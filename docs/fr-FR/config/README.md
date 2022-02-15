@@ -1723,42 +1723,9 @@ Le module `julia` affiche la version actuellement installée de [Julia](https://
 symbol = "∴ "
 ```
 
-## Local IP
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### Options
-
-| Option     | Défaut                    | Description                                            |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | Format du module.                                      |
-| `style`    | `"bold yellow"`           | Le style du module.                                    |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
-
-### Variables
-
-| Variable  | Exemple      | Description                           |
-| --------- | ------------ | ------------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address     |
-| style\* |              | Reflète la valeur de l'option `style` |
-
-*: Cette variable peut uniquement être utilisée dans une chaine de style
-
-### Exemple
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
-Le module `kotlin` affiche la version actuellement installée de [Kotlin](https://kotlinlang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le répertoire courant contient un fichier `.kt` ou `.kts`
 
@@ -1771,16 +1738,16 @@ Le module `kotlin` affiche la version actuellement installée de [Kotlin](https:
 | `detect_extensions` | `["kt", "kts"]`                      | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `[]`                                 | Quels fichiers devraient activer ce module.                                                |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `symbol`            | `"🅺 "`                               | Une chaîne de caractères représentant le symbole de Kotlin.                                |
+| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                                         |
 | `style`             | `"bold blue"`                        | Le style du module.                                                                        |
-| `kotlin_binary`     | `"kotlin"`                           | Configure le binaire kotlin que Starship exécute lors de l'obtention de la version.        |
-| `disabled`          | `false`                              | Désactive le module `kotlin`.                                                              |
+| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version.              |
+| `disabled`          | `false`                              | Disables the `kotlin` module.                                                              |
 
 ### Variables
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.4.21` | La version de `kotlin`                 |
+| version   | `v1.4.21` | The version of `kotlin`                |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
@@ -1805,7 +1772,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Affiche le nom du [contexte Kubernets](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) actuel et, si défini, l'espace de noms du fichier kubeconfig. L'espace de noms doit être défini dans le fichier kubeconfig, cela peut être fait via `kubectl config set-context starship-cluster --namespace astronaut`. Si la variable d'environnement `$KUBECONFIG` est définie, le module l'utilisera sinon il utilisera le fichier `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-cluster --namespace astronaut`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -1815,22 +1782,22 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option            | Défaut                                               | Description                                                            |
-| ----------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | Une chaîne de format représentant le symbole affiché avant le Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                      |
-| `style`           | `"cyan bold"`                                        | Le style du module.                                                    |
-| `context_aliases` |                                                      | Tableau des alias de contexte à afficher.                              |
-| `disabled`        | `true`                                               | Désactiver le module `kubernetes`.                                     |
+| Option            | Défaut                                               | Description                                                           |
+| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                     |
+| `style`           | `"cyan bold"`                                        | Le style du module.                                                   |
+| `context_aliases` |                                                      | Table of context aliases to display.                                  |
+| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
-| Variable  | Exemple              | Description                                      |
-| --------- | -------------------- | ------------------------------------------------ |
-| context   | `starship-cluster`   | Le contexte kubernetes actuel                    |
-| namespace | `starship-namespace` | Si défini, l'espace de noms actuel de kubernetes |
-| symbol    |                      | Reflète la valeur de l'option `symbol`           |
-| style\* |                      | Reflète la valeur de l'option `style`            |
+| Variable  | Exemple              | Description                              |
+| --------- | -------------------- | ---------------------------------------- |
+| context   | `starship-cluster`   | The current kubernetes context           |
+| namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| symbol    |                      | Reflète la valeur de l'option `symbol`   |
+| style\* |                      | Reflète la valeur de l'option `style`    |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1869,15 +1836,15 @@ Long and automatically generated cluster names can be identified and shortened u
 "gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
 ```
 
-## Saut de ligne
+## Line Break
 
-Le module `line_break` sépare l'invite en deux lignes.
+The `line_break` module separates the prompt into two lines.
 
 ### Options
 
-| Option     | Défaut  | Description                                                             |
-| ---------- | ------- | ----------------------------------------------------------------------- |
-| `disabled` | `false` | Désactive le module `line_break` , faisant de l'invite une seule ligne. |
+| Option     | Défaut  | Description                                                        |
+| ---------- | ------- | ------------------------------------------------------------------ |
+| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
 ### Exemple
 
@@ -1886,6 +1853,39 @@ Le module `line_break` sépare l'invite en deux lignes.
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Options
+
+| Option     | Défaut                    | Description                                            |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | Format du module.                                      |
+| `style`    | `"bold yellow"`           | Le style du module.                                    |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Variables
+
+| Variable  | Exemple      | Description                           |
+| --------- | ------------ | ------------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address     |
+| style\* |              | Reflète la valeur de l'option `style` |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
