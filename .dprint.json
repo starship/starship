@@ -11,6 +11,7 @@
     "**/*.{md,toml,json}"
   ],
   "excludes": [
+    "docs/.vuepress/dist/**",
     "**/node_modules",
     "**/*-lock.json",
     ".github/*",
