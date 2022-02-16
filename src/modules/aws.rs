@@ -68,8 +68,8 @@ fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Reg
         .iter()
         .find_map(|env_var| context.get_env(env_var));
     let region = context
-        .get_env("AWS_DEFAULT_REGION")
-        .or_else(|| context.get_env("AWS_REGION"));
+        .get_env("AWS_REGION")
+        .or_else(|| context.get_env("AWS_DEFAULT_REGION"));
     match (profile, region) {
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
@@ -224,7 +224,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-1) ")
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
