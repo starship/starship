@@ -20,6 +20,7 @@ pub struct StarshipRootConfig {
 pub const PROMPT_ORDER: &[&str] = &[
     "username",
     "hostname",
+    "localip",
     "shlvl",
     "singularity",
     "kubernetes",
@@ -86,6 +87,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "battery",
     "time",
     "status",
+    "container",
     "shell",
     "character",
 ];

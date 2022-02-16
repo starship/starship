@@ -109,7 +109,7 @@ Untuk mengkonfigurasi prompt agar menggunakan konfigurasi `use_symbol_for_status
 error_symbol = "[✖](bold red)"
 ```
 
-*Catatan:* Element `character` secara otomatis menambahkan sebuah spasi setelahnya, jadi tidak seperti `format` string yang lain, kami secara spesifik tidak menambahkannya pada contoh di atas.
+_Catatan:_ Element `character` secara otomatis menambahkan sebuah spasi setelahnya, jadi tidak seperti `format` string yang lain, kami secara spesifik tidak menambahkannya pada contoh di atas.
 
 #### Durasi Perintah
 

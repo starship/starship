@@ -52,6 +52,15 @@ fn get_pkg_branch_tag() -> &'static str {
 }
 
 fn make_github_issue_link(environment: Environment) -> String {
+    let shell_syntax = match environment.shell_info.name.as_ref() {
+        "powershell" | "pwsh" => "pwsh",
+        "fish" => "fish",
+        "cmd" => "lua",
+        // GitHub does not seem to support elvish syntax highlighting.
+        "elvish" => "bash",
+        _ => "bash",
+    };
+
     let body = urlencoding::encode(&format!("#### Current Behavior
 <!-- A clear and concise description of the behavior. -->
 
@@ -76,7 +85,7 @@ fn make_github_issue_link(environment: Environment) -> String {
 - Build Time: {build_time}
 #### Relevant Shell Configuration
 
-```bash
+```{shell_syntax}
 {shell_config}
 ```
 
@@ -100,6 +109,7 @@ fn make_github_issue_link(environment: Environment) -> String {
         rust_channel =  shadow::RUST_CHANNEL,
         build_rust_channel =  shadow::BUILD_RUST_CHANNEL,
         build_time =  shadow::BUILD_TIME,
+        shell_syntax = shell_syntax,
     ))
         .replace("%20", "+");
 
@@ -132,10 +142,7 @@ fn get_shell_info() -> ShellInfo {
 
     let shell = shell.unwrap();
 
-    let version = exec_cmd(&shell, &["--version"], Duration::from_millis(500)).map_or_else(
-        || UNKNOWN_VERSION.to_string(),
-        |output| output.stdout.trim().to_string(),
-    );
+    let version = get_shell_version(&shell);
 
     let config = get_config_path(&shell)
         .and_then(|config_path| fs::read_to_string(config_path).ok())
@@ -183,7 +190,7 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
             "bash" => Some(".bashrc"),
             "fish" => Some(".config/fish/config.fish"),
             "ion" => Some(".config/ion/initrc"),
-            "powershell" => {
+            "powershell" | "pwsh" => {
                 if cfg!(windows) {
                     Some("Documents/PowerShell/Microsoft.PowerShell_profile.ps1")
                 } else {
@@ -213,6 +220,22 @@ fn get_starship_config() -> String {
         })
         .and_then(|config_path| fs::read_to_string(config_path).ok())
         .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+}
+
+fn get_shell_version(shell: &str) -> String {
+    let time_limit = Duration::from_millis(500);
+    match shell {
+        "powershell" => exec_cmd(
+            &shell,
+            &["(Get-Host | Select Version | Format-Table -HideTableHeaders | Out-String).trim()"],
+            time_limit,
+        ),
+        _ => exec_cmd(&shell, &["--version"], time_limit),
+    }
+    .map_or_else(
+        || UNKNOWN_VERSION.to_string(),
+        |output| output.stdout.trim().to_string(),
+    )
 }
 
 #[cfg(test)]

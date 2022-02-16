@@ -28,13 +28,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Prerequisites
+### 준비 사항
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다.
 
 ### 빠른 설치
 
-1. **starship** 바이러니 설치:
+1. **starship** 바이너리 설치:
 
 
    #### 최근 버전 설치
@@ -44,7 +44,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    sh -c "$(curl -fsSL https://starship.rs/install.sh)"
    ```
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Starship을 업데이트하고 싶은 경우에도 위의 스크립트를 실행시키면 됩니다. Starship의 설정은 변경되지 않고 버전만 최근 버전으로 대체될 것입니다.
 
 
    #### 패키지 매니저를 이용한 설치
@@ -55,18 +55,18 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    brew install starship
    ```
 
-   With [Scoop](https://scoop.sh):
+   [Scoop](https://scoop.sh)을 통한 설치:
 
    ```powershell
    scoop install starship
    ```
 
-1. 쉘 설정에 시동 스크립트를 추가:
+1. 쉘 설정 파일에 init 스크립트 추가:
 
 
    #### Bash
 
-   `~/.bashrc`에 아래 라인을 추가
+   `~/.bashrc`의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   `~/.config/fish/config.fish`에 아래 라인을 추가
+   `~/.config/fish/config.fish`의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   `~/.zshrc`에 아래 라인을 추가
+   `~/.zshrc`의 끝부분에 아래 라인을 추가
 
    ```sh
    # ~/.zshrc
@@ -99,7 +99,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능. 일반적으로 해당 파일은 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 혹은 -Nix의 경우 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`에 위치.
+   `Microsoft.PowerShell_profile.ps1`의 끝부분에 아래 내용을 추가합니다. 해당 설정파일은 파워쉘에서 `$PROFILE` 변수 확인을 통해 확인 가능합니다. 일반적으로 해당 파일은 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 혹은 -Nix의 경우 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`에 있습니다.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   아래의 라인을 `~/.config/ion/initrc` 마지막에 추가:
+   `~/.config/ion/initrc` 의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.config/ion/initrc
@@ -119,9 +119,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: 주의 elvish 버전 v0.17 이상에서만 지원됩니다. :::
 
-   아래의 라인을 `~/.elvish/rc.elv` 마지막에 추가:
+   `~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -132,7 +132,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   아래의 라인을 `~/.tcshrc` 마지막에 추가:
+   `~/.tcshrc` 의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.tcshrc
@@ -143,13 +143,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: 주의 이는 추후 변경될 예정입니다. 버전 v0.33 이상에서만 지원됩니다. ::: 새로운 설정 파일에 아래의 내용을 추가하세요. `config path`를 실행시키면 파일의 위치를 확인할 수 있습니다.
 
    ```toml
    startup = [
-    "mkdir ~/.cache/starship",
-    "starship init nu | save ~/.cache/starship/init.nu",
-    "source ~/.cache/starship/init.nu"
+     "mkdir ~/.cache/starship",
+     "starship init nu | save ~/.cache/starship/init.nu",
+     "source ~/.cache/starship/init.nu",
    ]
    prompt = "starship_prompt"
    ```
@@ -157,7 +157,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   `~/.xonshrc` 의 끝부분에 아래 라인을 추가:
 
    ```sh
    # ~/.xonshrc
@@ -168,7 +168,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Cmd를 이용하려면 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 를 사용해야 합니다. `starship.lua` 파일에 아래의 라인을 추가하고 파일을 Clink scripts 폴더에 저장합니다.
 
    ```lua
    -- starship.lua

@@ -554,14 +554,19 @@ expiration={}
                 credentials_path.to_string_lossy().as_ref(),
             )
             .collect();
-        let expected = Some(format!(
-            "on {}",
-            Color::Yellow
-                .bold()
-                .paint("☁️  astronauts (ap-northeast-2) [30m]")
-        ));
 
-        assert_eq!(expected, actual);
+        // In principle, "30m" should be correct. However, bad luck in scheduling
+        // on shared runners may delay it. Allow for up to 2 seconds of delay.
+        let possible_values = ["30m", "29m59s", "29m58s"];
+        let possible_values = possible_values.map(|duration| {
+            let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}]", duration);
+            Some(format!(
+                "on {}",
+                Color::Yellow.bold().paint(segment_colored)
+            ))
+        });
+
+        assert!(possible_values.contains(&actual));
 
         dir.close()
     }

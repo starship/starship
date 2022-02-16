@@ -58,7 +58,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux
 
 ## Porque eu vejo alertas de `Executing command "..." timed out.`?
 
-O Starship executa comandos diferentes para recuperar as informações para exibir no prompt, por exemplo a versão de um programa ou o status atual do git. Para ter certeza de que o starship não travou durante uma execução destes comandos nos definimos um limite de tempo, se um comando ultrapassar este limite o starship vai parar a execução do comando e exibe o alerta acima, esse é um comportamento esperado. Este limite de tempo é configurado usando o [`command_timeout` key](/config/#prompt) então se você quiser você pode aumentar este limite. Você pode também seguir os passos para debugar para ver qual comando esta demorando e se você pode otimizar ele. Finalmente você pode definir a variável de ambiente `STARSHIP_LOG` para `error` para esconder estes alertas.
+O Starship executa comandos diferentes para recuperar as informações para exibir no prompt, por exemplo a versão de um programa ou o status atual do git. Para ter certeza de que o starship não travou durante uma execução destes comandos nos definimos um limite de tempo, se um comando ultrapassar este limite o starship vai parar a execução do comando e exibe o alerta acima, esse é um comportamento esperado. Este limite de tempo é configurado usando a [chave](/config/#prompt) `command_timeout` então se você quiser você pode aumentar este limite. Você pode também seguir os passos para debugar para ver qual comando esta demorando e se você pode otimizar ele. Finalmente você pode definir a variável de ambiente `STARSHIP_LOG` para `error` para esconder estes alertas.
 
 ## Eu vejo símbolos que não entendo ou não esperado, o que isso significa?
 
@@ -117,6 +117,6 @@ Se o Starship foi instalando usando algum gerenciador de pacotes, por favor cons
 Se o Starship foi instalado usando o script de instalação, o comando abaixo irá remover o binário:
 
 ```sh
-# Locate and delete the starship binary
+# Localiza e exclui o binário do starship
 sh -c 'rm "$(command -v 'starship')"'
 ```
