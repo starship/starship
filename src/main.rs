@@ -4,7 +4,7 @@ use clap::crate_authors;
 use std::io;
 use std::time::SystemTime;
 
-use clap::{AppSettings, IntoApp, Parser, Subcommand};
+use clap::{IntoApp, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
@@ -22,9 +22,10 @@ fn long_version() -> &'static str {
     author=crate_authors!(),
     version=shadow::PKG_VERSION,
     long_version=long_version(),
-    about="The cross-shell prompt for astronauts. ☄🌌️"
+    about="The cross-shell prompt for astronauts. ☄🌌️",
+    subcommand_required=true,
+    arg_required_else_help=true,
 )]
-#[clap(setting(AppSettings::SubcommandRequiredElseHelp))]
 struct Cli {
     #[clap(subcommand)]
     command: Commands,
@@ -88,7 +89,7 @@ enum Commands {
     /// Generate random session key
     Session,
     /// Prints time in milliseconds
-    #[clap(setting=AppSettings::Hidden)]
+    #[clap(hide = true)]
     Time,
     /// Prints timings of all active modules
     Timings(Properties),
@@ -206,7 +207,7 @@ fn main() {
         Commands::Timings(props) => print::timings(props),
         Commands::Completions { shell } => generate(
             shell,
-            &mut Cli::into_app(),
+            &mut Cli::command(),
             "starship",
             &mut io::stdout().lock(),
         ),
