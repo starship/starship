@@ -163,3 +163,6 @@ jobs:
       # Run the ignored tests that expect the above setup
       - name: Build | Test
         run: cargo test --workspace --locked --all-features -- -Z unstable-options --include-ignored
+        env:
+          # Avoid -D warnings on nightly builds
+          RUSTFLAGS: ""
