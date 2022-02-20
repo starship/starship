@@ -797,19 +797,20 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Opsi
 
-| Opsi                | Bawaan                                             | Deskripsi                                                                               |
-| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | Jumlah dari folder induk yang harusnya disingkat oleh direktori saat ini.               |
-| `truncate_to_repo`  | `true`                                             | Apakah harus menyingkat root dari git repo tempatmu berada saat ini.                    |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format dari modul.                                                                      |
-| `style`             | `"bold cyan"`                                      | Gaya penataan untuk modul.                                                              |
-| `disabled`          | `false`                                            | Menonaktifkan modul `directory`.                                                        |
-| `read_only`         | `"🔒"`                                              | Simbol yang mengindikasikan direktori saat ini bersifat read only.                      |
-| `read_only_style`   | `"red"`                                            | Corak gaya untuk simbol read only.                                                      |
-| `truncation_symbol` | `""`                                               | Simbol untuk awalan jalur yang disingkat. misalnya: ".../"                              |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.  |
-| `home_symbol`       | `"~"`                                              | Simbol yang mengindikasikan direktori home.                                             |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
+| Opsi                | Bawaan                                                                                                      | Deskripsi                                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | Jumlah dari folder induk yang harusnya disingkat oleh direktori saat ini.               |
+| `truncate_to_repo`  | `true`                                                                                                      | Apakah harus menyingkat root dari git repo tempatmu berada saat ini.                    |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | Format dari modul.                                                                      |
+| `style`             | `"bold cyan"`                                                                                               | Gaya penataan untuk modul.                                                              |
+| `disabled`          | `false`                                                                                                     | Menonaktifkan modul `directory`.                                                        |
+| `read_only`         | `"🔒"`                                                                                                       | Simbol yang mengindikasikan direktori saat ini bersifat read only.                      |
+| `read_only_style`   | `"red"`                                                                                                     | Corak gaya untuk simbol read only.                                                      |
+| `truncation_symbol` | `""`                                                                                                        | Simbol untuk awalan jalur yang disingkat. misalnya: ".../"                              |
+| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
+| `home_symbol`       | `"~"`                                                                                                       | The symbol indicating home directory.                                                   |
+| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -841,6 +842,21 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 *: This variable can only be used as a part of a style string
 
+<details>
+<summary>The git repos have additional variables.</summary>
+
+Let us consider the path `/path/to/home/git_repo/src/lib`
+
+| Variabel           | Contoh                | Deskripsi                               |
+| ------------------ | --------------------- | --------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
+| repo_root          | `"git_repo"`          | The git root directory name             |
+| path               | `"/src/lib"`          | The remaining path                      |
+| style              | `"black bold dimmed"` | Menyalin nilai dari opsi `style`        |
+| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+
+</details>
+
 ### Contoh
 
 ```toml
@@ -857,22 +873,22 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Opsi
 
-| Opsi                | Bawaan                                                        | Deskripsi                                                                                 |
-| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | Format dari modul.                                                                        |
-| `symbol`            | `"🐳 "`                                                        | Simbol yang digunakan sebelum menampilkan Docker context.                                 |
-| `only_with_files`   | `true`                                                        | Hanya ditampilkan jika terdapat kecocokan                                                 |
-| `detect_extensions` | `[]`                                                          | Extensions mana yang harusnya memicu modul (butuh `only_with_files` untuk diset true).    |
-| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | filenames mana yang harusnya memicu modul ini (butuh `only_with_files` untuk diset true). |
-| `detect_folders`    | `[]`                                                          | Folder mana yang harusnya memicu modul (butuh `only_with_files` untuk diset true).        |
-| `style`             | `"blue bold"`                                                 | Gaya penataan untuk modul.                                                                |
-| `disabled`          | `false`                                                       | Menonaktifkan module `docket_context`.                                                    |
+| Opsi                | Bawaan                                                        | Deskripsi                                                                         |
+| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | Format dari modul.                                                                |
+| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `"blue bold"`                                                 | Gaya penataan untuk modul.                                                        |
+| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
 ### Variabel
 
 | Variabel  | Contoh         | Deskripsi                         |
 | --------- | -------------- | --------------------------------- |
-| context   | `test_context` | Docker context terkini            |
+| context   | `test_context` | The current docker context        |
 | symbol    |                | Menyalin nilai dari opsi `symbol` |
 | style\* |                | Menyalin nilai dari opsi `style`  |
 
@@ -914,22 +930,22 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | Format dari modul.                                                                  |
 | `version_format`    | `"v${raw}"`                                                                                             | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `".NET "`                                                                                               | Simbol yang digunakan sebelum menampilkan versi dotnet terkini.                     |
-| `heuristic`         | `true`                                                                                                  | Menggunakan versi yang lebih cepat untuk membuat starship tetap trendi.             |
+| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                            |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                               |
 | `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                                                                                    | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                          |
 | `style`             | `"bold blue"`                                                                                           | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                                                                                 | Menonaktifkan modul `dotnet`.                                                       |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                                       |
 
 ### Variabel
 
-| Variabel  | Contoh           | Deskripsi                                              |
-| --------- | ---------------- | ------------------------------------------------------ |
-| version   | `v3.1.201`       | Versi dari sdk `dotnet`                                |
-| tfm       | `netstandard2.0` | Target Framework Moniket yang tengah ditarget starship |
-| symbol    |                  | Menyalin nilai dari opsi `symbol`                      |
-| style\* |                  | Menyalin nilai dari opsi `style`                       |
+| Variabel  | Contoh           | Deskripsi                                                          |
+| --------- | ---------------- | ------------------------------------------------------------------ |
+| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
+| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
+| symbol    |                  | Menyalin nilai dari opsi `symbol`                                  |
+| style\* |                  | Menyalin nilai dari opsi `style`                                   |
 
 *: This variable can only be used as a part of a style string
 
@@ -954,21 +970,21 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 | Opsi                | Bawaan                                                      | Deskripsi                                                                           |
 | ------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format dari modul elixir.                                                           |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                                   |
 | `version_format`    | `"v${raw}"`                                                 | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💧 "`                                                      | Simbol yang digunakan sebelum menampilkan versi Elixir/Erlang terkini.              |
+| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang.                     |
 | `detect_extensions` | `[]`                                                        | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["mix.exs"]`                                               | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                                        | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                          |
 | `style`             | `"bold purple"`                                             | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                                     | Menonaktifkan modul `elixir`.                                                       |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                                       |
 
 ### Variabel
 
 | Variabel    | Contoh  | Deskripsi                         |
 | ----------- | ------- | --------------------------------- |
-| version     | `v1.10` | Versi dari `elixir`               |
-| otp_version |         | Versi otp dari `elixir`           |
+| version     | `v1.10` | The version of `elixir`           |
+| otp_version |         | The otp version of `elixir`       |
 | symbol      |         | Menyalin nilai dari opsi `symbol` |
 | style\*   |         | Menyalin nilai dari opsi `style`  |
 
@@ -999,18 +1015,18 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | ------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`               | Format dari modul.                                                                  |
 | `version_format`    | `"v${raw}"`                                        | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🌳 "`                                             | Sebuah format string yang melambangkan simbol Elm.                                  |
+| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.                                     |
 | `detect_extensions` | `["elm"]`                                          | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `["elm-stuff"]`                                    | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.                                          |
 | `style`             | `"cyan bold"`                                      | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                            | Menonaktifkan modul `elm`.                                                          |
+| `disabled`          | `false`                                            | Disables the `elm` module.                                                          |
 
 ### Variabel
 
 | Variabel  | Contoh    | Deskripsi                         |
 | --------- | --------- | --------------------------------- |
-| version   | `v0.19.1` | Versi dari `elm`                  |
+| version   | `v0.19.1` | The version of `elm`              |
 | symbol    |           | Menyalin nilai dari opsi `symbol` |
 | style\* |           | Menyalin nilai dari opsi `style`  |
 
@@ -1047,21 +1063,21 @@ default = "unknown user"
 
 ### Opsi
 
-| Opsi       | Bawaan                         | Deskripsi                                                                             |
-| ---------- | ------------------------------ | ------------------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | Simbol yang digunakan sebelum menampilkan nilai dari variabel.                        |
-| `variabel` |                                | Variabel environment yang akan ditampilkan.                                           |
-| `bawaan`   |                                | Nilai bawaan yang akan ditampilkan ketika variabel yang terpilih tidak didefinisikan. |
-| `format`   | `"with [$env_value]($style) "` | Format dari modul.                                                                    |
-| `disabled` | `false`                        | Menonaktifkan modul `env_var`.                                                        |
+| Opsi       | Bawaan                         | Deskripsi                                                                    |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
+| `variable` |                                | The environment variable to be displayed.                                    |
+| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`   | `"with [$env_value]($style) "` | Format dari modul.                                                           |
+| `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variabel
 
-| Variabel  | Contoh                                            | Deskripsi                              |
-| --------- | ------------------------------------------------- | -------------------------------------- |
-| env_value | `Windows NT` (jika _variable_ akan menjadi `$OS`) | Nilai environment dari opsi `variable` |
-| symbol    |                                                   | Menyalin nilai dari opsi `symbol`      |
-| style\* | `black bold dimmed`                               | Menyalin nilai dari opsi `style`       |
+| Variabel  | Contoh                                      | Deskripsi                                  |
+| --------- | ------------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
+| symbol    |                                             | Menyalin nilai dari opsi `symbol`          |
+| style\* | `black bold dimmed`                         | Menyalin nilai dari opsi `style`           |
 
 *: This variable can only be used as a part of a style string
 
@@ -1104,7 +1120,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `style`             | `"bold red"`                         | Gaya penataan untuk modul.                                                          |
 | `detect_extensions` | `[]`                                 | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                          |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                                       |
 
 ### Variabel
@@ -1178,7 +1194,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | account   | `foo`         | The current GCP profile                                            |
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
-| active    | `bawaan`      | The active config name written in `~/.config/gcloud/active_config` |
+| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | Menyalin nilai dari opsi `symbol`                                  |
 | style\* |               | Menyalin nilai dari opsi `style`                                   |
 
@@ -1530,7 +1546,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                          |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                                    |
 | `style`             | `"bold white"`                       | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                              | Disables the `helm` module.                                                         |
@@ -1604,7 +1620,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `version_format`    | `"v${raw}"`                                                                                               | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                                                                                      | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                          |
 | `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                                     |
 | `style`             | `"red dimmed"`                                                                                            | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                                                                                                   | Disables the `java` module.                                                         |
@@ -1701,7 +1717,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["jl"]`                             | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                          |
 | `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                                   |
 | `style`             | `"bold purple"`                      | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                              | Disables the `julia` module.                                                        |
@@ -1739,7 +1755,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["kt", "kts"]`                      | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                          |
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                                  |
 | `style`             | `"bold blue"`                        | Gaya penataan untuk modul.                                                          |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version.       |
@@ -2029,7 +2045,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul                                                                   |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                           |
 | `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                               |
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -2719,7 +2735,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `version_format`    | `"v${raw}"`                              | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["sbt", "scala"]`                       | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[".metals"]`                            | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.                                          |
 | `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                                   |
 | `style`             | `"red dimmed"`                           | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                                        |
@@ -2777,7 +2793,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Variabel  | Bawaan | Deskripsi                                                  |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\* |        | Menyalin nilai dari opsi `style`.                          |
+| style\* |        | Mirrors the value of option `style`.                       |
 
 *: This variable can only be used as a part of a style string
 
@@ -3044,7 +3060,7 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 | Variabel  | Contoh     | Deskripsi                         |
 | --------- | ---------- | --------------------------------- |
 | version   | `v0.12.24` | The version of `terraform`        |
-| workspace | `bawaan`   | The current Terraform workspace   |
+| workspace | `default`  | The current Terraform workspace   |
 | symbol    |            | Menyalin nilai dari opsi `symbol` |
 | style\* |            | Menyalin nilai dari opsi `style`  |
 
@@ -3350,7 +3366,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `deskripsi`   | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
