@@ -18,10 +18,10 @@ pub struct CConfig<'a> {
 impl<'a> Default for CConfig<'a> {
     fn default() -> Self {
         CConfig {
-            format: "using [$symbol($compiler $compiler_version)]($style)",
+            format: "using [$symbol ($compiler_name $compiler_version )]($style)",
             version_format: "v${raw}",
             style: "149 bold",
-            symbol: "C ",
+            symbol: "C",
             disabled: false,
             detect_extensions: vec!["c", "h"],
             detect_files: vec![],

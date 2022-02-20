@@ -30,32 +30,40 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "compiler" => {
-                    let c_compiler_info = context
-                        .exec_cmd("cc", &["--version"])?
-                        .stdout; // std::string::String
-                    let c_compiler = if c_compiler_info.contains("clang") {
-                        "clang"
-                    } else if c_compiler_info.contains("Free Software Foundation") {
-                        "gcc"
+                "compiler_name" => {
+                    if config.format.contains("$compiler_name") {
+                        let c_compiler_info = context
+                            .exec_cmd("cc", &["--version"])?
+                            .stdout; // std::string::String
+                        let c_compiler = if c_compiler_info.contains("clang") {
+                            "clang"
+                        } else if c_compiler_info.contains("Free Software Foundation") {
+                            "gcc"
+                        } else {
+                            "Unknown compiler"
+                        };
+                        Some(c_compiler).map(Ok)
                     } else {
-                        "Unknown compiler"
-                    };
-                    Some(c_compiler).map(Ok)
+                        None
+                    }
                 }
                 _ => None,
             })
             .map(|variable| match variable {
                 "compiler_version" => {
-                    let c_version = context
-                        .exec_cmd("cc", &["-dumpversion"])? // works for both gcc and clang
-                        .stdout;
-                    VersionFormatter::format_module_version(
-                        module.get_name(),
-                        &c_version.trim(),
-                        config.version_format,
-                    )
-                    .map(Ok)
+                    if config.format.contains("$compiler_version") {
+                        let c_version = context
+                            .exec_cmd("cc", &["-dumpversion"])? // works for both gcc and clang
+                            .stdout;
+                        VersionFormatter::format_module_version(
+                            module.get_name(),
+                            c_version.trim(),
+                            config.version_format,
+                        )
+                        .map(Ok)
+                    } else {
+                        None
+                    }
                 }
                 _ => None,
             })
