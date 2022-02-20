@@ -84,6 +84,9 @@ nix = "0.23.1"
 [build-dependencies]
 shadow-rs = "0.8.1"
 
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1.12"
+
 [dev-dependencies]
 mockall = "0.11"
 tempfile = "3.2.0"
