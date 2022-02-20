@@ -450,6 +450,46 @@ discharging_symbol = "💦"
 # when capacity is over 30%, the battery indicator will not be displayed
 ```
 
+## C
+
+The `c` module shows some information about your C compiler. By default
+the module will be shown if the current directory contains a `.c` or `.h`
+file.
+
+### Options
+
+| Option              | Default                                                          | Description                                                               |
+| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"using [$symbol ($compiler_name $compiler_version )]($style)"`  | The format string for the module.                                         |
+| `version_format`    | `"v${raw}"`                                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"C"`                                                            | The symbol used before displaying the compiler details                    |
+| `detect_extensions` | `["c", "h"]`                                                     | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                             | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                             | Which folders should trigger this module.                                 |
+| `style`             | `"bold 149"`                                                     | The style for the module.                                                 |
+| `disabled`          | `false`                                                          | Disables the `c` module.                                                  |
+
+### Variables
+
+| Variable          | Example   | Description                          |
+| ----------------- | --------- | ------------------------------------ |
+| compiler_name     | clang     | The name of the compiler             |
+| compiler_version  | 13.0.0    | The version of the compiler          |
+| symbol            |           | Mirrors the value of option `symbol` |
+| style             |           | Mirrors the value of option `style`  |
+
+The `compiler_name` and `compiler_version` are discovered by running
+`cc --version` and `cc -dumpversion`. It works if `cc` is `gcc` or `clang`.
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[c]
+format = "using [$compiler_name $compiler_version]($style)"
+```
+
 ## Character
 
 The `character` module shows a character (usually an arrow) beside where the text
