@@ -22,19 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
-                "symbol" => { // needs to return a std::option::Option<String>
-                    let c_compiler_version = context
-                        .exec_cmd("cc", &["--version"])?
-                        .stdout; // std::string::String
-                    let c_compiler = if c_compiler_version.contains("clang") {
-                        "clang "
-                    } else if c_compiler_version.contains("Free Software Foundation") {
-                        "gcc "
-                    } else {
-                        "Unknown compiler "
-                    };
-                    Some(c_compiler)
-                }
+                "symbol" => Some(config.symbol),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -42,13 +30,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => {
+                "compiler" => {
+                    let c_compiler_info = context
+                        .exec_cmd("cc", &["--version"])?
+                        .stdout; // std::string::String
+                    let c_compiler = if c_compiler_info.contains("clang") {
+                        "clang"
+                    } else if c_compiler_info.contains("Free Software Foundation") {
+                        "gcc"
+                    } else {
+                        "Unknown compiler"
+                    };
+                    Some(c_compiler).map(Ok)
+                }
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "compiler_version" => {
                     let c_version = context
                         .exec_cmd("cc", &["-dumpversion"])? // works for both gcc and clang
                         .stdout;
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &c_version,
+                        &c_version.trim(),
                         config.version_format,
                     )
                     .map(Ok)
