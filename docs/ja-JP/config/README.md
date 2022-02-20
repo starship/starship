@@ -798,19 +798,20 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### オプション
 
-| オプション               | デフォルト                                              | 説明                                                                                      |
-| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | 現在のディレクトリを切り捨てる親フォルダーの数です。                                                              |
-| `truncate_to_repo`  | `true`                                             | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                                                           |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | moduleのフォーマットです。                                                                        |
-| `style`             | `"bold cyan"`                                      | モジュールのスタイルです。                                                                           |
-| `disabled`          | `false`                                            | `directory`モジュールを無効にします。                                                                |
-| `read_only`         | `"🔒"`                                              | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。                                                     |
-| `read_only_style`   | `"red"`                                            | 読み取り専用シンボルのスタイルです。                                                                      |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. 例: "…/"                                        |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.  |
-| `home_symbol`       | `"~"`                                              | ホームディレクトリを示すシンボルです。                                                                     |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
+| オプション               | デフォルト                                                                                                       | 説明                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | 現在のディレクトリを切り捨てる親フォルダーの数です。                                                              |
+| `truncate_to_repo`  | `true`                                                                                                      | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                                                           |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | moduleのフォーマットです。                                                                        |
+| `style`             | `"bold cyan"`                                                                                               | モジュールのスタイルです。                                                                           |
+| `disabled`          | `false`                                                                                                     | `directory`モジュールを無効にします。                                                                |
+| `read_only`         | `"🔒"`                                                                                                       | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。                                                     |
+| `read_only_style`   | `"red"`                                                                                                     | 読み取り専用シンボルのスタイルです。                                                                      |
+| `truncation_symbol` | `""`                                                                                                        | The symbol to prefix to truncated paths. 例: "…/"                                        |
+| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
+| `home_symbol`       | `"~"`                                                                                                       | The symbol indicating home directory.                                                   |
+| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -842,6 +843,21 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 *: This variable can only be used as a part of a style string
 
+<details>
+<summary>The git repos have additional variables.</summary>
+
+Let us consider the path `/path/to/home/git_repo/src/lib`
+
+| 変数                 | 設定例                   | 説明                                      |
+| ------------------ | --------------------- | --------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
+| repo_root          | `"git_repo"`          | The git root directory name             |
+| path               | `"/src/lib"`          | The remaining path                      |
+| style              | `"black bold dimmed"` | オプション `style` の値をミラーする                  |
+| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+
+</details>
+
 ### 設定例
 
 ```toml
@@ -858,24 +874,24 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### オプション
 
-| オプション               | デフォルト                              | 説明                                                             |
-| ------------------- | ---------------------------------- | -------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "` | moduleのフォーマットです。                                               |
-| `symbol`            | `"🐳 "`                             | Dockerコンテキストを表示する前に使用される記号です。                                  |
-| `only_with_files`   | `true`                             | ファイルに一致する場合にのみ表示                                               |
-| `detect_extensions` | `[]`                               | どの拡張子がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。    |
-| `detect_files`      | `The format for the module.`       | どんなファイル名がこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。 |
-| `detect_folders`    | `[]`                               | どんなフォルダがこのモジュールをトリガーするか(`only_with_files`がtrueになっている必要があります)。  |
-| `style`             | `"blue bold"`                      | モジュールのスタイルです。                                                  |
-| `disabled`          | `false`                            | `docker_context`モジュールを無効にします。                                  |
+| オプション               | デフォルト                                                         | 説明                                                                                |
+| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol$context]($style) "`                            | moduleのフォーマットです。                                                                  |
+| `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
+| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
+| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
+| `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
+| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
+| `style`             | `"blue bold"`                                                 | モジュールのスタイルです。                                                                     |
+| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
 ### 変数
 
-| 変数        | 設定例            | 説明                     |
-| --------- | -------------- | ---------------------- |
-| context   | `test_context` | 現在の Docker コンテキスト      |
-| symbol    |                | オプション `記号` の値をミラーする    |
-| style\* |                | オプション `style` の値をミラーする |
+| 変数        | 設定例            | 説明                         |
+| --------- | -------------- | -------------------------- |
+| context   | `test_context` | The current docker context |
+| symbol    |                | オプション `記号` の値をミラーする        |
+| style\* |                | オプション `style` の値をミラーする     |
 
 *: This variable can only be used as a part of a style string
 
@@ -911,23 +927,23 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### オプション
 
-| オプション               | デフォルト                                                                                                   | 説明                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | moduleのフォーマットです。                                       |
-| `version_format`    | `"v${raw}"`                                                                                             | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `".NET "`                                                                                               | dotnetのバージョンを表示する前に使用される記号です。                          |
-| `heuristic`         | `true`                                                                                                  | より高速なバージョン検出を使用して、starshipの動作を維持します。                   |
-| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                                                                                    | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `"bold blue"`                                                                                           | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                                                 | `dotnet`モジュールを無効にします。                                  |
+| オプション               | デフォルト                                                                                                   | 説明                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | moduleのフォーマットです。                                         |
+| `version_format`    | `"v${raw}"`                                                                                             | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。   |
+| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet. |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.    |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | どの拡張子がこのモジュールをアクティブにするか                                  |
+| `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | どのファイル名がこのモジュールをアクティブにするか                                |
+| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.               |
+| `style`             | `"bold blue"`                                                                                           | モジュールのスタイルです。                                            |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                            |
 
 ### 変数
 
 | 変数        | 設定例              | 説明                                                                 |
 | --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | `dotnet sdk` のバージョンです                                              |
+| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
 | symbol    |                  | オプション `記号` の値をミラーする                                                |
 | style\* |                  | オプション `style` の値をミラーする                                             |
@@ -960,7 +976,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
 | `detect_extensions` | `[]`                                                        | どの拡張子がこのモジュールをアクティブにするか                                         |
 | `detect_files`      | `["mix.exs"]`                                               | どのファイル名がこのモジュールをアクティブにするか                                       |
-| `detect_folders`    | `[]`                                                        | どのフォルダーがこのモジュールをアクティブにするか                                       |
+| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                      |
 | `style`             | `"bold purple"`                                             | モジュールのスタイルです。                                                   |
 | `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
 
@@ -1003,9 +1019,9 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.        |
 | `detect_extensions` | `["elm"]`                                          | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `["elm-stuff"]`                                    | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.             |
 | `style`             | `"cyan bold"`                                      | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                            | `elm`モジュールを無効にします。                                     |
+| `disabled`          | `false`                                            | Disables the `elm` module.                             |
 
 ### 変数
 
@@ -1048,13 +1064,13 @@ default = "unknown user"
 
 ### オプション
 
-| オプション      | デフォルト                          | 説明                                    |
-| ---------- | ------------------------------ | ------------------------------------- |
-| `symbol`   | `""`                           | 環境変数を表示する前に使用される記号です。                 |
-| `variable` |                                | 表示される環境変数です。                          |
-| `default`  |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。 |
-| `format`   | `"with [$env_value]($style) "` | moduleのフォーマットです。                      |
-| `disabled` | `false`                        | `env_var`モジュールを無効にします。                |
+| オプション      | デフォルト                          | 説明                                                                           |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
+| `variable` |                                | The environment variable to be displayed.                                    |
+| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`   | `"with [$env_value]($style) "` | moduleのフォーマットです。                                                             |
+| `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
 ### 変数
 
@@ -1105,16 +1121,16 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `style`             | `"bold red"`                         | モジュールのスタイルです。                                            |
 | `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                  |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | どのファイル名がこのモジュールをアクティブにするか                                |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                |
-| `disabled`          | `false`                              | `erlang`モジュールを無効にします。                                    |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.               |
+| `disabled`          | `false`                              | Disables the `erlang` module.                            |
 
 ### 変数
 
-| 変数        | 設定例       | 説明                     |
-| --------- | --------- | ---------------------- |
-| version   | `v22.1.3` | `erlang` のバージョン        |
-| symbol    |           | オプション `記号` の値をミラーする    |
-| style\* |           | オプション `style` の値をミラーする |
+| 変数        | 設定例       | 説明                      |
+| --------- | --------- | ----------------------- |
+| version   | `v22.1.3` | The version of `erlang` |
+| symbol    |           | オプション `記号` の値をミラーする     |
+| style\* |           | オプション `style` の値をミラーする  |
 
 *: This variable can only be used as a part of a style string
 
@@ -1165,23 +1181,23 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | オプション             | デフォルト                                                      | 説明                                                               |
 | ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | moduleのフォーマットです。                                                 |
-| `symbol`          | `"☁️ "`                                                    | 現在のGCPプロファイルを表示する前に表示される記号です。                                    |
-| `region_aliases`  |                                                            | GCP名に加えて表示するリージョンのエイリアスです。                                       |
+| `symbol`          | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.       |
+| `region_aliases`  |                                                            | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
 | `style`           | `"bold blue"`                                              | モジュールのスタイルです。                                                    |
 | `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
 ### 変数
 
-| 変数        | 設定例           | 説明                                              |
-| --------- | ------------- | ----------------------------------------------- |
-| region    | `us-central1` | 現在のGCPリージョン                                     |
-| account   | `foo`         | 現在のGCPプロファイル                                    |
-| domain    | `example.com` | The current GCP profile domain                  |
-| project   |               | 現在のGCPプロジェクト                                    |
-| active    | `default`     | `~/.config/gcloud/active_config` に書かれたアクティブな設定名 |
-| symbol    |               | オプション `記号` の値をミラーする                             |
-| style\* |               | オプション `style` の値をミラーする                          |
+| 変数        | 設定例           | 説明                                                                 |
+| --------- | ------------- | ------------------------------------------------------------------ |
+| region    | `us-central1` | The current GCP region                                             |
+| account   | `foo`         | The current GCP profile                                            |
+| domain    | `example.com` | The current GCP profile domain                                     |
+| project   |               | The current GCP project                                            |
+| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| symbol    |               | オプション `記号` の値をミラーする                                                |
+| style\* |               | オプション `style` の値をミラーする                                             |
 
 *: This variable can only be used as a part of a style string
 
@@ -1235,16 +1251,16 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### オプション
 
-| オプション                | デフォルト                            | 説明                                                                                   |
-| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name. |
-| `format`             | `"on [$symbol$branch]($style) "` | moduleのフォーマットです。 Use `"$branch"` to refer to the current branch name.                |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                               |
-| `style`              | `"bold purple"`                  | モジュールのスタイルです。                                                                        |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                             |
-| `truncation_symbol`  | `"…"`                            | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.                          |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                       |
-| `disabled`           | `false`                          | `git_branch`モジュールを無効にします。                                                            |
+| オプション                | デフォルト                            | 説明                                                                                       |
+| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
+| `format`             | `"on [$symbol$branch]($style) "` | moduleのフォーマットです。 Use `"$branch"` to refer to the current branch name.                    |
+| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
+| `style`              | `"bold purple"`                  | モジュールのスタイルです。                                                                            |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
+| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
+| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### 変数
 
@@ -1275,22 +1291,22 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### オプション
 
-| オプション                | デフォルト                              | 説明                                        |
-| -------------------- | ---------------------------------- | ----------------------------------------- |
-| `commit_hash_length` | `7`                                | 表示されるgitコミットハッシュの長さです。                    |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | moduleのフォーマットです。                          |
-| `style`              | `"bold green"`                     | モジュールのスタイルです。                             |
-| `only_detached`      | `true`                             | detached `HEAD` 状態のときのみ git コミットハッシュを表示する |
-| `tag_disabled`       | `true`                             | `git_commit` モジュールのタグ情報の表示を無効にする。         |
-| `tag_symbol`         | `" 🏷 "`                            | 表示される情報の前に追加されるタグシンボル                     |
-| `disabled`           | `false`                            | `git_commit`モジュールを無効にします。                 |
+| オプション                | デフォルト                              | 説明                                                      |
+| -------------------- | ---------------------------------- | ------------------------------------------------------- |
+| `commit_hash_length` | `7`                                | The length of the displayed git commit hash.            |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | moduleのフォーマットです。                                        |
+| `style`              | `"bold green"`                     | モジュールのスタイルです。                                           |
+| `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state |
+| `tag_disabled`       | `true`                             | Disables showing tag info in `git_commit` module.       |
+| `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                     |
+| `disabled`           | `false`                            | Disables the `git_commit` module.                       |
 
 ### 変数
 
-| 変数        | 設定例       | 説明                     |
-| --------- | --------- | ---------------------- |
-| hash      | `b703eb3` | 現在の git コミットハッシュ       |
-| style\* |           | オプション `style` の値をミラーする |
+| 変数        | 設定例       | 説明                          |
+| --------- | --------- | --------------------------- |
+| hash      | `b703eb3` | The current git commit hash |
+| style\* |           | オプション `style` の値をミラーする      |
 
 *: This variable can only be used as a part of a style string
 
@@ -1321,7 +1337,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | モジュールのスタイルです。                                                                           |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | moduleのフォーマットです。                                                                        |
-| `disabled`     | `false`                                                         | `git_state`モジュールを無効にします。                                                                |
+| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
 ### 変数
 
@@ -1391,23 +1407,23 @@ The `git_status` module shows symbols representing the state of the repo in your
 
 ### オプション
 
-| オプション               | デフォルト                                           | 説明                            |
-| ------------------- | ----------------------------------------------- | ----------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット     |
-| `conflicted`        | `"="`                                           | このブランチにはマージの競合があります。          |
-| `ahead`             | `"⇡"`                                           | `ahead`のフォーマット                |
-| `behind`            | `"⇣"`                                           | `behind`のフォーマット               |
-| `diverged`          | `"⇕"`                                           | `diverged`のフォーマット             |
-| `up_to_date`        | `""`                                            | The format of `up_to_date`    |
-| `untracked`         | `"?"`                                           | The format of `untracked`     |
-| `stashed`           | `"$"`                                           | The format of `stashed`       |
-| `modified`          | `"!"`                                           | The format of `modified`      |
-| `staged`            | `"+"`                                           | The format of `staged`        |
-| `renamed`           | `"»"`                                           | The format of `renamed`       |
-| `deleted`           | `"✘"`                                           | The format of `deleted`       |
-| `style`             | `"bold red"`                                    | モジュールのスタイルです。                 |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules. |
-| `disabled`          | `false`                                         | `git_status`モジュールを無効にします。     |
+| オプション               | デフォルト                                           | 説明                                  |
+| ------------------- | ----------------------------------------------- | ----------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
+| `conflicted`        | `"="`                                           | This branch has merge conflicts.    |
+| `ahead`             | `"⇡"`                                           | The format of `ahead`               |
+| `behind`            | `"⇣"`                                           | The format of `behind`              |
+| `diverged`          | `"⇕"`                                           | The format of `diverged`            |
+| `up_to_date`        | `""`                                            | The format of `up_to_date`          |
+| `untracked`         | `"?"`                                           | The format of `untracked`           |
+| `stashed`           | `"$"`                                           | The format of `stashed`             |
+| `modified`          | `"!"`                                           | The format of `modified`            |
+| `staged`            | `"+"`                                           | The format of `staged`              |
+| `renamed`           | `"»"`                                           | The format of `renamed`             |
+| `deleted`           | `"✘"`                                           | The format of `deleted`             |
+| `style`             | `"bold red"`                                    | モジュールのスタイルです。                       |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.       |
+| `disabled`          | `false`                                         | Disables the `git_status` module.   |
 
 ### 変数
 
@@ -1437,9 +1453,9 @@ The following variables can be used in `diverged`:
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| 変数      | 説明            |
-| ------- | ------------- |
-| `count` | ファイルの数を表示します。 |
+| 変数      | 説明                       |
+| ------- | ------------------------ |
+| `count` | Show the number of files |
 
 ### 設定例
 
@@ -1495,7 +1511,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `["Godeps"]`                                                                   | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold cyan"`                                                                  | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                        | `golang`モジュールを無効にします。                                  |
+| `disabled`          | `false`                                                                        | Disables the `golang` module.                          |
 
 ### 変数
 
@@ -1531,7 +1547,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.             |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.       |
 | `style`             | `"bold white"`                       | モジュールのスタイルです。                                          |
 | `disabled`          | `false`                              | Disables the `helm` module.                            |
@@ -1561,19 +1577,19 @@ The `hostname` module shows the system hostname.
 
 ### オプション
 
-| オプション      | デフォルト                       | 説明                                                                          |
-| ---------- | --------------------------- | --------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | SSHセッションに接続されている場合にのみホスト名を表示します。                                            |
-| `trim_at`  | `"."`                       | この文字が最初にマッチするまでをホスト名と認識します。 `"."`は最初の. までをホスト名として認識します。 `""`を指定した場合トリムしません。 |
-| `format`   | `"[$hostname]($style) in "` | moduleのフォーマットです。                                                            |
-| `style`    | `"bold dimmed green"`       | モジュールのスタイルです。                                                               |
-| `disabled` | `false`                     | `hostname`モジュールを無効にします。                                                     |
+| オプション      | デフォルト                       | 説明                                                                                                                                   |
+| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
+| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`   | `"[$hostname]($style) in "` | moduleのフォーマットです。                                                                                                                     |
+| `style`    | `"bold dimmed green"`       | モジュールのスタイルです。                                                                                                                        |
+| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
 
 ### 変数
 
 | 変数        | 設定例        | 説明                           |
 | --------- | ---------- | ---------------------------- |
-| ホスト名      | `computer` | The hostname of the computer |
+| hostname  | `computer` | The hostname of the computer |
 | style\* |            | オプション `style` の値をミラーする       |
 
 *: This variable can only be used as a part of a style string
@@ -1605,10 +1621,10 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `version_format`    | `"v${raw}"`                                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                                                                                      | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.             |
 | `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java        |
 | `style`             | `"red dimmed"`                                                                                            | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                                                   | `Java`モジュールを無効にします。                                    |
+| `disabled`          | `false`                                                                                                   | Disables the `java` module.                            |
 
 ### 変数
 
@@ -1655,13 +1671,13 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | オプション              | デフォルト                         | 説明                                                                       |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*       | `1`                           | 超過した場合、ジョブの数を表示します。                                                      |
+| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
 | `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
 | `format`           | `"[$symbol$number]($style) "` | moduleのフォーマットです。                                                         |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `"bold blue"`                 | モジュールのスタイルです。                                                            |
-| `disabled`         | `false`                       | `jobs`モジュールを無効にします。                                                      |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
 
 *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
@@ -1669,7 +1685,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | 変数        | 設定例 | 説明                     |
 | --------- | --- | ---------------------- |
-| number    | `1` | ジョブの数                  |
+| number    | `1` | The number of jobs     |
 | symbol    |     | オプション `記号` の値をミラーする    |
 | style\* |     | オプション `style` の値をミラーする |
 
@@ -1702,16 +1718,16 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `detect_extensions` | `["jl"]`                             | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `symbol`            | `"ஃ "`                               | Juliaのシンボルを表すフォーマット文字列                                 |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.             |
+| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.      |
 | `style`             | `"bold purple"`                      | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | `julia`モジュールを無効にします。                                   |
+| `disabled`          | `false`                              | Disables the `julia` module.                           |
 
 ### 変数
 
 | 変数        | 設定例      | 説明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v1.4.0` | `julia`のバージョン          |
+| version   | `v1.4.0` | The version of `julia` |
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
@@ -1740,7 +1756,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                        |
 | `detect_extensions` | `["kt", "kts"]`                      | どの拡張子がこのモジュールをアクティブにするか                                                       |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                                                     |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                                     |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `"bold blue"`                        | モジュールのスタイルです。                                                                 |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
@@ -1919,7 +1935,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 | 変数        | 設定例      | 説明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v5.4.0` | `lua` のバージョン           |
+| version   | `v5.4.0` | The version of `lua`   |
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
@@ -1948,13 +1964,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### オプション
 
-| オプション       | デフォルト                                           | 説明                          |
-| ----------- | ----------------------------------------------- | --------------------------- |
-| `threshold` | `75`                                            | この閾値を超えない限り、メモリ使用率は表示されません。 |
-| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | moduleのフォーマットです。            |
-| `symbol`    | `"🐏"`                                           | メモリ使用率を表示する前に使用される記号です。     |
-| `style`     | `"bold dimmed white"`                           | モジュールのスタイルです。               |
-| `disabled`  | `true`                                          | `memory_usage`モジュールを無効にします。 |
+| オプション       | デフォルト                                           | 説明                                                       |
+| ----------- | ----------------------------------------------- | -------------------------------------------------------- |
+| `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
+| `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | moduleのフォーマットです。                                         |
+| `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
+| `style`     | `"bold dimmed white"`                           | モジュールのスタイルです。                                            |
+| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
 ### 変数
 
@@ -1993,7 +2009,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | `style`             | `"bold purple"`                  | モジュールのスタイルです。                                                                                |
 | `format`            | `"on [$symbol$branch]($style) "` | moduleのフォーマットです。                                                                             |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
-| `truncation_symbol` | `"…"`                            | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
+| `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
 
 ### 変数
@@ -2072,7 +2088,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | `style`      | `"bold blue"`                                  | モジュールのスタイルです。                                         |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | `nix_shell`モジュールを無効にします。                              |
+| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
 
 ### 変数
 
@@ -2119,7 +2135,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | `detect_files`      | `["package.json", ".node-version"]`  | どのファイル名がこのモジュールをアクティブにするか                                                                             |
 | `detect_folders`    | `["node_modules"]`                   | どのフォルダーがこのモジュールをアクティブにするか                                                                             |
 | `style`             | `"bold green"`                       | モジュールのスタイルです。                                                                                         |
-| `disabled`          | `false`                              | `nodejs`モジュールを無効にします。                                                                                 |
+| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### 変数
@@ -2156,7 +2172,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 | オプション                     | デフォルト                                                                      | 説明                                                      |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | モジュールのフォーマット文字列。                                        |
+| `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                       |
 | `version_format`          | `"v${raw}"`                                                                | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。  |
 | `symbol`                  | `"🐫 "`                                                                     | The symbol used before displaying the version of OCaml. |
 | `global_switch_indicator` | `""`                                                                       | The format string used to represent global OPAM switch. |
@@ -2248,14 +2264,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### オプション
 
-| オプション             | デフォルト                             | 説明                                                        |
-| ----------------- | --------------------------------- | --------------------------------------------------------- |
-| `format`          | `"is [$symbol$version]($style) "` | moduleのフォーマットです。                                          |
-| `symbol`          | `"📦 "`                            | パッケージのバージョンを表示する前に使用される記号です。                              |
-| `version_format`  | `"v${raw}"`                       | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。    |
-| `style`           | `"bold 208"`                      | モジュールのスタイルです。                                             |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private. |
-| `disabled`        | `false`                           | `package`モジュールを無効にします。                                    |
+| オプション             | デフォルト                             | 説明                                                         |
+| ----------------- | --------------------------------- | ---------------------------------------------------------- |
+| `format`          | `"is [$symbol$version]($style) "` | moduleのフォーマットです。                                           |
+| `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package. |
+| `version_format`  | `"v${raw}"`                       | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。     |
+| `style`           | `"bold 208"`                      | モジュールのスタイルです。                                              |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.  |
+| `disabled`        | `false`                           | Disables the `package` module.                             |
 
 ### 変数
 
@@ -2290,7 +2306,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 | オプション               | デフォルト                                                                                                    | 説明                                                     |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                                                     | モジュールのフォーマット文字列。                                       |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                      |
 | `version_format`    | `"v${raw}"`                                                                                              | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`            | `"🐪 "`                                                                                                   | The symbol used before displaying the version of Perl  |
 | `detect_extensions` | `["pl", "pm", "pod"]`                                                                                    | どの拡張子がこのモジュールをアクティブにするか                                |
@@ -2330,12 +2346,12 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"🐘 "`                               | PHPのバージョンを表示する前に使用される記号です。                             |
+| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.  |
 | `detect_extensions` | `["php"]`                            | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["composer.json", ".php-version"]`  | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"147 bold"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | `php`モジュールを無効にします。                                     |
+| `disabled`          | `false`                              | Disables the `php` module.                             |
 
 ### 変数
 
@@ -2375,7 +2391,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 | オプション            | デフォルト                                        | 説明                                                     |
 | ---------------- | -------------------------------------------- | ------------------------------------------------------ |
-| `format`         | `"via [$symbol($username@)$stack]($style) "` | モジュールのフォーマット文字列。                                       |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | The format string for the module.                      |
 | `version_format` | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.         |
 | `style`          | `"bold 5"`                                   | モジュールのスタイルです。                                          |
@@ -2387,7 +2403,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 | --------- | ---------- | --------------------------- |
 | version   | `v0.12.24` | The version of `pulumi`     |
 | stack     | `dev`      | The current Pulumi stack    |
-| ユーザ名      | `alice`    | The current Pulumi username |
+| username  | `alice`    | The current Pulumi username |
 | symbol    |            | オプション `記号` の値をミラーする         |
 | style\* |            | オプション `style` の値をミラーする      |
 
@@ -2478,13 +2494,13 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `version_format`     | `"v${raw}"`                                                                                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                 |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `"yellow bold"`                                                                                              | モジュールのスタイルです。                                                                          |
-| `pyenv_version_name` | `false`                                                                                                      | pyenvを使用してPythonバージョンを取得します                                                            |
+| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `["py"]`                                                                                                     | どの拡張子がこのモジュールをアクティブにするか                                                                |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | どのファイル名がこのモジュールをアクティブにするか                                                              |
 | `detect_folders`     | `[]`                                                                                                         | どのフォルダーがこのモジュールをアクティブにするか                                                              |
-| `disabled`           | `false`                                                                                                      | `python`モジュールを無効にします。                                                                  |
+| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
 
@@ -2638,13 +2654,13 @@ Starship gets the current Ruby version by running `ruby -v`.
 | ------------------- | ------------------------------------ | ------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                        |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。  |
-| `symbol`            | `"💎 "`                               | Rubyのシンボルを表すフォーマット文字列.                                  |
+| `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.        |
 | `detect_extensions` | `["rb"]`                             | どの拡張子がこのモジュールをアクティブにするか                                 |
 | `detect_files`      | `["Gemfile", ".ruby-version"]`       | どのファイル名がこのモジュールをアクティブにするか                               |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                               |
 | `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module. |
 | `style`             | `"bold red"`                         | モジュールのスタイルです。                                           |
-| `disabled`          | `false`                              | `ruby`モジュールを無効にします。                                     |
+| `disabled`          | `false`                              | Disables the `ruby` module.                             |
 
 ### 変数
 
@@ -2678,18 +2694,18 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"🦀 "`                               | Rustのシンボルを表すフォーマット文字列                                  |
+| `symbol`            | `"🦀 "`                               | A format string representing the symbol of Rust        |
 | `detect_extensions` | `["rs"]`                             | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["Cargo.toml"]`                     | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold red"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | `rust`モジュールを無効にします。                                    |
+| `disabled`          | `false`                              | Disables the `rust` module.                            |
 
 ### 変数
 
 | 変数        | 設定例               | 説明                     |
 | --------- | ----------------- | ---------------------- |
-| version   | `v1.43.0-nightly` | `rustc`のバージョン          |
+| version   | `v1.43.0-nightly` | The version of `rustc` |
 | symbol    |                   | オプション `記号` の値をミラーする    |
 | style\* |                   | オプション `style` の値をミラーする |
 
@@ -2720,7 +2736,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `version_format`    | `"v${raw}"`                              | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `detect_extensions` | `["sbt", "scala"]`                       | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[".metals"]`                            | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.             |
 | `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.      |
 | `style`             | `"red dimmed"`                           | モジュールのスタイルです。                                          |
 | `disabled`          | `false`                                  | Disables the `scala` module.                           |
@@ -2778,7 +2794,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | 変数        | デフォルト | 説明                                                         |
 | --------- | ----- | ---------------------------------------------------------- |
 | indicator |       | Mirrors the value of `indicator` for currently used shell. |
-| style\* |       | オプション `style` の値をミラーする.                                    |
+| style\* |       | Mirrors the value of option `style`.                       |
 
 *: This variable can only be used as a part of a style string
 
@@ -3031,23 +3047,23 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 | オプション               | デフォルト                                | 説明                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol$workspace]($style) "` | モジュールのフォーマット文字列。                                       |
+| `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                      |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"💠"`                                | ワークスペースの前に表示されるフォーマット文字列。                              |
+| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.  |
 | `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[".terraform"]`                     | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold 105"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | `terraform`モジュールを無効にします。                               |
+| `disabled`          | `false`                              | Disables the `terraform` module.                       |
 
 ### 変数
 
-| 変数        | 設定例        | 説明                     |
-| --------- | ---------- | ---------------------- |
-| version   | `v0.12.24` | `terraform` のバージョン     |
-| workspace | `default`  | 現在のTerraformワークスペース    |
-| symbol    |            | オプション `記号` の値をミラーする    |
-| style\* |            | オプション `style` の値をミラーする |
+| 変数        | 設定例        | 説明                              |
+| --------- | ---------- | ------------------------------- |
+| version   | `v0.12.24` | The version of `terraform`      |
+| workspace | `default`  | The current Terraform workspace |
+| symbol    |            | オプション `記号` の値をミラーする             |
+| style\* |            | オプション `style` の値をミラーする          |
 
 *: This variable can only be used as a part of a style string
 
@@ -3083,15 +3099,15 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### オプション
 
-| オプション             | デフォルト                   | 説明                                                                                                    |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | モジュールのフォーマット文字列。                                                                                      |
-| `use_12hr`        | `false`                 | 12時間のフォーマットを有効にします。                                                                                   |
-| `time_format`     | この表の下を参照してください          | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。     |
-| `style`           | `"bold yellow"`         | モジュールのスタイルです。                                                                                         |
-| `utc_time_offset` | `"local"`               | 使用するUTCオフセットを設定します。 Range from -24 &lt; x &lt; 24. フロートが30/45分のタイムゾーンオフセットに対応できるようにします。   |
-| `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| オプション             | デフォルト                   | 説明                                                                                                                                 |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3099,7 +3115,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | 変数        | 設定例        | 説明                     |
 | --------- | ---------- | ---------------------- |
-| 時刻        | `13:08:10` | The current time.      |
+| time      | `13:08:10` | The current time.      |
 | style\* |            | オプション `style` の値をミラーする |
 
 *: This variable can only be used as a part of a style string
@@ -3134,13 +3150,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### オプション
 
-| オプション         | デフォルト                   | 説明                        |
-| ------------- | ----------------------- | ------------------------- |
-| `style_root`  | `"bold red"`            | ユーザーがrootのときに使用されるスタイルです。 |
-| `style_user`  | `"bold yellow"`         | 非rootユーザーに使用されるスタイルです。    |
-| `format`      | `"[$user]($style) in "` | moduleのフォーマットです。          |
-| `show_always` | `false`                 | `username`モジュールを常に表示します。  |
-| `disabled`    | `false`                 | `username`モジュールを無効にします。   |
+| オプション         | デフォルト                   | 説明                                    |
+| ------------- | ----------------------- | ------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
+| `format`      | `"[$user]($style) in "` | moduleのフォーマットです。                      |
+| `show_always` | `false`                 | Always shows the `username` module.   |
+| `disabled`    | `false`                 | Disables the `username` module.       |
 
 ### 変数
 
@@ -3350,8 +3366,8 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
-| `shell`       |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                       |
-| `説明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
