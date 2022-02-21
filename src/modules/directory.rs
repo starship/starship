@@ -364,8 +364,8 @@ mod tests {
         fs::create_dir_all(&src_dir)?;
         init_repo(&repo_dir)?;
 
-        let src_variations = [src_dir.clone(), src_dir.canonicalize().unwrap()];
-        let repo_variations = [repo_dir.clone(), repo_dir.canonicalize().unwrap()];
+        let src_variations = [src_dir.clone(), dunce::canonicalize(src_dir).unwrap()];
+        let repo_variations = [repo_dir.clone(), dunce::canonicalize(repo_dir).unwrap()];
         for src_dir in &src_variations {
             for repo_dir in &repo_variations {
                 let output = contract_repo_path(src_dir, repo_dir);
@@ -1590,7 +1590,7 @@ mod tests {
     #[test]
     #[cfg(windows)]
     fn windows_trims_extended_unc_path_prefix() {
-        // Under Windows, path canonicalization returns UNC paths using extended-path prefixes `\\?\UNC\`
+        // Under Windows, path canonicalization may return UNC paths using extended-path prefixes `\\?\UNC\`
         // We expect this prefix to be trimmed before being rendered.
         let unc_path = Path::new(r"\\?\UNC\server\share\a\b\c");
 

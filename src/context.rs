@@ -137,9 +137,9 @@ impl<'a> Context<'a> {
         }
 
         // Canonicalize the current path to resolve symlinks, etc.
-        // NOTE: On Windows this converts the path to extended-path syntax.
+        // NOTE: On Windows this may convert the path to extended-path syntax.
         let current_dir = Context::expand_tilde(path);
-        let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
+        let current_dir = dunce::canonicalize(&current_dir).unwrap_or(current_dir);
         let logical_dir = logical_path;
 
         let root_config = config
@@ -734,10 +734,8 @@ mod tests {
 
         assert_ne!(context.current_dir, context.logical_dir);
 
-        let expected_current_dir = path_actual
-            .join("yyy")
-            .canonicalize()
-            .expect("canonicalize");
+        let expected_current_dir =
+            dunce::canonicalize(path_actual.join("yyy")).expect("canonicalize");
         assert_eq!(expected_current_dir, context.current_dir);
 
         let expected_logical_dir = test_path;
@@ -786,5 +784,22 @@ mod tests {
 
         let expected_logical_dir = test_path;
         assert_eq!(expected_logical_dir, context.logical_dir);
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn strip_extended_path_prefix() {
+        let test_path = Path::new(r"\\?\C:\").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Unknown,
+            Target::Main,
+            test_path.clone(),
+            test_path,
+        );
+
+        let expected_path = Path::new(r"C:\");
+
+        assert_eq!(&context.current_dir, expected_path);
     }
 }
