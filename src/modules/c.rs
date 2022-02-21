@@ -32,9 +32,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "compiler_name" => {
                     if config.format.contains("$compiler_name") {
-                        let c_compiler_info = context
-                            .exec_cmd("cc", &["--version"])?
-                            .stdout; // std::string::String
+                        // This is ugly, it would be better expressed as "run each
+                        //   of these in turn, stopping when one succeeds and gimme
+                        //   the results" instead of a mess of nested ifs, but I've
+                        //   not yet figured out how to do that in Rust :-)
+                        // Try running `cc --version`; if that succeeds, unwrap it.
+                        //   otherwise try `gcc --version`; if that succeeds, unwrap it.
+                        //   Otherwise try `clang --version` and either unwrap or fail (? op)
+                        let c_compiler_info = context.exec_cmd("cc", &["--version"]);
+                        let c_compiler_info = if c_compiler_info.is_none() {
+                            let c_compiler_info = context.exec_cmd("gcc", &["--version"]);
+                            if c_compiler_info.is_none() {
+                                context.exec_cmd("clang", &["--version"])?
+                            } else {
+                                c_compiler_info.unwrap()
+                            }
+                        } else {
+                            c_compiler_info.unwrap()
+                        };
+                        let c_compiler_info = c_compiler_info.stdout;
+
                         let c_compiler = if c_compiler_info.contains("clang") {
                             "clang"
                         } else if c_compiler_info.contains("Free Software Foundation") {
@@ -52,9 +69,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "compiler_version" => {
                     if config.format.contains("$compiler_version") {
-                        let c_version = context
-                            .exec_cmd("cc", &["-dumpversion"])? // works for both gcc and clang
-                            .stdout;
+                        // Another pile of ugly
+                        let c_version = context.exec_cmd("cc", &["-dumpversion"]);
+                        let c_version = if c_version.is_none() {
+                            let c_version = context.exec_cmd("gcc", &["-dumpversion"]);
+                            if c_version.is_none() {
+                                context.exec_cmd("clang", &["-dumpversion"])?
+                            } else {
+                                c_version.unwrap()
+                            }
+                        } else {
+                            c_version.unwrap()
+                        };
+                        let c_version = c_version.stdout;
+
                         VersionFormatter::format_module_version(
                             module.get_name(),
                             c_version.trim(),
