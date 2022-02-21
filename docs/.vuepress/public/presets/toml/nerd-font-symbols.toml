@@ -58,5 +58,8 @@ symbol = " "
 [package]
 symbol = " "
 
+[spack]
+symbol = "🅢 "
+
 [rust]
 symbol = " "
