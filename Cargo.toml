@@ -31,7 +31,7 @@ ansi_term = "0.12.1"
 byte-unit = "4.0.13"
 chrono = "0.4.19"
 clap = { version = "3.1.0", features = ["derive", "cargo", "unicode"] }
-clap_complete = "3.0.6"
+clap_complete = "3.1.0"
 directories-next = "2.0.0"
 gethostname = "0.2.2"
 git2 = { version = "0.13.25", default-features = false }
