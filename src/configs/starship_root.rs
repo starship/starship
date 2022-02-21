@@ -74,6 +74,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "buf",
     "nix_shell",
     "conda",
+    "spack",
     "memory_usage",
     "aws",
     "gcloud",
