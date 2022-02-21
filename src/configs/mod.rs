@@ -18,6 +18,7 @@ pub mod dart;
 pub mod deno;
 pub mod directory;
 pub mod docker_context;
+pub mod dolt_branch;
 pub mod dotnet;
 pub mod elixir;
 pub mod elm;
@@ -101,6 +102,7 @@ pub struct FullConfig<'a> {
     deno: deno::DenoConfig<'a>,
     directory: directory::DirectoryConfig<'a>,
     docker_context: docker_context::DockerContextConfig<'a>,
+    dolt_branch: dolt_branch::DoltBranchConfig<'a>,
     dotnet: dotnet::DotnetConfig<'a>,
     elixir: elixir::ElixirConfig<'a>,
     elm: elm::ElmConfig<'a>,
@@ -182,6 +184,7 @@ impl<'a> Default for FullConfig<'a> {
             deno: Default::default(),
             directory: Default::default(),
             docker_context: Default::default(),
+            dolt_branch: Default::default(),
             dotnet: Default::default(),
             elixir: Default::default(),
             elm: Default::default(),

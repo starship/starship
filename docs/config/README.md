@@ -204,6 +204,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$dolt_branch\
 $docker_context\
 $package\
 $cmake\
@@ -954,6 +955,42 @@ the context in use).
 
 [docker_context]
 format = "via [🐋 $context](blue bold)"
+```
+
+## Dolt Branch
+
+The `dolt_branch` module shows the active branch of the dolt repo.
+
+### Options
+
+| Option               | Default                          | Description                                                                              |
+| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
+| `symbol`             | `" "`                           | A format string representing the symbol of dolt branch.                                   |
+| `style`              | `"bold purple"`                  | The style for the module.                                                                |
+| `truncation_length`  | `2^63 - 1`                       | Truncates a dolt branch to `N` graphemes.                                                 |
+| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `disabled`           | `false`                          | Disables the `dolt_branch` module.                                                        |
+
+### Variables
+
+| Variable         | Example  | Description                                                                                            |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch           | `main` | The current branch name.                                                                               |
+| symbol           |          | Mirrors the value of option `symbol`                                                                   |
+| style\*          |          | Mirrors the value of option `style`                                                                    |
+
+\*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dolt_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
 ```
 
 ## Dotnet

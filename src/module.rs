@@ -23,6 +23,7 @@ pub const ALL_MODULES: &[&str] = &[
     "deno",
     "directory",
     "docker_context",
+    "dolt_branch",
     "dotnet",
     "elixir",
     "elm",
