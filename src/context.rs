@@ -337,7 +337,7 @@ impl<'a> Context<'a> {
     }
 
     /// Attempt to execute several commands with exec_cmd, return the results of the first that works
-    pub fn exec_cmds_return_first (&self, commands: &[&[&str]]) -> Option<CommandOutput> {
+    pub fn exec_cmds_return_first(&self, commands: &[&[&str]]) -> Option<CommandOutput> {
         commands.iter().find_map(|attempt| {
             let c_compiler_info = self.exec_cmd(attempt[0], &attempt[1..]);
             if c_compiler_info.is_some() {

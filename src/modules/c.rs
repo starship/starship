@@ -20,19 +20,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        let c_compiler_info = if config.format.contains("$compiler_name") || config.format.contains("$compiler_version") {
+        let c_compiler_info = if config.format.contains("$compiler_name")
+            || config.format.contains("$compiler_version")
+        {
             context.exec_cmds_return_first(&[
                 // the compiler is usually cc, and --version works on gcc and clang
-                &["cc",    "--version"],
+                &["cc", "--version"],
                 // but on some platforms gcc is installed as *gcc*, not cc
-                &["gcc",   "--version"],
+                &["gcc", "--version"],
                 // for completeness, although I've never seen a clang that wasn't cc
                 &["clang", "--version"],
             ])
         } else {
             None
         };
-            
+
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
@@ -72,7 +74,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         // But this is CRUFTY AS HELL
                         VersionFormatter::format_module_version(
                             module.get_name(),
-                            &c_compiler_info.as_ref()?.stdout.split_whitespace().nth(3)?.to_string(),
+                            &c_compiler_info
+                                .as_ref()?
+                                .stdout
+                                .split_whitespace()
+                                .nth(3)?
+                                .to_string(),
                             config.version_format,
                         )
                         .map(Ok)
@@ -121,10 +128,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("c").path(dir.path()).collect();
 
-        let expected = Some(format!(
-            "via {}",
-            Color::Fixed(149).bold().paint("C ")
-        ));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -136,10 +140,7 @@ mod tests {
 
         let actual = ModuleRenderer::new("c").path(dir.path()).collect();
 
-        let expected = Some(format!(
-            "via {}",
-            Color::Fixed(149).bold().paint("C ")
-        ));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
         dir.close()
     }
