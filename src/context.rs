@@ -335,6 +335,23 @@ impl<'a> Context<'a> {
             Duration::from_millis(self.root_config.command_timeout),
         )
     }
+
+    /// Attempt to execute several commands with exec_cmd, return the results of the first that works
+    pub fn exec_cmds_return_first (&self, commands: &[&[&str]]) -> Option<CommandOutput> {
+        let mut attempts_iterator = commands.iter();
+        loop {
+            let attempt = attempts_iterator.next();
+            if attempt.is_none() {
+                break None;
+            }
+            let attempt = attempt.unwrap();
+            // this should be generalised to pass more args if they exist
+            let c_compiler_info = self.exec_cmd(attempt[0], &[attempt[1]]);
+            if c_compiler_info.is_some() {
+                break c_compiler_info;
+            }
+        }
+    }
 }
 
 #[derive(Debug)]
