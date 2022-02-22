@@ -1564,9 +1564,9 @@ checksum = "ae1a47186c03a32177042e55dbc5fd5aee900b8e0069a8d70fba96a9375cd012"
 
 [[package]]
 name = "shadow-rs"
-version = "0.8.1"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8935e920eb80ff8f5a5bced990325d12f6cc1015154a3852c6a23cf5bd71c447"
+checksum = "38aacac9d96bfdac3f00d2149fc2235f99b839f54f0bb18bea39c7749c97f709"
 dependencies = [
  "chrono",
  "git2",
