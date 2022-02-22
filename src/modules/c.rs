@@ -20,6 +20,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        let c_compiler_info = if config.format.contains("$compiler_name") || config.format.contains("$compiler_version") {
+            context.exec_cmds_return_first(&[
+                // the compiler is usually cc, and --version works on gcc and clang
+                &["cc",    "--version"],
+                // but on some platforms gcc is installed as *gcc*, not cc
+                &["gcc",   "--version"],
+                // for completeness, although I've never seen a clang that wasn't cc
+                &["clang", "--version"],
+            ])
+        } else {
+            None
+        };
+            
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
@@ -31,61 +44,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "compiler_name" => {
-                    if config.format.contains("$compiler_name") {
-                        // This is ugly, it would be better expressed as "run each
-                        //   of these in turn, stopping when one succeeds and gimme
-                        //   the results" instead of a mess of nested ifs, but I've
-                        //   not yet figured out how to do that in Rust :-)
-                        // Try running `cc --version`; if that succeeds, unwrap it.
-                        //   otherwise try `gcc --version`; if that succeeds, unwrap it.
-                        //   Otherwise try `clang --version` and either unwrap or fail (? op)
-                        let c_compiler_info = context.exec_cmd("cc", &["--version"]);
-                        let c_compiler_info = if c_compiler_info.is_none() {
-                            let c_compiler_info = context.exec_cmd("gcc", &["--version"]);
-                            if c_compiler_info.is_none() {
-                                context.exec_cmd("clang", &["--version"])?
-                            } else {
-                                c_compiler_info.unwrap()
-                            }
-                        } else {
-                            c_compiler_info.unwrap()
-                        };
-                        let c_compiler_info = c_compiler_info.stdout;
+                    let c_compiler_info = &c_compiler_info.as_ref()?.stdout;
 
-                        let c_compiler = if c_compiler_info.contains("clang") {
-                            "clang"
-                        } else if c_compiler_info.contains("Free Software Foundation") {
-                            "gcc"
-                        } else {
-                            "Unknown compiler"
-                        };
-                        Some(c_compiler).map(Ok)
+                    let c_compiler = if c_compiler_info.contains("clang") {
+                        "clang"
+                    } else if c_compiler_info.contains("Free Software Foundation") {
+                        "gcc"
                     } else {
-                        None
-                    }
+                        "Unknown compiler"
+                    };
+                    Some(c_compiler).map(Ok)
                 }
                 _ => None,
             })
             .map(|variable| match variable {
                 "compiler_version" => {
                     if config.format.contains("$compiler_version") {
-                        // Another pile of ugly
-                        let c_version = context.exec_cmd("cc", &["-dumpversion"]);
-                        let c_version = if c_version.is_none() {
-                            let c_version = context.exec_cmd("gcc", &["-dumpversion"]);
-                            if c_version.is_none() {
-                                context.exec_cmd("clang", &["-dumpversion"])?
-                            } else {
-                                c_version.unwrap()
-                            }
-                        } else {
-                            c_version.unwrap()
-                        };
-                        let c_version = c_version.stdout;
-
+                        // Clang says ...
+                        //   Apple clang version 13.0.0 ...\n
+                        //   OpenBSD clang version 11.1.0\n...
+                        //   FreeBSD clang version 11.0.1 ...\n
+                        // so seems to have the version always in position 3.
+                        // gcc says ...
+                        //   gcc (OmniOS 151036/9.3.0-il-1) 9.3.0\n...
+                        //   gcc (Debian 10.2.1-6) 10.2.1 ...\n
+                        // so again in position 3.
+                        // But this is CRUFTY AS HELL
                         VersionFormatter::format_module_version(
                             module.get_name(),
-                            c_version.trim(),
+                            &c_compiler_info.as_ref()?.stdout.split_whitespace().nth(3)?.to_string(),
                             config.version_format,
                         )
                         .map(Ok)
