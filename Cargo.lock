@@ -1075,9 +1075,9 @@ checksum = "2839e79665f131bdb5782e51f2c6c9599c133c6098982a54c794358bf432529c"
 
 [[package]]
 name = "open"
-version = "2.0.3"
+version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b1e014096a08da72e3287119e0c69a8f6fce61a031a55b1ce2607fe9c2b5a67"
+checksum = "5a82915836ef43159bb6a3c64d884c42329ccd0b8afdca737cf1e3dd701709dc"
 dependencies = [
  "pathdiff",
  "winapi",
