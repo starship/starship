@@ -270,7 +270,7 @@ mod tests {
     fn render_valid_paths() -> io::Result<()> {
         use io::Write;
         let dir = tempfile::tempdir()?;
-        let root = std::fs::canonicalize(dir.path())?;
+        let root = dunce::canonicalize(dir.path())?;
         let mut yaml = File::create(root.join("Pulumi.yml"))?;
         yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
         yaml.sync_all()?;
@@ -337,7 +337,7 @@ mod tests {
     fn partial_login() -> io::Result<()> {
         use io::Write;
         let dir = tempfile::tempdir()?;
-        let root = std::fs::canonicalize(dir.path())?;
+        let root = dunce::canonicalize(dir.path())?;
         let mut yaml = File::create(root.join("Pulumi.yml"))?;
         yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
         yaml.sync_all()?;
