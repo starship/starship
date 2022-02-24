@@ -76,13 +76,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(_) => config.pipestatus_format,
         _ => config.format,
     };
-    let parsed = format_exit_code(
-        &exit_code.to_string(),
-        main_format,
-        Some(&pipestatus),
-        &config,
-        context,
-    );
+    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config, context);
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -119,8 +113,8 @@ fn format_exit_code<'a>(
         false => None,
     };
     let signal_number = raw_signal_number.map(|sn| sn.to_string());
-    let signal_name = raw_signal_number
-        .and_then(|sn| status_signal_name(sn).or_else(|| signal_number.as_deref()));
+    let signal_name =
+        raw_signal_number.and_then(|sn| status_signal_name(sn).or(signal_number.as_deref()));
 
     // If not a signal and not a common meaning, it should at least print the raw exit code number
     let maybe_exit_code_number = match common_meaning.is_none() && signal_name.is_none() {

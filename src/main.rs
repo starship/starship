@@ -1,4 +1,4 @@
-#![warn(clippy::disallowed_method)]
+#![warn(clippy::disallowed_methods)]
 
 use clap::crate_authors;
 use std::io;

@@ -475,16 +475,19 @@ pub struct ScanDir<'a> {
 }
 
 impl<'a> ScanDir<'a> {
+    #[must_use]
     pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
         self.files = files;
         self
     }
 
+    #[must_use]
     pub const fn set_extensions(mut self, extensions: &'a [&'a str]) -> Self {
         self.extensions = extensions;
         self
     }
 
+    #[must_use]
     pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
         self.folders = folders;
         self
