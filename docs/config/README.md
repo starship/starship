@@ -884,10 +884,12 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 
 ### Variables
 
-| Variable | Example               | Description                         |
-| -------- | --------------------- | ----------------------------------- |
-| path     | `"D:/Projects"`       | The current directory path          |
-| style\*  | `"black bold dimmed"` | Mirrors the value of option `style` |
+| Variable       | Example                  | Description                                                   |
+| -------------- | ------------------------ | ------------------------------------------------------------- |
+| path           | `"D:/Projects/starship"` | The current directory path                                    |
+| path_base      | `"D:/Projects/"`         | The last component of `path`                                  |
+| last_component | `"starship"`             | The remainder of the `path` after removing the last component |
+| style\*        | `"black bold dimmed"`    | Mirrors the value of option `style`                           |
 
 *: This variable can only be used as a part of a style string
 
@@ -896,13 +898,15 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 
 Let us consider the path `/path/to/home/git_repo/src/lib`
 
-| Variable         | Example               | Description                             |
-| ---------------- | --------------------- | --------------------------------------- |
-| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
-| repo_root        | `"git_repo"`          | The git root directory name             |
-| path             | `"/src/lib"`          | The remaining path                      |
-| style            | `"black bold dimmed"` | Mirrors the value of option `style`     |
-| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+| Variable         | Example               | Description                                                   |
+| ---------------- | --------------------- | ------------------------------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | The path before git root directory path                       |
+| repo_root        | `"git_repo"`          | The git root directory name                                   |
+| path             | `"/src/lib"`          | The remaining path                                            |
+| path_base        | `"/src/"`             | The last component of `path`                                  |
+| last_component   | `"lib"`               | The remainder of the `path` after removing the last component |
+| style            | `"black bold dimmed"` | Mirrors the value of option `style`                           |
+| repo_root_style  | `"underline white"`   | Style for git root directory name                             |
 
 </details>
 
