@@ -78,7 +78,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         // But this is CRUFTY AS HELL
                         VersionFormatter::format_module_version(
                             module.get_name(),
-                            &c_compiler_info.split_whitespace().nth(3)?.to_string(),
+                            c_compiler_info.split_whitespace().nth(3)?,
                             config.version_format,
                         )
                         .map(Ok)
