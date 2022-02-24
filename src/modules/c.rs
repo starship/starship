@@ -126,10 +126,39 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.c"))?.sync_all()?;
 
+        // FIXME voodoo here to set up a mock for 'cc --version' claiming to be gcc
+        // NB the test for when it claims to be clang is in the ..._with_h_file test
         let actual = ModuleRenderer::new("c").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C gcc v10.2.1")));
+        assert_eq!(expected, actual);
 
+        // FIXME voodoo here to set up a mock for 'cc --version' claiming to be something
+        // unknown:
+        // HISOFT-C Compiler  V1.2
+        // Copyright © 1984 HISOFT
+        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C Unknown compiler")));
+        assert_eq!(expected, actual);
+
+        // FIXME voodoo here to set up a mock for 'cc --version' not working,
+        // then 'gcc --version' returning something sensible
+        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C gcc v10.2.1")));
+        assert_eq!(expected, actual);
+
+        // FIXME voodoo here to set up a mock for 'cc --version' not working,
+        // then 'gcc --version' not working, then 'clang --version' returning
+        // something sensible
+        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C clang v11.0.1")));
+        assert_eq!(expected, actual);
+
+        // FIXME voodoo here to set up a mock for 'cc --version' not working,
+        // then 'gcc --version' not working, then 'clang --version' not working
+        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
+
         dir.close()
     }
 
@@ -139,8 +168,7 @@ mod tests {
         File::create(dir.path().join("any.h"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("c").path(dir.path()).collect();
-
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
+        let expected = Some(format!("using {}", Color::Fixed(149).bold().paint("C clang v11.0.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

@@ -128,9 +128,23 @@ pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     args: &[U],
 ) -> Option<Option<CommandOutput>> {
     let command = display_command(&cmd, args);
-    let out = match command.as_str() {
-        "cobc -version" => Some(CommandOutput {
-            stdout: String::from("\
+    let out = if false {
+        // FIXME voodoo for handling commands where we want to test with multiple
+        // different outputs for the same command
+        None
+    } else {
+        // otherwise it's a simple command that returns the same every time
+        match command.as_str() {
+            "cc --version" => Some(CommandOutput {
+                stdout: String::from("\
+FreeBSD clang version 11.0.1 (git@github.com:llvm/llvm-project.git llvmorg-11.0.1-0-g43ff75f2c3fe)
+Target: x86_64-unknown-freebsd13.0
+Thread model: posix
+InstalledDir: /usr/bin"),
+                stderr: String::default(),
+            }),
+            "cobc -version" => Some(CommandOutput {
+                stdout: String::from("\
 cobc (GnuCOBOL) 3.1.2.0
 Copyright (C) 2020 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
@@ -140,143 +154,143 @@ Written by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart
 Built     Dec 24 2020 19:08:58
 Packaged  Dec 23 2020 12:04:58 UTC
 C version \"10.2.0\""),
-            stderr: String::default(),
-        }),
-        "crystal --version" => Some(CommandOutput {
-            stdout: String::from(
-                "\
+                stderr: String::default(),
+            }),
+            "crystal --version" => Some(CommandOutput {
+                stdout: String::from(
+                    "\
 Crystal 0.35.1 (2020-06-19)
 
 LLVM: 10.0.0
 Default target: x86_64-apple-macosx\n",
-            ),
-            stderr: String::default(),
-        }),
-        "dart --version" => Some(CommandOutput {
-            stdout: String::default(),
-            stderr: String::from(
-                "Dart VM version: 2.8.4 (stable) (Wed Jun 3 12:26:04 2020 +0200) on \"macos_x64\"",
-            ),
-        }),
-        "deno -V" => Some(CommandOutput {
-            stdout: String::from("deno 1.8.3\n"),
-            stderr: String::default()
-        }),
-        "dummy_command" => Some(CommandOutput {
-            stdout: String::from("stdout ok!\n"),
-            stderr: String::from("stderr ok!\n"),
-        }),
-        "elixir --version" => Some(CommandOutput {
-            stdout: String::from(
-                "\
+                ),
+                stderr: String::default(),
+            }),
+            "dart --version" => Some(CommandOutput {
+                stdout: String::default(),
+                stderr: String::from(
+                    "Dart VM version: 2.8.4 (stable) (Wed Jun 3 12:26:04 2020 +0200) on \"macos_x64\"",
+                ),
+            }),
+            "deno -V" => Some(CommandOutput {
+                stdout: String::from("deno 1.8.3\n"),
+                stderr: String::default()
+            }),
+            "dummy_command" => Some(CommandOutput {
+                stdout: String::from("stdout ok!\n"),
+                stderr: String::from("stderr ok!\n"),
+            }),
+            "elixir --version" => Some(CommandOutput {
+                stdout: String::from(
+                    "\
 Erlang/OTP 22 [erts-10.6.4] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
 
 Elixir 1.10 (compiled with Erlang/OTP 22)\n",
-            ),
-            stderr: String::default(),
-        }),
-        "elm --version" => Some(CommandOutput {
-            stdout: String::from("0.19.1\n"),
-            stderr: String::default(),
-        }),
-        "go version" => Some(CommandOutput {
-            stdout: String::from("go version go1.12.1 linux/amd64\n"),
-            stderr: String::default(),
-        }),
-        "helm version --short --client" => Some(CommandOutput {
-            stdout: String::from("v3.1.1+gafe7058\n"),
-            stderr: String::default(),
-        }),
-        s if s.ends_with("java -Xinternalversion") => Some(CommandOutput {
-            stdout: String::from("OpenJDK 64-Bit Server VM (13.0.2+8) for bsd-amd64 JRE (13.0.2+8), built on Feb  6 2020 02:07:52 by \"brew\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)"),
-            stderr: String::default(),
-        }),
-        "scalac -version" => Some(CommandOutput {
-            stdout: String::from("Scala compiler version 2.13.5 -- Copyright 2002-2020, LAMP/EPFL and Lightbend, Inc."),
-            stderr: String::default(),
-        }),
-        "julia --version" => Some(CommandOutput {
-            stdout: String::from("julia version 1.4.0\n"),
-            stderr: String::default(),
-        }),
-        "kotlin -version" => Some(CommandOutput {
-            stdout: String::from("Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)\n"),
-            stderr: String::default(),
-        }),
-        "kotlinc -version" => Some(CommandOutput {
-            stdout: String::from("info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)\n"),
-            stderr: String::default(),
-        }),
-        "lua -v" => Some(CommandOutput{
-            stdout: String::from("Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio\n"),
-            stderr: String::default(),
-        }),
-        "luajit -v" => Some(CommandOutput{
-            stdout: String::from("LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/\n"),
-            stderr: String::default(),
-        }),
-        "nim --version" => Some(CommandOutput {
-            stdout: String::from(
-                "\
+                ),
+                stderr: String::default(),
+            }),
+            "elm --version" => Some(CommandOutput {
+                stdout: String::from("0.19.1\n"),
+                stderr: String::default(),
+            }),
+            "go version" => Some(CommandOutput {
+                stdout: String::from("go version go1.12.1 linux/amd64\n"),
+                stderr: String::default(),
+            }),
+            "helm version --short --client" => Some(CommandOutput {
+                stdout: String::from("v3.1.1+gafe7058\n"),
+                stderr: String::default(),
+            }),
+            s if s.ends_with("java -Xinternalversion") => Some(CommandOutput {
+                stdout: String::from("OpenJDK 64-Bit Server VM (13.0.2+8) for bsd-amd64 JRE (13.0.2+8), built on Feb  6 2020 02:07:52 by \"brew\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)"),
+                stderr: String::default(),
+            }),
+            "scalac -version" => Some(CommandOutput {
+                stdout: String::from("Scala compiler version 2.13.5 -- Copyright 2002-2020, LAMP/EPFL and Lightbend, Inc."),
+                stderr: String::default(),
+            }),
+            "julia --version" => Some(CommandOutput {
+                stdout: String::from("julia version 1.4.0\n"),
+                stderr: String::default(),
+            }),
+            "kotlin -version" => Some(CommandOutput {
+                stdout: String::from("Kotlin version 1.4.21-release-411 (JRE 14.0.1+7)\n"),
+                stderr: String::default(),
+            }),
+            "kotlinc -version" => Some(CommandOutput {
+                stdout: String::from("info: kotlinc-jvm 1.4.21 (JRE 14.0.1+7)\n"),
+                stderr: String::default(),
+            }),
+            "lua -v" => Some(CommandOutput{
+                stdout: String::from("Lua 5.4.0  Copyright (C) 1994-2020 Lua.org, PUC-Rio\n"),
+                stderr: String::default(),
+            }),
+            "luajit -v" => Some(CommandOutput{
+                stdout: String::from("LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/\n"),
+                stderr: String::default(),
+            }),
+            "nim --version" => Some(CommandOutput {
+                stdout: String::from(
+                    "\
 Nim Compiler Version 1.2.0 [Linux: amd64]
 Compiled at 2020-04-03
 Copyright (c) 2006-2020 by Andreas Rumpf
 git hash: 7e83adff84be5d0c401a213eccb61e321a3fb1ff
 active boot switches: -d:release\n",
-            ),
-            stderr: String::default(),
-        }),
-        "node --version" => Some(CommandOutput {
-            stdout: String::from("v12.0.0\n"),
-            stderr: String::default(),
-        }),
-        "ocaml -vnum" => Some(CommandOutput {
-            stdout: String::from("4.10.0\n"),
-            stderr: String::default(),
-        }),
-        "opam switch show --safe" => Some(CommandOutput {
-            stdout: String::from("default\n"),
-            stderr: String::default(),
-        }),
-        "esy ocaml -vnum" => Some(CommandOutput {
-            stdout: String::from("4.08.1\n"),
-            stderr: String::default(),
-        }),
-        "perl -e printf q#%vd#,$^V;" => Some(CommandOutput {
-            stdout: String::from("5.26.1"),
-            stderr: String::default(),
-        }),
-        "php -nr echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;" => {
-            Some(CommandOutput {
-                stdout: String::from("7.3.8"),
+                ),
                 stderr: String::default(),
-            })
-        },
-        "pulumi version" => Some(CommandOutput{
-            stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
-            stderr: String::default(),
-        }),
-        "purs --version" => Some(CommandOutput {
-            stdout: String::from("0.13.5\n"),
-            stderr: String::default(),
-        }),
-        "pyenv version-name" => Some(CommandOutput {
-            stdout: String::from("system\n"),
-            stderr: String::default(),
-        }),
-        "python --version" => None,
-        "python2 --version" => Some(CommandOutput {
-            stdout: String::default(),
-            stderr: String::from("Python 2.7.17\n"),
-        }),
-        "python3 --version" => Some(CommandOutput {
-            stdout: String::from("Python 3.8.0\n"),
-            stderr: String::default(),
-        }),
-        "R --version" => Some(CommandOutput {
-            stdout: String::default(),
-            stderr: String::from(
-                r#"R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+            }),
+            "node --version" => Some(CommandOutput {
+                stdout: String::from("v12.0.0\n"),
+                stderr: String::default(),
+            }),
+            "ocaml -vnum" => Some(CommandOutput {
+                stdout: String::from("4.10.0\n"),
+                stderr: String::default(),
+            }),
+            "opam switch show --safe" => Some(CommandOutput {
+                stdout: String::from("default\n"),
+                stderr: String::default(),
+            }),
+            "esy ocaml -vnum" => Some(CommandOutput {
+                stdout: String::from("4.08.1\n"),
+                stderr: String::default(),
+            }),
+            "perl -e printf q#%vd#,$^V;" => Some(CommandOutput {
+                stdout: String::from("5.26.1"),
+                stderr: String::default(),
+            }),
+            "php -nr echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;" => {
+                Some(CommandOutput {
+                    stdout: String::from("7.3.8"),
+                    stderr: String::default(),
+                })
+            },
+            "pulumi version" => Some(CommandOutput{
+                stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
+                stderr: String::default(),
+            }),
+            "purs --version" => Some(CommandOutput {
+                stdout: String::from("0.13.5\n"),
+                stderr: String::default(),
+            }),
+            "pyenv version-name" => Some(CommandOutput {
+                stdout: String::from("system\n"),
+                stderr: String::default(),
+            }),
+            "python --version" => None,
+            "python2 --version" => Some(CommandOutput {
+                stdout: String::default(),
+                stderr: String::from("Python 2.7.17\n"),
+            }),
+            "python3 --version" => Some(CommandOutput {
+                stdout: String::from("Python 3.8.0\n"),
+                stderr: String::default(),
+            }),
+            "R --version" => Some(CommandOutput {
+                stdout: String::default(),
+                stderr: String::from(
+                    r#"R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)\n
 
@@ -285,62 +299,63 @@ You are welcome to redistribute it under the terms of the
 GNU General Public License versions 2 or 3.
 For more information about these matters see
 https://www.gnu.org/licenses/."#
-            ),
-        }),
-        "red --version" => Some(CommandOutput {
-            stdout: String::from("0.6.4\n"),
-            stderr: String::default()
-        }),
-        "ruby -v" => Some(CommandOutput {
-            stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
-            stderr: String::default(),
-        }),
-        "swift --version" => Some(CommandOutput {
-            stdout: String::from(
-                "\
+                ),
+            }),
+            "red --version" => Some(CommandOutput {
+                stdout: String::from("0.6.4\n"),
+                stderr: String::default()
+            }),
+            "ruby -v" => Some(CommandOutput {
+                stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
+                stderr: String::default(),
+            }),
+            "swift --version" => Some(CommandOutput {
+                stdout: String::from(
+                    "\
 Apple Swift version 5.2.2 (swiftlang-1103.0.32.6 clang-1103.0.32.51)
 Target: x86_64-apple-darwin19.4.0\n",
-            ),
-            stderr: String::default(),
-        }),
-        "vagrant --version" => Some(CommandOutput {
-            stdout: String::from("Vagrant 2.2.10\n"),
-            stderr: String::default(),
-        }),
-        "v version" => Some(CommandOutput {
-            stdout: String::from("V 0.2 30c0659"),
-            stderr: String::default()
-        }),
-        "zig version" => Some(CommandOutput {
-            stdout: String::from("0.6.0\n"),
-            stderr: String::default(),
-        }),
-        "cmake --version" => Some(CommandOutput {
-            stdout: String::from(
-                "\
+                ),
+                stderr: String::default(),
+            }),
+            "vagrant --version" => Some(CommandOutput {
+                stdout: String::from("Vagrant 2.2.10\n"),
+                stderr: String::default(),
+            }),
+            "v version" => Some(CommandOutput {
+                stdout: String::from("V 0.2 30c0659"),
+                stderr: String::default()
+            }),
+            "zig version" => Some(CommandOutput {
+                stdout: String::from("0.6.0\n"),
+                stderr: String::default(),
+            }),
+            "cmake --version" => Some(CommandOutput {
+                stdout: String::from(
+                    "\
 cmake version 3.17.3
 
 CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
-            ),
-            stderr: String::default(),
-        }),
-        "dotnet --version" => Some(CommandOutput {
-            stdout: String::from("3.1.103"),
-            stderr: String::default(),
-        }),
-        "dotnet --list-sdks" => Some(CommandOutput {
-            stdout: String::from("3.1.103 [/usr/share/dotnet/sdk]"),
-            stderr: String::default(),
-        }),
-        "terraform version" => Some(CommandOutput {
-            stdout: String::from("Terraform v0.12.14\n"),
-            stderr: String::default(),
-        }),
-        s if s.starts_with("erl -noshell -eval") => Some(CommandOutput {
-            stdout: String::from("22.1.3\n"),
-            stderr: String::default(),
-        }),
-        _ => return None,
+                ),
+                stderr: String::default(),
+            }),
+            "dotnet --version" => Some(CommandOutput {
+                stdout: String::from("3.1.103"),
+                stderr: String::default(),
+            }),
+            "dotnet --list-sdks" => Some(CommandOutput {
+                stdout: String::from("3.1.103 [/usr/share/dotnet/sdk]"),
+                stderr: String::default(),
+            }),
+            "terraform version" => Some(CommandOutput {
+                stdout: String::from("Terraform v0.12.14\n"),
+                stderr: String::default(),
+            }),
+            s if s.starts_with("erl -noshell -eval") => Some(CommandOutput {
+                stdout: String::from("22.1.3\n"),
+                stderr: String::default(),
+            }),
+            _ => return None,
+        }
     };
     Some(out)
 }
