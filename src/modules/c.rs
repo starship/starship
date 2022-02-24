@@ -61,7 +61,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "compiler_version" => {
-                    if config.format.contains("$compiler_version") {
+                    let c_compiler_info = &c_compiler_info.as_ref()?.stdout;
+                    if config.format.contains("$compiler_version")
+                        && (c_compiler_info.contains("clang")
+                            || c_compiler_info.contains("Free Software Foundation"))
+                    {
                         // Clang says ...
                         //   Apple clang version 13.0.0 ...\n
                         //   OpenBSD clang version 11.1.0\n...
@@ -74,12 +78,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         // But this is CRUFTY AS HELL
                         VersionFormatter::format_module_version(
                             module.get_name(),
-                            &c_compiler_info
-                                .as_ref()?
-                                .stdout
-                                .split_whitespace()
-                                .nth(3)?
-                                .to_string(),
+                            &c_compiler_info.split_whitespace().nth(3)?.to_string(),
                             config.version_format,
                         )
                         .map(Ok)
@@ -105,7 +104,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::test::ModuleRenderer;
+    use crate::{test::ModuleRenderer, utils::CommandOutput};
     use ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -126,37 +125,82 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.c"))?.sync_all()?;
 
-        // FIXME voodoo here to set up a mock for 'cc --version' claiming to be gcc
-        // NB the test for when it claims to be clang is in the ..._with_h_file test
-        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C gcc v10.2.1")));
+        // What happens when `cc --version` says it's gcc?
+        // The case when it claims to be clang is covered in folder_with_h_file,
+        // and uses the mock in src/test/mod.rs.
+        let actual = ModuleRenderer::new("c")
+            .cmd(
+                "cc --version",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        "\
+cc (Debian 10.2.1-6) 10.2.1 20210110
+Copyright (C) 2020 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+                    ),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "using {}",
+            Color::Fixed(149).bold().paint("C gcc v10.2.1 ")
+        ));
         assert_eq!(expected, actual);
 
-        // FIXME voodoo here to set up a mock for 'cc --version' claiming to be something
-        // unknown:
-        // HISOFT-C Compiler  V1.2
-        // Copyright © 1984 HISOFT
-        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C Unknown compiler")));
+        // What happens with an unknown C compiler? Needless to say, we're
+        // not running on a Z80 so we're never going to see this one in reality!
+        let actual = ModuleRenderer::new("c")
+            .cmd(
+                "cc --version",
+                Some(CommandOutput {
+                    stdout: String::from("HISOFT-C Compiler  V1.2\nCopyright © 1984 HISOFT"),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "using {}",
+            Color::Fixed(149).bold().paint("C Unknown compiler ")
+        ));
         assert_eq!(expected, actual);
 
-        // FIXME voodoo here to set up a mock for 'cc --version' not working,
-        // then 'gcc --version' returning something sensible
-        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C gcc v10.2.1")));
+        // What happens when 'cc --version' doesn't work, but 'gcc --version' does?
+        // This stubs out `cc` but we'll fall back to `gcc --version` as defined in
+        // src/test/mod.rs.
+        let actual = ModuleRenderer::new("c")
+            .cmd("cc --version", None)
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "using {}",
+            Color::Fixed(149).bold().paint("C gcc v10.2.1 ")
+        ));
         assert_eq!(expected, actual);
 
-        // FIXME voodoo here to set up a mock for 'cc --version' not working,
-        // then 'gcc --version' not working, then 'clang --version' returning
-        // something sensible
-        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C clang v11.0.1")));
+        // Now with both 'cc' and 'gcc' not working, this should fall back to 'clang --version'
+        let actual = ModuleRenderer::new("c")
+            .cmd("cc --version", None)
+            .cmd("gcc --version", None)
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "using {}",
+            Color::Fixed(149).bold().paint("C clang v11.1.0 ")
+        ));
         assert_eq!(expected, actual);
 
-        // FIXME voodoo here to set up a mock for 'cc --version' not working,
-        // then 'gcc --version' not working, then 'clang --version' not working
-        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
+        // What happens when we can't find any of cc, gcc or clang?
+        let actual = ModuleRenderer::new("c")
+            .cmd("cc --version", None)
+            .cmd("gcc --version", None)
+            .cmd("clang --version", None)
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!("using {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
 
         dir.close()
@@ -168,7 +212,10 @@ mod tests {
         File::create(dir.path().join("any.h"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("c").path(dir.path()).collect();
-        let expected = Some(format!("using {}", Color::Fixed(149).bold().paint("C clang v11.0.1 ")));
+        let expected = Some(format!(
+            "using {}",
+            Color::Fixed(149).bold().paint("C clang v11.0.1 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
