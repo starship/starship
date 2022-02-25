@@ -3,6 +3,9 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs: {}
+
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
@@ -110,6 +113,7 @@ jobs:
     name: Create GitHub Release
     needs: github_build
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == "push" }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2.4.0
@@ -143,6 +147,7 @@ jobs:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
     needs: github_release
+    if: ${{ github.event_name == "push" }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2.4.0
@@ -161,6 +166,7 @@ jobs:
     name: Update Brew Formula
     runs-on: ubuntu-latest
     needs: github_release
+    if: ${{ github.event_name == "push" }}
     steps:
       - uses: mislav/bump-homebrew-formula-action@v1.16
         with:
@@ -172,6 +178,7 @@ jobs:
     name: Publish docs to Netlify
     runs-on: ubuntu-latest
     needs: github_release
+    if: ${{ github.event_name == "push" }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2.4.0
