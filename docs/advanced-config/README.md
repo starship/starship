@@ -62,7 +62,8 @@ starship_precmd_user_func="blastoff"
 
 - To run a custom function right before a command runs, you can use the
   [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/).
-  However, you **must** trap the DEBUG signal _before_ initializing Starship!
+  However, you **must** trap the DEBUG signal _before_ initializing Starship,
+  and you **must** `set -o functrace` while initializing Starship!
   Starship can preserve the value of the DEBUG trap, but if the trap is overwritten
   after starship starts up, some functionality will break.
 
