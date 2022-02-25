@@ -69,15 +69,57 @@ fn parse_buf_version(buf_version: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-  use crate::test::ModuleRenderer;
-  use ansi_term::Color;
-  use std::fs::File;
-  use std::io;
+    use super::parse_buf_version;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
 
-  #[test]
-  fn buf_not_installed() {
-    let actual = ModuleRenderer::new("buf").collect();
-    let expected = None;
-    assert_eq!(expected, actual);
-  }
+    #[test]
+    fn buf_version() {
+          let ok_versions = ["1.0.0", "1.1.0-dev"];
+          let not_ok_versions = ["foo", "1.0"];
+
+          let all_some = ok_versions.iter().all(|&v| parse_buf_version(v).is_some());
+          let all_none = not_ok_versions
+              .iter()
+              .any(|&v| parse_buf_version(v).is_some());
+
+          assert!(all_some);
+          assert!(all_none);
+    }
+
+    #[test]
+    fn folder_without_buf_config() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("buf").path(dir.path()).collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_buf_config() {
+        let ok_files = ["buf.yaml", "buf.gen.yaml", "buf.work.yaml"];
+        let not_ok_files = ["buf.json"];
+
+        for file in ok_files {
+          let dir = tempfile::tempdir().unwrap();
+          File::create(dir.path().join(file)).unwrap().sync_all().unwrap();
+          let actual = ModuleRenderer::new("buf").path(dir.path()).collect();
+          let expected = Some(format!("with {}", Color::Blue.bold().paint("🦬 v1.0.0")));
+          assert_eq!(expected, actual);
+          dir.close().unwrap();
+        }
+
+        for file in not_ok_files {
+            let dir = tempfile::tempdir().unwrap();
+            File::create(dir.path().join(file)).unwrap().sync_all().unwrap();
+            let actual = ModuleRenderer::new("buf").path(dir.path()).collect();
+            let expected = None;
+            assert_eq!(expected, actual);
+            dir.close().unwrap();
+        }
+    }
+
 }

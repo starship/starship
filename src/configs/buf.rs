@@ -18,9 +18,9 @@ pub struct BufConfig<'a> {
 impl<'a> Default for BufConfig<'a> {
     fn default() -> Self {
         BufConfig {
-            format: "via [$symbol ($version )]($style)",
+            format: "with [$symbol( $version)]($style)",
             version_format: "v${raw}",
-            symbol: "🦬 ",
+            symbol: "🦬",
             style: "bold blue",
             disabled: false,
             detect_extensions: vec!["proto"],
