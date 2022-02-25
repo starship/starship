@@ -20,6 +20,9 @@ If emojis aren't your thing, this might catch your eye!
 [aws]
 symbol = "  "
 
+[buf]
+symbol = "🦬 "
+
 [conda]
 symbol = " "
 
@@ -111,6 +114,9 @@ After:
 ```toml
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
+
+[buf]
+format = '\[[$symbol($version)]($style)\]'
 
 [cmake]
 format = '\[[$symbol($version)]($style)\]'

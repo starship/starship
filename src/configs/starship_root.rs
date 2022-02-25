@@ -69,6 +69,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "vagrant",
     "zig",
     // ↑ Toolchain version modules ↑
+    "buf",
     "nix_shell",
     "conda",
     "memory_usage",

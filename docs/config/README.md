@@ -206,6 +206,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$buf\
 $cmake\
 $cobol\
 $container\
@@ -449,6 +450,10 @@ discharging_symbol = "💦"
 
 # when capacity is over 30%, the battery indicator will not be displayed
 ```
+
+## Buf
+
+TODO
 
 ## Character
 
