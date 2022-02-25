@@ -7,7 +7,7 @@ on:
 jobs:
   build_all_artifacts:
     name: Build All Release Artifacts
-    with: ./.github/workflows/deploy-build.yml
+    uses: ./.github/workflows/deploy-build.yml
 
   # Create GitHub release with Rust build targets and release notes
   github_release:
