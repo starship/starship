@@ -158,7 +158,7 @@ fn get_pulumi_workspace(context: &Context, name: &str, project_file: &Path) -> O
     } else {
         let mut hasher = Sha1::new();
         hasher.update(project_file.to_str()?.as_bytes());
-        crate::utils::encode_to_hex(&hasher.finalize().to_vec())
+        crate::utils::encode_to_hex(&hasher.finalize())
     };
     let unique_file_name = format!("{}-{}-workspace.json", name, project_file);
     let mut path = pulumi_home_dir(context)?;
