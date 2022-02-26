@@ -23,7 +23,7 @@ impl<'a> Default for BufConfig<'a> {
             symbol: "🦬",
             style: "bold blue",
             disabled: false,
-            detect_extensions: vec!["proto"],
+            detect_extensions: vec![],
             detect_files: vec!["buf.yaml", "buf.gen.yaml", "buf.work.yaml"],
             detect_folders: vec![],
         }
