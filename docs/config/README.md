@@ -460,17 +460,16 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 ### Options
 
-|·Option··············|·Default····················································|·Description···········································|
 | Option              | Default                                                    | Description                                           |
-| ------------------- | ---------------------------------------------------------- | ------------------------------------------------------|
+| ------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
 | `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
 | `version_format`    | `"v${raw}"`                                                | The version format.                                   |
-| `symbol`            | `"🦬 "`                                                    | The symbol used before displaying the version of Buf. |
+| `symbol`            | `"🦬 "`                                                     | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                                       | Which extensions should trigger this module.          |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`           | Which filenames should trigger this module.            |
-| `detect_folders`    | `[]`                                                      | Which folders should trigger this modules.             |
-| `style`             | `"bold blue"`                                             | The style for the module.                              |
-| `disabled`          | `false`                                                   | Disables the `elixir` module.                          |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`            | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                                       | Which folders should trigger this modules.            |
+| `style`             | `"bold blue"`                                              | The style for the module.                             |
+| `disabled`          | `false`                                                    | Disables the `elixir` module.                         |
 
 ### Variables
 
