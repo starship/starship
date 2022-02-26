@@ -13,7 +13,7 @@ use starship::module::ALL_MODULES;
 use starship::*;
 
 fn long_version() -> &'static str {
-    let ver = Box::new(crate::shadow::clap_version());
+    let ver = Box::new(crate::shadow::clap_long_version());
     Box::leak(ver).as_str()
 }
 
