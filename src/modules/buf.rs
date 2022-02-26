@@ -57,11 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn parse_buf_version(buf_version: &str) -> Option<String> {
-    Some(
-        buf_version
-            .split_whitespace().next()?
-            .to_string(),
-    )
+    Some(buf_version.split_whitespace().next()?.to_string())
 }
 
 #[cfg(test)]
