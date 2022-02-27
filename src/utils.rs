@@ -7,7 +7,31 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
+use crate::context::Context;
 use crate::context::Shell;
+
+/// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
+#[cfg(not(test))]
+#[inline]
+#[allow(dead_code)]
+pub fn context_path<S: AsRef<OsStr> + ?Sized>(_context: &Context, s: &S) -> PathBuf {
+    PathBuf::from(s)
+}
+
+/// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
+#[cfg(test)]
+#[allow(dead_code)]
+pub fn context_path<S: AsRef<OsStr> + ?Sized>(context: &Context, s: &S) -> PathBuf {
+    let requested_path = PathBuf::from(s);
+
+    if requested_path.is_absolute() {
+        let mut path = PathBuf::from(context.root_dir.path());
+        path.extend(requested_path.components().skip(1));
+        path
+    } else {
+        requested_path
+    }
+}
 
 /// Return the string contents of a file
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
@@ -51,7 +75,7 @@ pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
         }
     };
 
-    #[allow(clippy::disallowed_method)]
+    #[allow(clippy::disallowed_methods)]
     let mut cmd = Command::new(full_path);
     cmd.stderr(Stdio::piped())
         .stdout(Stdio::piped())

@@ -18,6 +18,7 @@ use std::fs;
 use std::marker::PhantomData;
 use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 use std::string::String;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
@@ -62,6 +63,10 @@ pub struct Context<'a> {
     /// A HashMap of command mocks
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
+
+    /// a mock of the root directory
+    #[cfg(test)]
+    pub root_dir: tempfile::TempDir,
 
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
@@ -132,9 +137,9 @@ impl<'a> Context<'a> {
         }
 
         // Canonicalize the current path to resolve symlinks, etc.
-        // NOTE: On Windows this converts the path to extended-path syntax.
+        // NOTE: On Windows this may convert the path to extended-path syntax.
         let current_dir = Context::expand_tilde(path);
-        let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
+        let current_dir = dunce::canonicalize(&current_dir).unwrap_or(current_dir);
         let logical_dir = logical_path;
 
         let root_config = config
@@ -154,6 +159,8 @@ impl<'a> Context<'a> {
             shell,
             target,
             width,
+            #[cfg(test)]
+            root_dir: tempfile::TempDir::new().unwrap(),
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]
@@ -468,16 +475,19 @@ pub struct ScanDir<'a> {
 }
 
 impl<'a> ScanDir<'a> {
+    #[must_use]
     pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
         self.files = files;
         self
     }
 
+    #[must_use]
     pub const fn set_extensions(mut self, extensions: &'a [&'a str]) -> Self {
         self.extensions = extensions;
         self
     }
 
+    #[must_use]
     pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
         self.folders = folders;
         self
@@ -569,7 +579,7 @@ pub enum Target {
 /// Properties as passed on from the shell as arguments
 #[derive(Parser, Debug)]
 pub struct Properties {
-    /// The status code of the previously run command
+    /// The status code of the previously run command as an unsigned or signed 32bit integer
     #[clap(short = 's', long = "status")]
     pub status_code: Option<String>,
     /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
@@ -611,8 +621,17 @@ impl Default for Properties {
     }
 }
 
+/// Parse String, but treat empty strings as `None`
+fn parse_trim<F: FromStr>(value: &str) -> Option<Result<F, F::Err>> {
+    let value = value.trim();
+    if value.is_empty() {
+        return None;
+    }
+    Some(F::from_str(value))
+}
+
 fn parse_jobs(jobs: &str) -> Result<i64, ParseIntError> {
-    jobs.trim().parse::<i64>()
+    parse_trim(jobs).unwrap_or(Ok(0))
 }
 
 fn default_width() -> usize {
@@ -620,10 +639,7 @@ fn default_width() -> usize {
 }
 
 fn parse_width(width: &str) -> Result<usize, ParseIntError> {
-    if width.is_empty() {
-        return Ok(default_width());
-    }
-    width.trim().parse::<usize>()
+    parse_trim(width).unwrap_or_else(|| Ok(default_width()))
 }
 
 #[cfg(test)]
@@ -721,10 +737,8 @@ mod tests {
 
         assert_ne!(context.current_dir, context.logical_dir);
 
-        let expected_current_dir = path_actual
-            .join("yyy")
-            .canonicalize()
-            .expect("canonicalize");
+        let expected_current_dir =
+            dunce::canonicalize(path_actual.join("yyy")).expect("canonicalize");
         assert_eq!(expected_current_dir, context.current_dir);
 
         let expected_logical_dir = test_path;
@@ -773,5 +787,22 @@ mod tests {
 
         let expected_logical_dir = test_path;
         assert_eq!(expected_logical_dir, context.logical_dir);
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn strip_extended_path_prefix() {
+        let test_path = Path::new(r"\\?\C:\").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Unknown,
+            Target::Main,
+            test_path.clone(),
+            test_path,
+        );
+
+        let expected_path = Path::new(r"C:\");
+
+        assert_eq!(&context.current_dir, expected_path);
     }
 }

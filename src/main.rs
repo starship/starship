@@ -1,10 +1,10 @@
-#![warn(clippy::disallowed_method)]
+#![warn(clippy::disallowed_methods)]
 
 use clap::crate_authors;
 use std::io;
 use std::time::SystemTime;
 
-use clap::{AppSettings, IntoApp, Parser, Subcommand};
+use clap::{IntoApp, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
@@ -13,7 +13,7 @@ use starship::module::ALL_MODULES;
 use starship::*;
 
 fn long_version() -> &'static str {
-    let ver = Box::new(crate::shadow::clap_version());
+    let ver = Box::new(crate::shadow::clap_long_version());
     Box::leak(ver).as_str()
 }
 
@@ -22,9 +22,10 @@ fn long_version() -> &'static str {
     author=crate_authors!(),
     version=shadow::PKG_VERSION,
     long_version=long_version(),
-    about="The cross-shell prompt for astronauts. ☄🌌️"
+    about="The cross-shell prompt for astronauts. ☄🌌️",
+    subcommand_required=true,
+    arg_required_else_help=true,
 )]
-#[clap(setting(AppSettings::SubcommandRequiredElseHelp))]
 struct Cli {
     #[clap(subcommand)]
     command: Commands,
@@ -88,7 +89,7 @@ enum Commands {
     /// Generate random session key
     Session,
     /// Prints time in milliseconds
-    #[clap(setting=AppSettings::Hidden)]
+    #[clap(hide = true)]
     Time,
     /// Prints timings of all active modules
     Timings(Properties),
@@ -108,7 +109,38 @@ fn main() {
     let _ = ansi_term::enable_ansi_support();
     logger::init();
 
-    let args = Cli::parse();
+    let args = match Cli::try_parse() {
+        Ok(args) => args,
+        Err(e) => {
+            // if the error is not printed to stderr, this means it was not really
+            // an error but rather some information is going to be listed, therefore
+            // we won't print the arguments passed
+            let is_info_only = !e.use_stderr();
+            // print the error and void panicking in case of stdout/stderr closing unexpectedly
+            let _ = e.print();
+            // if there was no mistake by the user and we're only going to display information,
+            // we won't put arguments or exit with non-zero code
+            let exit_code = if is_info_only {
+                0
+            } else {
+                // print the arguments
+                // avoid panicking in case of stderr closing
+                let mut stderr = io::stderr();
+                use io::Write;
+                let _ = writeln!(
+                    stderr,
+                    "\nNOTE:\n    passed arguments: {:?}",
+                    // collect into a vec to format args as a slice
+                    std::env::args().skip(1).collect::<Vec<_>>()
+                );
+                // clap exits with status 2 on error:
+                //  https://docs.rs/clap/latest/clap/struct.Error.html#method.exit
+                2
+            };
+
+            std::process::exit(exit_code);
+        }
+    };
     log::trace!("Parsed arguments: {:#?}", args);
 
     match args.command {
@@ -175,7 +207,7 @@ fn main() {
         Commands::Timings(props) => print::timings(props),
         Commands::Completions { shell } => generate(
             shell,
-            &mut Cli::into_app(),
+            &mut Cli::command(),
             "starship",
             &mut io::stdout().lock(),
         ),

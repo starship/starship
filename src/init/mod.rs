@@ -43,7 +43,7 @@ impl StarshipPath {
     /// PowerShell specific path escaping
     fn sprint_pwsh(&self) -> io::Result<String> {
         self.str_path()
-            .map(|s| s.replace("'", "''"))
+            .map(|s| s.replace('\'', "''"))
             .map(|s| format!("'{}'", s))
     }
     /// Command Shell specific path escaping
