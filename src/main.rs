@@ -2,6 +2,7 @@
 
 use clap::crate_authors;
 use std::io;
+use std::thread::available_parallelism;
 use std::time::SystemTime;
 
 use clap::{IntoApp, Parser, Subcommand};
@@ -108,6 +109,7 @@ fn main() {
     #[cfg(windows)]
     let _ = ansi_term::enable_ansi_support();
     logger::init();
+    init_global_threadpool();
 
     let args = match Cli::try_parse() {
         Ok(args) => args,
@@ -220,4 +222,20 @@ fn main() {
                 .collect::<String>()
         ),
     }
+}
+
+/// Intialize global `rayon` thread pool
+fn init_global_threadpool() {
+    // Allow overriding the number of threads
+    let num_threads = std::env::var("STARSHIP_NUM_THREADS")
+        .ok()
+        .and_then(|s| s.parse().ok())
+        // Default to the number of logical cores,
+        // but restrict the number of threads to 8
+        .unwrap_or_else(|| available_parallelism().map(usize::from).unwrap_or(1).min(8));
+
+    rayon::ThreadPoolBuilder::new()
+        .num_threads(num_threads)
+        .build_global()
+        .expect("Failed to initialize worker thread pool");
 }
