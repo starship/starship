@@ -4,6 +4,9 @@ use crate::configs::c::CConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
 
+use once_cell::sync::Lazy;
+use std::ops::Deref;
+
 /// Creates a module with the current c version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("c");
@@ -20,9 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        let c_compiler_info = if config.format.contains("$compiler_name")
-            || config.format.contains("$compiler_version")
-        {
+        let c_compiler_info = Lazy::new(|| {
             context.exec_cmds_return_first(&[
                 // the compiler is usually cc, and --version works on gcc and clang
                 &["cc", "--version"],
@@ -31,9 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 // for completeness, although I've never seen a clang that wasn't cc
                 &["clang", "--version"],
             ])
-        } else {
-            None
-        };
+        });
 
         formatter
             .map_meta(|var, _| match var {
@@ -46,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "compiler_name" => {
-                    let c_compiler_info = &c_compiler_info.as_ref()?.stdout;
+                    let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
 
                     let c_compiler = if c_compiler_info.contains("clang") {
                         "clang"
@@ -61,7 +60,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "compiler_version" => {
-                    let c_compiler_info = &c_compiler_info.as_ref()?.stdout;
+                    let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
                     if config.format.contains("$compiler_version")
                         && (c_compiler_info.contains("clang")
                             || c_compiler_info.contains("Free Software Foundation"))
