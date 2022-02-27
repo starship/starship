@@ -2,10 +2,18 @@
 
 set -euo pipefail
 
-# Example envrionmental variables that need to be set.
-# KEYCHAIN_ENTRY=AC_PASSWORD   # Or whatever you picked for <AUTH_ITEM_NAME> above
+# Envrionmental variables that need to be set. These are sane defaults
+# KEYCHAIN_ENTRY=AC_PASSWORD   # Or whatever you picked for <AUTH_ITEM_NAME>
 # RUNNER_TEMP=~/Library/Keychains/
-# KEYCHAIN_FILENAME=login.keychain
+# KEYCHAIN_FILENAME=login.keychain-db
+#
+# Environmental variables that can be set if needed. Else they will default to
+# values selected for the CI
+# 
+# The identifier for the application signing key. Can be a name or a fingerprint
+# APPLICATION_KEY_IDENT=E03290CABE09E9E42341C8FC82608E91241FAD4A
+# The identifier for the installer signing key. Can be a name or a fingerprint
+# INSTALLATION_KEY_IDENT=E525359D0B5AE97B7B6F5BB465FEC872C117D681
 
 usage(){
     echo "Builds, signs, and notarizes starship."
@@ -29,7 +37,7 @@ if [[ -z ${RUNNER_TEMP+x} ]]; then
 fi
 
 if [[ -z ${KEYCHAIN_FILENAME+x} ]]; then
-  error "Environmental variable KEYCHAIN_ENTRY must be set."
+  error "Environmental variable KEYCHAIN_FILENAME must be set."
 fi
 
 keychain_path="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
@@ -37,7 +45,17 @@ if [[ ! -f "$keychain_path" ]]; then
   error "Could not find keychain at $keychain_path"
 fi
 
-if [[ "$3" == "" ]]; then
+if [[ -z ${APPLICATION_KEY_IDENT+x} ]]; then
+  APPLICATION_KEY_IDENT=E03290CABE09E9E42341C8FC82608E91241FAD4A
+  echo "APPLICATION_KEY_IDENT not set. Using default value of $APPLICATION_KEY_IDENT"
+fi
+
+if [[ -z ${INSTALLATION_KEY_IDENT+x} ]]; then
+  INSTALLATION_KEY_IDENT=E525359D0B5AE97B7B6F5BB465FEC872C117D681
+  echo "INSTALLATION_KEY_IDENT not set. Using default value of $INSTALLATION_KEY_IDENT"
+fi
+
+if [[ -z ${3+x} ]]; then
     usage
     exit 1
 fi
@@ -51,9 +69,8 @@ if [[ ! -d "$starship_docs_dir/.vuepress/dist" ]]; then
   error "Documentation does not appear to have been built!"
 fi
 
-
-echo "Signing binary"
-codesign --timestamp --keychain "$keychain_path" --sign "E03290CABE09E9E42341C8FC82608E91241FAD4A" --verbose -f -o runtime "$starship_binary"
+echo ">>>> Signing binary"
+codesign --timestamp --keychain "$keychain_path" --sign "$APPLICATION_KEY_IDENT" --verbose -f -o runtime "$starship_binary"
 
 # Make ZIP file to notarize binary
 if [ "$starship_binary" != "starship" ]; then
@@ -61,7 +78,7 @@ if [ "$starship_binary" != "starship" ]; then
 fi
 zip starship.zip starship
 
-echo "Submitting binary for notarization"
+echo ">>>> Submitting binary for notarization"
 xcrun notarytool submit starship.zip --keychain-profile "$KEYCHAIN_ENTRY" --wait
 
 # Don't think this is actually necessary, but not costly so why not
@@ -69,19 +86,23 @@ rm starship
 unzip starship.zip
 
 # Create the component package
+echo ">>>> Building Component Package"
 bash "$script_dir/build_component_package.sh" "starship" "$starship_docs_dir/.vuepress/dist"
 
 # Create the distribution package
+echo ">>>> Building Distribution Package"
 resources_path="$script_dir/pkg_resources"
 bash "$script_dir/build_distribution_package.sh" "starship-component.pkg" "$resources_path" "$arch"
 
 # Codesign the package installer
-productsign --timestamp --sign "E525359D0B5AE97B7B6F5BB465FEC872C117D681" starship-unsigned.pkg starship.pkg
+productsign --timestamp --sign "$INSTALLATION_KEY_IDENT" starship-unsigned.pkg starship.pkg
 
 # Notarize the package installer
+echo ">>>> Submitting .pkg for notarization"
 xcrun notarytool submit starship.pkg --keychain-profile "$KEYCHAIN_ENTRY" --wait
 
 # Staple things
+echo ">>>> Running final steps"
 xcrun stapler staple starship.pkg
 
 # Rename to expected name
@@ -90,4 +111,5 @@ if [ "$pkgname" = "" ]; then
   pkgname="starship-$version-$arch.pkg"
 fi
 
+echo ">>>> Placing final output at $pkgname"
 mv starship.pkg "$pkgname"

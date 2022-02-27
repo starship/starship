@@ -164,7 +164,7 @@ documented by Apple. [This guide](https://matthew-brett.github.io/docosx/flat_pa
 and many of the links within it are the best documentation available on the subject.
 
 To build a component package, we first need to create a temporary directory and
-create a pseudo-filesystem within it (similar to PKGBUILDs on Arch). For example,
+create a pseudo-filesystem within it (similar to makepkg on Arch). For example,
 if we place the directory at `$TEMP_DIR/usr/local/bin/starship`, the binary
 will be installed at `/usr/local/bin/starship` once the installer runs.
 
@@ -239,8 +239,9 @@ installing computer can access the internet to verify notarization of the app.
 ## Putting It All Together
 
 If you don't want to run these commands, a full workflow is available in
-`build_and_notarize` script. Like the other scripts, it assumes the presence
-and validity of the environmental variables described at the start of this piece.
+`build_and_notarize` script. Check the documentation at the top of the script
+for environment variables and arguments that need to be set--it is a fairly
+complicated script, but this is a fairly complicated procedure.
 
 # Testing Notarization
 
