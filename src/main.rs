@@ -224,7 +224,7 @@ fn main() {
     }
 }
 
-/// Intialize global `rayon` thread pool
+/// Initialize global `rayon` thread pool
 fn init_global_threadpool() {
     // Allow overriding the number of threads
     let num_threads = std::env::var("STARSHIP_NUM_THREADS")
