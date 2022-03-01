@@ -63,7 +63,7 @@ Activez le module `programs.starship` dans votre fichier `home.nix`, et ajoutez 
 {
   programs.starship = {
     enable = true;
-    # Configuration written to ~/.config/starship.toml
+    # Configuration écrite dans ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
