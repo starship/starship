@@ -12,7 +12,7 @@
 
 ## Comment puis-je obtenir la complétion de commandes comme montré dans le GIF de démo?
 
-L'aide à la complétion ou autocomplétion est fournie par le shell que vous avez choisi. Dans le cas de la démo, elle a été faite avec [Fish Shell](https://fishshell.com/), qui fournit des complétions par défaut. Si vous utilisez le Shell Z (zsh), vous pouvez jeter un œil à [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+L'aide à la complétion ou autocomplétion est fournie par le shell que vous avez choisi. Dans le cas de la démo, elle a été faite avec [Fish Shell](https://fishshell.com/), qui fournit des complétions par défaut. Si vous utilisez le Z Shell (zsh), vous pouvez jeter un œil à [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Est-ce que l'option globale `format` et `<module>.disabled` font la même chose ?
 
@@ -58,7 +58,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux
 
 ## Pourquoi je vois des avertissements `Executing command "..." timed out.`?
 
-Starship exécute différentes commandes pour obtenir les informations à afficher dans l'invite, par exemple la version d'un programme ou l'état actuel de git. Pour s’assurer que starship ne soit pas bloqué par l’exécution de ces commandes, nous mettons une limite de temps. Si une commande dépasse cette limite, starship va arrêter l’exécution de la commande et afficher l’avertissement ci-dessus, c’est un comportement attendu. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. Vous pouvez également suivre les étapes de débogage ci-dessous pour voir quelle commande est lente et voir si vous pouvez l’optimiser. Enfin, vous pouvez définir la variable `STARSHIP_LOG` à `error` pour masquer ces avertissements.
+Starship exécute différentes commandes pour obtenir les informations à afficher dans l'invite, par exemple la version d'un programme ou l'état actuel de git. Pour s’assurer que starship ne soit pas bloqué par l’exécution de ces commandes, nous mettons une limite de temps. Si une commande dépasse cette limite, starship va arrêter l’exécution de la commande et afficher l’avertissement ci-dessus, c’est un comportement attendu. Cette limite de temps est configurable en utilisant la [clé `command_timeout`](/config/#prompt) si vous souhaitez l’augmenter. Vous pouvez également suivre les étapes de débogage ci-dessous pour voir quelle commande est lente et voir si vous pouvez l’optimiser. Enfin, vous pouvez définir la variable `STARSHIP_LOG` à `error` pour masquer ces avertissements.
 
 ## Je vois des symboles que je ne comprends pas et auxquels je ne m'attendais pas, que signifient-t-ils ?
 
@@ -117,6 +117,6 @@ Si Starship a été installé à l'aide d'un gestionnaire de paquets, veuillez v
 Si Starship a été installé en utilisant le script d'installation, la commande suivante supprimera l'exécutable :
 
 ```sh
-# Locate and delete the starship binary
+# Trouver et supprimer le binaire starship
 sh -c 'rm "$(command -v 'starship')"'
 ```
