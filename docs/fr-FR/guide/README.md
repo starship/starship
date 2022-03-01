@@ -383,13 +383,13 @@ eval "$(starship init zsh)"
 
 ### Étape 3. Configurer Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+Démarrez une nouvelle instance de votre shell, et vous devriez voir votre magnifique nouveau prompt. Si vous appréciez les paramètres par défaut, profitez!
 
-If you're looking to further customize Starship:
+Si vous souhaitez personnaliser Starship:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Configuration](https://starship.rs/config/)** – apprenez à configurer Starship pour ajuster votre prompt à vos préférences
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Préréglages](https://starship.rs/presets/)** – inspirez vous des configuration préfaites par d’autres
 
 ## 🤝 Contribuer
 
