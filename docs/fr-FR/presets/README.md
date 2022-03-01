@@ -253,7 +253,7 @@ format = '\[[$symbol($version)]($style)\]'
 
 ## Texte uniquement
 
-Cette configuration change les symboles en texte brut. Si votre terminal/police ne peuvent pas afficher les émoticônes ou les symboles NerdFonts, vous pouvez peut-être essayer cette configuration !
+Ce préréglage change les symboles en texte brut. Si votre terminal/police ne peuvent pas afficher les émojis ou icones NerdFonts, vous pouvez essayer ce préréglage!
 
 Avant (réglage par défaut avec la police Fixedsys):
 
@@ -261,7 +261,7 @@ Avant (réglage par défaut avec la police Fixedsys):
 
 Après (Texte uniquement):
 
-![Capture d'écran de la configuration Texte uniquement](/presets/plain-text-symbols-after.png)
+![Capture d'écran du préréglage Texte uniquement](/presets/plain-text-symbols-after.png)
 
 ### Configuration
 
@@ -386,9 +386,9 @@ symbol = "swift "
 
 ## Hide Runtime Versions
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Ce préréglage masque la version des environnements. If you work in containers or virtualized environments, this one is for you!
 
-![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
+![Capture d'écran du préréglage Cacher les versions des environnements](/presets/hide-runtime-versions.png)
 
 ### Configuration
 
@@ -483,9 +483,9 @@ format = 'via [$symbol]($style)'
 
 ## Pure
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Ce préréglage émule l'apparence et le comportement de [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Pure preset](/presets/pure-prompt.png)
+![Capture d'écran du préréglage Pure](/presets/pure-prompt.png)
 
 ### Configuration
 
