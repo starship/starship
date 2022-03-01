@@ -1,10 +1,10 @@
-# Paramètres par défaut
+# Préréglages
 
-Voici un ensemble de configurations soumises par la communauté pour Starship. Si vous avez une configuration à partager, veuillez [proposer une PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) pour mettre à jour ce fichier! 😊
+Voici un ensemble de préréglages pour Starship soumis par la communauté. Si vous avez un préréglage à partager, veuillez [proposer une PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) pour mettre à jour ce fichier! 😊
 
 ## Symboles Nerd Font
 
-Cette configuration ne modifie rien sauf les symboles utilisés pour chaque module. Si les émoticônes ne sont pas votre tasse de thé, elle pourrait retenir votre attention!
+Ce préréglage ne modifie rien sauf les symboles utilisés pour chaque module. Si les émoticônes ne sont pas votre tasse de thé, elle pourrait retenir votre attention!
 
 ![Capture d'écran du pré-réglage Nerd Font Symbols](/presets/nerd-font-symbols.png)
 
@@ -93,7 +93,7 @@ symbol = "ﯣ "
 
 ## Segments entre crochets
 
-Cette configuration modifie le format de tous les modules intégrés pour afficher leur segment entre crochets au lieu d'utiliser le label par défaut de Starship ("via", "sur", etc.).
+Ce préréglage modifie le format de tous les modules intégrés pour afficher leur segment entre crochets au lieu d'utiliser les labels par défaut de Starship ("via", "on", etc.).
 
 Avant:
 
@@ -101,7 +101,7 @@ Avant:
 
 Après:
 
-![Capture d'écran de la configuration Segments entre crochets](/presets/bracketed-segments-after.png)
+![Capture d'écran du préréglages Segments entre crochets](/presets/bracketed-segments-after.png)
 
 ### Configuration
 
