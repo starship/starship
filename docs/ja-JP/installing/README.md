@@ -63,8 +63,7 @@ nix-env -iA nixos.starship
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
-    # ~/.config/starship.toml に書き込まれる設定
+    # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
