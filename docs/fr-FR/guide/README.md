@@ -176,7 +176,7 @@ Sélectionnez votre système d'exploitation dans la liste ci-dessous pour voir l
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                                             | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -187,7 +187,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Distribution | Dépôt                                                    | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -249,7 +249,7 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                                            | Instructions                            |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
