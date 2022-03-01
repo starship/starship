@@ -169,7 +169,7 @@
 
 - Установленный и включённый [шрифт Powerline](https://www.nerdfonts.com/) (например, [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Шаг 1. Установите Starship
 
 Select your operating system from the list below to view installation instructions:
 
