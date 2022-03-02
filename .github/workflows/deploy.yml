@@ -65,7 +65,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -128,7 +128,7 @@ jobs:
       KEYCHAIN_ENTRY: AC_PASSWORD
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Notarize | Set up secrets
       env:
         APP_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_APPSIGNKEY_BASE64 }}
@@ -206,7 +206,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -239,7 +239,7 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -268,7 +268,7 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Install dependencies
         run: npm install
