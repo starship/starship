@@ -48,3 +48,6 @@ symbol = " "
 
 [package]
 symbol = " "
+
+[rust]
+symbol = " "
