@@ -5,6 +5,7 @@ use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
 
 use once_cell::sync::Lazy;
+use std::borrow::Cow;
 use std::ops::Deref;
 
 /// Creates a module with the current c version
@@ -54,11 +55,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         "Unknown compiler"
                     };
-                    Some(c_compiler).map(Ok)
+                    Some(c_compiler).map(Cow::Borrowed).map(Ok)
                 }
-                _ => None,
-            })
-            .map(|variable| match variable {
                 "compiler_version" => {
                     let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
                     if config.format.contains("$compiler_version")
@@ -80,6 +78,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             c_compiler_info.split_whitespace().nth(3)?,
                             config.version_format,
                         )
+                        .map(Cow::Owned)
                         .map(Ok)
                     } else {
                         None
