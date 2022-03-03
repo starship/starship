@@ -56,9 +56,35 @@ Starship prompt 會盡可能的使用被提供的上下文參數，但使用者�
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
+## Why do I see `Executing command "..." timed out.` warnings?
+
+Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+
 ## 我發現一些看不懂或意料外的符號，那是代表什麼意思？
 
 如果你看見了一些不認得的符號，你可以使用 `starship explain` 來列出當下顯示出的 modules 的解釋。
+
+## Starship is doing something unexpected, how can I debug it?
+
+You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+
+```sh
+env STARSHIP_LOG=trace starship module rust
+```
+
+If starship is being slow you can try using the `timings` command to see if there is a particular module or command that to blame.
+
+```sh
+env STARSHIP_LOG=trace starship timings
+```
+
+This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+
+Finally if you find a bug you can use the `bug-report` command to create a Github issue.
+
+```sh
+starship bug-report
+```
 
 ## 為什麼我無法在我的提示字元中看到字形符號？
 
@@ -91,6 +117,6 @@ echo -e "\xee\x82\xa0"
 如果你是透過安裝腳本來安裝 Starship 的，可以執行以下的命令來移除執行檔。
 
 ```sh
-# 定位並且刪除 starship 執行檔
-sh -c 'rm "$(which starship)"'
+# Locate and delete the starship binary
+sh -c 'rm "$(command -v 'starship')"'
 ```

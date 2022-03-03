@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let conda_env = truncate(conda_env, config.truncation_length);
+    let conda_env = truncate(&conda_env, config.truncation_length).unwrap_or(conda_env);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -37,7 +37,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "environment" => Some(Ok(conda_env.as_str())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

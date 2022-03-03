@@ -21,7 +21,7 @@ impl<'a> Default for NodejsConfig<'a> {
         NodejsConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: " ",
+            symbol: " ",
             style: "bold green",
             disabled: false,
             not_capable_style: "bold red",

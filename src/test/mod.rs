@@ -1,13 +1,14 @@
-use crate::context::{Context, Shell};
+use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
-    config::StarshipConfig,
+    config::{RootModuleConfig, StarshipConfig},
+    configs::StarshipRootConfig,
     utils::{create_command, CommandOutput},
 };
 use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use tempfile::TempDir;
 
 static FIXTURE_DIR: Lazy<PathBuf> =
@@ -33,8 +34,9 @@ static LOGGER: Lazy<()> = Lazy::new(|| {
 
 pub fn default_context() -> Context<'static> {
     let mut context = Context::new_with_shell_and_path(
-        clap::ArgMatches::default(),
+        Default::default(),
         Shell::Unknown,
+        Target::Main,
         PathBuf::new(),
         PathBuf::new(),
     );
@@ -68,6 +70,10 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn root_path(&self) -> &Path {
+        self.context.root_dir.path()
+    }
+
     pub fn logical_path<T>(mut self, path: T) -> Self
     where
         T: Into<PathBuf>,
@@ -78,6 +84,7 @@ impl<'a> ModuleRenderer<'a> {
 
     /// Sets the config of the underlying context
     pub fn config(mut self, config: toml::Value) -> Self {
+        self.context.root_config = StarshipRootConfig::load(&config);
         self.context.config = StarshipConfig {
             config: Some(config),
         };
@@ -101,15 +108,13 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
-    pub fn jobs(mut self, jobs: u64) -> Self {
-        self.context.properties.insert("jobs", jobs.to_string());
+    pub fn jobs(mut self, jobs: i64) -> Self {
+        self.context.properties.jobs = jobs;
         self
     }
 
     pub fn cmd_duration(mut self, duration: u64) -> Self {
-        self.context
-            .properties
-            .insert("cmd_duration", duration.to_string());
+        self.context.properties.cmd_duration = Some(duration.to_string());
         self
     }
 
@@ -117,14 +122,12 @@ impl<'a> ModuleRenderer<'a> {
     where
         T: Into<String>,
     {
-        self.context.properties.insert("keymap", keymap.into());
+        self.context.properties.keymap = keymap.into();
         self
     }
 
-    pub fn status(mut self, status: i32) -> Self {
-        self.context
-            .properties
-            .insert("status_code", status.to_string());
+    pub fn status(mut self, status: i64) -> Self {
+        self.context.properties.status_code = Some(status.to_string());
         self
     }
 
@@ -137,8 +140,8 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
-    pub fn pipestatus(mut self, status: &[i32]) -> Self {
-        self.context.pipestatus = Some(
+    pub fn pipestatus(mut self, status: &[i64]) -> Self {
+        self.context.properties.pipestatus = Some(
             status
                 .iter()
                 .map(std::string::ToString::to_string)

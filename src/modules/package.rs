@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => Some(Ok(&module_version)),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -197,6 +197,13 @@ fn get_vpkg_version(context: &Context, config: &PackageConfig) -> Option<String>
     format_version(raw_version, config.version_format)
 }
 
+fn get_sbt_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(context.current_dir.join("build.sbt")).ok()?;
+    let re = Regex::new(r"(?m)^(.*/)*\s*version\s*:=\s*.(?P<version>[\d\.]+)").unwrap();
+    let caps = re.captures(&file_contents)?;
+    format_version(&caps["version"], config.version_format)
+}
+
 fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = utils::read_file(&context.current_dir.join("Cargo.toml")).ok()?;
 
@@ -223,6 +230,24 @@ fn get_nimble_version(context: &Context, config: &PackageConfig) -> Option<Strin
     format_version(raw_version, config.version_format)
 }
 
+fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(&context.current_dir.join("shard.yml")).ok()?;
+
+    let data = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let raw_version = data.first()?["version"].as_str()?;
+
+    format_version(raw_version, config.version_format)
+}
+
+fn get_dart_pub_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = utils::read_file(&context.current_dir.join("pubspec.yaml")).ok()?;
+
+    let data = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let raw_version = data.first()?["version"].as_str()?;
+
+    format_version(raw_version, config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -237,8 +262,11 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_helm_package_version,
         get_maven_version,
         get_meson_version,
+        get_shard_version,
         get_vmod_version,
         get_vpkg_version,
+        get_sbt_version,
+        get_dart_pub_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
@@ -543,6 +571,19 @@ license = "MIT"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("semantic"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_crystal_shard_version() -> io::Result<()> {
+        let config_name = "shard.yml";
+        let config_content = "name: starship\nversion: 1.2.3\n".to_string();
+
+        let project_dir = create_project_dir()?;
+
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+
         project_dir.close()
     }
 
@@ -1065,6 +1106,55 @@ Module {
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
         expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_sbt_version() -> io::Result<()> {
+        let config_name = "build.sbt";
+        let config_content = "\
+name := \"starship\"
+version := \"1.2.3\"
+scalaVersion := \"2.13.7\"
+
+assembly / assemblyMergeStrategy := {
+  case PathList(\"META-INF\", _ @ _*) => MergeStrategy.discard
+  case _ => MergeStrategy.first
+}
+";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_sbt_version_thisbuild() -> io::Result<()> {
+        let config_name = "build.sbt";
+        let config_content = "\
+name := \"starship\"
+ThisBuild / version := \"1.2.3\"
+scalaVersion := \"2.13.7\"
+";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_dart_pub_version() -> io::Result<()> {
+        let config_name = "pubspec.yaml";
+        let config_content = "
+name: starship
+version: 1.0.0
+
+environment:
+  sdk: '>=2.15.0 <3.0.0'
+";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.0.0"), None);
         project_dir.close()
     }
 

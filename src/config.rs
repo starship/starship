@@ -1,4 +1,3 @@
-use crate::configs::StarshipRootConfig;
 use crate::utils;
 use ansi_term::{Color, Style};
 use indexmap::IndexMap;
@@ -63,6 +62,12 @@ impl<'a> ModuleConfig<'a> for &'a str {
     }
 }
 
+impl<'a> ModuleConfig<'a> for String {
+    fn from_config(config: &'a Value) -> Option<Self> {
+        config.as_str().map(std::borrow::ToOwned::to_owned)
+    }
+}
+
 impl<'a> ModuleConfig<'a> for Style {
     fn from_config(config: &Value) -> Option<Self> {
         parse_style_string(config.as_str()?)
@@ -101,6 +106,23 @@ impl<'a> ModuleConfig<'a> for u64 {
 impl<'a> ModuleConfig<'a> for f64 {
     fn from_config(config: &Value) -> Option<Self> {
         config.as_float()
+    }
+}
+
+impl<'a> ModuleConfig<'a> for u32 {
+    fn from_config(config: &Value) -> Option<Self> {
+        match config {
+            Value::Integer(value) => {
+                // Converting i64 to u32
+                if *value > 0 && *value <= u32::MAX.into() {
+                    Some(*value as Self)
+                } else {
+                    None
+                }
+            }
+            Value::String(value) => value.parse::<Self>().ok(),
+            _ => None,
+        }
     }
 }
 
@@ -346,14 +368,6 @@ impl StarshipConfig {
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
     }
-
-    pub fn get_root_config(&self) -> StarshipRootConfig {
-        if let Some(root_config) = &self.config {
-            StarshipRootConfig::load(root_config)
-        } else {
-            StarshipRootConfig::default()
-        }
-    }
 }
 
 /** Parse a style string which represents an ansi style. Valid tokens in the style
@@ -527,7 +541,7 @@ mod tests {
 
         let config = toml::toml! {
             untracked.value = "x"
-            modified = { value = "•", style = "red" }
+            modified = { value = "∙", style = "red" }
         };
 
         let mut git_status_config = TestConfig {
@@ -552,7 +566,7 @@ mod tests {
         assert_eq!(
             git_status_config.modified,
             SegmentDisplayConfig {
-                value: "•",
+                value: "∙",
                 style: Color::Red.normal(),
             }
         );

@@ -1,15 +1,15 @@
 use ansi_term::ANSIStrings;
-use clap::ArgMatches;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::time::Duration;
+use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
-use crate::context::{Context, Shell};
+use crate::context::{Context, Properties, Shell, Target};
 use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
@@ -53,15 +53,15 @@ fn test_grapheme_aware_width() {
     assert_eq!(11, "normal text".width_graphemes());
 }
 
-pub fn prompt(args: ArgMatches) {
-    let context = Context::new(args);
+pub fn prompt(args: Properties, target: Target) {
+    let context = Context::new(args, target);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
     write!(handle, "{}", get_prompt(context)).unwrap();
 }
 
 pub fn get_prompt(context: Context) -> String {
-    let config = context.config.get_root_config();
+    let config = &context.root_config;
     let mut buf = String::new();
 
     match std::env::var_os("TERM") {
@@ -75,7 +75,7 @@ pub fn get_prompt(context: Context) -> String {
 
     // A workaround for a fish bug (see #739,#279). Applying it to all shells
     // breaks things (see #808,#824,#834). Should only be printed in fish.
-    if let Shell::Fish = context.shell {
+    if Shell::Fish == context.shell && context.target == Target::Main {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 
@@ -108,17 +108,18 @@ pub fn get_prompt(context: Context) -> String {
     let mut root_module = Module::new("Starship Root", "The root module", None);
     root_module.set_segments(
         formatter
-            .parse(None)
+            .parse(None, Some(&context))
             .expect("Unexpected error returned in root format variables"),
     );
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
-    if config.add_newline {
+    if config.add_newline && context.target != Target::Continuation {
+        // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
     write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
 
-    if context.right {
+    if context.target == Target::Right {
         // right prompts generally do not allow newlines
         buf = buf.replace('\n', "");
     }
@@ -133,8 +134,8 @@ pub fn get_prompt(context: Context) -> String {
     buf
 }
 
-pub fn module(module_name: &str, args: ArgMatches) {
-    let context = Context::new(args);
+pub fn module(module_name: &str, args: Properties) {
+    let context = Context::new(args, Target::Main);
     let module = get_module(module_name, context).unwrap_or_default();
     print!("{}", module);
 }
@@ -143,8 +144,8 @@ pub fn get_module(module_name: &str, context: Context) -> Option<String> {
     modules::handle(module_name, &context).map(|m| m.to_string())
 }
 
-pub fn timings(args: ArgMatches) {
-    let context = Context::new(args);
+pub fn timings(args: Properties) {
+    let context = Context::new(args, Target::Main);
 
     struct ModuleTiming {
         name: String,
@@ -189,8 +190,8 @@ pub fn timings(args: ArgMatches) {
     }
 }
 
-pub fn explain(args: ArgMatches) {
-    let context = Context::new(args);
+pub fn explain(args: Properties) {
+    let context = Context::new(args, Target::Main);
 
     struct ModuleInfo {
         value: String,
@@ -224,8 +225,8 @@ pub fn explain(args: ArgMatches) {
     // Overall a line looks like this: " "{module value}" ({xxxms})  -  {description}".
     const PADDING_WIDTH: usize = 11;
 
-    let desc_width = term_size::dimensions()
-        .map(|(w, _)| w)
+    let desc_width = terminal_size()
+        .map(|(w, _)| w.0 as usize)
         // Add padding length to module length to avoid text overflow. This line also assures desc_width >= 0.
         .map(|width| width - std::cmp::min(width, max_module_width + PADDING_WIDTH));
 
@@ -411,26 +412,32 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
 /// Load the correct formatter for the context (ie left prompt or right prompt)
 /// and the list of all modules used in a format string
 fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
-    let config = context.config.get_root_config();
+    let config = &context.root_config;
 
-    let lformatter = StringFormatter::new(config.format);
-    let rformatter = StringFormatter::new(config.right_format);
+    let lformatter = StringFormatter::new(&config.format);
+    let rformatter = StringFormatter::new(&config.right_format);
+    let cformatter = StringFormatter::new(&config.continuation_prompt);
     if lformatter.is_err() {
         log::error!("Error parsing `format`")
     }
     if rformatter.is_err() {
         log::error!("Error parsing `right_format`")
     }
+    if cformatter.is_err() {
+        log::error!("Error parsing `continuation_prompt`")
+    }
 
-    match (lformatter, rformatter) {
-        (Ok(lf), Ok(rf)) => {
+    match (lformatter, rformatter, cformatter) {
+        (Ok(lf), Ok(rf), Ok(cf)) => {
             let mut modules: BTreeSet<String> = BTreeSet::new();
-            modules.extend(lf.get_variables());
-            modules.extend(rf.get_variables());
-            if context.right {
-                (rf, modules)
-            } else {
-                (lf, modules)
+            if context.target != Target::Continuation {
+                modules.extend(lf.get_variables());
+                modules.extend(rf.get_variables());
+            }
+            match context.target {
+                Target::Main => (lf, modules),
+                Target::Right => (rf, modules),
+                Target::Continuation => (cf, modules),
             }
         }
         _ => (StringFormatter::raw(">"), BTreeSet::new()),
@@ -453,9 +460,26 @@ mod test {
                 format=">\n>"
             }),
         };
-        context.right = true;
+        context.root_config.right_format = "$character".to_string();
+        context.target = Target::Right;
 
         let expected = String::from(">>"); // should strip new lines
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn continuation_prompt() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                continuation_prompt="><>"
+            }),
+        };
+        context.root_config.continuation_prompt = "><>".to_string();
+        context.target = Target::Continuation;
+
+        let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
     }

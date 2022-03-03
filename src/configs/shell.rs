@@ -15,14 +15,16 @@ pub struct ShellConfig<'a> {
     pub tcsh_indicator: &'a str,
     pub nu_indicator: &'a str,
     pub xonsh_indicator: &'a str,
+    pub cmd_indicator: &'a str,
     pub unknown_indicator: &'a str,
+    pub style: &'a str,
     pub disabled: bool,
 }
 
 impl<'a> Default for ShellConfig<'a> {
     fn default() -> Self {
         ShellConfig {
-            format: "$indicator ",
+            format: "[$indicator]($style) ",
             bash_indicator: "bsh",
             fish_indicator: "fsh",
             zsh_indicator: "zsh",
@@ -32,7 +34,9 @@ impl<'a> Default for ShellConfig<'a> {
             tcsh_indicator: "tsh",
             nu_indicator: "nu",
             xonsh_indicator: "xsh",
+            cmd_indicator: "cmd",
             unknown_indicator: "",
+            style: "white bold",
             disabled: true,
         }
     }

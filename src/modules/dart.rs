@@ -3,6 +3,7 @@ use super::{Context, Module, RootModuleConfig};
 use crate::configs::dart::DartConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
+use crate::utils::get_command_string_output;
 
 /// Creates a module with the current Dart version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -32,8 +33,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let dart_version =
-                        parse_dart_version(&context.exec_cmd("dart", &["--version"])?.stderr)?;
+                    let command = context.exec_cmd("dart", &["--version"])?;
+                    let dart_version = parse_dart_version(&get_command_string_output(command))?;
                     VersionFormatter::format_module_version(
                         module.get_name(),
                         &dart_version,
@@ -43,7 +44,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 }
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -71,6 +72,7 @@ fn parse_dart_version(dart_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
     use ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
@@ -135,6 +137,27 @@ mod tests {
 
         let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🎯 v2.8.4 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn detect_version_output_in_stdout() -> io::Result<()> {
+        // after dart 2.15.0, version info output in stdout.
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.dart"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("dart")
+            .cmd(
+                "dart --version",
+                Some(CommandOutput {
+                    stdout: String::from("Dart SDK version: 2.15.1 (stable) (Tue Dec 14 13:32:21 2021 +0100) on \"linux_x64\""),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🎯 v2.15.1 ")));
         assert_eq!(expected, actual);
         dir.close()
     }

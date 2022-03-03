@@ -18,7 +18,7 @@ features:
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship ist eine minimale, super schnelle, und extrem anpassbare Prompt für jede Shell! Sie zeigt die Information, die man benötigt an, während sie schnell und minimal bleibt. Schnell-Installation verfügbar für Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, und PowerShell.
+description: Starship ist eine minimale, super schnelle, und extrem anpassbare Prompt für jede Shell! Sie zeigt die Information, die man benötigt an, während sie schnell und minimal bleibt. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
 ---
 
 <div class="center">
@@ -119,7 +119,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Elvish
 
-   ::: warning Nur elvish v0.15 oder höher ist unterstützt. :::
+   ::: warning Nur elvish v0.17 oder höher ist unterstützt. :::
 
    Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
@@ -143,13 +143,13 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning Dies wird sich in der Zukunft ändern. Es wird nur nu Version v0.33 oder höher unterstützt. ::: Füge Folgendes zu deiner nu Konfigurationsdatei hinzu. Du kannst den Speicherort dieser Datei überprüfen, indem du `config path` in nu ausführst.
 
    ```toml
    startup = [
-    "mkdir ~/.cache/starship",
-    "starship init nu | save ~/.cache/starship/init.nu",
-    "source ~/.cache/starship/init.nu"
+     "mkdir ~/.cache/starship",
+     "starship init nu | save ~/.cache/starship/init.nu",
+     "source ~/.cache/starship/init.nu",
    ]
    prompt = "starship_prompt"
    ```
@@ -157,10 +157,21 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Füge folgendes an das Ende von `~/.xonshrc` hinzu:
 
    ```sh
    # ~/.xonshrc
 
    execx($(starship init xonsh))
+   ```
+
+
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
    ```

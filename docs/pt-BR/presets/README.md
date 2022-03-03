@@ -1,6 +1,6 @@
-# Predefinições
+# Configurações
 
-Aqui tem uma coleção de predefinições de configuração criadas pela comunidade de Starship. Se você tem uma predefinição para compartilhar, por favor, [envie uma PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) atualizando este arquivo! 😊
+Aqui tem uma coleção de predefinições de configuração criadas pela comunidade de Starship. Se você tem uma configuração para compartilhar, por favor, [envie uma PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) atualizando este arquivo! 😊
 
 ## Símbolos Nerd Font
 
@@ -60,6 +60,9 @@ symbol = " "
 [nix_shell]
 symbol = " "
 
+[nodejs]
+symbol = " "
+
 [package]
 symbol = " "
 
@@ -110,7 +113,7 @@ format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 
 [cmd_duration]
-format = '\[[⏱ $duration ]($style)\]'
+format = '\[[⏱ $duration]($style)\]'
 
 [cobol]
 format = '\[[$symbol($version)]($style)\]'
@@ -202,6 +205,9 @@ format = '\[[$symbol($version)]($style)\]'
 [php]
 format = '\[[$symbol($version)]($style)\]'
 
+[pulumi]
+format = '\[[$symbol$stack]($style)\]'
+
 [purescript]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -219,6 +225,9 @@ format = '\[[$symbol($version)]($style)\]'
 
 [scala]
 format = '\[[$symbol($version)]($style)\]'
+
+[sudo]
+format = '\[[as $symbol]\]'
 
 [swift]
 format = '\[[$symbol($version)]($style)\]'
@@ -350,6 +359,9 @@ symbol = "pl "
 [php]
 symbol = "php "
 
+[pulumi]
+symbol = "pulumi "
+
 [purescript]
 symbol = "purs "
 
@@ -364,6 +376,9 @@ symbol = "rs "
 
 [scala]
 symbol = "scala "
+
+[sudo]
+symbol = "sudo "
 
 [swift]
 symbol = "swift "
@@ -435,6 +450,9 @@ format = 'via [$symbol]($style)'
 [php]
 format = 'via [$symbol]($style)'
 
+[pulumi]
+format = 'via [$symbol$stack]($style)'
+
 [purescript]
 format = 'via [$symbol]($style)'
 
@@ -461,4 +479,61 @@ format = 'via [$symbol]($style)'
 
 [zig]
 format = 'via [$symbol]($style)'
+```
+
+## Pure
+
+Essa configuração simula a aparência e o comportamento do [Pure](https://github.com/sindresorhus/pure).
+
+![Captura de tela da configuração emulando Pure](/presets/pure-prompt.png)
+
+### Configuração
+
+```toml
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$cmd_duration\
+$line_break\
+$python\
+$character"""
+
+[directory]
+style = "blue"
+
+[character]
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vicmd_symbol = "[❮](green)"
+
+[git_branch]
+format = "[$branch]($style)"
+style = "bright-black"
+
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
+
+[python]
+format = "[$virtualenv]($style) "
+style = "bright-black"
 ```

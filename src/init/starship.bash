@@ -12,6 +12,9 @@
 # drawn, and only start the timer if this flag is present. That way, timing is
 # for the entire command, and not just a portion of it.
 
+# A way to set '$?', since bash does not allow assigning to '$?' directly
+function _starship_set_return() { return "${1:-0}"; }
+
 # Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
@@ -43,16 +46,20 @@ starship_precmd() {
     # Run the bash precmd function, if it's set. If not set, evaluates to no-op
     "${starship_precmd_user_func-:}"
 
+    # Set $? to the preserved value before running additional parts of the prompt
+    # command pipeline, which may rely on it.
+    _starship_set_return "$STARSHIP_CMD_STATUS"
+
     eval "$_PRESERVED_PROMPT_COMMAND"
 
     # Prepare the timer data, if needed.
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS  --pipestatus ${STARSHIP_PIPE_STATUS[@]} --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        PS1="$(::STARSHIP:: prompt --status=$STARSHIP_CMD_STATUS --pipestatus ${STARSHIP_PIPE_STATUS[@]} --jobs="$NUM_JOBS")"
+        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
@@ -100,3 +107,7 @@ export STARSHIP_SHELL="bash"
 STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
 STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
 export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
+
+# Set the continuation prompt
+PS2="$(::STARSHIP:: prompt --continuation)"
+

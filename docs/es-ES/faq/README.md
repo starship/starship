@@ -56,9 +56,35 @@ Si obtienes un error como "_version 'GLIBC_2.18' not found (required by starship
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
 ```
 
+## ¿Por qué veo advertencias `Executing command"..." timed out.`?
+
+Starship ejecuta diferentes comandos para obtener la información que se muestra en el prompt, por ejemplo la versión de un programa o el estado actual de git. Para asegurarse que starship no se quede congelado mientras trata de ejecutar estos comandos, establecimos un límite de tiempo, si un comando tarda más tiempo que este límite starship detendrá la ejecución del comando y mostrara la advertencia anterior, este es el comportamiento esperado. Este límite de tiempo es configurable usando la [llave `command_timeout`](/config/#prompt) así que si lo desea puede aumentar el límite de tiempo. También puedes seguir los pasos de depuración a continuación para ver qué comando está siendo lento y ver si puedes optimizarlo. Finalmente, puedes establecer la variable de entorno `STARSHIP_LOG` a `error` para ocultar estas advertencias.
+
 ## Veo símbolos que no entiendo ni espero, ¿qué significan?
 
 Si ves símbolos que no reconoces, puedes usar `starship explain` para explicar los módulos que se muestran actualmente.
+
+## Starship está haciendo algo inesperado, ¿cómo puedo depurarlo?
+
+Puede habilitar los registros de depuración usando la variable de entorno `STARSHIP_LOG`. Estos registros pueden ser muy detallados así que a menudo es útil utilizar el comando `module` si estás intentando depurar un módulo en particular, por ejemplo, si está intentando depurar el módulo `rust` podrías ejecutar el siguiente comando para obtener los registros de seguimiento y salida del módulo.
+
+```sh
+env STARSHIP_LOG=trace starship module rust
+```
+
+Si starship está siendo lento, puedes intentar usar el comando `timings` para ver si hay un módulo en particular o un comando a culpar.
+
+```sh
+env STARSHIP_LOG=trace starship timings
+```
+
+Esto producirá el registro de rastreo y un desglose de todos los módulos que tomaron más de 1 ms para ejecutarse o producir alguna salida.
+
+Finalmente, si encuentras un error puedes usar el comando `bug-report` para crear un issue en Github.
+
+```sh
+starship bug-report
+```
 
 ## ¿Por qué no veo un símbolo de glifo en mi prompt?
 
@@ -92,5 +118,5 @@ Si Starship fue instalado usando el guión de instalación, el siguiente comando
 
 ```sh
 # Localiza y elimina el binario de starship
-sh -c 'rm "$(which starship)"'
+sh -c 'rm "$(comando -v 'starship')"'
 ```

@@ -21,13 +21,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let repo = context.get_repo().ok()?;
-    let repo_root = repo.root.as_ref()?;
+    let repo_root = repo.workdir.as_ref()?;
 
     let diff = context
         .exec_cmd(
             "git",
             &[
-                OsStr::new("-C"),
+                OsStr::new("--git-dir"),
+                repo.path.as_os_str(),
+                OsStr::new("--work-tree"),
                 repo_root.as_os_str(),
                 OsStr::new("--no-optional-locks"),
                 OsStr::new("diff"),
@@ -50,7 +52,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "deleted" => GitDiff::get_variable(config.only_nonzero_diffs, stats.deleted),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

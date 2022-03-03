@@ -7,6 +7,7 @@ use starship_module_config_derive::ModuleConfig;
 pub struct FillConfig<'a> {
     pub style: &'a str,
     pub symbol: &'a str,
+    pub disabled: bool,
 }
 
 impl<'a> Default for FillConfig<'a> {
@@ -14,6 +15,7 @@ impl<'a> Default for FillConfig<'a> {
         FillConfig {
             style: "bold black",
             symbol: ".",
+            disabled: false,
         }
     }
 }

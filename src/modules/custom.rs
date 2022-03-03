@@ -3,7 +3,7 @@ use std::io::Write;
 use std::process::{Command, Output, Stdio};
 use std::time::Instant;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, RootModuleConfig, Shell};
 
 use crate::{configs::custom::CustomConfig, formatter::StringFormatter, utils::create_command};
 
@@ -56,8 +56,13 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 _ => None,
             })
-            .map(|variable| match variable {
+            .map_no_escaping(|variable| match variable {
                 "output" => {
+                    if context.shell == Shell::Cmd && config.shell.0.is_empty() {
+                        log::error!("Executing custom commands with cmd shell is not currently supported. Please set a different shell with the \"shell\" option.");
+                        return None;
+                    }
+
                     let output = exec_command(config.command, &config.shell.0)?;
                     let trimmed = output.trim();
 
@@ -69,7 +74,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                 }
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     match parsed {
@@ -118,7 +123,7 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
                 "Could not launch command with given shell or STARSHIP_SHELL env variable, retrying with /usr/bin/env sh"
             );
 
-            #[allow(clippy::disallowed_method)]
+            #[allow(clippy::disallowed_methods)]
             Command::new("/usr/bin/env")
                 .arg("sh")
                 .stdin(Stdio::piped())

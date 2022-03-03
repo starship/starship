@@ -6,7 +6,7 @@ use crate::configs::status::StatusConfig;
 use crate::formatter::{string_formatter::StringFormatterError, StringFormatter};
 use crate::segment::Segment;
 
-type ExitCode = i64;
+type ExitCode = i32;
 type SignalNumber = u32;
 #[derive(PartialEq)]
 enum PipeStatusStatus<'a> {
@@ -28,12 +28,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let exit_code = context
-        .properties
-        .get("status_code")
-        .map_or("0", String::as_str);
+    let exit_code = context.properties.status_code.as_deref().unwrap_or("0");
 
-    let pipestatus_status = match &context.pipestatus {
+    let pipestatus_status = match &context.properties.pipestatus {
         None => PipeStatusStatus::Disabled,
         Some(ps) => match ps.len() > 1 {
             true => PipeStatusStatus::Pipe(ps),
@@ -46,9 +43,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         false => PipeStatusStatus::Disabled,
     };
 
+    // Exit code is zero and pipestatus is all zero or disabled/missing
     if exit_code == "0"
-        && (pipestatus_status == PipeStatusStatus::Disabled
-            || pipestatus_status == PipeStatusStatus::NoPipe)
+        && (match pipestatus_status {
+            PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
+            _ => true,
+        })
     {
         return None;
     }
@@ -58,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
             .iter()
             .map(
-                |ec| match format_exit_code(ec.as_str(), config.format, None, &config) {
+                |ec| match format_exit_code(ec.as_str(), config.format, None, &config, context) {
                     Ok(segments) => segments
                         .into_iter()
                         .map(|s| s.to_string())
@@ -76,7 +76,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(_) => config.pipestatus_format,
         _ => config.format,
     };
-    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config);
+    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config, context);
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -93,14 +93,18 @@ fn format_exit_code<'a>(
     format: &'a str,
     pipestatus: Option<&str>,
     config: &'a StatusConfig,
+    context: &'a Context,
 ) -> Result<Vec<Segment>, StringFormatterError> {
-    let exit_code_int: ExitCode = match exit_code.parse() {
-        Ok(i) => i,
+    // First, parse as i64 to accept both i32 or u32, then normalize to i32.
+    let exit_code_int: ExitCode = match exit_code.parse::<i64>() {
+        Ok(i) => i as ExitCode,
         Err(_) => {
             log::warn!("Error parsing exit_code string to int");
             return Ok(Vec::new());
         }
     };
+
+    let hex_status = format!("0x{:X}", exit_code_int);
 
     let common_meaning = status_common_meaning(exit_code_int);
 
@@ -109,8 +113,8 @@ fn format_exit_code<'a>(
         false => None,
     };
     let signal_number = raw_signal_number.map(|sn| sn.to_string());
-    let signal_name = raw_signal_number
-        .and_then(|sn| status_signal_name(sn).or_else(|| signal_number.as_deref()));
+    let signal_name =
+        raw_signal_number.and_then(|sn| status_signal_name(sn).or(signal_number.as_deref()));
 
     // If not a signal and not a common meaning, it should at least print the raw exit code number
     let maybe_exit_code_number = match common_meaning.is_none() && signal_name.is_none() {
@@ -144,11 +148,12 @@ fn format_exit_code<'a>(
             })
             .map(|variable| match variable {
                 "status" => Some(Ok(exit_code)),
+                "hex_status" => Some(Ok(hex_status.as_ref())),
                 "int" => Some(Ok(exit_code)),
-                "maybe_int" => Ok(maybe_exit_code_number.as_deref()).transpose(),
-                "common_meaning" => Ok(common_meaning.as_deref()).transpose(),
+                "maybe_int" => Ok(maybe_exit_code_number).transpose(),
+                "common_meaning" => Ok(common_meaning).transpose(),
                 "signal_number" => Ok(signal_number.as_deref()).transpose(),
-                "signal_name" => Ok(signal_name.as_deref()).transpose(),
+                "signal_name" => Ok(signal_name).transpose(),
                 "pipestatus" => {
                     let pipestatus = pipestatus.unwrap_or_else(|| {
                         // We might enter this case if pipestatus hasn't
@@ -161,7 +166,7 @@ fn format_exit_code<'a>(
                 }
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     })
 }
 
@@ -270,6 +275,29 @@ mod tests {
                     disabled = false
                 })
                 .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+    }
+
+    #[test]
+    fn failure_hex_status() {
+        let exit_values = [1, 2, 130, -2147467260, 2147500036];
+        let string_values = ["0x1", "0x2", "0x82", "0x80004004", "0x80004004"];
+
+        for (exit_value, string_value) in exit_values.iter().zip(string_values) {
+            let expected = Some(format!(
+                "{} ",
+                Color::Red.bold().paint(format!("✖{}", string_value))
+            ));
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    symbol = "✖"
+                    disabled = false
+                    format = "[${symbol}${hex_status}]($style) "
+                })
+                .status(*exit_value)
                 .collect();
             assert_eq!(expected, actual);
         }
@@ -412,13 +440,13 @@ mod tests {
     #[test]
     fn pipeline_uses_pipestatus_format() {
         let exit_values = [
-            [0, 0, 0, 0],
+            [0, 1, 0, 0],
             [0, 1, 2, 3],
             [130, 126, 131, 127],
             [1, 1, 1, 1],
         ];
         let exit_values_rendered = [
-            "PSF 🟢=🟢 🟢 🟢",
+            "PSF 🟢=🔴 🟢 🟢",
             "PSF 🟢=🔴 🔴 🔴",
             "PSF 🧱=🚫 ⚡ 🔍",
             "PSF 🔴=🔴 🔴 🔴",
@@ -456,13 +484,13 @@ mod tests {
     #[test]
     fn pipeline_no_map_symbols() {
         let exit_values = [
-            [0, 0, 0, 0],
+            [0, 1, 0, 0],
             [0, 1, 2, 3],
             [130, 126, 131, 127],
             [1, 1, 1, 1],
         ];
         let exit_values_rendered = [
-            "PSF 🟢=🟢0 🟢0 🟢0",
+            "PSF 🟢=🔴1 🟢0 🟢0",
             "PSF 🟢=🔴1 🔴2 🔴3",
             "PSF INT🔴=🔴126 🔴1313 🔴127",
             "PSF 🔴=🔴1 🔴1 🔴1",
@@ -509,6 +537,26 @@ mod tests {
             .config(toml::toml! {
                 [status]
                 disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(&pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn successful_pipeline_pipestatus_enabled() {
+        let pipe_exit_code = [0, 0, 0];
+
+        let main_exit_code = 0;
+
+        let expected = None;
+
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+                pipestatus = true
             })
             .status(main_exit_code)
             .pipestatus(&pipe_exit_code)

@@ -1,10 +1,12 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
+mod azure;
 mod character;
 mod cmake;
 mod cmd_duration;
 mod cobol;
 mod conda;
+mod container;
 mod crystal;
 pub(crate) mod custom;
 mod dart;
@@ -33,6 +35,7 @@ mod julia;
 mod kotlin;
 mod kubernetes;
 mod line_break;
+mod localip;
 mod lua;
 mod memory_usage;
 mod nim;
@@ -43,6 +46,7 @@ mod openstack;
 mod package;
 mod perl;
 mod php;
+mod pulumi;
 mod purescript;
 mod python;
 mod red;
@@ -54,6 +58,7 @@ mod shell;
 mod shlvl;
 mod singularity;
 mod status;
+mod sudo;
 mod swift;
 mod terraform;
 mod time;
@@ -82,6 +87,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             // Keep these ordered alphabetically.
             // Default ordering is handled in configs/starship_root.rs
             "aws" => aws::module(context),
+            "azure" => azure::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "character" => character::module(context),
@@ -89,6 +95,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "cmd_duration" => cmd_duration::module(context),
             "cobol" => cobol::module(context),
             "conda" => conda::module(context),
+            "container" => container::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
             "directory" => directory::module(context),
@@ -115,6 +122,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "kotlin" => kotlin::module(context),
             "kubernetes" => kubernetes::module(context),
             "line_break" => line_break::module(context),
+            "localip" => localip::module(context),
             "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
             "nim" => nim::module(context),
@@ -125,6 +133,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "package" => package::module(context),
             "perl" => perl::module(context),
             "php" => php::module(context),
+            "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
             "rlang" => rlang::module(context),
@@ -137,6 +146,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
+            "sudo" => sudo::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
             "crystal" => crystal::module(context),
@@ -167,6 +177,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
 pub fn description(module: &str) -> &'static str {
     match module {
         "aws" => "The current AWS region and profile",
+        "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
@@ -175,6 +186,7 @@ pub fn description(module: &str) -> &'static str {
         "cmd_duration" => "How long the last command took to execute",
         "cobol" => "The currently installed version of COBOL/GNUCOBOL",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
+        "container" => "The container indicator, if inside a container.",
         "crystal" => "The currently installed version of Crystal",
         "dart" => "The currently installed version of Dart",
         "deno" => "The currently installed version of Deno",
@@ -202,6 +214,7 @@ pub fn description(module: &str) -> &'static str {
         "kotlin" => "The currently installed version of Kotlin",
         "kubernetes" => "The current Kubernetes context name and, if set, the namespace",
         "line_break" => "Separates the prompt into two lines",
+        "localip" => "The currently assigned ipv4 address",
         "lua" => "The currently installed version of Lua",
         "memory_usage" => "Current system memory and swap usage",
         "nim" => "The currently installed version of Nim",
@@ -212,6 +225,7 @@ pub fn description(module: &str) -> &'static str {
         "package" => "The package version of the current directory's project",
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
+        "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
         "red" => "The currently installed version of Red",
@@ -223,6 +237,7 @@ pub fn description(module: &str) -> &'static str {
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
         "status" => "The status of the last command",
+        "sudo" => "The sudo credentials are currently cached",
         "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",

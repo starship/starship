@@ -7,7 +7,7 @@
 
 大部分用户按照[主页](/guide/#🚀-installation)上的步骤安装即可， 但有一些特殊系统上的安装步骤不同。
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+现有平台众多，README 中无法全部展示，所以这里是社区中对其他平台 的一些安装说明。 还没找到您的平台？ 如果您找到它 ，请在这里添加它！
 
 ## [Chocolatey](https://chocolatey.org)
 
@@ -35,11 +35,21 @@ pkg install getconf
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
+## [Funtoo Linux](https://www.funtoo.org/Welcome)
+
+### 安装
+
+在 Funtom Linux 上，可以通过 Portact 从 [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) 安装启动：
+
+```sh
+emerge app-shells/starship
+```
+
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### 获取二进制文件
 
-#### Imperatively
+#### 命令
 
 ```sh
 nix-env -iA nixos.starship
@@ -47,13 +57,12 @@ nix-env -iA nixos.starship
 
 #### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+在您的 `home.nix` 文件中启用 `programs.starship` 模块，并添加您的设置
 
 ```nix
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
     # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
@@ -69,7 +78,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+然后运行
 
 ```sh
 home-manager switch
@@ -77,7 +86,7 @@ home-manager switch
 
 #### Declarative, system-wide, with NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+在您的 `configuration.nix`中，将 `pkgs.starship` 添加到 `environment.systemPackages`，然后运行
 
 ```sh
 sudo nixos-rebuild switch

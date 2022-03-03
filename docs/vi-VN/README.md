@@ -18,7 +18,7 @@ features:
 footer: Cấp phép bởi ISC | Bản quyền © 2019-nay Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
+description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biến mạnh mẽ cho bất kì shell nào! Hiển thị thông tin bạn cần, trong khi vẫn giữ cho đẹp và nhỏ gọn. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
 ---
 
 <div class="center">
@@ -119,7 +119,7 @@ eval $(starship init ion)
 
    #### Elvish
 
-   ::: warning Chỉ elvish v0.15 hoặc cao hơn được hỗ trợ. :::
+   ::: warning Chỉ elvish v0.17 hoặc cao hơn được hỗ trợ. :::
 
    Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
 
@@ -147,9 +147,9 @@ eval $(starship init ion)
 
    ```toml
    startup = [
-    "mkdir ~/.cache/starship",
-    "starship init nu | save ~/.cache/starship/init.nu",
-    "source ~/.cache/starship/init.nu"
+     "mkdir ~/.cache/starship",
+     "starship init nu | save ~/.cache/starship/init.nu",
+     "source ~/.cache/starship/init.nu",
    ]
    prompt = "starship_prompt"
    ```
@@ -163,4 +163,15 @@ eval $(starship init ion)
    # ~/.xonshrc
 
    execx($(starship init xonsh))
+   ```
+
+
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
    ```

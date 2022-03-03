@@ -1,20 +1,27 @@
-use crate::config::StarshipConfig;
+use crate::config::{RootModuleConfig, StarshipConfig};
+use crate::configs::StarshipRootConfig;
 use crate::module::Module;
-use crate::utils::{exec_cmd, CommandOutput};
+use crate::utils::{create_command, exec_timeout, CommandOutput};
 
 use crate::modules;
 use crate::utils::{self, home_dir};
-use clap::ArgMatches;
+use clap::Parser;
 use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
 use once_cell::sync::OnceCell;
-use std::collections::{HashMap, HashSet};
+#[cfg(test)]
+use std::collections::HashMap;
+use std::collections::HashSet;
 use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fmt::Debug;
 use std::fs;
+use std::marker::PhantomData;
+use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 use std::string::String;
 use std::time::{Duration, Instant};
+use terminal_size::terminal_size;
 
 /// Context contains data or common methods that may be used by multiple modules.
 /// The data contained within Context will be relevant to this particular rendering
@@ -35,10 +42,7 @@ pub struct Context<'a> {
     dir_contents: OnceCell<DirContents>,
 
     /// Properties to provide to modules.
-    pub properties: HashMap<&'a str, String>,
-
-    /// Pipestatus of processes in pipe
-    pub pipestatus: Option<Vec<String>>,
+    pub properties: Properties,
 
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
@@ -46,8 +50,8 @@ pub struct Context<'a> {
     /// The shell the user is assumed to be running
     pub shell: Shell,
 
-    /// Construct the right prompt instead of the left prompt
-    pub right: bool,
+    /// Which prompt to print (main, right, ...)
+    pub target: Target,
 
     /// Width of terminal, or zero if width cannot be detected.
     pub width: usize,
@@ -60,94 +64,111 @@ pub struct Context<'a> {
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
 
+    /// a mock of the root directory
+    #[cfg(test)]
+    pub root_dir: tempfile::TempDir,
+
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
 
-    /// Timeout for the execution of commands
-    cmd_timeout: Duration,
+    /// Starship root config
+    pub root_config: StarshipRootConfig,
+
+    /// Avoid issues with unused lifetimes when features are disabled
+    _marker: PhantomData<&'a ()>,
 }
 
 impl<'a> Context<'a> {
     /// Identify the current working directory and create an instance of Context
     /// for it. "logical-path" is used when a shell allows the "current working directory"
     /// to be something other than a file system path (like powershell provider specific paths).
-    pub fn new(arguments: ArgMatches) -> Context {
+    pub fn new(arguments: Properties, target: Target) -> Context<'a> {
         let shell = Context::get_shell();
 
         // Retrieve the "current directory".
         // If the path argument is not set fall back to the OS current directory.
         let path = arguments
-            .value_of("path")
-            .map(PathBuf::from)
+            .path
+            .clone()
             .or_else(|| env::current_dir().ok())
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
-            .or_else(|| arguments.value_of("logical_path").map(PathBuf::from))
+            .or_else(|| arguments.logical_path.clone())
             .unwrap_or_default();
 
         // Retrieve the "logical directory".
         // If the path argument is not set fall back to the PWD env variable set by many shells
         // or to the other path.
         let logical_path = arguments
-            .value_of("logical_path")
-            .map(PathBuf::from)
+            .logical_path
+            .clone()
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
             .unwrap_or_else(|| path.clone());
 
-        Context::new_with_shell_and_path(arguments, shell, path, logical_path)
+        Context::new_with_shell_and_path(arguments, shell, target, path, logical_path)
     }
 
     /// Create a new instance of Context for the provided directory
     pub fn new_with_shell_and_path(
-        arguments: ArgMatches,
+        mut properties: Properties,
         shell: Shell,
+        target: Target,
         path: PathBuf,
         logical_path: PathBuf,
-    ) -> Context {
+    ) -> Context<'a> {
         let config = StarshipConfig::initialize();
 
-        // Unwrap the clap arguments into a simple hashtable
-        let properties: HashMap<&str, std::string::String> = arguments
-            .args
-            .iter()
-            .filter(|(_, v)| !v.vals.is_empty())
-            .map(|(a, b)| (*a, b.vals.first().cloned().unwrap().into_string().unwrap()))
-            .collect();
+        // If the vector is zero-length, we should pretend that we didn't get a
+        // pipestatus at all (since this is the input `--pipestatus=""`)
+        if properties
+            .pipestatus
+            .as_deref()
+            .map_or(false, |p| p.len() == 1 && p[0].is_empty())
+        {
+            properties.pipestatus = None;
+        }
+        log::trace!(
+            "Received completed pipestatus of {:?}",
+            properties.pipestatus
+        );
 
-        // Pipestatus is an arguments list
-        let pipestatus = arguments
-            .values_of("pipestatus")
-            .map(|args| args.into_iter().map(String::from).collect());
+        // If status-code is empty, set it to None
+        if matches!(properties.status_code.as_deref(), Some("")) {
+            properties.status_code = None;
+        }
 
         // Canonicalize the current path to resolve symlinks, etc.
-        // NOTE: On Windows this converts the path to extended-path syntax.
+        // NOTE: On Windows this may convert the path to extended-path syntax.
         let current_dir = Context::expand_tilde(path);
-        let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
+        let current_dir = dunce::canonicalize(&current_dir).unwrap_or(current_dir);
         let logical_dir = logical_path;
 
-        let cmd_timeout = Duration::from_millis(config.get_root_config().command_timeout);
+        let root_config = config
+            .config
+            .as_ref()
+            .map_or_else(StarshipRootConfig::default, StarshipRootConfig::load);
 
-        let right = arguments.is_present("right");
+        let width = properties.terminal_width;
 
         Context {
             config,
             properties,
-            pipestatus,
             current_dir,
             logical_dir,
             dir_contents: OnceCell::new(),
             repo: OnceCell::new(),
             shell,
-            right,
-            width: term_size::dimensions()
-                .map(|(width, _)| width)
-                .unwrap_or_default(),
+            target,
+            width,
+            #[cfg(test)]
+            root_dir: tempfile::TempDir::new().unwrap(),
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
             battery_info_provider: &crate::modules::BatteryInfoProviderImpl,
-            cmd_timeout,
+            root_config,
+            _marker: PhantomData,
         }
     }
 
@@ -243,7 +264,8 @@ impl<'a> Context<'a> {
             }?;
             Ok(Repo {
                 branch: get_current_branch(&repository),
-                root: repository.workdir().map(Path::to_path_buf),
+                workdir: repository.workdir().map(Path::to_path_buf),
+                path: Path::to_path_buf(repository.path()),
                 state: repository.state(),
                 remote: get_remote_repository_info(&repository),
             })
@@ -252,8 +274,8 @@ impl<'a> Context<'a> {
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
         self.dir_contents.get_or_try_init(|| {
-            let timeout = Duration::from_millis(self.config.get_root_config().scan_timeout);
-            DirContents::from_path_with_timeout(&self.current_dir, timeout)
+            let timeout = self.root_config.scan_timeout;
+            DirContents::from_path_with_timeout(&self.current_dir, Duration::from_millis(timeout))
         })
     }
 
@@ -263,18 +285,23 @@ impl<'a> Context<'a> {
             "bash" => Shell::Bash,
             "fish" => Shell::Fish,
             "ion" => Shell::Ion,
-            "powershell" => Shell::PowerShell,
+            "powershell" | "pwsh" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
             "tcsh" => Shell::Tcsh,
             "nu" => Shell::Nu,
             "xonsh" => Shell::Xonsh,
+            "cmd" => Shell::Cmd,
             _ => Shell::Unknown,
         }
     }
 
+    // TODO: This should be used directly by clap parse
     pub fn get_cmd_duration(&self) -> Option<u128> {
-        self.properties.get("cmd_duration")?.parse::<u128>().ok()
+        self.properties
+            .cmd_duration
+            .as_deref()
+            .and_then(|cd| cd.parse::<u128>().ok())
     }
 
     /// Execute a command and return the output on stdout and stderr if successful
@@ -284,14 +311,29 @@ impl<'a> Context<'a> {
         cmd: T,
         args: &[U],
     ) -> Option<CommandOutput> {
+        log::trace!(
+            "Executing command {:?} with args {:?} from context",
+            cmd,
+            args
+        );
         #[cfg(test)]
         {
             let command = crate::utils::display_command(&cmd, args);
-            if let Some(output) = self.cmd.get(command.as_str()) {
-                return output.clone();
+            if let Some(output) = self
+                .cmd
+                .get(command.as_str())
+                .cloned()
+                .or_else(|| crate::utils::mock_cmd(&cmd, args))
+            {
+                return output;
             }
         }
-        exec_cmd(&cmd, args, self.cmd_timeout)
+        let mut cmd = create_command(cmd).ok()?;
+        cmd.args(args).current_dir(&self.current_dir);
+        exec_timeout(
+            &mut cmd,
+            Duration::from_millis(self.root_config.command_timeout),
+        )
     }
 }
 
@@ -324,7 +366,8 @@ impl DirContents {
         fs::read_dir(base)?
             .enumerate()
             .take_while(|(n, _)| {
-                n & 0xFF != 0 // only check timeout once every 2^8 entries
+                cfg!(test) // ignore timeout during tests
+                || n & 0xFF != 0 // only check timeout once every 2^8 entries
                 || start.elapsed() < timeout
             })
             .filter_map(|(_, entry)| entry.ok())
@@ -397,13 +440,23 @@ pub struct Repo {
 
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the path to the root of that repo.
-    pub root: Option<PathBuf>,
+    pub workdir: Option<PathBuf>,
+
+    /// The path of the repository's `.git` directory.
+    pub path: PathBuf,
 
     /// State
     pub state: RepositoryState,
 
     /// Remote repository
     pub remote: Option<Remote>,
+}
+
+impl Repo {
+    /// Opens the associated git repository.
+    pub fn open(&self) -> Result<Repository, git2::Error> {
+        Repository::open(&self.path)
+    }
 }
 
 /// Remote repository
@@ -422,16 +475,19 @@ pub struct ScanDir<'a> {
 }
 
 impl<'a> ScanDir<'a> {
+    #[must_use]
     pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
         self.files = files;
         self
     }
 
+    #[must_use]
     pub const fn set_extensions(mut self, extensions: &'a [&'a str]) -> Self {
         self.extensions = extensions;
         self
     }
 
+    #[must_use]
     pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
         self.folders = folders;
         self
@@ -508,7 +564,82 @@ pub enum Shell {
     Tcsh,
     Nu,
     Xonsh,
+    Cmd,
     Unknown,
+}
+
+/// Which kind of prompt target to print (main prompt, rprompt, ...)
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Target {
+    Main,
+    Right,
+    Continuation,
+}
+
+/// Properties as passed on from the shell as arguments
+#[derive(Parser, Debug)]
+pub struct Properties {
+    /// The status code of the previously run command as an unsigned or signed 32bit integer
+    #[clap(short = 's', long = "status")]
+    pub status_code: Option<String>,
+    /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
+    #[clap(long, value_delimiter = ' ')]
+    pub pipestatus: Option<Vec<String>>,
+    /// The width of the current interactive terminal.
+    #[clap(short = 'w', long, default_value_t=default_width(), parse(try_from_str=parse_width))]
+    terminal_width: usize,
+    /// The path that the prompt should render for.
+    #[clap(short, long)]
+    path: Option<PathBuf>,
+    /// The logical path that the prompt should render for.
+    /// This path should be a virtual/logical representation of the PATH argument.
+    #[clap(short = 'P', long)]
+    logical_path: Option<PathBuf>,
+    /// The execution duration of the last command, in milliseconds
+    #[clap(short = 'd', long)]
+    pub cmd_duration: Option<String>,
+    /// The keymap of fish/zsh/cmd
+    #[clap(short = 'k', long, default_value = "viins")]
+    pub keymap: String,
+    /// The number of currently running jobs
+    #[clap(short, long, default_value_t, parse(try_from_str=parse_jobs))]
+    pub jobs: i64,
+}
+
+impl Default for Properties {
+    fn default() -> Self {
+        Properties {
+            status_code: None,
+            pipestatus: None,
+            terminal_width: default_width(),
+            path: None,
+            logical_path: None,
+            cmd_duration: None,
+            keymap: "viins".to_string(),
+            jobs: 0,
+        }
+    }
+}
+
+/// Parse String, but treat empty strings as `None`
+fn parse_trim<F: FromStr>(value: &str) -> Option<Result<F, F::Err>> {
+    let value = value.trim();
+    if value.is_empty() {
+        return None;
+    }
+    Some(F::from_str(value))
+}
+
+fn parse_jobs(jobs: &str) -> Result<i64, ParseIntError> {
+    parse_trim(jobs).unwrap_or(Ok(0))
+}
+
+fn default_width() -> usize {
+    terminal_size().map_or(80, |(w, _)| w.0 as usize)
+}
+
+fn parse_width(width: &str) -> Result<usize, ParseIntError> {
+    parse_trim(width).unwrap_or_else(|| Ok(default_width()))
 }
 
 #[cfg(test)]
@@ -597,18 +728,17 @@ mod tests {
         // Mock navigation into the symlink path
         let test_path = path_symlink.join("yyy");
         let context = Context::new_with_shell_and_path(
-            ArgMatches::default(),
+            Default::default(),
             Shell::Unknown,
+            Target::Main,
             test_path.clone(),
             test_path.clone(),
         );
 
         assert_ne!(context.current_dir, context.logical_dir);
 
-        let expected_current_dir = path_actual
-            .join("yyy")
-            .canonicalize()
-            .expect("canonicalize");
+        let expected_current_dir =
+            dunce::canonicalize(path_actual.join("yyy")).expect("canonicalize");
         assert_eq!(expected_current_dir, context.current_dir);
 
         let expected_logical_dir = test_path;
@@ -622,8 +752,9 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            ArgMatches::default(),
+            Default::default(),
             Shell::Unknown,
+            Target::Main,
             test_path.clone(),
             test_path.clone(),
         );
@@ -642,8 +773,9 @@ mod tests {
         // Mock navigation to a directory which does not exist on disk
         let test_path = Path::new("~/path_which_does_not_exist").to_path_buf();
         let context = Context::new_with_shell_and_path(
-            ArgMatches::default(),
+            Default::default(),
             Shell::Unknown,
+            Target::Main,
             test_path.clone(),
             test_path.clone(),
         );
@@ -655,5 +787,22 @@ mod tests {
 
         let expected_logical_dir = test_path;
         assert_eq!(expected_logical_dir, context.logical_dir);
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn strip_extended_path_prefix() {
+        let test_path = Path::new(r"\\?\C:\").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Unknown,
+            Target::Main,
+            test_path.clone(),
+            test_path,
+        );
+
+        let expected_path = Path::new(r"C:\");
+
+        assert_eq!(&context.current_dir, expected_path);
     }
 }

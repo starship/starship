@@ -42,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => get_module_version(context, &config).map(Ok),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -65,6 +65,7 @@ fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> 
     // 1. `$RUSTUP_TOOLCHAIN`
     // 2. `rustup override list`
     // 3. `rust-toolchain` or `rust-toolchain.toml` in `.` or parent directories
+    // 4. `rustup default`
     // as `rustup` does.
     // https://github.com/rust-lang/rustup.rs/tree/eb694fcada7becc5d9d160bf7c623abe84f8971d#override-precedence
     //
@@ -74,10 +75,11 @@ fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> 
     // - `rustup show active-toolchain`
     // - `rustup which`
     if let Some(toolchain) = env_rustup_toolchain(context)
-        .or_else(|| execute_rustup_override_list(&context.current_dir))
+        .or_else(|| execute_rustup_override_list(context))
         .or_else(|| find_rust_toolchain_file(context))
+        .or_else(|| execute_rustup_default(context))
     {
-        match execute_rustup_run_rustc_version(&toolchain) {
+        match execute_rustup_run_rustc_version(context, &toolchain) {
             RustupRunRustcVersionOutcome::RustcVersion(rustc_version) => {
                 format_rustc_version(&rustc_version, config.version_format)
             }
@@ -85,12 +87,12 @@ fn get_module_version(context: &Context, config: &RustConfig) -> Option<String> 
             RustupRunRustcVersionOutcome::RustupNotWorking => {
                 // If `rustup` is not in `$PATH` or cannot be executed for other reasons, we can
                 // safely execute `rustc --version`.
-                format_rustc_version(&execute_rustc_version()?, config.version_format)
+                format_rustc_version(&execute_rustc_version(context)?, config.version_format)
             }
             RustupRunRustcVersionOutcome::Err => None,
         }
     } else {
-        format_rustc_version(&execute_rustc_version()?, config.version_format)
+        format_rustc_version(&execute_rustc_version(context)?, config.version_format)
     }
 }
 
@@ -99,29 +101,43 @@ fn env_rustup_toolchain(context: &Context) -> Option<String> {
     Some(val.trim().to_owned())
 }
 
-fn execute_rustup_override_list(cwd: &Path) -> Option<String> {
-    let Output { stdout, .. } = create_command("rustup")
-        .ok()?
-        .args(&["override", "list"])
-        .output()
-        .ok()?;
-    let stdout = String::from_utf8(stdout).ok()?;
-    extract_toolchain_from_rustup_override_list(&stdout, cwd)
+fn execute_rustup_override_list(context: &Context) -> Option<String> {
+    extract_toolchain_from_rustup_override_list(
+        &context.exec_cmd("rustup", &["override", "list"])?.stdout,
+        &context.current_dir,
+    )
+}
+
+fn execute_rustup_default(context: &Context) -> Option<String> {
+    // `rustup default` output is:
+    //    stable-x86_64-apple-darwin (default)
+    context
+        .exec_cmd("rustup", &["default"])?
+        .stdout
+        .split_whitespace()
+        .next()
+        .map(str::to_owned)
 }
 
 fn extract_toolchain_from_rustup_override_list(stdout: &str, cwd: &Path) -> Option<String> {
     if stdout == "no overrides\n" {
         return None;
     }
+    // use display version of path, also allows stripping \\?\
+    let cwd = cwd.to_string_lossy();
+    // rustup strips \\?\ prefix
+    #[cfg(windows)]
+    let cwd = cwd.strip_prefix(r"\\?\").unwrap_or(&cwd);
+
     stdout
         .lines()
         .filter_map(|line| {
-            let mut words = line.split_whitespace();
-            let dir = words.next()?;
-            let toolchain = words.next()?;
-            Some((dir, toolchain))
+            let (dir, toolchain) = line.split_once('\t')?;
+            Some((dir.trim(), toolchain.trim()))
         })
-        .find(|(dir, _)| cwd.starts_with(dir))
+        // find most specific match
+        .filter(|(dir, _)| cwd.starts_with(dir))
+        .max_by_key(|(dir, _)| dir.len())
         .map(|(_, toolchain)| toolchain.to_owned())
 }
 
@@ -189,9 +205,16 @@ fn find_rust_toolchain_file(context: &Context) -> Option<String> {
     }
 }
 
-fn execute_rustup_run_rustc_version(toolchain: &str) -> RustupRunRustcVersionOutcome {
+fn execute_rustup_run_rustc_version(
+    context: &Context,
+    toolchain: &str,
+) -> RustupRunRustcVersionOutcome {
     create_command("rustup")
-        .and_then(|mut cmd| cmd.args(&["run", toolchain, "rustc", "--version"]).output())
+        .and_then(|mut cmd| {
+            cmd.args(&["run", toolchain, "rustc", "--version"])
+                .current_dir(&context.current_dir)
+                .output()
+        })
         .map(extract_toolchain_from_rustup_run_rustc_version)
         .unwrap_or(RustupRunRustcVersionOutcome::RustupNotWorking)
 }
@@ -212,11 +235,11 @@ fn extract_toolchain_from_rustup_run_rustc_version(output: Output) -> RustupRunR
     RustupRunRustcVersionOutcome::Err
 }
 
-fn execute_rustc_version() -> Option<String> {
-    match create_command("rustc").ok()?.arg("--version").output() {
-        Ok(output) => Some(String::from_utf8(output.stdout).unwrap()),
-        Err(_) => None,
-    }
+fn execute_rustc_version(context: &Context) -> Option<String> {
+    context
+        .exec_cmd("rustc", &["--version"])
+        .map(|o| o.stdout)
+        .filter(|s| !s.is_empty())
 }
 
 fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<String> {
@@ -245,7 +268,7 @@ enum RustupRunRustcVersionOutcome {
 
 #[cfg(test)]
 mod tests {
-    use crate::context::Shell;
+    use crate::context::{Shell, Target};
     use once_cell::sync::Lazy;
     use std::io;
     use std::process::{ExitStatus, Output};
@@ -265,11 +288,13 @@ mod tests {
         );
 
         static OVERRIDES_INPUT: &str =
-            "/home/user/src/a                                beta-x86_64-unknown-linux-gnu\n\
-             /home/user/src/b                                nightly-x86_64-unknown-linux-gnu\n";
+            "/home/user/src/a                \t                beta-x86_64-unknown-linux-gnu\n\
+             /home/user/src/b                \t                nightly-x86_64-unknown-linux-gnu\n\
+             /home/user/src/b/d c            \t                stable-x86_64-pc-windows-msvc\n";
         static OVERRIDES_CWD_A: &str = "/home/user/src/a/src";
         static OVERRIDES_CWD_B: &str = "/home/user/src/b/tests";
         static OVERRIDES_CWD_C: &str = "/home/user/src/c/examples";
+        static OVERRIDES_CWD_D: &str = "/home/user/src/b/d c/spaces";
         assert_eq!(
             extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_A.as_ref()),
             Some("beta-x86_64-unknown-linux-gnu".to_owned()),
@@ -281,6 +306,29 @@ mod tests {
         assert_eq!(
             extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_C.as_ref()),
             None,
+        );
+        assert_eq!(
+            extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_D.as_ref()),
+            Some("stable-x86_64-pc-windows-msvc".to_owned()),
+        );
+    }
+
+    #[test]
+    #[cfg(windows)]
+    fn test_extract_toolchain_from_rustup_override_list_win() {
+        static OVERRIDES_INPUT: &str =
+            "C:\\src                \t                beta-x86_64-unknown-linux-gnu\n";
+        static OVERRIDES_CWD_A: &str = r"\\?\C:\src";
+        static OVERRIDES_CWD_B: &str = r"C:\src";
+
+        assert_eq!(
+            extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_A.as_ref()),
+            Some("beta-x86_64-unknown-linux-gnu".to_owned()),
+        );
+
+        assert_eq!(
+            extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_B.as_ref()),
+            Some("beta-x86_64-unknown-linux-gnu".to_owned()),
         );
     }
 
@@ -376,6 +424,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -396,6 +445,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -416,6 +466,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -438,6 +489,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             child_dir_path.clone(),
             child_dir_path,
         );
@@ -457,6 +509,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -474,6 +527,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -494,6 +548,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             dir.path().into(),
             dir.path().into(),
         );
@@ -516,6 +571,7 @@ mod tests {
         let context = Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
+            Target::Main,
             child_dir_path.clone(),
             child_dir_path,
         );

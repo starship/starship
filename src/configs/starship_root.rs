@@ -5,9 +5,10 @@ use std::cmp::Ordering;
 
 // On changes please also update the `FullConfig` struct in `mod.rs`
 #[derive(Clone, Serialize)]
-pub struct StarshipRootConfig<'a> {
-    pub format: &'a str,
-    pub right_format: &'a str,
+pub struct StarshipRootConfig {
+    pub format: String,
+    pub right_format: String,
+    pub continuation_prompt: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
@@ -19,6 +20,7 @@ pub struct StarshipRootConfig<'a> {
 pub const PROMPT_ORDER: &[&str] = &[
     "username",
     "hostname",
+    "localip",
     "shlvl",
     "singularity",
     "kubernetes",
@@ -53,6 +55,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "ocaml",
     "perl",
     "php",
+    "pulumi",
     "purescript",
     "python",
     "rlang",
@@ -72,9 +75,11 @@ pub const PROMPT_ORDER: &[&str] = &[
     "aws",
     "gcloud",
     "openstack",
+    "azure",
     "env_var",
     "crystal",
     "custom",
+    "sudo",
     "cmd_duration",
     "line_break",
     "jobs",
@@ -82,16 +87,18 @@ pub const PROMPT_ORDER: &[&str] = &[
     "battery",
     "time",
     "status",
+    "container",
     "shell",
     "character",
 ];
 
 // On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
-impl<'a> Default for StarshipRootConfig<'a> {
+impl<'a> Default for StarshipRootConfig {
     fn default() -> Self {
         StarshipRootConfig {
-            format: "$all",
-            right_format: "",
+            format: "$all".to_string(),
+            right_format: "".to_string(),
+            continuation_prompt: "[∙](bright-black) ".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
@@ -99,12 +106,13 @@ impl<'a> Default for StarshipRootConfig<'a> {
     }
 }
 
-impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
+impl<'a> ModuleConfig<'a> for StarshipRootConfig {
     fn load_config(&mut self, config: &'a toml::Value) {
         if let toml::Value::Table(config) = config {
             config.iter().for_each(|(k, v)| match k.as_str() {
                 "format" => self.format.load_config(v),
                 "right_format" => self.right_format.load_config(v),
+                "continuation_prompt" => self.continuation_prompt.load_config(v),
                 "scan_timeout" => self.scan_timeout.load_config(v),
                 "command_timeout" => self.command_timeout.load_config(v),
                 "add_newline" => self.add_newline.load_config(v),
@@ -119,6 +127,7 @@ impl<'a> ModuleConfig<'a> for StarshipRootConfig<'a> {
                             // Root options
                             "format",
                             "right_format",
+                            "continuation_prompt",
                             "scan_timeout",
                             "command_timeout",
                             "add_newline",

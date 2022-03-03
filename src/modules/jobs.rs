@@ -33,12 +33,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let props = &context.properties;
-    let num_of_jobs = props
-        .get("jobs")
-        .map_or("0", String::as_str)
-        .trim()
-        .parse::<i64>()
-        .ok()?;
+    let num_of_jobs = props.jobs;
 
     if num_of_jobs == 0
         && config.threshold > 0
@@ -88,7 +83,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "number" => Some(Ok(module_number.clone())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {

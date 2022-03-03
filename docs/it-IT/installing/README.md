@@ -35,6 +35,16 @@ pkg install getconf
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
+## [Funtoo Linux](https://www.funtoo.org/Welcome)
+
+### Installazione
+
+On Funtoo Linux, starship can be installed from [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
+
+```sh
+emerge app-shells/starship
+```
+
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
 ### Ottenere il Binario
@@ -53,7 +63,6 @@ Abilita il modulo `programs.starship` nel tuo file `home.nix` e aggiungi le tue 
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
     # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;

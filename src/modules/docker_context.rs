@@ -9,8 +9,8 @@ use crate::utils;
 /// Creates a module with the currently active Docker context
 ///
 /// Will display the Docker context if the following criteria are met:
-///     - There is a non-empty enviroment variable named DOCKER_HOST
-///     - Or there is a non-empty enviroment variable named DOCKER_CONTEXT
+///     - There is a non-empty environment variable named DOCKER_HOST
+///     - Or there is a non-empty environment variable named DOCKER_CONTEXT
 ///     - Or there is a file named `$HOME/.docker/config.json`
 ///     - Or a file named `$DOCKER_CONFIG/config.json`
 ///     - The file is JSON and contains a field named `currentContext`
@@ -41,7 +41,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     )
     .join("config.json");
 
-    let docker_context_env = std::array::IntoIter::new(["DOCKER_HOST", "DOCKER_CONTEXT"])
+    let docker_context_env = ["DOCKER_MACHINE_NAME", "DOCKER_HOST", "DOCKER_CONTEXT"]
+        .into_iter()
         .find_map(|env| context.get_env(env));
 
     let ctx = match docker_context_env {
@@ -70,7 +71,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "context" => Some(Ok(ctx.as_str())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -361,6 +362,39 @@ mod tests {
         let expected = Some(format!(
             "via {} ",
             Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")
+        ));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+    #[test]
+    fn test_docker_machine_name_overrides_other_env_vars_and_conf() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let cfg_file = cfg_dir.path().join("config.json");
+
+        let config_content = serde_json::json!({
+            "currentContext": "starship"
+        });
+
+        let mut docker_config = File::create(&cfg_file)?;
+        docker_config.write_all(config_content.to_string().as_bytes())?;
+        docker_config.sync_all()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_MACHINE_NAME", "machine_name")
+            .env("DOCKER_HOST", "udp://starship@127.0.0.1:53")
+            .env("DOCKER_CONTEXT", "starship")
+            .env("DOCKER_CONFIG", cfg_dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = Some(format!(
+            "via {} ",
+            Color::Blue.bold().paint("🐳 machine_name")
         ));
 
         assert_eq!(expected, actual);

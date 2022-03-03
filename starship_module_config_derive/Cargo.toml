@@ -1,19 +1,19 @@
 [package]
 name = "starship_module_config_derive"
 version = "0.2.1"
-edition = "2018"
 authors = ["Matan Kushner <hello@matchai.me>"]
-homepage = "https://starship.rs"
-documentation = "https://starship.rs/guide/"
-repository = "https://github.com/starship/starship"
-readme = "README.md"
-license = "ISC"
-keywords = ["prompt", "shell", "bash", "fish", "zsh"]
 categories = ["command-line-utilities"]
+documentation = "https://starship.rs/guide/"
+edition = "2021"
+homepage = "https://starship.rs"
+include = ["src/**/*", "LICENSE", "README.md"]
+keywords = ["prompt", "shell", "bash", "fish", "zsh"]
+license = "ISC"
+readme = "README.md"
+repository = "https://github.com/starship/starship"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
-include = ["src/**/*", "LICENSE", "README.md"]
 
 [lib]
 name = "starship_module_config_derive"

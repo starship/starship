@@ -18,7 +18,7 @@ features:
 footer: Под лицензией ISC | Авторское право © 2019-настоящее Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, and PowerShell.
+description: Starship - минимальная, быстрая и бесконечная настраиваемая командная строка для любой оболочки! Показывает нужную вам информацию, оставаясь красивой и минималистичной. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
 ---
 
 <div class="center">
@@ -28,9 +28,9 @@ description: Starship - минимальная, быстрая и бесконе
   </video>
 </div>
 
-### Требования
+### Обязательные требования
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- Установленный и включенный шрифт [Nerd Font](https://www.nerdfonts.com/) в вашем терминале.
 
 ### Быстрая установка
 
@@ -99,7 +99,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### PowerShell
 
-   Добавьте следующее в конец `Microsoft.PowerShell_profile.ps1`. Вы можете проверить местоположение этого файла, запросив переменную `$PROFILE` в PowerShell. Обычно он находится в `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix.
+   Добавьте следующее в конец `Microsoft.PowerShell_profile.ps1`. Вы можете узнать расположение этого файла, запросив переменную `$PROFILE` в PowerShell. Обычно он находится в `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` или `~/.config/powershell/Microsoft.PowerShell_profile.ps1` на -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -119,7 +119,7 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Elvish
 
-   ::: warning Only elvish v0.15 or higher is supported. :::
+   ::: warning Поддерживается только elvish v0.17 или выше. :::
 
    Добавьте следующую строку в конец `~/.elvish/rc.elv`:
 
@@ -143,13 +143,13 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Nushell
 
-   ::: warning This will change in the future. Only nu version v0.33 or higher is supported. ::: Add the following to your nu config file. You can check the location of this file by running `config path` in nu.
+   ::: warning Это будет изменено. Поддерживается только nu версии v0.33 или выше. ::: Добавьте следующее в свой конфигурационный файл nu. Вы можете узнать расположение этого файла, выполнив `config path` в nu.
 
    ```toml
    startup = [
-    "mkdir ~/.cache/starship",
-    "starship init nu | save ~/.cache/starship/init.nu",
-    "source ~/.cache/starship/init.nu"
+     "mkdir ~/.cache/starship",
+     "starship init nu | save ~/.cache/starship/init.nu",
+     "source ~/.cache/starship/init.nu",
    ]
    prompt = "starship_prompt"
    ```
@@ -157,10 +157,21 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Добавьте следующее в конец `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
 
    execx($(starship init xonsh))
+   ```
+
+
+   #### Cmd
+
+   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+
+   ```lua
+   -- starship.lua
+
+   load(io.popen('starship init cmd'):read("*a"))()
    ```

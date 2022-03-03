@@ -4,12 +4,14 @@ use serde::{self, Serialize};
 use starship_module_config_derive::ModuleConfig;
 
 pub mod aws;
+pub mod azure;
 pub mod battery;
 pub mod character;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
 pub mod conda;
+pub mod container;
 pub mod crystal;
 pub mod custom;
 pub mod dart;
@@ -38,6 +40,7 @@ pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
 pub mod line_break;
+pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod nim;
@@ -48,6 +51,7 @@ pub mod openstack;
 pub mod package;
 pub mod perl;
 pub mod php;
+pub mod pulumi;
 pub mod purescript;
 pub mod python;
 pub mod red;
@@ -60,6 +64,7 @@ pub mod shlvl;
 pub mod singularity;
 mod starship_root;
 pub mod status;
+pub mod sudo;
 pub mod swift;
 pub mod terraform;
 pub mod time;
@@ -75,19 +80,22 @@ pub use starship_root::*;
 #[serde(default)]
 pub struct FullConfig<'a> {
     // Root config
-    pub format: &'a str,
-    pub right_format: &'a str,
+    pub format: String,
+    pub right_format: String,
+    pub continuation_prompt: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
     // modules
     aws: aws::AwsConfig<'a>,
+    azure: azure::AzureConfig<'a>,
     battery: battery::BatteryConfig<'a>,
     character: character::CharacterConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
     cobol: cobol::CobolConfig<'a>,
     conda: conda::CondaConfig<'a>,
+    container: container::ContainerConfig<'a>,
     crystal: crystal::CrystalConfig<'a>,
     dart: dart::DartConfig<'a>,
     deno: deno::DenoConfig<'a>,
@@ -115,6 +123,7 @@ pub struct FullConfig<'a> {
     kotlin: kotlin::KotlinConfig<'a>,
     kubernetes: kubernetes::KubernetesConfig<'a>,
     line_break: line_break::LineBreakConfig,
+    localip: localip::LocalipConfig<'a>,
     lua: lua::LuaConfig<'a>,
     memory_usage: memory_usage::MemoryConfig<'a>,
     nim: nim::NimConfig<'a>,
@@ -125,6 +134,7 @@ pub struct FullConfig<'a> {
     package: package::PackageConfig<'a>,
     perl: perl::PerlConfig<'a>,
     php: php::PhpConfig<'a>,
+    pulumi: pulumi::PulumiConfig<'a>,
     purescript: purescript::PureScriptConfig<'a>,
     python: python::PythonConfig<'a>,
     red: red::RedConfig<'a>,
@@ -136,6 +146,7 @@ pub struct FullConfig<'a> {
     shlvl: shlvl::ShLvlConfig<'a>,
     singularity: singularity::SingularityConfig<'a>,
     status: status::StatusConfig<'a>,
+    sudo: sudo::SudoConfig<'a>,
     swift: swift::SwiftConfig<'a>,
     terraform: terraform::TerraformConfig<'a>,
     time: time::TimeConfig<'a>,
@@ -150,19 +161,22 @@ pub struct FullConfig<'a> {
 impl<'a> Default for FullConfig<'a> {
     fn default() -> Self {
         Self {
-            format: "$all",
-            right_format: "",
+            format: "$all".to_string(),
+            right_format: "".to_string(),
+            continuation_prompt: "[∙](bright-black) ".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
 
             aws: Default::default(),
+            azure: Default::default(),
             battery: Default::default(),
             character: Default::default(),
             cmake: Default::default(),
             cmd_duration: Default::default(),
             cobol: Default::default(),
             conda: Default::default(),
+            container: Default::default(),
             crystal: Default::default(),
             dart: Default::default(),
             deno: Default::default(),
@@ -190,6 +204,7 @@ impl<'a> Default for FullConfig<'a> {
             kotlin: Default::default(),
             kubernetes: Default::default(),
             line_break: Default::default(),
+            localip: Default::default(),
             lua: Default::default(),
             memory_usage: Default::default(),
             nim: Default::default(),
@@ -200,6 +215,7 @@ impl<'a> Default for FullConfig<'a> {
             package: Default::default(),
             perl: Default::default(),
             php: Default::default(),
+            pulumi: Default::default(),
             purescript: Default::default(),
             python: Default::default(),
             red: Default::default(),
@@ -211,6 +227,7 @@ impl<'a> Default for FullConfig<'a> {
             shlvl: Default::default(),
             singularity: Default::default(),
             status: Default::default(),
+            sudo: Default::default(),
             swift: Default::default(),
             terraform: Default::default(),
             time: Default::default(),

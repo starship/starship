@@ -109,7 +109,7 @@ Para configurar o prompt para usar a configuração antiga `use_symbol_for_statu
 error_symbol = "[✖](bold red)"
 ```
 
-*Nota:* O elemento `charactere` adiciona automaticamente um espaço depois do mesmo, portanto ao contrario strings `format`, nós não adicionamos o espaço nos exemplos acima.
+_Nota:_ O elemento `charactere` adiciona automaticamente um espaço depois, portanto, ao contrário das outras strings de `format`, nós não adicionamos nos exemplos acima.
 
 #### Tempo de execução do comando
 

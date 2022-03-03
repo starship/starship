@@ -7,6 +7,7 @@ use std::error::Error;
 use std::fmt;
 
 use crate::config::parse_style_string;
+use crate::context::{Context, Shell};
 use crate::segment::Segment;
 
 use super::model::*;
@@ -15,6 +16,7 @@ use super::parser::{parse, Rule};
 #[derive(Clone)]
 enum VariableValue<'a> {
     Plain(Cow<'a, str>),
+    NoEscapingPlain(Cow<'a, str>),
     Styled(Vec<Segment>),
     Meta(Vec<FormatElement<'a>>),
 }
@@ -109,6 +111,7 @@ impl<'a> StringFormatter<'a> {
     ///
     /// - `Some(Ok(_))`: The value of this variable will be displayed in the format string.
     ///
+    #[must_use]
     pub fn map<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
@@ -123,12 +126,35 @@ impl<'a> StringFormatter<'a> {
         self
     }
 
+    /// Maps variable name into a value which is wrapped to prevent escaping later
+    ///
+    /// This should be used for variables that should not be escaped before inclusion in the prompt
+    ///
+    /// See `StringFormatter::map` for description on the parameters.
+    ///
+    #[must_use]
+    pub fn map_no_escaping<T, M>(mut self, mapper: M) -> Self
+    where
+        T: Into<Cow<'a, str>>,
+        M: Fn(&str) -> Option<Result<T, StringFormatterError>> + Sync,
+    {
+        self.variables
+            .par_iter_mut()
+            .filter(|(_, value)| value.is_none())
+            .for_each(|(key, value)| {
+                *value = mapper(key)
+                    .map(|var| var.map(|var| VariableValue::NoEscapingPlain(var.into())));
+            });
+        self
+    }
+
     /// Maps a meta-variable to a format string containing other variables.
     ///
     /// This function should be called **before** other map methods so that variables found in
     /// the format strings of meta-variables can be cached properly.
     ///
     /// See `StringFormatter::map` for description on the parameters.
+    #[must_use]
     pub fn map_meta<M>(mut self, mapper: M) -> Self
     where
         M: Fn(&str, &BTreeSet<String>) -> Option<&'a str> + Sync,
@@ -170,6 +196,7 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name to an array of segments
     ///
     /// See `StringFormatter::map` for description on the parameters.
+    #[must_use]
     pub fn map_variables_to_segments<M>(mut self, mapper: M) -> Self
     where
         M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>> + Sync,
@@ -186,6 +213,7 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name in a style string to its value
     ///
     /// See `StringFormatter::map` for description on the parameters.
+    #[must_use]
     pub fn map_style<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
@@ -206,11 +234,16 @@ impl<'a> StringFormatter<'a> {
     ///
     /// - Format string in meta variables fails to parse
     /// - Variable mapper returns an error.
-    pub fn parse(self, default_style: Option<Style>) -> Result<Vec<Segment>, StringFormatterError> {
+    pub fn parse(
+        self,
+        default_style: Option<Style>,
+        context: Option<&Context>,
+    ) -> Result<Vec<Segment>, StringFormatterError> {
         fn parse_textgroup<'a>(
             textgroup: TextGroup<'a>,
             variables: &'a VariableMapType<'a>,
             style_variables: &'a StyleVariableMapType<'a>,
+            context: Option<&Context>,
         ) -> Result<Vec<Segment>, StringFormatterError> {
             let style = parse_style(textgroup.style, style_variables);
             parse_format(
@@ -218,6 +251,7 @@ impl<'a> StringFormatter<'a> {
                 style.transpose()?,
                 variables,
                 style_variables,
+                context,
             )
         }
 
@@ -252,6 +286,7 @@ impl<'a> StringFormatter<'a> {
             style: Option<Style>,
             variables: &'a VariableMapType<'a>,
             style_variables: &'a StyleVariableMapType<'a>,
+            context: Option<&Context>,
         ) -> Result<Vec<Segment>, StringFormatterError> {
             let results: Result<Vec<Vec<Segment>>, StringFormatterError> = format
                 .into_iter()
@@ -263,7 +298,7 @@ impl<'a> StringFormatter<'a> {
                                 format: textgroup.format,
                                 style: textgroup.style,
                             };
-                            parse_textgroup(textgroup, variables, style_variables)
+                            parse_textgroup(textgroup, variables, style_variables, context)
                         }
                         FormatElement::Variable(name) => variables
                             .get(name.as_ref())
@@ -278,14 +313,26 @@ impl<'a> StringFormatter<'a> {
                                         segment
                                     })
                                     .collect()),
-                                VariableValue::Plain(text) => Ok(Segment::from_text(style, text)),
+                                VariableValue::Plain(text) => Ok(Segment::from_text(
+                                    style,
+                                    shell_prompt_escape(
+                                        text,
+                                        match context {
+                                            None => Shell::Unknown,
+                                            Some(c) => c.shell,
+                                        },
+                                    ),
+                                )),
+                                VariableValue::NoEscapingPlain(text) => {
+                                    Ok(Segment::from_text(style, text))
+                                }
                                 VariableValue::Meta(format) => {
                                     let formatter = StringFormatter {
                                         format,
                                         variables: clone_without_meta(variables),
                                         style_variables: style_variables.clone(),
                                     };
-                                    formatter.parse(style)
+                                    formatter.parse(style, context)
                                 }
                             })
                             .unwrap_or_else(|| Ok(Vec::new())),
@@ -320,6 +367,9 @@ impl<'a> StringFormatter<'a> {
                                                     VariableValue::Plain(plain_value) => {
                                                         !plain_value.is_empty()
                                                     }
+                                                    VariableValue::NoEscapingPlain(
+                                                        no_escaping_plain_value,
+                                                    ) => !no_escaping_plain_value.is_empty(),
                                                     VariableValue::Styled(segments) => segments
                                                         .iter()
                                                         .any(|x| !x.value().is_empty()),
@@ -331,7 +381,7 @@ impl<'a> StringFormatter<'a> {
                             let should_show: bool = should_show_elements(&format, variables);
 
                             if should_show {
-                                parse_format(format, style, variables, style_variables)
+                                parse_format(format, style, variables, style_variables, context)
                             } else {
                                 Ok(Vec::new())
                             }
@@ -347,6 +397,7 @@ impl<'a> StringFormatter<'a> {
             default_style,
             &self.variables,
             &self.style_variables,
+            context,
         )
     }
 }
@@ -380,6 +431,28 @@ fn clone_without_meta<'a>(variables: &VariableMapType<'a>) -> VariableMapType<'a
         .collect()
 }
 
+/// Escape interpretable characters for the shell prompt
+pub fn shell_prompt_escape<T>(text: T, shell: Shell) -> String
+where
+    T: Into<String>,
+{
+    // Handle other interpretable characters
+    match shell {
+        // Bash might interepret baskslashes, backticks and $
+        // see #658 for more details
+        Shell::Bash => text
+            .into()
+            .replace('\\', r"\\")
+            .replace('$', r"\$")
+            .replace('`', r"\`"),
+        Shell::Zsh => {
+            // % is an escape in zsh, see PROMPT in `man zshmisc`
+            text.into().replace('%', "%%")
+        }
+        _ => text.into(),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -404,7 +477,7 @@ mod tests {
         let style = Some(Color::Red.bold());
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
-        let result = formatter.parse(style).unwrap();
+        let result = formatter.parse(style, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", style);
     }
@@ -413,7 +486,7 @@ mod tests {
     fn test_textgroup_text_only() {
         const FORMAT_STR: &str = "[text](red bold)";
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", Some(Color::Red.bold()));
     }
@@ -428,7 +501,7 @@ mod tests {
                 "var1" => Some(Ok("text1".to_owned())),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "text1", None);
     }
@@ -444,7 +517,7 @@ mod tests {
                 "style" => Some(Ok("red bold".to_owned())),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "root", root_style);
     }
@@ -456,7 +529,7 @@ mod tests {
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
             .map(|variable| Some(Ok(format!("${{{}}}", variable))));
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "${env:PWD}", None);
     }
@@ -466,7 +539,7 @@ mod tests {
         const FORMAT_STR: &str = r#"\\\[\$text\]\(red bold\)"#;
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, r#"\[$text](red bold)"#, None);
     }
@@ -479,7 +552,7 @@ mod tests {
         let inner_style = Some(Color::Blue.normal());
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
-        let result = formatter.parse(outer_style).unwrap();
+        let result = formatter.parse(outer_style, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "outer ", outer_style);
         match_next!(result_iter, "middle ", middle_style);
@@ -497,7 +570,7 @@ mod tests {
                 "var" => Some(Ok("text".to_owned())),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "text", var_style);
     }
@@ -523,7 +596,7 @@ mod tests {
                 "var" => Some(Ok(segments.clone())),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "styless", var_style);
         match_next!(result_iter, "styled", styled_style);
@@ -546,7 +619,7 @@ mod tests {
                 "b" => Some(Ok("$b")),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "$a", None);
         match_next!(result_iter, "$b", None);
@@ -568,7 +641,7 @@ mod tests {
                 "c" => Some(Ok("$c")),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "$a", None);
         match_next!(result_iter, "$b", None);
@@ -585,7 +658,7 @@ mod tests {
                 "some" => Some(Ok("$some")),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "$some", None);
         match_next!(result_iter, " should render but ", None);
@@ -602,7 +675,7 @@ mod tests {
                 "empty" => Some(Ok("")),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         assert_eq!(result.len(), 0);
     }
 
@@ -616,7 +689,7 @@ mod tests {
                 "empty" => Some(Ok("")),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         assert_eq!(result.len(), 0);
     }
 
@@ -630,7 +703,7 @@ mod tests {
                 "some" => Some(Ok("$some")),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "$some", None);
         match_next!(result_iter, " ", None);
@@ -649,7 +722,7 @@ mod tests {
                 "all" => Some("$some"),
                 _ => None,
             });
-        let result = formatter.parse(None).unwrap();
+        let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, " ", None);
     }
@@ -703,8 +776,50 @@ mod tests {
                     "never" => Some(Err(never_error.clone())),
                     _ => None,
                 })
-                .parse(None)
+                .parse(None, None)
         });
         assert!(segments.is_err());
+    }
+
+    #[test]
+    fn test_bash_escape() {
+        let test = "$(echo a)";
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::Bash),
+            r"\$(echo a)"
+        );
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            test
+        );
+
+        let test = r"\$(echo a)";
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::Bash),
+            r"\\\$(echo a)"
+        );
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            test
+        );
+
+        let test = r"`echo a`";
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::Bash),
+            r"\`echo a\`"
+        );
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            test
+        );
+    }
+    #[test]
+    fn test_zsh_escape() {
+        let test = "10%";
+        assert_eq!(shell_prompt_escape(test.to_owned(), Shell::Zsh), "10%%");
+        assert_eq!(
+            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            test
+        );
     }
 }

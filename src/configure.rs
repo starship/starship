@@ -3,6 +3,7 @@ use std::ffi::OsString;
 use std::io::ErrorKind;
 use std::process;
 use std::process::Stdio;
+use std::str::FromStr;
 
 use crate::config::RootModuleConfig;
 use crate::config::StarshipConfig;
@@ -10,9 +11,8 @@ use crate::configs::PROMPT_ORDER;
 use crate::utils;
 use std::fs::File;
 use std::io::Write;
-use toml::map::Map;
-use toml::value::Table;
 use toml::Value;
+use toml_edit::Document;
 
 #[cfg(not(windows))]
 const STD_EDITOR: &str = "vi";
@@ -20,42 +20,60 @@ const STD_EDITOR: &str = "vi";
 const STD_EDITOR: &str = "notepad.exe";
 
 pub fn update_configuration(name: &str, value: &str) {
-    let keys: Vec<&str> = name.split('.').collect();
-    if keys.len() != 2 {
-        log::error!("Please pass in a config key with a '.'");
-        process::exit(1);
-    }
+    let mut doc = get_configuration_edit();
 
-    if let Some(table) = get_configuration().as_table_mut() {
-        if !table.contains_key(keys[0]) {
-            table.insert(keys[0].to_string(), Value::Table(Map::new()));
+    match handle_update_configuration(&mut doc, name, value) {
+        Err(e) => {
+            eprintln!("{}", e);
+            process::exit(1);
         }
-
-        if let Some(values) = table.get(keys[0]).unwrap().as_table() {
-            let mut updated_values = values.clone();
-
-            if value.parse::<bool>().is_ok() {
-                updated_values.insert(
-                    keys[1].to_string(),
-                    Value::Boolean(value.parse::<bool>().unwrap()),
-                );
-            } else if value.parse::<i64>().is_ok() {
-                updated_values.insert(
-                    keys[1].to_string(),
-                    Value::Integer(value.parse::<i64>().unwrap()),
-                );
-            } else {
-                updated_values.insert(keys[1].to_string(), Value::String(value.to_string()));
-            }
-
-            table.insert(keys[0].to_string(), Value::Table(updated_values));
-        }
-
-        write_configuration(table);
+        _ => write_configuration(&doc),
     }
 }
 
-pub fn print_configuration(use_default: bool) {
+fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> Result<(), String> {
+    let mut keys = name.split('.');
+
+    let first_key = keys.next().unwrap_or_default();
+    if first_key.is_empty() {
+        return Err("Empty table keys are not supported".to_owned());
+    }
+
+    let table = doc.as_table_mut();
+    let mut current_item = table.entry(first_key).or_insert_with(toml_edit::table);
+
+    for key in keys {
+        if !current_item.is_table_like() {
+            return Err("This command can only index into TOML tables".to_owned());
+        }
+
+        if key.is_empty() {
+            return Err("Empty table keys are not supported".to_owned());
+        }
+
+        let table = current_item.as_table_like_mut().unwrap();
+
+        if !table.contains_key(key) {
+            table.insert(key, toml_edit::table());
+        }
+
+        current_item = table.get_mut(key).unwrap();
+    }
+
+    let mut new_value = toml_edit::Value::from_str(value)
+        .map(toml_edit::Item::Value)
+        .unwrap_or_else(|_| toml_edit::value(value));
+
+    if let Some(value) = current_item.as_value() {
+        *new_value.as_value_mut().unwrap().decor_mut() = value.decor().clone();
+    }
+
+    *current_item = new_value;
+
+    Ok(())
+}
+
+pub fn print_configuration(use_default: bool, paths: &[String]) {
     let config = if use_default {
         // Get default config
         let default_config = crate::configs::FullConfig::default();
@@ -70,68 +88,139 @@ pub fn print_configuration(use_default: bool) {
         toml::value::Value::try_from(user_config).unwrap()
     };
 
-    let string_config = toml::to_string_pretty(&config).unwrap();
-
     println!("# Warning: This config does not include keys that have an unset value\n");
-    println!(
-        "# $all is shorthand for {}",
-        PROMPT_ORDER
-            .iter()
-            .map(|module_name| format!("${}", module_name))
-            .collect::<String>()
-    );
 
-    // Unwrapping is fine because config is based on FullConfig
-    let custom_modules = config.get("custom").unwrap().as_table().unwrap();
-    if !use_default && !custom_modules.is_empty() {
+    // These are only used for format specifiers so don't print them if we aren't showing formats.
+    if paths.is_empty()
+        || paths
+            .iter()
+            .any(|path| path == "format" || path == "right_format")
+    {
         println!(
-            "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
-            custom_modules
-                .keys()
-                .map(|module_name| format!("${{custom.{}}}", module_name))
+            "# $all is shorthand for {}",
+            PROMPT_ORDER
+                .iter()
+                .map(|module_name| format!("${}", module_name))
                 .collect::<String>()
         );
+
+        // Unwrapping is fine because config is based on FullConfig
+        let custom_modules = config.get("custom").unwrap().as_table().unwrap();
+        if !use_default && !custom_modules.is_empty() {
+            println!(
+                "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
+                custom_modules
+                    .keys()
+                    .map(|module_name| format!("${{custom.{}}}", module_name))
+                    .collect::<String>()
+            );
+        }
     }
+
+    let print_config = if paths.is_empty() {
+        config
+    } else {
+        extract_toml_paths(config, paths)
+    };
+
+    let string_config = toml::to_string_pretty(&print_config).unwrap();
+
     println!("{}", string_config);
 }
 
-pub fn toggle_configuration(name: &str, key: &str) {
-    if let Some(table) = get_configuration().as_table_mut() {
-        match table.get(name) {
-            Some(v) => {
-                if let Some(values) = v.as_table() {
-                    let mut updated_values = values.clone();
+fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value {
+    // Extract all the requested sections into a new configuration.
+    let mut subset = toml::value::Table::new();
+    let config = if let Some(config) = config.as_table_mut() {
+        config
+    } else {
+        // This function doesn't make any sense if the root is not a table.
+        return toml::Value::Table(subset);
+    };
 
-                    let current: bool = match updated_values.get(key) {
-                        Some(v) => match v.as_bool() {
-                            Some(b) => b,
-                            _ => {
-                                log::error!(
-                                    "Given config key '{}' must be in 'boolean' format",
-                                    key
-                                );
-                                process::exit(1);
-                            }
-                        },
-                        _ => {
-                            log::error!("Given config key '{}' must be exist in config file", key);
-                            process::exit(1);
-                        }
-                    };
+    'paths: for path in paths {
+        let path_segments: Vec<_> = path.split('.').collect();
+        let (&end, parents) = path_segments.split_last().unwrap_or((&"", &[]));
 
-                    updated_values.insert(key.to_string(), Value::Boolean(!current));
-
-                    table.insert(name.to_string(), Value::Table(updated_values));
-
-                    write_configuration(table);
-                }
+        // Locate the parent table to remove the value from.
+        let mut source_cursor = &mut *config;
+        for &segment in parents {
+            source_cursor = if let Some(child) = source_cursor
+                .get_mut(segment)
+                .and_then(|value| value.as_table_mut())
+            {
+                child
+            } else {
+                // We didn't find a value for this path, so move on to the next path.
+                continue 'paths;
             }
-            _ => {
-                log::error!("Given module '{}' not found in config file", name);
-                process::exit(1);
-            }
+        }
+
+        // Extract the value to move.
+        let value = if let Some(value) = source_cursor.remove(end) {
+            value
+        } else {
+            // We didn't find a value for this path, so move on to the next path.
+            continue 'paths;
         };
+
+        // Create a destination for that value.
+        let mut destination_cursor = &mut subset;
+        for &segment in &path_segments[..path_segments.len() - 1] {
+            // Because we initialize `subset` to be a table, and only add additional values that
+            // exist in `config`, it's impossible for the value here to not be a table.
+            destination_cursor = destination_cursor
+                .entry(segment)
+                .or_insert_with(|| toml::Value::Table(toml::value::Table::new()))
+                .as_table_mut()
+                .unwrap();
+        }
+
+        destination_cursor.insert(end.to_owned(), value);
     }
+
+    toml::Value::Table(subset)
+}
+
+pub fn toggle_configuration(name: &str, key: &str) {
+    let mut doc = get_configuration_edit();
+
+    match handle_toggle_configuration(&mut doc, name, key) {
+        Err(e) => {
+            eprintln!("{}", e);
+            process::exit(1);
+        }
+        _ => write_configuration(&doc),
+    }
+}
+
+fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Result<(), String> {
+    if name.is_empty() || key.is_empty() {
+        return Err("Empty table keys are not supported".to_owned());
+    }
+
+    let table = doc.as_table_mut();
+
+    let values = table
+        .get_mut(name)
+        .ok_or_else(|| format!("Given module '{}' not found in config file", name))?
+        .as_table_like_mut()
+        .ok_or_else(|| format!("Given config entry '{}' is not a module", key))?;
+
+    let old_value = values
+        .get(key)
+        .ok_or_else(|| format!("Given config key '{}' must exist in config file", key))?;
+
+    let old = old_value
+        .as_bool()
+        .ok_or_else(|| format!("Given config key '{}' must be in 'boolean' format", key))?;
+
+    let mut new_value = toml_edit::value(!old);
+    // Above code already checks if it is a value (bool)
+    *new_value.as_value_mut().unwrap().decor_mut() = old_value.as_value().unwrap().decor().clone();
+
+    values.insert(key, new_value);
+    Ok(())
 }
 
 pub fn get_configuration() -> Value {
@@ -142,11 +231,35 @@ pub fn get_configuration() -> Value {
         .expect("Failed to load starship config")
 }
 
-pub fn write_configuration(table: &mut Table) {
+pub fn get_configuration_edit() -> Document {
+    let file_path = get_config_path();
+    let toml_content = match utils::read_file(&file_path) {
+        Ok(content) => {
+            log::trace!("Config file content: \"\n{}\"", &content);
+            Some(content)
+        }
+        Err(e) => {
+            let level = if e.kind() == ErrorKind::NotFound {
+                log::Level::Debug
+            } else {
+                log::Level::Error
+            };
+
+            log::log!(level, "Unable to read config file content: {}", &e);
+            None
+        }
+    };
+
+    toml_content
+        .unwrap_or_default()
+        .parse::<Document>()
+        .expect("Failed to load starship config")
+}
+
+pub fn write_configuration(doc: &Document) {
     let config_path = get_config_path();
 
-    let config_str =
-        toml::to_string_pretty(&table).expect("Failed to serialize the config to string");
+    let config_str = doc.to_string();
 
     File::create(&config_path)
         .and_then(|mut file| file.write_all(config_str.as_ref()))
@@ -260,5 +373,198 @@ mod tests {
     fn visual_not_set_editor_not_set() {
         let actual = get_editor_internal(None, None);
         assert_eq!(STD_EDITOR, actual);
+    }
+
+    #[test]
+    fn test_extract_toml_paths() {
+        let config = toml::toml! {
+            extract_root = true
+            ignore_root = false
+
+            [extract_section]
+            ok = true
+
+            [extract_section.subsection]
+            ok = true
+
+            [ignore_section]
+            ok = false
+
+            [extract_subsection]
+            ok = false
+
+            [extract_subsection.extracted]
+            ok = true
+
+            [extract_subsection.ignored]
+            ok = false
+        };
+        let expected_config = toml::toml! {
+            extract_root = true
+
+            [extract_section]
+            ok = true
+
+            [extract_section.subsection]
+            ok = true
+
+            [extract_subsection.extracted]
+            ok = true
+        };
+        let actual_config = extract_toml_paths(
+            config,
+            &[
+                "extract_root".to_owned(),
+                "extract_section".to_owned(),
+                "extract_subsection.extracted".to_owned(),
+            ],
+        );
+
+        assert_eq!(expected_config, actual_config);
+    }
+
+    fn create_doc() -> Document {
+        let config = concat!(
+            " # comment\n",
+            "  [status] # comment\n",
+            "disabled =    false # comment\n",
+            "# comment\n",
+            "\n"
+        );
+
+        config.parse::<Document>().unwrap()
+    }
+
+    #[test]
+    fn test_toggle_simple() {
+        let mut doc = create_doc();
+
+        assert!(!doc["status"]["disabled"].as_bool().unwrap());
+
+        handle_toggle_configuration(&mut doc, "status", "disabled").unwrap();
+
+        assert!(doc["status"]["disabled"].as_bool().unwrap());
+
+        let new_config = concat!(
+            " # comment\n",
+            "  [status] # comment\n",
+            "disabled =    true # comment\n",
+            "# comment\n",
+            "\n"
+        );
+
+        assert_eq!(doc.to_string(), new_config)
+    }
+
+    #[test]
+    fn test_toggle_missing_module() {
+        let mut doc = create_doc();
+        assert!(handle_toggle_configuration(&mut doc, "missing_module", "disabled").is_err());
+    }
+
+    #[test]
+    fn test_toggle_missing_key() {
+        let mut doc = create_doc();
+        assert!(handle_toggle_configuration(&mut doc, "status", "missing").is_err());
+    }
+
+    #[test]
+    fn test_toggle_wrong_type() {
+        let mut doc = create_doc();
+        doc["status"]["disabled"] = toml_edit::value("a");
+
+        assert!(handle_toggle_configuration(&mut doc, "status", "disabled").is_err());
+
+        doc["format"] = toml_edit::value("$all");
+
+        assert!(handle_toggle_configuration(&mut doc, "format", "disabled").is_err());
+    }
+
+    #[test]
+    fn test_toggle_empty() {
+        let mut doc = create_doc();
+
+        doc["status"][""] = toml_edit::value(true);
+        doc[""]["disabled"] = toml_edit::value(true);
+
+        assert!(handle_toggle_configuration(&mut doc, "status", "").is_err());
+        assert!(handle_toggle_configuration(&mut doc, "", "disabled").is_err());
+    }
+
+    #[test]
+    fn test_update_config_wrong_type() {
+        let mut doc = create_doc();
+
+        assert!(
+            handle_update_configuration(&mut doc, "status.disabled.not_a_table", "true").is_err()
+        );
+    }
+
+    #[test]
+    fn test_update_config_simple() {
+        let mut doc = create_doc();
+
+        assert!(!doc["status"]["disabled"].as_bool().unwrap());
+
+        handle_update_configuration(&mut doc, "status.disabled", "true").unwrap();
+
+        assert!(doc["status"]["disabled"].as_bool().unwrap());
+
+        let new_config = concat!(
+            " # comment\n",
+            "  [status] # comment\n",
+            "disabled =    true # comment\n",
+            "# comment\n",
+            "\n"
+        );
+
+        assert_eq!(doc.to_string(), new_config)
+    }
+
+    #[test]
+    fn test_update_config_parse() {
+        let mut doc = create_doc();
+
+        handle_update_configuration(&mut doc, "test", "true").unwrap();
+
+        assert!(doc["test"].as_bool().unwrap());
+
+        handle_update_configuration(&mut doc, "test", "0").unwrap();
+
+        assert_eq!(doc["test"].as_integer().unwrap(), 0);
+
+        handle_update_configuration(&mut doc, "test", "0.0").unwrap();
+
+        assert!(doc["test"].is_float());
+
+        handle_update_configuration(&mut doc, "test", "a string").unwrap();
+
+        assert_eq!(doc["test"].as_str().unwrap(), "a string");
+
+        handle_update_configuration(&mut doc, "test", "\"true\"").unwrap();
+
+        assert_eq!(doc["test"].as_str().unwrap(), "true");
+    }
+
+    #[test]
+    fn test_update_config_empty() {
+        let mut doc = create_doc();
+
+        assert!(handle_update_configuration(&mut doc, "", "true").is_err());
+        assert!(handle_update_configuration(&mut doc, ".....", "true").is_err());
+        assert!(handle_update_configuration(&mut doc, "a.a.a..a.a", "true").is_err());
+        assert!(handle_update_configuration(&mut doc, "a.a.a.a.a.", "true").is_err());
+        assert!(handle_update_configuration(&mut doc, ".a.a.a.a.a", "true").is_err());
+    }
+
+    #[test]
+    fn test_update_config_deep() {
+        let mut doc = create_doc();
+
+        handle_update_configuration(&mut doc, "a.b.c.d.e.f.g.h", "true").unwrap();
+
+        assert!(doc["a"]["b"]["c"]["d"]["e"]["f"]["g"]["h"]
+            .as_bool()
+            .unwrap())
     }
 }

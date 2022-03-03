@@ -1,4 +1,4 @@
-use process_control::{ChildExt, Timeout};
+use process_control::{ChildExt, Control};
 use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs::read_to_string;
@@ -7,7 +7,31 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
+use crate::context::Context;
 use crate::context::Shell;
+
+/// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
+#[cfg(not(test))]
+#[inline]
+#[allow(dead_code)]
+pub fn context_path<S: AsRef<OsStr> + ?Sized>(_context: &Context, s: &S) -> PathBuf {
+    PathBuf::from(s)
+}
+
+/// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
+#[cfg(test)]
+#[allow(dead_code)]
+pub fn context_path<S: AsRef<OsStr> + ?Sized>(context: &Context, s: &S) -> PathBuf {
+    let requested_path = PathBuf::from(s);
+
+    if requested_path.is_absolute() {
+        let mut path = PathBuf::from(context.root_dir.path());
+        path.extend(requested_path.components().skip(1));
+        path
+    } else {
+        requested_path
+    }
+}
 
 /// Return the string contents of a file
 pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
@@ -38,7 +62,7 @@ pub fn get_command_string_output(command: CommandOutput) -> String {
 /// This function also initialises std{err,out,in} to protect against processes changing the console mode
 pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
     let binary_name = binary_name.as_ref();
-    log::trace!("Creating Command struct with binary name {:?}", binary_name);
+    log::trace!("Creating Command for binary {:?}", binary_name);
 
     let full_path = match which::which(binary_name) {
         Ok(full_path) => {
@@ -51,7 +75,7 @@ pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
         }
     };
 
-    #[allow(clippy::disallowed_method)]
+    #[allow(clippy::disallowed_methods)]
     let mut cmd = Command::new(full_path);
     cmd.stderr(Stdio::piped())
         .stdout(Stdio::piped())
@@ -85,23 +109,26 @@ pub fn display_command<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 }
 
 /// Execute a command and return the output on stdout and stderr if successful
-#[cfg(not(test))]
 pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     cmd: T,
     args: &[U],
     time_limit: Duration,
 ) -> Option<CommandOutput> {
+    log::trace!("Executing command {:?} with args {:?}", cmd, args);
+    #[cfg(test)]
+    if let Some(o) = mock_cmd(&cmd, args) {
+        return o;
+    }
     internal_exec_cmd(cmd, args, time_limit)
 }
 
 #[cfg(test)]
-pub fn exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
+pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     cmd: T,
     args: &[U],
-    time_limit: Duration,
-) -> Option<CommandOutput> {
+) -> Option<Option<CommandOutput>> {
     let command = display_command(&cmd, args);
-    match command.as_str() {
+    let out = match command.as_str() {
         "cobc -version" => Some(CommandOutput {
             stdout: String::from("\
 cobc (GnuCOBOL) 3.1.2.0
@@ -224,7 +251,11 @@ active boot switches: -d:release\n",
                 stdout: String::from("7.3.8"),
                 stderr: String::default(),
             })
-        }
+        },
+        "pulumi version" => Some(CommandOutput{
+            stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
+            stderr: String::default(),
+        }),
         "purs --version" => Some(CommandOutput {
             stdout: String::from("0.13.5\n"),
             stderr: String::default(),
@@ -309,30 +340,13 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stdout: String::from("22.1.3\n"),
             stderr: String::default(),
         }),
-        // If we don't have a mocked command fall back to executing the command
-        _ => internal_exec_cmd(&cmd, args, time_limit),
-    }
+        _ => return None,
+    };
+    Some(out)
 }
 
-/// Wraps ANSI color escape sequences and other interpretable characters
-/// that need to be escaped in the shell-appropriate wrappers.
-pub fn wrap_colorseq_for_shell(mut ansi: String, shell: Shell) -> String {
-    // Handle other interpretable characters
-    match shell {
-        // Bash might interepret baskslashes, backticks and $
-        // see #658 for more details
-        Shell::Bash => {
-            ansi = ansi.replace('\\', r"\\");
-            ansi = ansi.replace('$', r"\$");
-            ansi = ansi.replace('`', r"\`");
-        }
-        Shell::Zsh => {
-            // % is an escape in zsh, see PROMPT in `man zshmisc`
-            ansi = ansi.replace('%', "%%");
-        }
-        _ => {}
-    };
-
+/// Wraps ANSI color escape sequences in the shell-appropriate wrappers.
+pub fn wrap_colorseq_for_shell(ansi: String, shell: Shell) -> String {
     const ESCAPE_BEGIN: char = '\u{1b}';
     const ESCAPE_END: char = 'm';
     wrap_seq_for_shell(ansi, shell, ESCAPE_BEGIN, ESCAPE_END)
@@ -389,37 +403,26 @@ fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     args: &[U],
     time_limit: Duration,
 ) -> Option<CommandOutput> {
-    log::trace!("Executing command {:?} with args {:?}", cmd, args);
+    let mut cmd = create_command(cmd).ok()?;
+    cmd.args(args);
+    exec_timeout(&mut cmd, time_limit)
+}
 
-    let full_path = match which::which(&cmd) {
-        Ok(full_path) => {
-            log::trace!("Using {:?} as {:?}", full_path, cmd);
-            full_path
-        }
-        Err(error) => {
-            log::trace!("Unable to find {:?} in PATH, {:?}", cmd, error);
-            return None;
-        }
-    };
-
+pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOutput> {
     let start = Instant::now();
-
-    #[allow(clippy::disallowed_method)]
-    let process = match Command::new(full_path)
-        .args(args)
-        .stderr(Stdio::piped())
-        .stdout(Stdio::piped())
-        .stdin(Stdio::null())
-        .spawn()
-    {
+    let process = match cmd.spawn() {
         Ok(process) => process,
         Err(error) => {
-            log::info!("Unable to run {:?}, {:?}", cmd, error);
+            log::info!("Unable to run {:?}, {:?}", cmd.get_program(), error);
             return None;
         }
     };
-
-    match process.with_output_timeout(time_limit).terminating().wait() {
+    match process
+        .controlled_with_output()
+        .time_limit(time_limit)
+        .terminate_for_timeout()
+        .wait()
+    {
         Ok(Some(output)) => {
             let stdout_string = match String::from_utf8(output.stdout) {
                 Ok(stdout) => stdout,
@@ -454,12 +457,16 @@ fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
             })
         }
         Ok(None) => {
-            log::warn!("Executing command {:?} timed out.", cmd);
+            log::warn!("Executing command {:?} timed out.", cmd.get_program());
             log::warn!("You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing.");
             None
         }
         Err(error) => {
-            log::info!("Executing command {:?} failed by: {:?}", cmd, error);
+            log::info!(
+                "Executing command {:?} failed by: {:?}",
+                cmd.get_program(),
+                error
+            );
             None
         }
     }
@@ -467,6 +474,11 @@ fn internal_exec_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 
 // Render the time into a nice human-readable string
 pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
+    // Make sure it renders something if the time equals zero instead of an empty string
+    if raw_millis == 0 {
+        return "0ms".into();
+    }
+
     // Calculate a simple breakdown into days/hours/minutes/seconds/milliseconds
     let (millis, raw_seconds) = (raw_millis % 1000, raw_millis / 1000);
     let (seconds, raw_minutes) = (raw_seconds % 60, raw_seconds / 60);
@@ -499,10 +511,29 @@ pub fn home_dir() -> Option<PathBuf> {
     directories_next::BaseDirs::new().map(|base_dirs| base_dirs.home_dir().to_owned())
 }
 
+const HEXTABLE: &[char] = &[
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
+];
+
+/// Encode a u8 slice into a hexadecimal string.
+pub fn encode_to_hex(slice: &[u8]) -> String {
+    // let mut j = 0;
+    let mut dst = Vec::with_capacity(slice.len() * 2);
+    for &v in slice {
+        dst.push(HEXTABLE[(v >> 4) as usize] as u8);
+        dst.push(HEXTABLE[(v & 0x0f) as usize] as u8);
+    }
+    String::from_utf8(dst).unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    #[test]
+    fn test_0ms() {
+        assert_eq!(render_time(0_u128, true), "0ms")
+    }
     #[test]
     fn test_500ms() {
         assert_eq!(render_time(500_u128, true), "500ms")
@@ -656,47 +687,6 @@ mod tests {
     }
 
     #[test]
-    fn test_bash_escape() {
-        let test = "$(echo a)";
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
-            r"\$(echo a)"
-        );
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"\$(echo a)";
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
-            r"\\\$(echo a)"
-        );
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
-            test
-        );
-
-        let test = r"`echo a`";
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::Bash),
-            r"\`echo a\`"
-        );
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
-            test
-        );
-    }
-    #[test]
-    fn test_zsh_escape() {
-        let test = "10%";
-        assert_eq!(wrap_colorseq_for_shell(test.to_owned(), Shell::Zsh), "10%%");
-        assert_eq!(
-            wrap_colorseq_for_shell(test.to_owned(), Shell::PowerShell),
-            test
-        );
-    }
-    #[test]
     fn test_get_command_string_output() {
         let case1 = CommandOutput {
             stdout: String::from("stdout"),
@@ -708,5 +698,13 @@ mod tests {
             stderr: String::from("stderr"),
         };
         assert_eq!(get_command_string_output(case2), "stderr");
+    }
+
+    #[test]
+    fn sha1_hex() {
+        assert_eq!(
+            encode_to_hex(&[8, 13, 9, 189, 129, 94]),
+            "080d09bd815e".to_string()
+        );
     }
 }

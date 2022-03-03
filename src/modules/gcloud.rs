@@ -44,7 +44,7 @@ impl GcloudContext {
             .skip(1)
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("account"))?;
-        let account = account_line.splitn(2, '=').nth(1)?.trim();
+        let account = account_line.split_once('=')?.1.trim();
         let mut segments = account.splitn(2, '@');
         Some((
             segments.next().map(String::from)?,
@@ -60,7 +60,7 @@ impl GcloudContext {
             .skip(1)
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("project"))?;
-        let project = project_line.splitn(2, '=').nth(1)?.trim();
+        let project = project_line.split_once('=')?.1.trim();
         Some(project.to_string())
     }
 
@@ -72,7 +72,7 @@ impl GcloudContext {
             .skip(1)
             .take_while(|line| !line.starts_with('['))
             .find(|line| line.starts_with("region"))?;
-        let region = region_line.splitn(2, '=').nth(1)?.trim();
+        let region = region_line.split_once('=')?.1.trim();
         Some(region.to_string())
     }
 }
@@ -147,11 +147,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "project" => context
                     .get_env("CLOUDSDK_CORE_PROJECT")
                     .or_else(|| gcloud_context.get_project())
+                    .map(|project| {
+                        config
+                            .project_aliases
+                            .get(&project)
+                            .map_or(project, |alias| (*alias).to_owned())
+                    })
                     .map(Ok),
                 "active" => Some(Ok(gcloud_context.config_name.clone())),
                 _ => None,
             })
-            .parse(None)
+            .parse(None, Some(context))
     });
 
     module.set_segments(match parsed {
@@ -380,6 +386,38 @@ project = abc
             "on {} ",
             Color::Blue.bold().paint("☁️  env_project")
         ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn project_set_with_alias() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(&active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        create_dir(dir.path().join("configurations"))?;
+        let config_default_path = dir.path().join("configurations").join("config_default");
+        let mut config_default_file = File::create(&config_default_path)?;
+        config_default_file.write_all(
+            b"\
+[core]
+project = very-long-project-name
+",
+        )?;
+
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                format = "on [$symbol$project]($style) "
+                [gcloud.project_aliases]
+                very-long-project-name = "vlpn"
+            })
+            .collect();
+        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  vlpn")));
 
         assert_eq!(actual, expected);
         dir.close()
