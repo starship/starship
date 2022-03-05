@@ -9,6 +9,13 @@ on:
       - "docs/**"
       - "**.md"
 
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 10
+  RUST_BACKTRACE: short
+  RUSTFLAGS: "-D warnings"
+  RUSTUP_MAX_RETRIES: 10
+
 jobs:
   # Run the `rustfmt` code formatter
   rustfmt:
@@ -16,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -25,9 +32,6 @@ jobs:
           override: true
           profile: minimal
           components: rustfmt
-
-      - name: Setup | libdbus (ubuntu)
-        run: sudo apt-get install libdbus-1-dev
 
       - name: Build | Format
         run: cargo fmt --all -- --check
@@ -41,14 +45,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v1
-
-      - name: Setup | libdbus (ubuntu)
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install libdbus-1-dev
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v1
@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v1
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v1
@@ -142,11 +142,7 @@ jobs:
         rust: [stable, nightly]
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
-
-      - name: Setup | libdbus (ubuntu)
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install libdbus-1-dev
+        uses: actions/checkout@v3
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v1
@@ -167,3 +163,6 @@ jobs:
       # Run the ignored tests that expect the above setup
       - name: Build | Test
         run: cargo test --workspace --locked --all-features -- -Z unstable-options --include-ignored
+        env:
+          # Avoid -D warnings on nightly builds
+          RUSTFLAGS: ""

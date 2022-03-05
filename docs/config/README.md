@@ -192,6 +192,7 @@ format = "$all"
 format = """
 $username\
 $hostname\
+$localip\
 $shlvl\
 $singularity\
 $kubernetes\
@@ -269,10 +270,17 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on
+The `aws` module shows the current AWS region and profile when
+credentials or a `credential_process` have been setup. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file. This module also shows an expiration timer when using temporary
 credentials.
+
+The module will display a profile only if its credentials are present in
+`~/.aws/credentials` or a `credential_process` is defined in
+`~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will
+also suffice.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
@@ -597,22 +605,16 @@ running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Options
 
-| Option               | Default                       | Description                                                |
-| -------------------- | ----------------------------- | ---------------------------------------------------------- |
-| `min_time`           | `2_000`                       | Shortest duration to show time for (in milliseconds).      |
-| `show_milliseconds`  | `false`                       | Show milliseconds in addition to seconds for the duration. |
-| `format`             | `"took [$duration]($style) "` | The format for the module.                                 |
-| `style`              | `"bold yellow"`               | The style for the module.                                  |
-| `disabled`           | `false`                       | Disables the `cmd_duration` module.                        |
-| `show_notifications` | `false`                       | Show desktop notifications when command completes.         |
-| `min_time_to_notify` | `45_000`                      | Shortest duration for notification (in milliseconds).      |
-
-::: tip
-
-Showing desktop notifications requires starship to be built with `notify-rust` support. You check if your starship
-supports notifications by running `STARSHIP_LOG=debug starship module cmd_duration -d 60000` when `show_notifications` is set to `true`.
-
-:::
+| Option                 | Default                       | Description                                                                                                                                                       |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                                                                             |
+| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                        |
+| `format`               | `"took [$duration]($style) "` | The format for the module.                                                                                                                                        |
+| `style`                | `"bold yellow"`               | The style for the module.                                                                                                                                         |
+| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                               |
+| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
+| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
+| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ### Variables
 
@@ -839,19 +841,20 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Option              | Default                                            | Description                                                                          |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.      |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in.     |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                           |
-| `style`             | `"bold cyan"`                                      | The style for the module.                                                            |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                     |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                                |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                                  |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                    |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo.                                              |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
+| Option              | Default                                                                                                     | Description                                                                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | The number of parent folders that the current directory should be truncated to.                                                    |
+| `truncate_to_repo`  | `true`                                                                                                      | Whether or not to truncate to the root of the git repo that you're currently in.                                                   |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | The format for the module.                                                                                                         |
+| `style`             | `"bold cyan"`                                                                                               | The style for the module.                                                                                                          |
+| `disabled`          | `false`                                                                                                     | Disables the `directory` module.                                                                                                   |
+| `read_only`         | `"🔒"`                                                                                                       | The symbol indicating current directory is read only.                                                                              |
+| `read_only_style`   | `"red"`                                                                                                     | The style for the read only symbol.                                                                                                |
+| `truncation_symbol` | `""`                                                                                                        | The symbol to prefix to truncated paths. eg: "…/"                                                                                  |
+| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo when `truncate_to_repo` option is set to false. The default value is equivalent to `style`. |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                                                                        |
+| `home_symbol`       | `"~"`                                                                                                       | The symbol indicating home directory.                                                                                              |
+| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                                               |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -887,6 +890,21 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 | style\*  | `"black bold dimmed"` | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
+
+<details>
+<summary>The git repos have additional variables.</summary>
+
+Let us consider the path `/path/to/home/git_repo/src/lib`
+
+| Variable         | Example               | Description                             |
+| ---------------- | --------------------- | --------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
+| repo_root        | `"git_repo"`          | The git root directory name             |
+| path             | `"/src/lib"`          | The remaining path                      |
+| style            | `"black bold dimmed"` | Mirrors the value of option `style`     |
+| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+
+</details>
 
 ### Example
 
@@ -1229,13 +1247,14 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 
 ### Options
 
-| Option           | Default                                                  | Description                                                     |
-| ---------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️  "`                                                 | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                          | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                            | The style for the module.                                       |
-| `disabled`       | `false`                                                  | Disables the `gcloud` module.                                   |
+| Option            | Default                                                  | Description                                                      |
+| ----------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                       |
+| `symbol`          | `"☁️ "`                                                  | The symbol used before displaying the current GCP profile.       |
+| `region_aliases`  |                                                          | Table of region aliases to display in addition to the GCP name.  |
+| `project_aliases` |                                                          | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                            | The style for the module.                                        |
+| `disabled`        | `false`                                                  | Disables the `gcloud` module.                                    |
 
 ### Variables
 
@@ -1282,6 +1301,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Git Branch
@@ -1727,16 +1757,17 @@ then the module will also show when there are 0 jobs running.
 
 ### Options
 
-| Option                                                                                                  | Default                       | Description                                                              |
-| ------------------------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*                                                                                            | `1`                           | Show number of jobs if exceeded.                                         |
-| `symbol_threshold`                                                                                      | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold`                                                                                      | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`                                                                                                | `"[$symbol$number]($style) "` | The format for the module.                                               |
-| `symbol`                                                                                                | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`                                                                                                 | `"bold blue"`                 | The style for the module.                                                |
-| `disabled`                                                                                              | `false`                       | Disables the `jobs` module.                                              |
-| *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead. |                               |                                                                          |
+| Option             | Default                       | Description                                                              |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
+| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
+| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
+| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
+| `format`           | `"[$symbol$number]($style) "` | The format for the module.                                               |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
+| `style`            | `"bold blue"`                 | The style for the module.                                                |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+
+*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
 ### Variables
 
@@ -1850,9 +1881,10 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file.
 The namespace needs to be set in the kubeconfig file, this can be done via
-`kubectl config set-context starship-cluster --namespace astronaut`.
+`kubectl config set-context starship-context --namespace astronaut`.
+Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`.
 If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
@@ -1876,8 +1908,10 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable  | Example              | Description                              |
 | --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context           |
+| context   | `starship-context`   | The current kubernetes context name      |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| user      | `starship-user`      | If set, the current kubernetes user      |
+| cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
 | symbol    |                      | Mirrors the value of option `symbol`     |
 | style\*   |                      | Mirrors the value of option `style`      |
 
@@ -1889,12 +1923,12 @@ To enable it, set `disabled` to `false` in your configuration file.
 # ~/.config/starship.toml
 
 [kubernetes]
-format = 'on [⛵ $context \($namespace\)](dimmed green) '
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 #### Regex Matching
@@ -1914,12 +1948,12 @@ and shortened using regular expressions:
 # OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
 # Or better, to rename every OpenShift cluster at once:
-".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+".*/(?P<var_cluster>[\\w-]+)/.*" = "$var_cluster"
 
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 ## Line Break
@@ -1939,6 +1973,39 @@ The `line_break` module separates the prompt into two lines.
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Options
+
+| Option     | Default                   | Description                                            |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | The format for the module.                             |
+| `style`    | `"bold yellow"`           | The style for the module.                              |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Variables
+
+| Variable  | Example      | Description                         |
+| --------- | ------------ | ----------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
+| style\*   |              | Mirrors the value of option `style` |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
@@ -2017,8 +2084,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | symbol       | `🐏`           | Mirrors the value of option `symbol`                               |
 | style\*      |               | Mirrors the value of option `style`                                |
 
-*: This variable can only be used as a part of a style string
-*\*: The SWAP file information is only displayed if detected on the current system
+_: This variable can only be used as a part of a style string
+_\*: The SWAP file information is only displayed if detected on the current system
 
 ### Example
 
@@ -2168,7 +2235,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
+| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
 | `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                          |
 | `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
 | `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
@@ -2892,7 +2959,7 @@ set to a number and meets or exceeds the specified threshold.
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | The format for the module.                                    |
-| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
+| `symbol`    | `"↕️ "`                      | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | The style for the module.                                     |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
@@ -2955,6 +3022,7 @@ format = '[📦 \[$env\]]($style) '
 
 The `status` module displays the exit code of the previous command.
 The module will be shown only if the exit code is not `0`.
+The status code will cast to a signed 32-bit integer.
 
 ::: tip
 

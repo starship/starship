@@ -8,9 +8,9 @@ If you have any questions that aren't addressed in this document, please don't h
 
 ## Glossary
 
-- **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the `nodejs` module shows the version of NodeJS that is currently installed on your computer, if your current directory is a NodeJS project.
+- **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the `rust` module shows the version of Rust that is currently installed on your computer, if your current directory is a Rust project.
 
-- **Segment**: Smaller sub-components that compose a module. For example, the `symbol` segment in the `nodejs` module contains the character that is shown before the version number (`⬢` by default).
+- **Segment**: Smaller sub-components that compose a module. For example, the `symbol` segment in the `rust` module contains the character that is shown before the version number (`🦀` by default).
 
 ## Philosophy
 
@@ -188,7 +188,7 @@ mod tests {
       // Here you setup the testing environment
       let tempdir = tempfile::tempdir()?;
       // Create some file needed to render the module
-      File::create(dir.path().join("YOUR_FILE"))?.sync_all()?;
+      File::create(tempdir.path().join("YOUR_FILE"))?.sync_all()?;
 
       // The output of the module
       let actual = ModuleRenderer::new("YOUR_MODULE_NAME")

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
       - name: Docs | Format
         uses: dprint/check@v2.0
 

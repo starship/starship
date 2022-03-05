@@ -3,6 +3,11 @@ on:
   push:
     tags:
       - "v*"
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 10
+  RUST_BACKTRACE: short
+  RUSTUP_MAX_RETRIES: 10
 
 jobs:
   # Build sources for every OS
@@ -60,16 +65,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
-
-      # Cache files between builds
-      - name: Setup | Cache Cargo
-        uses: actions/cache@v2.1.7
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        uses: actions/checkout@v3
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -109,6 +105,100 @@ jobs:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
 
+  # Notarize starship binaries for MacOS and build notarized pkg installers
+  notarize_and_pkgbuild:
+    runs-on: macos-latest
+    needs: github_build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-apple-darwin
+            arch: x86_64
+            name: starship-x86_64-apple-darwin.tar.gz
+            pkgname: starship-x86_64-apple-darwin.pkg
+
+          - target: aarch64-apple-darwin
+            arch: aarch64
+            name: starship-aarch64-apple-darwin.tar.gz
+            pkgname: starship-aarch64-apple-darwin.pkg
+
+    env:
+      KEYCHAIN_FILENAME: app-signing.keychain-db
+      KEYCHAIN_ENTRY: AC_PASSWORD
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Notarize | Set up secrets
+      env:
+        APP_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_APPSIGNKEY_BASE64 }}
+        INSTALL_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_INSTALLERSIGNKEY_BASE64 }}
+        P12_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
+        KEYCHAIN_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
+        APPLEID_USERNAME: ${{ secrets.APPLEDEV_ID_NAME }}
+        APPLEID_TEAMID: ${{ secrets.APPLEDEV_TEAM_ID }}
+        APPLEID_PASSWORD: ${{ secrets.APPLEDEV_PASSWORD }}
+      run: |
+        APP_CERTIFICATE_PATH="$RUNNER_TEMP/app_certificate.p12"
+        INSTALL_CERTIFICATE_PATH="$RUNNER_TEMP/install_certificate.p12"
+        KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
+
+        # import certificates from secrets
+        echo -n "$APP_CERTIFICATE_BASE64" | base64 --decode --output $APP_CERTIFICATE_PATH
+        echo -n "$INSTALL_CERTIFICATE_BASE64" | base64 --decode --output $INSTALL_CERTIFICATE_PATH
+
+        # create temporary keychain
+        security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+        security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+        security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+        # import certificates to keychain
+        security import $APP_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+        security import $INSTALL_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+        security list-keychain -d user -s $KEYCHAIN_PATH
+
+        # Add Apple Developer ID credentials to keychain
+        xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
+
+    - name: Notarize | Build docs
+      run: |
+        cd docs
+        npm install
+        npm run build
+
+    - name: Notarize | Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: ${{ matrix.name }}
+        path: artifacts
+
+    - name: Notarize | Unpack Binaries
+      run: tar xf artifacts/${{ matrix.name }}
+
+    - name: Notarize | Build, Sign, and Notarize Pkg
+      run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
+
+    - name: Notarize | Upload Notarized Flat Installer
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.pkgname }}
+        path: ${{ matrix.pkgname }}
+    
+    - name: Notarize | Package Notarized Binary
+      run: tar czvf ${{ matrix.name }} starship
+
+    - name: Notarize | Upload Notarized Binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.name }}
+        path: ${{ matrix.name }}
+
+    - name: Cleanup Secrets
+      if: ${{ always() }}
+      run: |
+        KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
+        security delete-keychain $KEYCHAIN_PATH
+
   # Create GitHub release with Rust build targets and release notes
   github_release:
     name: Create GitHub Release
@@ -116,7 +206,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -149,7 +239,7 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -178,7 +268,7 @@ jobs:
     needs: github_release
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup | Install dependencies
         run: npm install
