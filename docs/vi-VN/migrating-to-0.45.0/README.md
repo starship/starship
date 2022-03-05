@@ -109,7 +109,7 @@ Cấu hình dâu nhắc lệnh để sử dụng cấu hình `use_symbol_for_sta
 error_symbol = "[✖](bold red)"
 ```
 
-*Lưu ý:* Phần tử `character` tự động thêm vào một khoảng trắng phía sau, so unlike the other `format` strings, we specifically do not add one in the above examples.
+_Lưu ý:_ Phần tử `character` tự động thêm vào một khoảng trắng phía sau, so unlike the other `format` strings, we specifically do not add one in the above examples.
 
 #### Command Duration
 

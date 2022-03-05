@@ -11,6 +11,7 @@ pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
 pub mod conda;
+pub mod container;
 pub mod crystal;
 pub mod custom;
 pub mod dart;
@@ -39,6 +40,7 @@ pub mod julia;
 pub mod kotlin;
 pub mod kubernetes;
 pub mod line_break;
+pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod nim;
@@ -93,6 +95,7 @@ pub struct FullConfig<'a> {
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
     cobol: cobol::CobolConfig<'a>,
     conda: conda::CondaConfig<'a>,
+    container: container::ContainerConfig<'a>,
     crystal: crystal::CrystalConfig<'a>,
     dart: dart::DartConfig<'a>,
     deno: deno::DenoConfig<'a>,
@@ -120,6 +123,7 @@ pub struct FullConfig<'a> {
     kotlin: kotlin::KotlinConfig<'a>,
     kubernetes: kubernetes::KubernetesConfig<'a>,
     line_break: line_break::LineBreakConfig,
+    localip: localip::LocalipConfig<'a>,
     lua: lua::LuaConfig<'a>,
     memory_usage: memory_usage::MemoryConfig<'a>,
     nim: nim::NimConfig<'a>,
@@ -172,6 +176,7 @@ impl<'a> Default for FullConfig<'a> {
             cmd_duration: Default::default(),
             cobol: Default::default(),
             conda: Default::default(),
+            container: Default::default(),
             crystal: Default::default(),
             dart: Default::default(),
             deno: Default::default(),
@@ -199,6 +204,7 @@ impl<'a> Default for FullConfig<'a> {
             kotlin: Default::default(),
             kubernetes: Default::default(),
             line_break: Default::default(),
+            localip: Default::default(),
             lua: Default::default(),
             memory_usage: Default::default(),
             nim: Default::default(),

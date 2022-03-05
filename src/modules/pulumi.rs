@@ -1,8 +1,10 @@
 #![warn(missing_docs)]
+use serde::Deserialize;
 use sha1::{Digest, Sha1};
+use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::fs::File;
-use std::io::Read;
+use std::io::{BufReader, Read};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use yaml_rust::{Yaml, YamlLoader};
@@ -12,6 +14,17 @@ use crate::configs::pulumi::PulumiConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 
 static PULUMI_HOME: &str = "PULUMI_HOME";
+
+#[derive(Deserialize)]
+struct Credentials {
+    current: Option<String>,
+    accounts: Option<HashMap<String, Account>>,
+}
+
+#[derive(Deserialize)]
+struct Account {
+    username: Option<String>,
+}
 
 /// Creates a module with the current Pulumi version and stack name.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -40,6 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     )
                 }
                 .map(Ok),
+                "username" => get_pulumi_username(context).map(Ok),
                 "stack" => stack_name(&project_file, context).map(Ok),
                 _ => None,
             })
@@ -144,7 +158,7 @@ fn get_pulumi_workspace(context: &Context, name: &str, project_file: &Path) -> O
     } else {
         let mut hasher = Sha1::new();
         hasher.update(project_file.to_str()?.as_bytes());
-        crate::utils::encode_to_hex(&hasher.finalize().to_vec())
+        crate::utils::encode_to_hex(&hasher.finalize())
     };
     let unique_file_name = format!("{}-{}-workspace.json", name, project_file);
     let mut path = pulumi_home_dir(context)?;
@@ -161,6 +175,21 @@ fn pulumi_home_dir(context: &Context) -> Option<PathBuf> {
     } else {
         context.get_home().map(|p| p.join(".pulumi"))
     }
+}
+
+fn get_pulumi_username(context: &Context) -> Option<String> {
+    let home_dir = pulumi_home_dir(context)?;
+    let creds_path = home_dir.join("credentials.json");
+
+    let file = File::open(creds_path).ok()?;
+    let reader = BufReader::new(file);
+
+    // Read the JSON contents of the file as an instance of `User`.
+    let creds: Credentials = serde_json::from_reader(reader).ok()?;
+
+    let current_api_provider = creds.current?;
+
+    creds.accounts?.remove(&current_api_provider)?.username
 }
 
 #[cfg(test)]
@@ -241,7 +270,7 @@ mod tests {
     fn render_valid_paths() -> io::Result<()> {
         use io::Write;
         let dir = tempfile::tempdir()?;
-        let root = std::fs::canonicalize(dir.path())?;
+        let root = dunce::canonicalize(dir.path())?;
         let mut yaml = File::create(root.join("Pulumi.yml"))?;
         yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
         yaml.sync_all()?;
@@ -259,16 +288,103 @@ mod tests {
             ),
         )?;
         workspace.sync_all()?;
+
+        let credential_path = root.join(".pulumi");
+        let _ = std::fs::create_dir_all(&credential_path)?;
+        let credential_path = &credential_path.join("credentials.json");
+        let mut credential = File::create(&credential_path)?;
+        serde_json::to_writer_pretty(
+            &mut credential,
+            &serde_json::json!(
+                {
+                    "current": "https://api.example.com",
+                    "accessTokens": {
+                        "https://api.example.com": "redacted",
+                        "https://api.pulumi.com": "redacted"
+                    },
+                    "accounts": {
+                        "https://api.example.com": {
+                            "accessToken": "redacted",
+                            "username": "test-user",
+                            "lastValidatedAt": "2022-01-12T00:00:00.000000000-08:00"
+                        }
+                    }
+                }
+            ),
+        )?;
+        credential.sync_all()?;
         let rendered = ModuleRenderer::new("pulumi")
             .path(root.clone())
             .logical_path(root.clone())
             .config(toml::toml! {
                 [pulumi]
-                format = "in [$symbol($stack)]($style) "
+                format = "via [$symbol($username@)$stack]($style) "
             })
             .env("HOME", root.to_str().unwrap())
             .collect();
-        let expected = format!("in {} ", Color::Fixed(5).bold().paint(" launch"));
+        let expected = format!(
+            "via {} ",
+            Color::Fixed(5).bold().paint(" test-user@launch")
+        );
+        assert_eq!(expected, rendered.expect("a result"));
+        dir.close()?;
+        Ok(())
+    }
+
+    #[test]
+    /// This test confirms a render when the account information incomplete, i.e.: no username for
+    /// the current API.
+    fn partial_login() -> io::Result<()> {
+        use io::Write;
+        let dir = tempfile::tempdir()?;
+        let root = dunce::canonicalize(dir.path())?;
+        let mut yaml = File::create(root.join("Pulumi.yml"))?;
+        yaml.write_all("name: starship\nruntime: nodejs\ndescription: A thing\n".as_bytes())?;
+        yaml.sync_all()?;
+
+        let workspace_path = root.join(".pulumi").join("workspaces");
+        let _ = std::fs::create_dir_all(&workspace_path)?;
+        let workspace_path = &workspace_path.join("starship-test-workspace.json");
+        let mut workspace = File::create(&workspace_path)?;
+        serde_json::to_writer_pretty(
+            &mut workspace,
+            &serde_json::json!(
+                {
+                    "stack": "launch"
+                }
+            ),
+        )?;
+        workspace.sync_all()?;
+
+        let credential_path = root.join(".pulumi");
+        let _ = std::fs::create_dir_all(&credential_path)?;
+        let credential_path = &credential_path.join("starship-test-credential.json");
+        let mut credential = File::create(&credential_path)?;
+        serde_json::to_writer_pretty(
+            &mut credential,
+            &serde_json::json!(
+                {
+                    "current": "https://api.example.com",
+                    "accessTokens": {
+                        "https://api.example.com": "redacted",
+                        "https://api.pulumi.com": "redacted"
+                    },
+                    "accounts": {
+                    }
+                }
+            ),
+        )?;
+        credential.sync_all()?;
+        let rendered = ModuleRenderer::new("pulumi")
+            .path(root.clone())
+            .logical_path(root.clone())
+            .config(toml::toml! {
+                [pulumi]
+                format = "via [$symbol($username@)$stack]($style) "
+            })
+            .env("HOME", root.to_str().unwrap())
+            .collect();
+        let expected = format!("via {} ", Color::Fixed(5).bold().paint(" launch"));
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())

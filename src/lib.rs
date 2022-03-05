@@ -1,4 +1,4 @@
-#![warn(clippy::disallowed_method)]
+#![warn(clippy::disallowed_methods)]
 
 #[macro_use]
 extern crate shadow_rs;

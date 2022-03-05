@@ -63,8 +63,7 @@ Habilita el módulo `programs.starship` en tu archivo `home.nix` y añade tus co
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
-    # Configuración escrita en ~/.config/starship.toml
+    # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
 

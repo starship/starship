@@ -51,20 +51,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(undistract_me(module, &config, elapsed))
 }
 
-#[cfg(not(feature = "notify-rust"))]
-fn undistract_me<'a, 'b>(
-    module: Module<'a>,
-    config: &'b CmdDurationConfig,
-    _elapsed: u128,
-) -> Module<'a> {
-    if config.show_notifications {
-        log::debug!("This version of starship was built without notification support.");
-    }
-
-    module
-}
-
-#[cfg(feature = "notify-rust")]
 fn undistract_me<'a, 'b>(
     module: Module<'a>,
     config: &'b CmdDurationConfig,
@@ -79,12 +65,17 @@ fn undistract_me<'a, 'b>(
             unstyle(&ANSIStrings(&module.ansi_strings()))
         );
 
+        let timeout = match config.notification_timeout {
+            Some(v) => Timeout::Milliseconds(v),
+            None => Timeout::Default,
+        };
+
         let mut notification = Notification::new();
         notification
             .summary("Command finished")
             .body(&body)
             .icon("utilities-terminal")
-            .timeout(Timeout::Milliseconds(750));
+            .timeout(timeout);
 
         if let Err(err) = notification.show() {
             log::trace!("Cannot show notification: {}", err);

@@ -63,8 +63,7 @@ Kích hoạt mô đun `programs.starship` trong tệp `home.nix` của bạn, v�
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
-    # Cấu hình viết vào ~/.config/starship.toml
+    # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
 

@@ -40,6 +40,21 @@ has() {
   command -v "$1" 1>/dev/null 2>&1
 }
 
+# Make sure user is not using zsh or non-POSIX-mode bash, which can cause issues
+verify_shell_is_posix_or_exit() {
+  if [ -n "${ZSH_VERSION+x}" ]; then
+    error "Running installation script with \`zsh\` is known to cause errors."
+    error "Please use \`sh\` instead."
+    exit 1
+  elif [ -n "${BASH_VERSION+x}" ] && [ -z "${POSIXLY_CORRECT+x}" ]; then
+    error "Running installation script with non-POSIX \`bash\` may cause errors."
+    error "Please use \`sh\` instead."
+    exit 1
+  else
+    true  # No-op: no issues detected
+  fi
+}
+
 # Gets path to a temporary file, even if
 get_tmpfile() {
   suffix="$1"
@@ -355,7 +370,6 @@ print_install() {
   printf "\n"
 }
 
-
 is_build_available() {
   arch="$1"
   platform="$2"
@@ -398,6 +412,9 @@ fi
 if [ -z "${BASE_URL-}" ]; then
   BASE_URL="https://github.com/starship/starship/releases"
 fi
+
+# Non-POSIX shells can break once executing code due to semantic differences
+verify_shell_is_posix_or_exit
 
 # parse argv variables
 while [ "$#" -gt 0 ]; do

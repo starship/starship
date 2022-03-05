@@ -18,6 +18,7 @@ use std::fs;
 use std::marker::PhantomData;
 use std::num::ParseIntError;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 use std::string::String;
 use std::time::{Duration, Instant};
 use terminal_size::terminal_size;
@@ -43,9 +44,6 @@ pub struct Context<'a> {
     /// Properties to provide to modules.
     pub properties: Properties,
 
-    /// Pipestatus of processes in pipe
-    pub pipestatus: Option<Vec<String>>,
-
     /// Private field to store Git information for modules who need it
     repo: OnceCell<Repo>,
 
@@ -65,6 +63,10 @@ pub struct Context<'a> {
     /// A HashMap of command mocks
     #[cfg(test)]
     pub cmd: HashMap<&'a str, Option<CommandOutput>>,
+
+    /// a mock of the root directory
+    #[cfg(test)]
+    pub root_dir: tempfile::TempDir,
 
     #[cfg(feature = "battery")]
     pub battery_info_provider: &'a (dyn crate::modules::BatteryInfoProvider + Send + Sync),
@@ -107,7 +109,7 @@ impl<'a> Context<'a> {
 
     /// Create a new instance of Context for the provided directory
     pub fn new_with_shell_and_path(
-        properties: Properties,
+        mut properties: Properties,
         shell: Shell,
         target: Target,
         path: PathBuf,
@@ -115,17 +117,29 @@ impl<'a> Context<'a> {
     ) -> Context<'a> {
         let config = StarshipConfig::initialize();
 
-        let pipestatus = properties
+        // If the vector is zero-length, we should pretend that we didn't get a
+        // pipestatus at all (since this is the input `--pipestatus=""`)
+        if properties
             .pipestatus
             .as_deref()
-            .map(Context::get_and_flatten_pipestatus)
-            .flatten();
-        log::trace!("Received completed pipestatus of {:?}", pipestatus);
+            .map_or(false, |p| p.len() == 1 && p[0].is_empty())
+        {
+            properties.pipestatus = None;
+        }
+        log::trace!(
+            "Received completed pipestatus of {:?}",
+            properties.pipestatus
+        );
+
+        // If status-code is empty, set it to None
+        if matches!(properties.status_code.as_deref(), Some("")) {
+            properties.status_code = None;
+        }
 
         // Canonicalize the current path to resolve symlinks, etc.
-        // NOTE: On Windows this converts the path to extended-path syntax.
+        // NOTE: On Windows this may convert the path to extended-path syntax.
         let current_dir = Context::expand_tilde(path);
-        let current_dir = current_dir.canonicalize().unwrap_or(current_dir);
+        let current_dir = dunce::canonicalize(&current_dir).unwrap_or(current_dir);
         let logical_dir = logical_path;
 
         let root_config = config
@@ -138,7 +152,6 @@ impl<'a> Context<'a> {
         Context {
             config,
             properties,
-            pipestatus,
             current_dir,
             logical_dir,
             dir_contents: OnceCell::new(),
@@ -146,6 +159,8 @@ impl<'a> Context<'a> {
             shell,
             target,
             width,
+            #[cfg(test)]
+            root_dir: tempfile::TempDir::new().unwrap(),
             #[cfg(test)]
             env: HashMap::new(),
             #[cfg(test)]
@@ -199,27 +214,6 @@ impl<'a> Context<'a> {
             return utils::home_dir().unwrap().join(without_home);
         }
         dir
-    }
-
-    /// Reads and appropriately flattens multiple args for pipestatus
-    // TODO: Replace with value_delimiter = ' ' clap option?
-    pub fn get_and_flatten_pipestatus(args: &[String]) -> Option<Vec<String>> {
-        // Due to shell differences, we can potentially receive individual or space
-        // separated inputs, e.g. "0","1","2","0" is the same as "0 1 2 0" and
-        // "0 1", "2 0". We need to accept all these formats and return a Vec<String>
-        let parsed_vals = args
-            .iter()
-            .map(|x| x.split_ascii_whitespace())
-            .flatten()
-            .map(|x| x.to_string())
-            .collect::<Vec<String>>();
-        // If the vector is zero-length, we should pretend that we didn't get a
-        // pipestatus at all (since this is the input `--pipestatus=""`)
-        if parsed_vals.is_empty() {
-            None
-        } else {
-            Some(parsed_vals)
-        }
     }
 
     /// Create a new module
@@ -291,7 +285,7 @@ impl<'a> Context<'a> {
             "bash" => Shell::Bash,
             "fish" => Shell::Fish,
             "ion" => Shell::Ion,
-            "powershell" => Shell::PowerShell,
+            "powershell" | "pwsh" => Shell::PowerShell,
             "zsh" => Shell::Zsh,
             "elvish" => Shell::Elvish,
             "tcsh" => Shell::Tcsh,
@@ -481,16 +475,19 @@ pub struct ScanDir<'a> {
 }
 
 impl<'a> ScanDir<'a> {
+    #[must_use]
     pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
         self.files = files;
         self
     }
 
+    #[must_use]
     pub const fn set_extensions(mut self, extensions: &'a [&'a str]) -> Self {
         self.extensions = extensions;
         self
     }
 
+    #[must_use]
     pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
         self.folders = folders;
         self
@@ -571,10 +568,6 @@ pub enum Shell {
     Unknown,
 }
 
-fn default_width() -> usize {
-    terminal_size().map_or(80, |(w, _)| w.0 as usize)
-}
-
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Target {
@@ -586,14 +579,14 @@ pub enum Target {
 /// Properties as passed on from the shell as arguments
 #[derive(Parser, Debug)]
 pub struct Properties {
-    /// The status code of the previously run command
+    /// The status code of the previously run command as an unsigned or signed 32bit integer
     #[clap(short = 's', long = "status")]
-    pub status_code: Option<i32>,
+    pub status_code: Option<String>,
     /// Bash, Fish and Zsh support returning codes for each process in a pipeline.
-    #[clap(long)]
-    pipestatus: Option<Vec<String>>,
+    #[clap(long, value_delimiter = ' ')]
+    pub pipestatus: Option<Vec<String>>,
     /// The width of the current interactive terminal.
-    #[clap(short = 'w', long, default_value_t=default_width())]
+    #[clap(short = 'w', long, default_value_t=default_width(), parse(try_from_str=parse_width))]
     terminal_width: usize,
     /// The path that the prompt should render for.
     #[clap(short, long)]
@@ -628,8 +621,25 @@ impl Default for Properties {
     }
 }
 
+/// Parse String, but treat empty strings as `None`
+fn parse_trim<F: FromStr>(value: &str) -> Option<Result<F, F::Err>> {
+    let value = value.trim();
+    if value.is_empty() {
+        return None;
+    }
+    Some(F::from_str(value))
+}
+
 fn parse_jobs(jobs: &str) -> Result<i64, ParseIntError> {
-    jobs.trim().parse::<i64>()
+    parse_trim(jobs).unwrap_or(Ok(0))
+}
+
+fn default_width() -> usize {
+    terminal_size().map_or(80, |(w, _)| w.0 as usize)
+}
+
+fn parse_width(width: &str) -> Result<usize, ParseIntError> {
+    parse_trim(width).unwrap_or_else(|| Ok(default_width()))
 }
 
 #[cfg(test)]
@@ -727,10 +737,8 @@ mod tests {
 
         assert_ne!(context.current_dir, context.logical_dir);
 
-        let expected_current_dir = path_actual
-            .join("yyy")
-            .canonicalize()
-            .expect("canonicalize");
+        let expected_current_dir =
+            dunce::canonicalize(path_actual.join("yyy")).expect("canonicalize");
         assert_eq!(expected_current_dir, context.current_dir);
 
         let expected_logical_dir = test_path;
@@ -779,5 +787,22 @@ mod tests {
 
         let expected_logical_dir = test_path;
         assert_eq!(expected_logical_dir, context.logical_dir);
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn strip_extended_path_prefix() {
+        let test_path = Path::new(r"\\?\C:\").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            Properties::default(),
+            Shell::Unknown,
+            Target::Main,
+            test_path.clone(),
+            test_path,
+        );
+
+        let expected_path = Path::new(r"C:\");
+
+        assert_eq!(&context.current_dir, expected_path);
     }
 }

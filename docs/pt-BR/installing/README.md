@@ -39,7 +39,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com
 
 ### Instalação
 
-On Funtoo Linux, starship can be installed from [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
+No Funtoo Linux, o starship pode ser instalado a partir do [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
 
 ```sh
 emerge app-shells/starship
@@ -63,7 +63,6 @@ Ative o modulo `programs.starship` em seu arquivo `home.nix`, e adicione suas co
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
     # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
