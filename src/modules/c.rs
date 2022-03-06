@@ -5,6 +5,7 @@ use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
 
 use once_cell::sync::Lazy;
+use semver::Version;
 use std::borrow::Cow;
 use std::ops::Deref;
 
@@ -59,29 +60,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 }
                 "compiler_version" => {
                     let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
-                    if c_compiler_info.contains("clang")
-                        || c_compiler_info.contains("Free Software Foundation")
-                    {
-                        // Clang says ...
-                        //   Apple clang version 13.0.0 ...\n
-                        //   OpenBSD clang version 11.1.0\n...
-                        //   FreeBSD clang version 11.0.1 ...\n
-                        // so seems to have the version always in position 3.
-                        // gcc says ...
-                        //   gcc (OmniOS 151036/9.3.0-il-1) 9.3.0\n...
-                        //   gcc (Debian 10.2.1-6) 10.2.1 ...\n
-                        // so again in position 3.
-                        // But this is CRUFTY AS HELL
-                        VersionFormatter::format_module_version(
-                            module.get_name(),
-                            c_compiler_info.split_whitespace().nth(3)?,
-                            config.version_format,
-                        )
-                        .map(Cow::Owned)
-                        .map(Ok)
-                    } else {
-                        None
-                    }
+
+                    // Clang says ...
+                    //   Apple clang version 13.0.0 ...\n
+                    //   OpenBSD clang version 11.1.0\n...
+                    //   FreeBSD clang version 11.0.1 ...\n
+                    // so we always want the first semver-ish whitespace-
+                    // separated "word".
+                    // gcc says ...
+                    //   gcc (OmniOS 151036/9.3.0-il-1) 9.3.0\n...
+                    //   gcc (Debian 10.2.1-6) 10.2.1 ...\n
+                    //   cc (GCC) 3.3.5 (Debian 1:3.3.5-13)\n...
+                    // so again we always want the first semver-ish word.
+                    VersionFormatter::format_module_version(
+                        module.get_name(),
+                        c_compiler_info.split_whitespace().find_map(
+                            |word| match Version::parse(word) {
+                                Ok(_v) => Some(word),
+                                Err(_e) => None,
+                            },
+                        )?,
+                        config.version_format,
+                    )
+                    .map(Cow::Owned)
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -122,7 +124,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.c"))?.sync_all()?;
 
-        // What happens when `cc --version` says it's gcc?
+        // What happens when `cc --version` says it's modern gcc?
         // The case when it claims to be clang is covered in folder_with_h_file,
         // and uses the mock in src/test/mod.rs.
         let actual = ModuleRenderer::new("c")
@@ -144,6 +146,29 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
         let expected = Some(format!(
             "using {}",
             Color::Fixed(149).bold().paint("C gcc v10.2.1 ")
+        ));
+        assert_eq!(expected, actual);
+
+        // What happens when `cc --version` says it's ancient gcc?
+        let actual = ModuleRenderer::new("c")
+            .cmd(
+                "cc --version",
+                Some(CommandOutput {
+                    stdout: String::from(
+                        "\
+cc (GCC) 3.3.5 (Debian 1:3.3.5-13)
+Copyright (C) 2003 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+                    ),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "using {}",
+            Color::Fixed(149).bold().paint("C gcc v3.3.5 ")
         ));
         assert_eq!(expected, actual);
 
