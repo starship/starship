@@ -206,6 +206,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$c\
 $cmake\
 $cobol\
 $container\

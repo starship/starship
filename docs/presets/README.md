@@ -20,6 +20,9 @@ If emojis aren't your thing, this might catch your eye!
 [aws]
 symbol = "  "
 
+[c]
+symbol = "C "
+
 [conda]
 symbol = " "
 
@@ -111,6 +114,9 @@ After:
 ```toml
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
+
+[c]
+format = '\[[$symbol($compiler_name ($compiler_version))]($style)\]'
 
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
@@ -397,6 +403,9 @@ This preset hides the version of language runtimes. If you work in containers or
 ### Configuration
 
 ```toml
+[c]
+format = "via [$symbol ($compiler_name )]($style)"
+
 [cmake]
 format = "via [$symbol]($style)"
 
