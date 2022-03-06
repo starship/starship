@@ -1,6 +1,6 @@
-# 🚀 Instalação Avançada
+# 🚀 Instalação avançada
 
-Para instalar o Starship, você precisa de duas coisas:
+Para instalar o starship, você precisa de duas coisas:
 
 1. O binário do **Starship** em seu computador
 1. Altere seu shell para usar o binário do starship como seu prompt alterando os scripts init
