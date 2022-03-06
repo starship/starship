@@ -232,7 +232,7 @@ Alternatively, install Starship using any of the following package managers:
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
