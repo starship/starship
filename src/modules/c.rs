@@ -53,15 +53,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else if c_compiler_info.contains("Free Software Foundation") {
                         "gcc"
                     } else {
-                        "Unknown compiler"
+                        return None;
                     };
                     Some(c_compiler).map(Cow::Borrowed).map(Ok)
                 }
                 "compiler_version" => {
                     let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
-                    if config.format.contains("$compiler_version")
-                        && (c_compiler_info.contains("clang")
-                            || c_compiler_info.contains("Free Software Foundation"))
+                    if c_compiler_info.contains("clang")
+                        || c_compiler_info.contains("Free Software Foundation")
                     {
                         // Clang says ...
                         //   Apple clang version 13.0.0 ...\n
@@ -160,10 +159,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             )
             .path(dir.path())
             .collect();
-        let expected = Some(format!(
-            "using {}",
-            Color::Fixed(149).bold().paint("C Unknown compiler ")
-        ));
+        let expected = Some(format!("using {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
 
         // What happens when 'cc --version' doesn't work, but 'gcc --version' does?
