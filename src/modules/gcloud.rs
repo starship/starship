@@ -106,6 +106,16 @@ fn get_active_config(context: &Context, config_dir: &Path) -> Option<String> {
     })
 }
 
+fn get_active_config_name(config_name: String) -> String {
+    let name = if config_name == "NONE" {
+        log::error!("Error in module `gcloud`: No config ");
+        config_name
+    } else {
+        config_name
+    };
+    name
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("gcloud");
     let config: GcloudConfig = GcloudConfig::try_load(module.config);
@@ -154,7 +164,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             .map_or(project, |alias| (*alias).to_owned())
                     })
                     .map(Ok),
-                "active" => Some(Ok(gcloud_context.config_name.clone())),
+                "active" => Some(Ok(get_active_config_name(gcloud_context.config_name.clone()))),
                 _ => None,
             })
             .parse(None, Some(context))
