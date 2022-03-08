@@ -7,6 +7,7 @@ pub mod aws;
 pub mod azure;
 pub mod battery;
 pub mod character;
+pub mod chef;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
@@ -91,6 +92,7 @@ pub struct FullConfig<'a> {
     azure: azure::AzureConfig<'a>,
     battery: battery::BatteryConfig<'a>,
     character: character::CharacterConfig<'a>,
+    chef: chef::ChefConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
     cobol: cobol::CobolConfig<'a>,
@@ -172,6 +174,7 @@ impl<'a> Default for FullConfig<'a> {
             azure: Default::default(),
             battery: Default::default(),
             character: Default::default(),
+            chef: Default::default(),
             cmake: Default::default(),
             cmd_duration: Default::default(),
             cobol: Default::default(),

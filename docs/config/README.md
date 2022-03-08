@@ -206,6 +206,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$chef\
 $cmake\
 $cobol\
 $container\
@@ -522,6 +523,43 @@ error_symbol = "[➜](bold red) "
 [character]
 vicmd_symbol = "[V](bold green) "
 ```
+
+## Chef
+
+The `chef` module shows the currently installed version of the [Chef Infra Client](https://downloads.chef.io/tools/infra-client). By default
+the module will be activated if any of the following conditions are met:
+
+- The current directory contains a `Berksfile` file
+- The current directory contains a `Berksfile.lock` file
+- The current directory contains a `.kitchen.yml` file
+- The current directory contains a `kitchen.yml` file
+- The current directory contains a `metadata.rb` file
+- The current directory contains a `metadata.json` file
+- The current directory contains a `Policyfile.rb` file
+- The current directory contains a `cookbooks` directory
+- The current directory contains a `recipes` directory
+
+### Options
+
+| Option              | Default                                                                                                           | Description                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                                                                              | The format for the module.                                               |
+| `version_format`    | `"v${raw}"`                                                                                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch`|
+| `symbol`            | `"🍳 "`                                                                                                           | The symbol used before the version of chef.                              |
+| `detect_files`      | `["Berksfile", "Berksfile.lock", ".kitchen.yml", "kitchen.yml", "metadata.rb", "metadata.json", "Policyfile.rb"]` | Which filenames should trigger this module                               |
+| `detect_folders`    | `["cookbooks", "recipes"]`                                                                                        | Which folders should trigger this module                                 |
+| `style`             | `"bold red"`                                                                                                      | The style for the module.                                                |
+| `disabled`          | `false`                                                                                                           | Disables the `chef` module.                                              |
+
+### Variables
+
+| Variable | Example     | Description                          |
+| -------- | ----------- | ------------------------------------ |
+| version  | `v12.21.14` | The version of chef                  |
+| symbol   |             | Mirrors the value of option `symbol` |
+| style\*  |             | Mirrors the value of option `style`  |
+
+\*: This variable can only be used as a part of a style string
 
 ## CMake
 
