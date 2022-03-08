@@ -4,19 +4,19 @@ Poniżej zamieszczono zestaw gotowych konfiguracji Starship stworzonych przez sp
 
 To get details on how to use a preset, simply click on the image.
 
-## [Nerd Font Symbols](./nerd-font)
+## [Symbole Nerd Font](./nerd-font)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
 [![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
-## [Bracketed Segments](./bracketed-segments)
+## [Moduły w nawiasach kwadratowych](./bracketed-segments)
 
 Ta konfiguracja zmienia format wyświetlania wbudowanych modułów - zamiast domyślnych wyrazów ("via", "on", itp.) są wypisywane w nawiasach kwadratowych.
 
 [![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text)
+## [Symbole "plain text"](./plain-text)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
