@@ -37,4 +37,6 @@ builtin functions -e fish_mode_prompt
 set -gx STARSHIP_SHELL "fish"
 
 # Set up the session key that will be used to store logs
-set -gx STARSHIP_SESSION_KEY (random 10000000000000 9999999999999999)
+set STARSHIP_SESSION_KEY (random)(random)(random)(random)(random) # Random generates a number b/w 0 - 32767
+set STARSHIP_SESSION_KEY "$STARSHIP_SESSION_KEY"0000000000000000 # Pad it to 16+ chars.
+set -gx STARSHIP_SESSION_KEY (echo "$STARSHIP_SESSION_KEY" | cut -c 1-16) # Trim to 16-digits if excess.
