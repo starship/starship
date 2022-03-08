@@ -4,19 +4,19 @@ Aqui tem uma coleção de predefinições de configuração criadas pela comunid
 
 To get details on how to use a preset, simply click on the image.
 
-## [Nerd Font Symbols](./nerd-font)
+## [Símbolos Nerd Font](./nerd-font)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
 [![Captura de tela da predefinição Nerd Font Symbols](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
-## [Bracketed Segments](./bracketed-segments)
+## [Seguimentos entre colchetes](./bracketed-segments)
 
 Está configuração altera o formato de todos os módulos integrados para que usem colchetes ao mostrar o seguimento ao invés de usar texto padrão do Starship ("via", "on", etc.).
 
 [![Captura de tela de segmentos predefinidos](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text)
+## [Símbolos de texto simples](./plain-text)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
