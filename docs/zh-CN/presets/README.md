@@ -4,7 +4,7 @@
 
 To get details on how to use a preset, simply click on the image.
 
-## [Nerd Font Symbols](./nerd-font)
+## [Nerd 字体符号](./nerd-font)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
@@ -16,7 +16,7 @@ This preset changes the format of all the built-in modules to show their segment
 
 [![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text)
+## [纯文本符号](./plain-text)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
