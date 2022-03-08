@@ -4,7 +4,7 @@
 
 To get details on how to use a preset, simply click on the image.
 
-## [Nerd Font Symbols](./nerd-font)
+## [Символы Шрифта Nerd Font](./nerd-font)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
