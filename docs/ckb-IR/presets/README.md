@@ -4,19 +4,19 @@
 
 To get details on how to use a preset, simply click on the image.
 
-## [Nerd Font Symbols](./nerd-font)
+## [هێماکانی Nerd Font](./nerd-font)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
 [![ڕوونماوێنەیەکی پێش ڕێکخستنی هێماکانی فۆنتی Nerd](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
-## [Bracketed Segments](./bracketed-segments)
+## [پارچە کەوانەکراوەکان](./bracketed-segments)
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
 [![ڕوونماوێنەی پێشڕێکخستنی Bracketed Segments](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text)
+## [هێما نووسینەکییە ئاساییەکان](./plain-text)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
