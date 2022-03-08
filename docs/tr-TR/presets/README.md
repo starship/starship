@@ -4,7 +4,7 @@ Topluluk tarafından gönderilen Starship için yapılandırma ön ayarları kol
 
 To get details on how to use a preset, simply click on the image.
 
-## [Nerd Font Symbols](./nerd-font)
+## [Nerd Yazı Tipi Sembolleri](./nerd-font)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
