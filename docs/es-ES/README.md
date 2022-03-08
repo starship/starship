@@ -42,8 +42,9 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
    Con el intérprete de comandos:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    Para actualizar Starship, vuelve a ejecutar el guión anterior. Reemplazará la versión actual sin tocar la configuración de Starship.
 
 
