@@ -238,7 +238,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 100% "));
+        let expected = Some(String::from("• 100% "));
 
         assert_eq!(expected, actual);
     }
@@ -263,7 +263,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 80% "));
+        let expected = Some(String::from("⇡ 80% "));
 
         assert_eq!(expected, actual);
     }
@@ -288,7 +288,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 80% "));
+        let expected = Some(String::from("⇣ 80% "));
 
         assert_eq!(expected, actual);
     }
@@ -313,7 +313,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 0% "));
+        let expected = Some(String::from("❓ 0% "));
 
         assert_eq!(expected, actual);
     }
@@ -338,7 +338,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 0% "));
+        let expected = Some(String::from("❗ 0% "));
 
         assert_eq!(expected, actual);
     }
@@ -388,7 +388,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(format!("{} ", Color::Red.bold().paint(" 40%")));
+        let expected = Some(format!("{} ", Color::Red.bold().paint("⇣ 40%")));
 
         assert_eq!(expected, actual);
     }
@@ -413,7 +413,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 13% "));
+        let expected = Some(String::from("⇣ 13% "));
 
         assert_eq!(expected, actual);
     }
