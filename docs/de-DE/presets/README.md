@@ -4,7 +4,7 @@ Here is a collection of community-submitted configuration presets for Starship. 
 
 To get details on how to use a preset, simply click on the image.
 
-## [Nerd Font Symbols](./nerd-font)
+## [Nerd Font Symbole](./nerd-font)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
