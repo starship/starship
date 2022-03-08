@@ -300,6 +300,7 @@ date is read from the `AWSUME_EXPIRATION` env var.
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                        |
 | `symbol`            | `"☁️ "`                                                          | The symbol used before displaying the current AWS profile.        |
 | `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.   |
+| `profile_aliases`   |                                                                  | Table of profile aliases to display in addition to the AWS name.  |
 | `style`             | `"bold yellow"`                                                  | The style for the module.                                         |
 | `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired. |
 | `disabled`          | `false`                                                          | Disables the `AWS` module.                                        |
@@ -330,6 +331,8 @@ symbol = "🅰 "
 [aws.region_aliases]
 ap-southeast-2 = "au"
 us-east-1 = "va"
+[aws.profile_aliases]
+CompanyGroupFrobozzOnCallAccess = 'Frobozz'
 ```
 
 #### Display region
@@ -355,6 +358,8 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+[aws.profile_aliases]
+Enterprise_Naming_Scheme-voidstars = 'void**'
 ```
 
 ## Azure
