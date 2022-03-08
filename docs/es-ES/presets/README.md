@@ -4,19 +4,19 @@ Aqui tienes una colección de preajustes creados por la comunidad de Starship. �
 
 To get details on how to use a preset, simply click on the image.
 
-## [Nerd Font Symbols](./nerd-font)
+## [Símbolos de Nerd Font](./nerd-font)
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
 [![Captura de pantalla del preajuste de los Símbolos de Nerd Font](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
-## [Bracketed Segments](./bracketed-segments)
+## [Segmentos entre Corchetes](./bracketed-segments)
 
 Este preajuste cambia el formato de todos los módulos incorporados para mostrar su segmento entre corchetes en lugar de usar la redacción por defecto de Starship ("via", "on", etc.).
 
 [![Captura de pantalla del preajuste de los Segmentos entre Corchetes](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text)
+## [Símbolos de texto sin formato](./plain-text)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
