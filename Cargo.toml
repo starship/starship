@@ -30,7 +30,7 @@ battery = ["starship-battery"]
 ansi_term = "0.12.1"
 byte-unit = "4.0.14"
 chrono = "0.4.19"
-clap = { version = "3.1.5", features = ["derive", "cargo", "unicode"] }
+clap = { version = "3.1.6", features = ["derive", "cargo", "unicode"] }
 clap_complete = "3.1.1"
 directories-next = "2.0.0"
 dunce = "1.0.2"
