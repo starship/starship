@@ -129,6 +129,19 @@ pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 ) -> Option<Option<CommandOutput>> {
     let command = display_command(&cmd, args);
     let out = match command.as_str() {
+        "ansible --version" => Some(CommandOutput {
+            stdout: String::from("\
+ansible [core 2.1.3]
+  config file = /config/file/ansible.cfg
+  configured module search path = /path/to/modules
+  ansible python module location = /path/to/ansible/python
+  ansible collection location = /path/to/ansible/collections
+  executable location = /path/to/ansible
+  python version = 3.10.1
+  jinja version = 3.2.1
+  libyaml = True"),
+            stderr: String::default(),
+        }),
         "cobc -version" => Some(CommandOutput {
             stdout: String::from("\
 cobc (GnuCOBOL) 3.1.2.0

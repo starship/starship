@@ -206,6 +206,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$ansible\
 $cmake\
 $cobol\
 $container\
@@ -266,6 +267,45 @@ modules you explicitly add to the format will not be duplicated. Eg.
 ```toml
 # Move the directory to the second line
 format = "$all$directory$character"
+```
+
+## Ansible
+
+The `ansible` module shows the current Ansible version. This will be displayed
+when a file with the name `ansible.cfg` or `galaxy-requirements.txt` is 
+present in the current directory. It will also be enabled when a directory
+named `host_vars` or `group_vars` exists in the current directory.
+
+### Options
+
+| Option              | Default                                      | Description                                                               |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `[]`                                         | Which extensions should trigger this module.                              |
+| `detect_files`      | `["ansible.cfg", "galaxy-requirements.txt"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["group_vars", "host_vars"]`                | Which folders should trigger this modules.                                |
+| `symbol`            | `"Ⓐ "`                                      | A format string representing the symbol of Ansible.                       |
+| `style`             | `"bold white"`                               | The style for the module.                                                 |
+| `disabled`          | `false`                                      | Disables the `ansible` module.                                            |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.2.3` | The version of `ansible`             |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[ansible]
+symbol = "A "
 ```
 
 ## AWS
