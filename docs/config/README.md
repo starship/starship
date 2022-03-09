@@ -497,8 +497,7 @@ until one works, and use the information emitted by that one.
 We divine what type of compiler you have by looking for either the string
 "clang" in the output or the string "Free Software Foundation". If neither can
 be found no compiler name will be reported. We get the compiler version by
-extracting the first thing from the output that looks like a [semantic
-version](https://semver.org/).
+extracting the first thing from the output that looks like a [semantic version](https://semver.org/).
 
 The list of supported compilers is currently very Unixy, and biased towards
 open source. If you are on Windows, or are using a commercial Unix C compiler,
