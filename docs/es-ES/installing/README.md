@@ -32,7 +32,7 @@ pkg install getconf
 ### Instalación
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
+curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)
@@ -63,8 +63,7 @@ Habilita el módulo `programs.starship` en tu archivo `home.nix` y añade tus co
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
-    # Configuración escrita en ~/.config/starship.toml
+    # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
 

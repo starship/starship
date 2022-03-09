@@ -1,16 +1,15 @@
-# Presets
+a# Presets
 
 Here is a collection of community-submitted configuration presets for Starship.
 If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
-## Nerd Font Symbols
+To get details on how to use a preset, simply click on the image.
 
-This preset doesn't change anything except for the symbols used for each module.
-If emojis aren't your thing, this might catch your eye!
+## [Nerd Font Symbols](./nerd-font)
 
-![Screenshot of Nerd Font Symbols preset](/presets/nerd-font-symbols.png)
+This preset changes the symbols for each module to use Nerd Font symbols.
 
-### Prerequisites
+[![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
 
@@ -21,7 +20,7 @@ If emojis aren't your thing, this might catch your eye!
 symbol = "  "
 
 [buf]
-symbol = "🦬 "
+symbol = " "
 
 [conda]
 symbol = " "
@@ -101,13 +100,14 @@ symbol = "ﯣ "
 This preset changes the format of all the built-in modules to show their segment
 in brackets instead of using the default Starship wording ("via", "on", etc.).
 
-Before:
+[![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-![Screenshot of default Starship configuration](/presets/bracketed-segments-before.png)
+## [Plain Text Symbols](./plain-text)
 
-After:
+This preset changes the symbols for each module into plain text. Great if you
+don't have access to Unicode.
 
-![Screenshot of Bracketed Segments preset](/presets/bracketed-segments-after.png)
+[![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
 
 ### Configuration
 
@@ -398,152 +398,10 @@ symbol = "swift "
 
 This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
 
-![Screenshot of Hide Runtime Versions preset](/presets/hide-runtime-versions.png)
+[![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
 
-### Configuration
-
-```toml
-[cmake]
-format = "via [$symbol]($style)"
-
-[cobol]
-format = "via [$symbol]($style)"
-
-[crystal]
-format = "via [$symbol]($style)"
-
-[dart]
-format = "via [$symbol]($style)"
-
-[deno]
-format = "via [$symbol]($style)"
-
-[dotnet]
-format = "[$symbol(🎯 $tfm )]($style)"
-
-[elixir]
-format = 'via [$symbol]($style)'
-
-[elm]
-format = 'via [$symbol]($style)'
-
-[erlang]
-format = 'via [$symbol]($style)'
-
-[golang]
-format = 'via [$symbol]($style)'
-
-[helm]
-format = 'via [$symbol]($style)'
-
-[julia]
-format = 'via [$symbol]($style)'
-
-[kotlin]
-format = 'via [$symbol]($style)'
-
-[lua]
-format = 'via [$symbol]($style)'
-
-[nim]
-format = 'via [$symbol]($style)'
-
-[nodejs]
-format = 'via [$symbol]($style)'
-
-[ocaml]
-format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
-
-[perl]
-format = 'via [$symbol]($style)'
-
-[php]
-format = 'via [$symbol]($style)'
-
-[pulumi]
-format = 'via [$symbol$stack]($style)'
-
-[purescript]
-format = 'via [$symbol]($style)'
-
-[red]
-format = 'via [$symbol]($style)'
-
-[rlang]
-format = 'via [$symbol]($style)'
-
-[ruby]
-format = 'via [$symbol]($style)'
-
-[rust]
-format = 'via [$symbol]($style)'
-
-[swift]
-format = 'via [$symbol]($style)'
-
-[vagrant]
-format = 'via [$symbol]($style)'
-
-[vlang]
-format = 'via [$symbol]($style)'
-
-[zig]
-format = 'via [$symbol]($style)'
-```
-
-## Pure
+## [Pure Prompt](./pure-preset)
 
 This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Pure preset](/presets/pure-prompt.png)
-
-### Configuration
-
-```toml
-format = """
-$username\
-$hostname\
-$directory\
-$git_branch\
-$git_state\
-$git_status\
-$cmd_duration\
-$line_break\
-$python\
-$character"""
-
-[directory]
-style = "blue"
-
-[character]
-success_symbol = "[❯](purple)"
-error_symbol = "[❯](red)"
-vicmd_symbol = "[❮](green)"
-
-[git_branch]
-format = "[$branch]($style)"
-style = "bright-black"
-
-[git_status]
-format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
-style = "cyan"
-conflicted = "​"
-untracked = "​"
-modified = "​"
-staged = "​"
-renamed = "​"
-deleted = "​"
-stashed = "≡"
-
-[git_state]
-format = '\([$state( $progress_current/$progress_total)]($style)\) '
-style = "bright-black"
-
-[cmd_duration]
-format = "[$duration]($style) "
-style = "yellow"
-
-[python]
-format = "[$virtualenv]($style) "
-style = "bright-black"
-```
+[![Screenshot of Pure preset](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)

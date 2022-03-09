@@ -261,7 +261,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-Le module `aws` affiche la région et le profil AWS courant. Ces informations sont basées sur les variables d'environnement `AWS_REGION`, `AWS_DEFAULT_REGION`, et `AWS_PROFILE` ainsi que le fichier `~/.aws/config`. Ce module affiche également un minuteur d'expiration lorsque vous utilisez des identifiants temporaires.
+The `aws` module shows the current AWS region and profile when credentials or a `credential_process` have been setup. Ces informations sont basées sur les variables d'environnement `AWS_REGION`, `AWS_DEFAULT_REGION`, et `AWS_PROFILE` ainsi que le fichier `~/.aws/config`. Ce module affiche également un minuteur d'expiration lorsque vous utilisez des identifiants temporaires.
+
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
 
 Lorsque vous utilisez [aws-vault](https://github.com/99designs/aws-vault) le profil est lu à partir de la variable d'environnement `AWS_VAULT` et la date d'expiration des identifiants est lue à partir de la variable d'environnement `AWS_SESSION_EXPIRATION`.
 
@@ -795,19 +797,20 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 
 ### Options
 
-| Option              | Défaut                                             | Description                                                                             |
-| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué.   |
-| `truncate_to_repo`  | `true`                                             | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.           |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Format du module.                                                                       |
-| `style`             | `"bold cyan"`                                      | Le style du module.                                                                     |
-| `disabled`          | `false`                                            | Désactive le module `directory`.                                                        |
-| `read_only`         | `"🔒"`                                              | Le symbole indiquant que le répertoire courant est en lecture seule.                    |
-| `read_only_style`   | `"red"`                                            | Le style du symbole en lecture seule.                                                   |
-| `truncation_symbol` | `""`                                               | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                    |
-| `repo_root_style`   | `None`                                             | Le style pour la racine du dépôt git quand l’option `truncate_to_repo` est à false.     |
-| `home_symbol`       | `"~"`                                              | Le symbole indiquant le répertoire personnel.                                           |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
+| Option              | Défaut                                                                                                      | Description                                                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué.   |
+| `truncate_to_repo`  | `true`                                                                                                      | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.           |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | Format du module.                                                                       |
+| `style`             | `"bold cyan"`                                                                                               | Le style du module.                                                                     |
+| `disabled`          | `false`                                                                                                     | Désactive le module `directory`.                                                        |
+| `read_only`         | `"🔒"`                                                                                                       | Le symbole indiquant que le répertoire courant est en lecture seule.                    |
+| `read_only_style`   | `"red"`                                                                                                     | Le style du symbole en lecture seule.                                                   |
+| `truncation_symbol` | `""`                                                                                                        | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                    |
+| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
+| `home_symbol`       | `"~"`                                                                                                       | Le symbole indiquant le répertoire personnel.                                           |
+| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
@@ -838,6 +841,21 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 | style\* | `"black bold dimmed"` | Reflète la valeur de l'option `style` |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
+
+<details>
+<summary>The git repos have additional variables.</summary>
+
+Let us consider the path `/path/to/home/git_repo/src/lib`
+
+| Variable           | Exemple               | Description                             |
+| ------------------ | --------------------- | --------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
+| repo_root          | `"git_repo"`          | The git root directory name             |
+| path               | `"/src/lib"`          | The remaining path                      |
+| style              | `"black bold dimmed"` | Reflète la valeur de l'option `style`   |
+| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+
+</details>
 
 ### Exemple
 
@@ -1159,13 +1177,14 @@ Le module `gcloud` affiche la configuration actuelle pour [`gcloud`](https://clo
 
 ### Options
 
-| Option           | Défaut                                                     | Description                                                 |
-| ---------------- | ---------------------------------------------------------- | ----------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format du module.                                           |
-| `symbol`         | `"☁️  "`                                                   | Le symbole affiché avant le profil GCP actuel.              |
-| `region_aliases` |                                                            | Table des alias de région à afficher en plus du nom du GCP. |
-| `style`          | `"bold blue"`                                              | Le style du module.                                         |
-| `disabled`       | `false`                                                    | Désactive le module `gcloud`.                               |
+| Option            | Défaut                                                     | Description                                                      |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format du module.                                                |
+| `symbol`          | `"☁️  "`                                                   | Le symbole affiché avant le profil GCP actuel.                   |
+| `region_aliases`  |                                                            | Table des alias de région à afficher en plus du nom du GCP.      |
+| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                              | Le style du module.                                              |
+| `disabled`        | `false`                                                    | Désactive le module `gcloud`.                                    |
 
 ### Variables
 
@@ -1212,6 +1231,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Branche Git
@@ -1374,25 +1404,32 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 Le module `git_status` affiche des symboles représentant l'état du dépôt dans votre répertoire courant.
 
+::: tip
+
+The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+
+:::
+
 ### Options
 
-| Option              | Défaut                                          | Description                                 |
-| ------------------- | ----------------------------------------------- | ------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Le format par défaut du module `git_status` |
-| `conflicted`        | `"="`                                           | Cette branche a des conflits de fusion.     |
-| `ahead`             | `"⇡"`                                           | Le format de `ahead`                        |
-| `behind`            | `"⇣"`                                           | Le format de `behind`                       |
-| `diverged`          | `"⇕"`                                           | Le format de `diverged`                     |
-| `up_to_date`        | `""`                                            | The format of `up_to_date`                  |
-| `untracked`         | `"?"`                                           | Le format de `untracked`                    |
-| `stashed`           | `"$"`                                           | Le format de `stashed`                      |
-| `modified`          | `"!"`                                           | Le format de `modified`                     |
-| `staged`            | `"+"`                                           | Le format de `staged`                       |
-| `renamed`           | `"»"`                                           | Le format de `renamed`                      |
-| `deleted`           | `"✘"`                                           | Le format de `deleted`                      |
-| `style`             | `"bold green"`                                  | Le style du module.                         |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.               |
-| `disabled`          | `false`                                         | Désactive le module `git_status`.           |
+| Option              | Défaut                                          | Description                                                                                                 |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Le format par défaut du module `git_status`                                                                 |
+| `conflicted`        | `"="`                                           | Cette branche a des conflits de fusion.                                                                     |
+| `ahead`             | `"⇡"`                                           | Le format de `ahead`                                                                                        |
+| `behind`            | `"⇣"`                                           | Le format de `behind`                                                                                       |
+| `diverged`          | `"⇕"`                                           | Le format de `diverged`                                                                                     |
+| `up_to_date`        | `""`                                            | The format of `up_to_date`                                                                                  |
+| `untracked`         | `"?"`                                           | Le format de `untracked`                                                                                    |
+| `stashed`           | `"$"`                                           | Le format de `stashed`                                                                                      |
+| `modified`          | `"!"`                                           | Le format de `modified`                                                                                     |
+| `staged`            | `"+"`                                           | Le format de `staged`                                                                                       |
+| `renamed`           | `"»"`                                           | Le format de `renamed`                                                                                      |
+| `deleted`           | `"✘"`                                           | Le format de `deleted`                                                                                      |
+| `style`             | `"bold green"`                                  | Le style du module.                                                                                         |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
+| `disabled`          | `false`                                         | Désactive le module `git_status`.                                                                           |
+| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Variables
 
@@ -1454,6 +1491,15 @@ Afficher le nombre de commits en avance/en retard par rapport à la branche suiv
 ahead = "⇡${count}"
 diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
+```
+
+Use Windows Starship executable on Windows paths in WSL
+
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
 ## Go
@@ -1711,39 +1757,6 @@ Le module `julia` affiche la version actuellement installée de [Julia](https://
 symbol = "∴ "
 ```
 
-## localip
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### Options
-
-| Option     | Défaut                    | Description                                            |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | Format du module.                                      |
-| `style`    | `"bold yellow"`           | Le style du module.                                    |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
-
-### Variables
-
-| Variable  | Exemple      | Description                           |
-| --------- | ------------ | ------------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address     |
-| style\* |              | Reflète la valeur de l'option `style` |
-
-*: Cette variable peut uniquement être utilisée dans une chaine de style
-
-### Exemple
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
 Le module `kotlin` affiche la version actuellement installée de [Kotlin](https://kotlinlang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
@@ -1793,7 +1806,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Affiche le nom du [contexte Kubernets](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) actuel et, si défini, l'espace de noms du fichier kubeconfig. L'espace de noms doit être défini dans le fichier kubeconfig, cela peut être fait via `kubectl config set-context starship-cluster --namespace astronaut`. Si la variable d'environnement `$KUBECONFIG` est définie, le module l'utilisera sinon il utilisera le fichier `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Si la variable d'environnement `$KUBECONFIG` est définie, le module l'utilisera sinon il utilisera le fichier `~/.kube/config`.
 
 ::: tip
 
@@ -1815,8 +1828,10 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 | Variable  | Exemple              | Description                                      |
 | --------- | -------------------- | ------------------------------------------------ |
-| context   | `starship-cluster`   | Le contexte kubernetes actuel                    |
+| context   | `starship-context`   | The current kubernetes context name              |
 | namespace | `starship-namespace` | Si défini, l'espace de noms actuel de kubernetes |
+| user      | `starship-user`      | If set, the current kubernetes user              |
+| cluster   | `starship-cluster`   | If set, the current kubernetes cluster           |
 | symbol    |                      | Reflète la valeur de l'option `symbol`           |
 | style\* |                      | Reflète la valeur de l'option `style`            |
 
@@ -1828,12 +1843,12 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 # ~/.config/starship.toml
 
 [kubernetes]
-format = 'on [⛵ $context \($namespace\)](dimmed green) '
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 #### Regex Matching
@@ -1849,12 +1864,12 @@ Long and automatically generated cluster names can be identified and shortened u
 # OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
 # Or better, to rename every OpenShift cluster at once:
-".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+".*/(?P<var_cluster>[\\w-]+)/.*" = "$var_cluster"
 
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 ## Saut de ligne
@@ -1874,6 +1889,39 @@ Le module `line_break` sépare l'invite en deux lignes.
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Options
+
+| Option     | Défaut                    | Description                                            |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | Format du module.                                      |
+| `style`    | `"bold yellow"`           | Le style du module.                                    |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Variables
+
+| Variable  | Exemple      | Description                           |
+| --------- | ------------ | ------------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address     |
+| style\* |              | Reflète la valeur de l'option `style` |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua

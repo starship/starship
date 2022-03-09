@@ -32,7 +32,7 @@ pkg install getconf
 ### Cài đặt
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
+curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)
@@ -63,8 +63,7 @@ Kích hoạt mô đun `programs.starship` trong tệp `home.nix` của bạn, v�
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
-    # Cấu hình viết vào ~/.config/starship.toml
+    # Configuration written to ~/.config/starship.toml
     settings = {
       # add_newline = false;
 
