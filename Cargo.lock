@@ -1603,7 +1603,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "1.3.0"
+version = "1.4.0"
 dependencies = [
  "ansi_term",
  "byte-unit",
