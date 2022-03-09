@@ -42,8 +42,9 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
    Dengan Shell:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    Untuk memperbarui Starship, jalankan kembali skrip di atas. Hal ini dapat memperbarui versi yang terpasang tanpa mengubah konfigurasi Starship.
 
 

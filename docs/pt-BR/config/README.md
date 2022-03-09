@@ -261,7 +261,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-O módulo `aws` exibi a região e perfil atual do AWS. Isto é baseado nas variáveis de env `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` contidas no arquivo `~/.aws/config`. Este modulo exibi também tempo de expiração de credenciais temporarias.
+The `aws` module shows the current AWS region and profile when credentials or a `credential_process` have been setup. Isto é baseado nas variáveis de env `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` contidas no arquivo `~/.aws/config`. Este modulo exibi também tempo de expiração de credenciais temporarias.
+
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
 
 Quando usar [aws-vault](https://github.com/99designs/aws-vault) o perfil é lido da variável `AWS_VAULT` e o tempo de expiração de credenciais é lida da variável de env `AWS_SESSION_EXPIRATION`.
 
@@ -602,7 +604,7 @@ format = "levou [$duration](bold yellow)"
 
 O módulo `conda` exibe o ambiente atual do [Conda](https://docs.conda.io/en/latest/), se o `$CONDA_DEFAULT_ENV` estiver definido.
 
-::: dica
+::: tip
 
 Isso não suprime o modificador de prompt do conda, você pode executar `conda config --set changeps1 False`.
 
@@ -795,19 +797,20 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 
 ### Opções
 
-| Opções              | Padrão                                             | Descrição                                                                                   |
-| ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | O número de pastas pais do diretório atual que serão truncadas.                             |
-| `truncate_to_repo`  | `true`                                             | Seu diretório será truncado ou não para a raiz do repositório git atual.                    |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | O formato do módulo.                                                                        |
-| `style`             | `"bold cyan"`                                      | O estilo do módulo.                                                                         |
-| `disabled`          | `false`                                            | Desabilita o módulo `directory`.                                                            |
-| `read_only`         | `"🔒"`                                              | O simbolo que indica que o diretório atual é somente leitura.                               |
-| `read_only_style`   | `"red"`                                            | O estilo para o simbolo de somente leitura.                                                 |
-| `truncation_symbol` | `""`                                               | O simbolo para prefixo de caminhos truncados. ex: "…/"                                      |
-| `repo_root_style`   | `None`                                             | O estilo para o repositório git root quando `truncate_to_repo` estiver definido como false. |
-| `home_symbol`       | `"~"`                                              | O simbolo para indicar o diretório home.                                                    |
-| `use_os_path_sep`   | `true`                                             | Use o separador especifico do SO em vez de sempre usar `/` (ex: `\` no Windows)          |
+| Opções              | Padrão                                                                                                      | Descrição                                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | O número de pastas pais do diretório atual que serão truncadas.                         |
+| `truncate_to_repo`  | `true`                                                                                                      | Seu diretório será truncado ou não para a raiz do repositório git atual.                |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | O formato do módulo.                                                                    |
+| `style`             | `"bold cyan"`                                                                                               | O estilo do módulo.                                                                     |
+| `disabled`          | `false`                                                                                                     | Desabilita o módulo `directory`.                                                        |
+| `read_only`         | `"🔒"`                                                                                                       | O simbolo que indica que o diretório atual é somente leitura.                           |
+| `read_only_style`   | `"red"`                                                                                                     | O estilo para o simbolo de somente leitura.                                             |
+| `truncation_symbol` | `""`                                                                                                        | O simbolo para prefixo de caminhos truncados. ex: "…/"                                  |
+| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
+| `home_symbol`       | `"~"`                                                                                                       | O simbolo para indicar o diretório home.                                                |
+| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>Este módulo tem algumas configurações avançadas que controlam como o diretório é exibido.</summary>
@@ -838,6 +841,21 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 | style\* | `"black bold dimmed"` | Espelha o valor da opção `style` |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
+
+<details>
+<summary>The git repos have additional variables.</summary>
+
+Let us consider the path `/path/to/home/git_repo/src/lib`
+
+| Variável           | Exemplo               | Descrição                               |
+| ------------------ | --------------------- | --------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
+| repo_root          | `"git_repo"`          | The git root directory name             |
+| path               | `"/src/lib"`          | The remaining path                      |
+| style              | `"black bold dimmed"` | Espelha o valor da opção `style`        |
+| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+
+</details>
 
 ### Exemplo
 
@@ -912,7 +930,7 @@ O módulo também vai exibir o Target Framework Moniker (<https://docs.microsoft
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                                                                                             | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `".NET "`                                                                                               | O símbolo usado antes de exibir a versão do dotnet.                                  |
+| `symbol`            | `".NET "`                                                                                               | O simbolo usado antes de exibir a versão do dotnet.                                  |
 | `heuristic`         | `true`                                                                                                  | Usa a versão de detecção rápida do starship snappy.                                  |
 | `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
@@ -954,7 +972,7 @@ O módulo `elixir` exibe a versão instalada do [Elixir](https://elixir-lang.org
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | O formato do módulo elixir.                                                          |
 | `version_format`    | `"v${raw}"`                                                 | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💧 "`                                                      | O símbolo usado antes de exibir a versão do Elixir/Erlang.                           |
+| `symbol`            | `"💧 "`                                                      | O simbolo usado antes de exibir a versão do Elixir/Erlang.                           |
 | `detect_extensions` | `[]`                                                        | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["mix.exs"]`                                               | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                                        | Quais pastas devem ativar este módulo.                                               |
@@ -1030,7 +1048,7 @@ O módulo `env_var` exibe o valor atual de uma variável de ambiente selecionada
 - A opção de configuração da `variable` corresponde a uma variável existente
 - A configuração `variable` não está definida, mas a `default` está
 
-::: dica Múltiplas variáveis de ambiente podem ser exibidas usando um `.`. (Veja o exemplo) se a configuração `variable` não é definida, o módulo irá exibir o valor da variável após o caractere `.`.
+::: tip Varias variáveis podem ser exibidas usando um `.`. (Veja o exemplo) se a configuração `variable` não é definida, o módulo irá exibir o valor da variável após o caractere `.`.
 
 Exemplo: a configuração a seguir irá mostrar o valor da variável de ambiente USER
 
@@ -1055,11 +1073,11 @@ default = "unknown user"
 
 ### Variáveis
 
-| Variável  | Exemplo                                  | Descrição                               |
-| --------- | ---------------------------------------- | --------------------------------------- |
-| env_value | `Windows NT` (se _variable_ seria `$OS`) | O valor de ambiente da opção `variable` |
-| symbol    |                                          | Espelha o valor da opção `símbolo`      |
-| style\* | `black bold dimmed`                      | Espelha o valor da opção `style`        |
+| Variável  | Exemplo                                     | Descrição                               |
+| --------- | ------------------------------------------- | --------------------------------------- |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | O valor de ambiente da opção `variable` |
+| symbol    |                                             | Espelha o valor da opção `símbolo`      |
+| style\* | `black bold dimmed`                         | Espelha o valor da opção `style`        |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1098,7 +1116,7 @@ O módulo de `erlang` exibe a versão atual instalada do [Erlang/OTP](https://er
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `" "`                               | O símbolo usado antes de exibir a versão do erlang.                                  |
+| `symbol`            | `" "`                               | O simbolo usado antes de exibir a versão do erlang.                                  |
 | `style`             | `"bold red"`                         | O estilo do módulo.                                                                  |
 | `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Quais nomes de arquivos devem ativar este módulo.                                    |
@@ -1159,13 +1177,14 @@ O módulo `gcloud` exibe a configuração atual para o [`gcloud`](https://cloud.
 
 ### Opções
 
-| Opções           | Padrão                                                     | Descrição                                                    |
-| ---------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                         |
-| `symbol`         | `"☁️  "`                                                   | O simbolo usado antes de exibir o perfil atual do GCP.       |
-| `region_aliases` |                                                            | Tabela de aliases de região para exibir além do nome do GCP. |
-| `style`          | `"bold blue"`                                              | O estilo do módulo.                                          |
-| `disabled`       | `false`                                                    | Desabilita o módulo `gcloud`.                                |
+| Opções            | Padrão                                                     | Descrição                                                        |
+| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                             |
+| `symbol`          | `"☁️  "`                                                   | O simbolo usado antes de exibir o perfil atual do GCP.           |
+| `region_aliases`  |                                                            | Tabela de aliases de região para exibir além do nome do GCP.     |
+| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                              | O estilo do módulo.                                              |
+| `disabled`        | `false`                                                    | Desabilita o módulo `gcloud`.                                    |
 
 ### Variáveis
 
@@ -1212,6 +1231,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Git Branch
@@ -1333,7 +1363,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 O módulo `git_metrics` vai exibir o número de adições e exclusões de linhas no repositório git atual.
 
-::: dica
+::: tip
 
 Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
@@ -1374,25 +1404,32 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 O módulo `git_status` exibe o simbolo que representa o estado do repositório no diretório atual.
 
+::: tip
+
+The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+
+:::
+
 ### Opções
 
-| Opções              | Padrão                                          | Descrição                           |
-| ------------------- | ----------------------------------------------- | ----------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status`  |
-| `conflicted`        | `"="`                                           | Este braço tem conflitos.           |
-| `ahead`             | `"⇡"`                                           | O formato do `ahead`                |
-| `behind`            | `"⇣"`                                           | O formato do `behind`               |
-| `diverged`          | `"⇕"`                                           | O formato do `diverged`             |
-| `up_to_date`        | `""`                                            | O formato do `up_to_date`           |
-| `untracked`         | `"?"`                                           | O formato do `untracked`            |
-| `stashed`           | `"$"`                                           | O formato do `stashed`              |
-| `modified`          | `"!"`                                           | O formato do `modified`             |
-| `staged`            | `"+"`                                           | O formato do `staged`               |
-| `renamed`           | `"»"`                                           | O formato do `renamed`              |
-| `deleted`           | `"✘"`                                           | O formato do `deleted`              |
-| `style`             | `"bold red"`                                    | O estilo do módulo.                 |
-| `ignore_submodules` | `false`                                         | Ignora as alterações de submódulos. |
-| `disabled`          | `false`                                         | Desabilita o módulo `git_status`.   |
+| Opções              | Padrão                                          | Descrição                                                                                                   |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status`                                                                          |
+| `conflicted`        | `"="`                                           | Este braço tem conflitos.                                                                                   |
+| `ahead`             | `"⇡"`                                           | O formato do `ahead`                                                                                        |
+| `behind`            | `"⇣"`                                           | O formato do `behind`                                                                                       |
+| `diverged`          | `"⇕"`                                           | O formato do `diverged`                                                                                     |
+| `up_to_date`        | `""`                                            | O formato do `up_to_date`                                                                                   |
+| `untracked`         | `"?"`                                           | O formato do `untracked`                                                                                    |
+| `stashed`           | `"$"`                                           | O formato do `stashed`                                                                                      |
+| `modified`          | `"!"`                                           | O formato do `modified`                                                                                     |
+| `staged`            | `"+"`                                           | O formato do `staged`                                                                                       |
+| `renamed`           | `"»"`                                           | O formato do `renamed`                                                                                      |
+| `deleted`           | `"✘"`                                           | O formato do `deleted`                                                                                      |
+| `style`             | `"bold red"`                                    | O estilo do módulo.                                                                                         |
+| `ignore_submodules` | `false`                                         | Ignora as alterações de submódulos.                                                                         |
+| `disabled`          | `false`                                         | Desabilita o módulo `git_status`.                                                                           |
+| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Variáveis
 
@@ -1454,6 +1491,15 @@ Exibe o count a frente/atrás do braço que esta sendo rastreado
 ahead = "⇡${count}"
 diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
+```
+
+Use Windows Starship executable on Windows paths in WSL
+
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
 ## Go
@@ -1711,39 +1757,6 @@ O módulo `julia` exibe a versão atual instalada do [Julia](https://julialang.o
 symbol = "∴ "
 ```
 
-## localip
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### Opções
-
-| Opções     | Padrão                    | Descrição                                              |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | O formato do módulo.                                   |
-| `style`    | `"bold yellow"`           | O estilo do módulo.                                    |
-| `disabled` | `true`                    | Desabilita o módulo `localip`.                         |
-
-### Variáveis
-
-| Variável  | Exemplo      | Descrição                         |
-| --------- | ------------ | --------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
-| style\* |              | Espelha o valor da opção `style`  |
-
-*: Esta variável só pode ser usada como parte de uma string de estilo
-
-### Exemplo
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
 O módulo `kotlin` exibie a versão atual instalada do [Kotlin](https://kotlinlang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
@@ -1787,15 +1800,15 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Usa o binário do compilador Kotlin para obter a versão instalada
+# Uses the Kotlin Compiler binary to get the installed version
 kotlin_binary = "kotlinc"
 ```
 
 ## Kubernetes
 
-Exibe o [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) nome e, se definido, o namespace do arquivo kubeconfig. O namespace precisa estar definido no arquivo kubeconfig, isto pode ser feito via `kubectl config set-context starship-cluster --namespace astronaut`. Se a env var `$KUBECONFIG` estiver definida o módulo vai usa-la ao invés de usar o `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Se a env var `$KUBECONFIG` estiver definida o módulo vai usa-la ao invés de usar o `~/.kube/config`.
 
-::: dica
+::: tip
 
 Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
@@ -1815,8 +1828,10 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 | Variável  | Exemplo              | Descrição                                   |
 | --------- | -------------------- | ------------------------------------------- |
-| context   | `starship-cluster`   | O contexto atual do kubernetes              |
+| context   | `starship-context`   | The current kubernetes context name         |
 | namespace | `starship-namespace` | Se definido o namespace atual do kubernetes |
+| user      | `starship-user`      | If set, the current kubernetes user         |
+| cluster   | `starship-cluster`   | If set, the current kubernetes cluster      |
 | symbol    |                      | Espelha o valor da opção `símbolo`          |
 | style\* |                      | Espelha o valor da opção `style`            |
 
@@ -1828,12 +1843,12 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 # ~/.config/starship.toml
 
 [kubernetes]
-format = 'em [⛵ $context \($namespace\)](dimmed green) '
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 #### Correspondência Regex
@@ -1846,18 +1861,18 @@ Nomes longos de clusters gerados automaticamente podem ser encurtados usando exp
 
 ```toml
 [kubernetes.context_aliases]
-# Os contextos OpenShift carregam o namespace e o usuário no contexto kube: `namespace/name/user`:
+# Contexto do OpenShift carrega o namespace e usuário no contexto kube: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
-# Ou melhor, renomear todos os clusters do OpenShift de uma só vez:
-".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+# Ou melhor, para renomear cada cluster OpenShift de uma vez:
+".*/(?P<var_cluster>[\\w-]+)/.*" = "$var_cluster"
 
-# Contextos do GKE, AWS e outros provedores de nuvem geralmente carregam informações adicionais, como a região/zona.
-# A entrada a seguir corresponde ao formato do GKE (`gke_projectname_zone_cluster-name`)
-# e renomeia cada contexto kube correspondente em um formato mais legível (`gke-cluster-name`):
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+# Contexto do GKE, AWS e outras provedores de nuvem normalmente carregam mais informações, como a region/zone.
+# A entrada a seguir corresponde o formato GKE (`gke_projectname_zone_cluster-name`)
+# e renomeia cada kube context em um formato mais legível (`gke-cluster-name`):
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
-## Quebra de Linha
+## Quebra de linha
 
 O módulo `line_break` separa o prompt em duas linhas.
 
@@ -1865,7 +1880,7 @@ O módulo `line_break` separa o prompt em duas linhas.
 
 | Opções     | Padrão  | Descrição                                                                           |
 | ---------- | ------- | ----------------------------------------------------------------------------------- |
-| `disabled` | `false` | Desabilita o módulo `line_break`, fazendo com que o prompt seja em uma única linha. |
+| `disabled` | `false` | Desabilita o módulo `line_break`, fazendo com que o prompt seja em uma unica linha. |
 
 ### Exemplo
 
@@ -1874,6 +1889,39 @@ O módulo `line_break` separa o prompt em duas linhas.
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Opções
+
+| Opções     | Padrão                    | Descrição                                              |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | O formato do módulo.                                   |
+| `style`    | `"bold yellow"`           | O estilo do módulo.                                    |
+| `disabled` | `true`                    | Desabilita o módulo `localip`.                         |
+
+### Variáveis
+
+| Variável  | Exemplo      | Descrição                         |
+| --------- | ------------ | --------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
+| style\* |              | Espelha o valor da opção `style`  |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
@@ -1919,11 +1967,11 @@ format = "via [🌕 $version](bold blue) "
 
 ## Uso de Memória
 
-O módulo `memory_usage` mostra a memória atual do sistema e o uso de troca.
+O módulo `memory_usage` exibe o uso atual de memoria e swap.
 
 Por padrão o uso do swap é exibido se o total de swap do sistema é diferente de zero.
 
-::: dica
+::: tip
 
 Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
@@ -1995,7 +2043,7 @@ O módulo `hg_branch` exibe o braço atual do repositório no diretório atual.
 # ~/.config/starship.toml
 
 [hg_branch]
-format = "em [🌱 $branch](bold purple)"
+format = "on [🌱 $branch](bold purple)"
 truncation_length = 4
 truncation_symbol = ""
 ```
@@ -2141,7 +2189,7 @@ O módulo `ocaml` exibe a versão atual instalada do [OCaml](https://ocaml.org/)
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | A string de formato do módulo.                                                       |
 | `version_format`          | `"v${raw}"`                                                                | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`                  | `"🐫 "`                                                                     | O símbolo usado antes de exibir a versão do OCaml.                                   |
+| `symbol`                  | `"🐫 "`                                                                     | O simbolo usado antes de exibir a versão do OCaml.                                   |
 | `global_switch_indicator` | `""`                                                                       | A string usada para representar a mudança global OPAM.                               |
 | `local_switch_indicator`  | `"*"`                                                                      | A string usada para representar as mudanças locais do OPAM.                          |
 | `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Quais extensões devem ativar este módulo.                                            |
@@ -2201,14 +2249,14 @@ O módulo `openstack` exibe o OpenStack cloud e projeto atual. O módulo apenas 
 # ~/.config/starship.toml
 
 [openstack]
-format = "em [$symbol$cloud(\\($project\\))]($style) "
+format = "on [$symbol$cloud(\\($project\\))]($style) "
 style = "bold yellow"
 symbol = "☁️ "
 ```
 
 ## Versionamento de Pacotes
 
-O módulo `package` é mostrado quando o diretório atual é o repositório de um pacote e mostra sua versão atual. O módulo atualmente suporta pacotes `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart`.
+O módulo `package` é exibido quando o diretório atual é um repositorio para um pacote e exibe sua versão atual. O módulo atualmente suporta pacotes `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` e `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – O versionamento de pacotes `npm` é extraído do `package.json` presente no diretório atual
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – O versionamento de pacotes `cargo`é extraído do arquivo `Cargo.toml` presente no diretório atual
@@ -2301,7 +2349,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-O módulo `php` mostra a versão atualmente instalada do [PHP](https://www.php.net/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `php` exibe a versão atual instalada do [PHP](https://www.php.net/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `composer.json`
 - O diretório atual tenha um arquivo `.php-version`
@@ -2313,7 +2361,7 @@ O módulo `php` mostra a versão atualmente instalada do [PHP](https://www.php.n
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐘 "`                               | The symbol used before displaying the version of PHP.                                |
+| `symbol`            | `"🐘 "`                               | O simbolo usado antes de exibir a versão do PHP.                                     |
 | `detect_extensions` | `["php"]`                            | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["composer.json", ".php-version"]`  | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
@@ -2343,7 +2391,7 @@ format = "via [🔹 $version](147 bold) "
 
 The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
-::: dica
+::: tip
 
 Por padrão a versão do Pulumi não é exibida, pois leva um tempo maior para ser carregada. Em média a maioria dos plugins leva (~70ms). Se você ainda deseja ativa-la, [siga o exemplo abaixo](#with-pulumi-version).
 
@@ -2469,7 +2517,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | `detect_folders`     | `[]`                                                                                                         | Quais pastas devem ativar este módulo                                                |
 | `disabled`           | `false`                                                                                                      | Desabilita o módulo `python`.                                                        |
 
-::: dica
+::: tip
 
 A variável `python_binary` aceita uma string ou uma lista de strings. O Starship vai tentar executar cada binário até obter um resultado. Note que você pode apenas alterar o binário em que o Starship executa para pegar a versão do Python não os argumentos que são utilizados.
 
@@ -2501,7 +2549,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Use apenas o binário `python3` para obter a versão.
+# Apenas use o binário `python3` para pegar a versão.
 python_binary = "python3"
 ```
 
@@ -2509,7 +2557,7 @@ python_binary = "python3"
 # ~/.config/starship.toml
 
 [python]
-# Não acione para arquivos com a extensão py
+#Não acione arquivos com a extensão py
 detect_extensions = []
 ```
 
@@ -2517,16 +2565,16 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Exibe a versão do python de dentro de um venv local.
+# Exibe a versão do python dentro de um local venv.
 #
-# Note que isso só funcionará quando o venv estiver dentro do projeto e só
-# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
+# Observe que isso só funcionará quando o venv estiver dentro do projeto e somente
+# funcionar no diretório que contém o venv dir mas talvez isso esteja ok?
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 ```
 
 ## R
 
-O módulo `rlang` mostra a versão atualmente instalada do [R](https://www.r-project.org/). O módulo será mostrado se qualquer uma das seguintes condições for atendida:
+O módulo `rlang` exibe a versão atual instalada do [R](https://www.r-project.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
 - O diretório atual tenha um arquivo com a extensão `.R`.
 - O diretório atual tenha um arquivo com a extensão `.Rd`.
@@ -2563,7 +2611,7 @@ O módulo `rlang` mostra a versão atualmente instalada do [R](https://www.r-pro
 # ~/.config/starship.toml
 
 [rlang]
-format = "com [📐 $version](blue bold) "
+format = "with [📐 $version](blue bold) "
 ```
 
 ## Red
@@ -2731,7 +2779,7 @@ symbol = "🌟 "
 
 O módulo de `shell` exibe um indicador para o shell que esta sendo usado.
 
-::: dica
+::: tip
 
 Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
@@ -2850,7 +2898,7 @@ format = '[📦 \[$env\]]($style) '
 
 O módulo `status` exibe o código de saída do comando anterior. O módulo será exibido apenas se o código de saída não for `0`. The status code will cast to a signed 32-bit integer.
 
-::: dica
+::: tip
 
 Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
@@ -2911,7 +2959,7 @@ disabled = false
 
 O módulo `sudo` é exibido se uma credencial sudo estiver em cache. O módulo vai ser exibido somente se as credenciais estiverem em cache.
 
-::: dica
+::: tip
 
 Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
@@ -2999,7 +3047,7 @@ format = "via [🏎  $version](red bold)"
 
 O módulo `terraform` exibe o [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) selecionado e sua versão.
 
-::: dica
+::: tip
 
 Por padrão a versão do Terraform não é exibida, desde que é lento recuperar a versão atual quando muitos plugins estão em uso. Se você deseja habilitar,, [Siga o exemplo abaixo](#with-terraform-version).
 
@@ -3058,7 +3106,7 @@ format = "[🏎💨 $workspace]($style) "
 
 O módulo `time` exibe a hora **local** atual. A configuração de `format` é usada pelo [`chrono`](https://crates.io/crates/chrono) para controlar qual hora é exibida. Dê uma olhada na [documentação do chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver quais opções estão disponíveis.
 
-::: dica
+::: tip
 
 Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
 
@@ -3102,14 +3150,14 @@ time_range = "10:00:00-14:00:00"
 
 ## Nome do usuário
 
-O módulo `username` mostra o nome de usuário do usuário ativo. O módulo será mostrado se alguma das seguintes condições for atendida:
+O módulo `username` exibe o username do usuário ativo. O módulo vai exibir se algumas das condições a seguir for atendida:
 
 - O usuário atual é root
 - O usuário atual não é o mesmo que está logado
 - O usuário atual esta conectado em uma sessão SSH
 - A variável `show_always` esta definida como true
 
-::: dica
+::: tip
 
 Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. Se seu host SSH não tem estas variáveis configuradas, uma alternativa é definir uma delas com valor burro.
 
@@ -3130,7 +3178,7 @@ Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION
 | Variável | Exemplo      | Descrição                                                                              |
 | -------- | ------------ | -------------------------------------------------------------------------------------- |
 | `style`  | `"red bold"` | Espelha o valor da opção `style_root` quando o root esta logado e `style_user` se não. |
-| `user`   | `"fulano"`   | O ID do usuário logado atualmente.                                                     |
+| `user`   | `"matchai"`  | O ID do usuário logado atualmente.                                                     |
 
 ### Exemplo
 
@@ -3253,7 +3301,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Por padrão, o módulo `zig` mostra a versão atualmente instalada do [Zig](https://ziglang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
+Por padrão o módulo `zig` exibe a versão atual instalada do [Zig](https://ziglang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
 
 - O diretório atual contém arquivo com a extensão `.zig`
 
@@ -3263,7 +3311,7 @@ Por padrão, o módulo `zig` mostra a versão atualmente instalada do [Zig](http
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"↯ "`                               | O símbolo usado antes de exibir a versão do Zig.                                     |
+| `symbol`            | `"↯ "`                               | O simbolo usado antes de exibir a versão do Zig.                                     |
 | `style`             | `"bold yellow"`                      | O estilo do módulo.                                                                  |
 | `disabled`          | `false`                              | Desabilita o módulo `zig`.                                                           |
 | `detect_extensions` | `["zig"]`                            | Quais extensões devem ativar este módulo.                                            |
@@ -3272,11 +3320,11 @@ Por padrão, o módulo `zig` mostra a versão atualmente instalada do [Zig](http
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                         |
-| --------- | -------- | --------------------------------- |
-| version   | `v0.6.0` | A versão do `zig`                 |
-| symbol    |          | Espelha o valor da opção `symbol` |
-| style\* |          | Espelha o valor da opção `style`  |
+| Variável  | Exemplo  | Descrição                          |
+| --------- | -------- | ---------------------------------- |
+| version   | `v0.6.0` | A versão do `zig`                  |
+| symbol    |          | Espelha o valor da opção `símbolo` |
+| style\* |          | Espelha o valor da opção `style`   |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -3291,9 +3339,9 @@ symbol = "⚡️ "
 
 ## Comandos Personalizados
 
-Os módulos `custom` mostram a saída de alguns comandos arbitrários.
+O módulo `custom` exibe a saída de alguns comandos arbitrários.
 
-Esses módulos serão mostrados se alguma das seguintes condições for atendida:
+Este módulo vai ser exibir se algumas das condições a seguir for atendida:
 
 - O diretório atual tenha um arquivo cujo o nome esta em `files`
 - O diretório atual tenha um diretório cujo o nome esta em `directories`
@@ -3301,19 +3349,19 @@ Esses módulos serão mostrados se alguma das seguintes condições for atendida
 - O comando `when` retorna 0
 - O sistema operacional (std::env::consts::OS) corresponde com o `os` se definido.
 
-::: dica
+::: tip
 
-Vários módulos personalizados podem ser definidos usando um `.`.
-
-:::
-
-::: dica
-
-A ordem na qual os módulos personalizados são mostrados pode ser definida individualmente incluindo `${custom.foo}` no `format` de nível superior (como inclui um ponto, você precisa usar `${...}`). Por padrão, o módulo `custom` mostrará todos os módulos personalizados na ordem em que eles foram definidos.
+Vários módulos personalizados podem ser definidos usando `.`.
 
 :::
 
-::: dica
+::: tip
+
+A ordem em que o módulo custom é exibido pode ser definido individualmente incluindo `${custom.foo}` em nilve superior `format` (pois inclui um ponto, você precisa usar `${...}`). Por padrão, o módulo `custom` mostrará todos os módulos personalizados na ordem em que eles foram definidos.
+
+:::
+
+::: tip
 
 A [Issue #1252](https://github.com/starship/starship/discussions/1252) contém exemplos de módulos personalizados. Se você tem um exemplo interessante que não esta coberto lá, sinta-se livre para compartilha-lo!
 

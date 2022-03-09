@@ -261,7 +261,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-`aws` module cho biết region và profile hiện tại của AWS. Cái này dựa trên các biến môi trường `AWS_REGION`, `AWS_DEFAULT_REGION`, và `AWS_PROFILE` với tập tin `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile when credentials or a `credential_process` have been setup. Cái này dựa trên các biến môi trường `AWS_REGION`, `AWS_DEFAULT_REGION`, và `AWS_PROFILE` với tập tin `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
+
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -795,19 +797,20 @@ Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                           | Mô tả                                                                                   |
-| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | Số lượng thư mục cha của thư mục hiện tại nên được rút gọn.                             |
-| `truncate_to_repo`  | `true`                                             | Có hoặc không rút gọn đường dẫn gốc của git repo hiện tại của bạn.                      |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | Định dạng cho module.                                                                   |
-| `style`             | `"bold cyan"`                                      | Kiểu cho module.                                                                        |
-| `disabled`          | `false`                                            | Vô hiệu mô đun `directory`.                                                             |
-| `read_only`         | `"🔒"`                                              | Biểu tượng để nhận biết thư mục hiện tại là chỉ đọc.                                    |
-| `read_only_style`   | `"red"`                                            | Style cho biểu tượng chỉ đọc.                                                           |
-| `truncation_symbol` | `""`                                               | Biểu tượng tiền tố cho các đường dẫn rút gọn. ví dụ: "…/"                               |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false.  |
-| `home_symbol`       | `"~"`                                              | Biểu tượng nhận biết thư mục home.                                                      |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows) |
+| Tuỳ chọn            | Mặc định                                                                                                    | Mô tả                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | Số lượng thư mục cha của thư mục hiện tại nên được rút gọn.                             |
+| `truncate_to_repo`  | `true`                                                                                                      | Có hoặc không rút gọn đường dẫn gốc của git repo hiện tại của bạn.                      |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | Định dạng cho module.                                                                   |
+| `style`             | `"bold cyan"`                                                                                               | Kiểu cho module.                                                                        |
+| `disabled`          | `false`                                                                                                     | Vô hiệu mô đun `directory`.                                                             |
+| `read_only`         | `"🔒"`                                                                                                       | Biểu tượng để nhận biết thư mục hiện tại là chỉ đọc.                                    |
+| `read_only_style`   | `"red"`                                                                                                     | Style cho biểu tượng chỉ đọc.                                                           |
+| `truncation_symbol` | `""`                                                                                                        | Biểu tượng tiền tố cho các đường dẫn rút gọn. ví dụ: "…/"                               |
+| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
+| `home_symbol`       | `"~"`                                                                                                       | Biểu tượng nhận biết thư mục home.                                                      |
+| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>Mô đun này có một vài tùy chọn nâng cao để điều khiển cách thư mục được hiển thị.</summary>
@@ -838,6 +841,21 @@ Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và 
 | style\* | `"black bold dimmed"` | Giá trị ghi đè của `style` |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
+
+<details>
+<summary>The git repos have additional variables.</summary>
+
+Let us consider the path `/path/to/home/git_repo/src/lib`
+
+| Biến               | Ví dụ                 | Mô tả                                   |
+| ------------------ | --------------------- | --------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
+| repo_root          | `"git_repo"`          | The git root directory name             |
+| path               | `"/src/lib"`          | The remaining path                      |
+| style              | `"black bold dimmed"` | Giá trị ghi đè của `style`              |
+| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+
+</details>
 
 ### Ví dụ
 
@@ -1159,13 +1177,14 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định                                                   | Mô tả                                                             |
-| ---------------- | ---------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Định dạng cho module.                                             |
-| `symbol`         | `"☁️  "`                                                   | Kí hiệu sử dụng hiển thị trước profile GCP hiện tại.              |
-| `region_aliases` |                                                            | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
-| `style`          | `"bold blue"`                                              | Kiểu cho module.                                                  |
-| `disabled`       | `false`                                                    | Vô hiệu mô đun `gcloud`.                                          |
+| Tuỳ chọn          | Mặc định                                                   | Mô tả                                                             |
+| ----------------- | ---------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Định dạng cho module.                                             |
+| `symbol`          | `"☁️  "`                                                   | Kí hiệu sử dụng hiển thị trước profile GCP hiện tại.              |
+| `region_aliases`  |                                                            | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
+| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name.  |
+| `style`           | `"bold blue"`                                              | Kiểu cho module.                                                  |
+| `disabled`        | `false`                                                    | Vô hiệu mô đun `gcloud`.                                          |
 
 ### Các biến
 
@@ -1212,6 +1231,17 @@ symbol = "️🇬️ "
 [gcloud.region_aliases]
 us-central1 = "uc1"
 asia-northeast1 = "an1"
+```
+
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
 ```
 
 ## Git Branch
@@ -1374,25 +1404,32 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạng thái của repo trong thư mục hiện tại của bạn.
 
+::: thử thuật
+
+The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+
+:::
+
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                        | Mô tả                               |
-| ------------------- | ----------------------------------------------- | ----------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status` |
-| `conflicted`        | `"="`                                           | Nhánh này có nhiều merge conflicts. |
-| `ahead`             | `"⇡"`                                           | Định dạng của `ahead`               |
-| `behind`            | `"⇣"`                                           | Định dạng của `behind`              |
-| `diverged`          | `"⇕"`                                           | Định dạng của `diverged`            |
-| `up_to_date`        | `""`                                            | The format of `up_to_date`          |
-| `untracked`         | `"?"`                                           | Định dạng của `untracked`           |
-| `stashed`           | `"$"`                                           | Định dạng của `stashed`             |
-| `modified`          | `"!"`                                           | Định dạng của `modified`            |
-| `staged`            | `"+"`                                           | Định dạng của `modified`            |
-| `renamed`           | `"»"`                                           | Định dạng của `renamed`             |
-| `deleted`           | `"✘"`                                           | Định dạng của `deleted`             |
-| `style`             | `"bold red"`                                    | Kiểu cho module.                    |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.       |
-| `disabled`          | `false`                                         | Vô hiệu `git_status` module.        |
+| Tuỳ chọn            | Mặc định                                        | Mô tả                                                                                                       |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Định dạng mặc định cho `git_status`                                                                         |
+| `conflicted`        | `"="`                                           | Nhánh này có nhiều merge conflicts.                                                                         |
+| `ahead`             | `"⇡"`                                           | Định dạng của `ahead`                                                                                       |
+| `behind`            | `"⇣"`                                           | Định dạng của `behind`                                                                                      |
+| `diverged`          | `"⇕"`                                           | Định dạng của `diverged`                                                                                    |
+| `up_to_date`        | `""`                                            | The format of `up_to_date`                                                                                  |
+| `untracked`         | `"?"`                                           | Định dạng của `untracked`                                                                                   |
+| `stashed`           | `"$"`                                           | Định dạng của `stashed`                                                                                     |
+| `modified`          | `"!"`                                           | Định dạng của `modified`                                                                                    |
+| `staged`            | `"+"`                                           | Định dạng của `modified`                                                                                    |
+| `renamed`           | `"»"`                                           | Định dạng của `renamed`                                                                                     |
+| `deleted`           | `"✘"`                                           | Định dạng của `deleted`                                                                                     |
+| `style`             | `"bold red"`                                    | Kiểu cho module.                                                                                            |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
+| `disabled`          | `false`                                         | Vô hiệu `git_status` module.                                                                                |
+| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Các biến
 
@@ -1454,6 +1491,15 @@ Hiển thị tổng số nhánh phía trước/phía sau của nhánh được t
 ahead = "⇡${count}"
 diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
+```
+
+Use Windows Starship executable on Windows paths in WSL
+
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
 ```
 
 ## Go
@@ -1711,39 +1757,6 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 symbol = "∴ "
 ```
 
-## localip
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### Các tuỳ chọn
-
-| Tuỳ chọn   | Mặc định                  | Mô tả                                                  |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | Định dạng cho module.                                  |
-| `style`    | `"bold yellow"`           | Kiểu cho module.                                       |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
-
-### Các biến
-
-| Biến      | Ví dụ        | Mô tả                             |
-| --------- | ------------ | --------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
-| style\* |              | Giá trị ghi đè của `style`        |
-
-*: Biến này có thể chỉ được sử dụng như một phần của style string
-
-### Ví dụ
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
@@ -1793,7 +1806,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file. Namespace cần được thiết lập trong tệp tin kubeconfig, cài này có thể được thực thi thông qua `kubectl config set-context starship-cluster --namespace astronaut`. Nếu biến môi trường `$KUBECONFIG` được thiết lập, mô đun sẽ sử dụng cái đó nếu nó không sử dụng `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Nếu biến môi trường `$KUBECONFIG` được thiết lập, mô đun sẽ sử dụng cái đó nếu nó không sử dụng `~/.kube/config`.
 
 ::: thử thuật
 
@@ -1815,8 +1828,10 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 | Biến      | Ví dụ                | Mô tả                                    |
 | --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context           |
+| context   | `starship-context`   | The current kubernetes context name      |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| user      | `starship-user`      | If set, the current kubernetes user      |
+| cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
 | symbol    |                      | Giá trị ghi đè tuỳ chọn `symbol`         |
 | style\* |                      | Giá trị ghi đè của `style`               |
 
@@ -1828,12 +1843,12 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 # ~/.config/starship.toml
 
 [kubernetes]
-format = 'on [⛵ $context \($namespace\)](dimmed green) '
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 #### Regex Matching
@@ -1849,12 +1864,12 @@ Long and automatically generated cluster names can be identified and shortened u
 # OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
 # Or better, to rename every OpenShift cluster at once:
-".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+".*/(?P<var_cluster>[\\w-]+)/.*" = "$var_cluster"
 
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 ## Line Break
@@ -1874,6 +1889,39 @@ The `line_break` module separates the prompt into two lines.
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn   | Mặc định                  | Mô tả                                                  |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | Định dạng cho module.                                  |
+| `style`    | `"bold yellow"`           | Kiểu cho module.                                       |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Các biến
+
+| Biến      | Ví dụ        | Mô tả                             |
+| --------- | ------------ | --------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
+| style\* |              | Giá trị ghi đè của `style`        |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
