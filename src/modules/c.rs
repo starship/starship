@@ -9,7 +9,7 @@ use semver::Version;
 use std::borrow::Cow;
 use std::ops::Deref;
 
-/// Creates a module with the current c version
+/// Creates a module with the current C compiler and version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("c");
     let config: CConfig = CConfig::try_load(module.config);
@@ -108,6 +108,14 @@ mod tests {
     use std::fs::File;
     use std::io;
 
+    // we need to test that we can parse the version, even though that's not in the default config
+    fn versioned_format() -> toml::Value {
+        toml::toml! {
+            [c]
+            format = "via [$symbol ($name ($version ))]($style)"
+        }
+    }
+
     #[test]
     fn folder_without_c_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -142,6 +150,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
                 }),
             )
             .path(dir.path())
+            .config(versioned_format())
             .collect();
         let expected = Some(format!(
             "via {}",
@@ -165,6 +174,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
                 }),
             )
             .path(dir.path())
+            .config(versioned_format())
             .collect();
         let expected = Some(format!(
             "via {}",
@@ -183,6 +193,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
                 }),
             )
             .path(dir.path())
+            .config(versioned_format())
             .collect();
         let expected = Some(format!("via {}", Color::Fixed(149).bold().paint(" ")));
         assert_eq!(expected, actual);
@@ -190,14 +201,13 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
         // What happens when 'cc --version' doesn't work, but 'gcc --version' does?
         // This stubs out `cc` but we'll fall back to `gcc --version` as defined in
         // src/test/mod.rs.
+        // Also we don't bother to redefine the config for this one, as we've already
+        // proved we can parse its version.
         let actual = ModuleRenderer::new("c")
             .cmd("cc --version", None)
             .path(dir.path())
             .collect();
-        let expected = Some(format!(
-            "via {}",
-            Color::Fixed(149).bold().paint(" gcc v10.2.1 ")
-        ));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint(" gcc ")));
         assert_eq!(expected, actual);
 
         // Now with both 'cc' and 'gcc' not working, this should fall back to 'clang --version'
@@ -205,6 +215,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .cmd("cc --version", None)
             .cmd("gcc --version", None)
             .path(dir.path())
+            .config(versioned_format())
             .collect();
         let expected = Some(format!(
             "via {}",
@@ -218,6 +229,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .cmd("gcc --version", None)
             .cmd("clang --version", None)
             .path(dir.path())
+            .config(versioned_format())
             .collect();
         let expected = Some(format!("via {}", Color::Fixed(149).bold().paint(" ")));
         assert_eq!(expected, actual);
@@ -230,7 +242,10 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.h"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
+        let actual = ModuleRenderer::new("c")
+            .path(dir.path())
+            .config(versioned_format())
+            .collect();
         let expected = Some(format!(
             "via {}",
             Color::Fixed(149).bold().paint(" clang v11.0.1 ")
