@@ -25,11 +25,6 @@ description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
 
-[badges]
-is-it-maintained-issue-resolution = { repository = "starship/starship" }
-is-it-maintained-open-issues = { repository = "starship/starship" }
-maintenance = { status = "actively-developed" }
-
 [features]
 default = ["battery"]
 battery = ["starship-battery"]
