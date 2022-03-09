@@ -111,11 +111,11 @@ fn get_credentials_duration(context: &Context, aws_profile: Option<&Profile>) ->
     Some(expiration_date.timestamp() - chrono::Local::now().timestamp())
 }
 
-fn alias_name(name: String, aliases: &HashMap<String, &str>) -> String {
-    match aliases.get(&name) {
-        None => name,
-        Some(alias) => (*alias).to_string(),
-    }
+fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<String> {
+    name.as_ref()
+        .and_then(|n| aliases.get(n))
+        .map(|&a| a.to_string())
+        .or(name)
 }
 
 fn get_credential_process(context: &Context, aws_profile: Option<&Profile>) -> Option<String> {
@@ -197,17 +197,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         })
     };
 
-    let mapped_region = if let Some(aws_region) = aws_region {
-        Some(alias_name(aws_region, &config.region_aliases))
-    } else {
-        None
-    };
+    let mapped_region = alias_name(aws_region, &config.region_aliases);
 
-    let mapped_profile = if let Some(aws_profile) = aws_profile {
-        Some(alias_name(aws_profile, &config.profile_aliases))
-    } else {
-        None
-    };
+    let mapped_profile = alias_name(aws_profile, &config.profile_aliases);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
