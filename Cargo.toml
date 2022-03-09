@@ -15,7 +15,7 @@ include = [
   "Cross.toml",
   "LICENSE",
   "/README.md",
-  "docs/.vuepress/public/presets/toml/"
+  "docs/.vuepress/public/presets/toml/",
 ]
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]
 license = "ISC"
