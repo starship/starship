@@ -21,7 +21,7 @@ impl<'a> Default for CConfig<'a> {
             format: "using [$symbol ($compiler_name ($compiler_version ))]($style)",
             version_format: "v${raw}",
             style: "149 bold",
-            symbol: "C",
+            symbol: "",
             disabled: false,
             detect_extensions: vec!["c", "h"],
             detect_files: vec![],
