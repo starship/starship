@@ -143,7 +143,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="使用 iTerm 和 Snazz 主题的 Starship"
+  alt="使用 iTerm 和 Snazzy 主题的 Starship"
   width="50%"
   align="right"
  />
@@ -267,7 +267,7 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Bash</summary>
 
-在 `~/.bashhrc` 的最后，添加以下内容：
+在 `~/.bashrc` 的最后，添加以下内容：
 
 ```sh
 eval "$(starship init bash)"
@@ -381,7 +381,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### 步骤 3. 配置 StarShip
+### 步骤 3. 配置 Starship
 
 打开一个新的 Shell 实例，你应该就能看到漂亮的 Shell 新提示符了。 如果你对默认配置感到满意，就可以开始享用了！
 
