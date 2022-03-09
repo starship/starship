@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.59"
+version = "1.4.0"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -24,7 +24,8 @@ repository = "https://github.com/starship/starship"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
-
+[package]
+rust-version = "1.56"
 [badges]
 is-it-maintained-issue-resolution = { repository = "starship/starship" }
 is-it-maintained-open-issues = { repository = "starship/starship" }
