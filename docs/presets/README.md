@@ -116,7 +116,7 @@ After:
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
 [c]
-format = '\[[$symbol($compiler_name ($compiler_version))]($style)\]'
+format = '\[[$symbol($name ($version))]($style)\]'
 
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
@@ -404,7 +404,7 @@ This preset hides the version of language runtimes. If you work in containers or
 
 ```toml
 [c]
-format = "via [$symbol ($compiler_name )]($style)"
+format = "via [$symbol ($name )]($style)"
 
 [cmake]
 format = "via [$symbol]($style)"

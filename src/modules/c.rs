@@ -46,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "compiler_name" => {
+                "name" => {
                     let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
 
                     let c_compiler = if c_compiler_info.contains("clang") {
@@ -58,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     };
                     Some(c_compiler).map(Cow::Borrowed).map(Ok)
                 }
-                "compiler_version" => {
+                "version" => {
                     let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;
 
                     // Clang says ...
@@ -144,7 +144,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .path(dir.path())
             .collect();
         let expected = Some(format!(
-            "using {}",
+            "via {}",
             Color::Fixed(149).bold().paint(" gcc v10.2.1 ")
         ));
         assert_eq!(expected, actual);
@@ -167,7 +167,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .path(dir.path())
             .collect();
         let expected = Some(format!(
-            "using {}",
+            "via {}",
             Color::Fixed(149).bold().paint(" gcc v3.3.5 ")
         ));
         assert_eq!(expected, actual);
@@ -184,7 +184,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             )
             .path(dir.path())
             .collect();
-        let expected = Some(format!("using {}", Color::Fixed(149).bold().paint(" ")));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint(" ")));
         assert_eq!(expected, actual);
 
         // What happens when 'cc --version' doesn't work, but 'gcc --version' does?
@@ -195,7 +195,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .path(dir.path())
             .collect();
         let expected = Some(format!(
-            "using {}",
+            "via {}",
             Color::Fixed(149).bold().paint(" gcc v10.2.1 ")
         ));
         assert_eq!(expected, actual);
@@ -207,7 +207,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .path(dir.path())
             .collect();
         let expected = Some(format!(
-            "using {}",
+            "via {}",
             Color::Fixed(149).bold().paint(" clang v11.1.0 ")
         ));
         assert_eq!(expected, actual);
@@ -219,7 +219,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .cmd("clang --version", None)
             .path(dir.path())
             .collect();
-        let expected = Some(format!("using {}", Color::Fixed(149).bold().paint(" ")));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint(" ")));
         assert_eq!(expected, actual);
 
         dir.close()
@@ -232,7 +232,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
 
         let actual = ModuleRenderer::new("c").path(dir.path()).collect();
         let expected = Some(format!(
-            "using {}",
+            "via {}",
             Color::Fixed(149).bold().paint(" clang v11.0.1 ")
         ));
         assert_eq!(expected, actual);
