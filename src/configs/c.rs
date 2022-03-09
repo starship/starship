@@ -13,6 +13,7 @@ pub struct CConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub detectors: Vec<Vec<&'a str>>,
 }
 
 impl<'a> Default for CConfig<'a> {
@@ -26,6 +27,14 @@ impl<'a> Default for CConfig<'a> {
             detect_extensions: vec!["c", "h"],
             detect_files: vec![],
             detect_folders: vec![],
+            detectors: vec![
+                // the compiler is usually cc, and --version works on gcc and clang
+                vec!["cc", "--version"],
+                // but on some platforms gcc is installed as *gcc*, not cc
+                vec!["gcc", "--version"],
+                // for completeness, although I've never seen a clang that wasn't cc
+                vec!["clang", "--version"],
+            ],
         }
     }
 }

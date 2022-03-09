@@ -26,14 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         let c_compiler_info = Lazy::new(|| {
-            context.exec_cmds_return_first(&[
-                // the compiler is usually cc, and --version works on gcc and clang
-                &["cc", "--version"],
-                // but on some platforms gcc is installed as *gcc*, not cc
-                &["gcc", "--version"],
-                // for completeness, although I've never seen a clang that wasn't cc
-                &["clang", "--version"],
-            ])
+            context.exec_cmds_return_first(config.detectors)
         });
 
         formatter

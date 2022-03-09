@@ -467,6 +467,7 @@ file.
 | `detect_extensions` | `["c", "h"]`                       | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                               | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                               | Which folders should trigger this module.                                 |
+| `detectors`         | see details below                  | How to detect what the compiler is                                        |
 | `style`             | `"bold 149"`                       | The style for the module.                                                 |
 | `disabled`          | `false`                            | Disables the `c` module.                                                  |
 
@@ -483,6 +484,24 @@ The `name` and `version` are discovered by running
 `cc --version`. It works if `cc` is `gcc` or `clang`.
 
 NB that `version` is not in the default format.
+
+### Detectors
+
+This is a list of lists of strings used to detect what the compiler is. The
+default is:
+
+```
+[ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ]
+```
+
+Each inner list is a command and its arguments. We will try each one in turn
+until one works, and use the information emitted by that one.
+
+We divine what type of compiler you have by looking for either the string
+"clang" in the output or the string "Free Software Foundation". If neither can
+be found no compiler name will be reported. We get the compiler version by
+extracting the first thing from the output that looks like a [semantic
+version](https://semver.org/).
 
 ### Example
 
