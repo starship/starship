@@ -480,9 +480,6 @@ file.
 | symbol   |         | Mirrors the value of option `symbol` |
 | style    |         | Mirrors the value of option `style`  |
 
-The `name` and `version` are discovered by running
-`cc --version`. It works if `cc` is `gcc` or `clang`.
-
 NB that `version` is not in the default format.
 
 ### Detectors
@@ -502,6 +499,12 @@ We divine what type of compiler you have by looking for either the string
 be found no compiler name will be reported. We get the compiler version by
 extracting the first thing from the output that looks like a [semantic
 version](https://semver.org/).
+
+The list of supported compilers is currently very Unixy, and biased towards
+open source. If you are on Windows, or are using a commercial Unix C compiler,
+please [raise an issue on github](https://github.com/starship/starship/)
+telling us how to recognise your compiler and what should appear in the prompt.
+Or even better, submit a patch!
 
 ### Example
 
