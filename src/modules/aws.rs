@@ -187,12 +187,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mapped_region = if let Some(aws_region) = aws_region {
-        Some(alias_name(aws_region, &config.region_aliases))
-    } else {
-        None
-    };
-
     let duration = {
         get_credentials_duration(context, aws_profile.as_ref()).map(|duration| {
             if duration > 0 {
@@ -201,6 +195,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 config.expiration_symbol.to_string()
             }
         })
+    };
+
+    let mapped_region = if let Some(aws_region) = aws_region {
+        Some(alias_name(aws_region, &config.region_aliases))
+    } else {
+        None
+    };
+
+    let mapped_profile = if let Some(aws_profile) = aws_profile {
+        Some(alias_name(aws_profile, &config.profile_aliases))
+    } else {
+        None
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -214,7 +220,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "profile" => aws_profile.as_ref().map(Ok),
+                "profile" => mapped_profile.as_ref().map(Ok),
                 "region" => mapped_region.as_ref().map(Ok),
                 "duration" => duration.as_ref().map(Ok),
                 _ => None,
