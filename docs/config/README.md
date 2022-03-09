@@ -459,16 +459,16 @@ file.
 
 ### Options
 
-| Option              | Default                                       | Description                                                               |
-| ------------------- | --------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol ($name ($version ))]($style)"` | The format string for the module.                                         |
-| `version_format`    | `"v${raw}"`                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"C"`                                         | The symbol used before displaying the compiler details                    |
-| `detect_extensions` | `["c", "h"]`                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                          | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                          | Which folders should trigger this module.                                 |
-| `style`             | `"bold 149"`                                  | The style for the module.                                                 |
-| `disabled`          | `false`                                       | Disables the `c` module.                                                  |
+| Option              | Default                            | Description                                                               |
+| ------------------- | ---------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol ($name )]($style)"` | The format string for the module.                                         |
+| `version_format`    | `"v${raw}"`                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `""`                              | The symbol used before displaying the compiler details                    |
+| `detect_extensions` | `["c", "h"]`                       | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                               | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                               | Which folders should trigger this module.                                 |
+| `style`             | `"bold 149"`                       | The style for the module.                                                 |
+| `disabled`          | `false`                            | Disables the `c` module.                                                  |
 
 ### Variables
 
@@ -481,6 +481,8 @@ file.
 
 The `name` and `version` are discovered by running
 `cc --version`. It works if `cc` is `gcc` or `clang`.
+
+NB that `version` is not in the default format.
 
 ### Example
 

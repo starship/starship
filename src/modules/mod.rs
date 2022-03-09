@@ -181,7 +181,7 @@ pub fn description(module: &str) -> &'static str {
         "aws" => "The current AWS region and profile",
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
-        "c" => "Your C compiler type and version",
+        "c" => "Your C compiler type",
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
         }
