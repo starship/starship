@@ -21,7 +21,7 @@ If emojis aren't your thing, this might catch your eye!
 symbol = "  "
 
 [c]
-symbol = "C "
+symbol = " "
 
 [conda]
 symbol = " "
