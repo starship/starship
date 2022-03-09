@@ -3,6 +3,8 @@ name = "starship"
 version = "1.4.0"
 authors = ["Starship Contributors"]
 build = "build.rs"
+# MSRV is specified to use std::thread::available_parallelism, which was stabilized in Rust version 1.59
+rust-version = "1.59"
 categories = ["command-line-utilities"]
 documentation = "https://starship.rs/guide/"
 edition = "2021"
