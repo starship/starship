@@ -67,7 +67,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Bash
 
-   在 `~/.bashhrc` 的最后，添加以下内容：
+   在 `~/.bashrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.bashrc
