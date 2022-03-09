@@ -42,8 +42,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    使用 Shell 命令：
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    自更新 Starship ，运行下面脚本 将会在不改动 Starship 配置文件的情况下升级版本
 
 
