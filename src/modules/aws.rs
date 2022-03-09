@@ -111,9 +111,9 @@ fn get_credentials_duration(context: &Context, aws_profile: Option<&Profile>) ->
     Some(expiration_date.timestamp() - chrono::Local::now().timestamp())
 }
 
-fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
-    match aliases.get(&region) {
-        None => region,
+fn alias_name(name: String, aliases: &HashMap<String, &str>) -> String {
+    match aliases.get(&name) {
+        None => name,
         Some(alias) => (*alias).to_string(),
     }
 }
@@ -188,7 +188,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let mapped_region = if let Some(aws_region) = aws_region {
-        Some(alias_region(aws_region, &config.region_aliases))
+        Some(alias_name(aws_region, &config.region_aliases))
     } else {
         None
     };
