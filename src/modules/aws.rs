@@ -376,6 +376,46 @@ mod tests {
     }
 
     #[test]
+    fn profile_set_with_alias() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "CORPORATION-CORP_astronauts_ACCESS_GROUP")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws.profile_aliases]
+                CORPORATION-CORP_astronauts_ACCESS_GROUP = "astro"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn region_and_profile_both_set_with_alias() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "CORPORATION-CORP_astronauts_ACCESS_GROUP")
+            .env("AWS_REGION", "ap-southeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws.profile_aliases]
+                CORPORATION-CORP_astronauts_ACCESS_GROUP = "astro"
+                [aws.region_aliases]
+                ap-southeast-2 = "au"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro (au) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn credentials_file_is_ignored_when_is_directory() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("credentials");
