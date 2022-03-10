@@ -116,7 +116,7 @@ unpack() {
       return 0
       ;;
     *.zip)
-      flags=$(test -z "${VERBOSE-}" && echo "-qq" || echo "")
+      flags=$(test -z "${VERBOSE-}" && echo "-qqo" || echo "-o")
       UNZIP="${flags}" ${sudo} unzip "${archive}" -d "${bin_dir}"
       return 0
       ;;
