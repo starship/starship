@@ -50,6 +50,7 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
 }
 
 #[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(untagged)]
 pub enum Either<A, B> {
     First(A),
@@ -74,6 +75,24 @@ where
             Either::First(v) => Ok(VecOr(v)),
             Either::Second(s) => Ok(VecOr(vec![s])),
         }
+    }
+}
+
+#[cfg(feature = "config-schema")]
+impl<T> schemars::JsonSchema for VecOr<T>
+where
+    T: schemars::JsonSchema + Sized,
+{
+    fn schema_name() -> String {
+        Either::<T, Vec<T>>::schema_name()
+    }
+
+    fn json_schema(gen: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
+        Either::<T, Vec<T>>::json_schema(gen)
+    }
+
+    fn is_referenceable() -> bool {
+        Either::<T, Vec<T>>::is_referenceable()
     }
 }
 

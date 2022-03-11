@@ -3,6 +3,7 @@ use crate::config::VecOr;
 use serde::{self, Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(default)]
 pub struct CustomConfig<'a> {
     pub format: &'a str,
