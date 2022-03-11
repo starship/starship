@@ -76,7 +76,7 @@ format = "took [$duration]($style) "
 
 ### Modules affectés
 
-#### Character
+#### Caractères
 
 | Propriété supprimée     | Remplacement     |
 | ----------------------- | ---------------- |
@@ -109,7 +109,7 @@ Pour que l'invite utilise l'ancienne configuration `use_symbol_for_status = true
 error_symbol = "[✖](bold red)"
 ```
 
-_Note :_ L’élément `character` ajoute automatiquement une espace après lui, donc contrairement aux autres chaines `format`, nous n’en ajoutons pas une exprès dans les exemples de dessus.
+_Note:_ L'élément `character` est automatiquement suivi d'un espace, donc à la différence des autres valeurs `format`, nous n'en ajoutons pas dans les exemples précédents.
 
 #### Temps d'exécution
 
