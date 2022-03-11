@@ -338,7 +338,7 @@ prompt = "starship_prompt"
 </details>
 
 <details>
-<summary>Powershell</summary>
+<summary>파워셀</summary>
 
 다음 내용을 PowerShell 설정파일 (찾으려면 `$PROFILE` 실행) 마지막 부분에 추가하세요:
 
