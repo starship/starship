@@ -25,7 +25,7 @@ impl<'a> Default for NodejsConfig<'a> {
             style: "bold green",
             disabled: false,
             not_capable_style: "bold red",
-            detect_extensions: vec!["js", "mjs", "cjs", "ts", "mts", "cts" ],
+            detect_extensions: vec!["js", "mjs", "cjs", "ts", "mts", "cts"],
             detect_files: vec!["package.json", ".node-version", ".nvmrc"],
             detect_folders: vec!["node_modules"],
         }
