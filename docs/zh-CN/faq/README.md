@@ -1,4 +1,4 @@
-# 常见问题
+# Frequently Asked Questions
 
 ## 主页示例图中的效果用的是什么配置？
 
