@@ -47,7 +47,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-PowerShell (Windows) で同様に `$PROFILE` にこの行を追加します。
+PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
@@ -276,7 +276,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 | オプション               | デフォルト                                                                | 説明                                                                |
 | ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | moduleのフォーマットです。                                                  |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | module のフォーマットです。                                                 |
 | `symbol`            | `"☁️ "`                                                              | 現在のAWSプロファイルを表示する前に表示される記号です。                                     |
 | `region_aliases`    |                                                                      | AWS名に加えて表示するリージョンのエイリアスです。                                        |
 | `style`             | `"bold yellow"`                                                      | モジュールのスタイルです。                                                     |
@@ -1042,7 +1042,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 format = "via [ $version](cyan bold) "
 ```
 
-## Environment Variable
+## 環境変数
 
 The `env_var` module displays the current value of a selected environment variables. 次の条件のいずれかが満たされると、モジュールが表示されます。
 
@@ -1285,7 +1285,7 @@ truncation_length = 4
 truncation_symbol = ""
 ```
 
-## Git Commit
+## Git コミット
 
 `git_commit` モジュールは、カレントディレクトリのリポジトリの現在のコミットハッシュとタグ (もしあれば) を表示します。
 
@@ -2013,7 +2013,7 @@ symbol = " "
 style = "bold dimmed green"
 ```
 
-## Mercurial Branch
+## Mercurial ブランチ
 
 ` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
 
