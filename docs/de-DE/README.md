@@ -62,12 +62,12 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    scoop install starship
    ```
 
-1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
+1. Führe den init Befehl zum Start der Shell aus:
 
 
    #### Bash
 
-   Trage folgendes am Ende der `~/.bashrc` ein:
+   Füge dies ans Ende von `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -89,7 +89,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Zsh
 
-   Trage folgendes am Ende der `~/.zshrc` ein:
+   Füge dies ans Ende von `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
