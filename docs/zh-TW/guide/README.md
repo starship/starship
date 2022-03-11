@@ -362,7 +362,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-將以下內容放到 `~/.xonshrc` 的結尾：
+將以下內容加到 `~/.xonshrc` 的結尾：
 
 ```python
 execx($(starship init xonsh))
