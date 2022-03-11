@@ -48,7 +48,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    Per aggiornare Starship stesso, riavviare lo script sopra. Sostituirà la versione corrente senza toccare la configurazione di Starship.
 
 
-   #### Installa con Package Manager
+   #### Installa via Package Manager
 
    Con [Homebrew](https://brew.sh/):
 
@@ -100,7 +100,7 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    #### Powershell
 
-   Aggiungi quanto segue alla fine di `Microsoft.PowerShell_profile.ps1`. Puoi controllare la posizione di questo file interrogando la variabile `$PROFILE` in PowerShell. In genere il percorso è `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oppure `~/.config/powershell/Microsoft.PowerShell_profile.ps1` in -Nix.
+   Aggiungi quanto segue alla fine di `Microsoft.PowerShell_profile.ps1`. Puoi controllare la posizione di questo file interrogando la variabile `$PROFILE` in PowerShell. Tipicamente il percorso è `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oppure `~/.config/powershell/Microsoft.PowerShell_profile.ps1` su -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
