@@ -34,7 +34,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
 ### Instalación rápida
 
-1. Instalar el binario de **Starship**:
+1. Instala el binario de **Starship**:
 
 
    #### Instalar la última versión
@@ -48,9 +48,9 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
    Para actualizar Starship, vuelve a ejecutar el guión anterior. Reemplazará la versión actual sin tocar la configuración de Starship.
 
 
-   #### Instalar con un gestor de paquetes
+   #### Instalar vía un gestor de paquetes
 
-   Con [Homebrew](https://brew.sh/):
+   Con [Homebew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -67,7 +67,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Bash
 
-   Añade el siguiente código al final de `~/.bashrc`:
+   Añade la siguiente línea al final de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -120,7 +120,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Elvish
 
-   ::: advertencia Solo se admite Elvish v0.17 o superior. :::
+   ::: warning Solo se admite Elvish v0.17 o superior. :::
 
    Añade el siguiente código al final de `~/.elvish/rc.elv`:
 
