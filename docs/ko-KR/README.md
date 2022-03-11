@@ -120,7 +120,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: 주의 elvish 버전 v0.17 이상에서만 지원됩니다. :::
+   ::: warning elvish v0.17 이상만 지원. :::
 
    `~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
 
