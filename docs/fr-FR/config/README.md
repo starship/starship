@@ -560,7 +560,7 @@ Le module `cobol` affiche la version de COBOL installée. Par défaut, le module
 
 Le module `cmd_duration` montre le temps qu'a pris la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
 
-::: attention, n'accrochez pas la trappe DEBUG en Bash
+::: warning N'interceptez pas le signal DEBUG avec Bash
 
 Si vous utilisez starship en `bash`, n'accrochez pas `DEBUG` après avoir exécuté `eval $(starship init $0)`, ou ce module **cassera**.
 
