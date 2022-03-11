@@ -158,7 +158,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Xonsh
 
-   將以下內容放到 `~/.xonshrc` 的結尾：
+   將以下內容加到 `~/.xonshrc` 的結尾：
 
    ```sh
    # ~/.xonshrc
