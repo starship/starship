@@ -144,7 +144,7 @@ usage() {
     "-b, --bin-dir" "Override the bin installation directory [default: ${BIN_DIR}]" \
     "-a, --arch" "Override the architecture identified by the installer [default: ${ARCH}]" \
     "-B, --base-url" "Override the base URL used for downloading releases [default: ${BASE_URL}]" \
-    "-h, --help" "Dispays this help message"
+    "-h, --help" "Displays this help message"
 }
 
 elevate_priv() {
