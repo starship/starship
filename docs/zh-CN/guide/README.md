@@ -267,7 +267,7 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Bash</summary>
 
-在 `~/.bashrc` 的最后，添加以下内容：
+在 `~/.bashhrc` 的最后，添加以下内容：
 
 ```sh
 eval "$(starship init bash)"
@@ -393,15 +393,15 @@ eval "$(starship init zsh)"
 
 ## 🤝 贡献
 
-我们期待着 **所有技能等级** 的参与者！ 如果你想让自己参与项目的路径轻松一些，可以先试试某个 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们一直在寻找贡献者！**不论你的技能如何**你都可以参与贡献 。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
-如果你熟练掌握某个非英语语言，我们非常感谢任何帮助翻译与同步文档到其他语言的贡献。 如果你想要帮忙，可以在 [Starship Crowdin](https://translate.starship.rs/) 上参与。
+如果你能流利地使用非英语语种，我们非常感谢你帮助翻译我们的文件并将其更新到其他语言。 如果您想要帮助，可以在 [Starship Crowdin](https://translate.starship.rs/) 上贡献翻译。
 
-如果你有兴趣贡献 Starship 这个项目，请先看看我们的 [贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 也欢迎加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 和大家打个招呼。 👋
+如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
 ## 💭该项目受以下项目启发
 
-请看看这些之前的项目，他们启发了 Starship 项目。 🙏
+请参考这些曾经为 Starship 提供启发的工程。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
