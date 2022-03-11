@@ -27,7 +27,7 @@ Die voreingestellte Konfigurations-Datei kann mit der `STARSHIP_CONFIG` Umgebung
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
-Für die Windows PowerShell diese Zeile zum `$PROFILE` hinzufügen:
+Äquivalent ist in der Windows PowerShell diese Zeile zum `$PROFILE` hinzuzufügen:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
@@ -341,7 +341,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Optionen
 
-| Variable   | Standartwert                             | Beschreibung                               |
+| Variable   | Standardwert                             | Beschreibung                               |
 | ---------- | ---------------------------------------- | ------------------------------------------ |
 | `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
 | `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
@@ -437,13 +437,13 @@ Das Zeichen zeigt an ob der letzte Befehl erfolgreich war, oder einen Fehler erz
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: Warnung
+::: warning
 
 `error_symbol` is not supported on nu shell.
 
 :::
 
-::: Warnung
+::: warning
 
 `vicmd_symbol` is only supported in cmd, fish and zsh.
 
@@ -1011,7 +1011,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Optionen
 
-| Option              | Standardwert                                       | Beschreibung                                                              |
+| Option              | Standartwert                                       | Beschreibung                                                              |
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`               | Das Format für das Modul.                                                 |
 | `version_format`    | `"v${raw}"`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1670,13 +1670,13 @@ The default functionality is:
 - 1 job -> `symbol` is shown.
 - 2 jobs or more -> `symbol` + `number` are shown.
 
-::: Warnung
+::: warning
 
 This module is not supported on tcsh and nu.
 
 :::
 
-::: Warnung
+::: warning
 
 The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
@@ -3102,7 +3102,7 @@ format = "[🏎💨 $version$workspace]($style) "
 format = "[🏎💨 $workspace]($style) "
 ```
 
-## Zeit
+## Uhrzeit
 
 Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
 
