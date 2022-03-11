@@ -1,4 +1,4 @@
-# FAQ
+# Frequently Asked Questions
 
 ## Какая конфигурация используется в демо-GIF?
 
