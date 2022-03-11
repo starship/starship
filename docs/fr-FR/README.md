@@ -32,7 +32,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
 - Une [Nerd Font](https://www.nerdfonts.com/) est installée et activée dans votre terminal.
 
-### Installation rapide
+### Installation
 
 1. Installer le binaire **starship** :
 
@@ -100,7 +100,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Powershell
 
-   Ajoutez ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Habituellement, son chemin est `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix.
+   Ajouter ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Habituellement, son chemin est `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
