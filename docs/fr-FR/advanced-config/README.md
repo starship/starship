@@ -69,7 +69,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Changer le titre de la fenêtre
+## Modifier le titre des fenêtres
 
 Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter votre répertoire de travail). Fish le fait même par défaut. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
