@@ -41,7 +41,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logging
 
-Por padrão, o starship registra avisos e erros em um arquivo chamado `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, onde a chave de sessão corresponde a uma instância do seu terminal. Isso, no entanto, pode ser alterado usando a variável de ambiente `STARSHIP_CACHE`:
+Por padrão o starship grava logs de erros e warnings dentro de um arquivo chamado `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, onde a session key corresponde a instancia do seu terminal. Isto, no entanto pode ser alterado usando a variável de ambiente `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -61,19 +61,19 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 ### Terminologia
 
-**Módulo**: Um componente no prompt que fornece informações com base em informações contextuais do seu sistema operacional. Por exemplo, o módulo "nodejs" mostra a versão do Node.js que está atualmente instalada em seu computador, se seu diretório atual for um projeto Node.js.
+**Módulo**: Um componente no prompt que fornece informações baseado no contexto do seu SO. Por exemplo, o "nodejs"módulo exibe a versão do Node.js que está instalada no computador, se o diretório atual for um projeto Node.js.
 
-**Variável**: Subcomponentes menores que contêm informações fornecidas pelo módulo. Por exemplo, a variável "version" no módulo "nodejs" contém a versão atual do Node.js.
+**Variável**: Um pequeno subcomponente que contem informações fornecidas pelo módulo. Por exemplo, a variável "version" no módulo "nodejs"contem a versão atual do Node.js.
 
-Por convenção, a maioria dos módulos tem um prefixo de cor de terminal padrão (ex., `via` em "nodejs") e um espaço vazio como sufixo.
+Por convenção, a maioria dos módulos tem um prefixo de cor (e.x. `via` no "nodejs") e um espaço vazio para sufixo.
 
 ### Formatação de Strings
 
-As strings de formato são o formato com o qual um módulo imprime todas as suas variáveis. A maioria dos módulos tem uma entrada chamada `format` que configura o formato de exibição do módulo. Você pode usar textos, variáveis e grupos de texto em uma string de formato.
+Formatar uma string é a forma de como o módulo ira imprimir suas variáveis. A maioria dos módulos tem uma entrada chamada `format` que configura o formato que o módulo é exibido. Você pode usar textos, variáveis e grupo de textos em uma formatação de string.
 
 #### Variável
 
-Uma variável contém um símbolo `$` seguido pelo nome da variável. O nome de uma variável pode conter apenas letras, números e `_`.
+Uma variável contem um simbolo `$` seguido pelo nome da variável. O nome de uma variável pode apenas conter letras, números e `_`.
 
 Por exemplo:
 
@@ -83,11 +83,11 @@ Por exemplo:
 
 #### Grupo de Texto
 
-Um grupo de texto é composto de duas partes diferentes.
+Um grupo de texto é composto por duas partes diferentes.
 
-A primeira parte, que está entre um `[]`, é uma [string de formato](#format-strings). Você pode adicionar textos, variáveis ou até mesmo grupos de texto aninhados nele.
+A primeira parte, é contida em um `[]`, é uma [formatação de string](#format-strings). Você pode adicionar textos, variáveis ou até mesmos grupo de textos aninhados.
 
-Na segunda parte, que está dentro de um `()`, está uma [string de estilo](#style-strings). Isso pode ser usado para estilizar a primeira parte.
+Na segunda parte, é composta por um `()`, é uma [estilização de string](#style-strings). Isto pode ser usado para estilizar a primeira parte.
 
 Por exemplo:
 
@@ -97,7 +97,7 @@ Por exemplo:
 
 #### Estilo dos textos
 
-A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. Para obter detalhes sobre a sintaxe completa, consulte o [guia de configuração avançada](/advanced-config/).
+A maioria dos módulos do starship permite que você configure o estilo de exibição dos textos. Isso é feito através de um parâmetro (geralmente chamado `style`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo e o que elas fazem. Para detalhes sobre a sintaxe completa, consulte o [guia de configurações avançadas](/advanced-config/).
 
 - `"fg:green bg:blue"` deixa o texto verde com o fundo azul
 - `"bg:blue fg:bright-green"` deixa o texto verde brilhante com o fundo azul
@@ -106,11 +106,11 @@ A maioria dos módulos no starship permite que você configure seus estilos de e
 - `"bold italic fg:purple"` deixa o texto em negrito e itálico com a cor roxa
 - `""` desabilita explicitamente todos os estilos
 
-Observe que a aparência do estilo será controlada pelo emulador de terminal. Por exemplo, alguns emuladores de terminal irão clarear as cores em vez de colocar o texto em negrito, e alguns temas de cores usam os mesmos valores para as cores normais e brilhantes. Além disso, para obter texto em itálico, seu terminal deve suportar itálico.
+Note que a aparência do estilo será controlado pelo seu terminal. Por exemplo, alguns terminais deixarão as cores mais brilhantes ao invés de deixar o texto em negrito, ou alguns temas podem usar as mesmas cores para cores brilhantes e normais. Além disso, para textos em itálico, o terminal precisa ter suporte.
 
 #### Formatação de String Condicional
 
-Uma string de formato condicional envolta de `(` e `)` não será renderizada se todas as variáveis internas estiverem vazias.
+Uma formatação condicional de string é envolto por `(` e `)` não vai ser exibido caso a variável dentro esteja vazia.
 
 Por exemplo:
 
@@ -120,17 +120,17 @@ Por exemplo:
 
 #### Caracteres Especiais
 
-Os seguintes símbolos têm uso especial em uma string de formato e devem ser evitados: `$ \ [ ] ( )`.
+O símbolos a seguir tem um uso na formatação de string e deve ser escapados `$ \ [ ] ( )`.
 
-Observe que o TOML tem [strings básicas e strings literais](https://toml.io/en/v1.0.0#string). É recomendado usar uma string literal (entre aspas simples) em seu config. Se você quiser usar uma string básica (entre aspas duplas), você deve escapar da própria barra invertida (ou seja, use `\\`).
+Note que TOML tem [string básicas e strings literais](https://toml.io/en/v1.0.0#string). É recomendado usar um string literal(cercado por aspas simples) em seu config. Se você quiser usar uma string básica(cercado por aspas duplas), você precisa adicionar o backslash (ex: use `\\`).
 
-Por exemplo, quando você deseja imprimir um símbolo `$` em uma nova linha, as seguintes configurações para `format` são equivalentes:
+Por exemplo, quando você quer imprimir um simbolo `$` em uma nova linha, as configurações de `format` a seguir são equivalentes:
 
 ```toml
 # com string básica
 format = "\n\\$"
 
-# com string básica multilinha
+# com múltiplas linhas de string básica
 format = """
 
 \\$"""
@@ -143,7 +143,7 @@ format = '''
 
 ## Prompt de Comando
 
-Esta é a lista de opções de configuração em todo o prompt.
+Está é a lista de opções de configuração de prompt.
 
 ### Opções
 
@@ -160,22 +160,22 @@ Esta é a lista de opções de configuração em todo o prompt.
 ```toml
 # ~/.config/starship.toml
 
-# Use custom format
+# Usa um format customizado
 format = """
 [┌───────────────────>](bold green)
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Espera 10 milliseconds para que o starship verifique os arquivos no diretório atual.
+#Espera 10 milissegundos para que o starship check os arquivos do diretório atual.
 scan_timeout = 10
 
-# Remove a quebra de linha no início do prompt
+# Desabilita uma nova linha no inicio do prompt
 add_newline = false
 ```
 
 ### Format de Prompt Padrão
 
-O padrão `format` é usado para definir o formato do prompt, se estiver vazio ou nenhum `format` for fornecido. O padrão é como mostrado:
+O `formato` padrão é usado para definir o formato do prompt, se um valor vazio ou não `formatado` for informado. Os valores padrão são os seguintes:
 
 ```toml
 format = "$all"
@@ -252,7 +252,7 @@ $shell\
 $character"""
 ```
 
-Se você quiser apenas estender o formato padrão, você pode usar `$all`; os módulos que você adicionar explicitamente ao formato não serão duplicados. Ex.
+Se você quer estender o formato padrão, você pode usar `$all`; Os módulos adicionado explicitamente não serão duplicados. Ex.
 
 ```toml
 # Move o diretório para a segunda linha
@@ -289,7 +289,7 @@ Quando usar [AWSume](https://awsu.me) o perfil é lido da variável `AWSUME_PROF
 | region    | `ap-northeast-1` | A região atual do AWS                |
 | profile   | `astronauts`     | O perfil atual do AWS                |
 | duration  | `2h27m20s`       | A duração temporária das credenciais |
-| symbol    |                  | Espelha o valor da opção `símbolo`   |
+| symbol    |                  | Espelha o valor da opção `symbol`    |
 | style\* |                  | Espelha o valor da opção `style`     |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -302,7 +302,7 @@ Quando usar [AWSume](https://awsu.me) o perfil é lido da variável `AWSUME_PROF
 # ~/.config/starship.toml
 
 [aws]
-format = 'em [$symbol($profile )(\($region\) )]($style)'
+format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -316,7 +316,7 @@ us-east-1 = "va"
 # ~/.config/starship.toml
 
 [aws]
-format = "em [$symbol$region]($style) "
+format = "on [$symbol$region]($style) "
 style = "bold blue"
 symbol = "🅰 "
 [aws.region_aliases]
@@ -330,7 +330,7 @@ us-east-1 = "va"
 # ~/.config/starship.toml
 
 [aws]
-format = "em [$symbol$profile]($style) "
+format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
 ```
@@ -355,7 +355,7 @@ O módulo `azure` exibe a assinatura Azure atual. Isto é baseado na exibição 
 
 [azure]
 disabled = false
-format = "em [$symbol($subscription)]($style) "
+format = "on [$symbol($subscription)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
 ```
@@ -390,7 +390,7 @@ discharging_symbol = "💀 "
 
 ### Indicador de bateria
 
-A configuração `display` é usada para definir quando o indicador de bateria deve ser exibido (threshold), qual deve ser o simbolo(symbol) e como você gostaria de exibir (style). Se nenhum `display` for fornecido. O padrão é como mostrado:
+A configuração `display` é usada para definir quando o indicador de bateria deve ser exibido (threshold), qual deve ser o simbolo(symbol) e como você gostaria de exibir (style). Se nenhum `display` for fornecido. Os valores padrão são os seguintes:
 
 ```toml
 [[battery.display]]
@@ -437,13 +437,13 @@ O caractere vai te dizer se o ultimo comando foi bem sucedido ou não. Você pod
 
 Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olhada [neste exemplo](#with-custom-error-shape).
 
-::: atenção
+::: warning
 
 `error_symbol` não é suportado pelo nu shell.
 
 :::
 
-::: atenção
+::: warning
 
 `vicmd_symbol` is only supported in cmd, fish and zsh.
 
@@ -518,11 +518,11 @@ O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por 
 
 ### Variáveis
 
-| Variável  | Exemplo   | Descrição                          |
-| --------- | --------- | ---------------------------------- |
-| version   | `v3.17.3` | A versão do cmake                  |
-| symbol    |           | Espelha o valor da opção `símbolo` |
-| style\* |           | Espelha o valor da opção `style`   |
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v3.17.3` | A versão do cmake                 |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -548,11 +548,11 @@ O módulo `cobol` exibe a versão instalada atual do COBOL. Por padrão, o módu
 
 ### Variáveis
 
-| Variável  | Exemplo    | Descrição                          |
-| --------- | ---------- | ---------------------------------- |
-| version   | `v3.1.2.0` | A versão do `cobol`                |
-| symbol    |            | Espelha o valor da opção `símbolo` |
-| style\* |            | Espelha o valor da opção `style`   |
+| Variável  | Exemplo    | Descrição                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v3.1.2.0` | A versão do `cobol`               |
+| symbol    |            | Espelha o valor da opção `symbol` |
+| style\* |            | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -597,7 +597,7 @@ Usuários do bash que precisam de funções pre-executadas podem usar [rcaloras'
 
 [cmd_duration]
 min_time = 500
-format = "levou [$duration](bold yellow)"
+format = "underwent [$duration](bold yellow)"
 ```
 
 ## Conda
@@ -623,11 +623,11 @@ Isso não suprime o modificador de prompt do conda, você pode executar `conda c
 
 ### Variáveis
 
-| Variável    | Exemplo      | Descrição                          |
-| ----------- | ------------ | ---------------------------------- |
-| environment | `astronauts` | O environment atual do conda       |
-| symbol      |              | Espelha o valor da opção `símbolo` |
-| style\*   |              | Espelha o valor da opção `style`   |
+| Variável    | Exemplo      | Descrição                         |
+| ----------- | ------------ | --------------------------------- |
+| environment | `astronauts` | O environment atual do conda      |
+| symbol      |              | Espelha o valor da opção `symbol` |
+| style\*   |              | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -655,11 +655,11 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Variáveis
 
-| Variável  | Exemplo             | Descrição                          |
-| --------- | ------------------- | ---------------------------------- |
-| name      | `fedora-toolbox:35` | The name of the container          |
-| symbol    |                     | Espelha o valor da opção `símbolo` |
-| style\* |                     | Espelha o valor da opção `style`   |
+| Variável  | Exemplo             | Descrição                         |
+| --------- | ------------------- | --------------------------------- |
+| name      | `fedora-toolbox:35` | The name of the container         |
+| symbol    |                     | Espelha o valor da opção `symbol` |
+| style\* |                     | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -683,7 +683,7 @@ O módulo `crystal` exibe a versão instalada atual do [Crystal](https://crystal
 
 | Opções              | Padrão                               | Descrição                                                                            |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
-| `symbol`            | `"🔮 "`                               | O símbolo usado antes de exibir a versão do crystal.                                 |
+| `symbol`            | `"🔮 "`                               | O simbolo usado antes de exibir a versão do crystal.                                 |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `style`             | `"bold red"`                         | O estilo do módulo.                                                                  |
@@ -694,11 +694,11 @@ O módulo `crystal` exibe a versão instalada atual do [Crystal](https://crystal
 
 ### Variáveis
 
-| Variável  | Exemplo   | Descrição                          |
-| --------- | --------- | ---------------------------------- |
-| version   | `v0.32.1` | A versão do `crystal`              |
-| symbol    |           | Espelha o valor da opção `símbolo` |
-| style\* |           | Espelha o valor da opção `style`   |
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v0.32.1` | A versão do `crystal`             |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -734,11 +734,11 @@ O módulo `dart` exibe a versão atual instalada do [Dart](https://dart.dev/). P
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v2.8.4` | The version of `dart`              |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.8.4` | The version of `dart`             |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -772,11 +772,11 @@ O módulo `deno` exibe a versão instalada atual do [Deno](https://deno.land/). 
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v1.8.3` | A versão do `deno`                 |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.8.3` | A versão do `deno`                |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 ### Exemplo
 
@@ -837,7 +837,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 
 | Variável  | Exemplo               | Descrição                        |
 | --------- | --------------------- | -------------------------------- |
-| path      | `"D:/Projetos"`       | O caminho do diretório atual     |
+| path      | `"D:/Projects"`       | O caminho do diretório atual     |
 | style\* | `"black bold dimmed"` | Espelha o valor da opção `style` |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -886,11 +886,11 @@ O módulo `docker_context` exibe o [Docker context](https://docs.docker.com/engi
 
 ### Variáveis
 
-| Variável  | Exemplo        | Descrição                          |
-| --------- | -------------- | ---------------------------------- |
-| context   | `test_context` | O contexto atual do docker         |
-| symbol    |                | Espelha o valor da opção `símbolo` |
-| style\* |                | Espelha o valor da opção `style`   |
+| Variável  | Exemplo        | Descrição                         |
+| --------- | -------------- | --------------------------------- |
+| context   | `test_context` | O contexto atual do docker        |
+| symbol    |                | Espelha o valor da opção `symbol` |
+| style\* |                | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -940,12 +940,12 @@ O módulo também vai exibir o Target Framework Moniker (<https://docs.microsoft
 
 ### Variáveis
 
-| Variável  | Exemplo          | Descrição                          |
-| --------- | ---------------- | ---------------------------------- |
-| version   | `v3.1.201`       | A versão do sdk `dotnet`           |
-| tfm       | `netstandard2.0` | O framework alvo do projeto atual  |
-| symbol    |                  | Espelha o valor da opção `símbolo` |
-| style\* |                  | Espelha o valor da opção `style`   |
+| Variável  | Exemplo          | Descrição                         |
+| --------- | ---------------- | --------------------------------- |
+| version   | `v3.1.201`       | A versão do sdk `dotnet`          |
+| tfm       | `netstandard2.0` | O framework alvo do projeto atual |
+| symbol    |                  | Espelha o valor da opção `symbol` |
+| style\* |                  | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -981,12 +981,12 @@ O módulo `elixir` exibe a versão instalada do [Elixir](https://elixir-lang.org
 
 ### Variáveis
 
-| Variável    | Exemplo | Descrição                          |
-| ----------- | ------- | ---------------------------------- |
-| version     | `v1.10` | A versão do `elixir`               |
-| otp_version |         | A versão otp do `elixir`           |
-| symbol      |         | Espelha o valor da opção `símbolo` |
-| style\*   |         | Espelha o valor da opção `style`   |
+| Variável    | Exemplo | Descrição                         |
+| ----------- | ------- | --------------------------------- |
+| version     | `v1.10` | A versão do `elixir`              |
+| otp_version |         | A versão otp do `elixir`          |
+| symbol      |         | Espelha o valor da opção `symbol` |
+| style\*   |         | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1024,19 +1024,17 @@ O módulo `elm` exibe a versão instalada do [Elm](https://elm-lang.org/). Por p
 
 ### Variáveis
 
-| Variável  | Exemplo   | Descrição                          |
-| --------- | --------- | ---------------------------------- |
-| version   | `v0.19.1` | A versão do `elm`                  |
-| symbol    |           | Espelha o valor da opção `símbolo` |
-| style\* |           | Espelha o valor da opção `style`   |
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v0.19.1` | A versão do `elm`                 |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
 ### Exemplo
 
 ```toml
-# ~/.config/starship.toml
-
 [elm]
 format = "via [ $version](cyan bold) "
 ```
@@ -1076,7 +1074,7 @@ default = "unknown user"
 | Variável  | Exemplo                                     | Descrição                               |
 | --------- | ------------------------------------------- | --------------------------------------- |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | O valor de ambiente da opção `variable` |
-| symbol    |                                             | Espelha o valor da opção `símbolo`      |
+| symbol    |                                             | Espelha o valor da opção `symbol`       |
 | style\* | `black bold dimmed`                         | Espelha o valor da opção `style`        |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -1088,7 +1086,7 @@ default = "unknown user"
 
 [env_var]
 variable = "SHELL"
-default = "shell desconhecido"
+default = "unknown shell"
 ```
 
 Exibindo múltiplas variáveis de ambiente:
@@ -1098,9 +1096,9 @@ Exibindo múltiplas variáveis de ambiente:
 
 [env_var.SHELL]
 variable = "SHELL"
-default = "shell desconhecido"
+default = "unknown shell"
 [env_var.USER]
-default = "user desconhecido"
+default = "unknown user"
 ```
 
 ## Erlang
@@ -1125,11 +1123,11 @@ O módulo de `erlang` exibe a versão atual instalada do [Erlang/OTP](https://er
 
 ### Variáveis
 
-| Variável  | Exemplo   | Descrição                          |
-| --------- | --------- | ---------------------------------- |
-| version   | `v22.1.3` | A versão do `erlang`               |
-| symbol    |           | Espelha o valor da opção `símbolo` |
-| style\* |           | Espelha o valor da opção `style`   |
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v22.1.3` | A versão do `erlang`              |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1195,7 +1193,7 @@ O módulo `gcloud` exibe a configuração atual para o [`gcloud`](https://cloud.
 | domain    | `example.com` | O perfil de domínio atual do GCP                                   |
 | project   |               | O projeto atual do GCP                                             |
 | active    | `default`     | O nome da configuração escrita em `~/.config/gcloud/active_config` |
-| symbol    |               | Espelha o valor da opção `símbolo`                                 |
+| symbol    |               | Espelha o valor da opção `symbol`                                  |
 | style\* |               | Espelha o valor da opção `style`                                   |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -1208,7 +1206,7 @@ O módulo `gcloud` exibe a configuração atual para o [`gcloud`](https://cloud.
 # ~/.config/starship.toml
 
 [gcloud]
-format = 'em [$symbol$account(@$domain)(\($project\))]($style) '
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
 #### Exibe apenas o nome da configuração ativa
@@ -1268,7 +1266,7 @@ O módulo `git_branch` exibe o branch ativo do repositório no diretório atual.
 | branch        | `master` | O nome do braço atual, retornará para `HEAD` se não tiver braço atual (e.x: git detached `HEAD`). |
 | remote_name   | `origin` | O nome do remoto.                                                                                 |
 | remote_branch | `master` | O nome do braço rastreado no `remote_name`.                                                       |
-| symbol        |          | Espelha o valor da opção `símbolo`                                                                |
+| symbol        |          | Espelha o valor da opção `symbol`                                                                 |
 | style\*     |          | Espelha o valor da opção `style`                                                                  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -1530,11 +1528,11 @@ O módulo `golang` exibe a versão instalada atual do [Go](https://golang.org/).
 
 ### Variáveis
 
-| Variável  | Exemplo   | Descrição                          |
-| --------- | --------- | ---------------------------------- |
-| version   | `v1.12.1` | A versão do `go`                   |
-| symbol    |           | Espelha o valor da opção `símbolo` |
-| style\* |           | Espelha o valor da opção `style`   |
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v1.12.1` | A versão do `go`                  |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1569,11 +1567,11 @@ O módulo `helm` exibe a versão atual instalada do [Helm](https://helm.sh/). Po
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v3.1.1` | A versão do `helm`                 |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v3.1.1` | A versão do `helm`                |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1643,11 +1641,11 @@ O módulo `java` exibe o versão atual instalada do [Java](https://www.oracle.co
 
 ### Variáveis
 
-| Variável  | Exemplo | Descrição                          |
-| --------- | ------- | ---------------------------------- |
-| version   | `v14`   | A versão do `java`                 |
-| symbol    |         | Espelha o valor da opção `símbolo` |
-| style\* |         | Espelha o valor da opção `style`   |
+| Variável  | Exemplo | Descrição                         |
+| --------- | ------- | --------------------------------- |
+| version   | `v14`   | A versão do `java`                |
+| symbol    |         | Espelha o valor da opção `symbol` |
+| style\* |         | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1670,13 +1668,13 @@ A funcionalidade padrão é:
 - 1 job -> `symbol` é exibido.
 - 2 jobs or more -> `symbol` + `number` é exibido.
 
-::: atenção
+::: warning
 
 Este módulo não é suportado em tcsh e nu.
 
 :::
 
-::: atenção
+::: warning
 
 A opção `threshold` está obsoleta, mas se você quiser usa-la, o módulo vai exibir o numero de jobs rodando se for maior que 1 ou maior que o valor configurado na `threshold`, se ele existir. Se o valor `threshold` for definido como 0, então o módulo vai exibir quando tiver 0 jobs rodando.
 
@@ -1698,11 +1696,11 @@ A opção `threshold` está obsoleta, mas se você quiser usa-la, o módulo vai 
 
 ### Variáveis
 
-| Variável  | Exemplo | Descrição                          |
-| --------- | ------- | ---------------------------------- |
-| number    | `1`     | O número de jobs                   |
-| symbol    |         | Espelha o valor da opção `símbolo` |
-| style\* |         | Espelha o valor da opção `style`   |
+| Variável  | Exemplo | Descrição                         |
+| --------- | ------- | --------------------------------- |
+| number    | `1`     | O número de jobs                  |
+| symbol    |         | Espelha o valor da opção `symbol` |
+| style\* |         | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1740,11 +1738,11 @@ O módulo `julia` exibe a versão atual instalada do [Julia](https://julialang.o
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v1.4.0` | A versão do `julia`                |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.4.0` | A versão do `julia`               |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1779,11 +1777,11 @@ O módulo `kotlin` exibie a versão atual instalada do [Kotlin](https://kotlinla
 
 ### Variáveis
 
-| Variável  | Exemplo   | Descrição                          |
-| --------- | --------- | ---------------------------------- |
-| version   | `v1.4.21` | A versão do `kotlin`               |
-| symbol    |           | Espelha o valor da opção `símbolo` |
-| style\* |           | Espelha o valor da opção `style`   |
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v1.4.21` | A versão do `kotlin`              |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1832,7 +1830,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | namespace | `starship-namespace` | Se definido o namespace atual do kubernetes |
 | user      | `starship-user`      | If set, the current kubernetes user         |
 | cluster   | `starship-cluster`   | If set, the current kubernetes cluster      |
-| symbol    |                      | Espelha o valor da opção `símbolo`          |
+| symbol    |                      | Espelha o valor da opção `symbol`           |
 | style\* |                      | Espelha o valor da opção `style`            |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -1861,14 +1859,14 @@ Nomes longos de clusters gerados automaticamente podem ser encurtados usando exp
 
 ```toml
 [kubernetes.context_aliases]
-# Contexto do OpenShift carrega o namespace e usuário no contexto kube: `namespace/name/user`:
+# Os contextos OpenShift carregam o namespace e o usuário no contexto kube: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
-# Ou melhor, para renomear cada cluster OpenShift de uma vez:
+# Ou melhor, renomear todos os clusters do OpenShift de uma só vez:
 ".*/(?P<var_cluster>[\\w-]+)/.*" = "$var_cluster"
 
-# Contexto do GKE, AWS e outras provedores de nuvem normalmente carregam mais informações, como a region/zone.
-# A entrada a seguir corresponde o formato GKE (`gke_projectname_zone_cluster-name`)
-# e renomeia cada kube context em um formato mais legível (`gke-cluster-name`):
+# Contextos do GKE, AWS e outros provedores de nuvem geralmente carregam informações adicionais, como a região/zona.
+# A entrada a seguir corresponde ao formato do GKE (`gke_projectname_zone_cluster-name`)
+# e renomeia cada contexto kube correspondente em um formato mais legível (`gke-cluster-name`):
 "gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
@@ -1948,11 +1946,11 @@ O módulo `lua` exibe a versão atual instalada do [Lua](http://www.lua.org/). P
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v5.4.0` | A versão do `lua`                  |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v5.4.0` | A versão do `lua`                 |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1965,9 +1963,9 @@ O módulo `lua` exibe a versão atual instalada do [Lua](http://www.lua.org/). P
 format = "via [🌕 $version](bold blue) "
 ```
 
-## Uso de Memória
+## Uso de memória
 
-O módulo `memory_usage` exibe o uso atual de memoria e swap.
+O módulo `memory_usage` mostra a memória atual do sistema e o uso de troca.
 
 Por padrão o uso do swap é exibido se o total de swap do sistema é diferente de zero.
 
@@ -1995,7 +1993,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | ram_pct          | `48%`         | A porcentagem de uso atual da memoria do sistema. |
 | swap\*\*     | `1GiB/4GiB`   | O tamanho atual do swap do sistema.               |
 | swap_pct\*\* | `77%`         | A porcentagem atual de uso do swap.               |
-| symbol           | `🐏`           | Espelha o valor da opção `símbolo`                |
+| symbol           | `🐏`           | Espelha o valor da opção `symbol`                 |
 | style\*        |               | Espelha o valor da opção `style`                  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo *\*: As informações do arquivo SWAP são exibidas apenas se detectadas no sistema atual
@@ -2029,11 +2027,11 @@ O módulo `hg_branch` exibe o braço atual do repositório no diretório atual.
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| branch    | `master` | O braço mercurial ativo            |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| branch    | `master` | O braço mercurial ativo           |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2072,11 +2070,11 @@ O módulo `nim` exibe a versão atual instalada do [Nim](https://nim-lang.org/).
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v1.2.0` | A versão do `nimc`                 |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.2.0` | A versão do `nimc`                |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2107,12 +2105,12 @@ O módulo `nix_shell` exibe o ambiente [nix-shell](https://nixos.org/guides/nix-
 
 ### Variáveis
 
-| Variável  | Exemplo | Descrição                          |
-| --------- | ------- | ---------------------------------- |
-| state     | `pure`  | O estado do nix-shell              |
-| name      | `lorri` | O nome do nix-shell                |
-| symbol    |         | Espelha o valor da opção `símbolo` |
-| style\* |         | Espelha o valor da opção `style`   |
+| Variável  | Exemplo | Descrição                         |
+| --------- | ------- | --------------------------------- |
+| state     | `pure`  | O estado do nix-shell             |
+| name      | `lorri` | O nome do nix-shell               |
+| symbol    |         | Espelha o valor da opção `symbol` |
+| style\* |         | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2155,11 +2153,11 @@ O módulo `nodejs` exibe a versão atual instalada do [Node.js](https://nodejs.o
 
 ### Variáveis
 
-| Variável  | Exemplo    | Descrição                          |
-| --------- | ---------- | ---------------------------------- |
-| version   | `v13.12.0` | A versão do `node`                 |
-| symbol    |            | Espelha o valor da opção `símbolo` |
-| style\* |            | Espelha o valor da opção `style`   |
+| Variável  | Exemplo    | Descrição                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v13.12.0` | A versão do `node`                |
+| symbol    |            | Espelha o valor da opção `symbol` |
+| style\* |            | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2189,7 +2187,7 @@ O módulo `ocaml` exibe a versão atual instalada do [OCaml](https://ocaml.org/)
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | A string de formato do módulo.                                                       |
 | `version_format`          | `"v${raw}"`                                                                | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`                  | `"🐫 "`                                                                     | O simbolo usado antes de exibir a versão do OCaml.                                   |
+| `symbol`                  | `"🐫 "`                                                                     | O símbolo usado antes de exibir a versão do OCaml.                                   |
 | `global_switch_indicator` | `""`                                                                       | A string usada para representar a mudança global OPAM.                               |
 | `local_switch_indicator`  | `"*"`                                                                      | A string usada para representar as mudanças locais do OPAM.                          |
 | `detect_extensions`       | `["opam", "ml", "mli", "re", "rei"]`                                       | Quais extensões devem ativar este módulo.                                            |
@@ -2205,7 +2203,7 @@ O módulo `ocaml` exibe a versão atual instalada do [OCaml](https://ocaml.org/)
 | version          | `v4.10.0`    | A versão do `ocaml`                                              |
 | switch_name      | `my-project` | O switch OPAM ativo                                              |
 | switch_indicator |              | Espelha o valor do `indicator` para o switch ativo atual do OPAM |
-| symbol           |              | Espelha o valor da opção `símbolo`                               |
+| symbol           |              | Espelha o valor da opção `symbol`                                |
 | style\*        |              | Espelha o valor da opção `style`                                 |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -2234,12 +2232,12 @@ O módulo `openstack` exibe o OpenStack cloud e projeto atual. O módulo apenas 
 
 ### Variáveis
 
-| Variável  | Exemplo | Descrição                          |
-| --------- | ------- | ---------------------------------- |
-| cloud     | `corp`  | O OpenStack cloud atual            |
-| project   | `dev`   | O projeto OpenStack atual          |
-| symbol    |         | Espelha o valor da opção `símbolo` |
-| style\* |         | Espelha o valor da opção `style`   |
+| Variável  | Exemplo | Descrição                         |
+| --------- | ------- | --------------------------------- |
+| cloud     | `corp`  | O OpenStack cloud atual           |
+| project   | `dev`   | O projeto OpenStack atual         |
+| symbol    |         | Espelha o valor da opção `symbol` |
+| style\* |         | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2254,9 +2252,9 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
-## Versionamento de Pacotes
+## Package Version
 
-O módulo `package` é exibido quando o diretório atual é um repositorio para um pacote e exibe sua versão atual. O módulo atualmente suporta pacotes `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` e `dart`.
+O módulo `package` é mostrado quando o diretório atual é o repositório de um pacote e mostra sua versão atual. O módulo atualmente suporta pacotes `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – O versionamento de pacotes `npm` é extraído do `package.json` presente no diretório atual
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – O versionamento de pacotes `cargo`é extraído do arquivo `Cargo.toml` presente no diretório atual
@@ -2290,11 +2288,11 @@ O módulo `package` é exibido quando o diretório atual é um repositorio para 
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v1.0.0` | A versão do seu pacote             |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v1.0.0` | A versão do seu pacote            |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2332,11 +2330,11 @@ O módulo `perl` exibe a versão atual instalada do [Perl](https://www.perl.org/
 
 ### Variáveis
 
-| Variável  | Exemplo   | Descrição                          |
-| --------- | --------- | ---------------------------------- |
-| version   | `v5.26.1` | A versão do `perl`                 |
-| symbol    |           | Espelha o valor da opção `símbolo` |
-| style\* |           | Espelha o valor da opção `style`   |
+| Variável  | Exemplo   | Descrição                         |
+| --------- | --------- | --------------------------------- |
+| version   | `v5.26.1` | A versão do `perl`                |
+| symbol    |           | Espelha o valor da opção `symbol` |
+| style\* |           | Espelha o valor da opção `style`  |
 
 ### Exemplo
 
@@ -2349,7 +2347,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-O módulo `php` exibe a versão atual instalada do [PHP](https://www.php.net/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `php` mostra a versão atualmente instalada do [PHP](https://www.php.net/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `composer.json`
 - O diretório atual tenha um arquivo `.php-version`
@@ -2370,11 +2368,11 @@ O módulo `php` exibe a versão atual instalada do [PHP](https://www.php.net/). 
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v7.3.8` | A versão do `php`                  |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v7.3.8` | A versão do `php`                 |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2414,13 +2412,13 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Variáveis
 
-| Variável  | Exemplo    | Descrição                          |
-| --------- | ---------- | ---------------------------------- |
-| version   | `v0.12.24` | A versão do `pulumi`               |
-| stack     | `dev`      | A stack Pulumi atual               |
-| username  | `alice`    | The current Pulumi username        |
-| symbol    |            | Espelha o valor da opção `símbolo` |
-| style\* |            | Espelha o valor da opção `style`   |
+| Variável  | Exemplo    | Descrição                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v0.12.24` | A versão do `pulumi`              |
+| stack     | `dev`      | A stack Pulumi atual              |
+| username  | `alice`    | The current Pulumi username       |
+| symbol    |            | Espelha o valor da opção `symbol` |
+| style\* |            | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2457,7 +2455,7 @@ O módulo `purescript` exibe a versão atual instalada do [PureScript](https://w
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"<=> "`                       | O símbolo usado antes de exibir a versão do PureScript.                              |
+| `symbol`            | `"<=> "`                       | O simbolo usado antes de exibir a versão do PureScript.                              |
 | `detect_extensions` | `["purs"]`                           | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["spago.dhall"]`                    | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
@@ -2466,11 +2464,11 @@ O módulo `purescript` exibe a versão atual instalada do [PureScript](https://w
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `0.13.5` | A versão do `purescript`           |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `0.13.5` | A versão do `purescript`          |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2530,7 +2528,7 @@ O valor padrão e a ordem para o `python_binary` foram escolhidos para identific
 | Variável     | Exemplo         | Descrição                               |
 | ------------ | --------------- | --------------------------------------- |
 | version      | `"v3.8.1"`      | A versão do `python`                    |
-| symbol       | `"🐍 "`          | Espelha o valor da opção `símbolo`      |
+| symbol       | `"🐍 "`          | Espelha o valor da opção `symbol`       |
 | style        | `"yellow bold"` | Espelha o valor da opção `style`        |
 | pyenv_prefix | `"pyenv "`      | Espelha o valor da opção `pyenv_prefix` |
 | virtualenv   | `"venv"`        | O nome atual do `virtualenv`            |
@@ -2574,7 +2572,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-O módulo `rlang` exibe a versão atual instalada do [R](https://www.r-project.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+O módulo `rlang` mostra a versão atualmente instalada do [R](https://www.r-project.org/). O módulo será mostrado se qualquer uma das seguintes condições for atendida:
 
 - O diretório atual tenha um arquivo com a extensão `.R`.
 - O diretório atual tenha um arquivo com a extensão `.Rd`.
@@ -2599,11 +2597,11 @@ O módulo `rlang` exibe a versão atual instalada do [R](https://www.r-project.o
 
 ### Variáveis
 
-| Variável | Exemplo       | Descrição                          |
-| -------- | ------------- | ---------------------------------- |
-| version  | `v4.0.5`      | A versão do `R`                    |
-| symbol   |               | Espelha o valor da opção `símbolo` |
-| style    | `"blue bold"` | Espelha o valor da opção `style`   |
+| Variável | Exemplo       | Descrição                         |
+| -------- | ------------- | --------------------------------- |
+| version  | `v4.0.5`      | A versão do `R`                   |
+| symbol   |               | Espelha o valor da opção `symbol` |
+| style    | `"blue bold"` | Espelha o valor da opção `style`  |
 
 ### Exemplo
 
@@ -2616,7 +2614,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-Por padrão o módulo `red` exibe a versão atual instalada do [Red](https://www.red-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+Por padrão o módulo `red` exibe a versão atual instalada do [Red](https://www.red-lang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
 
 - O diretório atual contenha um arquivo com a extensão `.red` or `.reds`
 
@@ -2635,11 +2633,11 @@ Por padrão o módulo `red` exibe a versão atual instalada do [Red](https://www
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v2.5.1` | A versão do `red`                  |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.5.1` | A versão do `red`                 |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2654,7 +2652,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-Por padrão o módulo `ruby` vai exibir a versão atual instalada do [Ruby](https://www.ruby-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+Por padrão o módulo `ruby` vai exibir a versão atual instalada do [Ruby](https://www.ruby-lang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
 
 - O diretório atual tenha um arquivo `Gemfile`
 - O diretório atual contém um arquivo `.ruby-version`
@@ -2679,11 +2677,11 @@ O Starship pega a versão atual do Ruby rodando `ruby -v`.
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v2.5.1` | A versão do `ruby`                 |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v2.5.1` | A versão do `ruby`                |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2698,7 +2696,7 @@ symbol = "🔺 "
 
 ## Rust
 
-Por padrão o módulo `rust` vai exibir a versão atual instalada do [Rust](https://www.rust-lang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+Por padrão o módulo `rust` vai exibir a versão atual instalada do [Rust](https://www.rust-lang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
 
 - O diretório atual contem um arquivo `Cargo.toml`
 - O diretório atual tenha um arquivo com a extensão `.rs`
@@ -2718,11 +2716,11 @@ Por padrão o módulo `rust` vai exibir a versão atual instalada do [Rust](http
 
 ### Variáveis
 
-| Variável  | Exemplo           | Descrição                          |
-| --------- | ----------------- | ---------------------------------- |
-| version   | `v1.43.0-nightly` | A versão do `rustc`                |
-| symbol    |                   | Espelha o valor da opção `símbolo` |
-| style\* |                   | Espelha o valor da opção `style`   |
+| Variável  | Exemplo           | Descrição                         |
+| --------- | ----------------- | --------------------------------- |
+| version   | `v1.43.0-nightly` | A versão do `rustc`               |
+| symbol    |                   | Espelha o valor da opção `symbol` |
+| style\* |                   | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2758,11 +2756,11 @@ O módulo `scala` exibe a versão atual instalada do [Scala](https://www.scala-l
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `2.13.5` | A versão do `scala`                |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `2.13.5` | A versão do `scala`               |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2843,11 +2841,11 @@ O módulo `shlvl` exibe o atual [`SHLVL`](https://tldp.org/LDP/abs/html/internal
 
 ### Variáveis
 
-| Variável  | Exemplo | Descrição                          |
-| --------- | ------- | ---------------------------------- |
-| shlvl     | `3`     | O valor atual do `SHLVL`           |
-| symbol    |         | Espelha o valor da opção `símbolo` |
-| style\* |         | Espelha o valor da opção `style`   |
+| Variável  | Exemplo | Descrição                         |
+| --------- | ------- | --------------------------------- |
+| shlvl     | `3`     | O valor atual do `SHLVL`          |
+| symbol    |         | Espelha o valor da opção `symbol` |
+| style\* |         | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2877,11 +2875,11 @@ O módulo `singularity` exibe a imagem atual do [Singularity](https://sylabs.io/
 
 ### Variáveis
 
-| Variável  | Exemplo      | Descrição                          |
-| --------- | ------------ | ---------------------------------- |
-| env       | `centos.img` | A imagem atual do Singularity      |
-| symbol    |              | Espelha o valor da opção `símbolo` |
-| style\* |              | Espelha o valor da opção `style`   |
+| Variável  | Exemplo      | Descrição                         |
+| --------- | ------------ | --------------------------------- |
+| env       | `centos.img` | A imagem atual do Singularity     |
+| symbol    |              | Espelha o valor da opção `symbol` |
+| style\* |              | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2937,7 +2935,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | signal_name    | `KILL`  | Nome do sinal correspondente ao código de saída, apenas se for sinalizado                                |
 | maybe_int      | `7`     | Contém o código de saída quando nenhum significado for encontrado                                        |
 | pipestatus     |         | Exibição do pipeline de programas com os códigos de saída, este é apenas disponível no pipestatus_format |
-| symbol         |         | Espelha o valor da opção `símbolo`                                                                       |
+| symbol         |         | Espelha o valor da opção `symbol`                                                                        |
 | style\*      |         | Espelha o valor da opção `style`                                                                         |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -2977,10 +2975,10 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 ### Variáveis
 
-| Variável  | Exemplo | Descrição                          |
-| --------- | ------- | ---------------------------------- |
-| symbol    |         | Espelha o valor da opção `símbolo` |
-| style\* |         | Espelha o valor da opção `style`   |
+| Variável  | Exemplo | Descrição                         |
+| --------- | ------- | --------------------------------- |
+| symbol    |         | Espelha o valor da opção `symbol` |
+| style\* |         | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -3006,7 +3004,7 @@ disabled = false
 
 ## Swift
 
-Por padrão o módulo `swift` vai exibir a versão atual instalada do [Swift](https://swift.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+Por padrão o módulo `swift` vai exibir a versão atual instalada do [Swift](https://swift.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
 
 - O diretório atual tenha um arquivo `Package.swift`
 - O diretório atual tenha um arquivo com a extensão `.swift`
@@ -3026,11 +3024,11 @@ Por padrão o módulo `swift` vai exibir a versão atual instalada do [Swift](ht
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v5.2.4` | A versão do `swift`                |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v5.2.4` | A versão do `swift`               |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -3073,12 +3071,12 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Variáveis
 
-| Variável  | Exemplo    | Descrição                          |
-| --------- | ---------- | ---------------------------------- |
-| version   | `v0.12.24` | A versão do `terraform`            |
-| workspace | `default`  | O workspace atual do Terraform     |
-| symbol    |            | Espelha o valor da opção `símbolo` |
-| style\* |            | Espelha o valor da opção `style`   |
+| Variável  | Exemplo    | Descrição                         |
+| --------- | ---------- | --------------------------------- |
+| version   | `v0.12.24` | A versão do `terraform`           |
+| workspace | `default`  | O workspace atual do Terraform    |
+| symbol    |            | Espelha o valor da opção `symbol` |
+| style\* |            | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -3148,9 +3146,9 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Nome do usuário
+## Username
 
-O módulo `username` exibe o username do usuário ativo. O módulo vai exibir se algumas das condições a seguir for atendida:
+O módulo `username` mostra o nome de usuário do usuário ativo. O módulo será mostrado se alguma das seguintes condições for atendida:
 
 - O usuário atual é root
 - O usuário atual não é o mesmo que está logado
@@ -3214,11 +3212,11 @@ O módulo `vagrant` exibe a versão atual instalada do [Vagrant](https://www.vag
 
 ### Variáveis
 
-| Variável  | Exemplo          | Descrição                          |
-| --------- | ---------------- | ---------------------------------- |
-| version   | `Vagrant 2.2.10` | A versão do `Vagrant`              |
-| symbol    |                  | Espelha o valor da opção `símbolo` |
-| style\* |                  | Espelha o valor da opção `style`   |
+| Variável  | Exemplo          | Descrição                         |
+| --------- | ---------------- | --------------------------------- |
+| version   | `Vagrant 2.2.10` | A versão do `Vagrant`             |
+| symbol    |                  | Espelha o valor da opção `symbol` |
+| style\* |                  | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -3253,11 +3251,11 @@ O módulo `vlang` exibe a versão atual instalada do [V](https://vlang.io/). Por
 
 ### Variáveis
 
-| Variável  | Exemplo | Descrição                          |
-| --------- | ------- | ---------------------------------- |
-| version   | `v0.2`  | A versão do `v`                    |
-| symbol    |         | Espelha o valor da opção `símbolo` |
-| style\* |         | Espelha o valor da opção `style`   |
+| Variável  | Exemplo | Descrição                         |
+| --------- | ------- | --------------------------------- |
+| version   | `v0.2`  | A versão do `v`                   |
+| symbol    |         | Espelha o valor da opção `symbol` |
+| style\* |         | Espelha o valor da opção `style`  |
 
 ### Exemplo
 
@@ -3282,11 +3280,11 @@ O módulo `vcsh` exibe o repositório [VCSH](https://github.com/RichiH/vcsh) atu
 
 ### Variáveis
 
-| Variável  | Exemplo                                     | Descrição                          |
-| --------- | ------------------------------------------- | ---------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | O nome do repositório ativo        |
-| symbol    |                                             | Espelha o valor da opção `símbolo` |
-| style\* | `black bold dimmed`                         | Espelha o valor da opção `style`   |
+| Variável  | Exemplo                                     | Descrição                         |
+| --------- | ------------------------------------------- | --------------------------------- |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | O nome do repositório ativo       |
+| symbol    |                                             | Espelha o valor da opção `symbol` |
+| style\* | `black bold dimmed`                         | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -3301,7 +3299,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Por padrão o módulo `zig` exibe a versão atual instalada do [Zig](https://ziglang.org/). O módulo vai exibir se algumas das condições a seguir for atendida:
+Por padrão, o módulo `zig` mostra a versão atualmente instalada do [Zig](https://ziglang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
 
 - O diretório atual contém arquivo com a extensão `.zig`
 
@@ -3311,7 +3309,7 @@ Por padrão o módulo `zig` exibe a versão atual instalada do [Zig](https://zig
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"↯ "`                               | O simbolo usado antes de exibir a versão do Zig.                                     |
+| `symbol`            | `"↯ "`                               | O símbolo usado antes de exibir a versão do Zig.                                     |
 | `style`             | `"bold yellow"`                      | O estilo do módulo.                                                                  |
 | `disabled`          | `false`                              | Desabilita o módulo `zig`.                                                           |
 | `detect_extensions` | `["zig"]`                            | Quais extensões devem ativar este módulo.                                            |
@@ -3320,11 +3318,11 @@ Por padrão o módulo `zig` exibe a versão atual instalada do [Zig](https://zig
 
 ### Variáveis
 
-| Variável  | Exemplo  | Descrição                          |
-| --------- | -------- | ---------------------------------- |
-| version   | `v0.6.0` | A versão do `zig`                  |
-| symbol    |          | Espelha o valor da opção `símbolo` |
-| style\* |          | Espelha o valor da opção `style`   |
+| Variável  | Exemplo  | Descrição                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v0.6.0` | A versão do `zig`                 |
+| symbol    |          | Espelha o valor da opção `symbol` |
+| style\* |          | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -3394,11 +3392,11 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 ### Variáveis
 
-| Variável  | Descrição                          |
-| --------- | ---------------------------------- |
-| output    | A saída do comando no `shell`      |
-| symbol    | Espelha o valor da opção `símbolo` |
-| style\* | Espelha o valor da opção `style`   |
+| Variável  | Descrição                         |
+| --------- | --------------------------------- |
+| output    | A saída do comando no `shell`     |
+| symbol    | Espelha o valor da opção `symbol` |
+| style\* | Espelha o valor da opção `style`  |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
