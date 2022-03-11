@@ -176,7 +176,7 @@ Note: Continuation prompts are only available in the following shells:
 continuation_prompt = "▶▶"
 ```
 
-## Stile delle Stringhe
+## Stringhe di stile
 
 Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le parole non sono sensibili alle maiuscole (cioè `grassetto` e `BoLd` sono considerate la stessa stringa). Ogni parola può essere una delle seguenti:
 
