@@ -1,4 +1,4 @@
-# FAQ
+# Frequently Asked Questions
 
 ## デモGIFで使用される構成は何ですか？
 
