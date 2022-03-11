@@ -393,7 +393,7 @@ Starship을 추가로 커스터마이징 하고싶다면:
 
 ## 🤝 기여하기
 
-우리는 언제나 **기술 수준에 관계없이** 기여자를 찾고 있습니다! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+우리는 언제나 **기술 수준에 관계없이** 기여자를 찾고 있습니다! 프로젝트에 참여하고자 한다면, [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) 를 보내보세요.
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
