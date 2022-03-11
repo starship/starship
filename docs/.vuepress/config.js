@@ -294,42 +294,42 @@ module.exports = {
                     ["/vi-VN/presets/", "Mẫu thiết lập"],
                 ],
             },
-        },
-        "/zh-TW/": {
-            // text for the language dropdown
-            selectText: "語言",
-            // label for this locale in the language dropdown
-            label: "繁體中文",
-            // Custom text for edit link. Defaults to "Edit this page"
-            editLinkText: "在 GitHub 上修改此頁面",
-            // Custom navbar values
-            nav: [{ text: "設定", link: "/zh-TW/config/" }],
-            // Custom sidebar values
-            sidebar: [
-                "/zh-TW/",
-                ["/zh-TW/guide/", "指引"],
-                ["/zh-TW/config/", "設定"],
-                ["/zh-TW/advanced-config/", "進階設定"],
-            ],
-        },
-        "/zh-CN/": {
-            // text for the language dropdown
-            selectText: "语言",
-            // label for this locale in the language dropdown
-            label: "简体中文",
-            // Custom text for edit link. Defaults to "Edit this page"
-            editLinkText: "在 GitHub 上修改此页",
-            // Custom navbar values
-            nav: [{ text: "配置", link: "/zh-CN/config/" }],
-            // Custom sidebar values
-            sidebar: [
-                "/zh-CN/",
-                ["/zh-CN/guide/", "指南"],
-                ["/zh-CN/config/", "配置"],
-                ["/zh-CN/advanced-config/", "高级配置"],
-                ["/zh-CN/faq/", "常见问题"],
-                ["/zh-CN/presets/", "社区配置分享"],
-            ],
+            "/zh-TW/": {
+                // text for the language dropdown
+                selectText: "語言",
+                // label for this locale in the language dropdown
+                label: "繁體中文",
+                // Custom text for edit link. Defaults to "Edit this page"
+                editLinkText: "在 GitHub 上修改此頁面",
+                // Custom navbar values
+                nav: [{ text: "設定", link: "/zh-TW/config/" }],
+                // Custom sidebar values
+                sidebar: [
+                    "/zh-TW/",
+                    ["/zh-TW/guide/", "指引"],
+                    ["/zh-TW/config/", "設定"],
+                    ["/zh-TW/advanced-config/", "進階設定"],
+                ],
+            },
+            "/zh-CN/": {
+                // text for the language dropdown
+                selectText: "语言",
+                // label for this locale in the language dropdown
+                label: "简体中文",
+                // Custom text for edit link. Defaults to "Edit this page"
+                editLinkText: "在 GitHub 上修改此页",
+                // Custom navbar values
+                nav: [{ text: "配置", link: "/zh-CN/config/" }],
+                // Custom sidebar values
+                sidebar: [
+                    "/zh-CN/",
+                    ["/zh-CN/guide/", "指南"],
+                    ["/zh-CN/config/", "配置"],
+                    ["/zh-CN/advanced-config/", "高级配置"],
+                    ["/zh-CN/faq/", "常见问题"],
+                    ["/zh-CN/presets/", "社区配置分享"],
+                ],
+            },
         },
     },
     plugins: [
