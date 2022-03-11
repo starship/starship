@@ -324,7 +324,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+다음 내용을 Nushell 설정파일 (찾으려면 `config path` 실행) 마지막 부분에 추가하세요:
 
 ```toml
 startup = [
@@ -340,7 +340,7 @@ prompt = "starship_prompt"
 <details>
 <summary>Powershell</summary>
 
-다음 내용을 PowerShell 설정 (찾으려면 `$PROFILE` 실행) 마지막에 추가하세요:
+다음 내용을 PowerShell 설정파일 (찾으려면 `$PROFILE` 실행) 마지막 부분에 추가하세요:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
