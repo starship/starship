@@ -1,12 +1,12 @@
 # Configuración
 
-Para comenzar a configurar Starship, crea el siguiente archivo: `~/.config/starship.toml`.
+Para iniciar la configuración de starship, crea el siguiente fichero: `~/.config.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Toda la configuración de Starship se realiza en este archivo [TOML](https://github.com/toml-lang/toml):
+Toda la configuración de starship se incluye en este fichero [TOML](https://github.com/toml-lang/toml):
 
 ```toml
 # Inserta una línea en blanco al inicio del prompt
@@ -95,7 +95,7 @@ Por ejemplo:
 - `[⌘ $version](bold green)` imprimirá un símbolo `⌘` seguido por el contenido de la variable `version`, con texto en negrita color verde.
 - `[a [b](red) c](green)` imprimirá `a b c` con `b` en rojo, `a` y `c` en verde.
 
-#### Cadenas de estilo
+#### Cadenas de Estilo
 
 La mayoría de los módulos de starship permiten configurar los estilos de su cadenas texto. Esto se consigue con una entrada (normalmente llamada `style` - estilo) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de textos estilados junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consulta [la guía de configuración avanzada](/advanced-config/).
 
@@ -147,13 +147,13 @@ Esta es la lista de opciones de configuración.
 
 ### Opciones
 
-| Opción            | Por defecto                        | Descripción                                                                    |
-| ----------------- | ---------------------------------- | ------------------------------------------------------------------------------ |
-| `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                               |
-| `right_format`    | `""`                               | Ver [Habilitar prompt derecho](/advanced-config/#enable-right-prompt)          |
-| `scan_timeout`    | `30`                               | Tiempo de espera tras el que Starship escanea archivos (en milisegundos).      |
-| `command_timeout` | `500`                              | Tiempo de espera para los comandos ejecutados por Starship (en milisegundos).  |
-| `add_newline`     | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos. |
+| Opción            | Predeterminado                 | Descripción                                                                    |
+| ----------------- | ------------------------------ | ------------------------------------------------------------------------------ |
+| `format`          | [link](#default-prompt-format) | Configura el formato del prompt.                                               |
+| `right_format`    | `""`                           | Ver [Habilitar prompt derecho](/advanced-config/#enable-right-prompt)          |
+| `scan_timeout`    | `30`                           | Tiempo de espera tras el que starship escanea archivos (en milisegundos).      |
+| `command_timeout` | `500`                          | Tiempo de espera para los comandos ejecutados por starship (en milisegundos).  |
+| `add_newline`     | `true`                         | Inserta un línea en blanco entre las instrucciones del intérprete de comandos. |
 
 ### Ejemplo
 
@@ -252,7 +252,7 @@ $shell\
 $character"""
 ```
 
-Si solo quieres extender el formato predeterminado, puedes usar `$all`; los módulos que se añaden explícitamente al formato no serán duplicados. Ej.
+Si solo quieres extender el formato predeterminado, puedes usar `$all`; los módulos que se añaden explícitamente al formato no serán duplicados. Por ejemplo.
 
 ```toml
 # Mueve el módulo directorio a la segunda línea
@@ -265,11 +265,11 @@ El módulo `aws` muestra la región y el perfil actual de AWS cuando se han conf
 
 El módulo mostrará un perfil solamente si sus credenciales están presentes en `~/.aws/credentials` o un `credential_process` está definido en `~/.aws/config`. Alternativamente, es suficiente con tener cualquiera de las siguientes variables de entorno `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, o `AWS_SESSION_TOKEN`.
 
-Cuando se utiliza [aws-vault](https://github.com/99designs/aws-vault), el perfil se obtiene de la variable de entorno `AWS_VAULT` y la fecha de expiración de credenciales se obtiene de la variable de entorno `AWS_SESSION_EXPIRATION`.
+Cuando se utiliza [aws-vault](https://github.com/99designs/aws-vault), el perfil se lee de la variable de entorno `AWS_VAULT` y la fecha de expiración de credenciales se lee de la variable de entorno `AWS_SESSION_EXPIRATION`.
 
 Cuando uses [awsu](https://github.com/kreuzwerker/awsu) el perfil se obtiene de la variable de entorno `AWSU_PROFILE`.
 
-Cuando se utiliza [AWSume](https://awsu.me), el perfil se obtiene de la variable de entorno `AWSUME_PROFILE` y la fecha de expiración de credenciales se obtiene de la variable de entorno `AWSUME_EXPIRATION`.
+Cuando se utiliza [AWSume](https://awsu.me), el perfil se lee de la variable de entorno `AWSUME_PROFILE` y la fecha de expiración de credenciales se lee de la variable de entorno `AWSUME_EXPIRATION`.
 
 ### Opciones
 
@@ -292,7 +292,7 @@ Cuando se utiliza [AWSume](https://awsu.me), el perfil se obtiene de la variable
 | symbol    |                  | Refleja el valor de la opción `symbol`                   |
 | style\* |                  | Refleja el valor de la opción `style`                    |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplos
 
@@ -362,7 +362,7 @@ style = "blue bold"
 
 ## Battery
 
-El módulo `battery` muestra qué tan cargada está la batería del dispositivo y su estado de carga actual. El módulo solamente es visible cuando la batería del dispositivo está por debajo del 10%.
+El módulo `battery` muestra la cantidad de batería y si está cargando o no. El módulo es solo visible cuando la batería está por debajo del 10%.
 
 ### Opciones
 
@@ -374,7 +374,7 @@ El módulo `battery` muestra qué tan cargada está la batería del dispositivo 
 | `unknown_symbol`     | `" "`                            | El símbolo que se muestra cuando el estado de la batería es desconocido. |
 | `empty_symbol`       | `" "`                            | El símbolo que se muestra cuando el estado de la batería está vacío.     |
 | `format`             | `"[$symbol$percentage]($style) "` | El formato del módulo.                                                   |
-| `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.                          |
+| `display`            | [link](#battery-display)          | Define cuándo mostrar el indicador y el estilo.                          |
 | `disabled`           | `false`                           | Desactiva el módulo `battery`.                                           |
 
 ### Ejemplo
@@ -426,7 +426,7 @@ discharging_symbol = "💦"
 # cuando la capacidad está sobre el 30%, el indicador de batería no se visualizara
 ```
 
-## Carácter
+## Character
 
 El módulo `character` muestra un carater (normalmente una flecha) tras el texto que introduces en el terminal.
 
@@ -604,7 +604,7 @@ format = "underwent [$duration](bold yellow)"
 
 El módulo `conda` muestra el entorno actual [Conda](https://docs.conda.io/en/latest/), si `$CONDA_DEFAULT_ENV` está configurado.
 
-::: consejo
+::: tip
 
 Esto no modifica el propio símbolo de sistema de conda. En caso de querer suprimirlo, ejecuta `conda config --set changeps1 False`.
 
@@ -646,7 +646,7 @@ El módulo `container` muestra el símbolo y nombre del contenedor, si está den
 
 ### Opciones
 
-| Opción     | Predeterminado                       | Descripción                                                      |
+| Opción     | Por defecto                          | Descripción                                                      |
 | ---------- | ------------------------------------ | ---------------------------------------------------------------- |
 | `symbol`   | `"⬢"`                                | El símbolo mostrado, cuando se encuentra dentro de un contenedor |
 | `style`    | `"bold red dimmed"`                  | El estilo del módulo.                                            |
@@ -797,7 +797,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 
 ### Opciones
 
-| Opción              | Predeterminado                                                                                              | Descripción                                                                             |
+| Opción              | Por defecto                                                                                                 | Descripción                                                                             |
 | ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `truncation_length` | `3`                                                                                                         | El número de directorios padre a los que se debe truncar el directorio actual.          |
 | `truncate_to_repo`  | `true`                                                                                                      | Trunca o no hasta la raíz del repositorio git en el que estés.                          |
@@ -1048,7 +1048,7 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 - La opción de configuración de `variable` coincide con una variable de entorno existente
 - La opción de configuración de `variable` no está definida, pero la opción de configuración se encuentra `por defecto`
 
-::: consejo Múltiples variables de entorno pueden mostrarse usando un `.`. (ver ejemplo) Si la opción de configuración de la `variable` no está definida, el módulo mostrará el valor de la variable bajo el nombre del texto después del caracter `.`.
+::: tip Múltiples variables de entorno pueden mostrarse usando un `.`. (ver ejemplo) Si la opción de configuración de la `variable` no está definida, el módulo mostrará el valor de la variable bajo el nombre del texto después del caracter `.`.
 
 Ejemplo: la siguiente configuración mostrará el valor de la variable de entorno USER
 
@@ -1363,7 +1363,7 @@ cherry_pick = "[🍒 PICKING](bold red)"
 
 El módulo `git_metrics` mostrará el número de líneas añadidas y eliminadas en el repositorio git actual.
 
-::: consejo
+::: tip
 
 Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
 
@@ -1404,7 +1404,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 El módulo `git_status` muestra símbolos que representan el estado del repositorio en su directorio actual.
 
-::: consejo
+::: tip
 
 The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
@@ -1808,9 +1808,9 @@ kotlin_binary = "kotlinc"
 
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
 
-::: consejo
+::: tip
 
-Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -1971,9 +1971,9 @@ El módulo `memory_usage` muestra la memoria del sistema actual y el uso de memo
 
 Por defecto, el uso de swap se muestra si el intercambio total del sistema no es cero.
 
-::: consejo
+::: tip
 
-Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2391,7 +2391,7 @@ format = "via [🔹 $version](147 bold) "
 
 El módulo `pulumi` muestra el nombre de usuario actual, [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/)seleccionado y la versión.
 
-::: consejo
+::: tip
 
 Por defecto la versión de Pulumi no se muestra, ya que toma un orden de magnitud más largo para cargar que la mayoría de los plugins (~70ms). Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-pulumi-version).
 
@@ -2517,7 +2517,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
 | `disabled`           | `false`                                                                                                      | Desactiva el módulo `python`.                                                           |
 
-::: consejo
+::: tip
 
 La variable `python_binary` acepta una cadena o una lista de cadenas. Starship intentará ejecutar cada binario hasta que obtenga un resultado. Ten en cuenta que sólo puedes cambiar el binario que Starship ejecuta para obtener la versión de Python no los argumentos que se utilizan.
 
@@ -2779,9 +2779,9 @@ symbol = "🌟 "
 
 El módulo `shell` muestra un indicador para el intérprete de comandos actualmente utilizado.
 
-::: consejo
+::: tip
 
-Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -2898,13 +2898,13 @@ format = '[📦 \[$env\]]($style) '
 
 El módulo `status` muestra el código de salida del comando anterior. El módulo se mostrará sólo si el código de salida no es `0`. El código de estado se convertirá a un entero con signo de 32 bits.
 
-::: consejo
+::: tip
 
-Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
-::: advertencia Este módulo no es compatible con el intérprete de comandos nu. :::
+::: warning Este módulo no es compatible con el intérprete de comandos nu. :::
 
 ### Opciones
 
@@ -2959,9 +2959,9 @@ disabled = false
 
 El módulo `sudo` muestra si las credenciales de sudo están actualmente en caché. El módulo solo se mostrará si las credenciales están guardadas en caché.
 
-::: consejo
+::: tip
 
-Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -3047,7 +3047,7 @@ format = "via [🏎  $version](red bold)"
 
 El módulo `Terraform` muestra el espacio de trabajo de [Terraform](https://www.terraform.io/docs/language/state/workspaces.html) y la versión seleccionados actualmente.
 
-::: consejo
+::: tip
 
 Por defecto no se muestra la versión de Terraform, ya que esto es lento para las versiones actuales de Terraform cuando hay muchos complementos en uso. Si aún deseas activarlo, [sigue el ejemplo que se muestra a continuación](#with-terraform-version).
 
@@ -3106,9 +3106,9 @@ format = "[🏎💨 $workspace]($style) "
 
 El módulo `time` muestra la hora **local** actual. El valor de configuración de `format` es usado por la caja de [`chrono`](https://crates.io/crates/chrono) para controlar cómo se muestra la hora. Echa un vistazo a [los documentos de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver qué opciones están disponibles.
 
-::: consejo
+::: tip
 
-Este módulo está deshabilitado por defecto. Para habilitarlo, establece `disabled` a `false` en tu archivo de configuración.
+Este módulo está deshabilitado por defecto. Para activarlo, establece `disabled` a `false` en tu archivo de configuración.
 
 :::
 
@@ -3157,7 +3157,7 @@ El módulo `username` muestra el nombre de usuario activo. El módulo se muestra
 - El usuario está actualmente conectado como una sesión SSH
 - La variable `show_always` se establece en true
 
-::: consejo
+::: tip
 
 La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION`, `SSH_CLIENT`, y `SSH_TTY`. Si su host SSH no configura estas variables, una solución es establecer una de ellas con un valor tonto.
 
@@ -3349,25 +3349,25 @@ Estos módulos se mostrarán si se cumplen alguna de las siguientes condiciones:
 - El comando `when` devuelve 0
 - El sistema operativo actual (std::env::consts::OS) coincide con el campo `os` si está definido.
 
-::: consejo
+::: tip
 
 Múltiples módulos personalizados pueden definirse usando una `.`.
 
 :::
 
-::: consejo
+::: tip
 
 El orden en el que se muestran los módulos personalizados se puede establecer individualmente incluyendo `${custom.foo}` en el `format` de nivel superior (ya que incluye un punto, necesita usar `${...}`). Por defecto, el módulo `custom` simplemente mostrará todos los módulos personalizados en el orden en que fueron definidos.
 
 :::
 
-::: consejo
+::: tip
 
 [El issue #1252](https://github.com/starship/starship/discussions/1252) contiene ejemplos de módulos personalizados. Si tiene un ejemplo interesante no cubierto allí, no dude en compartirlo allí!
 
 :::
 
-::: advertencia la salida de comandos se imprime sin escapar al prompt
+::: warning la salida de comandos se imprime sin escapar al prompt
 
 Cualquiera que sea la salida que genere el comando se imprime sin modificar en el prompt. Esto significa que si la salida contiene secuencias especiales que son interpretadas por el intérprete, se expandirán cuando se muestre. Estas secuencias especiales son específicas del intérprete, por ejemplo, puedes escribir un módulo de comando que escribe secuencias de bash, por ejemplo, `\h`, pero este módulo no funcionará en el intérprete fish o zsh.
 
@@ -3419,7 +3419,7 @@ Si no se da el `shell` o solo contiene un elemento y Starship detecta PowerShell
 shell = ["pwsh", "-Command", "-"]
 ```
 
-::: advertencia Asegúrate de que tu configuración personalizada de shell salga con éxito
+::: warning Asegúrate de que tu configuración personalizada del intérprete de comandos salga con éxito
 
 Si establece un comando personalizado, asegúrese de que el Shell por defecto usado por starship ejecutará correctamente el comando con una salida elgante (a través de la opción `shell`).
 
