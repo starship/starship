@@ -109,6 +109,7 @@ module.exports = {
         ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png" }],
         ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt" }],
     ],
+    evergreen: true,
     theme: "default-prefers-color-scheme",
     themeConfig: {
         logo: "/icon.png",
