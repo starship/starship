@@ -62,7 +62,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    scoop install starship
    ```
 
-1. أضف البرنامج النصي إلى ملف تهيئة موجه الأوامر:
+1. أضف ما يلي إلى ملف تكوين موجه الأوامر الخاص بك:
 
 
    #### Bash
@@ -120,7 +120,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: تحذير يدعم فقط elvish v0.17 أو أعلى. :::
+   ::: warning يدعم فقط elvish v0.17 أو أعلى. :::
 
    أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
 
