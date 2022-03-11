@@ -121,7 +121,6 @@ module.exports = {
                     ["/advanced-config/", "Advanced Configuration"],
                     ["/faq/", "Frequently Asked Questions"],
                     ["/presets/", "Presets"],
-                    ["/migrating-to-0.45.0/", "Migrating to v0.45.0"],
                 ],
             },
             "/de-DE/": {
@@ -236,7 +235,6 @@ module.exports = {
                     ["/ja-JP/advanced-config/", "高度な設定"],
                     ["/ja-JP/faq/", "FAQ"],
                     ["/ja-JP/presets/", "準備するもの"],
-                    ["/ja-JP/migrating-to-0.45.0/", "v0.45への移行"],
                 ],
             },
             "/pt-BR/": {
