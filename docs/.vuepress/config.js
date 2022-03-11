@@ -1,26 +1,27 @@
-const sidebar = (lang, override = {}) => [
-    "", // "Home", which should always have a override
-    "guide", // README, which should always have a override
-    // Overrides for any page below is an inconsistency between the sidebar title and page title
-    "installing",
-    "config",
-    "advanced-config",
-    "faq",
-    "presets",
-].map(page => {
-    let path = "/"
+const sidebar = (lang, override = {}) =>
+    [
+        "", // "Home", which should always have a override
+        "guide", // README, which should always have a override
+        // Overrides for any page below is an inconsistency between the sidebar title and page title
+        "installing",
+        "config",
+        "advanced-config",
+        "faq",
+        "presets",
+    ].map(page => {
+        let path = "/";
 
-    if (lang) {
-        path += `${lang}/`
-    }
+        if (lang) {
+            path += `${lang}/`;
+        }
 
-    if (page) {
-        path += `${page}/`
-    }
+        if (page) {
+            path += `${page}/`;
+        }
 
-    // If no override is set for current page, let VuePress fallback to page title
-    return page in override ? [path, override[page]] : path
-})
+        // If no override is set for current page, let VuePress fallback to page title
+        return page in override ? [path, override[page]] : path;
+    });
 
 module.exports = {
     locales: {
@@ -269,7 +270,7 @@ module.exports = {
                     guide: "Руководство",
                     installing: "Advanced Installation",
                     config: "Настройка",
-                    'advanced-config': "Расширенная Настройка",
+                    "advanced-config": "Расширенная Настройка",
                     faq: "Часто Задаваемые Вопросы",
                 }),
             },
