@@ -100,7 +100,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Powershell
 
-   Thêm vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
+   Thêm đoạn sau vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -109,12 +109,12 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Ion
 
-   Thêm vào cuối tệp tin `~/.config/ion/initrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
 
-eval $(starship init ion)   
+   eval $(starship init ion)
    ```
 
 
@@ -133,7 +133,7 @@ eval $(starship init ion)
 
    #### Tcsh
 
-   Thêm đoạn dưới vào cuối file `~/.tcshrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
