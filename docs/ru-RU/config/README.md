@@ -560,7 +560,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 Модуль `cmd_duration` показывает время исполнения последней команды. Модуль будет показан только, если команда заняла более двух секунд, или если задан параметр `min_time`.
 
-::: предупреждение Не подключайте ловушку DEBUG к Bash
+::: warning Не подключайте ловушку DEBUG к Bash
 
 Если вы испоьзуете Starship в `bash`, не подключайте ловушку `DEBUG` после запуска `eval $(starship init $0)`, иначе этот модуль сломается.
 
