@@ -313,7 +313,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-Thêm vào cuối tệp tin `~/.config/ion/initrc`:
+Thêm đoạn sau vào cuối tệp tin `~/.config/ion/initrc`:
 
 ```sh
 eval $(starship init ion)
