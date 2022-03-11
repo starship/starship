@@ -437,13 +437,13 @@ El carácter te dirá si el último comando funcionó o no. Se puede hacer de do
 
 Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
-::: aviso
+::: warning
 
 `error_symbol` no es compatible con el intérprete de comandos nu.
 
 :::
 
-::: aviso
+::: warning
 
 `vicmd_symbol` solo es compatible con cmd, fish y zsh.
 
@@ -1670,13 +1670,13 @@ La funcionalidad por defecto es:
 - 1 tarea -> `symbol` se muestra.
 - 2 tareas o más -> `symbol` + `number` son mostrados.
 
-::: aviso
+::: warning
 
 Este módulo no está soportado por tcsh y nu.
 
 :::
 
-::: aviso
+::: warning
 
 La opción `threshold` está obsoleta, pero si deseas usarla, el módulo mostrará el número de tareas en ejecución si hay más de 1 tarea, o más que el valor de configuración `threshold`, si existe. Si `threshold` se establece en 0, entonces el módulo también se mostrará cuando haya 0 tareas en ejecución.
 
