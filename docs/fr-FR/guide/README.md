@@ -267,7 +267,7 @@ Configurez votre shell pour initialiser starship. Sélectionnez le vôtre dans l
 <details>
 <summary>Bash</summary>
 
-Ajouter ce qui suit à la fin de `~/.bashrc`:
+Ajoutez ce qui suit à la fin de `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
@@ -302,7 +302,7 @@ Note : Seul Elvish v0.17+ est supporté
 <details>
 <summary>Fish</summary>
 
-Ajoutez le code suivant à la fin de `~/.config/fish/config.fish`:
+Ajoutez ce qui suit à la fin de `~/.config/fish/config.fish`:
 
 ```fish
 starship init fish | source
@@ -313,7 +313,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-Ajouter ce qui suit à la fin de `~/.config/ion/initrc`:
+Ajoutez ce qui suit à la fin de `~/.config/ion/initrc`:
 
 ```sh
 eval $(starship init ion)
@@ -373,7 +373,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-Ajouter ce qui suit à la fin de `~/.zshrc`:
+Ajoutez ce qui suit à la fin de `~/.zshrc`:
 
 ```sh
 eval "$(starship init zsh)"
@@ -411,9 +411,9 @@ Jetez un œil aux précédents projets qui ont inspiré la création de starship
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icône de roquette de Starship">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icône de fusée de Starship">
 </p>
 
 ## 📝 License
 
-Copyright © 2019-présent, [contributeurs de Starship](https://github.com/starship/starship/graphs/contributors).<br /> Ce projet est sous licence [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Copyright © 2019-présent, [Contributeurs Starship](https://github.com/starship/starship/graphs/contributors).<br /> Ce projet est sous licence [ISC](https://github.com/starship/starship/blob/master/LICENSE).
