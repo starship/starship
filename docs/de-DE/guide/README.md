@@ -15,7 +15,7 @@
   <a href="https://crates.io/crates/starship"
     ><img
       src="https://img.shields.io/crates/v/starship?style=flat-square"
-      alt="Crates.io-Version"
+      alt="Crates.io Version"
  /></a>
   <a href="https://repology.org/project/starship/versions"
     ><img
