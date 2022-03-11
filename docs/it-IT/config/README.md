@@ -95,7 +95,7 @@ Per esempio:
 - `[⌘ $version](grassetto verde)` stamperà un simbolo `⌘` seguito dal contenuto della variabile `version`, con testo grassetto di colore verde.
 - `[a [b](rosso) c](verde)` stamperà `a b c` con `b` rosso, e `a` e `c` verde.
 
-#### Stile delle Stringhe
+#### Stringhe di stile
 
 La maggior parte dei moduli in starship ti permettono di configurare i loro stili di visualizzazione. Questo viene fatto con una voce (solitamente chiamata `style`) che è una stringa che specifica la configurazione. Ecco alcuni esempi di stringhe di stile per quello che fanno. Per maggiori dettagli sulla sintassi completa, consulta la [guida di configurazione avanzata](/advanced-config/).
 
