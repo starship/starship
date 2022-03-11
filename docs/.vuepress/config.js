@@ -151,7 +151,7 @@ module.exports = {
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Bearbeite diese Seite auf GitHub",
                 // Custom navbar values
-                nav: [{ text: "Konfiguration", link: "/config/" }],
+                nav: [{ text: "Konfiguration", link: "/de-DE/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("de-DE", {
                     guide: "Anleitung",
