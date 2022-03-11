@@ -35,10 +35,10 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Sitio Web</a>
-  ·
+  <a href="https://starship.rs">Sitio web</a>
+
 <a href="#🚀-installation">Instalación</a>
-  ·
+
 <a href="https://starship.rs/config/">Configuración</a>
 </p>
 
@@ -95,7 +95,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-jp.png"
-      alt="Japonés"
+      alt="日本語"
  /></a>
   &nbsp;
   <a
@@ -103,7 +103,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português (Brasil)"
+      alt="Português do Brasil"
  /></a>
   &nbsp;
   <a
@@ -111,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Ruso"
+      alt="Русский"
  /></a>
   &nbsp;
   <a
@@ -119,7 +119,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Vietnamita"
+      alt="Tiếng Việt"
  /></a>
   &nbsp;
   <a
@@ -127,7 +127,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="Chino Mandarín"
+      alt="简体中文"
  /></a>
   &nbsp;
   <a
@@ -135,7 +135,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="Chino Tradicional"
+      alt="繁體中文"
  /></a>
 </p>
 
@@ -267,7 +267,7 @@ Configure su shell para inicializar starship. Selecciona el tuyo de la lista de 
 <details>
 <summary>Bash</summary>
 
-Añade el siguiente código al final de `~/.bashrc`:
+Añade la siguiente línea al final de `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
@@ -391,7 +391,7 @@ Si estás buscando personalizar Starship:
 
 - **[Ajustes preestablecidos](https://starship.rs/presets/)** - inspírate en la configuración construida por otros
 
-## 🤝 Colaborando
+## 🤝 Contribuir
 
 ¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! Si estás interesado en empezar en el proyecto con algo sencillo, prueba con un problema etiquetado como [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
