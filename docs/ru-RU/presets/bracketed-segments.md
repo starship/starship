@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#bracketed-segments)
+[Return to Presets](./README.md#bracketed-segments)
 
 # Bracketed Segments Preset
 
