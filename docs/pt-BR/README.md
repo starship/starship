@@ -37,7 +37,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 1. Instale o binário do **starship**:
 
 
-   #### Instalar a última versão
+   #### Instalando a última versão
 
    Com o Shell:
 
@@ -48,7 +48,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    Para atualizar o Starship de maneira manual, execute novamente o script acima. Isto irá substituir a versão atual sem alterar as configurações do Starship.
 
 
-   #### Instalar via Gerenciador de Pacotes
+   #### Instalar via gerenciador de pacotes
 
    Com o [Homebrew](https://brew.sh/):
 
@@ -62,7 +62,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    scoop install starship
    ```
 
-1. Adicione o script de inicialização ao arquivo de configuração do shell:
+1. Adicione o script de inicialização no arquivo de configuração do seu shell:
 
 
    #### Bash
@@ -100,7 +100,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Powershell
 
-   Adicione o comando a seguir ao final do arquivo `Microsoft.PowerShell_profile.ps1`. Você pode conferir a localização do arquivo consultando a varável `$PROFILE` no PowerShell. Normalmente o caminho é  `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` no -Nix.
+   Adicione o comando a seguir ao final do arquivo `Microsoft.PowerShell_profile.ps1`. Você pode checar a localização deste arquivo consultando a variável `$PROFILE` no PowerShell. Normalmente o caminho é  `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` no -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -120,7 +120,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Elvish
 
-   ::: warning Apenas a versão elvish v0.17 ou superior é suportada. :::
+   ::: warning Apenas a versão v0.17 ou superior do elvish é suportada. :::
 
    Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
