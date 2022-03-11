@@ -69,7 +69,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Cambiar título de la ventana
+## Cambiar el Título de la Ventana
 
 Algunos intérpretes de comandos van a cambiar automáticamente el título de la ventana por ti (p. ej., para mostrar tu directorio actual). Fish incluso lo hace por defecto. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash`, `zsh`, `cmd` o `powershell`.
 
@@ -176,19 +176,19 @@ Nota: Los prompts de continuación solo están disponibles en los siguientes int
 continuation_prompt = "▶▶"
 ```
 
-## Cadenas de estilo
+## Cadenas de Estilo
 
 Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
 
-- `negrita`
-- `cursiva`
-- `subrayado`
-- `atenuado`
-- `invertido`
+- `bold`
+- `italic`
+- `underline`
+- `dimmed`
+- `inverted`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
-- `ninguno`
+- `none`
 
 donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
 
