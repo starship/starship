@@ -111,11 +111,11 @@ fn get_credentials_duration(context: &Context, aws_profile: Option<&Profile>) ->
     Some(expiration_date.timestamp() - chrono::Local::now().timestamp())
 }
 
-fn alias_region(region: String, aliases: &HashMap<String, &str>) -> String {
-    match aliases.get(&region) {
-        None => region,
-        Some(alias) => (*alias).to_string(),
-    }
+fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<String> {
+    name.as_ref()
+        .and_then(|n| aliases.get(n))
+        .map(|&a| a.to_string())
+        .or(name)
 }
 
 fn get_credential_process(context: &Context, aws_profile: Option<&Profile>) -> Option<String> {
@@ -187,12 +187,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mapped_region = if let Some(aws_region) = aws_region {
-        Some(alias_region(aws_region, &config.region_aliases))
-    } else {
-        None
-    };
-
     let duration = {
         get_credentials_duration(context, aws_profile.as_ref()).map(|duration| {
             if duration > 0 {
@@ -202,6 +196,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
         })
     };
+
+    let mapped_region = alias_name(aws_region, &config.region_aliases);
+
+    let mapped_profile = alias_name(aws_profile, &config.profile_aliases);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -214,7 +212,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "profile" => aws_profile.as_ref().map(Ok),
+                "profile" => mapped_profile.as_ref().map(Ok),
                 "region" => mapped_region.as_ref().map(Ok),
                 "duration" => duration.as_ref().map(Ok),
                 _ => None,
@@ -364,6 +362,46 @@ mod tests {
             Color::Yellow
                 .bold()
                 .paint("☁️  astronauts (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profile_set_with_alias() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "CORPORATION-CORP_astronauts_ACCESS_GROUP")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws.profile_aliases]
+                CORPORATION-CORP_astronauts_ACCESS_GROUP = "astro"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn region_and_profile_both_set_with_alias() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "CORPORATION-CORP_astronauts_ACCESS_GROUP")
+            .env("AWS_REGION", "ap-southeast-2")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws.profile_aliases]
+                CORPORATION-CORP_astronauts_ACCESS_GROUP = "astro"
+                [aws.region_aliases]
+                ap-southeast-2 = "au"
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astro (au) ")
         ));
 
         assert_eq!(expected, actual);
