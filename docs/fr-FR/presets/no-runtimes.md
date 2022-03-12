@@ -1,8 +1,8 @@
 [Retourner aux préréglages](./README.md#no-runtime-versions)
 
-# No Runtime Versions Preset
+# Préréglage Pas de version des environnements
 
-Ce préréglage masque la version des environnements. If you work in containers or virtualized environments, this one is for you!
+Ce préréglage masque la version des environnements. Si vous travaillez dans des conteneurs ou environnements virtuels, celui-là est pour vous!
 
 ![Capture d'écran du préréglage Cacher les versions des environnements](/presets/img/no-runtime-versions.png)
 
