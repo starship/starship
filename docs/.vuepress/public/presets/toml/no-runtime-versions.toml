@@ -1,3 +1,6 @@
+[buf]
+format = "via [$symbol]($style)"
+
 [cmake]
 format = "via [$symbol]($style)"
 
