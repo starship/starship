@@ -484,26 +484,11 @@ NB that `version` is not in the default format.
 
 ### Detectors
 
-This is a list of lists of strings used to detect what the compiler is. The
-default is:
+The `detectors` variable accepts a list of commands to determine the compiler version and name.
 
-```
-[ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ]
-```
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result.
 
-Each inner list is a command and its arguments. We will try each one in turn
-until one works, and use the information emitted by that one.
-
-We divine what type of compiler you have by looking for either the string
-"clang" in the output or the string "Free Software Foundation". If neither can
-be found no compiler name will be reported. We get the compiler version by
-extracting the first thing from the output that looks like a [semantic version](https://semver.org/).
-
-The list of supported compilers is currently very Unixy, and biased towards
-open source. If you are on Windows, or are using a commercial Unix C compiler,
-please [raise an issue on github](https://github.com/starship/starship/)
-telling us how to recognise your compiler and what should appear in the prompt.
-Or even better, submit a patch!
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
 
 ### Example
 
