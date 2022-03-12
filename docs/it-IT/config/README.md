@@ -2182,21 +2182,21 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts` extension
+- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
 
 ### Opzioni
 
-| Opzione             | Default                              | Descrizione                                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
-| `version_format`    | `"v${raw}"`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch`          |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Quali estensioni dovrebbero attivare questo modulo.                                                   |
-| `detect_files`      | `["package.json", ".node-version"]`  | Quali nomi di file dovrebbero attivare questo modulo.                                                 |
-| `detect_folders`    | `["node_modules"]`                   | Quali cartelle dovrebbero attivare questo modulo.                                                     |
-| `style`             | `"bold green"`                       | Lo stile per il modulo.                                                                               |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Opzione             | Default                                    | Descrizione                                                                                           |
+| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`       | The format for the module.                                                                            |
+| `version_format`    | `"v${raw}"`                                | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch`          |
+| `symbol`            | `" "`                                     | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts", "mts", "cts"]` | Quali estensioni dovrebbero attivare questo modulo.                                                   |
+| `detect_files`      | `["package.json", ".node-version"]`        | Quali nomi di file dovrebbero attivare questo modulo.                                                 |
+| `detect_folders`    | `["node_modules"]`                         | Quali cartelle dovrebbero attivare questo modulo.                                                     |
+| `style`             | `"bold green"`                             | Lo stile per il modulo.                                                                               |
+| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
 
