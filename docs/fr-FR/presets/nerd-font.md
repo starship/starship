@@ -1,6 +1,6 @@
 [Retourner aux préréglages](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Préréglage Symboles Nerd Font
 
 This preset changes the symbols for each module to use Nerd Font symbols.
 
