@@ -55,28 +55,29 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Create pipestatus string
     let pipestatus = match pipestatus_status {
-        PipeStatusStatus::Pipe(pipestatus) => pipestatus
-            .iter()
-            .map(
-                |ec| match format_exit_code(ec.as_str(), config.format, None, &config, context) {
-                    Ok(segments) => segments
-                        .into_iter()
-                        .map(|s| s.to_string())
-                        .collect::<Vec<String>>()
-                        .join(""),
-                    Err(_) => "".to_string(),
-                },
-            )
-            .collect::<Vec<String>>()
-            .join(config.pipestatus_separator),
-        _ => "".to_string(),
+        PipeStatusStatus::Pipe(pipestatus) => {
+            let format = config.format.trim();
+            let mut pipestatus = pipestatus
+                .iter()
+                .flat_map(|ec| {
+                    let mut segments =
+                        format_exit_code(ec.as_str(), format, None, &config, context)
+                            .unwrap_or_else(|e| Segment::from_text(None, e.to_string()));
+                    segments.append(&mut Segment::from_text(None, config.pipestatus_separator));
+                    segments
+                })
+                .collect::<Vec<Segment>>();
+            pipestatus.pop();
+            Some(Ok(pipestatus))
+        }
+        _ => None,
     };
 
     let main_format = match pipestatus_status {
         PipeStatusStatus::Pipe(_) => config.pipestatus_format,
         _ => config.format,
     };
-    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config, context);
+    let parsed = format_exit_code(exit_code, main_format, pipestatus, &config, context);
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -91,7 +92,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn format_exit_code<'a>(
     exit_code: &'a str,
     format: &'a str,
-    pipestatus: Option<&str>,
+    pipestatus: Option<Result<Vec<Segment>, StringFormatterError>>,
     config: &'a StatusConfig,
     context: &'a Context,
 ) -> Result<Vec<Segment>, StringFormatterError> {
@@ -154,16 +155,10 @@ fn format_exit_code<'a>(
                 "common_meaning" => Ok(common_meaning).transpose(),
                 "signal_number" => Ok(signal_number.as_deref()).transpose(),
                 "signal_name" => Ok(signal_name).transpose(),
-                "pipestatus" => {
-                    let pipestatus = pipestatus.unwrap_or_else(|| {
-                        // We might enter this case if pipestatus hasn't
-                        // been processed yet, which means that it has been
-                        // set in format
-                        log::warn!("pipestatus variable is only available in pipestatus_format");
-                        ""
-                    });
-                    Some(Ok(pipestatus))
-                }
+                _ => None,
+            })
+            .map_variables_to_segments(|variable| match variable {
+                "pipestatus" => pipestatus.clone(),
                 _ => None,
             })
             .parse(None, Some(context))
