@@ -1,10 +1,10 @@
 [Retourner aux préréglages](./README.md#plain-text-symbols)
 
-## Plain Text Symbols Preset
+## Préréglage Symboles en texte brut
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Ce préréglage change les symboles de chaque module en texte brut. Idéal si vous n'avez pas accès à Unicode.
 
-![Capture d'écran du préréglage Texte uniquement](/presets/img/plain-text-symbols.png)
+![Capture d'écran du préréglage Symboles en texte brut](/presets/img/plain-text-symbols.png)
 
 ### Configuration
 
