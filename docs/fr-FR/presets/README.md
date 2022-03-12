@@ -2,11 +2,11 @@
 
 Voici un ensemble de préréglages pour Starship soumis par la communauté. Si vous avez un préréglage à partager, veuillez [proposer une PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) pour mettre à jour ce fichier! 😊
 
-To get details on how to use a preset, simply click on the image.
+Pour obtenir des détails sur comment utiliser un préréglage, cliquez simplement sur l’image.
 
 ## [Symboles Nerd Font](./nerd-font.md)
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Ce préréglage change les symboles de chaque module pour utiliser les symboles de Nerd Font.
 
 [![Capture d'écran du préréglage Nerd Font Symbols](/presets/img/nerd-font-symbols.png "Cliquez pour voir le préréglage Nerd Font Symbols")](./nerd-font)
 
@@ -18,13 +18,13 @@ Ce préréglage modifie le format de tous les modules intégrés pour afficher l
 
 ## [Texte uniquement](./plain-text.md)
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Ce préréglage change les symboles de chaque module en texte brut. Idéal si vous n'avez pas accès à Unicode.
 
 [![Capture d'écran du préréglage Texte uniquement](/presets/img/plain-text-symbols.png "Cliquez pour voir le préréglage Texte uniquement")](./plain-text)
 
 ## [Pas de version des environnements](./no-runtimes.md)
 
-Ce préréglage masque la version des environnements. If you work in containers or virtualized environments, this one is for you!
+Ce préréglage masque la version des environnements. Si vous travaillez dans des conteneurs ou environnements virtuels, celui-là est pour vous!
 
 [![Capture d'écran du préréglage Pas de version des environnements](/presets/img/no-runtime-versions.png "Cliquez pour voir le préréglage Pas de version des environnements")](./no-runtimes)
 
