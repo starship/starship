@@ -100,7 +100,7 @@ format = "took [$duration]($style) "
 
 Précédemment, la propriété `use_symbol_for_status` était utilisée pour configurer l'invite afin d'afficher le `error_symbol` lorsque la dernière commande aboutissait à un résultat non-nul.
 
-Depuis la version v0.45.0, nous utilisons désormais systématiquement `error_symbol` après une commande dont le résultat est non-nul, fusionnant ainsi les propriétés `use_symbol_for_status` et `error_symbol`.
+Depuis la version v0.45.0, nous utilisons systématiquement `error_symbol` après un code de statut non-nul, unifiant ainsi les propriétés `use_symbol_for_status` et `error_symbol`.
 
 Pour que l'invite utilise l'ancienne configuration `use_symbol_for_status = true`, ajoutez la ligne suivante à votre configuration:
 
