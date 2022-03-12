@@ -180,7 +180,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Ce qui est équivalent à
 format = """
 $username\
 $hostname\
@@ -282,7 +282,7 @@ Lorsque vous utilisez [AWSume](https://awsu.me) le profil est lu à partir de la
 | `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.  |
 | `style`             | `"bold yellow"`                                                      | Le style du module.                                               |
 | `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
+| `disabled`          | `false`                                                              | Désactive le module `AWS`.                                        |
 
 ### Variables
 
@@ -441,22 +441,22 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 ### Options
 
-| Option              | Défaut                                                       | Description                                           |
-| ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
-| `version_format`    | `"v${raw}"`                                                  | Le format de la version.                              |
-| `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                                         | Quelles extensions devraient activer ce module.       |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Les fichiers qui activent ce module.                  |
-| `detect_folders`    | `[]`                                                         | Quels dossiers devraient activer ce module.           |
-| `style`             | `"bold blue"`                                                | Le style du module.                                   |
-| `disabled`          | `false`                                                      | Disables the `elixir` module.                         |
+| Option              | Défaut                                                       | Description                                            |
+| ------------------- | ------------------------------------------------------------ | ------------------------------------------------------ |
+| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | Le format du module `buf`.                             |
+| `version_format`    | `"v${raw}"`                                                  | Le format de la version.                               |
+| `symbol`            | `"🦬 "`                                                       | Le symbole utilisé avant d’afficher la version de Buf. |
+| `detect_extensions` | `[]`                                                         | Quelles extensions devraient activer ce module.        |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Les fichiers qui activent ce module.                   |
+| `detect_folders`    | `[]`                                                         | Quels dossiers devraient activer ce module.            |
+| `style`             | `"bold blue"`                                                | Le style du module.                                    |
+| `disabled`          | `false`                                                      | Désactive le module `elixir`.                          |
 
 ### Variables
 
 | Variable      | Exemple  | Description                            |
 | ------------- | -------- | -------------------------------------- |
-| `buf_version` | `v1.0.0` | The version of `buf`                   |
+| `buf_version` | `v1.0.0` | La version de `buf`                    |
 | `symbol`      |          | Reflète la valeur de l'option `symbol` |
 | `style`*      |          | Reflète la valeur de l'option `style`  |
 
@@ -484,7 +484,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`error_symbol` is not supported on nu shell.
+`error_symbol` n’est pas supporté avec nu shell.
 
 :::
 
@@ -1022,7 +1022,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `detect_files`      | `["mix.exs"]`                                               | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                                        | Quels dossiers devraient activer ce module.                                                |
 | `style`             | `"bold purple"`                                             | Le style du module.                                                                        |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                                              |
+| `disabled`          | `false`                                                     | Désactive le module `elixir`.                                                              |
 
 ### Variables
 
