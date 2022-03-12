@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#no-runtime-versions)
+[Retourner aux préréglages](./README.md#no-runtime-versions)
 
 # No Runtime Versions Preset
 
@@ -8,6 +8,6 @@ Ce préréglage masque la version des environnements. If you work in containers 
 
 ### Configuration
 
-[Click to download TOML](/presets/toml/no-runtime-versions.toml)
+[Cliquez pour télécharger le TOML](/presets/toml/no-runtime-versions.toml)
 
 <<< @/.vuepress/public/presets/toml/no-runtime-versions.toml
