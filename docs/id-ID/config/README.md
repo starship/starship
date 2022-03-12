@@ -2182,21 +2182,21 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts` extension
+- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
 
 ### Opsi
 
-| Opsi                | Bawaan                               | Deskripsi                                                                                             |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `fromat`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                                    |
-| `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`                   |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Ekstensi mana yang sebaiknya memicu modul ini.                                                        |
-| `detect_files`      | `["package.json", ".node-version"]`  | filenames mana yang sebaiknya memicu modul ini.                                                       |
-| `detect_folders`    | `["node_modules"]`                   | Folder mana yang sebaiknya memicul modul ini.                                                         |
-| `style`             | `"bold green"`                       | Gaya penataan untuk modul.                                                                            |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Opsi                | Bawaan                                     | Deskripsi                                                                                             |
+| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `fromat`            | `"via [$symbol($version )]($style)"`       | Format dari modul.                                                                                    |
+| `version_format`    | `"v${raw}"`                                | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`                   |
+| `symbol`            | `" "`                                     | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts", "mts", "cts"]` | Ekstensi mana yang sebaiknya memicu modul ini.                                                        |
+| `detect_files`      | `["package.json", ".node-version"]`        | filenames mana yang sebaiknya memicu modul ini.                                                       |
+| `detect_folders`    | `["node_modules"]`                         | Folder mana yang sebaiknya memicul modul ini.                                                         |
+| `style`             | `"bold green"`                             | Gaya penataan untuk modul.                                                                            |
+| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variabel
 
