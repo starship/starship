@@ -135,6 +135,11 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn width(mut self, width: usize) -> Self {
+        self.context.width = width;
+        self
+    }
+
     #[cfg(feature = "battery")]
     pub fn battery_info_provider(
         mut self,
@@ -162,6 +167,12 @@ impl<'a> ModuleRenderer<'a> {
         // the case (to get durations for all modules). So here we make it so, that an empty
         // module returns None in the tests...
         ret.filter(|s| !s.is_empty())
+    }
+}
+
+impl<'a> From<ModuleRenderer<'a>> for Context<'a> {
+    fn from(renderer: ModuleRenderer<'a>) -> Self {
+        renderer.context
     }
 }
 
