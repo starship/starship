@@ -169,9 +169,9 @@
 
 - Eine [Nerd Schriftart](https://www.nerdfonts.com/) installiert und im Terminal aktiviert (zum Beispiel [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Schritt 1. Installiere Starship
 
-Select your operating system from the list below to view installation instructions:
+Wähle dein Betriebssystem aus der Liste für detaillierte Installationsanweisungen:
 
 <details>
 <summary>Android</summary>
@@ -260,9 +260,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Schritt 2. Richte deine Shell für die Nutzung von Starship ein
 
-Configure your shell to initialize starship. Select yours from the list below:
+Konfigurieren deine Shell um Starship zu initialisieren. Wähle dafür deine Shell aus der Liste aus:
 
 <details>
 <summary>Bash</summary>
@@ -276,7 +276,7 @@ eval "$(starship init bash)"
 </details>
 
 <details>
-<summary>Cmd</summary>
+<summary>⌘ Cmd</summary>
 
 You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
@@ -381,15 +381,15 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Schritt 3. Starship konfigurieren
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+Starte eine neue Shell, um deinen neuen und schönen Prompt zu sehen. Wenn du mit den Defaults zufrieden bist, bist du bereits fertig!
 
-If you're looking to further customize Starship:
+Falls du Starship weiter anpassen möchtest:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Konfiguration](https://starship.rs/config/)** - Lerne, wie du Starship deinen Bedürfnissen nach anpassen kannst
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Voreinstellungen](https://starship.rs/presets/)** - lasse dich von vorgefertigter Konfigurationen anderer Benutzenden inspirieren
 
 ## 🤝 Mitwirken
 
