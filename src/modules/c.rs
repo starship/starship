@@ -145,7 +145,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint(" gcc v10.2.1 ")
+            Color::Fixed(149).bold().paint("C gcc v10.2.1 ")
         ));
         assert_eq!(expected, actual);
 
@@ -169,7 +169,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint(" gcc v3.3.5 ")
+            Color::Fixed(149).bold().paint("C gcc v3.3.5 ")
         ));
         assert_eq!(expected, actual);
 
@@ -186,7 +186,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .path(dir.path())
             .config(versioned_format())
             .collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint(" ")));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
 
         // What happens when 'cc --version' doesn't work, but 'gcc --version' does?
@@ -198,7 +198,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .cmd("cc --version", None)
             .path(dir.path())
             .collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint(" gcc ")));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C gcc ")));
         assert_eq!(expected, actual);
 
         // Now with both 'cc' and 'gcc' not working, this should fall back to 'clang --version'
@@ -210,7 +210,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint(" clang v11.1.0 ")
+            Color::Fixed(149).bold().paint("C clang v11.1.0 ")
         ));
         assert_eq!(expected, actual);
 
@@ -222,7 +222,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .path(dir.path())
             .config(versioned_format())
             .collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint(" ")));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
 
         dir.close()
@@ -239,7 +239,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint(" clang v11.0.1 ")
+            Color::Fixed(149).bold().paint("C clang v11.0.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()

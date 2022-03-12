@@ -1,6 +1,9 @@
 [aws]
 symbol = "  "
 
+[c]
+symbol = " "
+
 [conda]
 symbol = " "
 
