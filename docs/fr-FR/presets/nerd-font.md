@@ -2,7 +2,7 @@
 
 # Préréglage Symboles Nerd Font
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Ce préréglage change les symboles de chaque module pour utiliser les symboles de Nerd Font.
 
 ![Capture d'écran du pré-réglage Nerd Font Symbols](/presets/img/nerd-font-symbols.png)
 
