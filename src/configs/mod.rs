@@ -6,6 +6,7 @@ use starship_module_config_derive::ModuleConfig;
 pub mod aws;
 pub mod azure;
 pub mod battery;
+pub mod buf;
 pub mod c;
 pub mod character;
 pub mod cmake;
@@ -91,6 +92,7 @@ pub struct FullConfig<'a> {
     aws: aws::AwsConfig<'a>,
     azure: azure::AzureConfig<'a>,
     battery: battery::BatteryConfig<'a>,
+    buf: buf::BufConfig<'a>,
     c: c::CConfig<'a>,
     character: character::CharacterConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
@@ -173,6 +175,7 @@ impl<'a> Default for FullConfig<'a> {
             aws: Default::default(),
             azure: Default::default(),
             battery: Default::default(),
+            buf: Default::default(),
             c: Default::default(),
             character: Default::default(),
             cmake: Default::default(),

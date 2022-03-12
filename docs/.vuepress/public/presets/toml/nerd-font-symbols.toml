@@ -1,6 +1,9 @@
 [aws]
 symbol = "  "
 
+[buf]
+symbol = " "
+
 [c]
 symbol = " "
 

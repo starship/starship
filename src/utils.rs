@@ -129,6 +129,10 @@ pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 ) -> Option<Option<CommandOutput>> {
     let command = display_command(&cmd, args);
     let out = match command.as_str() {
+        "buf --version" => Some(CommandOutput {
+            stdout: String::from("1.0.0"),
+            stderr: String::default(),
+        }),
         "cc --version" => Some(CommandOutput {
             stdout: String::from("\
 FreeBSD clang version 11.0.1 (git@github.com:llvm/llvm-project.git llvmorg-11.0.1-0-g43ff75f2c3fe)

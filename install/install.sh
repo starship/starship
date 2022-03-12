@@ -116,7 +116,7 @@ unpack() {
       return 0
       ;;
     *.zip)
-      flags=$(test -z "${VERBOSE-}" && echo "-qq" || echo "")
+      flags=$(test -z "${VERBOSE-}" && echo "-qqo" || echo "-o")
       UNZIP="${flags}" ${sudo} unzip "${archive}" -d "${bin_dir}"
       return 0
       ;;
@@ -144,7 +144,7 @@ usage() {
     "-b, --bin-dir" "Override the bin installation directory [default: ${BIN_DIR}]" \
     "-a, --arch" "Override the architecture identified by the installer [default: ${ARCH}]" \
     "-B, --base-url" "Override the base URL used for downloading releases [default: ${BASE_URL}]" \
-    "-h, --help" "Dispays this help message"
+    "-h, --help" "Display this help message"
 }
 
 elevate_priv() {
@@ -263,7 +263,7 @@ confirm() {
 }
 
 check_bin_dir() {
-  bin_dir="$1"
+  bin_dir="${1%/}"
 
   if [ ! -d "$BIN_DIR" ]; then
     error "Installation location $BIN_DIR does not appear to be a directory"
@@ -276,7 +276,7 @@ check_bin_dir() {
   good=$(
     IFS=:
     for path in $PATH; do
-      if [ "${path}" = "${bin_dir}" ]; then
+      if [ "${path%/}" = "${bin_dir}" ]; then
         printf 1
         break
       fi

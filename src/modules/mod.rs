@@ -1,6 +1,7 @@
 // While adding out new module add out module to src/module.rs ALL_MODULES const array also.
 mod aws;
 mod azure;
+mod buf;
 mod c;
 mod character;
 mod cmake;
@@ -91,6 +92,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "azure" => azure::module(context),
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
+            "buf" => buf::module(context),
             "c" => c::module(context),
             "character" => character::module(context),
             "cmake" => cmake::module(context),
@@ -181,6 +183,7 @@ pub fn description(module: &str) -> &'static str {
         "aws" => "The current AWS region and profile",
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
+        "buf" => "The currently installed version of the Buf CLI",
         "c" => "Your C compiler type",
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"

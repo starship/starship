@@ -1,3 +1,28 @@
+const sidebar = (lang, override = {}) =>
+    [
+        "", // "Home", which should always have a override
+        "guide", // README, which should always have a override
+        // Overrides for any page below is an inconsistency between the sidebar title and page title
+        "installing",
+        "config",
+        "advanced-config",
+        "faq",
+        "presets",
+    ].map(page => {
+        let path = "/";
+
+        if (lang) {
+            path += `${lang}/`;
+        }
+
+        if (page) {
+            path += `${page}/`;
+        }
+
+        // If no override is set for current page, let VuePress fallback to page title
+        return page in override ? [path, override[page]] : path;
+    });
+
 module.exports = {
     locales: {
         "/": {
@@ -85,6 +110,7 @@ module.exports = {
         ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png" }],
         ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt" }],
     ],
+    evergreen: true,
     theme: "default-prefers-color-scheme",
     themeConfig: {
         logo: "/icon.png",
@@ -113,16 +139,9 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "Configuration", link: "/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/",
-                    ["/guide/", "Guide"],
-                    ["/installing/", "Advanced Installation"],
-                    ["/config/", "Configuration"],
-                    ["/advanced-config/", "Advanced Configuration"],
-                    ["/faq/", "Frequently Asked Questions"],
-                    ["/presets/", "Presets"],
-                    ["/migrating-to-0.45.0/", "Migrating to v0.45.0"],
-                ],
+                sidebar: sidebar("", {
+                    guide: "Guide",
+                }),
             },
             "/de-DE/": {
                 // text for the language dropdown
@@ -132,16 +151,14 @@ module.exports = {
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Bearbeite diese Seite auf GitHub",
                 // Custom navbar values
-                nav: [{ text: "Konfiguration", link: "/config/" }],
+                nav: [{ text: "Konfiguration", link: "/de-DE/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/de-DE/",
-                    ["/de-DE/guide/", "Anleitung"],
-                    ["/de-DE/config/", "Konfiguration"],
-                    ["/de-DE/advanced-config/", "Erweiterte Konfiguration"],
-                    ["/de-DE/faq/", "Häufig gestellte Fragen"],
-                    ["/de-DE/presets/", "Konfigurations-Beispiele"],
-                ],
+                sidebar: sidebar("de-DE", {
+                    guide: "Anleitung",
+                    installing: "Erweiterte Installation",
+                    faq: "Häufig gestellte Fragen",
+                    presets: "Konfigurations-Beispiele",
+                }),
             },
             "/es-ES/": {
                 // text for the language dropdown
@@ -153,14 +170,12 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "Configuración", link: "/es-ES/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/es-ES/",
-                    ["/es-ES/guide/", "Guía"],
-                    ["/es-ES/config/", "Configuración"],
-                    ["/es-ES/advanced-config/", "Configuración Avanzada"],
-                    ["/es-ES/faq/", "Preguntas frecuentes"],
-                    ["/es-ES/presets/", "Ajustes predeterminados"],
-                ],
+                sidebar: sidebar("es-ES", {
+                    guide: "Guía",
+                    installing: "Instalación avanzada",
+                    faq: "Preguntas frecuentes",
+                    presets: "Ajustes predeterminados",
+                }),
             },
             "/fr-FR/": {
                 // text for the language dropdown
@@ -172,14 +187,10 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "Configuration", link: "/fr-FR/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/fr-FR/",
-                    ["/fr-FR/guide/", "Guide"],
-                    ["/fr-FR/config/", "Configuration"],
-                    ["/fr-FR/advanced-config/", "Configuration avancée"],
-                    ["/fr-FR/faq/", "Foire aux questions"],
-                    ["/fr-FR/presets/", "Paramètres par défaut"],
-                ],
+                sidebar: sidebar("fr-FR", {
+                    guide: "Guide",
+                    installing: "Installation avancée",
+                }),
             },
             "/id-ID/": {
                 // text for the language dropdown
@@ -191,14 +202,12 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "Konfigurasi", link: "/id-ID/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/id-ID/",
-                    ["/id-ID/guide/", "Petunjuk"],
-                    ["/id-ID/config/", "Konfigurasi"],
-                    ["/id-ID/advanced-config/", "Konfigurasi Lanjutan"],
-                    ["/id-ID/faq/", "Pertanyaan Umum"],
-                    ["/id-ID/presets/", "Prasetel"],
-                ],
+                sidebar: sidebar("id-ID", {
+                    guide: "Petunjuk",
+                    installing: "Advanced Installation",
+                    faq: "Pertanyaan Umum",
+                    presets: "Prasetel",
+                }),
             },
             "/it-IT/": {
                 // text for the language dropdown
@@ -210,14 +219,10 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "Configuration", link: "/it-IT/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/it-IT/",
-                    ["/it-IT/guide/", "Guide"],
-                    ["/it-IT/config/", "Configurazione"],
-                    ["/it-IT/advanced-config/", "Configurazione Avanzata"],
-                    ["/it-IT/faq/", "FAQ"],
-                    ["/it-IT/presets/", "Preset"],
-                ],
+                sidebar: sidebar("it-IT", {
+                    guide: "Guide",
+                    installing: "Installazione Avanzata",
+                }),
             },
             "/ja-JP/": {
                 // text for the language dropdown
@@ -229,15 +234,10 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "設定", link: "/ja-JP/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/ja-JP/",
-                    ["/ja-JP/guide/", "ガイド"],
-                    ["/ja-JP/config/", "設定"],
-                    ["/ja-JP/advanced-config/", "高度な設定"],
-                    ["/ja-JP/faq/", "FAQ"],
-                    ["/ja-JP/presets/", "準備するもの"],
-                    ["/ja-JP/migrating-to-0.45.0/", "v0.45への移行"],
-                ],
+                sidebar: sidebar("ja-JP", {
+                    guide: "ガイド",
+                    installing: "高度なインストール",
+                }),
             },
             "/pt-BR/": {
                 // text for the language dropdown
@@ -249,14 +249,12 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "Configuração", link: "/pt-BR/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/pt-BR/",
-                    ["/pt-BR/guide/", "Guia"],
-                    ["/pt-BR/config/", "Configuração"],
-                    ["/pt-BR/advanced-config/", "Configuração avançada"],
-                    ["/pt-BR/faq/", "Perguntas frequentes"],
-                    ["/pt-BR/presets/", "Predefinições"],
-                ],
+                sidebar: sidebar("pt-BR", {
+                    guide: "Guia",
+                    installing: "Instalação avançada",
+                    faq: "Perguntas frequentes",
+                    presets: "Predefinições",
+                }),
             },
             "/ru-RU/": {
                 // text for the language dropdown
@@ -268,14 +266,13 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "Настройка", link: "/ru-RU/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/ru-RU/",
-                    ["/ru-RU/guide/", "Руководство"],
-                    ["/ru-RU/config/", "Настройка"],
-                    ["/ru-RU/advanced-config/", "Расширенная Настройка"],
-                    ["/ru-RU/faq/", "Часто Задаваемые Вопросы"],
-                    ["/ru-RU/presets/", "Предустановки"],
-                ],
+                sidebar: sidebar("ru-RU", {
+                    guide: "Руководство",
+                    installing: "Advanced Installation",
+                    config: "Настройка",
+                    "advanced-config": "Расширенная Настройка",
+                    faq: "Часто Задаваемые Вопросы",
+                }),
             },
             "/vi-VN/": {
                 // text for the language dropdown
@@ -287,51 +284,43 @@ module.exports = {
                 // Custom navbar values
                 nav: [{ text: "Cấu hình", link: "/vi-VN/config/" }],
                 // Custom sidebar values
-                sidebar: [
-                    "/vi-VN/",
-                    ["/vi-VN/guide/", "Hướng dẫn"],
-                    ["/vi-VN/config/", "Cấu hình"],
-                    ["/vi-VN/advanced-config/", "Cấu hình nâng cao"],
-                    ["/vi-VN/faq/", "Các hỏi thường gặp"],
-                    ["/vi-VN/presets/", "Mẫu thiết lập"],
-                ],
+                sidebar: sidebar("vi-VN", {
+                    guide: "Hướng dẫn",
+                    installing: "Cài đặt nâng cao",
+                    faq: "Các hỏi thường gặp",
+                }),
             },
-        },
-        "/zh-TW/": {
-            // text for the language dropdown
-            selectText: "語言",
-            // label for this locale in the language dropdown
-            label: "繁體中文",
-            // Custom text for edit link. Defaults to "Edit this page"
-            editLinkText: "在 GitHub 上修改此頁面",
-            // Custom navbar values
-            nav: [{ text: "設定", link: "/zh-TW/config/" }],
-            // Custom sidebar values
-            sidebar: [
-                "/zh-TW/",
-                ["/zh-TW/guide/", "指引"],
-                ["/zh-TW/config/", "設定"],
-                ["/zh-TW/advanced-config/", "進階設定"],
-            ],
-        },
-        "/zh-CN/": {
-            // text for the language dropdown
-            selectText: "语言",
-            // label for this locale in the language dropdown
-            label: "简体中文",
-            // Custom text for edit link. Defaults to "Edit this page"
-            editLinkText: "在 GitHub 上修改此页",
-            // Custom navbar values
-            nav: [{ text: "配置", link: "/zh-CN/config/" }],
-            // Custom sidebar values
-            sidebar: [
-                "/zh-CN/",
-                ["/zh-CN/guide/", "指南"],
-                ["/zh-CN/config/", "配置"],
-                ["/zh-CN/advanced-config/", "高级配置"],
-                ["/zh-CN/faq/", "常见问题"],
-                ["/zh-CN/presets/", "社区配置分享"],
-            ],
+            "/zh-TW/": {
+                // text for the language dropdown
+                selectText: "語言",
+                // label for this locale in the language dropdown
+                label: "繁體中文",
+                // Custom text for edit link. Defaults to "Edit this page"
+                editLinkText: "在 GitHub 上修改此頁面",
+                // Custom navbar values
+                nav: [{ text: "設定", link: "/zh-TW/config/" }],
+                // Custom sidebar values
+                sidebar: sidebar("zh-TW", {
+                    guide: "指引",
+                    installing: "進階安裝",
+                }),
+            },
+            "/zh-CN/": {
+                // text for the language dropdown
+                selectText: "语言",
+                // label for this locale in the language dropdown
+                label: "简体中文",
+                // Custom text for edit link. Defaults to "Edit this page"
+                editLinkText: "在 GitHub 上修改此页",
+                // Custom navbar values
+                nav: [{ text: "配置", link: "/zh-CN/config/" }],
+                // Custom sidebar values
+                sidebar: sidebar("zh-CN", {
+                    guide: "指南",
+                    installing: "高级安装",
+                    presets: "社区配置分享",
+                }),
+            },
         },
     },
     plugins: [
