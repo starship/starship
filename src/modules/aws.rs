@@ -64,12 +64,13 @@ fn get_aws_region_from_config(context: &Context, aws_profile: Option<&str>) -> O
 
 fn get_aws_profile_and_region(context: &Context) -> (Option<Profile>, Option<Region>) {
     let profile_env_vars = vec!["AWSU_PROFILE", "AWS_VAULT", "AWSUME_PROFILE", "AWS_PROFILE"];
+    let region_env_vars = vec!["AWS_REGION", "AWS_DEFAULT_REGION"];
     let profile = profile_env_vars
         .iter()
         .find_map(|env_var| context.get_env(env_var));
-    let region = context
-        .get_env("AWS_REGION")
-        .or_else(|| context.get_env("AWS_DEFAULT_REGION"));
+    let region = region_env_vars
+        .iter()
+        .find_map(|env_var| context.get_env(env_var));
     match (profile, region) {
         (Some(p), Some(r)) => (Some(p), Some(r)),
         (None, Some(r)) => (None, Some(r)),
