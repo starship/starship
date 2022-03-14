@@ -43,6 +43,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         false => PipeStatusStatus::Disabled,
     };
 
+    // Exit code is zero and pipestatus is all zero or disabled/missing
+    if config.success_symbol == ""
+        && (match pipestatus_status {
+            PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
+            _ => true,
+        })
+    {
+        return None;
+    }
+
     // Create pipestatus string
     let pipestatus = match pipestatus_status {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
