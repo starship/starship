@@ -225,6 +225,7 @@ mod tests {
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
+                success_symbol = ""
                 disabled = false
             })
             .status(0)
