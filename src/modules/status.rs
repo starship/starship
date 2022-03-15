@@ -254,10 +254,7 @@ mod tests {
 
     #[test]
     fn success_status_success_symbol_filled() {
-        let expected = Some(format!(
-            "{} ",
-            format!("✔️{}", status)
-        ));
+        let expected = Some(format!("{} ", Color::Red.bold().paint("✔️0")));
 
         // Status code 0
         let actual = ModuleRenderer::new("status")
@@ -270,7 +267,6 @@ mod tests {
             .collect();
         assert_eq!(expected, actual);
 
-        let expected = None;
         // No status code
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
