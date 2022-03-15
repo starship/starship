@@ -36,7 +36,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let branch_name = repo.branch.as_ref()?;
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
-
+    
+    for ignore_branch in config.ignore_branch.split(',') {
+        let ignore_graphemes: Vec<&str> = UnicodeSegmentation::graphemes(ignore_branch, true).collect();
+        
+        if graphemes.eq(&ignore_graphemes) {
+            return None;
+        }
+    }
+        
     let mut remote_branch_graphemes: Vec<&str> = Vec::new();
     let mut remote_name_graphemes: Vec<&str> = Vec::new();
     if let Some(remote) = repo.remote.as_ref() {
