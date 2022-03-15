@@ -44,7 +44,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     // Exit code is zero and pipestatus is all zero or disabled/missing
-    if config.success_symbol == ""
+    if exit_code == "0"
+        && config.success_symbol.is_empty()
         && (match pipestatus_status {
             PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
             _ => true,
