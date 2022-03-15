@@ -37,7 +37,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let branch_name = repo.branch.as_ref()?;
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
     
-    for ignore_branch in config.ignore_branches.split(',') {
+    for ignore_branch in config.ignore_branches {
         let ignore_graphemes: Vec<&str> = UnicodeSegmentation::graphemes(ignore_branch, true).collect();
         
         if graphemes.eq(&ignore_graphemes) {
