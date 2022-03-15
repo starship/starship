@@ -43,6 +43,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         false => PipeStatusStatus::Disabled,
     };
 
+    // Exit code is zero while success_symbol and pipestatus are all zero or disabled/missing
+    if exit_code == "0"
+        && config.success_symbol.is_empty()
+        && (match pipestatus_status {
+            PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
+            _ => true,
+        })
+    {
+        return None;
+    }
+
     // Create pipestatus string
     let pipestatus = match pipestatus_status {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
@@ -218,13 +229,59 @@ mod tests {
     use crate::test::ModuleRenderer;
 
     #[test]
-    fn success_status() {
+    fn success_status_success_symbol_empty() {
         let expected = None;
+
+        // Status code 0 and success_symbol = ""
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                success_symbol = ""
+                disabled = false
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected, actual);
+
+        // Status code 0 and success_symbol is missing
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected, actual);
+
+        // No status code and success_symbol = ""
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                success_symbol = ""
+                disabled = false
+            })
+            .collect();
+        assert_eq!(expected, actual);
+
+        // No status code and success_symbol is missing
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+            })
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn success_status_success_symbol_filled() {
+        let expected = Some(format!("{} ", Color::Red.bold().paint("✔️0")));
 
         // Status code 0
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
+                success_symbol = "✔️"
                 disabled = false
             })
             .status(0)
@@ -235,6 +292,7 @@ mod tests {
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
+                success_symbol = "✔️"
                 disabled = false
             })
             .collect();
