@@ -1398,7 +1398,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
-ignore_branches = ["master","main"]
+ignore_branches = ["master", "main"]
 ```
 
 ## Git Commit
