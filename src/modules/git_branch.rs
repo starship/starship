@@ -37,7 +37,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let branch_name = repo.branch.as_ref()?;
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
     
-    for ignore_branch in config.ignore_branch.split(',') {
+    for ignore_branch in config.ignore_branches.split(',') {
         let ignore_graphemes: Vec<&str> = UnicodeSegmentation::graphemes(ignore_branch, true).collect();
         
         if graphemes.eq(&ignore_graphemes) {
@@ -368,6 +368,29 @@ mod tests {
             "on {} ",
             Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
         ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+    
+    #[test]
+    fn test_ignore_branches() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["checkout", "-b", "test_branch"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                [git_branch]
+                    ignore_branches = "dummy,test_branch"
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
