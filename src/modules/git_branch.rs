@@ -385,7 +385,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_branch")
             .config(toml::toml! {
                 [git_branch]
-                    ignore_branches = "dummy,test_branch"
+                    ignore_branches = ["dummy", "test_branch"]
             })
             .path(&repo_dir.path())
             .collect();
