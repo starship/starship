@@ -3083,7 +3083,7 @@ format = '[📦 \[$env\]]($style) '
 ## Status
 
 The `status` module displays the exit code of the previous command.
-The module will be shown only if the exit code is not `0`.
+If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`.
 The status code will cast to a signed 32-bit integer.
 
 ::: tip
@@ -3103,11 +3103,11 @@ This module is not supported on nu shell.
 | ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                 | The format of the module                                |
 | `symbol`                | `"✖"`                                                                         | The symbol displayed on program error                   |
-| `success_symbol`        | `"✔️"`                                                                        | The symbol displayed on program success                 |
-| `not_executable_symbol` | `"🚫"`                                                                         | The symbol displayed when file isn't executable         |
-| `not_found_symbol`      | `"🔍"`                                                                         | The symbol displayed when the command can't be found    |
-| `sigint_symbol`         | `"🧱"`                                                                         | The symbol displayed on SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                         | The symbol displayed on any signal                      |
+| `success_symbol`        | `""`                                                                          | The symbol displayed on program success.                |
+| `not_executable_symbol` | `"🚫"`                                                                        | The symbol displayed when file isn't executable         |
+| `not_found_symbol`      | `"🔍"`                                                                        | The symbol displayed when the command can't be found    |
+| `sigint_symbol`         | `"🧱"`                                                                        | The symbol displayed on SIGINT (Ctrl + c)               |
+| `signal_symbol`         | `"⚡"`                                                                        | The symbol displayed on any signal                      |
 | `style`                 | `"bold red"`                                                                  | The style for the module.                               |
 | `recognize_signal_code` | `true`                                                                        | Enable signal mapping from exit code                    |
 | `map_symbol`            | `false`                                                                       | Enable symbols mapping from exit code                   |
@@ -3140,8 +3140,9 @@ This module is not supported on nu shell.
 
 [status]
 style = "bg:blue"
-symbol = "🔴"
-format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
+symbol = "🔴 "
+success_symbol = "🟢"
+format = '[\[$success_symbol$symbol$common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 ```
