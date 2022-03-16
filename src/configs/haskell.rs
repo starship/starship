@@ -20,7 +20,7 @@ impl<'a> Default for HaskellConfig<'a> {
         HaskellConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: " ",
+            symbol: "λ ",
             style: "bold purple",
             disabled: false,
             detect_extensions: vec!["hs", "cabal", "hs-boot"],
