@@ -119,8 +119,15 @@ fn alias_name(name: Option<String>, aliases: &HashMap<String, &str>) -> Option<S
         .or(name)
 }
 
-fn get_credential_process(context: &Context, aws_profile: Option<&Profile>) -> Option<String> {
-    let contents = read_file(get_config_file_path(context)?).ok()?;
+fn has_credential_process_or_sso(context: &Context, aws_profile: Option<&Profile>) -> bool {
+    let fp = match get_config_file_path(context) {
+        Some(fp) => fp,
+        None => return false,
+    };
+    let contents = match read_file(fp) {
+        Ok(contents) => contents,
+        Err(_) => return false,
+    };
 
     let profile_line = if let Some(aws_profile) = aws_profile {
         format!("[profile {}]", aws_profile)
@@ -128,15 +135,12 @@ fn get_credential_process(context: &Context, aws_profile: Option<&Profile>) -> O
         "[default]".to_string()
     };
 
-    let cred_proc_line = contents
+    contents
         .lines()
         .skip_while(|line| line != &profile_line)
         .skip(1)
         .take_while(|line| !line.starts_with('['))
-        .find(|line| line.starts_with("credential_process"))?;
-
-    let cred_proc = cred_proc_line.split('=').nth(1)?.trim();
-    Some(cred_proc.to_string())
+        .any(|line| line.starts_with("credential_process") || line.starts_with("sso_start_url"))
 }
 
 fn get_defined_credentials(context: &Context, aws_profile: Option<&Profile>) -> Option<String> {
@@ -182,7 +186,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // only display if credential_process is defined or has valid credentials
-    if get_credential_process(context, aws_profile.as_ref()).is_none()
+    if !has_credential_process_or_sso(context, aws_profile.as_ref())
         && get_defined_credentials(context, aws_profile.as_ref()).is_none()
     {
         return None;
@@ -831,6 +835,37 @@ credential_process = /opt/bin/awscreds-retriever
 "
             .as_bytes(),
         )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn sso_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[default]
+region = ap-northeast-2
+sso_start_url = https://starship.rs/sso
+sso_region = <SSO-Default-Region>
+sso_account_id = <AWS ACCOUNT ID>
+sso_role_name = <AWS-ROLE-NAME>
+"
+            .as_bytes(),
+        )?;
+
+        file.sync_all()?;
 
         let actual = ModuleRenderer::new("aws")
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
