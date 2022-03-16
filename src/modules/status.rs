@@ -177,7 +177,7 @@ fn status_common_meaning(ex: ExitCode) -> Option<&'static str> {
         return None;
     }
     match ex {
-        0 => Some(""),  // SUCCESS can be defined by $success_symbol if the user wishes too.
+        0 => Some(""), // SUCCESS can be defined by $success_symbol if the user wishes too.
         1 => Some("ERROR"),
         2 => Some("USAGE"),
         126 => Some("NOPERM"),
