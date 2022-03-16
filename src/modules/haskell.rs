@@ -148,7 +148,7 @@ mod tests {
         Ok(())
     }
 
-    static REANIMATE_STACK_YAML: &'static str = r"
+    static REANIMATE_STACK_YAML: &str = r"
 resolver: lts-14.27
 
 allow-newer: false
