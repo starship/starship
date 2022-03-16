@@ -26,7 +26,7 @@ impl<'a> Default for StatusConfig<'a> {
         StatusConfig {
             format: "[$symbol$status]($style) ",
             symbol: "✖",
-            success_symbol: "✔️",
+            success_symbol: "",
             not_executable_symbol: "🚫",
             not_found_symbol: "🔍",
             sigint_symbol: "🧱",
