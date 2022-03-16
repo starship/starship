@@ -26,7 +26,7 @@ impl<'a> Default for GitBranchConfig<'a> {
             truncation_symbol: "…",
             only_attached: false,
             always_show_remote: false,
-            ignore_branches: vec![""],
+            ignore_branches: vec![],
             disabled: false,
         }
     }
