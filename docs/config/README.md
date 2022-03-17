@@ -512,7 +512,7 @@ file.
 | `detect_extensions` | `["c", "h"]`                                                                | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                                                        | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                        | Which folders should trigger this module.                                 |
-| `detectors`         | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                        |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                        |
 | `style`             | `"bold 149"`                                                                | The style for the module.                                                 |
 | `disabled`          | `false`                                                                     | Disables the `c` module.                                                  |
 
@@ -527,11 +527,11 @@ file.
 
 NB that `version` is not in the default format.
 
-### Detectors
+### Commands
 
-The `detectors` variable accepts a list of commands to determine the compiler version and name.
+The `commands` option accepts a list of commands to determine the compiler version and name.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result.
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
 
 If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
 
