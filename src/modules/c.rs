@@ -99,14 +99,6 @@ mod tests {
     use std::fs::File;
     use std::io;
 
-    // we need to test that we can parse the version, even though that's not in the default config
-    fn versioned_format() -> toml::Value {
-        toml::toml! {
-            [c]
-            format = "via [$symbol ($name ($version ))]($style)"
-        }
-    }
-
     #[test]
     fn folder_without_c_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -141,11 +133,10 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
                 }),
             )
             .path(dir.path())
-            .config(versioned_format())
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("C gcc v10.2.1 ")
+            Color::Fixed(149).bold().paint("C v10.2.1-gcc ")
         ));
         assert_eq!(expected, actual);
 
@@ -165,11 +156,10 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
                 }),
             )
             .path(dir.path())
-            .config(versioned_format())
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("C gcc v3.3.5 ")
+            Color::Fixed(149).bold().paint("C v3.3.5-gcc ")
         ));
         assert_eq!(expected, actual);
 
@@ -184,7 +174,6 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
                 }),
             )
             .path(dir.path())
-            .config(versioned_format())
             .collect();
         let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
@@ -198,7 +187,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .cmd("cc --version", None)
             .path(dir.path())
             .collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C gcc ")));
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C v10.2.1-gcc ")));
         assert_eq!(expected, actual);
 
         // Now with both 'cc' and 'gcc' not working, this should fall back to 'clang --version'
@@ -206,11 +195,10 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .cmd("cc --version", None)
             .cmd("gcc --version", None)
             .path(dir.path())
-            .config(versioned_format())
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("C clang v11.1.0 ")
+            Color::Fixed(149).bold().paint("C v11.1.0-clang ")
         ));
         assert_eq!(expected, actual);
 
@@ -220,7 +208,6 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .cmd("gcc --version", None)
             .cmd("clang --version", None)
             .path(dir.path())
-            .config(versioned_format())
             .collect();
         let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C ")));
         assert_eq!(expected, actual);
@@ -235,11 +222,10 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
 
         let actual = ModuleRenderer::new("c")
             .path(dir.path())
-            .config(versioned_format())
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("C clang v11.0.1 ")
+            Color::Fixed(149).bold().paint("C v11.0.1-clang ")
         ));
         assert_eq!(expected, actual);
         dir.close()

@@ -2,7 +2,7 @@
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
 [c]
-format = '\[[$symbol ($name)]($style)\]'
+format = '\[[$symbol $version(-$name)]($style)\]'
 
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
