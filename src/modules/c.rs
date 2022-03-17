@@ -187,7 +187,10 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
             .cmd("cc --version", None)
             .path(dir.path())
             .collect();
-        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C v10.2.1-gcc ")));
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(149).bold().paint("C v10.2.1-gcc ")
+        ));
         assert_eq!(expected, actual);
 
         // Now with both 'cc' and 'gcc' not working, this should fall back to 'clang --version'
@@ -220,9 +223,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("any.h"))?.sync_all()?;
 
-        let actual = ModuleRenderer::new("c")
-            .path(dir.path())
-            .collect();
+        let actual = ModuleRenderer::new("c").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
             Color::Fixed(149).bold().paint("C v11.0.1-clang ")
