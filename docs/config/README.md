@@ -273,7 +273,7 @@ format = "$all$directory$character"
 ## AWS
 
 The `aws` module shows the current AWS region and profile when
-credentials or a `credential_process` have been setup. This is based on
+credentials, a `credential_process` or a `sso_start_url` have been setup. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file. This module also shows an expiration timer when using temporary
 credentials.
@@ -1423,6 +1423,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
 | `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
 | `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
+| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                      |
 | `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Variables
@@ -1446,6 +1447,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+ignore_branches = ["master", "main"]
 ```
 
 ## Git Commit
@@ -2338,21 +2340,21 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts` extension
+- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
 
 ### Options
 
-| Option              | Default                              | Description                                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                          |
-| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
-| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
-| `style`             | `"bold green"`                       | The style for the module.                                                                             |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Option              | Default                                    | Description                                                                                           |
+| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`       | The format for the module.                                                                            |
+| `version_format`    | `"v${raw}"`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `" "`                                     | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts", "mts", "cts"]` | Which extensions should trigger this module.                                                          |
+| `detect_files`      | `["package.json", ".node-version"]`        | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `["node_modules"]`                         | Which folders should trigger this module.                                                             |
+| `style`             | `"bold green"`                             | The style for the module.                                                                             |
+| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
 
@@ -3132,7 +3134,7 @@ format = '[📦 \[$env\]]($style) '
 ## Status
 
 The `status` module displays the exit code of the previous command.
-The module will be shown only if the exit code is not `0`.
+If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`.
 The status code will cast to a signed 32-bit integer.
 
 ::: tip
@@ -3152,7 +3154,7 @@ This module is not supported on nu shell.
 | ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                 | The format of the module                                |
 | `symbol`                | `"✖"`                                                                         | The symbol displayed on program error                   |
-| `success_symbol`        | `"✔️"`                                                                        | The symbol displayed on program success                 |
+| `success_symbol`        | `""`                                                                          | The symbol displayed on program success                 |
 | `not_executable_symbol` | `"🚫"`                                                                         | The symbol displayed when file isn't executable         |
 | `not_found_symbol`      | `"🔍"`                                                                         | The symbol displayed when the command can't be found    |
 | `sigint_symbol`         | `"🧱"`                                                                         | The symbol displayed on SIGINT (Ctrl + c)               |
@@ -3189,8 +3191,9 @@ This module is not supported on nu shell.
 
 [status]
 style = "bg:blue"
-symbol = "🔴"
-format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
+symbol = "🔴 "
+success_symbol = "🟢 SUCCESS"
+format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 ```
