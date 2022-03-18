@@ -33,3 +33,9 @@ Ce préréglage masque la version des environnements. Si vous travaillez dans de
 Ce préréglage émule l'apparence et le comportement de [Pure](https://github.com/sindresorhus/pure).
 
 [![Capture d'écran du préréglage Pure](/presets/img/pure-preset.png "Cliquez pour voir le préréglage Pure")](./pure-preset)
+
+## [Pastel Powerline](./pastel-powerline.md)
+
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+
+[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Cliquez pour voir le préréglage Pure")](./pastel-powerline)
