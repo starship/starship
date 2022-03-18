@@ -270,8 +270,18 @@ pub fn edit_configuration() {
     let config_path = get_config_path();
     let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
 
-    let command = utils::create_command(&editor_cmd[0])
-        .expect("Unable to locate editor in $PATH.")
+    let mut command = match utils::create_command(&editor_cmd[0]) {
+        Ok(cmd) => cmd,
+        Err(_) => {
+            log::error!(
+                "Unable to find editor {:?}. Are $VISUAL and $EDITOR set correctly?",
+                editor_cmd
+            );
+            std::process::exit(1);
+        }
+    };
+
+    let result = command
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
@@ -279,20 +289,9 @@ pub fn edit_configuration() {
         .arg(config_path)
         .status();
 
-    match command {
-        Ok(_) => (),
-        Err(error) => match error.kind() {
-            ErrorKind::NotFound => {
-                eprintln!(
-                    "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
-                    environment variables correctly?",
-                    editor_cmd
-                );
-                std::process::exit(1)
-            }
-            other_error => panic!("failed to open file: {:?}", other_error),
-        },
-    };
+    if result.is_err() {
+        log::error!("Failed to execute editor command {:?}", command);
+    }
 }
 
 fn get_editor() -> String {
