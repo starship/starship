@@ -209,6 +209,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$haskell\
 $helm\
 $java\
 $julia\
@@ -1594,6 +1595,39 @@ The `golang` module shows the currently installed version of [Go](https://golang
 format = "via [🏎💨 $version](bold cyan) "
 ```
 
+## Haskell
+
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+
+Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+
+- The current directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+
+### Opciones
+
+| Opción              | Por defecto                          | Descripción                                          |
+| ------------------- | ------------------------------------ | ---------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
+| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell   |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Qué extensiones deberían activar este módulo.        |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Qué nombres de archivo deberían activar este módulo. |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.           |
+| `style`             | `"bold purple"`                      | El estilo del módulo.                                |
+| `disabled`          | `false`                              | Disables the `haskell` module.                       |
+
+### Variables
+
+| Variable       | Ejemplo     | Descripción                                                                             |
+| -------------- | ----------- | --------------------------------------------------------------------------------------- |
+| version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| symbol         |             | Refleja el valor de la opción `symbol`                                                  |
+| style\*      |             | Refleja el valor de la opción `style`                                                   |
+
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
+
 ## Helm
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
@@ -1622,7 +1656,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -1654,7 +1688,7 @@ The `hostname` module shows the system hostname.
 | hostname  | `computer` | The hostname of the computer          |
 | style\* |            | Refleja el valor de la opción `style` |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -1751,7 +1785,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -1793,7 +1827,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -1863,7 +1897,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Opción            | Por defecto                                          | Descripción                                                           |
+| Opción            | Predeterminado                                       | Descripción                                                           |
 | ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | El formato del módulo.                                                |
@@ -1958,7 +1992,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | localipv4 | 192.168.1.13 | Contains the primary IPv4 address     |
 | style\* |              | Refleja el valor de la opción `style` |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2082,7 +2116,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2125,7 +2159,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2161,7 +2195,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2208,7 +2242,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | symbol    |            | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2255,7 +2289,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | Refleja el valor de la opción `symbol`                            |
 | style\*        |              | Refleja el valor de la opción `style`                             |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2288,7 +2322,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2469,7 +2503,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | symbol    |            | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2688,7 +2722,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-*: Esta variable sólo puede ser usada como parte de una cadena de estilo
+*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
 ### Ejemplo
 
@@ -2732,7 +2766,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2771,7 +2805,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | Refleja el valor de la opción `symbol` |
 | style\* |                   | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -2858,7 +2892,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | indicator |                | Mirrors the value of `indicator` for currently used shell. |
 | style\* |                | Mirrors the value of option `style`.                       |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplos
 
@@ -2896,7 +2930,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -3030,7 +3064,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -3268,7 +3302,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | symbol    |                  | Refleja el valor de la opción `symbol` |
 | style\* |                  | Refleja el valor de la opción `style`  |
 
-*: Esta variable sólo puede ser usada como parte de una cadena de estilo
+*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
 ### Ejemplo
 
@@ -3336,7 +3370,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | symbol    |                                             | Refleja el valor de la opción `symbol` |
 | style\* | `black bold dimmed`                         | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -3355,7 +3389,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                             |
+| Opción              | Predeterminado                       | Descripción                                                                             |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
