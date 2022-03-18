@@ -33,3 +33,9 @@ This preset changes the symbols for each module into plain text. Great if you do
 This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
 
 [![Screenshot of Pure preset](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
+
+## [Pastel Powerline](./pastel-powerline.md)
+
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+
+[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
