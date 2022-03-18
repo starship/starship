@@ -4,7 +4,7 @@ use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
 
 #[cfg(all(target_os = "windows", not(test)))]
-use super::utils::admin_win;
+use deelevate::{PrivilegeLevel, Token};
 
 #[cfg(not(target_os = "windows"))]
 const USERNAME_ENV_VAR: &str = "USER";
@@ -85,7 +85,11 @@ fn is_login_user(context: &Context, username: &str) -> bool {
 
 #[cfg(all(target_os = "windows", not(test)))]
 fn is_root_user() -> bool {
-    admin_win::is_app_elevated()
+    let token = Token::with_current_process().unwrap();
+    matches!(
+        token.privilege_level().unwrap(),
+        PrivilegeLevel::Elevated | PrivilegeLevel::HighIntegrityAdmin
+    )
 }
 
 #[cfg(all(target_os = "windows", test))]
