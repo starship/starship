@@ -33,3 +33,9 @@ Está predefinição oculta a versão do runtime da linguagem. Se você trabalha
 Essa configuração simula a aparência e o comportamento do [Pure](https://github.com/sindresorhus/pure).
 
 [![Captura de tela da configuração emulando Pure](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
+
+## [Pastel Powerline](./pastel-powerline.md)
+
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+
+[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
