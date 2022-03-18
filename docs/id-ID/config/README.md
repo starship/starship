@@ -209,6 +209,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$haskell\
 $helm\
 $java\
 $julia\
@@ -1593,6 +1594,39 @@ The `golang` module shows the currently installed version of [Go](https://golang
 [golang]
 format = "via [🏎💨 $version](bold cyan) "
 ```
+
+## Haskell
+
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+
+Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+
+- The current directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+
+### Opsi
+
+| Opsi                | Bawaan                               | Deskripsi                                          |
+| ------------------- | ------------------------------------ | -------------------------------------------------- |
+| `fromat`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                 |
+| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Ekstensi mana yang sebaiknya memicu modul ini.     |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | filenames mana yang sebaiknya memicu modul ini.    |
+| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.      |
+| `style`             | `"bold purple"`                      | Gaya penataan untuk modul.                         |
+| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+
+### Variabel
+
+| Variabel       | Contoh      | Deskripsi                                                                               |
+| -------------- | ----------- | --------------------------------------------------------------------------------------- |
+| version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| symbol         |             | Menyalin nilai dari opsi `symbol`                                                       |
+| style\*      |             | Menyalin nilai dari opsi `style`                                                        |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 ## Helm
 
