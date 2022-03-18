@@ -209,6 +209,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$haskell\
 $helm\
 $java\
 $julia\
@@ -1593,6 +1594,39 @@ The `golang` module shows the currently installed version of [Go](https://golang
 [golang]
 format = "via [🏎💨 $version](bold cyan) "
 ```
+
+## Haskell
+
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+
+Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+
+- The current directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+
+### Opções
+
+| Opções              | Padrão                               | Descrição                                          |
+| ------------------- | ------------------------------------ | -------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                               |
+| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Quais extensões devem ativar este módulo.          |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Quais nomes de arquivos devem ativar este módulo.  |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.             |
+| `style`             | `"bold purple"`                      | O estilo do módulo.                                |
+| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+
+### Variáveis
+
+| Variável       | Exemplo     | Descrição                                                                               |
+| -------------- | ----------- | --------------------------------------------------------------------------------------- |
+| version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| symbol         |             | Espelha o valor da opção `symbol`                                                       |
+| style\*      |             | Espelha o valor da opção `style`                                                        |
+
+*: Esta variável só pode ser usada como parte de uma string de estilo
 
 ## Helm
 
