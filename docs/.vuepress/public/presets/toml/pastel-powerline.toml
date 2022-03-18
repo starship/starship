@@ -50,7 +50,7 @@ format = '[[ $symbol $branch ](bg:#FCA17D)]($style)'
 
 [git_status]
 style = "bg:#FCA17D"
-format = '[[ $all_status$ahead_behind ](bg:#FCA17D)]($style)'
+format = '[[($all_status$ahead_behind )](bg:#FCA17D)]($style)'
 
 [nodejs]
 symbol = ""
