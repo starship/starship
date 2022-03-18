@@ -203,7 +203,7 @@
 安装最新版本：
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 或者，使用以下任一软件包管理器安装Starship：
@@ -232,7 +232,7 @@ sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 安装最新版本：
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 或者，使用以下任一软件包管理器安装Starship：

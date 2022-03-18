@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.3.0"
+version = "1.4.2"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -8,19 +8,25 @@ documentation = "https://starship.rs/guide/"
 edition = "2021"
 homepage = "https://starship.rs"
 # Keep `/` in front of `README.md` to exclude localized readmes
-include = ["src/**/*", "build.rs", "Cross.toml", "LICENSE", "README.md"]
+include = [
+  "src/**/*",
+  "/starship.exe.manifest",
+  "build.rs",
+  "Cross.toml",
+  "LICENSE",
+  "/README.md",
+  "docs/.vuepress/public/presets/toml/",
+]
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]
 license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
+# MSRV is specified to use std::thread::availabe_parallelism, which was stablizized in Rust version 1.59
+# Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
+rust-version = "1.59"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
-
-[badges]
-is-it-maintained-issue-resolution = { repository = "starship/starship" }
-is-it-maintained-open-issues = { repository = "starship/starship" }
-maintenance = { status = "actively-developed" }
 
 [features]
 default = ["battery"]
@@ -28,20 +34,20 @@ battery = ["starship-battery"]
 
 [dependencies]
 ansi_term = "0.12.1"
-byte-unit = "4.0.13"
+byte-unit = "4.0.14"
 chrono = "0.4.19"
-clap = { version = "3.1.3", features = ["derive", "cargo", "unicode"] }
-clap_complete = "3.1.0"
+clap = { version = "3.1.6", features = ["derive", "cargo", "unicode"] }
+clap_complete = "3.1.1"
 directories-next = "2.0.0"
 dunce = "1.0.2"
-gethostname = "0.2.2"
+gethostname = "0.2.3"
 git2 = { version = "0.13.25", default-features = false }
 indexmap = { version = "1.8.0", features = ["serde"] }
 local_ipaddress = "0.1.3"
 log = { version = "0.4.14", features = ["std"] }
 notify-rust = "4.5.6"
-once_cell = "1.9.0"
-open = "2.1.0"
+once_cell = "1.10.0"
+open = "2.1.1"
 os_info = "3.2.0"
 path-slash = "0.1.4"
 pest = "2.1.3"
@@ -49,7 +55,7 @@ pest_derive = "2.1.0"
 quick-xml = "0.22.0"
 rand = "0.8.5"
 rayon = "1.5.1"
-regex = "1.5.4"
+regex = "1.5.5"
 rust-ini = "0.18.0"
 semver = "1.0.6"
 serde = { version = "1.0.136", features = ["derive"] }
@@ -72,7 +78,7 @@ versions = "4.0.0"
 which = "4.2.4"
 yaml-rust = "0.4.5"
 
-process_control = { version = "3.2.1", features = ["crossbeam-channel"] }
+process_control = { version = "3.3.0", features = ["crossbeam-channel"] }
 
 shell-words = "1.1.0"
 

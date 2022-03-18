@@ -42,8 +42,9 @@ description: Starship - минимальная, быстрая и бесконе
    Через Bash:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    Для обновления Starship перезапустите этот скрипт. Он заменит текущую версию без изменения конфигурации.
 
 

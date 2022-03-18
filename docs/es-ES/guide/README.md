@@ -203,7 +203,7 @@ Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 Instale la última versión para su sistema:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternativamente, instale Starship usando cualquiera de los siguientes gestores de paquetes:
@@ -232,7 +232,7 @@ Alternativamente, instale Starship usando cualquiera de los siguientes gestores 
 Instale la última versión para su sistema:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternativamente, instale Starship usando cualquiera de los siguientes gestores de paquetes:

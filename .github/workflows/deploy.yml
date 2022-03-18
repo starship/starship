@@ -202,7 +202,7 @@ jobs:
   # Create GitHub release with Rust build targets and release notes
   github_release:
     name: Create GitHub Release
-    needs: github_build
+    needs: [github_build, notarize_and_pkgbuild]
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
