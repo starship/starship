@@ -209,7 +209,7 @@ impl<'a> fmt::Display for Module<'a> {
 fn ansi_strings_modified(ansi_strings: Vec<String>, shell: Shell) -> Vec<String> {
     ansi_strings
         .into_iter()
-        .map(|ansi| wrap_colorseq_for_shell(ansi.to_string(), shell))
+        .map(|ansi| wrap_colorseq_for_shell(ansi, shell))
         .collect::<Vec<String>>()
 }
 

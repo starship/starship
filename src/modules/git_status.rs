@@ -1160,7 +1160,7 @@ mod tests {
             .output()?;
         barrier();
 
-        writeln!(&mut file, "modified")?;
+        writeln!(file, "modified")?;
         file.sync_all()?;
 
         Ok(())
@@ -1196,7 +1196,7 @@ mod tests {
         barrier();
 
         let mut file = File::create(repo_dir.join("readme.md.bak"))?;
-        writeln!(&mut file, "modified")?;
+        writeln!(file, "modified")?;
         file.sync_all()?;
 
         Ok(())
@@ -1210,7 +1210,7 @@ mod tests {
 
     fn create_staged_and_ignored(repo_dir: &Path) -> io::Result<()> {
         let mut file = File::create(repo_dir.join(".gitignore"))?;
-        writeln!(&mut file, "ignored.txt")?;
+        writeln!(file, "ignored.txt")?;
         file.sync_all()?;
 
         create_command("git")?
@@ -1220,7 +1220,7 @@ mod tests {
         barrier();
 
         let mut file = File::create(repo_dir.join("ignored.txt"))?;
-        writeln!(&mut file, "modified")?;
+        writeln!(file, "modified")?;
         file.sync_all()?;
 
         Ok(())
