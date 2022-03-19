@@ -126,7 +126,9 @@ impl<'a> Module<'a> {
     /// Set segments in module
     pub fn set_segments(&mut self, segments: Vec<Segment>) {
         let mut segments_new = Vec::new();
-        let mut segments = segments.into_iter();
+        let mut segments = segments
+            .into_iter()
+            .filter(|segment| !segment.value().is_empty());
 
         if let Some(mut current_segment) = segments.next() {
             for segment in segments {
