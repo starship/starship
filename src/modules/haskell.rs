@@ -88,7 +88,7 @@ fn is_stack_project(context: &Context) -> bool {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
     use std::io::Write;
@@ -126,7 +126,10 @@ mod tests {
             let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
             let expected = Some(format!(
                 "via {}",
-                Color::Purple.bold().paint(format!("λ {} ", resolver))
+                Style::new()
+                    .purple()
+                    .bold()
+                    .style(format!("λ {} ", resolver))
             ));
             assert_eq!(expected, actual);
             dir.close()?;
@@ -141,7 +144,10 @@ mod tests {
             let dir = tempfile::tempdir()?;
             File::create(dir.path().join(hs_file))?.sync_all()?;
             let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
-            let expected = Some(format!("via {}", Color::Purple.bold().paint("λ 9.2.1 ")));
+            let expected = Some(format!(
+                "via {}",
+                Style::new().purple().bold().style("λ 9.2.1 ")
+            ));
             assert_eq!(expected, actual);
             dir.close()?;
         }

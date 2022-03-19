@@ -887,7 +887,7 @@ sso_role_name = <AWS-ROLE-NAME>
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+            Style::new().yellow().bold().style("☁️  (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);

@@ -275,7 +275,7 @@ mod tests {
 
     #[test]
     fn success_status_success_symbol_filled() {
-        let expected = Some(format!("{} ", Color::Red.bold().paint("✔️0")));
+        let expected = Some(format!("{} ", Style::new().red().bold().style("✔️0")));
 
         // Status code 0
         let actual = ModuleRenderer::new("status")
