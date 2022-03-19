@@ -112,7 +112,7 @@ fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
 mod tests {
     use super::{parse_opam_switch, SwitchType};
     use crate::{test::ModuleRenderer, utils::CommandOutput};
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::{self, File};
     use std::io;
 
@@ -147,7 +147,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -161,7 +161,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -179,7 +179,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.08.1 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.08.1 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -193,7 +193,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -207,7 +207,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -221,7 +221,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -235,7 +235,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -249,7 +249,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -263,7 +263,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -277,7 +277,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -291,7 +291,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -305,7 +305,7 @@ mod tests {
         let actual = ModuleRenderer::new("ocaml").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (default) ")
+            Style::new().yellow().bold().style("🐫 v4.10.0 (default) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -326,7 +326,10 @@ mod tests {
             )
             .path(dir.path())
             .collect();
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐫 v4.10.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("🐫 v4.10.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -348,9 +351,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow
+            Style::new()
+                .yellow()
                 .bold()
-                .paint("🐫 v4.10.0 (ocaml-base-compiler.4.10.0) ")
+                .style("🐫 v4.10.0 (ocaml-base-compiler.4.10.0) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -377,9 +381,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow
+            Style::new()
+                .yellow()
                 .bold()
-                .paint("🐫 v4.10.0 (g/ocaml-base-compiler.4.10.0) ")
+                .style("🐫 v4.10.0 (g/ocaml-base-compiler.4.10.0) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -402,7 +407,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (*my-project) ")
+            Style::new()
+                .yellow()
+                .bold()
+                .style("🐫 v4.10.0 (*my-project) ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -429,7 +437,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐫 v4.10.0 (^my-project) ")
+            Style::new()
+                .yellow()
+                .bold()
+                .style("🐫 v4.10.0 (^my-project) ")
         ));
         assert_eq!(expected, actual);
         dir.close()

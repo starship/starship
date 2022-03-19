@@ -102,7 +102,7 @@ fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::{io, str};
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
@@ -144,7 +144,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green.bold().paint(format!("({})", expected_hash))
+            Style::new()
+                .green()
+                .bold()
+                .style(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -174,7 +177,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green.bold().paint(format!("({})", expected_hash))
+            Style::new()
+                .green()
+                .bold()
+                .style(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -218,7 +224,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green.bold().paint(format!("({})", expected_hash))
+            Style::new()
+                .green()
+                .bold()
+                .style(format!("({})", expected_hash))
         ));
 
         assert_eq!(expected, actual);
@@ -258,9 +267,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
+            Style::new()
+                .green()
                 .bold()
-                .paint(format!("({})", expected_output.trim()))
+                .style(format!("({})", expected_output.trim()))
         ));
 
         assert_eq!(expected, actual);
@@ -309,9 +319,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
+            Style::new()
+                .green()
                 .bold()
-                .paint(format!("({})", expected_output.trim()))
+                .style(format!("({})", expected_output.trim()))
         ));
 
         assert_eq!(expected, actual);
@@ -380,9 +391,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Green
+            Style::new()
+                .green()
                 .bold()
-                .paint(format!("({})", expected_output.trim()))
+                .style(format!("({})", expected_output.trim()))
         ));
 
         assert_eq!(expected, actual);

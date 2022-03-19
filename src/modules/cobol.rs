@@ -75,7 +75,7 @@ fn get_cobol_version(cobol_stdout: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -98,7 +98,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("cobol").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("⚙️ v3.1.2.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("⚙️ v3.1.2.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -110,7 +113,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("cobol").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("⚙️ v3.1.2.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("⚙️ v3.1.2.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -122,7 +128,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("cobol").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("⚙️ v3.1.2.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("⚙️ v3.1.2.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -134,7 +143,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("cobol").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("⚙️ v3.1.2.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("⚙️ v3.1.2.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

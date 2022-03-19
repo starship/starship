@@ -172,7 +172,7 @@ impl BatteryInfoProvider for BatteryInfoProviderImpl {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn no_battery_status() {
@@ -388,7 +388,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(format!("{} ", Color::Red.bold().paint(" 40%")));
+        let expected = Some(format!("{} ", Style::new().red().bold().style(" 40%")));
 
         assert_eq!(expected, actual);
     }

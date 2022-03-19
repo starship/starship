@@ -286,7 +286,7 @@ fn format_version(version: &str, version_format: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::{test::ModuleRenderer, utils::CommandOutput};
-    use ansi_term::Color;
+    use owo_colors::{Style, XtermColors};
     use std::fs::File;
     use std::io;
     use std::io::Write;
@@ -390,7 +390,10 @@ license = "MIT"
 
         let expected = Some(format!(
             "is {} ",
-            Color::Fixed(208).bold().paint(format!("📦 {}", "v0.1.0"))
+            Style::new()
+                .color(XtermColors::from(208))
+                .bold()
+                .style(format!("📦 {}", "v0.1.0"))
         ));
 
         assert_eq!(actual, expected);
@@ -1185,7 +1188,10 @@ environment:
         let text = String::from(contains.unwrap_or(""));
         let expected = Some(format!(
             "is {} ",
-            Color::Fixed(208).bold().paint(format!("📦 {}", text))
+            Style::new()
+                .color(XtermColors::from(208))
+                .bold()
+                .style(format!("📦 {}", text))
         ));
 
         if contains.is_some() {

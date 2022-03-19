@@ -58,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -77,7 +77,10 @@ mod tests {
         File::create(dir.path().join("Main.purs"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::White.bold().paint("<=> v0.13.5 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().white().bold().style("<=> v0.13.5 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -88,7 +91,10 @@ mod tests {
         File::create(dir.path().join("spago.dhall"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("purescript").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::White.bold().paint("<=> v0.13.5 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().white().bold().style("<=> v0.13.5 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

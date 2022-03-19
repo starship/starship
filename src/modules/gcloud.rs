@@ -176,7 +176,7 @@ mod tests {
     use std::fs::{create_dir, File};
     use std::io::{self, Write};
 
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     use crate::test::ModuleRenderer;
 
@@ -202,7 +202,7 @@ account = foo@example.com
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️  foo@example.com")
+            Style::new().blue().bold().style("☁️  foo@example.com")
         ));
 
         assert_eq!(actual, expected);
@@ -233,7 +233,10 @@ account = foo@example.com
                 format = "on [$symbol$account(\\($region\\))]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  foo")));
+        let expected = Some(format!(
+            "on {} ",
+            Style::new().blue().bold().style("☁️  foo")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -264,7 +267,10 @@ region = us-central1
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️  foo@example.com(us-central1)")
+            Style::new()
+                .blue()
+                .bold()
+                .style("☁️  foo@example.com(us-central1)")
         ));
 
         assert_eq!(actual, expected);
@@ -300,7 +306,7 @@ region = us-central1
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️  foo@example.com(uc1)")
+            Style::new().blue().bold().style("☁️  foo@example.com(uc1)")
         ));
 
         assert_eq!(actual, expected);
@@ -321,7 +327,10 @@ region = us-central1
                 format = "on [$symbol$active]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  default1")));
+        let expected = Some(format!(
+            "on {} ",
+            Style::new().blue().bold().style("☁️  default1")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -351,7 +360,10 @@ project = abc
                 format = "on [$symbol$project]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  abc")));
+        let expected = Some(format!(
+            "on {} ",
+            Style::new().blue().bold().style("☁️  abc")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -384,7 +396,7 @@ project = abc
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("☁️  env_project")
+            Style::new().blue().bold().style("☁️  env_project")
         ));
 
         assert_eq!(actual, expected);
@@ -417,7 +429,10 @@ project = very-long-project-name
                 very-long-project-name = "vlpn"
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  vlpn")));
+        let expected = Some(format!(
+            "on {} ",
+            Style::new().blue().bold().style("☁️  vlpn")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -473,7 +488,10 @@ project = overridden
                 format = "on [$symbol$project]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  overridden")));
+        let expected = Some(format!(
+            "on {} ",
+            Style::new().blue().bold().style("☁️  overridden")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()

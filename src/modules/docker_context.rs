@@ -87,7 +87,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io::{self, Write};
 
@@ -124,7 +124,10 @@ mod tests {
             .path(pwd.path())
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().blue().bold().style("🐳 starship")
+        ));
 
         assert_eq!(expected, actual);
 
@@ -153,7 +156,10 @@ mod tests {
             .path(pwd.path())
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().blue().bold().style("🐳 starship")
+        ));
 
         assert_eq!(expected, actual);
 
@@ -182,7 +188,10 @@ mod tests {
             .path(pwd.path())
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().blue().bold().style("🐳 starship")
+        ));
 
         assert_eq!(expected, actual);
 
@@ -235,7 +244,10 @@ mod tests {
             })
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().blue().bold().style("🐳 starship")
+        ));
 
         assert_eq!(expected, actual);
 
@@ -281,7 +293,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {} ",
-            Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")
+            Style::new()
+                .blue()
+                .bold()
+                .style("🐳 udp://starship@127.0.0.1:53")
         ));
 
         assert_eq!(expected, actual);
@@ -300,7 +315,10 @@ mod tests {
                 only_with_files = false
             })
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().blue().bold().style("🐳 starship")
+        ));
 
         assert_eq!(expected, actual);
 
@@ -329,7 +347,10 @@ mod tests {
                 only_with_files = false
             })
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().blue().bold().style("🐳 starship")
+        ));
 
         assert_eq!(expected, actual);
 
@@ -361,7 +382,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {} ",
-            Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")
+            Style::new()
+                .blue()
+                .bold()
+                .style("🐳 udp://starship@127.0.0.1:53")
         ));
 
         assert_eq!(expected, actual);
@@ -394,7 +418,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {} ",
-            Color::Blue.bold().paint("🐳 machine_name")
+            Style::new().blue().bold().style("🐳 machine_name")
         ));
 
         assert_eq!(expected, actual);

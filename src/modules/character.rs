@@ -73,11 +73,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod test {
     use crate::context::Shell;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn success_status() {
-        let expected = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected = Some(format!("{} ", Style::new().green().bold().style("❯")));
 
         // Status code 0
         let actual = ModuleRenderer::new("character").status(0).collect();
@@ -90,7 +90,7 @@ mod test {
 
     #[test]
     fn failure_status() {
-        let expected = Some(format!("{} ", Color::Red.bold().paint("❯")));
+        let expected = Some(format!("{} ", Style::new().red().bold().style("❯")));
 
         let exit_values = [1, 54321, -5000];
 
@@ -102,8 +102,8 @@ mod test {
 
     #[test]
     fn custom_symbol() {
-        let expected_fail = Some(format!("{} ", Color::Red.bold().paint("✖")));
-        let expected_success = Some(format!("{} ", Color::Green.bold().paint("➜")));
+        let expected_fail = Some(format!("{} ", Style::new().red().bold().style("✖")));
+        let expected_success = Some(format!("{} ", Style::new().green().bold().style("➜")));
 
         let exit_values = [1, 54321, -5000];
 
@@ -134,9 +134,9 @@ mod test {
 
     #[test]
     fn zsh_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
-        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
-        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_vicmd = Some(format!("{} ", Style::new().green().bold().style("❮")));
+        let expected_specified = Some(format!("{} ", Style::new().green().bold().style("V")));
+        let expected_other = Some(format!("{} ", Style::new().green().bold().style("❯")));
 
         // zle keymap is vicmd
         let actual = ModuleRenderer::new("character")
@@ -166,9 +166,9 @@ mod test {
 
     #[test]
     fn fish_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
-        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
-        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_vicmd = Some(format!("{} ", Style::new().green().bold().style("❮")));
+        let expected_specified = Some(format!("{} ", Style::new().green().bold().style("V")));
+        let expected_other = Some(format!("{} ", Style::new().green().bold().style("❯")));
 
         // fish keymap is default
         let actual = ModuleRenderer::new("character")
@@ -198,9 +198,9 @@ mod test {
 
     #[test]
     fn cmd_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
-        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
-        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_vicmd = Some(format!("{} ", Style::new().green().bold().style("❮")));
+        let expected_specified = Some(format!("{} ", Style::new().green().bold().style("V")));
+        let expected_other = Some(format!("{} ", Style::new().green().bold().style("❯")));
 
         // cmd keymap is vi
         let actual = ModuleRenderer::new("character")

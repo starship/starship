@@ -74,7 +74,7 @@ fn parse_vagrant_version(vagrant_stdout: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -96,7 +96,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("vagrant").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Cyan.bold().paint("⍱ v2.2.10 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().cyan().bold().style("⍱ v2.2.10 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

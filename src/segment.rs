@@ -1,5 +1,5 @@
 use crate::print::{Grapheme, UnicodeWidthGraphemes};
-use ansi_term::{ANSIString, Style};
+use owo_colors::Style;
 use std::fmt;
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -15,11 +15,16 @@ pub struct TextSegment {
 
 impl TextSegment {
     // Returns the ANSIString of the segment value
-    fn ansi_string(&self) -> ANSIString {
+    fn ansi_string(&self) -> String {
         match self.style {
-            Some(style) => style.paint(&self.value),
-            None => ANSIString::from(&self.value),
+            Some(style) => style.style(&self.value).to_string(),
+            None => self.value.clone(),
         }
+    }
+
+    /// Appends another text segment, keeping the style of this segment
+    pub fn append(&mut self, suffix: TextSegment) {
+        self.value.push_str(&suffix.value)
     }
 }
 
@@ -34,8 +39,8 @@ pub struct FillSegment {
 }
 
 impl FillSegment {
-    // Returns the ANSIString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, width: Option<usize>) -> ANSIString {
+    // Returns the String of the segment value with ANSI sequences, not including its prefix and suffix
+    pub fn ansi_string(&self, width: Option<usize>) -> String {
         let s = match width {
             Some(w) => self
                 .value
@@ -52,9 +57,10 @@ impl FillSegment {
                 .collect::<String>(),
             None => String::from(&self.value),
         };
+
         match self.style {
-            Some(style) => style.paint(s),
-            None => ANSIString::from(s),
+            Some(style) => style.style(s).to_string(),
+            None => s,
         }
     }
 }
@@ -62,12 +68,12 @@ impl FillSegment {
 #[cfg(test)]
 mod fill_seg_tests {
     use super::FillSegment;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn ansi_string_width() {
         let width: usize = 10;
-        let style = Color::Blue.bold();
+        let style = Style::new().blue().bold();
 
         let inputs = vec![
             (".", ".........."),
@@ -83,7 +89,7 @@ mod fill_seg_tests {
                 style: Some(style),
             };
             let actual = f.ansi_string(Some(width));
-            assert_eq!(style.paint(*expected), actual);
+            assert_eq!(style.style(*expected).to_string(), actual);
         }
     }
 }
@@ -97,6 +103,11 @@ pub enum Segment {
 }
 
 impl Segment {
+    /// Checks if a given segment is a text segment
+    pub fn is_text_segment(&self) -> bool {
+        matches!(self, Segment::Text(_))
+    }
+
     /// Creates new segments from a text with a style; breaking out LineTerminators.
     pub fn from_text<T>(style: Option<Style>, value: T) -> Vec<Segment>
     where
@@ -159,11 +170,11 @@ impl Segment {
     }
 
     // Returns the ANSIString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self) -> ANSIString {
+    pub fn ansi_string(&self) -> String {
         match self {
             Segment::Fill(fs) => fs.ansi_string(None),
             Segment::Text(ts) => ts.ansi_string(),
-            Segment::LineTerm => ANSIString::from(LINE_TERMINATOR_STRING),
+            Segment::LineTerm => LINE_TERMINATOR_STRING.to_string(),
         }
     }
 

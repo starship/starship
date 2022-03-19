@@ -124,7 +124,7 @@ fn get_first_grapheme(text: &str) -> &str {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::io;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
@@ -237,7 +237,11 @@ mod tests {
             "1337_hello_world",
             "[$branch](bold blue)",
             "",
-            Color::Blue.bold().paint("1337_hello_world").to_string(),
+            Style::new()
+                .blue()
+                .bold()
+                .style("1337_hello_world")
+                .to_string(),
         )
     }
 
@@ -249,8 +253,8 @@ mod tests {
             "",
             format!(
                 "branch: {} {} ",
-                Color::Blue.bold().paint("1337_hello_world"),
-                Color::Red.paint("THE COLORS")
+                Style::new().blue().bold().style("1337_hello_world"),
+                Style::new().red().style("THE COLORS")
             ),
         )
     }
@@ -264,7 +268,7 @@ mod tests {
             symbol = "git: "
             style = "green"
         "#,
-            format!("git: {}", Color::Green.paint("1337_hello_world"),),
+            format!("git: {}", Style::new().green().style("1337_hello_world"),),
         )
     }
 
@@ -288,7 +292,10 @@ mod tests {
 
         let expected = Some(format!(
             "on {} ",
-            Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
+            Style::new()
+                .purple()
+                .bold()
+                .style(format!("\u{e0a0} {}", "main")),
         ));
 
         assert_eq!(expected, actual);
@@ -314,9 +321,10 @@ mod tests {
 
         let expected = Some(format!(
             "on {} ",
-            Color::Purple
+            Style::new()
+                .purple()
                 .bold()
-                .paint(format!("\u{e0a0} {}", "test_branch")),
+                .style(format!("\u{e0a0} {}", "test_branch")),
         ));
 
         assert_eq!(expected, actual);
@@ -366,7 +374,10 @@ mod tests {
 
         let expected = Some(format!(
             "on {} ",
-            Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
+            Style::new()
+                .purple()
+                .bold()
+                .style(format!("\u{e0a0} {}", "main")),
         ));
 
         assert_eq!(expected, actual);
@@ -418,7 +429,7 @@ mod tests {
 
     //     let expected = Some(format!(
     //         "on {} ",
-    //         Color::Purple.bold().paint(format!("\u{e0a0} {}", "master")),
+    //         Style::new().purple().bold().style(format!("\u{e0a0} {}", "master")),
     //     ));
 
     //     assert_eq!(expected, actual);
@@ -471,9 +482,10 @@ mod tests {
 
         let expected = Some(format!(
             "on {} ",
-            Color::Purple
+            Style::new()
+                .purple()
                 .bold()
-                .paint(format!("\u{e0a0} {}{}", expected_name, truncation_symbol)),
+                .style(format!("\u{e0a0} {}{}", expected_name, truncation_symbol)),
         ));
 
         assert_eq!(expected, actual);

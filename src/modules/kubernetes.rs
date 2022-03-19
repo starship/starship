@@ -186,7 +186,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::env;
     use std::fs::File;
     use std::io::{self, Write};
@@ -254,7 +254,10 @@ users: []
             .config(config)
             .collect();
 
-        let expected = Some(format!("{} in ", Color::Cyan.bold().paint(expected)));
+        let expected = Some(format!(
+            "{} in ",
+            Style::new().cyan().bold().style(expected)
+        ));
         assert_eq!(expected, actual);
 
         dir.close()
@@ -352,7 +355,7 @@ users: []
 
         let expected = Some(format!(
             "{} in ",
-            Color::Cyan.bold().paint("☸ test_context")
+            Style::new().cyan().bold().style("☸ test_context")
         ));
         assert_eq!(expected, actual);
 
@@ -395,7 +398,10 @@ users: []
 
         let expected = Some(format!(
             "{} in ",
-            Color::Cyan.bold().paint("☸ test_context (test_namespace)")
+            Style::new()
+                .cyan()
+                .bold()
+                .style("☸ test_context (test_namespace)")
         ));
         assert_eq!(expected, actual);
 
@@ -443,7 +449,10 @@ users: []
 
         let expected = Some(format!(
             "{} in ",
-            Color::Cyan.bold().paint("☸ test_context (test_namespace)")
+            Style::new()
+                .cyan()
+                .bold()
+                .style("☸ test_context (test_namespace)")
         ));
         assert_eq!(expected, actual);
 
@@ -521,7 +530,10 @@ users: []
 
         let expected = Some(format!(
             "{} in ",
-            Color::Cyan.bold().paint("☸ test_context (test_namespace)")
+            Style::new()
+                .cyan()
+                .bold()
+                .style("☸ test_context (test_namespace)")
         ));
         assert_eq!(expected, actual_cc_first);
         assert_eq!(expected, actual_ctx_first);

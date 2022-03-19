@@ -73,7 +73,7 @@ fn parse_dart_version(dart_version: &str) -> Option<String> {
 mod tests {
     use crate::test::ModuleRenderer;
     use crate::utils::CommandOutput;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::{self, File};
     use std::io;
 
@@ -92,7 +92,10 @@ mod tests {
         File::create(dir.path().join("any.dart"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🎯 v2.8.4 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🎯 v2.8.4 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -103,7 +106,10 @@ mod tests {
         fs::create_dir_all(dir.path().join(".dart_tool"))?;
 
         let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🎯 v2.8.4 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🎯 v2.8.4 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -114,7 +120,10 @@ mod tests {
         File::create(dir.path().join("pubspec.yaml"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🎯 v2.8.4 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🎯 v2.8.4 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -125,7 +134,10 @@ mod tests {
         File::create(dir.path().join("pubspec.yml"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🎯 v2.8.4 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🎯 v2.8.4 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -136,7 +148,10 @@ mod tests {
         File::create(dir.path().join("pubspec.lock"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("dart").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🎯 v2.8.4 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🎯 v2.8.4 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -157,7 +172,10 @@ mod tests {
             )
             .path(dir.path())
             .collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🎯 v2.15.1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🎯 v2.15.1 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

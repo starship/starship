@@ -71,7 +71,7 @@ fn parse_nim_version(version_cmd_output: &str) -> Option<&str> {
 mod tests {
     use super::parse_nim_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -113,7 +113,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.nimble"))?.sync_all()?;
         let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("👑 v1.2.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("👑 v1.2.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -123,7 +126,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.nim"))?.sync_all()?;
         let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("👑 v1.2.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("👑 v1.2.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -133,7 +139,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.nims"))?.sync_all()?;
         let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("👑 v1.2.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("👑 v1.2.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -143,7 +152,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("cfg.nim"))?.sync_all()?;
         let actual = ModuleRenderer::new("nim").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("👑 v1.2.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("👑 v1.2.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

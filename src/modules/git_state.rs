@@ -158,7 +158,7 @@ struct StateDescription<'a> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::ffi::OsStr;
     use std::fs::OpenOptions;
     use std::io::{self, Error, ErrorKind, Write};
@@ -191,7 +191,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REBASING 1/1")));
+        let expected = Some(format!(
+            "({}) ",
+            Style::new().yellow().bold().style("REBASING 1/1")
+        ));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -206,7 +209,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("MERGING")));
+        let expected = Some(format!(
+            "({}) ",
+            Style::new().yellow().bold().style("MERGING")
+        ));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -223,7 +229,7 @@ mod tests {
 
         let expected = Some(format!(
             "({}) ",
-            Color::Yellow.bold().paint("CHERRY-PICKING")
+            Style::new().yellow().bold().style("CHERRY-PICKING")
         ));
 
         assert_eq!(expected, actual);
@@ -239,7 +245,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("BISECTING")));
+        let expected = Some(format!(
+            "({}) ",
+            Style::new().yellow().bold().style("BISECTING")
+        ));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -254,7 +263,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
-        let expected = Some(format!("({}) ", Color::Yellow.bold().paint("REVERTING")));
+        let expected = Some(format!(
+            "({}) ",
+            Style::new().yellow().bold().style("REVERTING")
+        ));
 
         assert_eq!(expected, actual);
         repo_dir.close()

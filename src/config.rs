@@ -1,6 +1,6 @@
 use crate::utils;
-use ansi_term::{Color, Style};
 use indexmap::IndexMap;
+use owo_colors::{DynColors, Style};
 use serde::Serialize;
 
 use std::clone::Clone;
@@ -384,10 +384,10 @@ impl StarshipConfig {
  - 'inverted'
  - '<color>'       (see the parse_color_string doc for valid color strings)
 */
-pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+pub fn parse_style_string(style_string: &str) -> Option<Style> {
     style_string
         .split_whitespace()
-        .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
+        .fold(Some(Style::new()), |maybe_style, token| {
             maybe_style.and_then(|style| {
                 let token = token.to_lowercase();
 
@@ -406,7 +406,7 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "bold" => Some(style.bold()),
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
-                    "inverted" => Some(style.reverse()),
+                    "inverted" => Some(style.reversed()),
                     // When the string is supposed to be a color:
                     // Decide if we yield none, reset background or set color.
                     color_string => {
@@ -417,16 +417,14 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                             let parsed = parse_color_string(color_string);
                             // bg + invalid color = reset the background to default.
                             if !col_fg && parsed.is_none() {
-                                let mut new_style = style;
-                                new_style.background = Option::None;
-                                Some(new_style)
+                                Some(style.remove_bg())
                             } else {
                                 // Valid color, apply color to either bg or fg
                                 parsed.map(|ansi_color| {
                                     if col_fg {
-                                        style.fg(ansi_color)
+                                        style.color(ansi_color)
                                     } else {
-                                        style.on(ansi_color)
+                                        style.on_color(ansi_color)
                                     }
                                 })
                             }
@@ -437,13 +435,38 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
         })
 }
 
+/// Parse a string that represents a predefined color name, returning None if this fails
+fn parse_predefined_color(color_string: &str) -> Option<owo_colors::AnsiColors> {
+    use owo_colors::AnsiColors::*;
+
+    Some(match color_string.to_lowercase().as_str() {
+        "black" => Black,
+        "red" => Red,
+        "green" => Green,
+        "yellow" => Yellow,
+        "blue" => Blue,
+        "purple" => Magenta,
+        "cyan" => Cyan,
+        "white" => White,
+        "bright-black" => BrightBlack, // "bright-black" is dark grey
+        "bright-red" => BrightRed,
+        "bright-green" => BrightGreen,
+        "bright-yellow" => BrightYellow,
+        "bright-blue" => BrightBlue,
+        "bright-purple" => BrightMagenta,
+        "bright-cyan" => BrightCyan,
+        "bright-white" => BrightWhite,
+        _ => return None,
+    })
+}
+
 /** Parse a string that represents a color setting, returning None if this fails
  There are three valid color formats:
   - #RRGGBB      (a hash followed by an RGB hex)
   - u8           (a number from 0-255, representing an ANSI color)
   - colstring    (one of the 16 predefined color strings)
 */
-fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
+fn parse_color_string(color_string: &str) -> Option<owo_colors::DynColors> {
     // Parse RGB hex values
     log::trace!("Parsing color_string: {}", color_string);
     if color_string.starts_with('#') {
@@ -459,48 +482,31 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
         let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
         let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
         log::trace!("Read RGB color string: {},{},{}", r, g, b);
-        return Some(Color::RGB(r, g, b));
+        return Some(DynColors::Rgb(r, g, b));
     }
 
-    // Parse a u8 (ansi color)
+    // Parse a u8 (ansi 256-color)
     if let Result::Ok(ansi_color_num) = color_string.parse::<u8>() {
         log::trace!("Read ANSI color string: {}", ansi_color_num);
-        return Some(Color::Fixed(ansi_color_num));
+        return Some(DynColors::Xterm(ansi_color_num.into()));
     }
 
     // Check for any predefined color strings
-    // There are no predefined enums for bright colors, so we use Color::Fixed
-    let predefined_color = match color_string.to_lowercase().as_str() {
-        "black" => Some(Color::Black),
-        "red" => Some(Color::Red),
-        "green" => Some(Color::Green),
-        "yellow" => Some(Color::Yellow),
-        "blue" => Some(Color::Blue),
-        "purple" => Some(Color::Purple),
-        "cyan" => Some(Color::Cyan),
-        "white" => Some(Color::White),
-        "bright-black" => Some(Color::Fixed(8)), // "bright-black" is dark grey
-        "bright-red" => Some(Color::Fixed(9)),
-        "bright-green" => Some(Color::Fixed(10)),
-        "bright-yellow" => Some(Color::Fixed(11)),
-        "bright-blue" => Some(Color::Fixed(12)),
-        "bright-purple" => Some(Color::Fixed(13)),
-        "bright-cyan" => Some(Color::Fixed(14)),
-        "bright-white" => Some(Color::Fixed(15)),
-        _ => None,
-    };
+    let predefined_color = parse_predefined_color(color_string).map(DynColors::Ansi);
 
     if predefined_color.is_some() {
         log::trace!("Read predefined color: {}", color_string);
     } else {
         log::debug!("Could not parse color in string: {}", color_string);
     }
+
     predefined_color
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use owo_colors::XtermColors;
     use starship_module_config_derive::ModuleConfig;
 
     #[test]
@@ -551,11 +557,11 @@ mod tests {
         let mut git_status_config = TestConfig {
             untracked: SegmentDisplayConfig {
                 value: "?",
-                style: Color::Red.bold(),
+                style: Style::new().red().bold(),
             },
             modified: SegmentDisplayConfig {
                 value: "!",
-                style: Color::Red.bold(),
+                style: Style::new().red().bold(),
             },
         };
         git_status_config.load_config(&config);
@@ -564,14 +570,14 @@ mod tests {
             git_status_config.untracked,
             SegmentDisplayConfig {
                 value: "x",
-                style: Color::Red.bold(),
+                style: Style::new().red().bold(),
             }
         );
         assert_eq!(
             git_status_config.modified,
             SegmentDisplayConfig {
                 value: "∙",
-                style: Color::Red.normal(),
+                style: Style::new().red(),
             }
         );
     }
@@ -665,7 +671,10 @@ mod tests {
     #[test]
     fn test_from_style() {
         let config = Value::from("red bold");
-        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
+        assert_eq!(
+            <Style>::from_config(&config).unwrap(),
+            Style::new().red().bold()
+        );
     }
 
     #[test]
@@ -682,7 +691,7 @@ mod tests {
         let config = Value::from("#a12BcD");
         assert_eq!(
             <Style>::from_config(&config).unwrap(),
-            Color::RGB(0xA1, 0x2B, 0xCD).into()
+            Style::new().bg_rgb::<0xA1, 0x2B, 0xCD>()
         );
     }
 
@@ -702,18 +711,9 @@ mod tests {
     fn table_get_styles_bold_italic_underline_green_dimmed_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD");
         let mystyle = <Style>::from_config(&config).unwrap();
-        assert!(mystyle.is_bold);
-        assert!(mystyle.is_italic);
-        assert!(mystyle.is_underline);
-        assert!(mystyle.is_dimmed);
         assert_eq!(
             mystyle,
-            ansi_term::Style::new()
-                .bold()
-                .italic()
-                .underline()
-                .dimmed()
-                .fg(Color::Green)
+            Style::new().bold().italic().underline().dimmed().green()
         );
     }
 
@@ -721,20 +721,15 @@ mod tests {
     fn table_get_styles_bold_italic_underline_green_dimmed_inverted_silly_caps() {
         let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD InVeRTed");
         let mystyle = <Style>::from_config(&config).unwrap();
-        assert!(mystyle.is_bold);
-        assert!(mystyle.is_italic);
-        assert!(mystyle.is_underline);
-        assert!(mystyle.is_dimmed);
-        assert!(mystyle.is_reverse);
         assert_eq!(
             mystyle,
-            ansi_term::Style::new()
+            Style::new()
                 .bold()
                 .italic()
                 .underline()
                 .dimmed()
-                .reverse()
-                .fg(Color::Green)
+                .reversed()
+                .green()
         );
     }
 
@@ -743,7 +738,7 @@ mod tests {
         // Test a "plain" style with no formatting
         let config = Value::from("");
         let plain_style = <Style>::from_config(&config).unwrap();
-        assert_eq!(plain_style, ansi_term::Style::new());
+        assert_eq!(plain_style, Style::new());
 
         // Test a string that's clearly broken
         let config = Value::from("djklgfhjkldhlhk;j");
@@ -778,15 +773,21 @@ mod tests {
 
         // Test that bg:none will yield a style
         let config = Value::from("fg:red bg:none");
-        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.normal());
+        assert_eq!(<Style>::from_config(&config).unwrap(), Style::new().red());
 
         // Test that bg:none will yield a style
         let config = Value::from("fg:red bg:none bold");
-        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
+        assert_eq!(
+            <Style>::from_config(&config).unwrap(),
+            Style::new().red().bold()
+        );
 
         // Test that bg:none will overwrite the previous background colour
         let config = Value::from("fg:red bg:green bold bg:none");
-        assert_eq!(<Style>::from_config(&config).unwrap(), Color::Red.bold());
+        assert_eq!(
+            <Style>::from_config(&config).unwrap(),
+            Style::new().red().bold()
+        );
     }
 
     #[test]
@@ -798,8 +799,8 @@ mod tests {
             flipped_style,
             Style::new()
                 .underline()
-                .fg(Color::Fixed(120))
-                .on(Color::RGB(5, 5, 5))
+                .color(XtermColors::from(120))
+                .bg_rgb::<5, 5, 5>()
         );
 
         // Test that the last color style is always the one used
@@ -807,7 +808,9 @@ mod tests {
         let multi_style = <Style>::from_config(&config).unwrap();
         assert_eq!(
             multi_style,
-            Style::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
+            Style::new()
+                .color(XtermColors::from(125))
+                .on_color(XtermColors::from(127))
         );
     }
 }

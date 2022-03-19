@@ -43,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn no_env_set() {
@@ -60,7 +60,7 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Blue.bold().dimmed().paint("[centos.img]")
+            Style::new().blue().bold().dimmed().style("[centos.img]")
         ));
 
         assert_eq!(expected, actual);

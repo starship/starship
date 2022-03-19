@@ -61,7 +61,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use owo_colors::Style;
 
     macro_rules! get_localip {
         () => {
@@ -95,7 +95,7 @@ mod tests {
                 disabled = false
             })
             .collect();
-        let expected = Some(format!("{} ", style().paint(localip)));
+        let expected = Some(format!("{} ", style().style(localip)));
 
         assert_eq!(expected, actual);
     }
@@ -126,7 +126,7 @@ mod tests {
             })
             .env("SSH_CONNECTION", "something")
             .collect();
-        let expected = Some(format!("{} ", style().paint(localip)));
+        let expected = Some(format!("{} ", style().style(localip)));
 
         assert_eq!(expected, actual);
     }
@@ -142,6 +142,6 @@ mod tests {
     }
 
     fn style() -> Style {
-        Color::Yellow.bold()
+        Style::new().yellow().bold()
     }
 }

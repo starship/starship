@@ -63,7 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{Color, Style};
+    use owo_colors::Style;
 
     use crate::test::ModuleRenderer;
 
@@ -71,7 +71,7 @@ mod tests {
 
     fn style() -> Style {
         // default style
-        Color::Yellow.bold()
+        Style::new().yellow().bold()
     }
 
     #[test]
@@ -96,7 +96,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "2")
             .collect();
-        let expected = Some(format!("{} ", style().paint("↕️  2")));
+        let expected = Some(format!("{} ", style().style("↕️  2")));
 
         assert_eq!(expected, actual);
     }
@@ -138,7 +138,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "1")
             .collect();
-        let expected = Some(format!("{} ", style().paint("↕️  1")));
+        let expected = Some(format!("{} ", style().style("↕️  1")));
 
         assert_eq!(expected, actual);
     }
@@ -168,7 +168,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "2")
             .collect();
-        let expected = Some(format!("{} ", Color::Red.underline().paint("↕️  2")));
+        let expected = Some(format!("{} ", Style::new().red().underline().style("↕️  2")));
 
         assert_eq!(expected, actual);
     }
@@ -183,7 +183,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "2")
             .collect();
-        let expected = Some(format!("{} ", style().paint("shlvl is 2")));
+        let expected = Some(format!("{} ", style().style("shlvl is 2")));
 
         assert_eq!(expected, actual);
     }
@@ -198,7 +198,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "2")
             .collect();
-        let expected = Some(format!("↕️   going down {} GOING UP ", style().paint("2")));
+        let expected = Some(format!("↕️   going down {} GOING UP ", style().style("2")));
 
         assert_eq!(expected, actual);
     }
@@ -215,7 +215,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "3")
             .collect();
-        let expected = Some(format!("{} ", style().paint("~~~>")));
+        let expected = Some(format!("{} ", style().style("~~~>")));
 
         assert_eq!(expected, actual);
     }

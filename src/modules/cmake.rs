@@ -71,7 +71,7 @@ fn parse_cmake_version(cmake_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -89,7 +89,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("CMakeLists.txt"))?.sync_all()?;
         let actual = ModuleRenderer::new("cmake").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("△ v3.17.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("△ v3.17.3 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -99,7 +102,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("CMakeCache.txt"))?.sync_all()?;
         let actual = ModuleRenderer::new("cmake").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("△ v3.17.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("△ v3.17.3 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

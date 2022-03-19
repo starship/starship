@@ -56,14 +56,18 @@ fn undistract_me<'a, 'b>(
     config: &'b CmdDurationConfig,
     elapsed: u128,
 ) -> Module<'a> {
-    use ansi_term::{unstyle, ANSIStrings};
     use notify_rust::{Notification, Timeout};
 
     if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
-        let body = format!(
-            "Command execution {}",
-            unstyle(&ANSIStrings(&module.ansi_strings()))
-        );
+        let output = module
+            .ansi_strings()
+            .into_iter()
+            .map(strip_ansi_escapes::strip)
+            .filter_map(|bytes| bytes.ok().map(Vec::into_iter))
+            .flatten()
+            .collect::<Vec<u8>>();
+
+        let body = format!("Command execution {}", String::from_utf8_lossy(&output));
 
         let timeout = match config.notification_timeout {
             Some(v) => Timeout::Milliseconds(v),
@@ -88,7 +92,7 @@ fn undistract_me<'a, 'b>(
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn config_blank_duration_1s() {
@@ -106,7 +110,10 @@ mod tests {
             .cmd_duration(5000)
             .collect();
 
-        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("5s")));
+        let expected = Some(format!(
+            "took {} ",
+            Style::new().yellow().bold().style("5s")
+        ));
         assert_eq!(expected, actual);
     }
 
@@ -134,7 +141,10 @@ mod tests {
             .cmd_duration(10000)
             .collect();
 
-        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("10s")));
+        let expected = Some(format!(
+            "took {} ",
+            Style::new().yellow().bold().style("10s")
+        ));
         assert_eq!(expected, actual);
     }
 
@@ -162,7 +172,10 @@ mod tests {
             .cmd_duration(5000)
             .collect();
 
-        let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
+        let expected = Some(format!(
+            "underwent {} ",
+            Style::new().yellow().bold().style("5s")
+        ));
         assert_eq!(expected, actual);
     }
 }

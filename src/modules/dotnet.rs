@@ -346,7 +346,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
     use tempfile::{self, TempDir};
@@ -366,7 +366,7 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 ")
+                Style::new().blue().bold().style(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -380,7 +380,7 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 ")
+                Style::new().blue().bold().style(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -394,7 +394,7 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 ")
+                Style::new().blue().bold().style(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -417,7 +417,10 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 🎯 netstandard2.0 ")
+                Style::new()
+                    .blue()
+                    .bold()
+                    .style(".NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -431,7 +434,7 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 ")
+                Style::new().blue().bold().style(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -445,7 +448,7 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 ")
+                Style::new().blue().bold().style(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -459,7 +462,7 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 ")
+                Style::new().blue().bold().style(".NET v3.1.103 ")
             )),
         );
         workspace.close()
@@ -472,7 +475,10 @@ mod tests {
         touch_path(&workspace, "global.json", Some(&global_json))?;
         expect_output(
             workspace.path(),
-            Some(format!("via {}", Color::Blue.bold().paint(".NET v1.2.3 "))),
+            Some(format!(
+                "via {}",
+                Style::new().blue().bold().style(".NET v1.2.3 ")
+            )),
         );
         workspace.close()
     }
@@ -488,7 +494,10 @@ mod tests {
             &workspace.path().join("project"),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v1.2.3 🎯 netstandard2.0 ")
+                Style::new()
+                    .blue()
+                    .bold()
+                    .style(".NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -509,7 +518,10 @@ mod tests {
             &workspace.path().join("deep/path/to/project"),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v1.2.3 🎯 netstandard2.0 ")
+                Style::new()
+                    .blue()
+                    .bold()
+                    .style(".NET v1.2.3 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -524,7 +536,10 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue.bold().paint(".NET v3.1.103 🎯 netstandard2.0 ")
+                Style::new()
+                    .blue()
+                    .bold()
+                    .style(".NET v3.1.103 🎯 netstandard2.0 ")
             )),
         );
         workspace.close()
@@ -539,9 +554,10 @@ mod tests {
             workspace.path(),
             Some(format!(
                 "via {}",
-                Color::Blue
+                Style::new()
+                    .blue()
                     .bold()
-                    .paint(".NET v3.1.103 🎯 netstandard2.0;net461 ")
+                    .style(".NET v3.1.103 🎯 netstandard2.0;net461 ")
             )),
         );
         workspace.close()

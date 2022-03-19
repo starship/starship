@@ -71,7 +71,7 @@ fn parse_v_version(v_version: &str) -> Option<String> {
 mod tests {
     use super::parse_v_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -95,7 +95,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.v"))?.sync_all()?;
         let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("V v0.2 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -105,7 +108,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("v.mod"))?.sync_all()?;
         let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("V v0.2 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -115,7 +121,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("vpkg.json"))?.sync_all()?;
         let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("V v0.2 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -125,7 +134,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join(".vpkg-lock.json"))?.sync_all()?;
         let actual = ModuleRenderer::new("vlang").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("V v0.2 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("V v0.2 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -141,7 +153,10 @@ mod tests {
                 version_format = "${raw}"
             })
             .collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("V 0.2 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("V 0.2 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

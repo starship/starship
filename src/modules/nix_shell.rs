@@ -63,7 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn no_env_variables() {
@@ -88,7 +88,10 @@ mod tests {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "pure")
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  pure")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().blue().bold().style("❄️  pure")
+        ));
 
         assert_eq!(expected, actual);
     }
@@ -98,7 +101,10 @@ mod tests {
         let actual = ModuleRenderer::new("nix_shell")
             .env("IN_NIX_SHELL", "impure")
             .collect();
-        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  impure")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().blue().bold().style("❄️  impure")
+        ));
 
         assert_eq!(expected, actual);
     }
@@ -111,7 +117,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {} ",
-            Color::Blue.bold().paint("❄️  pure (starship)")
+            Style::new().blue().bold().style("❄️  pure (starship)")
         ));
 
         assert_eq!(expected, actual);
@@ -125,7 +131,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "via {} ",
-            Color::Blue.bold().paint("❄️  impure (starship)")
+            Style::new().blue().bold().style("❄️  impure (starship)")
         ));
 
         assert_eq!(expected, actual);

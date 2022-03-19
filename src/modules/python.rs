@@ -133,7 +133,7 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::{create_dir_all, File};
     use std::io;
     use std::io::Write;
@@ -345,7 +345,7 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
+            Style::new().yellow().bold().style("🐍 v3.8.0 (my_venv) ")
         ));
 
         assert_eq!(actual, expected);
@@ -363,7 +363,7 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
+            Style::new().yellow().bold().style("🐍 v3.8.0 (my_venv) ")
         ));
 
         assert_eq!(actual, expected);
@@ -390,7 +390,7 @@ prompt = 'foo'
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
+            Style::new().yellow().bold().style("🐍 v3.8.0 (foo) ")
         ));
 
         assert_eq!(actual, expected);
@@ -417,7 +417,7 @@ prompt = '(foo)'
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
+            Style::new().yellow().bold().style("🐍 v3.8.0 (foo) ")
         ));
 
         assert_eq!(actual, expected);
@@ -435,7 +435,10 @@ prompt = '(foo)'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v2.7.17 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("🐍 v2.7.17 ")
+        ));
         assert_eq!(expected, actual);
     }
 
@@ -450,7 +453,10 @@ prompt = '(foo)'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("🐍 v3.8.0 ")
+        ));
         assert_eq!(expected, actual);
     }
 
@@ -468,7 +474,10 @@ prompt = '(foo)'
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("🐍 v3.8.0 ")
+        ));
         assert_eq!(expected, actual);
     }
 
@@ -486,7 +495,7 @@ prompt = '(foo)'
 
         let expected = Some(format!(
             "via {}",
-            Color::Yellow.bold().paint("🐍 test_pyenv system ")
+            Style::new().yellow().bold().style("🐍 test_pyenv system ")
         ));
         assert_eq!(expected, actual);
     }

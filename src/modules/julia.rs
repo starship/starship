@@ -76,7 +76,7 @@ fn parse_julia_version(julia_stdout: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -98,7 +98,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("julia").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Purple.bold().paint("ஃ v1.4.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().purple().bold().style("ஃ v1.4.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -110,7 +113,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("julia").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Purple.bold().paint("ஃ v1.4.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().purple().bold().style("ஃ v1.4.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -122,7 +128,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("julia").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Purple.bold().paint("ஃ v1.4.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().purple().bold().style("ஃ v1.4.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

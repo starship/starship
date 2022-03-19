@@ -66,7 +66,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
     use crate::context::Shell;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn test_none_if_disabled() {
@@ -86,7 +86,7 @@ mod tests {
 
     #[test]
     fn test_bash_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("bsh")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("bsh")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Bash)
             .config(toml::toml! {
@@ -100,7 +100,7 @@ mod tests {
 
     #[test]
     fn test_bash_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("bash")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("bash")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Bash)
             .config(toml::toml! {
@@ -115,7 +115,7 @@ mod tests {
 
     #[test]
     fn test_fish_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("fsh")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("fsh")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Fish)
             .config(toml::toml! {
@@ -129,7 +129,7 @@ mod tests {
 
     #[test]
     fn test_fish_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("fish")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("fish")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Fish)
             .config(toml::toml! {
@@ -144,7 +144,7 @@ mod tests {
 
     #[test]
     fn test_zsh_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("zsh")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("zsh")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Zsh)
             .config(toml::toml! {
@@ -158,7 +158,7 @@ mod tests {
 
     #[test]
     fn test_zsh_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("zsh")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("zsh")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Bash)
             .config(toml::toml! {
@@ -173,7 +173,7 @@ mod tests {
 
     #[test]
     fn test_powershell_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("psh")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("psh")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::PowerShell)
             .config(toml::toml! {
@@ -187,7 +187,10 @@ mod tests {
 
     #[test]
     fn test_powershell_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("powershell")));
+        let expected = Some(format!(
+            "{} ",
+            Style::new().cyan().bold().style("powershell")
+        ));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::PowerShell)
             .config(toml::toml! {
@@ -202,7 +205,7 @@ mod tests {
 
     #[test]
     fn test_ion_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("ion")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("ion")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Ion)
             .config(toml::toml! {
@@ -216,7 +219,7 @@ mod tests {
 
     #[test]
     fn test_ion_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("ion")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("ion")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Ion)
             .config(toml::toml! {
@@ -231,7 +234,7 @@ mod tests {
 
     #[test]
     fn test_elvish_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("esh")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("esh")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Elvish)
             .config(toml::toml! {
@@ -245,7 +248,7 @@ mod tests {
 
     #[test]
     fn test_elvish_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("elvish")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("elvish")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Elvish)
             .config(toml::toml! {
@@ -260,7 +263,7 @@ mod tests {
 
     #[test]
     fn test_nu_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("nu")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("nu")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Nu)
             .config(toml::toml! {
@@ -274,7 +277,7 @@ mod tests {
 
     #[test]
     fn test_nu_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("nu")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("nu")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Nu)
             .config(toml::toml! {
@@ -289,7 +292,7 @@ mod tests {
 
     #[test]
     fn test_xonsh_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("xsh")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("xsh")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Xonsh)
             .config(toml::toml! {
@@ -303,7 +306,7 @@ mod tests {
 
     #[test]
     fn test_xonsh_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("xonsh")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("xonsh")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Xonsh)
             .config(toml::toml! {
@@ -318,7 +321,7 @@ mod tests {
 
     #[test]
     fn test_cmd_default_format() {
-        let expected = Some(format!("{} ", Color::White.bold().paint("cmd")));
+        let expected = Some(format!("{} ", Style::new().white().bold().style("cmd")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Cmd)
             .config(toml::toml! {
@@ -332,7 +335,7 @@ mod tests {
 
     #[test]
     fn test_cmd_custom_format() {
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("cmd")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("cmd")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Cmd)
             .config(toml::toml! {
@@ -379,7 +382,7 @@ mod tests {
 
     #[test]
     fn test_default_style() {
-        let expected = Some(format!("{}", Color::White.bold().paint("fish")));
+        let expected = Some(format!("{}", Style::new().white().bold().style("fish")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Fish)
             .config(toml::toml! {
@@ -394,7 +397,7 @@ mod tests {
 
     #[test]
     fn test_custom_style() {
-        let expected = Some(format!("{}", Color::Cyan.bold().paint("fish")));
+        let expected = Some(format!("{}", Style::new().cyan().bold().style("fish")));
         let actual = ModuleRenderer::new("shell")
             .shell(Shell::Fish)
             .config(toml::toml! {

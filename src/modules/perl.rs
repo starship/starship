@@ -60,7 +60,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::{Style, XtermColors};
     use std::fs::File;
     use std::io;
 
@@ -84,7 +84,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -99,7 +99,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -114,7 +114,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -129,7 +129,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -144,7 +144,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -159,7 +159,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -174,7 +174,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -189,7 +189,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -204,7 +204,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -219,7 +219,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Color::Fixed(149).bold().paint("🐪 v5.26.1 ")
+            Style::new().color(XtermColors::from(149)).bold().style("🐪 v5.26.1 ")
         ));
         assert_eq!(expected, actual);
         dir.close()

@@ -86,7 +86,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io::{self, Write};
 
@@ -115,7 +115,7 @@ clouds:
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Yellow.bold().paint("☁️  corp(testproject)")
+            Style::new().yellow().bold().style("☁️  corp(testproject)")
         ));
 
         assert_eq!(actual, expected);
@@ -139,7 +139,10 @@ dummy_yaml
                 [openstack]
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  test")));
+        let expected = Some(format!(
+            "on {} ",
+            Style::new().yellow().bold().style("☁️  test")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()
@@ -159,7 +162,10 @@ dummy_yaml
                 [openstack]
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  test")));
+        let expected = Some(format!(
+            "on {} ",
+            Style::new().yellow().bold().style("☁️  test")
+        ));
 
         assert_eq!(actual, expected);
         dir.close()

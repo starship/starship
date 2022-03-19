@@ -224,7 +224,7 @@ fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     use crate::test::ModuleRenderer;
 
@@ -314,7 +314,7 @@ mod tests {
         for status in &exit_values {
             let expected = Some(format!(
                 "{} ",
-                Color::Red.bold().paint(format!("✖{}", status))
+                Style::new().red().bold().style(format!("✖{}", status))
             ));
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
@@ -336,7 +336,10 @@ mod tests {
         for (exit_value, string_value) in exit_values.iter().zip(string_values) {
             let expected = Some(format!(
                 "{} ",
-                Color::Red.bold().paint(format!("✖{}", string_value))
+                Style::new()
+                    .red()
+                    .bold()
+                    .style(format!("✖{}", string_value))
             ));
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {

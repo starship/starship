@@ -108,8 +108,8 @@ fn parse_json(json_file_path: &Path) -> Option<JValue> {
 mod tests {
     use crate::modules::azure::parse_json;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
     use ini::Ini;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io::{self, Write};
     use std::path::PathBuf;
@@ -188,7 +188,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("ﴃ Subscription 1")
+            Style::new().blue().bold().style("ﴃ Subscription 1")
         ));
         assert_eq!(actual, expected);
         dir.close()

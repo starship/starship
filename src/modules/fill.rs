@@ -24,7 +24,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn basic() {
@@ -35,7 +35,7 @@ mod tests {
                 symbol = "*-"
             })
             .collect();
-        let expected = Some(format!("{}", Color::Green.bold().paint("*-")));
+        let expected = Some(format!("{}", Style::new().green().bold().style("*-")));
 
         assert_eq!(expected, actual);
     }
@@ -61,7 +61,7 @@ mod tests {
                 disabled = false
             })
             .collect();
-        let expected = Some(format!("{}", Color::Black.bold().paint(".")));
+        let expected = Some(format!("{}", Style::new().black().bold().style(".")));
 
         assert_eq!(expected, actual);
     }

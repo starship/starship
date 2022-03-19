@@ -107,7 +107,7 @@ enum Commands {
 fn main() {
     // Configure the current terminal on windows to support ANSI escape sequences.
     #[cfg(windows)]
-    let _ = ansi_term::enable_ansi_support();
+    let _ = enable_ansi_support::enable_ansi_support();
     logger::init();
     init_global_threadpool();
 

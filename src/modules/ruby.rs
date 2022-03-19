@@ -85,7 +85,7 @@ fn format_ruby_version(ruby_version: &str, version_format: &str) -> Option<Strin
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -107,7 +107,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("💎 v2.5.1 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -119,7 +122,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("💎 v2.5.1 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -131,7 +137,10 @@ mod tests {
 
         let actual = ModuleRenderer::new("ruby").path(dir.path()).collect();
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("💎 v2.5.1 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -144,7 +153,10 @@ mod tests {
             .env("RUBY_VERSION", "2.5.1")
             .collect();
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("💎 v2.5.1 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -158,7 +170,10 @@ mod tests {
             .collect();
 
         // rbenv variable is only detected; its value is not used
-        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("💎 v2.5.1 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

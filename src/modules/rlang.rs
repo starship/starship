@@ -73,7 +73,7 @@ fn parse_r_version(r_version: &str) -> Option<String> {
 mod tests {
     use super::parse_r_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs;
     use std::fs::File;
     use std::io;
@@ -151,7 +151,10 @@ https://www.gnu.org/licenses/."#;
 
     fn check_r_render(dir: &tempfile::TempDir) {
         let actual = ModuleRenderer::new("rlang").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("📐 v4.1.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("📐 v4.1.0 ")
+        ));
         assert_eq!(expected, actual);
     }
 }

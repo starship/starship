@@ -51,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::{test::ModuleRenderer, utils::CommandOutput};
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn test_sudo_not_cached() {
@@ -84,7 +84,7 @@ mod tests {
                 allow_windows = true
             })
             .collect();
-        let expected = Some(format!("{}", Color::Blue.bold().paint("as 🧙 ")));
+        let expected = Some(format!("{}", Style::new().blue().bold().style("as 🧙 ")));
 
         assert_eq!(expected, actual);
     }

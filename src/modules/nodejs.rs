@@ -119,7 +119,7 @@ fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) 
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::{self, File};
     use std::io;
     use std::io::Write;
@@ -139,7 +139,10 @@ mod tests {
         File::create(dir.path().join("package.json"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -163,7 +166,10 @@ mod tests {
         File::create(dir.path().join(".node-version"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -174,7 +180,10 @@ mod tests {
         File::create(dir.path().join(".nvmrc"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -185,7 +194,10 @@ mod tests {
         File::create(dir.path().join("index.js"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -196,7 +208,10 @@ mod tests {
         File::create(dir.path().join("index.mjs"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -207,7 +222,10 @@ mod tests {
         File::create(dir.path().join("index.cjs"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -218,7 +236,10 @@ mod tests {
         File::create(dir.path().join("index.ts"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -230,7 +251,10 @@ mod tests {
         fs::create_dir_all(&node_modules)?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -249,7 +273,10 @@ mod tests {
         file.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -268,7 +295,10 @@ mod tests {
         file.sync_all()?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style(" v12.0.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

@@ -105,7 +105,7 @@ fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option
 #[cfg(test)]
 mod test {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use owo_colors::Style;
 
     const TEST_VAR_VALUE: &str = "astronauts";
 
@@ -126,7 +126,7 @@ mod test {
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
             .collect();
-        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
+        let expected = Some(format!("with {} ", style().style(TEST_VAR_VALUE)));
 
         assert_eq!(expected, actual);
     }
@@ -139,7 +139,7 @@ mod test {
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
             .collect();
-        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
+        let expected = Some(format!("with {} ", style().style(TEST_VAR_VALUE)));
 
         assert_eq!(expected, actual);
     }
@@ -165,7 +165,7 @@ mod test {
             })
             .env("TEST_VAR", TEST_VAR_VALUE)
             .collect();
-        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
+        let expected = Some(format!("with {} ", style().style(TEST_VAR_VALUE)));
 
         assert_eq!(expected, actual);
     }
@@ -178,7 +178,7 @@ mod test {
                 default = "N/A"
             })
             .collect();
-        let expected = Some(format!("with {} ", style().paint("N/A")));
+        let expected = Some(format!("with {} ", style().style("N/A")));
 
         assert_eq!(expected, actual);
     }
@@ -194,7 +194,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("■ {}", TEST_VAR_VALUE))
+            style().style(format!("■ {}", TEST_VAR_VALUE))
         ));
 
         assert_eq!(expected, actual);
@@ -211,7 +211,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("_{}", TEST_VAR_VALUE))
+            style().style(format!("_{}", TEST_VAR_VALUE))
         ));
 
         assert_eq!(expected, actual);
@@ -228,7 +228,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("{}_", TEST_VAR_VALUE))
+            style().style(format!("{}_", TEST_VAR_VALUE))
         ));
 
         assert_eq!(expected, actual);
@@ -246,8 +246,8 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} with {} ",
-            style().paint(TEST_VAR_VALUE),
-            style().paint(TEST_VAR_VALUE)
+            style().style(TEST_VAR_VALUE),
+            style().style(TEST_VAR_VALUE)
         ));
 
         assert_eq!(expected, actual);
@@ -255,6 +255,6 @@ mod test {
 
     fn style() -> Style {
         // default style
-        Color::Black.bold().dimmed()
+        Style::new().black().bold().dimmed()
     }
 }

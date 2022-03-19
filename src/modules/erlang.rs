@@ -73,7 +73,7 @@ fn get_erlang_version(context: &Context) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -94,7 +94,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("rebar.config"))?.sync_all()?;
 
-        let expected = Some(format!("via {}", Color::Red.bold().paint(" v22.1.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style(" v22.1.3 ")
+        ));
         let output = ModuleRenderer::new("erlang").path(dir.path()).collect();
 
         assert_eq!(output, expected);

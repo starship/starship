@@ -100,7 +100,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod test {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn config_blank_job_0() {
@@ -114,7 +114,7 @@ mod test {
     fn config_blank_job_1() {
         let actual = ModuleRenderer::new("jobs").jobs(1).collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦")));
         assert_eq!(expected, actual);
     }
 
@@ -122,7 +122,7 @@ mod test {
     fn config_blank_job_2() {
         let actual = ModuleRenderer::new("jobs").jobs(2).collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦2")));
         assert_eq!(expected, actual);
     }
 
@@ -136,7 +136,7 @@ mod test {
             .jobs(1)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦")));
         assert_eq!(expected, actual);
     }
 
@@ -150,7 +150,7 @@ mod test {
             .jobs(2)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦2")));
         assert_eq!(expected, actual);
     }
 
@@ -165,7 +165,7 @@ mod test {
             .jobs(1)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦")));
         assert_eq!(expected, actual);
     }
 
@@ -181,7 +181,7 @@ mod test {
             .jobs(1)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦")));
         assert_eq!(expected, actual);
     }
 
@@ -197,7 +197,7 @@ mod test {
             .jobs(1)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦1")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦1")));
         assert_eq!(expected, actual);
     }
 
@@ -212,7 +212,7 @@ mod test {
             .jobs(2)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦2")));
         assert_eq!(expected, actual);
     }
 
@@ -226,7 +226,7 @@ mod test {
             .jobs(2)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦")));
         assert_eq!(expected, actual);
     }
 
@@ -240,7 +240,7 @@ mod test {
             .jobs(2)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦2")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦2")));
         assert_eq!(expected, actual);
     }
 
@@ -255,7 +255,7 @@ mod test {
             .jobs(2)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("2")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("2")));
         assert_eq!(expected, actual);
     }
 
@@ -269,7 +269,7 @@ mod test {
             .jobs(3)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦3")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦3")));
         assert_eq!(expected, actual);
     }
 
@@ -284,7 +284,7 @@ mod test {
             .jobs(0)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦0")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦0")));
         assert_eq!(expected, actual);
     }
 
@@ -299,7 +299,7 @@ mod test {
             .jobs(1)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦1")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦1")));
         assert_eq!(expected, actual);
     }
 
@@ -313,7 +313,7 @@ mod test {
             .jobs(0)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦0")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦0")));
         assert_eq!(expected, actual);
     }
 
@@ -327,7 +327,7 @@ mod test {
             .jobs(1)
             .collect();
 
-        let expected = Some(format!("{} ", Color::Blue.bold().paint("✦1")));
+        let expected = Some(format!("{} ", Style::new().blue().bold().style("✦1")));
         assert_eq!(expected, actual);
     }
 }

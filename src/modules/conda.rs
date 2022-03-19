@@ -54,7 +54,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     #[test]
     fn not_in_env() {
@@ -88,7 +88,7 @@ mod tests {
 
         let expected = Some(format!(
             "via {} ",
-            Color::Green.bold().paint("🅒 astronauts")
+            Style::new().green().bold().style("🅒 astronauts")
         ));
 
         assert_eq!(expected, actual);
@@ -100,7 +100,10 @@ mod tests {
             .env("CONDA_DEFAULT_ENV", "/some/really/long/and/really/annoying/path/that/shouldnt/be/displayed/fully/conda/my_env")
             .collect();
 
-        let expected = Some(format!("via {} ", Color::Green.bold().paint("🅒 my_env")));
+        let expected = Some(format!(
+            "via {} ",
+            Style::new().green().bold().style("🅒 my_env")
+        ));
 
         assert_eq!(expected, actual);
     }

@@ -239,7 +239,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::{create_dir, File};
     use std::io::{self, Write};
 
@@ -260,7 +260,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+            Style::new().yellow().bold().style("☁️  (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -276,7 +276,10 @@ mod tests {
                 ap-southeast-2 = "au"
             })
             .collect();
-        let expected = Some(format!("on {}", Color::Yellow.bold().paint("☁️  (au) ")));
+        let expected = Some(format!(
+            "on {}",
+            Style::new().yellow().bold().style("☁️  (au) ")
+        ));
 
         assert_eq!(expected, actual);
     }
@@ -290,7 +293,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+            Style::new().yellow().bold().style("☁️  (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -304,7 +307,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts ")
+            Style::new().yellow().bold().style("☁️  astronauts ")
         ));
 
         assert_eq!(expected, actual);
@@ -319,7 +322,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts-vault ")
+            Style::new().yellow().bold().style("☁️  astronauts-vault ")
         ));
 
         assert_eq!(expected, actual);
@@ -334,7 +337,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts-awsu ")
+            Style::new().yellow().bold().style("☁️  astronauts-awsu ")
         ));
 
         assert_eq!(expected, actual);
@@ -349,7 +352,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts-awsume ")
+            Style::new().yellow().bold().style("☁️  astronauts-awsume ")
         ));
 
         assert_eq!(expected, actual);
@@ -364,9 +367,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow
+            Style::new()
+                .yellow()
                 .bold()
-                .paint("☁️  astronauts (ap-northeast-2) ")
+                .style("☁️  astronauts (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -385,7 +389,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astro (ap-northeast-2) ")
+            Style::new()
+                .yellow()
+                .bold()
+                .style("☁️  astro (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -406,7 +413,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astro (au) ")
+            Style::new().yellow().bold().style("☁️  astro (au) ")
         ));
 
         assert_eq!(expected, actual);
@@ -465,7 +472,7 @@ region = us-east-2
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (us-east-1) ")
+            Style::new().yellow().bold().style("☁️  (us-east-1) ")
         ));
 
         assert_eq!(expected, actual);
@@ -498,7 +505,10 @@ credential_process = /opt/bin/awscreds-retriever
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts (us-east-2) ")
+            Style::new()
+                .yellow()
+                .bold()
+                .style("☁️  astronauts (us-east-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -514,9 +524,10 @@ credential_process = /opt/bin/awscreds-retriever
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow
+            Style::new()
+                .yellow()
                 .bold()
-                .paint("☁️  astronauts (ap-northeast-1) ")
+                .style("☁️  astronauts (ap-northeast-1) ")
         ));
 
         assert_eq!(expected, actual);
@@ -530,7 +541,7 @@ credential_process = /opt/bin/awscreds-retriever
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts ")
+            Style::new().yellow().bold().style("☁️  astronauts ")
         ));
 
         assert_eq!(expected, actual);
@@ -544,7 +555,7 @@ credential_process = /opt/bin/awscreds-retriever
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-1) ")
+            Style::new().yellow().bold().style("☁️  (ap-northeast-1) ")
         ));
 
         assert_eq!(expected, actual);
@@ -563,7 +574,7 @@ credential_process = /opt/bin/awscreds-retriever
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Yellow.bold().paint("☁️  ap-northeast-1")
+            Style::new().yellow().bold().style("☁️  ap-northeast-1")
         ));
 
         assert_eq!(expected, actual);
@@ -582,7 +593,7 @@ credential_process = /opt/bin/awscreds-retriever
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Yellow.bold().paint("☁️  astronauts")
+            Style::new().yellow().bold().style("☁️  astronauts")
         ));
 
         assert_eq!(expected, actual);
@@ -598,7 +609,7 @@ credential_process = /opt/bin/awscreds-retriever
                 format = "on [$symbol$profile]($style) "
             })
             .collect();
-        let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  ")));
+        let expected = Some(format!("on {} ", Style::new().yellow().bold().style("☁️  ")));
 
         assert_eq!(expected, actual);
     }
@@ -627,9 +638,10 @@ credential_process = /opt/bin/awscreds-retriever
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow
+            Style::new()
+                .yellow()
                 .bold()
-                .paint("☁️  astronauts (ap-northeast-2) [30m]")
+                .style("☁️  astronauts (ap-northeast-2) [30m]")
         ));
 
         assert_eq!(expected, actual);
@@ -682,7 +694,7 @@ expiration={}
             let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}]", duration);
             Some(format!(
                 "on {}",
-                Color::Yellow.bold().paint(segment_colored)
+                Style::new().yellow().bold().style(segment_colored)
             ))
         });
 
@@ -704,9 +716,10 @@ expiration={}
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow
+            Style::new()
+                .yellow()
                 .bold()
-                .paint("☁️  astronauts (ap-northeast-2) ")
+                .style("☁️  astronauts (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -739,9 +752,10 @@ expiration={}
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow
+            Style::new()
+                .yellow()
                 .bold()
-                .paint(format!("☁️  astronauts (ap-northeast-2) [{}]", symbol))
+                .style(format!("☁️  astronauts (ap-northeast-2) [{}]", symbol))
         ));
 
         assert_eq!(expected, actual);
@@ -812,9 +826,10 @@ aws_secret_access_key=dummy
 
         let expected = Some(format!(
             "on {}",
-            Color::Yellow
+            Style::new()
+                .yellow()
                 .bold()
-                .paint("☁️  astronauts (ap-northeast-2) ")
+                .style("☁️  astronauts (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -841,7 +856,7 @@ credential_process = /opt/bin/awscreds-retriever
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+            Style::new().yellow().bold().style("☁️  (ap-northeast-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -887,7 +902,7 @@ sso_role_name = <AWS-ROLE-NAME>
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts ")
+            Style::new().yellow().bold().style("☁️  astronauts ")
         ));
 
         assert_eq!(expected, actual);
@@ -901,7 +916,7 @@ sso_role_name = <AWS-ROLE-NAME>
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts ")
+            Style::new().yellow().bold().style("☁️  astronauts ")
         ));
 
         assert_eq!(expected, actual);
@@ -915,7 +930,7 @@ sso_role_name = <AWS-ROLE-NAME>
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Yellow.bold().paint("☁️  astronauts ")
+            Style::new().yellow().bold().style("☁️  astronauts ")
         ));
 
         assert_eq!(expected, actual);

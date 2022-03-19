@@ -68,7 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use owo_colors::Style;
     use unicode_segmentation::UnicodeSegmentation;
 
     macro_rules! get_hostname {
@@ -95,7 +95,7 @@ mod tests {
                 trim_at = ""
             })
             .collect();
-        let expected = Some(format!("{} in ", style().paint(hostname)));
+        let expected = Some(format!("{} in ", style().style(hostname)));
 
         assert_eq!(expected, actual);
     }
@@ -124,7 +124,7 @@ mod tests {
             })
             .env("SSH_CONNECTION", "something")
             .collect();
-        let expected = Some(format!("{} in ", style().paint(hostname)));
+        let expected = Some(format!("{} in ", style().style(hostname)));
 
         assert_eq!(expected, actual);
     }
@@ -139,7 +139,7 @@ mod tests {
                 trim_at = ""
             })
             .collect();
-        let expected = Some(format!("{} in ", style().paint(hostname)));
+        let expected = Some(format!("{} in ", style().style(hostname)));
 
         assert_eq!(expected, actual);
     }
@@ -157,12 +157,12 @@ mod tests {
                 trim_at = trim_at
             })
             .collect();
-        let expected = Some(format!("{} in ", style().paint(remainder)));
+        let expected = Some(format!("{} in ", style().style(remainder)));
 
         assert_eq!(expected, actual);
     }
 
     fn style() -> Style {
-        Color::Green.bold().dimmed()
+        Style::new().green().bold().dimmed()
     }
 }

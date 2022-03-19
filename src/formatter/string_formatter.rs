@@ -1,4 +1,4 @@
-use ansi_term::Style;
+use owo_colors::Style;
 use pest::error::Error as PestError;
 use rayon::prelude::*;
 use std::borrow::Cow;
@@ -456,7 +456,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     // match_next(result: IterMut<Segment>, value, style)
     macro_rules! match_next {
@@ -474,7 +474,7 @@ mod tests {
     #[test]
     fn test_default_style() {
         const FORMAT_STR: &str = "text";
-        let style = Some(Color::Red.bold());
+        let style = Some(Style::new().red().bold());
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let result = formatter.parse(style, None).unwrap();
@@ -488,7 +488,7 @@ mod tests {
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
-        match_next!(result_iter, "text", Some(Color::Red.bold()));
+        match_next!(result_iter, "text", Some(Style::new().red().bold()));
     }
 
     #[test]
@@ -509,7 +509,7 @@ mod tests {
     #[test]
     fn test_variable_in_style() {
         const FORMAT_STR: &str = "[root]($style)";
-        let root_style = Some(Color::Red.bold());
+        let root_style = Some(Style::new().red().bold());
 
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
@@ -547,9 +547,9 @@ mod tests {
     #[test]
     fn test_nested_textgroup() {
         const FORMAT_STR: &str = "outer [middle [inner](blue)](red bold)";
-        let outer_style = Some(Color::Green.normal());
-        let middle_style = Some(Color::Red.bold());
-        let inner_style = Some(Color::Blue.normal());
+        let outer_style = Some(Style::new().green());
+        let middle_style = Some(Style::new().red().bold());
+        let inner_style = Some(Style::new().blue());
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let result = formatter.parse(outer_style, None).unwrap();
@@ -562,7 +562,7 @@ mod tests {
     #[test]
     fn test_styled_variable_as_text() {
         const FORMAT_STR: &str = "[$var](red bold)";
-        let var_style = Some(Color::Red.bold());
+        let var_style = Some(Style::new().red().bold());
 
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
@@ -578,9 +578,9 @@ mod tests {
     #[test]
     fn test_styled_variable_as_segments() {
         const FORMAT_STR: &str = "[$var](red bold)";
-        let var_style = Some(Color::Red.bold());
-        let styled_style = Some(Color::Green.italic());
-        let styled_no_modifier_style = Some(Color::Green.normal());
+        let var_style = Some(Style::new().red().bold());
+        let styled_style = Some(Style::new().green().italic());
+        let styled_no_modifier_style = Some(Style::new().green());
 
         let mut segments: Vec<Segment> = Vec::new();
         segments.extend(Segment::from_text(None, "styless"));

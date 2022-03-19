@@ -70,7 +70,7 @@ fn parse_deno_version(deno_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -88,7 +88,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("deno.json"))?.sync_all()?;
         let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style("🦕 v1.8.3 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -98,7 +101,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("deno.jsonc"))?.sync_all()?;
         let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style("🦕 v1.8.3 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -108,7 +114,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("mod.ts"))?.sync_all()?;
         let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style("🦕 v1.8.3 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -118,7 +127,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("mod.js"))?.sync_all()?;
         let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style("🦕 v1.8.3 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -128,7 +140,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("deps.ts"))?.sync_all()?;
         let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style("🦕 v1.8.3 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -138,7 +153,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("deps.js"))?.sync_all()?;
         let actual = ModuleRenderer::new("deno").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint("🦕 v1.8.3 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().green().bold().style("🦕 v1.8.3 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

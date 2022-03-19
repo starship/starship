@@ -199,7 +199,7 @@ mod tests {
     use super::*;
     use crate::context::Target;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::{Style, XtermColors};
 
     #[test]
     fn pulumi_version_release() {
@@ -257,7 +257,10 @@ mod tests {
             })
             .collect();
         dir.close()?;
-        let expected = format!("with {} ", Color::Fixed(5).bold().paint("v1.2.3-ver"));
+        let expected = format!(
+            "with {} ",
+            Style::new().color(XtermColors::from(5)).bold().style("v1.2.3-ver")
+        );
 
         assert_eq!(expected, rendered.expect("a result"));
         Ok(())
@@ -324,7 +327,7 @@ mod tests {
             .collect();
         let expected = format!(
             "via {} ",
-            Color::Fixed(5).bold().paint(" test-user@launch")
+            Style::new().color(XtermColors::from(5)).bold().style(" test-user@launch")
         );
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
@@ -384,7 +387,7 @@ mod tests {
             })
             .env("HOME", root.to_str().unwrap())
             .collect();
-        let expected = format!("via {} ", Color::Fixed(5).bold().paint(" launch"));
+        let expected = format!("via {} ", Style::new().color(XtermColors::from(5)).bold().style(" launch"));
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())
@@ -404,7 +407,7 @@ mod tests {
                 format = "in [$symbol($stack)]($style) "
             })
             .collect();
-        let expected = format!("in {} ", Color::Fixed(5).bold().paint(" "));
+        let expected = format!("in {} ", Style::new().color(XtermColors::from(5)).bold().style(" "));
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())

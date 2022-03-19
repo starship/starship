@@ -1,5 +1,4 @@
 use crate::utils;
-use ansi_term::Color;
 use log::{Level, LevelFilter, Metadata, Record};
 use once_cell::sync::OnceCell;
 use std::{
@@ -107,15 +106,20 @@ impl log::Log for StarshipLogger {
         }
 
         if self.enabled(record.metadata()) && !self.log_file_content.contains(to_print.as_str()) {
+            let style = owo_colors::Style::new();
+            let level = record.level();
+
+            let level_style = match level {
+                Level::Trace => style.blue().dimmed(),
+                Level::Debug => style.cyan(),
+                Level::Info => style.white(),
+                Level::Warn => style.yellow(),
+                Level::Error => style.red(),
+            };
+
             eprintln!(
                 "[{}] - ({}): {}",
-                match record.level() {
-                    Level::Trace => Color::Blue.dimmed().paint(format!("{}", record.level())),
-                    Level::Debug => Color::Cyan.paint(format!("{}", record.level())),
-                    Level::Info => Color::White.paint(format!("{}", record.level())),
-                    Level::Warn => Color::Yellow.paint(format!("{}", record.level())),
-                    Level::Error => Color::Red.paint(format!("{}", record.level())),
-                },
+                level_style.style(&level),
                 record.module_path().unwrap_or_default(),
                 record.args()
             );

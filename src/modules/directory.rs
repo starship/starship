@@ -338,7 +338,7 @@ mod tests {
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
     use crate::utils::home_dir;
-    use ansi_term::Color;
+    use owo_colors::Style;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
     #[cfg(target_os = "windows")]
@@ -519,7 +519,10 @@ mod tests {
                 .env("HOME", tmp_dir.path().to_str().unwrap())
                 .path(symlink_dir)
                 .collect();
-            let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/fuel-gauge")));
+            let expected = Some(format!(
+                "{} ",
+                Style::new().cyan().bold().style("~/fuel-gauge")
+            ));
 
             assert_eq!(expected, actual);
 
@@ -544,7 +547,10 @@ mod tests {
                 .path(dir)
                 .env("HOME", tmp_dir.path().to_str().unwrap())
                 .collect();
-            let expected = Some(format!("{} ", Color::Cyan.bold().paint("~/src/fuel-gauge")));
+            let expected = Some(format!(
+                "{} ",
+                Style::new().cyan().bold().style("~/src/fuel-gauge")
+            ));
 
             assert_eq!(expected, actual);
 
@@ -557,8 +563,8 @@ mod tests {
             let actual = ModuleRenderer::new("directory").path("/etc").collect();
             let expected = Some(format!(
                 "{}{} ",
-                Color::Cyan.bold().paint("/etc"),
-                Color::Red.normal().paint("🔒")
+                Style::new().cyan().bold().style("/etc"),
+                Style::new().red().style("🔒")
             ));
 
             assert_eq!(expected, actual);
@@ -570,7 +576,7 @@ mod tests {
         let actual = ModuleRenderer::new("directory")
             .path(home_dir().unwrap())
             .collect();
-        let expected = Some(format!("{} ", Color::Cyan.bold().paint("~")));
+        let expected = Some(format!("{} ", Style::new().cyan().bold().style("~")));
 
         assert_eq!(expected, actual);
     }
@@ -586,7 +592,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("🚀"))
+            Style::new().cyan().bold().style(convert_path_sep("🚀"))
         ));
 
         assert_eq!(expected, actual);
@@ -603,9 +609,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("🚀/path/subpath"))
+                .style(convert_path_sep("🚀/path/subpath"))
         ));
 
         assert_eq!(expected, actual);
@@ -625,9 +632,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("net/workspace/d/dev"))
+                .style(convert_path_sep("net/workspace/d/dev"))
         ));
 
         assert_eq!(expected, actual);
@@ -645,7 +653,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("/correct/order"))
+            Style::new()
+                .cyan()
+                .bold()
+                .style(convert_path_sep("/correct/order"))
         ));
 
         assert_eq!(expected, actual);
@@ -666,9 +677,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep(&format!("/foo/bar/{}/path", strange_sub)))
+                .style(convert_path_sep(&format!("/foo/bar/{}/path", strange_sub)))
         ));
 
         assert_eq!(expected, actual);
@@ -683,9 +695,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory").path(dir).collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep(&format!("~/{}/starship", name)))
+                .style(convert_path_sep(&format!("~/{}/starship", name)))
         ));
 
         assert_eq!(expected, actual);
@@ -701,9 +714,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory").path(dir).collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep(&format!("{}/engine/schematics", name)))
+                .style(convert_path_sep(&format!("{}/engine/schematics", name)))
         ));
 
         assert_eq!(expected, actual);
@@ -726,7 +740,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
+            Style::new().cyan().bold().style(convert_path_sep(&format!(
                 "~/{}/st/schematics",
                 name.split_at(3).0
             )))
@@ -750,7 +764,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("/"))
+            Style::new().cyan().bold().style(convert_path_sep("/"))
         ));
 
         assert_eq!(expected, actual);
@@ -765,9 +779,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory").path(dir).collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep(&format!("{}/thrusters/rocket", name)))
+                .style(convert_path_sep(&format!("{}/thrusters/rocket", name)))
         ));
 
         assert_eq!(expected, actual);
@@ -790,7 +805,7 @@ mod tests {
         let dir_str = dir.to_slash_lossy();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(
+            Style::new().cyan().bold().style(convert_path_sep(
                 &truncate(&dir_str, 100).unwrap_or(dir_str)
             ))
         ));
@@ -815,11 +830,14 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&to_fish_style(
-                100,
-                dir.to_slash_lossy(),
-                ""
-            )))
+            Style::new()
+                .cyan()
+                .bold()
+                .style(convert_path_sep(&to_fish_style(
+                    100,
+                    dir.to_slash_lossy(),
+                    ""
+                )))
         ));
 
         assert_eq!(expected, actual);
@@ -841,9 +859,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep(&format!("{}/rocket", name)))
+                .style(convert_path_sep(&format!("{}/rocket", name)))
         ));
 
         assert_eq!(expected, actual);
@@ -866,7 +885,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
+            Style::new().cyan().bold().style(convert_path_sep(&format!(
                 "{}/thrusters/rocket",
                 to_fish_style(1, dir.to_slash_lossy(), "/thrusters/rocket")
             )))
@@ -887,9 +906,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory").path(repo_dir).collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("rocket-controls"))
+                .style(convert_path_sep("rocket-controls"))
         ));
 
         assert_eq!(expected, actual);
@@ -908,9 +928,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory").path(dir).collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("rocket-controls/src"))
+                .style(convert_path_sep("rocket-controls/src"))
         ));
 
         assert_eq!(expected, actual);
@@ -929,9 +950,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory").path(dir).collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("src/meters/fuel-gauge"))
+                .style(convert_path_sep("src/meters/fuel-gauge"))
         ));
 
         assert_eq!(expected, actual);
@@ -958,7 +980,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(
+            Style::new().cyan().bold().style(convert_path_sep(
                 "above-repo/rocket-controls/src/meters/fuel-gauge"
             ))
         ));
@@ -988,7 +1010,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
+            Style::new().cyan().bold().style(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
             )))
@@ -1019,7 +1041,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
+            Style::new().cyan().bold().style(convert_path_sep(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
             )))
@@ -1049,9 +1071,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("rocket-controls/src/meters/fuel-gauge"))
+                .style(convert_path_sep("rocket-controls/src/meters/fuel-gauge"))
         ));
 
         assert_eq!(expected, actual);
@@ -1071,9 +1094,10 @@ mod tests {
         let actual = ModuleRenderer::new("directory").path(symlink_dir).collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("rocket-controls-symlink"))
+                .style(convert_path_sep("rocket-controls-symlink"))
         ));
 
         assert_eq!(expected, actual);
@@ -1097,9 +1121,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("rocket-controls-symlink/src"))
+                .style(convert_path_sep("rocket-controls-symlink/src"))
         ));
 
         assert_eq!(expected, actual);
@@ -1123,9 +1148,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("src/meters/fuel-gauge"))
+                .style(convert_path_sep("src/meters/fuel-gauge"))
         ));
 
         assert_eq!(expected, actual);
@@ -1158,7 +1184,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(
+            Style::new().cyan().bold().style(convert_path_sep(
                 "above-repo/rocket-controls-symlink/src/meters/fuel-gauge"
             ))
         ));
@@ -1194,7 +1220,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
+            Style::new().cyan().bold().style(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
             )))
@@ -1231,7 +1257,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
+            Style::new().cyan().bold().style(convert_path_sep(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
                 to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
             )))
@@ -1267,7 +1293,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(
+            Style::new().cyan().bold().style(convert_path_sep(
                 "rocket-controls-symlink/src/meters/fuel-gauge"
             ))
         ));
@@ -1297,9 +1323,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("rocket-controls/src/loop/loop"))
+                .style(convert_path_sep("rocket-controls/src/loop/loop"))
         ));
 
         assert_eq!(expected, actual);
@@ -1318,9 +1345,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("…/four/element/path"))
+                .style(convert_path_sep("…/four/element/path"))
         ));
         assert_eq!(expected, actual);
     }
@@ -1337,9 +1365,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("/a/four/element/path"))
+                .style(convert_path_sep("/a/four/element/path"))
         ));
         assert_eq!(expected, actual);
     }
@@ -1360,9 +1389,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep(&format!("…/{}/a/subpath", name)))
+                .style(convert_path_sep(&format!("…/{}/a/subpath", name)))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1385,9 +1415,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep(&format!("~/{}/a/subpath", name)))
+                .style(convert_path_sep(&format!("~/{}/a/subpath", name)))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1411,7 +1442,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("…/src/sub/path"))
+            Style::new()
+                .cyan()
+                .bold()
+                .style(convert_path_sep("…/src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1436,9 +1470,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("…/repo/src/sub/path"))
+                .style(convert_path_sep("…/repo/src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1458,7 +1493,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("C:/temp"))
+            Style::new()
+                .cyan()
+                .bold()
+                .style(convert_path_sep("C:/temp"))
         ));
         assert_eq!(expected, actual);
     }
@@ -1477,7 +1515,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("…/temp"))
+            Style::new().cyan().bold().style(convert_path_sep("…/temp"))
         ));
         assert_eq!(expected, actual);
     }
@@ -1496,7 +1534,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep("…\\temp"))
+            Style::new()
+                .cyan()
+                .bold()
+                .style(convert_path_sep("…\\temp"))
         ));
         assert_eq!(expected, actual);
     }
@@ -1510,9 +1551,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("Logical:/fuel-gauge"))
+                .style(convert_path_sep("Logical:/fuel-gauge"))
         ));
 
         let actual = ModuleRenderer::new("directory")
@@ -1538,9 +1580,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("src/meters/fuel-gauge"))
+                .style(convert_path_sep("src/meters/fuel-gauge"))
         ));
 
         let actual = ModuleRenderer::new("directory")
@@ -1566,9 +1609,10 @@ mod tests {
 
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep("C:/Windows/System32"))
+                .style(convert_path_sep("C:/Windows/System32"))
         ));
 
         // Note: We have disable the read_only settings here due to false positives when running
@@ -1598,9 +1642,10 @@ mod tests {
         // which is why the first part of this string still includes backslashes
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
+            Style::new()
+                .cyan()
                 .bold()
-                .paint(convert_path_sep(r"\\server\share/a/b/c"))
+                .style(convert_path_sep(r"\\server\share/a/b/c"))
         ));
 
         let actual = ModuleRenderer::new("directory")
@@ -1633,10 +1678,9 @@ mod tests {
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{}{}repo{} ",
-            Color::Cyan.bold().prefix(),
-            Color::Red.prefix(),
-            Color::Cyan.paint(convert_path_sep("/src/sub/path"))
+            "{}{} ",
+            Style::new().red().bold().style("repo"),
+            Style::new().cyan().bold().style(convert_path_sep("/src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1661,10 +1705,16 @@ mod tests {
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{}{}repo{} ",
-            Color::Cyan.bold().paint(convert_path_sep("…/above/")),
-            Color::Green.prefix(),
-            Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
+            "{}{}{} ",
+            Style::new()
+                .cyan()
+                .bold()
+                .style(convert_path_sep("…/above/")),
+            Style::new().green().style("repo"),
+            Style::new()
+                .cyan()
+                .bold()
+                .style(convert_path_sep("/src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1704,7 +1754,7 @@ mod tests {
         let path = invalid_path();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(path.to_string_lossy())
+            Style::new().cyan().bold().style(path.to_string_lossy())
         ));
 
         let actual = ModuleRenderer::new("directory").path(path).collect();
@@ -1727,7 +1777,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(format!("~/{}/starship", name))
+            Style::new()
+                .cyan()
+                .bold()
+                .style(format!("~/{}/starship", name))
         ));
 
         assert_eq!(expected, actual);

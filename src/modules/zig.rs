@@ -59,7 +59,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -78,7 +78,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.zig"))?.sync_all()?;
         let actual = ModuleRenderer::new("zig").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Yellow.bold().paint("↯ v0.6.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().yellow().bold().style("↯ v0.6.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

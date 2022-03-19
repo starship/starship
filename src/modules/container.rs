@@ -101,7 +101,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::path::PathBuf;
 
     #[test]
@@ -152,10 +152,11 @@ mod tests {
         // The value that should be rendered by the module.
         let expected = Some(format!(
             "{} ",
-            Color::Red
+            Style::new()
+                .red()
                 .bold()
                 .dimmed()
-                .paint(format!("⬢ [{}]", name.unwrap_or("podman")))
+                .style(format!("⬢ [{}]", name.unwrap_or("podman")))
         ));
 
         Ok((actual, expected))

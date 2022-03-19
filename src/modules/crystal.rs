@@ -72,7 +72,7 @@ fn parse_crystal_version(crystal_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -92,7 +92,10 @@ mod tests {
         File::create(dir.path().join("shard.yml"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("crystal").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🔮 v0.35.1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("🔮 v0.35.1 ")
+        ));
         assert_eq!(expected, actual);
 
         dir.close()
@@ -104,7 +107,10 @@ mod tests {
         File::create(dir.path().join("main.cr"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("crystal").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🔮 v0.35.1 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("🔮 v0.35.1 ")
+        ));
         assert_eq!(expected, actual);
 
         dir.close()

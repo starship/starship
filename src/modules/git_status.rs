@@ -464,7 +464,7 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{ANSIStrings, Color};
+    use owo_colors::Style;
     use std::ffi::OsStr;
     use std::fs::{self, File};
     use std::io::{self, prelude::*};
@@ -489,7 +489,7 @@ mod tests {
     fn format_output(symbols: &str) -> Option<String> {
         Some(format!(
             "{} ",
-            Color::Red.bold().paint(format!("[{}]", symbols))
+            Style::new().red().bold().style(format!("[{}]", symbols))
         ))
     }
 
@@ -843,12 +843,10 @@ mod tests {
             .path(&repo_dir.path())
             .collect();
         let expected = Some(format!(
-            "{} ",
-            ANSIStrings(&[
-                Color::Red.bold().paint("[+"),
-                Color::Green.paint("1"),
-                Color::Red.bold().paint("]"),
-            ])
+            "{}{}{} ",
+                Style::new().red().bold().style("[+"),
+                Style::new().green().style("1"),
+                Style::new().red().bold().style("]"),
         ));
 
         assert_eq!(expected, actual);

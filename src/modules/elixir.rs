@@ -91,7 +91,7 @@ fn parse_elixir_version(version: &str) -> Option<(String, String)> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -145,7 +145,7 @@ Elixir 1.13.0-dev (compiled with Erlang/OTP 23)
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("💧 v1.10 (OTP 22) ")
+            Style::new().purple().bold().style("💧 v1.10 (OTP 22) ")
         ));
         let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 

@@ -58,7 +58,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -76,7 +76,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.red"))?.sync_all()?;
         let actual = ModuleRenderer::new("red").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 v0.6.4 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("🔺 v0.6.4 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -86,7 +89,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("hello.reds"))?.sync_all()?;
         let actual = ModuleRenderer::new("red").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 v0.6.4 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("🔺 v0.6.4 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -102,7 +108,10 @@ mod tests {
                 version_format = "${raw}"
             })
             .collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint("🔺 0.6.4 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().red().bold().style("🔺 0.6.4 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

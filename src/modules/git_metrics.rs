@@ -116,7 +116,7 @@ mod tests {
     use std::path::{Path, PathBuf};
     use std::process::Stdio;
 
-    use ansi_term::Color;
+    use owo_colors::Style;
 
     use crate::test::ModuleRenderer;
 
@@ -145,7 +145,7 @@ mod tests {
 
         let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+        let expected = Some(format!("{} ", Style::new().green().bold().style("+1"),));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -161,7 +161,7 @@ mod tests {
 
         let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Red.bold().paint("-1")));
+        let expected = Some(format!("{} ", Style::new().red().bold().style("-1")));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -179,8 +179,8 @@ mod tests {
 
         let expected = Some(format!(
             "{} {} ",
-            Color::Green.bold().paint("+4"),
-            Color::Red.bold().paint("-2")
+            Style::new().green().bold().style("+4"),
+            Style::new().red().bold().style("-2")
         ));
 
         assert_eq!(expected, actual);
@@ -220,8 +220,8 @@ mod tests {
 
         let expected = Some(format!(
             "{} {} ",
-            Color::Green.bold().paint("+1"),
-            Color::Red.bold().paint("-0")
+            Style::new().green().bold().style("+1"),
+            Style::new().red().bold().style("-0")
         ));
 
         assert_eq!(expected, actual);

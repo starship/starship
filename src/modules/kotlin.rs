@@ -82,7 +82,7 @@ fn parse_kotlin_version(kotlin_stdout: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use owo_colors::Style;
     use std::fs::File;
     use std::io;
 
@@ -100,7 +100,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.kt"))?.sync_all()?;
         let actual = ModuleRenderer::new("kotlin").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🅺 v1.4.21 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🅺 v1.4.21 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -110,7 +113,10 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("main.kts"))?.sync_all()?;
         let actual = ModuleRenderer::new("kotlin").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🅺 v1.4.21 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🅺 v1.4.21 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -130,7 +136,10 @@ mod tests {
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🅺 v1.4.21 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🅺 v1.4.21 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -150,7 +159,10 @@ mod tests {
             .config(config)
             .collect();
 
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🅺 v1.4.21 ")));
+        let expected = Some(format!(
+            "via {}",
+            Style::new().blue().bold().style("🅺 v1.4.21 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

@@ -98,7 +98,7 @@ fn graphemes_len(text: &str) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{Color, Style};
+    use owo_colors::Style;
     use std::fs;
     use std::io;
     use std::path::Path;
@@ -274,7 +274,7 @@ mod tests {
             }),
             &[
                 Expect::BranchName("branch-name-131"),
-                Expect::Style(Color::Blue.underline()),
+                Expect::Style(Style::new().blue().underline()),
                 Expect::TruncationSymbol(""),
             ],
         );
@@ -297,7 +297,7 @@ mod tests {
             .collect();
 
         let mut expect_branch_name = "default";
-        let mut expect_style = Color::Purple.bold();
+        let mut expect_style = Style::new().purple().bold();
         let mut expect_symbol = "\u{e0a0}";
         let mut expect_truncation_symbol = "…";
 
@@ -325,7 +325,7 @@ mod tests {
 
         let expected = Some(format!(
             "on {} ",
-            expect_style.paint(format!(
+            expect_style.style(format!(
                 "{} {}{}",
                 expect_symbol, expect_branch_name, expect_truncation_symbol
             )),
