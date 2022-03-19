@@ -691,7 +691,7 @@ mod tests {
         let config = Value::from("#a12BcD");
         assert_eq!(
             <Style>::from_config(&config).unwrap(),
-            Style::new().bg_rgb::<0xA1, 0x2B, 0xCD>()
+            Style::new().fg_rgb::<0xA1, 0x2B, 0xCD>()
         );
     }
 

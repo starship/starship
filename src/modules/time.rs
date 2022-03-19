@@ -502,7 +502,7 @@ mod tests {
             .unwrap();
 
         // This is the prefix with "at ", the color code, then the prefix char [
-        let col_prefix = format!("at {}{}[", '\u{1b}', "[1;33m");
+        let col_prefix = format!("at {}{}[", '\u{1b}', "[33;1m");
 
         // This is the suffix with suffix char ']', then color codes, then a space
         let col_suffix = format!("]{}{} ", '\u{1b}', "[0m");
