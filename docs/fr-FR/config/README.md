@@ -814,13 +814,13 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                                                    | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"green bold"`                                                          | Le style du module.                                                                        |
-| `disabled`          | `false`                                                                 | Disables the `deno` module.                                                                |
+| `disabled`          | `false`                                                                 | Désactive le module `deno`.                                                                |
 
 ### Variables
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.8.3` | The version of `deno`                  |
+| version   | `v1.8.3` | La version de `deno`                   |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
