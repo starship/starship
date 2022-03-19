@@ -3176,7 +3176,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 | Option              | Default                                | Description                                                                                                                                     |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to/. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
 | `symbol`            | `"🅢  "`                                | The symbol used before the environment name.                                                                                                    |
 | `style`             | `"bold blue"`                          | The style for the module.                                                                                                                       |
 | `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                                                                      |
