@@ -100,8 +100,8 @@ mod tests {
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Style::new().blue().bold().style("🌙 v5.4.0 "))
-        );
+            Style::new().blue().bold().style("🌙 v5.4.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -114,8 +114,8 @@ mod tests {
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Style::new().blue().bold().style("🌙 v5.4.0 "))
-        );
+            Style::new().blue().bold().style("🌙 v5.4.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -129,8 +129,8 @@ mod tests {
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Style::new().blue().bold().style("🌙 v5.4.0 "))
-        );
+            Style::new().blue().bold().style("🌙 v5.4.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }

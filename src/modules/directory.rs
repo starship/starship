@@ -1680,7 +1680,10 @@ mod tests {
         let expected = Some(format!(
             "{}{} ",
             Style::new().red().bold().style("repo"),
-            Style::new().cyan().bold().style(convert_path_sep("/src/sub/path"))
+            Style::new()
+                .cyan()
+                .bold()
+                .style(convert_path_sep("/src/sub/path"))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()

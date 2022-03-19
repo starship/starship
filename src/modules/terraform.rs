@@ -156,7 +156,8 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
 
         let expected = Some(format!(
             "via {} ",
-            Style::new().color(XtermColors::from(105))
+            Style::new()
+                .color(XtermColors::from(105))
                 .bold()
                 .style("💠 v0.12.14 default")
         ));
@@ -183,7 +184,8 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
 
         let expected = Some(format!(
             "via {} ",
-            Style::new().color(XtermColors::from(105))
+            Style::new()
+                .color(XtermColors::from(105))
                 .bold()
                 .style("💠 v0.12.14 development")
         ));
@@ -210,7 +212,10 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
         let expected = Some(format!(
             "via {} ",
-            Style::new().color(XtermColors::from(105)).bold().style("💠 default")
+            Style::new()
+                .color(XtermColors::from(105))
+                .bold()
+                .style("💠 default")
         ));
 
         assert_eq!(expected, actual);
@@ -228,7 +233,10 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
             .collect();
         let expected = Some(format!(
             "via {} ",
-            Style::new().color(XtermColors::from(105)).bold().style("💠 development")
+            Style::new()
+                .color(XtermColors::from(105))
+                .bold()
+                .style("💠 development")
         ));
 
         assert_eq!(expected, actual);
@@ -251,7 +259,10 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
             .collect();
         let expected = Some(format!(
             "via {} ",
-            Style::new().color(XtermColors::from(105)).bold().style("💠 development")
+            Style::new()
+                .color(XtermColors::from(105))
+                .bold()
+                .style("💠 development")
         ));
 
         assert_eq!(expected, actual);
@@ -268,7 +279,10 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
         let expected = Some(format!(
             "via {} ",
-            Style::new().color(XtermColors::from(105)).bold().style("💠 default")
+            Style::new()
+                .color(XtermColors::from(105))
+                .bold()
+                .style("💠 default")
         ));
 
         assert_eq!(expected, actual);
@@ -287,7 +301,10 @@ is 0.12.14. You can update by downloading from www.terraform.io/downloads.html
         let actual = ModuleRenderer::new("terraform").path(dir.path()).collect();
         let expected = Some(format!(
             "via {} ",
-            Style::new().color(XtermColors::from(105)).bold().style("💠 development")
+            Style::new()
+                .color(XtermColors::from(105))
+                .bold()
+                .style("💠 development")
         ));
 
         assert_eq!(expected, actual);

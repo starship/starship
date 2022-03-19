@@ -105,7 +105,10 @@ mod tests {
         let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Style::new().color(XtermColors::from(202)).bold().style("🐦 v5.2.2 ")
+            Style::new()
+                .color(XtermColors::from(202))
+                .bold()
+                .style("🐦 v5.2.2 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -118,7 +121,10 @@ mod tests {
         let actual = ModuleRenderer::new("swift").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Style::new().color(XtermColors::from(202)).bold().style("🐦 v5.2.2 ")
+            Style::new()
+                .color(XtermColors::from(202))
+                .bold()
+                .style("🐦 v5.2.2 ")
         ));
         assert_eq!(expected, actual);
         dir.close()

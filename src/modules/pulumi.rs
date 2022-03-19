@@ -259,7 +259,10 @@ mod tests {
         dir.close()?;
         let expected = format!(
             "with {} ",
-            Style::new().color(XtermColors::from(5)).bold().style("v1.2.3-ver")
+            Style::new()
+                .color(XtermColors::from(5))
+                .bold()
+                .style("v1.2.3-ver")
         );
 
         assert_eq!(expected, rendered.expect("a result"));
@@ -327,7 +330,10 @@ mod tests {
             .collect();
         let expected = format!(
             "via {} ",
-            Style::new().color(XtermColors::from(5)).bold().style(" test-user@launch")
+            Style::new()
+                .color(XtermColors::from(5))
+                .bold()
+                .style(" test-user@launch")
         );
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
@@ -387,7 +393,13 @@ mod tests {
             })
             .env("HOME", root.to_str().unwrap())
             .collect();
-        let expected = format!("via {} ", Style::new().color(XtermColors::from(5)).bold().style(" launch"));
+        let expected = format!(
+            "via {} ",
+            Style::new()
+                .color(XtermColors::from(5))
+                .bold()
+                .style(" launch")
+        );
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())
@@ -407,7 +419,10 @@ mod tests {
                 format = "in [$symbol($stack)]($style) "
             })
             .collect();
-        let expected = format!("in {} ", Style::new().color(XtermColors::from(5)).bold().style(" "));
+        let expected = format!(
+            "in {} ",
+            Style::new().color(XtermColors::from(5)).bold().style(" ")
+        );
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())

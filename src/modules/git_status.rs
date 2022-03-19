@@ -844,9 +844,9 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{}{}{} ",
-                Style::new().red().bold().style("[+"),
-                Style::new().green().style("1"),
-                Style::new().red().bold().style("]"),
+            Style::new().red().bold().style("[+"),
+            Style::new().green().style("1"),
+            Style::new().red().bold().style("]"),
         ));
 
         assert_eq!(expected, actual);

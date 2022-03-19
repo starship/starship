@@ -83,7 +83,10 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Style::new().color(XtermColors::from(147)).bold().style("🐘 v7.3.8 ")
+            Style::new()
+                .color(XtermColors::from(147))
+                .bold()
+                .style("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -98,7 +101,10 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Style::new().color(XtermColors::from(147)).bold().style("🐘 v7.3.8 ")
+            Style::new()
+                .color(XtermColors::from(147))
+                .bold()
+                .style("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
@@ -113,7 +119,10 @@ mod tests {
 
         let expected = Some(format!(
             "via {}",
-            Style::new().color(XtermColors::from(147)).bold().style("🐘 v7.3.8 ")
+            Style::new()
+                .color(XtermColors::from(147))
+                .bold()
+                .style("🐘 v7.3.8 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
