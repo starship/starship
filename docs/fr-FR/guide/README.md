@@ -160,7 +160,7 @@
 - **Facile:** rapide à installer – commencez à l'utiliser en quelques minutes.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Consultez la documentation de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -173,12 +173,12 @@
 
 ### Étape 1. Installer Starship
 
-Select your operating system from the list below to view installation instructions:
+Sélectionnez votre système d'exploitation dans la liste ci-dessous pour voir les instructions d'installation:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                                             | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -189,7 +189,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Distribution | Dépôt                                                    | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -208,7 +208,7 @@ Installez la dernière version pour votre système:
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Distribution       | Dépôt                                                                                          | Instructions                                                                   |
 | ------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -237,7 +237,7 @@ Installez la dernière version pour votre système:
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                    | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -251,7 +251,7 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                                            | Instructions                            |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
