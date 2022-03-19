@@ -180,7 +180,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# Ce qui est équivalent à
 format = """
 $username\
 $hostname\
@@ -697,13 +697,13 @@ The `container` module displays a symbol and container name, if inside a contain
 | `symbol`   | `"⬢"`                                | The symbol shown, when inside a container |
 | `style`    | `"bold red dimmed"`                  | Le style du module.                       |
 | `format`   | "[$symbol \\[$name\\]]($style) " | Format du module.                         |
-| `disabled` | `false`                              | Disables the `container` module.          |
+| `disabled` | `false`                              | Désactive le module `container`.          |
 
 ### Variables
 
 | Variable  | Exemple             | Description                            |
 | --------- | ------------------- | -------------------------------------- |
-| name      | `fedora-toolbox:35` | The name of the container              |
+| name      | `fedora-toolbox:35` | Le nom du conteneur                    |
 | symbol    |                     | Reflète la valeur de l'option `symbol` |
 | style\* |                     | Reflète la valeur de l'option `style`  |
 
