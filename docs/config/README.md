@@ -512,12 +512,6 @@ look at [this example](#with-custom-error-shape).
 
 ::: warning
 
-`error_symbol` is not supported on nu shell.
-
-:::
-
-::: warning
-
 `vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
@@ -3127,10 +3121,6 @@ The status code will cast to a signed 32-bit integer.
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
 
-:::
-
-::: warning
-This module is not supported on nu shell.
 :::
 
 ### Options
