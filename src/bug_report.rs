@@ -7,7 +7,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 pub fn create() {
-    println!("{}\n", shadow::version().trim());
+    println!("{}\n", shadow::VERSION.trim());
     let os_info = os_info::get();
 
     let environment = Environment {
