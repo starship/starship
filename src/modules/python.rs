@@ -1,7 +1,7 @@
 use ini::Ini;
 use std::path::Path;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;

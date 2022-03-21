@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::haskell::HaskellConfig;
 use crate::formatter::StringFormatter;

@@ -65,7 +65,6 @@ shadow-rs = "0.11.0"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.7.9", optional = true }
-starship_module_config_derive = { version = "0.2.1", path = "starship_module_config_derive" }
 strsim = "0.10.0"
 sys-info = "0.9.1"
 terminal_size = "0.1.17"

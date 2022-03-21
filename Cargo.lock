@@ -1583,7 +1583,6 @@ dependencies = [
  "shadow-rs",
  "shell-words",
  "starship-battery",
- "starship_module_config_derive",
  "strsim",
  "sys-info",
  "tempfile",
@@ -1615,15 +1614,6 @@ dependencies = [
  "num-traits",
  "uom",
  "winapi",
-]
-
-[[package]]
-name = "starship_module_config_derive"
-version = "0.2.1"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
