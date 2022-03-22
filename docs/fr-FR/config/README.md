@@ -33,7 +33,7 @@ De manière équivalente, pour Powershell (Windows), ajoutez la ligne suivante �
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Ou pour Cmd (Windows) ajouter cette ligne à votre `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -53,7 +53,7 @@ De manière équivalente, pour Powershell (Windows), ajoutez la ligne suivante �
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Ou pour Cmd (Windows) ajouter cette ligne à votre `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -150,7 +150,7 @@ Voici la liste des options de configuration de l'invite en lui-même.
 | Option            | Défaut                         | Description                                                                 |
 | ----------------- | ------------------------------ | --------------------------------------------------------------------------- |
 | `format`          | [lien](#default-prompt-format) | Configure le format de l'invite.                                            |
-| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)            |
+| `right_format`    | `""`                           | Voir [Activer le prompt à droite](/advanced-config/#enable-right-prompt)    |
 | `scan_timeout`    | `30`                           | Délai d'attente pour que starship scanne les fichiers (en millisecondes).   |
 | `command_timeout` | `500`                          | Délai maximal pour les commandes exécutées par starship (en millisecondes). |
 | `add_newline`     | `true`                         | Insère une ligne vide entre les invites du shell.                           |
@@ -275,15 +275,15 @@ Lorsque vous utilisez [AWSume](https://awsu.me) le profil est lu à partir de la
 
 ### Options
 
-| Option              | Défaut                                                               | Description                                                       |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format du module.                                                 |
-| `symbol`            | `"☁️ "`                                                              | Le symbole affiché avant le profil AWS actuel.                    |
-| `region_aliases`    |                                                                      | Table des alias de région à afficher en plus du nom AWS.          |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.  |
-| `style`             | `"bold yellow"`                                                      | Le style du module.                                               |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                              | Désactive le module `AWS`.                                        |
+| Option              | Défaut                                                               | Description                                                             |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format du module.                                                       |
+| `symbol`            | `"☁️ "`                                                              | Le symbole est affiché avant le profil AWS actuel.                      |
+| `region_aliases`    |                                                                      | Table des alias de région à afficher en plus du nom AWS.                |
+| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.        |
+| `style`             | `"bold yellow"`                                                      | Le style du module.                                                     |
+| `expiration_symbol` | `X`                                                                  | Le symbole est affiché lorsque les identifiants temporaires ont expiré. |
+| `disabled`          | `false`                                                              | Désactive le module `AWS`.                                              |
 
 ### Variables
 
