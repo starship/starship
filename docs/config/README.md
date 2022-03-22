@@ -506,9 +506,9 @@ file.
 
 | Option              | Default                                                                     | Description                                                               |
 | ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol $version(-$name )]($style)"`                                 | The format string for the module.                                         |
+| `format`            | `"via [$symbol$version(-$name )]($style)"`                                  | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"C"`                                                                       | The symbol used before displaying the compiler details                    |
+| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                    |
 | `detect_extensions` | `["c", "h"]`                                                                | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                                                        | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                        | Which folders should trigger this module.                                 |
