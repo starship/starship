@@ -692,12 +692,12 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Opsi
 
-| Opsi       | Bawaan                               | Deskripsi                                 |
-| ---------- | ------------------------------------ | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                  | Gaya penataan untuk modul.                |
-| `fromat`   | "[$symbol \\[$name\\]]($style) " | Format dari modul.                        |
-| `disabled` | `false`                              | Disables the `container` module.          |
+| Opsi       | Bawaan                                 | Deskripsi                                 |
+| ---------- | -------------------------------------- | ----------------------------------------- |
+| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                    | Gaya penataan untuk modul.                |
+| `fromat`   | `"[$symbol \\[$name\\]]($style) "` | Format dari modul.                        |
+| `disabled` | `false`                                | Disables the `container` module.          |
 
 ### Variabel
 
