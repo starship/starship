@@ -437,8 +437,8 @@ discharging_symbol = "💦"
 
 Le module `buf` affiche la version de [Buf](https://buf.build) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
-- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+- La commande [`buf`](https://github.com/bufbuild/buf) est installée.
+- Le dossier actuel contient un fichier de configuration [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml) ou [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml).
 
 ### Options
 
@@ -472,16 +472,16 @@ Le module `buf` affiche la version de [Buf](https://buf.build) installée. Par d
 symbol = "🦬 "
 ```
 
-## Caractères
+## Caractère
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Le module `character` affiche un caractère (en général une flèche) à côté de là où vous entrez le texte dans votre terminal.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Le caractère vous dira si la dernière commande a été réussie ou pas. Il peut faire ça de deux façons:
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- en changeant de couleur(`red`/`green`)
+- en changeant de forme (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Par défaut, il ne change que de couleur. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
 ::: warning
 
