@@ -934,7 +934,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 | Variable  | Exemple        | Description                            |
 | --------- | -------------- | -------------------------------------- |
-| context   | `test_context` | The current docker context             |
+| context   | `test_context` | Le contexte docker courant             |
 | symbol    |                | Reflète la valeur de l'option `symbol` |
 | style\* |                | Reflète la valeur de l'option `style`  |
 
@@ -978,11 +978,11 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `version_format`    | `"v${raw}"`                                                                                             | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                                   |
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                                      |
-| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Quelles extensions devraient activer ce module.                                            |
+| `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Les extensions qui déclenchent ce module.                                                  |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                                                                                    | Quels dossiers devraient activer ce module.                                                |
 | `style`             | `"bold blue"`                                                                                           | Le style du module.                                                                        |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                                              |
+| `disabled`          | `false`                                                                                                 | Désactive le module `dotnet`.                                                              |
 
 ### Variables
 
@@ -1049,11 +1049,11 @@ symbol = "🔮 "
 
 Le module `elm` affiche la version de [Elm](https://elm-lang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `elm.json` file
-- The current directory contains a `elm-package.json` file
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- Le dossier courant contient un fichier `elm.json`
+- Le dossier courant contient un fichier `elm-package.json`
+- Le dossier courant contient un fichier `elm-version`
+- Le dossier courant contient un dossier `elm-stuff`
+- Le dossier courant contient des fichiers `*.elm`
 
 ### Options
 
@@ -1072,7 +1072,7 @@ Le module `elm` affiche la version de [Elm](https://elm-lang.org/) installée. P
 
 | Variable  | Exemple   | Description                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.19.1` | The version of `elm`                   |
+| version   | `v0.19.1` | La version de `elm`                    |
 | symbol    |           | Reflète la valeur de l'option `symbol` |
 | style\* |           | Reflète la valeur de l'option `style`  |
 
@@ -1102,7 +1102,7 @@ Example: following configuration will display value of USER environment variable
 # ~/.config/starship.toml
 
 [env_var.USER]
-default = "unknown user"
+default = "utilisateur inconnu"
 ```
 
 :::
@@ -1119,11 +1119,11 @@ default = "unknown user"
 
 ### Variables
 
-| Variable  | Exemple                                     | Description                                |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Reflète la valeur de l'option `symbol`     |
-| style\* | `black bold dimmed`                         | Reflète la valeur de l'option `style`      |
+| Variable  | Exemple                                  | Description                                |
+| --------- | ---------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (si _variable_ était `$OS`) | The environment value of option `variable` |
+| symbol    |                                          | Reflète la valeur de l'option `symbol`     |
+| style\* | `black bold dimmed`                      | Reflète la valeur de l'option `style`      |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1134,19 +1134,19 @@ default = "unknown user"
 
 [env_var]
 variable = "SHELL"
-default = "unknown shell"
+default = "shell inconnu"
 ```
 
-Displaying multiple environmental variables:
+Afficher plusieurs variables d’environnement:
 
 ```toml
 # ~/.config/starship.toml
 
 [env_var.SHELL]
 variable = "SHELL"
-default = "unknown shell"
+default = "shell inconnu"
 [env_var.USER]
-default = "unknown user"
+default = "utilisateur inconnu"
 ```
 
 ## Erlang
