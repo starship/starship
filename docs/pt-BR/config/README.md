@@ -692,12 +692,12 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Opções
 
-| Opções     | Padrão                               | Descrição                                 |
-| ---------- | ------------------------------------ | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                  | O estilo do módulo.                       |
-| `format`   | "[$symbol \\[$name\\]]($style) " | O formato do módulo.                      |
-| `disabled` | `false`                              | Disables the `container` module.          |
+| Opções     | Padrão                                 | Descrição                                 |
+| ---------- | -------------------------------------- | ----------------------------------------- |
+| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                    | O estilo do módulo.                       |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | O formato do módulo.                      |
+| `disabled` | `false`                                | Disables the `container` module.          |
 
 ### Variáveis
 
