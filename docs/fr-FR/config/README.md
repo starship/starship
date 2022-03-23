@@ -166,7 +166,7 @@ format = """
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Attendez 10 millisecondes pour que starship vérifie les fichiers dans le répertoire de travail.
+# Attendez 10 millisecondes pour que starship vérifie les fichiers dans le dossier courant.
 scan_timeout = 10
 
 # Désactive la nouvelle ligne au début de l'invite
@@ -481,7 +481,7 @@ Le caractère vous dira si la dernière commande a été réussie ou pas. Il peu
 - en changeant de couleur(`red`/`green`)
 - en changeant de forme (`❯`/`✖`)
 
-Par défaut, il ne change que de couleur. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Par défaut, il ne change que de couleur. Si vous désirez également changer sa forme, jetez un à [cet exemple](#with-custom-error-shape).
 
 ::: warning
 
@@ -491,7 +491,7 @@ Par défaut, il ne change que de couleur. If you also want to change its shape t
 
 ::: warning
 
-`vicmd_symbol` is only supported in cmd, fish and zsh.
+`vicmd_symbol` n’est supporté qu’avec cmd, fish et zsh.
 
 :::
 
@@ -544,10 +544,10 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+Le module `cmake` affiche la version de [CMake](https://cmake.org/) installée. Par défaut, le module s’activera si l’une de ces conditions est remplie:
 
-- The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
+- Le dossier courant contient un fichier `CMakeLists.txt`
+- Le dossier courant contient un fichier `CMakeCache.txt`
 
 ### Options
 
@@ -576,8 +576,8 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 Le module `cobol` affiche la version de COBOL installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- Le répertoire courant contient un fichier finissant par `.cob` ou `.COB`
-- Le répertoire courant contiens un fichier finissant par `.cbl` ou `.CBL`
+- Le dossier courant contient un fichier finissant par `.cob` ou `.COB`
+- Le dossier courant contiens un fichier finissant par `.cbl` ou `.CBL`
 
 ### Options
 
@@ -722,8 +722,8 @@ format = "[$symbol \\[$name\\]]($style) "
 
 Le module `crystal` affiche la version installée de [Crystal](https://crystal-lang.org/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- Le répertoire courant contient un fichier `shard.yml`
-- Le répertoire courant contient un fichier `.cr`
+- Le dossier courant contient un fichier `shard.yml`
+- Le dossier courant contient un fichier `.cr`
 
 ### Options
 
@@ -1089,7 +1089,7 @@ format = "via [ $version](cyan bold) "
 
 ## Variable d'environnement
 
-The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
+The `env_var` module displays the current value of a selected environment variables. Le module sera affiché si l'une de ces conditions est remplie:
 
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
@@ -2356,7 +2356,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 - [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
 
-> ⚠️ La version montrée est celle du paquet dont le code source est dans votre répertoire courant, pas votre gestionnaire de paquet.
+> ⚠️ La version montrée est celle du paquet dont le code source est dans votre dossier courant, pas votre gestionnaire de paquet.
 
 ### Options
 
@@ -2655,7 +2655,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current directory contains a file with the `.R` extension.
 - The current directory contains a file with the `.Rd` extension.
@@ -2697,7 +2697,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2779,7 +2779,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -3088,7 +3088,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3232,7 +3232,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. Le module est affiché si l'une de ces conditions est remplie :
+The `username` module shows active user's username. Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -3383,7 +3383,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current directory contains a `.zig` file
 
@@ -3423,7 +3423,7 @@ symbol = "⚡️ "
 
 Les modules `custom` affichent la sortie d’une commande arbitaitre.
 
-These modules will be shown if any of the following conditions are met:
+Ces modules seront affichés si l'une de ces conditions est remplie:
 
 - The current directory contains a file whose name is in `files`
 - The current directory contains a directory whose name is in `directories`
