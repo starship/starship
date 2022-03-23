@@ -692,12 +692,12 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                     |
-| ---------- | ------------------------------------ | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                  | Kiểu cho module.                          |
-| `format`   | "[$symbol \\[$name\\]]($style) " | Định dạng cho module.                     |
-| `disabled` | `false`                              | Disables the `container` module.          |
+| Tuỳ chọn   | Mặc định                               | Mô tả                                     |
+| ---------- | -------------------------------------- | ----------------------------------------- |
+| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                    | Kiểu cho module.                          |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | Định dạng cho module.                     |
+| `disabled` | `false`                                | Disables the `container` module.          |
 
 ### Các biến
 
