@@ -71,7 +71,7 @@ function Invoke-Starship-PreCommand {
 
 ## Modifier le titre des fenêtres
 
-Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter votre répertoire de travail). Fish le fait même par défaut. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter le dossier courant). Fish le fait même par défaut. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
 Tout d'abord, définissez une fonction de changement de titre de fenêtre (identique en bash et zsh) :
 
@@ -97,7 +97,7 @@ precmd_functions+=(set_titre_fenetre)
 
 Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration shell (`~/.bashrc` ou `~/.zshrc`) pour le rendre permanent.
 
-Par exemple, si vous voulez afficher votre répertoire actuel dans le titre de l'onglet de votre terminal, ajoutez le code suivant à votre `~/.bashrc` ou `~/.zshrc`:
+Par exemple, si vous voulez afficher votre dossier courant dans le titre de l'onglet de votre terminal, ajoutez le code suivant à votre `~/.bashrc` ou `~/.zshrc`:
 
 ```bash
 function set_win_title(){
