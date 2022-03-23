@@ -44,7 +44,7 @@ gethostname = "0.2.3"
 git2 = { version = "0.14.2", default-features = false }
 indexmap = { version = "1.8.0", features = ["serde"] }
 local_ipaddress = "0.1.3"
-log = { version = "0.4.14", features = ["std"] }
+log = { version = "0.4.16", features = ["std"] }
 notify-rust = "4.5.7"
 once_cell = "1.10.0"
 open = "2.1.1"
