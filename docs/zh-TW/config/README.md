@@ -692,12 +692,12 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### 選項
 
-| Option     | 預設                                   | 說明                                        |
-| ---------- | ------------------------------------ | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                  | 這個模組的風格。                                  |
-| `format`   | "[$symbol \\[$name\\]]($style) " | The format for the module.                |
-| `disabled` | `false`                              | Disables the `container` module.          |
+| Option     | 預設                                     | 說明                                        |
+| ---------- | -------------------------------------- | ----------------------------------------- |
+| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                    | 這個模組的風格。                                  |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | The format for the module.                |
+| `disabled` | `false`                                | Disables the `container` module.          |
 
 ### Variables
 
