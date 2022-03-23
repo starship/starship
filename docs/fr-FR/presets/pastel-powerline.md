@@ -8,7 +8,7 @@ Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh
 
 ### Pré-requis
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
+- Une [Nerd Font](https://www.nerdfonts.com/) est installée et activée dans votre terminal (l'exemple utilise Caskaydia Cove Nerd Font)
 
 ### Configuration
 
