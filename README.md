@@ -337,8 +337,43 @@ startup = [
 ]
 prompt = "starship_prompt"
 ```
+ 
+for nushell 0.6 version add these line to the last line of config.nu 
+```nu 
+def starship_prompt [] {
+    # jobs are not supported
+    # status is not supported
+    starship prompt --cmd-duration $env.CMD_DURATION_MS
+}
+let-env PROMPT_COMMAND = { (starship_prompt) }
+```
+Because in 0.6 version of nushell, It has a end_symbol for it self, so I recommand a setting of starship here.
+```toml
+add_newline = false
+format = """
+[\uE0B6](fg:#1C4961)[$directory](bg:#1C4961)[\uE0B0](fg:#1C4961 bg:#2F79A1)$git_branch[\uE0B0](fg:#2F79A1 bg:#3A95C7)$git_status[\uE0B0](#40A9E0 bg:none) $all$character""" 
 
+[directory]
+style = "bg:#1C4961 fg:white"
+
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"
+
+[git_branch]
+format = "[ $symbol$branch ]($style)"
+style = "bg:#2F79A1 fg:white"
+
+[git_status]
+format = "[ $all_status$ahead_behind ]($style)"
+style = "bg:#3A95C7 fg:white"
+
+[time]
+disabled = true
+format = "[ $time ]($style)"
+style = "bg:#40A9E0 fg:white"
+```
 </details>
+
 
 <details>
 <summary>PowerShell</summary>
