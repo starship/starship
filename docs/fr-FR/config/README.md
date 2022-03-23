@@ -3404,7 +3404,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v0.6.0` | The version of `zig`                   |
+| version   | `v0.6.0` | La version de `zip`                    |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -3419,9 +3419,9 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 symbol = "⚡️ "
 ```
 
-## Custom commands
+## Commandes personnalisées
 
-The `custom` modules show the output of some arbitrary commands.
+Les modules `custom` affichent la sortie d’une commande arbitaitre.
 
 These modules will be shown if any of the following conditions are met:
 
@@ -3519,13 +3519,13 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = "echo foo" # shows output of command
-files = ["foo"] # can specify filters but wildcards are not supported
+command = "echo foo" # affiche la sortie de la commande
+files = ["foo"] # possible de spécifier des filtres, mais les jokers ne sont pas supportés
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-extensions = ["pst"] # filters *.pst files
+extensions = ["pst"] # filtre les fichiers *.pst
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
 ```
