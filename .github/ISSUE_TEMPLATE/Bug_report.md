@@ -49,7 +49,7 @@ assignees: ''
     Fish: ~/.config/fish/config.fish
     Xonsh: ~/.config/xonsh/rc.xsh
     Elvish: ~/.config/elvish/rc.elv
-    Nushell: ~/.config/nushell/config.nu
+    Nushell: $nu.config-path
     Ion: ~/.config/ion/initrc
 -->
 
