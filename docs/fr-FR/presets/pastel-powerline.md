@@ -1,10 +1,10 @@
 [Retourner aux préréglages](./README.md#pastel-powerline)
 
-# Pastel Powerline Preset
+# Préréglage Pastel Powerline
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Il montre également comment fonctionne la substitution de chemin dans starship.
 
-![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png)
+![Capture d'écran du préréglage Pastel Powerline](/presets/img/pastel-powerline.png)
 
 ### Pré-requis
 
