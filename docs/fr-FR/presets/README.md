@@ -36,6 +36,6 @@ Ce préréglage émule l'apparence et le comportement de [Pure](https://github.c
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Il montre également comment fonctionne la substitution de chemin dans starship.
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Cliquez pour voir le préréglage Pure")](./pastel-powerline)
+[![Capture d'écran du préréglage Pastel Powerline](/presets/img/pastel-powerline.png "Cliquez pour voir le préréglage Pure")](./pastel-powerline)
