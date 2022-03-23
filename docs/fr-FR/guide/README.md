@@ -145,7 +145,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="Starship dans iTerm2 avec le thème Snazzy"
   width="50%"
   align="right"
  />
@@ -326,7 +326,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+Ajoutez ce qui suit à la fin de votre configuration Nushell (trouvez-la en exécutant `config path`):
 
 ```toml
 startup = [
@@ -342,7 +342,7 @@ prompt = "starship_prompt"
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Ajoutez le code suivant à la fin de votre configuration de PowerShell (trouvez-la en exécutant `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
