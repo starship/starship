@@ -604,7 +604,7 @@ Le module `cobol` affiche la version de COBOL installée. Par défaut, le module
 
 ## Temps d'exécution
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Le module `cmd_duration` affiche combien de temps la dernière commande a pris à s’exécuter. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
 
@@ -835,7 +835,7 @@ format = "via [🦕 $version](green bold) "
 
 ## Dossier
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Le module `directory` affiche le chemin du dossier courant, tronqué à 3 dossiers parents. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
@@ -2173,7 +2173,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+Le module `nix_shell` affiche la version de l’environnement [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). The module will be shown when inside a nix-shell environment.
 
 ### Options
 
@@ -2211,7 +2211,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
@@ -2255,7 +2255,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+Le module `ocaml` affiche la version de [OCaml](https://ocaml.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -2430,7 +2430,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+Le module `php` affiche la version de [PHP](https://www.php.net/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
@@ -3088,7 +3088,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `swift` affiche la version de [Swift](https://swift.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3127,7 +3127,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+Le module `terraform` affiche [l’espace de travail Terraform](https://www.terraform.io/docs/language/state/workspaces.html) sélectionné et sa version.
 
 ::: tip
 
@@ -3186,7 +3186,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Date et Heure
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Le module `time` affiche la date et heure **locale**. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3232,7 +3232,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. Le module sera affiché si l'une de ces conditions est remplie:
+Le module `username` affiche le nom de l’utilisateur actif. Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
