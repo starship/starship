@@ -342,7 +342,8 @@ print_install() {
         source ~/.cache/starship/init.nu"
         warning="${warning} This will change in the future.
   Only Nushell v0.60 or higher is supported.
-  You can check the location of this your config file by running \$nu.config-path in nu."
+  You can check the location of this your config file by running \$nu.config-path in nu.
+  ${BOLD}First run${NO_COLOR} \"mkdir ~/.cache/starship; starship init nu | save ~/.cache/starship/init.nu\""
         ;;
     esac
     printf "  %s\n  %s\n  Add the following to the end of %s:\n\n\t%s\n\n" \
