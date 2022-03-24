@@ -1601,8 +1601,8 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 
 Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `stack.yaml` file
-- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+- Le dossier courant contient un fichier `stack.yaml`
+- Le dossier courant contient un fichier `.hs`, `.cabal` ou `.hs-boot`
 
 ### Options
 
@@ -1632,8 +1632,8 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 Le module `helm` affiche la version de [Helm](https://helm.sh/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `helmfile.yaml` file
-- The current directory contains a `Chart.yaml` file
+- Le dossier courant contient un fichier `helmfile.yaml`
+- Le dossier courant contient un fichier `Chart.yaml`
 
 ### Options
 
@@ -1706,8 +1706,8 @@ disabled = false
 
 Le module `java` affiche la version de [Java](https://www.oracle.com/java/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+- Le dossier courant contient un fichier `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`ou `build.boot`
+- Le dossier courant contient un fichier avec l’extension `.java`, `.class`, `.gradle`, `.jar`, `.clj` ou `.cljc`
 
 ### Options
 
@@ -1802,9 +1802,9 @@ symbol_threshold = 0
 
 Le module `Julia` affiche la version de [Julia](https://julialang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- Le dossier courant contient un fichier `Project.toml`
+- Le dossier courant contient un fichier `Manifest.toml`
+- Le dossier courant contient un fichier `.jl`
 
 ### Options
 
@@ -1842,7 +1842,7 @@ symbol = "∴ "
 
 Le module `kotlin` affiche la version de [Kotlin](https://kotlinlang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `.kt` or a `.kts` file
+- Le dossier courant contient un fichier `.kt` ou `.kts`
 
 ### Options
 
@@ -2009,9 +2009,9 @@ disabled = false
 
 Le module `lua` affiche la version de [Lua](http://www.lua.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `.lua-version` file
-- The current directory contains a `lua` directory
-- The current directory contains a file with the `.lua` extension
+- Le dossier courant contient un fichier `.lua-version`
+- Le dossier courant contient un dossier `lua`
+- Le dossier courant contient un fichier avec l’extension `.lua`
 
 ### Options
 
@@ -2133,10 +2133,10 @@ truncation_symbol = ""
 
 Le module `nim` affiche la version de [Nim](https://nim-lang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `nim.cfg` file
-- The current directory contains a file with the `.nim` extension
-- The current directory contains a file with the `.nims` extension
-- The current directory contains a file with the `.nimble` extension
+- Le dossier courant contient un fichier `nim.cfg`
+- Le dossier courant contient un fichier avec l’extension `.nim`
+- Le dossier courant contient un fichier avec l’extension `.nims`
+- Le dossier courant contient un fichier avec l’extension `.nimble`
 
 ### Options
 
@@ -2213,12 +2213,12 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `package.json` file
-- The current directory contains a `.node-version` file
-- The current directory contains a `.nvmrc` file
+- Le dossier courant contient un fichier `package.json`
+- Le dossier courant contient un fichier `.node-version`
+- Le dossier courant contient un fichier `.nvmrc`
 - The current directory contains a `node_modules` directory
-- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
+- Le dossier courant contient un fichier avec l’extension `.js`, `.mjs` ou `.cjs`
+- Le dossier courant contient un fichier avec l’extension `.ts`, `.mts` ou `.cts`
 
 ### Options
 
@@ -2530,7 +2530,7 @@ format = "[$symbol$stack]($style) "
 Le module `purescript` affiche la version de [PureScript](https://www.purescript.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - The current directory contains a `spago.dhall` file
-- The current directory contains a file with the `.purs` extension
+- Le dossier courant contient un fichier avec l’extension `.purs`
 
 ### Options
 
@@ -2579,7 +2579,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 - The current directory contains a `requirements.txt` file
 - The current directory contains a `setup.py` file
 - The current directory contains a `tox.ini` file
-- The current directory contains a file with the `.py` extension.
+- Le dossier courant contient un fichier avec l’extension `.py`.
 - A virtual environment is currently activated
 
 ### Options
@@ -2657,8 +2657,8 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 Le module `rlang` affiche la version de [R](https://www.r-project.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
 
-- The current directory contains a file with the `.R` extension.
-- The current directory contains a file with the `.Rd` extension.
+- Le dossier courant contient un fichier avec l’extension `.R`.
+- Le dossier courant contient un fichier avec l’extension `.Rd`.
 - The current directory contains a file with the `.Rmd` extension.
 - The current directory contains a file with the `.Rproj` extension.
 - The current directory contains a file with the `.Rsx` extension.
