@@ -19,7 +19,7 @@ pub struct CConfig<'a> {
 impl<'a> Default for CConfig<'a> {
     fn default() -> Self {
         CConfig {
-            format: "via [$symbol$version(-$name )]($style)",
+            format: "via [$symbol($version(-$name) )]($style)",
             version_format: "v${raw}",
             style: "149 bold",
             symbol: "C ",
