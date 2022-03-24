@@ -560,7 +560,7 @@ Le module `cmake` affiche la version de [CMake](https://cmake.org/) installée. 
 | `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                                 |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module                                                   |
 | `style`             | `"bold blue"`                          | Le style du module.                                                                        |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                                               |
+| `disabled`          | `false`                                | Désactive le module `cmake`.                                                               |
 
 ### Variables
 
@@ -622,7 +622,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                        |
 | `format`               | `"took [$duration]($style) "` | Format du module.                                                                                                                                                 |
 | `style`                | `"bold yellow"`               | Le style du module.                                                                                                                                               |
-| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                               |
+| `disabled`             | `false`                       | Désactive le module `cmd_duration`.                                                                                                                               |
 | `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
 | `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
 | `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
@@ -776,7 +776,7 @@ Le module `dart` affiche la version de [Dart](https://dart.dev/) installée. Par
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[".dart_tool"]`                                  | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold blue"`                                     | Le style du module.                                                                        |
-| `disabled`          | `false`                                           | Disables the `dart` module.                                                                |
+| `disabled`          | `false`                                           | Désactive le module `dart`.                                                                |
 
 ### Variables
 
@@ -849,7 +849,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncate_to_repo`  | `true`                                                                                                      | Whether or not to truncate to the root of the git repo that you're currently in.        |
 | `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | Format du module.                                                                       |
 | `style`             | `"bold cyan"`                                                                                               | Le style du module.                                                                     |
-| `disabled`          | `false`                                                                                                     | Disables the `directory` module.                                                        |
+| `disabled`          | `false`                                                                                                     | Désactive le module `directory`.                                                        |
 | `read_only`         | `"🔒"`                                                                                                       | The symbol indicating current directory is read only.                                   |
 | `read_only_style`   | `"red"`                                                                                                     | The style for the read only symbol.                                                     |
 | `truncation_symbol` | `""`                                                                                                        | The symbol to prefix to truncated paths. eg: "…/"                                       |
@@ -928,7 +928,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
 | `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
 | `style`             | `"blue bold"`                                                 | Le style du module.                                                               |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| `disabled`          | `false`                                                       | Désactive le module `docker_context`.                                             |
 
 ### Variables
 
@@ -1066,7 +1066,7 @@ Le module `elm` affiche la version de [Elm](https://elm-lang.org/) installée. P
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `["elm-stuff"]`                                    | Quels dossiers devraient activer ce module.                                                |
 | `style`             | `"cyan bold"`                                      | Le style du module.                                                                        |
-| `disabled`          | `false`                                            | Disables the `elm` module.                                                                 |
+| `disabled`          | `false`                                            | Désactive le module `elm`.                                                                 |
 
 ### Variables
 
@@ -1115,7 +1115,7 @@ default = "utilisateur inconnu"
 | `variable` |                                | The environment variable to be displayed.                                    |
 | `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | Format du module.                                                            |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| `disabled` | `false`                        | Désactive le module `env_var`.                                               |
 
 ### Variables
 
@@ -1167,7 +1167,7 @@ Le module `Erlang` affiche la version de [Erlang/OTP](https://erlang.org/doc/) i
 | `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
-| `disabled`          | `false`                              | Disables the `erlang` module.                                                              |
+| `disabled`          | `false`                              | Désactive le module `erlang`.                                                              |
 
 ### Variables
 
@@ -1198,7 +1198,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 | ---------- | -------------- | --------------------------------- |
 | `symbol`   | `"."`          | The symbol used to fill the line. |
 | `style`    | `"bold black"` | Le style du module.               |
-| `disabled` | `false`        | Disables the `fill` module        |
+| `disabled` | `false`        | Désactive le module `fill`        |
 
 ### Exemple
 
@@ -1230,7 +1230,7 @@ Le module `gcloud` affiche la version de la commande [`gcloud`](https://cloud.go
 | `region_aliases`  |                                                            | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
 | `style`           | `"bold blue"`                                              | Le style du module.                                              |
-| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
+| `disabled`        | `false`                                                    | Désactive le module `gcloud`.                                    |
 
 ### Variables
 
@@ -1346,7 +1346,7 @@ Le module `git_commit` affiche le hash du commit courant et l’étiquette (s’
 | `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                             | Disables showing tag info in `git_commit` module.       |
 | `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                     |
-| `disabled`           | `false`                            | Disables the `git_commit` module.                       |
+| `disabled`           | `false`                            | Désactive le module `git_commit`.                       |
 
 ### Variables
 
@@ -1384,7 +1384,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | Le style du module.                                                                     |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | Format du module.                                                                       |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+| `disabled`     | `false`                                                         | Désactive le module `git_state`.                                                        |
 
 ### Variables
 
@@ -1425,7 +1425,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `deleted_style`      | `"bold red"`                                                 | The style for the deleted count.      |
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format du module.                     |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `disabled`           | `true`                                                       | Désactive le module `git_metrics`.    |
 
 ### Variables
 
@@ -1476,7 +1476,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `deleted`           | `"✘"`                                           | The format of `deleted`                                                                                     |
 | `style`             | `"bold red"`                                    | Le style du module.                                                                                         |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
+| `disabled`          | `false`                                         | Désactive le module `git_status`.                                                                           |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Variables
@@ -1574,7 +1574,7 @@ Par défaut, le module `go` affiche la version de [Go](https://golang.org/) inst
 | `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `["Godeps"]`                                                                   | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold cyan"`                                                                  | Le style du module.                                                                        |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                                                              |
+| `disabled`          | `false`                                                                        | Désactive le module `golang`.                                                              |
 
 ### Variables
 
@@ -1614,7 +1614,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 | `detect_files`      | `["stack.yaml", "cabal.project"]`    | Les fichiers qui activent ce module.               |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.               |
 | `style`             | `"bold purple"`                      | Le style du module.                                |
-| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+| `disabled`          | `false`                              | Désactive le module `haskell`.                     |
 
 ### Variables
 
@@ -1646,7 +1646,7 @@ Le module `helm` affiche la version de [Helm](https://helm.sh/) installée. Par 
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                                           |
 | `style`             | `"bold white"`                       | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `helm` module.                                                                |
+| `disabled`          | `false`                              | Désactive le module `helm`.                                                                |
 
 ### Variables
 
@@ -1679,7 +1679,7 @@ Le module `hostname` affiche le nom d’hôte du système system.
 | `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `format`   | `"[$hostname]($style) in "` | Format du module.                                                                                                                    |
 | `style`    | `"bold dimmed green"`       | Le style du module.                                                                                                                  |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| `disabled` | `false`                     | Désactive le module `hostname`.                                                                                                      |
 
 ### Variables
 
@@ -1720,7 +1720,7 @@ Le module `java` affiche la version de [Java](https://www.oracle.com/java/) inst
 | `detect_folders`    | `[]`                                                                                                      | Quels dossiers devraient activer ce module.                                                |
 | `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                                            |
 | `style`             | `"red dimmed"`                                                                                            | Le style du module.                                                                        |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                                                |
+| `disabled`          | `false`                                                                                                   | Désactive le module `java`.                                                                |
 
 ### Variables
 
@@ -1773,7 +1773,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `format`           | `"[$symbol$number]($style) "` | Format du module.                                                        |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `"bold blue"`                 | Le style du module.                                                      |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+| `disabled`         | `false`                       | Désactive le module `jobs`.                                              |
 
 *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
@@ -1817,7 +1817,7 @@ Le module `Julia` affiche la version de [Julia](https://julialang.org/) install�
 | `detect_folders`    | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
 | `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                                          |
 | `style`             | `"bold purple"`                      | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `julia` module.                                                               |
+| `disabled`          | `false`                              | Désactive le module `Julia`.                                                               |
 
 ### Variables
 
@@ -1856,7 +1856,7 @@ Le module `kotlin` affiche la version de [Kotlin](https://kotlinlang.org/) insta
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                                         |
 | `style`             | `"bold blue"`                        | Le style du module.                                                                        |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version.              |
-| `disabled`          | `false`                              | Disables the `kotlin` module.                                                              |
+| `disabled`          | `false`                              | Désactive le module `kotlin`.                                                              |
 
 ### Variables
 
@@ -1903,7 +1903,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                     |
 | `style`           | `"cyan bold"`                                        | Le style du module.                                                   |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| `disabled`        | `true`                                               | Désactiver le module `kubernetes`.                                    |
 
 ### Variables
 
@@ -1983,7 +1983,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
 | `format`   | `"[$localipv4]($style) "` | Format du module.                                      |
 | `style`    | `"bold yellow"`           | Le style du module.                                    |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
+| `disabled` | `true`                    | Désactive le module `localip`.                         |
 
 ### Variables
 
@@ -2025,7 +2025,7 @@ Le module `lua` affiche la version de [Lua](http://www.lua.org/) installée. Par
 | `detect_folders`    | `["lua"]`                            | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold blue"`                        | Le style du module.                                                                        |
 | `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.                 |
-| `disabled`          | `false`                              | Disables the `lua` module.                                                                 |
+| `disabled`          | `false`                              | Désactive le module `lua`.                                                                 |
 
 ### Variables
 
@@ -2066,7 +2066,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | Format du module.                                        |
 | `symbol`    | `"🐏"`                                           | The symbol used before displaying the memory usage.      |
 | `style`     | `"bold dimmed white"`                           | Le style du module.                                      |
-| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
+| `disabled`  | `true`                                          | Désactiver le module `memory_usage`.                     |
 
 ### Variables
 
@@ -2106,7 +2106,7 @@ Le module `hg_branch` affiche la branche active du dépôt dans le dossier coura
 | `format`            | `"on [$symbol$branch]($style) "` | Format du module.                                                                            |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
 | `truncation_symbol` | `"…"`                            | The symbol used to indicate a branch name was truncated.                                     |
-| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
+| `disabled`          | `true`                           | Désactive le module `hg_branch`.                                                             |
 
 ### Variables
 
@@ -2149,7 +2149,7 @@ Le module `nim` affiche la version de [Nim](https://nim-lang.org/) installée. P
 | `detect_files`      | `["nim.cfg"]`                        | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold yellow"`                      | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `nim` module.                                                                 |
+| `disabled`          | `false`                              | Désactive le module `nim`.                                                                 |
 
 ### Variables
 
@@ -2184,7 +2184,7 @@ Le module `nix_shell` affiche la version de l’environnement [nix-shell](https:
 | `style`      | `"bold blue"`                                  | Le style du module.                                   |
 | `impure_msg` | `"impure"`                                     | A format string shown when the shell is impure.       |
 | `pure_msg`   | `"pure"`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
+| `disabled`   | `false`                                        | Désactive le module `nix_shell`.                      |
 
 ### Variables
 
@@ -2231,7 +2231,7 @@ Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) install�
 | `detect_files`      | `["package.json", ".node-version"]`        | Les fichiers qui activent ce module.                                                                  |
 | `detect_folders`    | `["node_modules"]`                         | Les dossiers qui activent ce module.                                                                  |
 | `style`             | `"bold green"`                             | Le style du module.                                                                                   |
-| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
+| `disabled`          | `false`                                    | Désactive le module `nodejs`.                                                                         |
 | `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
@@ -2277,7 +2277,7 @@ Le module `ocaml` affiche la version de [OCaml](https://ocaml.org/) installée. 
 | `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Les dossiers qui activent ce module.                                                       |
 | `style`                   | `"bold yellow"`                                                            | Le style du module.                                                                        |
-| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                                               |
+| `disabled`                | `false`                                                                    | Désactive le module `ocaml`.                                                               |
 
 ### Variables
 
@@ -2311,7 +2311,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | Format du module.                                              |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `"bold yellow"`                                     | Le style du module.                                            |
-| `disabled` | `false`                                             | Disables the `openstack` module.                               |
+| `disabled` | `false`                                             | Désactive le module `openstack`.                               |
 
 ### Variables
 
@@ -2367,7 +2367,7 @@ The `package` module is shown when the current directory is the repository for a
 | `version_format`  | `"v${raw}"`                       | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `style`           | `"bold 208"`                      | Le style du module.                                                                        |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.                                  |
-| `disabled`        | `false`                           | Disables the `package` module.                                                             |
+| `disabled`        | `false`                           | Désactive le module `package`.                                                             |
 
 ### Variables
 
@@ -2409,7 +2409,7 @@ Le module `perl` affiche la version de [Perl](https://www.perl.org/) installée.
 | `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                                                                                     | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold 149"`                                                                                             | Le style du module.                                                                        |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                                                |
+| `disabled`          | `false`                                                                                                  | Désactive le module `perl`.                                                                |
 
 ### Variables
 
@@ -2447,7 +2447,7 @@ Le module `php` affiche la version de [PHP](https://www.php.net/) installée. Pa
 | `detect_files`      | `["composer.json", ".php-version"]`  | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"147 bold"`                         | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `php` module.                                                                 |
+| `disabled`          | `false`                              | Désactive le module `php`.                                                                 |
 
 ### Variables
 
@@ -2491,7 +2491,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 | `version_format` | `"v${raw}"`                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                             |
 | `style`          | `"bold 5"`                                   | Le style du module.                                                                        |
-| `disabled`       | `false`                                      | Disables the `pulumi` module.                                                              |
+| `disabled`       | `false`                                      | Désactive le module `pulumi`.                                                              |
 
 ### Variables
 
@@ -2902,7 +2902,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 [shell]
 fish_indicator = ""
 powershell_indicator = "_"
-unknown_indicator = "mystery shell"
+unknown_indicator = "shell mystère"
 style = "cyan bold"
 disabled = false
 ```
