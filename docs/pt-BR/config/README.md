@@ -951,9 +951,9 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-O módulo `dotnet` exibe a versão relevante do [.NET Core SDK](https://dotnet.microsoft.com/) para o directório atual. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+O módulo `dotnet` exibe a versão relevante do [.NET Core SDK](https://dotnet.microsoft.com/) para o directório atual. Se o SDK foi predefinido no diretório atual, a versão será exibida. Caso contrário, o módulo exibe a versão mais recente instalada do SDK.
 
-By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
+Por padrão, este módulo só será exibido no seu prompt quando um ou mais dos seguintes arquivos estiverem presentes no diretório atual:
 
 - `global.json`
 - `project.json`
@@ -964,9 +964,9 @@ By default this module will only be shown in your prompt when one or more of the
 - `*.fsproj`
 - `*.xproj`
 
-You'll also need the .NET Core SDK installed in order to use it correctly.
+Você também precisará do SDK do .NET Core instalado para usá-lo corretamente.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Internamente, este módulo usa um mecanismo próprio para detecção da versão. Geralmente é duas vezes mais rápido que executar `dotnet --version`, mas pode exibir uma versão errada se o seu projeto .NET tiver o layout de diretórios incomum. Se precisão for mais importante que velocidade, você pode desabilitar o mecanismo definindo `heuristic = false` nas opções do módulo.
 
 The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
 
