@@ -1053,7 +1053,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 - The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- The current directory contains `*.elm` files
 
 ### Options
 
