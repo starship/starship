@@ -485,12 +485,6 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`error_symbol` is not supported on nu shell.
-
-:::
-
-::: warning
-
 `vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
@@ -2984,8 +2978,6 @@ The `status` module displays the exit code of the previous command. If $success_
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
-
-::: warning This module is not supported on nu shell. :::
 
 ### 配置项
 
