@@ -761,9 +761,9 @@ format = "via [✨ $version](bold blue) "
 
 Le module `dart` affiche la version de [Dart](https://dart.dev/) installée. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `.dart`
+- Le dossier courant contient un fichier avec l’extension `.dart`
 - Le dossier courant contient un fichier `.dart_tool`
-- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+- Le dossier courant contient un fichier `pubsepc.yaml`, `pubspec.yml` ou `pubspec.lock`
 
 ### Options
 
@@ -801,7 +801,7 @@ format = "via [🔰 $version](bold red) "
 
 Le module `rust` affiche la version de [Deno](https://deno.land/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- Le dossier courant contient un fichier `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
 
 ### Options
 
@@ -1010,7 +1010,7 @@ heuristic = false
 
 Le module `elixir` affiche les versions de [Elixir](https://elixir-lang.org/) et [Erlang/OTP](https://erlang.org/doc/) installées. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `mix.exs` file.
+- Le dossier courant contient un fichier `mix.exs`.
 
 ### Options
 
@@ -1153,8 +1153,8 @@ default = "utilisateur inconnu"
 
 Le module `Erlang` affiche la version de [Erlang/OTP](https://erlang.org/doc/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- Le dossier courant contient un fichier `rebar.config`.
+- Le dossier courant contient un fichier `erlang.mk`.
 
 ### Options
 
@@ -1554,14 +1554,14 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 Par défaut, le module `go` affiche la version de [Go](https://golang.org/) installée. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `go.mod` file
-- The current directory contains a `go.sum` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- Le dossier courant contient un fichier `go.mod`
+- Le dossier courant contient un fichier `go.sum`
+- Le dossier courant contient un fichier `glide.yaml`
+- Le dossier courant contient un fichier `Gopkg.yml`
+- Le dossier courant contient un fichier `Gopkg.lock`
+- Le dossier courant contient un fichier `.go-version`
+- Le dossier courant contient un dossier `Godeps`
+- Le dossier courant contient un fichier avec l’extension `.go`
 
 ### Options
 
