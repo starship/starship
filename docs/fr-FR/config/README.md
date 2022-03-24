@@ -2543,7 +2543,7 @@ Le module `purescript` affiche la version de [PureScript](https://www.purescript
 | `detect_files`      | `["spago.dhall"]`                    | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold white"`                       | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                                          |
+| `disabled`          | `false`                              | Désactive le module `purescript`.                                                          |
 
 ### Variables
 
