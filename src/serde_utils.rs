@@ -41,7 +41,7 @@ impl<'de> ValueDeserializer<'de> {
 }
 
 impl ValueDeserializer<'_> {
-    /// Pretify an error message by adding the current key and struct name to it.
+    /// Prettify an error message by adding the current key and struct name to it.
     fn error<T: fmt::Display>(&self, msg: T) -> ValueError {
         match (self.current_key, self.info) {
             (Some(key), Some(StructInfo { name, .. })) => {
