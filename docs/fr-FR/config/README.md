@@ -2257,7 +2257,7 @@ format = "via [🤖 $version](bold green) "
 
 Le module `ocaml` affiche la version de [OCaml](https://ocaml.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a file with `.opam` extension or `_opam` directory
+- Le dossier courant contient un fichier avec l’extension `.opam` ou un dossier `_opam`
 - The current directory contains a `esy.lock` directory
 - The current directory contains a `dune` or `dune-project` file
 - The current directory contains a `jbuild` or `jbuild-ignore` file
@@ -2659,9 +2659,9 @@ Le module `rlang` affiche la version de [R](https://www.r-project.org/) install�
 
 - Le dossier courant contient un fichier avec l’extension `.R`.
 - Le dossier courant contient un fichier avec l’extension `.Rd`.
-- The current directory contains a file with the `.Rmd` extension.
-- The current directory contains a file with the `.Rproj` extension.
-- The current directory contains a file with the `.Rsx` extension.
+- Le dossier courant contient un fichier avec l’extension `.Rmd`.
+- Le dossier courant contient un fichier avec l’extension `.Rproj`.
+- Le dossier courant contient un fichier avec l’extension `.Rsx`.
 - The current directory contains a `.Rprofile` file
 - The current directory contains a `.Rproj.user` folder
 
@@ -2699,7 +2699,7 @@ format = "with [📐 $version](blue bold) "
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
-- The current directory contains a file with `.red` or `.reds` extension
+- Le dossier courant contient un fichier avec l’extension `.red` ou `.reds`
 
 ### Options
 
@@ -2782,7 +2782,7 @@ symbol = "🔺 "
 Par défaut, le module `rust` affiche la version de [Rust](https://www.rust-lang.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- Le dossier courant contient un fichier avec l’extension `.rs`
 
 ### Options
 
@@ -2821,7 +2821,7 @@ format = "via [⚙️ $version](red bold)"
 Le module `scala` affiche la version de [Scala](https://www.scala-lang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
+- Le dossier courant contient un fichier avec l’extension `.scala` ou `.sbt`
 - The current directory contains a directory named `.metals`
 
 ### Options
@@ -3091,7 +3091,7 @@ disabled = false
 Par défaut, le module `swift` affiche la version de [Swift](https://swift.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
 
 - The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
+- Le dossier courant contient un fichier avec l’extension `.swift`
 
 ### Options
 
@@ -3138,7 +3138,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
+- Le dossier courant contient un fichier avec l’extension `.tf`, `.tfplan` ou `.tfstate`
 
 ### Options
 
@@ -3317,7 +3317,7 @@ format = "via [⍱ $version](bold white) "
 
 Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a file with `.v` extension
+- Le dossier courant contient un fichier avec l’extension `.v`
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### Options
