@@ -1959,9 +1959,9 @@ The `line_break` module separates the prompt into two lines.
 
 ### Options
 
-| Option     | Défaut  | Description                                                        |
-| ---------- | ------- | ------------------------------------------------------------------ |
-| `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
+| Option     | Défaut  | Description                                                             |
+| ---------- | ------- | ----------------------------------------------------------------------- |
+| `disabled` | `false` | Désactive le module `line_break`, mettant l'invite sur une seule ligne. |
 
 ### Exemple
 
@@ -2596,7 +2596,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 | `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                                |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                                 |
 | `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                                   |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                              |
+| `disabled`           | `false`                                                                                                      | Désactive le module `python`.                                                              |
 
 ::: tip
 
@@ -2676,7 +2676,7 @@ Le module `rlang` affiche la version de [R](https://www.r-project.org/) install�
 | `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module                                                |
 | `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module                                                 |
 | `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                                   |
-| `disabled`          | `false`                              | Disables the `r` module.                                                                   |
+| `disabled`          | `false`                              | Désactive le module `r`.                                                                   |
 
 ### Variables
 
@@ -2712,7 +2712,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"red bold"`                         | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `red` module.                                                                 |
+| `disabled`          | `false`                              | Désactive le module `red`.                                                                 |
 
 ### Variables
 
@@ -2756,7 +2756,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                                    |
 | `style`             | `"bold red"`                         | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                                                |
+| `disabled`          | `false`                              | Désactive le module `ruby`.                                                                |
 
 ### Variables
 
@@ -2795,7 +2795,7 @@ Par défaut, le module `rust` affiche la version de [Rust](https://www.rust-lang
 | `detect_files`      | `["Cargo.toml"]`                     | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold red"`                         | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `rust` module.                                                                |
+| `disabled`          | `false`                              | Désactive le module `rust`.                                                                |
 
 ### Variables
 
@@ -2835,7 +2835,7 @@ Le module `scala` affiche la version de [Scala](https://www.scala-lang.org/) ins
 | `detect_folders`    | `[".metals"]`                            | Quels dossiers devraient activer ce module.                                                |
 | `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                                          |
 | `style`             | `"red dimmed"`                           | Le style du module.                                                                        |
-| `disabled`          | `false`                                  | Disables the `scala` module.                                                               |
+| `disabled`          | `false`                                  | Désactive le module `scala`.                                                               |
 
 ### Variables
 
@@ -2883,7 +2883,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | Format du module.                                            |
 | `style`                | `"white bold"`            | Le style du module.                                          |
-| `disabled`             | `true`                    | Disables the `shell` module.                                 |
+| `disabled`             | `true`                    | Désactive le module `shell`.                                 |
 
 ### Variables
 
@@ -2920,7 +2920,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | Le style du module.                                           |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
+| `disabled`  | `true`                       | Désactive le module `shlvl`.                                  |
 
 ### Variables
 
@@ -2954,7 +2954,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | `format`   | `'[$symbol\[$env\]]($style) '` | Format du module.                                |
 | `symbol`   | `""`                             | A format string displayed before the image name. |
 | `style`    | `"bold dimmed blue"`             | Le style du module.                              |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| `disabled` | `false`                          | Désactive le module `singularity`.               |
 
 ### Variables
 
@@ -3004,7 +3004,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
 | `pipestatus_separator`  | `|`                                                                                  |                                                         |
 | `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
-| `disabled`              | `true`                                                                               | Disables the `status` module.                           |
+| `disabled`              | `true`                                                                               | Désactiver le module `status`.                          |
 
 ### Variables
 
@@ -3055,7 +3055,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
 | `style`         | `"bold blue"`           | Le style du module.                                     |
 | `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+| `disabled`      | `true`                  | Désactive le module `sudo`.                             |
 
 ### Variables
 
@@ -3104,7 +3104,7 @@ Par défaut, le module `swift` affiche la version de [Swift](https://swift.org/)
 | `detect_files`      | `["Package.swift"]`                  | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold 202"`                         | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `swift` module.                                                               |
+| `disabled`          | `false`                              | Désactiver le module `swift`.                                                              |
 
 ### Variables
 
@@ -3151,7 +3151,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 | `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[".terraform"]`                     | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"bold 105"`                         | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                                           |
+| `disabled`          | `false`                              | Désactive le module `terraform`.                                                           |
 
 ### Variables
 
@@ -3203,7 +3203,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
 | `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                       |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
@@ -3253,7 +3253,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `style_user`  | `"bold yellow"`         | The style used for non-root users.      |
 | `format`      | `"[$user]($style) in "` | Format du module.                       |
 | `show_always` | `false`                 | Toujours afficher le module `username`. |
-| `disabled`    | `false`                 | Disables the `username` module.         |
+| `disabled`    | `false`                 | Désactiver le module `username`.        |
 
 ### Variables
 
@@ -3292,7 +3292,7 @@ Le module `vagrant` affiche la version de [Vagrant](https://www.vagrantup.com/) 
 | `detect_files`      | `["Vagrantfile"]`                    | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"cyan bold"`                        | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                                             |
+| `disabled`          | `false`                              | Désactive le module `vagrant`.                                                             |
 
 ### Variables
 
@@ -3331,7 +3331,7 @@ Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par d
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                         | Les dossiers qui activent ce module.                                                       |
 | `style`             | `"blue bold"`                                | Le style du module.                                                                        |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                                               |
+| `disabled`          | `false`                                      | Désactive le module `vlang`.                                                               |
 
 ### Variables
 
@@ -3360,7 +3360,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | `symbol`   |                                  | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | Le style du module.                                    |
 | `format`   | `"vcsh [$symbol$repo]($style) "` | Format du module.                                      |
-| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+| `disabled` | `false`                          | Désactive le module `vcsh`.                            |
 
 ### Variables
 
@@ -3395,7 +3395,7 @@ Par défaut, le module `zip` affiche la version de [Zig](https://ziglang.org/) i
 | `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                                      |
 | `style`             | `"bold yellow"`                      | Le style du module.                                                                        |
-| `disabled`          | `false`                              | Disables the `zig` module.                                                                 |
+| `disabled`          | `false`                              | Désactive le module `zig`.                                                                 |
 | `detect_extensions` | `["zig"]`                            | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `[]`                                 | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
