@@ -485,13 +485,7 @@ Par défaut, il ne change que de couleur. Si vous désirez également changer sa
 
 ::: warning
 
-`error_symbol` n’est pas supporté avec nu shell.
-
-:::
-
-::: warning
-
-`vicmd_symbol` n’est supporté qu’avec cmd, fish et zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh.
 
 :::
 
@@ -544,7 +538,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-Le module `cmake` affiche la version de [CMake](https://cmake.org/) installée. Par défaut, le module s’activera si l’une de ces conditions est remplie:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `CMakeLists.txt`
 - Le dossier courant contient un fichier `CMakeCache.txt`
@@ -574,7 +568,7 @@ Le module `cmake` affiche la version de [CMake](https://cmake.org/) installée. 
 
 ## COBOL / GNUCOBOL
 
-Le module `cobol` affiche la version de COBOL installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier finissant par `.cob` ou `.COB`
 - Le dossier courant contiens un fichier finissant par `.cbl` ou `.CBL`
@@ -604,7 +598,7 @@ Le module `cobol` affiche la version de COBOL installée. Par défaut, le module
 
 ## Temps d'exécution
 
-Le module `cmd_duration` affiche combien de temps la dernière commande a pris à s’exécuter. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
 ::: warning Do not hook the DEBUG trap in Bash
 
@@ -648,7 +642,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-Le module `conda` affiche l’environnement [Conda](https://docs.conda.io/en/latest/) courant, si `$CONDA_DEFAULT_ENV` est définie.
+The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
@@ -720,7 +714,7 @@ format = "[$symbol \\[$name\\]]($style) "
 
 ## Crystal
 
-Le module `crystal` affiche la version installée de [Crystal](https://crystal-lang.org/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `shard.yml`
 - Le dossier courant contient un fichier `.cr`
@@ -759,7 +753,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-Le module `dart` affiche la version de [Dart](https://dart.dev/) installée. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier avec l’extension `.dart`
 - Le dossier courant contient un fichier `.dart_tool`
@@ -799,7 +793,7 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-Le module `rust` affiche la version de [Deno](https://deno.land/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
 
@@ -835,7 +829,7 @@ format = "via [🦕 $version](green bold) "
 
 ## Dossier
 
-Le module `directory` affiche le chemin du dossier courant, tronqué à 3 dossiers parents. Your directory will also be truncated to the root of the git repo that you're currently in.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
 When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
@@ -951,7 +945,7 @@ format = "via [🐋 $context](blue bold)"
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Sinon, le module affiche la dernière version installée du SDK.
+The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
 By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
@@ -1008,7 +1002,7 @@ heuristic = false
 
 ## Elixir
 
-Le module `elixir` affiche les versions de [Elixir](https://elixir-lang.org/) et [Erlang/OTP](https://erlang.org/doc/) installées. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `mix.exs`.
 
@@ -1047,7 +1041,7 @@ symbol = "🔮 "
 
 ## Elm
 
-Le module `elm` affiche la version de [Elm](https://elm-lang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `elm.json`
 - Le dossier courant contient un fichier `elm-package.json`
@@ -1089,7 +1083,7 @@ format = "via [ $version](cyan bold) "
 
 ## Variable d'environnement
 
-The `env_var` module displays the current value of a selected environment variables. Le module sera affiché si l'une de ces conditions est remplie:
+The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
 - The `variable` configuration option matches an existing environment variable
 - The `variable` configuration option is not defined, but the `default` configuration option is
@@ -1137,7 +1131,7 @@ variable = "SHELL"
 default = "shell inconnu"
 ```
 
-Afficher plusieurs variables d’environnement:
+Displaying multiple environmental variables:
 
 ```toml
 # ~/.config/starship.toml
@@ -1151,7 +1145,7 @@ default = "utilisateur inconnu"
 
 ## Erlang
 
-Le module `Erlang` affiche la version de [Erlang/OTP](https://erlang.org/doc/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `rebar.config`.
 - Le dossier courant contient un fichier `erlang.mk`.
@@ -1219,7 +1213,7 @@ AA -------------------------------------------- BB -----------------------------
 
 ## Google Cloud (`gcloud`)
 
-Le module `gcloud` affiche la version de la commande [`gcloud`](https://cloud.google.com/sdk/gcloud) installée. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
 ### Options
 
@@ -1292,7 +1286,7 @@ very-long-project-name = "vlpn"
 
 ## Git Branch
 
-Le module `git_branch` affiche la branche active du dépôt dans le dossier courant.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Options
 
@@ -1334,7 +1328,7 @@ ignore_branches = ["master", "main"]
 
 ## Commit Git
 
-Le module `git_commit` affiche le hash du commit courant et l’étiquette (s’il y en a) du dépôt dans le dossier courant.
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
 ### Options
 
@@ -1450,7 +1444,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Statut Git
 
-Le module `git_status` affiche des symboles représentant l’état du dépôt dans le dossier courant.
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ::: tip
 
@@ -1552,7 +1546,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Go
 
-Par défaut, le module `go` affiche la version de [Go](https://golang.org/) installée. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `go.mod`
 - Le dossier courant contient un fichier `go.sum`
@@ -1599,7 +1593,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
 
-Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `stack.yaml`
 - Le dossier courant contient un fichier `.hs`, `.cabal` ou `.hs-boot`
@@ -1630,7 +1624,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ## Helm
 
-Le module `helm` affiche la version de [Helm](https://helm.sh/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `helmfile.yaml`
 - Le dossier courant contient un fichier `Chart.yaml`
@@ -1669,7 +1663,7 @@ format = "via [⎈ $version](bold white) "
 
 ## Nom d'hôte
 
-Le module `hostname` affiche le nom d’hôte du système system.
+The `hostname` module shows the system hostname.
 
 ### Options
 
@@ -1704,7 +1698,7 @@ disabled = false
 
 ## Java
 
-Le module `java` affiche la version de [Java](https://www.oracle.com/java/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`ou `build.boot`
 - Le dossier courant contient un fichier avec l’extension `.java`, `.class`, `.gradle`, `.jar`, `.clj` ou `.cljc`
@@ -1743,7 +1737,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-Le module `jobs` affiche le nombre de tâches en cours. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -1800,7 +1794,7 @@ symbol_threshold = 0
 
 ## Julia
 
-Le module `Julia` affiche la version de [Julia](https://julialang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `julia` module shows the currently installed version of [Julia](https://julialang.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `Project.toml`
 - Le dossier courant contient un fichier `Manifest.toml`
@@ -1840,7 +1834,7 @@ symbol = "∴ "
 
 ## Kotlin
 
-Le module `kotlin` affiche la version de [Kotlin](https://kotlinlang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `.kt` ou `.kts`
 
@@ -2007,7 +2001,7 @@ disabled = false
 
 ## Lua
 
-Le module `lua` affiche la version de [Lua](http://www.lua.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `.lua-version`
 - Le dossier courant contient un dossier `lua`
@@ -2095,7 +2089,7 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-Le module `hg_branch` affiche la branche active du dépôt dans le dossier courant.
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### Options
 
@@ -2131,7 +2125,7 @@ truncation_symbol = ""
 
 ## Nim
 
-Le module `nim` affiche la version de [Nim](https://nim-lang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `nim.cfg`
 - Le dossier courant contient un fichier avec l’extension `.nim`
@@ -2173,7 +2167,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-Le module `nix_shell` affiche la version de l’environnement [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). The module will be shown when inside a nix-shell environment.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
 ### Options
 
@@ -2211,7 +2205,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `package.json`
 - Le dossier courant contient un fichier `.node-version`
@@ -2255,7 +2249,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-Le module `ocaml` affiche la version de [OCaml](https://ocaml.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier avec l’extension `.opam` ou un dossier `_opam`
 - The current directory contains a `esy.lock` directory
@@ -2390,12 +2384,12 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-Le module `perl` affiche la version de [Perl](https://www.perl.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `Makefile.PL` ou `Build.PL`
 - Le dossier courant contient un fichier `cpanfile` ou `cpanfile.snapshot`
 - Le dossier courant contient un fichier `META.json` ou `META.yml`
-- The current directory contains a `.perl-version` file
+- Le dossier courant contient un fichier `.perl-version`
 - The current directory contains a `.pl`, `.pm` or `.pod`
 
 ### Options
@@ -2430,10 +2424,10 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-Le module `php` affiche la version de [PHP](https://www.php.net/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `composer.json` file
-- The current directory contains a `.php-version` file
+- Le dossier courant contient un fichier `composer.json`
+- Le dossier courant contient un fichier `.php-version`
 - The current directory contains a `.php` extension
 
 ### Options
@@ -2478,7 +2472,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 :::
 
-Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
 - A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
@@ -2527,9 +2521,9 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-Le module `purescript` affiche la version de [PureScript](https://www.purescript.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `spago.dhall` file
+- Le dossier courant contient un fichier `spago.dhall`
 - Le dossier courant contient un fichier avec l’extension `.purs`
 
 ### Options
@@ -2570,15 +2564,15 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
-- The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
+- Le dossier courant contient un fichier `.python-version`
+- Le dossier courant contient un fichier `Pipfile`
+- Le dossier courant contient un fichier `__init__.py`
+- Le dossier courant contient un fichier `pyproject.toml`
+- Le dossier courant contient un fichier `requirements.txt`
+- Le dossier courant contient un fichier `setup.py`
+- Le dossier courant contient un fichier `tox.ini`
 - Le dossier courant contient un fichier avec l’extension `.py`.
 - A virtual environment is currently activated
 
@@ -2655,14 +2649,14 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-Le module `rlang` affiche la version de [R](https://www.r-project.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
+The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier avec l’extension `.R`.
 - Le dossier courant contient un fichier avec l’extension `.Rd`.
 - Le dossier courant contient un fichier avec l’extension `.Rmd`.
 - Le dossier courant contient un fichier avec l’extension `.Rproj`.
 - Le dossier courant contient un fichier avec l’extension `.Rsx`.
-- The current directory contains a `.Rprofile` file
+- Le dossier courant contient un fichier `.Rprofile`
 - The current directory contains a `.Rproj.user` folder
 
 ### Options
@@ -2697,7 +2691,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le dossier courant contient un fichier avec l’extension `.red` ou `.reds`
 
@@ -2735,11 +2729,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-Par défaut, le module `ruby` affiche la version de [Ruby](https://www.ruby-lang.org/) installée. Le module est affiché si l'une de ces conditions est remplie :
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
+- Le dossier courant contient un fichier `Gemfile`
+- Le dossier courant contient un fichier `.ruby-version`
+- Le dossier courant contient un fichier `.rb`
 - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 
 Starship gets the current Ruby version by running `ruby -v`.
@@ -2779,9 +2773,9 @@ symbol = "🔺 "
 
 ## Rust
 
-Par défaut, le module `rust` affiche la version de [Rust](https://www.rust-lang.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
-- The current directory contains a `Cargo.toml` file
+- Le dossier courant contient un fichier `Cargo.toml`
 - Le dossier courant contient un fichier avec l’extension `.rs`
 
 ### Options
@@ -2818,9 +2812,9 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-Le module `scala` affiche la version de [Scala](https://www.scala-lang.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
+- Le dossier courant contient un fichier `build.sbt`, `.scalaenv` ou `.sbtenv`
 - Le dossier courant contient un fichier avec l’extension `.scala` ou `.sbt`
 - The current directory contains a directory named `.metals`
 
@@ -2985,8 +2979,6 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-::: warning This module is not supported on nu shell. :::
-
 ### Options
 
 | Option                  | Défaut                                                                               | Description                                             |
@@ -3088,9 +3080,9 @@ disabled = false
 
 ## Swift
 
-Par défaut, le module `swift` affiche la version de [Swift](https://swift.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
 
-- The current directory contains a `Package.swift` file
+- Le dossier courant contient un fichier `Package.swift`
 - Le dossier courant contient un fichier avec l’extension `.swift`
 
 ### Options
@@ -3127,7 +3119,7 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-Le module `terraform` affiche [l’espace de travail Terraform](https://www.terraform.io/docs/language/state/workspaces.html) sélectionné et sa version.
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
@@ -3135,7 +3127,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 :::
 
-Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
 - Le dossier courant contient un fichier avec l’extension `.tf`, `.tfplan` ou `.tfstate`
@@ -3186,7 +3178,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Date et Heure
 
-Le module `time` affiche la date et heure **locale**. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3232,7 +3224,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-Le module `username` affiche le nom de l’utilisateur actif. Le module sera affiché si l'une de ces conditions est remplie:
+The `username` module shows active user's username. Le module est affiché si l'une de ces conditions est remplie :
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -3277,9 +3269,9 @@ show_always = true
 
 ## Vagrant
 
-Le module `vagrant` affiche la version de [Vagrant](https://www.vagrantup.com/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `Vagrantfile` file
+- Le dossier courant contient un fichier `Vagrantfile`
 
 ### Options
 
@@ -3315,10 +3307,10 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier avec l’extension `.v`
-- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
+- Le dossier courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
 
 ### Options
 
@@ -3383,9 +3375,9 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Par défaut, le module `zip` affiche la version de [Zig](https://ziglang.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
-- The current directory contains a `.zig` file
+- Le dossier courant contient un fichier `.zip`
 
 ### Options
 
@@ -3421,13 +3413,13 @@ symbol = "⚡️ "
 
 ## Commandes personnalisées
 
-Les modules `custom` affichent la sortie d’une commande arbitaitre.
+The `custom` modules show the output of some arbitrary commands.
 
-Ces modules seront affichés si l'une de ces conditions est remplie:
+These modules will be shown if any of the following conditions are met:
 
-- The current directory contains a file whose name is in `files`
+- Le dossier courant contient un fichier dont le nom est dans `files`
 - The current directory contains a directory whose name is in `directories`
-- The current directory contains a file whose extension is in `extensions`
+- Le dossier courant contient un fichier dont l’extension est dans `extensions`
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
