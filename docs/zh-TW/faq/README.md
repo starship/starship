@@ -1,4 +1,4 @@
-# 常見問答
+# Frequently Asked Questions
 
 ## 主頁示例圖中的效果是使用哪些配置達成的？
 

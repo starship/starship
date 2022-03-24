@@ -1,4 +1,4 @@
-# 🚀 Erweiterte Installation
+# Advanced Installation
 
 Um Starship zu installieren, musst du zwei Dinge tun:
 

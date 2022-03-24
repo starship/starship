@@ -1,4 +1,4 @@
-# FAQ
+# Frequently Asked Questions
 
 ## ئەو ڕێکخستنە چییە لە GIF پێشاندانەکەدا بەکارهاتووە؟
 

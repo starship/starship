@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#pure)
+[Return to Presets](./README.md#pure)
 
 # Pure Preset
 

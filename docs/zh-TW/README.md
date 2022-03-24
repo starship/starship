@@ -144,21 +144,23 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Nushell
 
-   ::: warning 這項設定可能在未來改變 只支援 nu v0.33 以上的版本。 ::: 將以下內容放到你的 nu 設定檔裡， 你可以透過在 nu 執行 `config path` 指令來取得設定檔的位置。
-
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   ::: warning 這項設定可能在未來改變 Only Nushell v0.60+ is supported. ::: Run the following:
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
    ```
 
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
+   source ~/.cache/starship/init.nu
+   ```
 
    #### Xonsh
 
-   將以下內容放到 `~/.xonshrc` 的結尾：
+   將以下內容加到 `~/.xonshrc` 的結尾：
 
    ```sh
    # ~/.xonshrc

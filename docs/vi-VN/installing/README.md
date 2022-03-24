@@ -1,4 +1,4 @@
-# 🚀 Cài đặt nâng cao
+# Advanced Installation
 
 Để cài đặt starship, bạn cần làm 2 thứ:
 

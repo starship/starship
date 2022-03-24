@@ -1,4 +1,4 @@
-# Pertanyaan Umum (FAQ)
+# Frequently Asked Questions
 
 ## What is the configuration used in the demo GIF?
 

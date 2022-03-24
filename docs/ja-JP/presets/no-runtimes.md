@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#no-runtime-versions)
+[Return to Presets](./README.md#no-runtime-versions)
 
 # No Runtime Versions Preset
 

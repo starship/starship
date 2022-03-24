@@ -2,7 +2,7 @@
 
 Meskipun Starship tergolong sebagai shell yang serbaguna, terkadang kita butuh upaya yang lebih dari sekadar mengedit `starship.toml` untuk membuatnya menjalankan beberapa hal tertentu. Halaman ini merincikan beberapa teknik konfigurasi lanjutan yang digunakan oleh starship.
 
-::: peringatan
+::: warning
 
 Konfigurasi pada bagian ini dapat berubah saat pembaruan Starship rilis di kemudian hari nanti.
 
