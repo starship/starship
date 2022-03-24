@@ -1111,19 +1111,19 @@ default = "unknown user"
 
 | Opções     | Padrão                         | Descrição                                                                    |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
+| `symbol`   | `""`                           | O símbolo usado antes de exibir o valor da variável.                         |
+| `variable` |                                | A variável de ambiente a ser exibida.                                        |
+| `default`  |                                | O valor padrão a ser exibido quando a variável selecionada não for definida. |
 | `format`   | `"with [$env_value]($style) "` | O formato do módulo.                                                         |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| `disabled` | `false`                        | Desabilita o módulo `env_var`.                                               |
 
 ### Variáveis
 
-| Variável  | Exemplo                                     | Descrição                                  |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | Espelha o valor da opção `symbol`          |
-| style\* | `black bold dimmed`                         | Espelha o valor da opção `style`           |
+| Variável  | Exemplo                                   | Descrição                                  |
+| --------- | ----------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (se a variável __ for `$OS`) | The environment value of option `variable` |
+| symbol    |                                           | Espelha o valor da opção `symbol`          |
+| style\* | `black bold dimmed`                       | Espelha o valor da opção `style`           |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1151,10 +1151,10 @@ default = "unknown user"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `erlang` mostra a versão atualmente instalada do [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
-- The current directory contains a `rebar.config` file.
-- The current directory contains a `erlang.mk` file.
+- O diretório atual contém um arquivo `rebar.config`.
+- O diretório atual contém um arquivo `erlang.mk`.
 
 ### Opções
 
