@@ -348,12 +348,12 @@ Le module `azure` affiche l'abonnement Azure actuel. Ceci est basé sur l'affich
 
 ### Options
 
-| Variable   | Défaut                                   | Description                                            |
-| ---------- | ---------------------------------------- | ------------------------------------------------------ |
-| `format`   | `"on [$symbol($subscription)]($style) "` | Le format utilisé pour faire le rendu du module Azure. |
-| `symbol`   | `"ﴃ "`                                   | Le symbole utilisé dans le format.                     |
-| `style`    | `"blue bold"`                            | Le style utilisé dans le format.                       |
-| `disabled` | `true`                                   | Désactive le module `azure`.                           |
+| Variable   | Défaut                                   | Description                              |
+| ---------- | ---------------------------------------- | ---------------------------------------- |
+| `format`   | `"on [$symbol($subscription)]($style) "` | Le format pour le rendu du module Azure. |
+| `symbol`   | `"ﴃ "`                                   | Le symbole utilisé dans le format.       |
+| `style`    | `"blue bold"`                            | Le style utilisé dans le format.         |
+| `disabled` | `true`                                   | Désactive le module `azure`.             |
 
 ### Exemple
 
@@ -485,7 +485,7 @@ Par défaut, il ne change que de couleur. Si vous désirez également changer sa
 
 ::: warning
 
-`vicmd_symbol` is only supported in cmd, fish and zsh.
+`vicmd_symbol` n’est supporté que dans cmd, fish et zsh.
 
 :::
 
@@ -538,7 +538,7 @@ vicmd_symbol = "[V](bold green) "
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+Le module `cmake` affiche la version de [CMake](https://cmake.org/) installée. By default the module will be activated if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `CMakeLists.txt`
 - Le dossier courant contient un fichier `CMakeCache.txt`
@@ -568,7 +568,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+Le module `cobol` affiche la version de COBOL installée. By default, the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier finissant par `.cob` ou `.COB`
 - Le dossier courant contiens un fichier finissant par `.cbl` ou `.CBL`
@@ -714,7 +714,7 @@ format = "[$symbol \\[$name\\]]($style) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
+Le module `crystal` affiche la version de [Crystal](https://crystal-lang.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `shard.yml`
 - Le dossier courant contient un fichier `.cr`
@@ -753,7 +753,7 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
+Le module `dart` affiche la version de [Dart](https://dart.dev/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier avec l’extension `.dart`
 - Le dossier courant contient un fichier `.dart_tool`
@@ -793,7 +793,7 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
+Le module `deno` affiche la version de [Deno](https://deno.land/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
 
@@ -1002,7 +1002,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
+Le module `elixir` affiche la version de [Elixir](https://elixir-lang.org/) et [Erlang/OTP](https://erlang.org/doc/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `mix.exs`.
 
