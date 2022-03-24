@@ -21,7 +21,7 @@ success_symbol = "[➜](bold green)" # Le segment «success_symbol» est changé
 disabled = true
 ```
 
-Vous pouvez changer l'emplacement par défaut du fichier  avec la variable d'environnement `STARSHIP_CONFIG` :
+Vous pouvez choisir l'emplacement du fichier avec la variable d'environnement `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
@@ -761,8 +761,8 @@ format = "via [✨ $version](bold blue) "
 
 Le module `dart` affiche la version de [Dart](https://dart.dev/) installée. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a file with `.dart` extension
-- The current directory contains a `.dart_tool` directory
+- Le dossier courant contient un fichier `.dart`
+- Le dossier courant contient un fichier `.dart_tool`
 - The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Options
