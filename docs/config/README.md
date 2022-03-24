@@ -1116,7 +1116,7 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- The current directory contains `*.elm` files
 
 ### Options
 
