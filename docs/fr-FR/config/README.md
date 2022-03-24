@@ -2259,10 +2259,10 @@ Le module `ocaml` affiche la version de [OCaml](https://ocaml.org/) installée. 
 
 - Le dossier courant contient un fichier avec l’extension `.opam` ou un dossier `_opam`
 - The current directory contains a `esy.lock` directory
-- The current directory contains a `dune` or `dune-project` file
-- The current directory contains a `jbuild` or `jbuild-ignore` file
-- The current directory contains a `.merlin` file
-- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+- Le dossier courant contient un fichier `dune` ou `dune-project`
+- Le dossier courant contient un fichier `jbuild` ou `jbuild-ignore`
+- Le dossier courant contient un fichier `.merlin`
+- Le dossier courant contient un fichier avec l’extension `.ml`, `.mli`, `.re` ou `.rei`
 
 ### Options
 
@@ -2392,9 +2392,9 @@ format = "via [🎁 $version](208 bold) "
 
 Le module `perl` affiche la version de [Perl](https://www.perl.org/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `Makefile.PL` or `Build.PL` file
-- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
-- The current directory contains a `META.json` file or `META.yml` file
+- Le dossier courant contient un fichier `Makefile.PL` ou `Build.PL`
+- Le dossier courant contient un fichier `cpanfile` ou `cpanfile.snapshot`
+- Le dossier courant contient un fichier `META.json` ou `META.yml`
 - The current directory contains a `.perl-version` file
 - The current directory contains a `.pl`, `.pm` or `.pod`
 
