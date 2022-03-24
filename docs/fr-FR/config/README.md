@@ -1041,7 +1041,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
+Le module `elm` affiche la version de [Elm](https://elm-lang.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `elm.json`
 - Le dossier courant contient un fichier `elm-package.json`
