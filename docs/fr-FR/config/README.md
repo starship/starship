@@ -1502,41 +1502,41 @@ Le module Statut Git est très lent dans les dossiers Windows (par exemple sous 
 
 ### Options
 
-| Option              | Défaut                                          | Description                                                                                                 |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Le format par défaut du module `git_status`                                                                 |
-| `conflicted`        | `"="`                                           | Cette branche a des conflits de fusion.                                                                     |
-| `ahead`             | `"⇡"`                                           | Le format de `ahead`                                                                                        |
-| `behind`            | `"⇣"`                                           | Le format de `behind`                                                                                       |
-| `diverged`          | `"⇕"`                                           | Le format de `diverged`                                                                                     |
-| `up_to_date`        | `""`                                            | The format de `up_to_date`                                                                                  |
-| `untracked`         | `"?"`                                           | Le format de `untracked`                                                                                    |
-| `stashed`           | `"$"`                                           | Le format de `stashed`                                                                                      |
-| `modified`          | `"!"`                                           | Le format de `modified`                                                                                     |
-| `staged`            | `"+"`                                           | Le format de `staged`                                                                                       |
-| `renamed`           | `"»"`                                           | Le format de `renamed`                                                                                      |
-| `deleted`           | `"✘"`                                           | Le format de `deleted`                                                                                      |
-| `style`             | `"bold green"`                                  | Le style du module.                                                                                         |
-| `ignore_submodules` | `false`                                         | Ignorer les changements des sous-modules.                                                                   |
-| `disabled`          | `false`                                         | Désactive le module `git_status`.                                                                           |
-| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| Option              | Défaut                                          | Description                                                                                                                     |
+| ------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Le format par défaut du module `git_status`                                                                                     |
+| `conflicted`        | `"="`                                           | Cette branche a des conflits de fusion.                                                                                         |
+| `ahead`             | `"⇡"`                                           | Le format de `ahead`                                                                                                            |
+| `behind`            | `"⇣"`                                           | Le format de `behind`                                                                                                           |
+| `diverged`          | `"⇕"`                                           | Le format de `diverged`                                                                                                         |
+| `up_to_date`        | `""`                                            | The format de `up_to_date`                                                                                                      |
+| `untracked`         | `"?"`                                           | Le format de `untracked`                                                                                                        |
+| `stashed`           | `"$"`                                           | Le format de `stashed`                                                                                                          |
+| `modified`          | `"!"`                                           | Le format de `modified`                                                                                                         |
+| `staged`            | `"+"`                                           | Le format de `staged`                                                                                                           |
+| `renamed`           | `"»"`                                           | Le format de `renamed`                                                                                                          |
+| `deleted`           | `"✘"`                                           | Le format de `deleted`                                                                                                          |
+| `style`             | `"bold green"`                                  | Le style du module.                                                                                                             |
+| `ignore_submodules` | `false`                                         | Ignorer les changements des sous-modules.                                                                                       |
+| `disabled`          | `false`                                         | Désactive le module `git_status`.                                                                                               |
+| `windows_starship`  |                                                 | Utiliser ce chemin (Linux) vers un exécutable Starship Windows pour afficher le `git_status` pour les chemins Windows dans WSL. |
 
 ### Variables
 
 Les variables suivantes peuvent être utilisées pour la valeur de `format`:
 
-| Variable       | Description                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Raccourci pour `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Affiche `conflicted` lorsque la branche courante a des conflits de fusion.                                    |
-| `untracked`    | Affiche `untracked` lorsqu'il y a des fichiers non suivis dans le répertoire de travail.                      |
-| `stashed`      | Affiche `stashed` lorsqu'une remise existe pour le dépôt local.                                               |
-| `modified`     | Affiche `modified` lorsqu'il y a des fichiers modifiés dans le répertoire de travail.                         |
-| `staged`       | Affiche `staged` lorsqu'un nouveau fichier a été ajouté à la zone de validation.                              |
-| `renamed`      | Affiche `renamed` lorsqu'un fichier renommé a été ajouté à la zone de validation.                             |
-| `deleted`      | Affiche `deleted` lorsque la suppression d'un fichier a été ajoutée à la zone de validation.                  |
-| style\*      | Reflète la valeur de l'option `style`                                                                         |
+| Variable       | Description                                                                                                           |
+| -------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `all_status`   | Raccourci pour `$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                        |
+| `ahead_behind` | Affiche la chaine de formatage `diverged`, `ahead`, `behind` ou `up_to_date` en se basant sur l’état actuel du dépôt. |
+| `conflicted`   | Affiche `conflicted` lorsque la branche courante a des conflits de fusion.                                            |
+| `untracked`    | Affiche `untracked` lorsqu'il y a des fichiers non suivis dans le répertoire de travail.                              |
+| `stashed`      | Affiche `stashed` lorsqu'une remise existe pour le dépôt local.                                                       |
+| `modified`     | Affiche `modified` lorsqu'il y a des fichiers modifiés dans le répertoire de travail.                                 |
+| `staged`       | Affiche `staged` lorsqu'un nouveau fichier a été ajouté à la zone de validation.                                      |
+| `renamed`      | Affiche `renamed` lorsqu'un fichier renommé a été ajouté à la zone de validation.                                     |
+| `deleted`      | Affiche `deleted` lorsque la suppression d'un fichier a été ajoutée à la zone de validation.                          |
+| style\*      | Reflète la valeur de l'option `style`                                                                                 |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1583,7 +1583,7 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-Use Windows Starship executable on Windows paths in WSL
+Utiliser un exécutable Starship Windows pour les chemins Windows dans WSL
 
 ```toml
 # ~/.config/starship.toml
@@ -1648,15 +1648,15 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 ### Options
 
-| Option              | Défaut                               | Description                                        |
-| ------------------- | ------------------------------------ | -------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                  |
-| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell |
-| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Quelles extensions devraient activer ce module.    |
-| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Les fichiers qui activent ce module.               |
-| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.               |
-| `style`             | `"bold purple"`                      | Le style du module.                                |
-| `disabled`          | `false`                              | Désactive le module `haskell`.                     |
+| Option              | Défaut                               | Description                                             |
+| ------------------- | ------------------------------------ | ------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                       |
+| `symbol`            | `"λ "`                               | Une chaîne de format représentant le symbole de Haskell |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Quelles extensions devraient activer ce module.         |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Les fichiers qui activent ce module.                    |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                    |
+| `style`             | `"bold purple"`                      | Le style du module.                                     |
+| `disabled`          | `false`                              | Désactive le module `haskell`.                          |
 
 ### Variables
 
@@ -1664,7 +1664,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | -------------- | ----------- | --------------------------------------------------------------------------------------- |
 | version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
 | snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
-| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| ghc\_version | `9.2.1`     | Version de GHC installée                                                                |
 | symbol         |             | Reflète la valeur de l'option `symbol`                                                  |
 | style\*      |             | Reflète la valeur de l'option `style`                                                   |
 
