@@ -150,7 +150,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en exécutant `$nu.config path`):
 
    ```sh
    mkdir ~/.cache/starship
