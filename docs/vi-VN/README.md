@@ -120,7 +120,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Elvish
 
-   ::: warning Chỉ elvish v0.17 hoặc cao hơn được hỗ trợ. :::
+   ::: warning Only elvish v0.18 or higher is supported. :::
 
    Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
 
