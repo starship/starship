@@ -326,7 +326,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Run the following:
+Exécutez les commandes suivantes:
 
 ```sh
 mkdir ~/.cache/starship
