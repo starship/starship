@@ -1,6 +1,6 @@
-[Return to Presets](./README.md#no-runtime-versions)
+[Retornar para Predefinições](./README.md#no-runtime-versions)
 
-# No Runtime Versions Preset
+# Runtime Ausente
 
 Está predefinição oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, este é para você!
 
