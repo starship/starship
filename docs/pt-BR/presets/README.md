@@ -6,7 +6,7 @@ To get details on how to use a preset, simply click on the image.
 
 ## [Símbolos Nerd Font](./nerd-font.md)
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Essa predefinição altera os símbolos para cada módulo usar símbolos com Nerd Font.
 
 [![Captura de tela da predefinição Nerd Font Symbols](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
@@ -36,6 +36,6 @@ Essa configuração simula a aparência e o comportamento do [Pure](https://gith
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+Esta predefinição é inspirada em [M365Princesa](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Mostra também como a substituição de segmentos do caminho completo do diretório funciona no starship.
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Screenshot do preset Pastel Powerline](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
