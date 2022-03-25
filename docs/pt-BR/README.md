@@ -144,7 +144,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Nushell
 
-   ::: Atenção Isto vai mudar no futuro. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: Atenção Isto vai mudar no futuro. Somente Nushell v0.60+ é suportado. ::: Execute os seguintes comandos:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -171,7 +171,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Cmd
 
-   Você precisa do [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) com Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Você precisa do [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) com Cmd. Adicione o seguinte num arquivo `starship.lua` e coloque este arquivo no diretório scripts do Clink:
 
    ```lua
    -- starship.lua
