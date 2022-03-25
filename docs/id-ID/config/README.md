@@ -264,9 +264,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Diperoleh dari variabel environment `AWS_REGION`, `AWS_DEFAULT_REGION`, dan `AWS_PROFILE` pada file `~/.aws/config`. Modul ini juga menampilkan penghitung waktu mundur kedaluwarsa ketika menggunakan temporer kredensial.
+The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile event when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
 
 Ketika menggunakan [aws-vault](https://github.com/99designs/aws-vault), profil dibaca dari variabel environment `AWS_VAULT` dan tanggal kedaluwarsanya dibaca dari variabel environment `AWS_SESSION_EXPIRATION`.
 
@@ -276,15 +276,16 @@ Ketika menggunakan [AWSume](https://awsu.me) profil dibaca dari variabel environ
 
 ### Opsi
 
-| Opsi                | Bawaan                                                               | Deskripsi                                                        |
-| ------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `fromat`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format dari modul.                                               |
-| `symbol`            | `"☁️ "`                                                              | Simbol yang digunakan sebelum menampilkan profil AWS terkini.    |
-| `region_aliases`    |                                                                      | Tabel alias dari region yang ditampilan selain nama AWS.         |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name. |
-| `style`             | `"bold yellow"`                                                      | Gaya penataan untuk modul.                                       |
-| `expiration_symbol` | `X`                                                                  | Simbol ditampilkan ketika temporer kredensial telah kedaluwarsa. |
-| `disabled`          | `false`                                                              | Menonaktifkan modul `AWS`.                                       |
+| Opsi                | Bawaan                                                               | Deskripsi                                                                                                 |
+| ------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `fromat`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format dari modul.                                                                                        |
+| `symbol`            | `"☁️ "`                                                              | Simbol yang digunakan sebelum menampilkan profil AWS terkini.                                             |
+| `region_aliases`    |                                                                      | Tabel alias dari region yang ditampilan selain nama AWS.                                                  |
+| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                          |
+| `style`             | `"bold yellow"`                                                      | Gaya penataan untuk modul.                                                                                |
+| `expiration_symbol` | `X`                                                                  | Simbol ditampilkan ketika temporer kredensial telah kedaluwarsa.                                          |
+| `disabled`          | `false`                                                              | Menonaktifkan modul `AWS`.                                                                                |
+| `force_display`     | `false`                                                              | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variabel
 
