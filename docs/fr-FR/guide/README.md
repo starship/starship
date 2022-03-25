@@ -297,7 +297,7 @@ Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Seul Elvish v0.17+ est supporté
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
