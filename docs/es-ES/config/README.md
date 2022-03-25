@@ -199,6 +199,7 @@ $hg_branch\
 $docker_context\
 $package\
 $buf\
+$c\
 $cmake\
 $cobol\
 $container\
@@ -470,6 +471,52 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 [buf]
 symbol = "🦬 "
+```
+
+## C
+
+The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+
+### Opciones
+
+| Opción              | Por defecto                                                                 | Descripción                                                                             |
+| ------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | La cadena de formato para el módulo.                                                    |
+| `version_format`    | `"v${raw}"`                                                                 | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                                  |
+| `detect_extensions` | `["c", "h"]`                                                                | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `[]`                                                                        | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                                                        | Qué carpetas deberían activar este módulo.                                              |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                                      |
+| `style`             | `"bold 149"`                                                                | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                                                     | Disables the `c` module.                                                                |
+
+### Variables
+
+| Variable | Ejemplo | Descripción                            |
+| -------- | ------- | -------------------------------------- |
+| name     | clang   | The name of the compiler               |
+| version  | 13.0.0  | The version of the compiler            |
+| symbol   |         | Refleja el valor de la opción `symbol` |
+| style    |         | Refleja el valor de la opción `style`  |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[c]
+format = "via [$name $version]($style)"
 ```
 
 ## Character
@@ -799,7 +846,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Opciones
 
-| Opción              | Por defecto                                                             | Descripción                                                                             |
+| Opción              | Predeterminado                                                          | Descripción                                                                             |
 | ------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                    | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                                                             | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
@@ -1152,7 +1199,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                             |
+| Opción              | Predeterminado                       | Descripción                                                                             |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
@@ -1413,7 +1460,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opciones
 
-| Opción               | Por defecto                                                  | Descripción                           |
+| Opción               | Predeterminado                                               | Descripción                           |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------- |
 | `added_style`        | `"bold green"`                                               | The style for the added count.        |
 | `deleted_style`      | `"bold red"`                                                 | The style for the deleted count.      |
@@ -1620,7 +1667,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol         |             | Refleja el valor de la opción `symbol`                                                  |
 | style\*      |             | Refleja el valor de la opción `style`                                                   |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ## Helm
 
@@ -1840,7 +1887,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                                                             |
+| Opción              | Predeterminado                       | Descripción                                                                             |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
@@ -2760,7 +2807,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
-*: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
+*: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 ### Ejemplo
 
@@ -3347,7 +3394,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Opciones
 
-| Opción     | Por defecto                      | Descripción                                            |
+| Opción     | Predeterminado                   | Descripción                                            |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
 | `symbol`   |                                  | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | El estilo del módulo.                                  |
