@@ -12,6 +12,6 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 
 ### Configuração
 
-[Click to download TOML](/presets/toml/pastel-powerline.toml)
+[Clique para baixar o TOML](/presets/toml/pastel-powerline.toml)
 
 <<< @/.vuepress/public/presets/toml/pastel-powerline.toml
