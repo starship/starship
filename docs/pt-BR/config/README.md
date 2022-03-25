@@ -180,7 +180,7 @@ O `formato` padrão é usado para definir o formato do prompt, se um valor vazio
 ```toml
 format = "$all"
 
-# Que é equivalente a:
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -199,6 +199,7 @@ $hg_branch\
 $docker_context\
 $package\
 $buf\
+$c\
 $cmake\
 $cobol\
 $container\
@@ -470,6 +471,52 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 [buf]
 symbol = "🦬 "
+```
+
+## C
+
+The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+
+### Opções
+
+| Opções              | Padrão                                                                      | Descrição                                                                            |
+| ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | A string de formato do módulo.                                                       |
+| `version_format`    | `"v${raw}"`                                                                 | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                               |
+| `detect_extensions` | `["c", "h"]`                                                                | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `[]`                                                                        | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[]`                                                                        | Quais pastas devem ativar este módulo.                                               |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                                   |
+| `style`             | `"bold 149"`                                                                | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                                                     | Disables the `c` module.                                                             |
+
+### Variáveis
+
+| Variável | Exemplo | Descrição                         |
+| -------- | ------- | --------------------------------- |
+| name     | clang   | The name of the compiler          |
+| version  | 13.0.0  | The version of the compiler       |
+| symbol   |         | Espelha o valor da opção `symbol` |
+| style    |         | Espelha o valor da opção `style`  |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Exemplo
+
+```toml
+# ~/.config/starship.toml
+
+[c]
+format = "via [$name $version]($style)"
 ```
 
 ## Caractere
@@ -970,8 +1017,8 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | O formato do módulo.                                                                 |
 | `version_format`    | `"v${raw}"`                                                                                             | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `".NET "`                                                                                               | O símbolo usado na frente da versão do dotnet.                                       |
-| `heuristic`         | `true`                                                                                                  | Usa a detecção de versão rápida para manter o starship ligeiro e hábil.              |
+| `symbol`            | `".NET "`                                                                                               | The symbol used before displaying the version of dotnet.                             |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                                |
 | `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                                                    | Quais pastas devem ativar este módulo.                                               |
@@ -980,12 +1027,12 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variáveis
 
-| Variável  | Exemplo          | Descrição                                         |
-| --------- | ---------------- | ------------------------------------------------- |
-| version   | `v3.1.201`       | A versão do `dotnet`                              |
-| tfm       | `netstandard2.0` | O Target Framework Moniker usado no projeto atual |
-| symbol    |                  | Espelha o valor da opção `symbol`                 |
-| style\* |                  | Espelha o valor da opção `style`                  |
+| Variável  | Exemplo          | Descrição                                                          |
+| --------- | ---------------- | ------------------------------------------------------------------ |
+| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
+| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
+| symbol    |                  | Espelha o valor da opção `symbol`                                  |
+| style\* |                  | Espelha o valor da opção `style`                                   |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1012,18 +1059,18 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                                    |
 | `version_format`    | `"v${raw}"`                                                 | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💧 "`                                                      | O símbolo usado na frente da versão do Elixir ou Erlang.                             |
+| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang.                      |
 | `detect_extensions` | `[]`                                                        | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `["mix.exs"]`                                               | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                                        | Quais pastas devem ativar este módulo.                                               |
 | `style`             | `"bold purple"`                                             | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                                     | Desabilita o módulo `elixir`.                                                        |
+| `disabled`          | `false`                                                     | Disables the `elixir` module.                                                        |
 
 ### Variáveis
 
 | Variável    | Exemplo | Descrição                         |
 | ----------- | ------- | --------------------------------- |
-| version     | `v1.10` | A versão do `elixir`              |
+| version     | `v1.10` | The version of `elixir`           |
 | otp_version |         | The otp version of `elixir`       |
 | symbol      |         | Espelha o valor da opção `symbol` |
 | style\*   |         | Espelha o valor da opção `style`  |
@@ -1105,19 +1152,19 @@ default = "unknown user"
 
 | Opções     | Padrão                         | Descrição                                                                    |
 | ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | O símbolo usado antes de exibir o valor da variável.                         |
-| `variable` |                                | A variável de ambiente a ser exibida.                                        |
-| `default`  |                                | O valor padrão a ser exibido quando a variável selecionada não for definida. |
+| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
+| `variable` |                                | The environment variable to be displayed.                                    |
+| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`   | `"with [$env_value]($style) "` | O formato do módulo.                                                         |
-| `disabled` | `false`                        | Desabilita o módulo `env_var`.                                               |
+| `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variáveis
 
-| Variável  | Exemplo                                   | Descrição                                  |
-| --------- | ----------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (se a variável __ for `$OS`) | The environment value of option `variable` |
-| symbol    |                                           | Espelha o valor da opção `symbol`          |
-| style\* | `black bold dimmed`                       | Espelha o valor da opção `style`           |
+| Variável  | Exemplo                                     | Descrição                                  |
+| --------- | ------------------------------------------- | ------------------------------------------ |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
+| symbol    |                                             | Espelha o valor da opção `symbol`          |
+| style\* | `black bold dimmed`                         | Espelha o valor da opção `style`           |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1167,7 +1214,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 | Variável  | Exemplo   | Descrição                         |
 | --------- | --------- | --------------------------------- |
-| version   | `v22.1.3` | A versão do `erlang`              |
+| version   | `v22.1.3` | The version of `erlang`           |
 | symbol    |           | Espelha o valor da opção `symbol` |
 | style\* |           | Espelha o valor da opção `style`  |
 
