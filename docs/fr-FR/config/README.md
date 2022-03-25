@@ -1265,14 +1265,14 @@ Le module `gcloud` affiche la configuration actuelle pour [`gcloud`](https://clo
 
 ### Options
 
-| Option            | Défaut                                                     | Description                                                      |
-| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
-| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format du module.                                                |
-| `symbol`          | `"☁️  "`                                                   | Le symbole affiché avant le profil GCP actuel.                   |
-| `region_aliases`  |                                                            | Table des alias de région à afficher en plus du nom du GCP.      |
-| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
-| `style`           | `"bold blue"`                                              | Le style du module.                                              |
-| `disabled`        | `false`                                                    | Désactive le module `gcloud`.                                    |
+| Option            | Défaut                                                     | Description                                                 |
+| ----------------- | ---------------------------------------------------------- | ----------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format du module.                                           |
+| `symbol`          | `"☁️  "`                                                   | Le symbole affiché avant le profil GCP actuel.              |
+| `region_aliases`  |                                                            | Table des alias de région à afficher en plus du nom du GCP. |
+| `project_aliases` |                                                            | Table des alias de projet à afficher en plus du nom du GCP. |
+| `style`           | `"bold blue"`                                              | Le style du module.                                         |
+| `disabled`        | `false`                                                    | Désactive le module `gcloud`.                               |
 
 ### Variables
 
@@ -1321,7 +1321,7 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
-#### Display account and aliased project
+#### Afficher le compte et le projet aliasée
 
 ```toml
 # ~/.config/starship.toml
@@ -1347,7 +1347,7 @@ Le module `git_branch` affiche la branche active du dépôt dans votre répertoi
 | `truncation_length`  | `2^63 - 1`                       | Tronque une branche git à `N` graphèmes.                                                                                        |
 | `truncation_symbol`  | `"…"`                            | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué. Vous pouvez utiliser `""` pour ne pas afficher de symbole. |
 | `only_attached`      | `false`                          | Ne montrer le nom de la branche que si elle n'est pas dans un état `HEAD` détachée.                                             |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Utile pour "master" ou "main".                                                             |
+| `ignore_branches`    | `[]`                             | Une liste de noms à ne pas afficher. Utile pour "master" ou "main".                                                             |
 | `disabled`           | `false`                          | Désactive le module `git_branch`.                                                                                               |
 
 ### Variables
@@ -1449,9 +1449,9 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git Metrics
+## Métriques Git
 
-The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+Le module `git_metrics` affiche le nombre de lignes ajoutées et supprimées dans le dépôt Git courant.
 
 ::: tip
 
@@ -1461,22 +1461,22 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option               | Défaut                                                       | Description                           |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `added_style`        | `"bold green"`                                               | The style for the added count.        |
-| `deleted_style`      | `"bold green"`                                               | The style for the deleted count.      |
-| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format du module.                     |
-| `disabled`           | `true`                                                       | Désactive le module `git_metrics`.    |
+| Option               | Défaut                                                       | Description                                           |
+| -------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
+| `added_style`        | `"bold green"`                                               | Le style pour le compte des ajouts.                   |
+| `deleted_style`      | `"bold green"`                                               | Le style pour le compte des suppressions.             |
+| `only_nonzero_diffs` | `true`                                                       | Afficher le statut seulement pour les items modifiés. |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format du module.                                     |
+| `disabled`           | `true`                                                       | Désactive le module `git_metrics`.                    |
 
 ### Variables
 
-| Variable          | Exemple | Description                                 |
-| ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
-| added_style\*   |         | Mirrors the value of option `added_style`   |
-| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+| Variable          | Exemple | Description                                   |
+| ----------------- | ------- | --------------------------------------------- |
+| added             | `1`     | Le nombre de lignes ajoutées                  |
+| deleted           | `2`     | Le nombre de lignes supprimées                |
+| added_style\*   |         | Possède la valeur de l’option `added_style`   |
+| deleted_style\* |         | Possède la valeur de l’option `deleted_style` |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1496,7 +1496,7 @@ Le module `git_status` affiche des symboles représentant l'état du dépôt dan
 
 ::: tip
 
-The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+Le module Statut Git est très lent dans les dossiers Windows (par exemple sous `/mnt/c/`) dans un environnement WSL. Vous pouvez désactiver le module ou utiliser l’option `windows_starship` pour utiliser un exécutable Starship natif pour calculer le `git_status` pour ces chemins.
 
 :::
 
@@ -1509,7 +1509,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `ahead`             | `"⇡"`                                           | Le format de `ahead`                                                                                        |
 | `behind`            | `"⇣"`                                           | Le format de `behind`                                                                                       |
 | `diverged`          | `"⇕"`                                           | Le format de `diverged`                                                                                     |
-| `up_to_date`        | `""`                                            | The format of `up_to_date`                                                                                  |
+| `up_to_date`        | `""`                                            | The format de `up_to_date`                                                                                  |
 | `untracked`         | `"?"`                                           | Le format de `untracked`                                                                                    |
 | `stashed`           | `"$"`                                           | Le format de `stashed`                                                                                      |
 | `modified`          | `"!"`                                           | Le format de `modified`                                                                                     |
@@ -1517,7 +1517,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `renamed`           | `"»"`                                           | Le format de `renamed`                                                                                      |
 | `deleted`           | `"✘"`                                           | Le format de `deleted`                                                                                      |
 | `style`             | `"bold green"`                                  | Le style du module.                                                                                         |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
+| `ignore_submodules` | `false`                                         | Ignorer les changements des sous-modules.                                                                   |
 | `disabled`          | `false`                                         | Désactive le module `git_status`.                                                                           |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
