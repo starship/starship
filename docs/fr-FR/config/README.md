@@ -1795,7 +1795,7 @@ Le fonctionnement par défaut est:
 
 ::: warning
 
-This module is not supported on tcsh and nu.
+Ce module n'est pas pris en charge sur tcsh et nu.
 
 :::
 
@@ -1817,7 +1817,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `style`            | `"bold blue"`                 | Le style du module.                                                      |
 | `disabled`         | `false`                       | Désactive le module `jobs`.                                              |
 
-*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
+*: Cette option is dépréciée, utilisez les options `number_threshold` et `symbol_threshold` à la place.
 
 ### Variables
 
@@ -1951,10 +1951,10 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 | Variable  | Exemple              | Description                                      |
 | --------- | -------------------- | ------------------------------------------------ |
-| context   | `starship-context`   | The current kubernetes context name              |
-| namespace | `starship-namespace` | Si défini, l'espace de noms actuel de kubernetes |
-| user      | `starship-user`      | If set, the current kubernetes user              |
-| cluster   | `starship-cluster`   | If set, the current kubernetes cluster           |
+| context   | `starship-context`   | Le nom du contexte de kubernetes actuel          |
+| namespace | `starship-namespace` | Si défini, l'espace de noms de kubernetes actuel |
+| user      | `starship-user`      | Si défini, l’utilisateur de kubernetes actuel    |
+| cluster   | `starship-cluster`   | Si défini, le cluster de kubernetes actuel       |
 | symbol    |                      | Reflète la valeur de l'option `symbol`           |
 | style\* |                      | Reflète la valeur de l'option `style`            |
 
@@ -2014,24 +2014,24 @@ Le module `line_break` sépare l'invite en deux lignes.
 disabled = true
 ```
 
-## Local IP
+## IP locale
 
-The `localip` module shows the IPv4 address of the primary network interface.
+Le module `localip` affiche l’adresse IPv4 de l’interface réseau principale.
 
 ### Options
 
-| Option     | Défaut                    | Description                                            |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | Format du module.                                      |
-| `style`    | `"bold yellow"`           | Le style du module.                                    |
-| `disabled` | `true`                    | Désactive le module `localip`.                         |
+| Option     | Défaut                    | Description                                                       |
+| ---------- | ------------------------- | ----------------------------------------------------------------- |
+| `ssh_only` | `true`                    | Afficher uniquenement l’adresse IP si connecté à une session SSH. |
+| `format`   | `"[$localipv4]($style) "` | Format du module.                                                 |
+| `style`    | `"bold yellow"`           | Le style du module.                                               |
+| `disabled` | `true`                    | Désactive le module `localip`.                                    |
 
 ### Variables
 
 | Variable  | Exemple      | Description                           |
 | --------- | ------------ | ------------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address     |
+| localipv4 | 192.168.1.13 | Contient l’adresse IPv4 principale    |
 | style\* |              | Reflète la valeur de l'option `style` |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
@@ -2215,7 +2215,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-Le module `nix_shell` affiche la version de l’environnement [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). The module will be shown when inside a nix-shell environment.
+Le module `nix_shell` affiche la version de l’environnement [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). Ce module s’affichera quand vous serez à l’intérieur d’un environnement nix-shell.
 
 ### Options
 
@@ -2232,8 +2232,8 @@ Le module `nix_shell` affiche la version de l’environnement [nix-shell](https:
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| state     | `pure`  | The state of the nix-shell             |
-| name      | `lorri` | The name of the nix-shell              |
+| state     | `pure`  | L’état du nix-shell                    |
+| name      | `lorri` | Le nom du nix-shell                    |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
@@ -2549,7 +2549,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 ### Exemple
 
-#### With Pulumi Version
+#### Avec la version de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -2558,7 +2558,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 format = "[🛥 ($version )$stack]($style) "
 ```
 
-#### Without Pulumi version
+#### Sans la version de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -2656,7 +2656,7 @@ The default values and order for `python_binary` was chosen to first identify th
 | symbol       | `"🐍 "`          | Reflète la valeur de l'option `symbol`     |
 | style        | `"yellow bold"` | Reflète la valeur de l'option `style`      |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `"venv"`        | The current `virtualenv` name              |
+| virtualenv   | `"venv"`        | Le nom du `virtualenv` courant             |
 
 ### Exemple
 
@@ -2901,7 +2901,7 @@ symbol = "🌟 "
 
 ## Shell
 
-The `shell` module shows an indicator for currently used shell.
+Le module `shell` affiche un indicateur en fonction du shell actuellement utilisé.
 
 ::: tip
 
