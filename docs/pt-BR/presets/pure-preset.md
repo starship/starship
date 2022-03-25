@@ -8,6 +8,6 @@ Essa configuração simula a aparência e o comportamento do [Pure](https://gith
 
 ### Configuração
 
-[Click to download TOML](/presets/toml/pure-preset.toml)
+[Clique para baixar o TOML](/presets/toml/pure-preset.toml)
 
 <<< @/.vuepress/public/presets/toml/pure-preset.toml
