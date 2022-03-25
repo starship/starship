@@ -1639,7 +1639,7 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Haskell
 
-The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+Le module `haskell` affiche la version de GHC et/ou l’instantané Stack sélectionnée.
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
@@ -1660,13 +1660,13 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 ### Variables
 
-| Variable       | Exemple     | Description                                                                             |
-| -------------- | ----------- | --------------------------------------------------------------------------------------- |
-| version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
-| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
-| ghc\_version | `9.2.1`     | Version de GHC installée                                                                |
-| symbol         |             | Reflète la valeur de l'option `symbol`                                                  |
-| style\*      |             | Reflète la valeur de l'option `style`                                                   |
+| Variable       | Exemple     | Description                                                                                  |
+| -------------- | ----------- | -------------------------------------------------------------------------------------------- |
+| version        |             | `ghc_version` ou `snapshot` en fonction de si le dossier courant est un project Stack ou pas |
+| snapshot       | `lts-18.12` | L’instantané de Stack sélectionné                                                            |
+| ghc\_version | `9.2.1`     | Version de GHC installée                                                                     |
+| symbol         |             | Reflète la valeur de l'option `symbol`                                                       |
+| style\*      |             | Reflète la valeur de l'option `style`                                                        |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1727,7 +1727,7 @@ Le module `hostname` affiche le nom d'hôte du système.
 
 | Variable   | Exemple    | Description                           |
 | ---------- | ---------- | ------------------------------------- |
-| nom d'hôte | `computer` | The hostname of the computer          |
+| nom d'hôte | `computer` | Le nom d’hôte de l’ordinateur         |
 | style\*  |            | Reflète la valeur de l'option `style` |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
@@ -1740,7 +1740,7 @@ Le module `hostname` affiche le nom d'hôte du système.
 [hostname]
 ssh_only = false
 format = "on [$hostname](bold red) "
-trim_at = ".companyname.com"
+trim_at = ".nom-entreprise.com"
 disabled = false
 ```
 
@@ -1787,11 +1787,11 @@ symbol = "🌟 "
 
 Le module `jobs` affiche le nombre de tâches en cours d'exécution. Le module ne sera affiché que s'il y a des tâches de fond. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
-The default functionality is:
+Le fonctionnement par défaut est:
 
-- 0 jobs -> Nothing is shown.
-- 1 job -> `symbol` is shown.
-- 2 jobs or more -> `symbol` + `number` are shown.
+- 0 tâche -> Rien n’est affiché.
+- 1 tâche -> `symbol` est affiché.
+- 2 taĉhes ou plus -> `symbol` + `number` sont affichés.
 
 ::: warning
 
