@@ -186,7 +186,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // only display if credential_process is defined or has valid credentials
-    if !config.display_empty_creds
+    if !config.force_display
         && !has_credential_process_or_sso(context, aws_profile.as_ref())
         && get_defined_credentials(context, aws_profile.as_ref()).is_none()
     {
@@ -804,7 +804,7 @@ region = us-east-2
         let actual = ModuleRenderer::new("aws")
             .config(toml::toml! {
                 [aws]
-                display_empty_creds = true
+                force_display = true
             })
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
             .env("AWS_PROFILE", "astronauts")
