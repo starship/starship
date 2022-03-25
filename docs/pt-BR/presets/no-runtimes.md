@@ -1,8 +1,8 @@
 [Retornar para Predefinições](./README.md#no-runtime-versions)
 
-# Runtime Ausente
+# Remover versão do runtime
 
-Está predefinição oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, este é para você!
+Está personalização oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, este é para você!
 
 ![Captura de tela de ajustes de ocultar versão de runtime](/presets/img/no-runtime-versions.png)
 
