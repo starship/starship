@@ -483,13 +483,13 @@ The `c` module shows some information about your C compiler. By default the modu
 | ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | La chaîne de format pour le module.                                                        |
 | `version_format`    | `"v${raw}"`                                                                 | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                                     |
+| `symbol`            | `"C "`                                                                      | Le symbole utilisé avant d’afficher les détails du compilateur                             |
 | `detect_extensions` | `["c", "h"]`                                                                | Quelles extensions devraient activer ce module.                                            |
 | `detect_files`      | `[]`                                                                        | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`    | `[]`                                                                        | Les dossiers qui activent ce module.                                                       |
-| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                                         |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | Comment détecter quel est le compilateur                                                   |
 | `style`             | `"bold 149"`                                                                | Le style du module.                                                                        |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                                                                   |
+| `disabled`          | `false`                                                                     | Désactive le module `c`.                                                                   |
 
 ### Variables
 
