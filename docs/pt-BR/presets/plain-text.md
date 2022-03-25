@@ -2,7 +2,7 @@
 
 ## Personalização de símbolos de texto simples
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Essa personalização converte os símbolos para cada módulo em texto simples. Importante para quando não tiver suporte para caracteres Unicode.
 
 ![Captura de tela da predefinição de símbolos de texto simples](/presets/img/plain-text-symbols.png)
 
