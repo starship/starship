@@ -1329,7 +1329,7 @@ asia-northeast1 = "an1"
 [gcloud]
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 [gcloud.project_aliases]
-very-long-project-name = "vlpn"
+nom-de-projet-long = "ndpl"
 ```
 
 ## Branche Git
