@@ -1794,7 +1794,7 @@ symbol_threshold = 0
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). By default the module will be shown if any of the following conditions are met:
+Le module `julia` affiche la version de [Julia](https://julialang.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `Project.toml`
 - Le dossier courant contient un fichier `Manifest.toml`
@@ -1834,7 +1834,7 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
+Le module `kotlin` affiche la version de [Kotlin](https://kotlinlang.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `.kt` ou `.kts`
 
@@ -2001,7 +2001,7 @@ disabled = false
 
 ## Lua
 
-The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). By default the module will be shown if any of the following conditions are met:
+Le module `lua` affiche la version de [Lua](http://www.lua.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `.lua-version`
 - Le dossier courant contient un dossier `lua`
@@ -2125,7 +2125,7 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
+Le module `nim` affiche la version de [Nim](https://nim-lang.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `nim.cfg`
 - Le dossier courant contient un fichier avec l’extension `.nim`
@@ -2205,7 +2205,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
+Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `package.json`
 - Le dossier courant contient un fichier `.node-version`
@@ -2249,7 +2249,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). By default the module will be shown if any of the following conditions are met:
+Le module `ocaml` affiche la version de [OCaml](https://ocaml.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier avec l’extension `.opam` ou un dossier `_opam`
 - The current directory contains a `esy.lock` directory
@@ -2384,7 +2384,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). By default the module will be shown if any of the following conditions are met:
+Le module `perl` affiche la version de [Perl](https://www.perl.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `Makefile.PL` ou `Build.PL`
 - Le dossier courant contient un fichier `cpanfile` ou `cpanfile.snapshot`
@@ -2424,7 +2424,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
+Le module `php` affiche la version de [PHP](https://www.php.net/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `composer.json`
 - Le dossier courant contient un fichier `.php-version`
@@ -2521,7 +2521,7 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
+Le module `purescript` affiche la version de [PureScript](https://www.purescript.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `spago.dhall`
 - Le dossier courant contient un fichier avec l’extension `.purs`
@@ -2560,7 +2560,7 @@ format = "via [$symbol$version](bold white)"
 
 ## Python
 
-The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
+Le module `python` affiche la version de [Python](https://www.python.org/) installée et l’[environnement virtual Python](https://docs.python.org/tutorial/venv.html) actif s’il y en a un.
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
@@ -2649,7 +2649,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+Le module `rlang` affiche la version de [R](https://www.r-project.org/) installée. The module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier avec l’extension `.R`.
 - Le dossier courant contient un fichier avec l’extension `.Rd`.
@@ -2691,7 +2691,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
+Par défaut, le module `red` affiche la version de [Red](https://www.red-lang.org/) installée. Le module est affiché si l'une de ces conditions est remplie :
 
 - Le dossier courant contient un fichier avec l’extension `.red` ou `.reds`
 
@@ -2729,7 +2729,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
+Le module `ruby` affiche la version de [Ruby](https://www.ruby-lang.org/) installée. Le module est affiché si l'une de ces conditions est remplie :
 
 - Le dossier courant contient un fichier `Gemfile`
 - Le dossier courant contient un fichier `.ruby-version`
@@ -2773,7 +2773,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
+Le module `rust` affiche la version de [Rust](https://www.rust-lang.org/) installée. Le module est affiché si l'une de ces conditions est remplie :
 
 - Le dossier courant contient un fichier `Cargo.toml`
 - Le dossier courant contient un fichier avec l’extension `.rs`
@@ -2812,7 +2812,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). By default the module will be shown if any of the following conditions are met:
+Le module `scale` affiche la version de [Scala](https://www.scala-lang.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `build.sbt`, `.scalaenv` ou `.sbtenv`
 - Le dossier courant contient un fichier avec l’extension `.scala` ou `.sbt`
@@ -3080,7 +3080,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
+Par défaut, le module `swift` affiche la version de [Swift](https://swift.org/) installée. Le module est affiché si l'une de ces conditions est remplie :
 
 - Le dossier courant contient un fichier `Package.swift`
 - Le dossier courant contient un fichier avec l’extension `.swift`
@@ -3262,14 +3262,14 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 [username]
 style_user = "white bold"
 style_root = "black bold"
-format = "user: [$user]($style) "
+format = "utilisateur: [$user]($style) "
 disabled = false
 show_always = true
 ```
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). By default the module will be shown if any of the following conditions are met:
+Le module `vagrant` affiche la version de [Vagrant](https://www.vagrantup.com/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier `Vagrantfile`
 
@@ -3290,7 +3290,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 | Variable  | Exemple          | Description                            |
 | --------- | ---------------- | -------------------------------------- |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
+| version   | `Vagrant 2.2.10` | La version de `Vagrant`                |
 | symbol    |                  | Reflète la valeur de l'option `symbol` |
 | style\* |                  | Reflète la valeur de l'option `style`  |
 
@@ -3307,7 +3307,7 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). By default the module will be shown if any of the following conditions are met:
+Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier avec l’extension `.v`
 - Le dossier courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
@@ -3329,7 +3329,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v0.2`  | The version of `v`                     |
+| version   | `v0.2`  | La version de `v`                      |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
@@ -3375,7 +3375,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
+Le module `zig` affiche la version de [Zig](https://ziglang.org/) installée. Le module est affiché si l'une de ces conditions est remplie :
 
 - Le dossier courant contient un fichier `.zip`
 
