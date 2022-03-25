@@ -2911,22 +2911,22 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option                 | Défaut                    | Description                                                  |
-| ---------------------- | ------------------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`                     | Une chaîne de format utilisée pour représenter bash.         |
-| `fish_indicator`       | `fsh`                     | Une chaîne de format utilisée pour représenter fish.         |
-| `zsh_indicator`        | `zsh`                     | Une chaîne de format utilisée pour représenter zsh.          |
-| `powershell_indicator` | `psh`                     | Une chaîne de format utilisée pour représenter powershell.   |
-| `ion_indicator`        | `ion`                     | Une chaîne de format utilisée pour représenter ion.          |
-| `elvish_indicator`     | `esh`                     | Une chaîne de format utilisée pour représenter elvish.       |
-| `tcsh_indicator`       | `tsh`                     | Une chaîne de format utilisée pour représenter tcsh.         |
-| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
-| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
-| `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
-| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
-| `format`               | `"[$indicator]($style) "` | Format du module.                                            |
-| `style`                | `"white bold"`            | Le style du module.                                          |
-| `disabled`             | `true`                    | Désactive le module `shell`.                                 |
+| Option                 | Défaut                    | Description                                                 |
+| ---------------------- | ------------------------- | ----------------------------------------------------------- |
+| `bash_indicator`       | `bsh`                     | Chaine de formatage utilisée pour représenter bash.         |
+| `fish_indicator`       | `fsh`                     | Chaine de formatage utilisée pour représenter fish.         |
+| `zsh_indicator`        | `zsh`                     | Chaine de formatage utilisée pour représenter zsh.          |
+| `powershell_indicator` | `psh`                     | Chaine de formatage utilisée pour représenter powershell.   |
+| `ion_indicator`        | `ion`                     | Chaine de formatage utilisée pour représenter ion.          |
+| `elvish_indicator`     | `esh`                     | Chaine de formatage utilisée pour représenter elvish.       |
+| `tcsh_indicator`       | `tsh`                     | Chaine de formatage utilisée pour représenter tcsh.         |
+| `xonsh_indicator`      | `xsh`                     | Chaine de formatage utilisée pour représenter xonsh.        |
+| `cmd_indicator`        | `cmd`                     | Chaine de formatage utilisée pour représenter cmd.          |
+| `nu_indicator`         | `nu`                      | Chaine de formatage utilisée pour représenter nu.           |
+| `unknown_indicator`    |                           | La valeur par défaut à afficher quand le shell est inconnu. |
+| `format`               | `"[$indicator]($style) "` | Format du module.                                           |
+| `style`                | `"white bold"`            | Le style du module.                                         |
+| `disabled`             | `true`                    | Désactive le module `shell`.                                |
 
 ### Variables
 
@@ -3018,9 +3018,9 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 format = '[📦 \[$env\]]($style) '
 ```
 
-## Status
+## Statut
 
-Le module `status` affiche le code de sortie de la commande précédente. Si $success_symbol est vide (par défaut), ce module sera affiché uniquement quand le code de sortie n’est pas `0`. The status code will cast to a signed 32-bit integer.
+Le module `status` affiche le code de sortie de la commande précédente. Si $success_symbol est vide (par défaut), ce module sera affiché uniquement quand le code de sortie n’est pas `0`. Le code de statut est converti en entier signé 32 bits.
 
 ::: tip
 
@@ -3199,7 +3199,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
 | version   | `v0.12.24` | La version de `terraform`              |
-| workspace | `default`  | The current Terraform workspace        |
+| workspace | `default`  | L’espace de travail Terraform courant  |
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
 
@@ -3247,7 +3247,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                          |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                                 |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Sinon, il est défini comme `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+Si `use_12hr` est à `true`, alors `time_format` vaut `"%r"`. Sinon, il vaut `"%T"`. Définir manuellement `time_format` outrepasse le paramètre `use_12hr`.
 
 ### Variables
 
@@ -3407,7 +3407,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 | Variable  | Exemple                                         | Description                            |
 | --------- | ----------------------------------------------- | -------------------------------------- |
-| repo      | `dotfiles` si dans un dépôt VCSH nommé dotfiles | The active repository name             |
+| repo      | `dotfiles` si dans un dépôt VCSH nommé dotfiles | Le nom du dépôt actif                  |
 | symbol    |                                                 | Reflète la valeur de l'option `symbol` |
 | style\* | `black bold dimmed`                             | Reflète la valeur de l'option `style`  |
 
@@ -3469,7 +3469,7 @@ Ces modules seront affichés si l'une de ces conditions est remplie:
 - Le dossier courant contient un fichier dont le nom est dans `files`
 - The current directory contains a directory whose name is in `directories`
 - Le dossier courant contient un fichier dont l’extension est dans `extensions`
-- The `when` command returns 0
+- La commande `when` retourne 0
 - The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
 ::: tip
