@@ -144,7 +144,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Nushell
 
-   ::: warning Cela va changer dans le futur. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning Cela va changer dans le futur. Seul Nushell v0.60+ est supporté. ::: Exécutez les commandes suivantes:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
