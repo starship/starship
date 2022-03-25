@@ -3035,7 +3035,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Ce module est désactivé par défaut. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3070,7 +3070,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# Sous windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3102,7 +3102,7 @@ Par défaut, le module `swift` affiche la version de [Swift](https://swift.org/)
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.2.4` | The version of `swift`                 |
+| version   | `v5.2.4` | La version de `swift`                  |
 | symbol    |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -3127,9 +3127,9 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 :::
 
-By default the module will be shown if any of the following conditions are met:
+Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `.terraform` folder
+- Le dossier courant contient un dossier `.terraform`
 - Le dossier courant contient un fichier avec l’extension `.tf`, `.tfplan` ou `.tfstate`
 
 ### Options
@@ -3149,7 +3149,7 @@ By default the module will be shown if any of the following conditions are met:
 
 | Variable  | Exemple    | Description                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`             |
+| version   | `v0.12.24` | La version de `terraform`              |
 | workspace | `default`  | The current Terraform workspace        |
 | symbol    |            | Reflète la valeur de l'option `symbol` |
 | style\* |            | Reflète la valeur de l'option `style`  |
@@ -3204,7 +3204,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Exemple    | Description                           |
 | --------- | ---------- | ------------------------------------- |
-| time      | `13:08:10` | The current time.                     |
+| time      | `13:08:10` | L’heure actuelle.                     |
 | style\* |            | Reflète la valeur de l'option `style` |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
