@@ -1,8 +1,8 @@
 [Return to Presets](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Símbolos Nerd Font
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Essa predefinição altera os símbolos para cada módulo usar símbolos com Nerd Font.
 
 ![Captura de tela da predefinição Nerd Font Symbols](/presets/img/nerd-font-symbols.png)
 
