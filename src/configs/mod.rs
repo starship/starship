@@ -7,6 +7,7 @@ pub mod aws;
 pub mod azure;
 pub mod battery;
 pub mod buf;
+pub mod c;
 pub mod character;
 pub mod cmake;
 pub mod cmd_duration;
@@ -93,6 +94,7 @@ pub struct FullConfig<'a> {
     azure: azure::AzureConfig<'a>,
     battery: battery::BatteryConfig<'a>,
     buf: buf::BufConfig<'a>,
+    c: c::CConfig<'a>,
     character: character::CharacterConfig<'a>,
     cmake: cmake::CMakeConfig<'a>,
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
@@ -176,6 +178,7 @@ impl<'a> Default for FullConfig<'a> {
             azure: Default::default(),
             battery: Default::default(),
             buf: Default::default(),
+            c: Default::default(),
             character: Default::default(),
             cmake: Default::default(),
             cmd_duration: Default::default(),

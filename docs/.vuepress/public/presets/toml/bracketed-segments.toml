@@ -1,6 +1,9 @@
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
+[c]
+format = '\[[$symbol($version(-$name))]($style)\]'
+
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
 

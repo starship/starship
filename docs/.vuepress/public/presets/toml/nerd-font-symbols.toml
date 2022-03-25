@@ -4,6 +4,9 @@ symbol = "  "
 [buf]
 symbol = " "
 
+[c]
+symbol = " "
+
 [conda]
 symbol = " "
 

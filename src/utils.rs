@@ -133,6 +133,30 @@ pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
             stdout: String::from("1.0.0"),
             stderr: String::default(),
         }),
+        "cc --version" => Some(CommandOutput {
+            stdout: String::from("\
+FreeBSD clang version 11.0.1 (git@github.com:llvm/llvm-project.git llvmorg-11.0.1-0-g43ff75f2c3fe)
+Target: x86_64-unknown-freebsd13.0
+Thread model: posix
+InstalledDir: /usr/bin"),
+            stderr: String::default(),
+        }),
+        "gcc --version" => Some(CommandOutput {
+            stdout: String::from("\
+cc (Debian 10.2.1-6) 10.2.1 20210110
+Copyright (C) 2020 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."),
+            stderr: String::default(),
+        }),
+        "clang --version" => Some(CommandOutput {
+            stdout: String::from("\
+OpenBSD clang version 11.1.0
+Target: amd64-unknown-openbsd7.0
+Thread model: posix
+InstalledDir: /usr/bin"),
+            stderr: String::default(),
+        }),
         "cobc -version" => Some(CommandOutput {
             stdout: String::from("\
 cobc (GnuCOBOL) 3.1.2.0

@@ -16,6 +16,9 @@ deleted = "x"
 [aws]
 symbol = "aws "
 
+[c]
+symbol = "C "
+
 [cobol]
 symbol = "cobol "
 

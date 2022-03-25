@@ -2,6 +2,7 @@
 mod aws;
 mod azure;
 mod buf;
+mod c;
 mod character;
 mod cmake;
 mod cmd_duration;
@@ -93,6 +94,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "buf" => buf::module(context),
+            "c" => c::module(context),
             "character" => character::module(context),
             "cmake" => cmake::module(context),
             "cmd_duration" => cmd_duration::module(context),
@@ -184,6 +186,7 @@ pub fn description(module: &str) -> &'static str {
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
         "buf" => "The currently installed version of the Buf CLI",
+        "c" => "Your C compiler type",
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
         }
