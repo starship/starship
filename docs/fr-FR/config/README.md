@@ -264,9 +264,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Ces informations sont basées sur les variables d'environnement `AWS_REGION`, `AWS_DEFAULT_REGION`, et `AWS_PROFILE` ainsi que le fichier `~/.aws/config`. Ce module affiche également un minuteur d'expiration lorsque vous utilisez des identifiants temporaires.
+The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile event when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
 
 Lorsque vous utilisez [aws-vault](https://github.com/99designs/aws-vault) le profil est lu à partir de la variable d'environnement `AWS_VAULT` et la date d'expiration des identifiants est lue à partir de la variable d'environnement `AWS_SESSION_EXPIRATION`.
 
@@ -276,15 +276,16 @@ Lorsque vous utilisez [AWSume](https://awsu.me) le profil est lu à partir de la
 
 ### Options
 
-| Option              | Défaut                                                               | Description                                                             |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format du module.                                                       |
-| `symbol`            | `"☁️ "`                                                              | Le symbole est affiché avant le profil AWS actuel.                      |
-| `region_aliases`    |                                                                      | Table des alias de région à afficher en plus du nom AWS.                |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.        |
-| `style`             | `"bold yellow"`                                                      | Le style du module.                                                     |
-| `expiration_symbol` | `X`                                                                  | Le symbole est affiché lorsque les identifiants temporaires ont expiré. |
-| `disabled`          | `false`                                                              | Désactive le module `AWS`.                                              |
+| Option              | Défaut                                                               | Description                                                                                               |
+| ------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format du module.                                                                                         |
+| `symbol`            | `"☁️ "`                                                              | Le symbole est affiché avant le profil AWS actuel.                                                        |
+| `region_aliases`    |                                                                      | Table des alias de région à afficher en plus du nom AWS.                                                  |
+| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                          |
+| `style`             | `"bold yellow"`                                                      | Le style du module.                                                                                       |
+| `expiration_symbol` | `X`                                                                  | Le symbole est affiché lorsque les identifiants temporaires ont expiré.                                   |
+| `disabled`          | `false`                                                              | Désactive le module `AWS`.                                                                                |
+| `force_display`     | `false`                                                              | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variables
 
@@ -1135,7 +1136,7 @@ Le module `env_var` affiche la valeur actuelle de la variable d’environnement 
 - L'option `variable` correspond à une variable d'environnement existante
 - L'option `variable` n'est pas définie, mais l'option `default` l'est
 
-::: tip Plusieurs variables d’environnement peuvent être affichées en utilisant un `.` (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+::: tip Plusieurs variables d’environnement peuvent être affichées en utilisant un `.` (voir exemple). Si l’option de configuration `variable` n’est pas définie, le module affichera la valeur de la variable dont le nom est le texte après le caractère `.`.
 
 Exemple : la configuration suivante va afficher la valeur de la variable d’environnement UTILISATEUR
 
