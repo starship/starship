@@ -1,6 +1,6 @@
-[Return to Presets](./README.md#plain-text-symbols)
+[Retornar para Personalizações](./README.md#plain-text-symbols)
 
-## Plain Text Symbols Preset
+## Personalização de símbolos de texto simples
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
