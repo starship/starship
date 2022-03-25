@@ -120,7 +120,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Elvish
 
-   ::: warning Only elvish v0.18 or higher is supported. :::
+   ::: warning تەنها elvish v0.18 یان بەرزتر پشتگیری کراوە. :::
 
    ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
 
