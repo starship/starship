@@ -297,7 +297,7 @@ Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
