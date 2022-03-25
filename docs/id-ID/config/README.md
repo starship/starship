@@ -199,6 +199,7 @@ $hg_branch\
 $docker_context\
 $package\
 $buf\
+$c\
 $cmake\
 $cobol\
 $container\
@@ -470,6 +471,52 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 [buf]
 symbol = "🦬 "
+```
+
+## C
+
+The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+
+### Opsi
+
+| Opsi                | Bawaan                                                                      | Deskripsi                                                                           |
+| ------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `fromat`            | `"via [$symbol($version(-$name) )]($style)"`                                | The format string for the module.                                                   |
+| `version_format`    | `"v${raw}"`                                                                 | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                              |
+| `detect_extensions` | `["c", "h"]`                                                                | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `[]`                                                                        | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                                                        | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                                  |
+| `style`             | `"bold 149"`                                                                | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                                                     | Disables the `c` module.                                                            |
+
+### Variabel
+
+| Variabel | Contoh | Deskripsi                         |
+| -------- | ------ | --------------------------------- |
+| name     | clang  | The name of the compiler          |
+| version  | 13.0.0 | The version of the compiler       |
+| symbol   |        | Menyalin nilai dari opsi `symbol` |
+| style    |        | Menyalin nilai dari opsi `style`  |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[c]
+format = "via [$name $version]($style)"
 ```
 
 ## Karakter
