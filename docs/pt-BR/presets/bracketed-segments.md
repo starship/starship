@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#bracketed-segments)
+[Retornar para Personalizações](./README.md#bracketed-segments)
 
 # Predefinições entre colchetes
 
