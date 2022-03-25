@@ -120,7 +120,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.18 or higher is supported. :::
+   ::: warning elvish v0.18 이상만 지원. :::
 
    `~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
 
@@ -171,7 +171,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   Cmd를 이용하려면 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 를 사용해야 합니다. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Cmd를 이용하려면 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 를 사용해야 합니다. `starship.lua` 파일에 아래의 라인을 추가하고 파일을 Clink scripts 폴더에 저장합니다.
 
    ```lua
    -- starship.lua
