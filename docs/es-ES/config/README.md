@@ -264,9 +264,9 @@ format="$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del fichero `~/.aws/config`. Este módulo también muestra un temporizador de caducidad al usar credenciales temporales.
+The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile event when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
 
-El módulo mostrará un perfil solamente si sus credenciales están presentes en `~/.aws/credentials` o un `credential_process` está definido en `~/.aws/config`. Alternativamente, es suficiente con tener cualquiera de las siguientes variables de entorno `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, o `AWS_SESSION_TOKEN`.
+El módulo mostrará un perfil solamente si sus credenciales están presentes en `~/.aws/credentials` o un `credential_process` está definido en `~/.aws/config`. Alternativamente, es suficiente con tener cualquiera de las siguientes variables de entorno `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, o `AWS_SESSION_TOKEN`. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
 
 Cuando se utiliza [aws-vault](https://github.com/99designs/aws-vault), el perfil se lee de la variable de entorno `AWS_VAULT` y la fecha de expiración de credenciales se lee de la variable de entorno `AWS_SESSION_EXPIRATION`.
 
@@ -276,15 +276,16 @@ Cuando se utiliza [AWSume](https://awsu.me), el perfil se lee de la variable de 
 
 ### Opciones
 
-| Opción              | Por defecto                                                          | Descripción                                                          |
-| ------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | El formato del módulo.                                               |
-| `symbol`            | `"☁️ "`                                                              | El símbolo que se muestra antes del perfil de AWS.                   |
-| `region_aliases`    |                                                                      | Tabla de alias de región para mostrar además del nombre AWS.         |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.     |
-| `style`             | `"bold yellow"`                                                      | El estilo del módulo.                                                |
-| `expiration_symbol` | `X`                                                                  | El símbolo mostrado cuando las credenciales temporales han caducado. |
-| `disabled`          | `false`                                                              | Desactiva el módulo AWS.                                             |
+| Opción              | Por defecto                                                          | Descripción                                                                                               |
+| ------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | El formato del módulo.                                                                                    |
+| `symbol`            | `"☁️ "`                                                              | El símbolo que se muestra antes del perfil de AWS.                                                        |
+| `region_aliases`    |                                                                      | Tabla de alias de región para mostrar además del nombre AWS.                                              |
+| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                          |
+| `style`             | `"bold yellow"`                                                      | El estilo del módulo.                                                                                     |
+| `expiration_symbol` | `X`                                                                  | El símbolo mostrado cuando las credenciales temporales han caducado.                                      |
+| `disabled`          | `false`                                                              | Desactiva el módulo AWS.                                                                                  |
+| `force_display`     | `false`                                                              | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variables
 
