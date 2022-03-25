@@ -200,6 +200,7 @@ $hg_branch\
 $docker_context\
 $package\
 $buf\
+$c\
 $cmake\
 $cobol\
 $container\
@@ -471,6 +472,52 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 [buf]
 symbol = "🦬 "
+```
+
+## C
+
+The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+
+### オプション
+
+| オプション               | デフォルト                                                                       | 説明                                                     |
+| ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | モジュールのフォーマット文字列。                                       |
+| `version_format`    | `"v${raw}"`                                                                 | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details |
+| `detect_extensions` | `["c", "h"]`                                                                | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                                                        | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                        | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                     |
+| `style`             | `"bold 149"`                                                                | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                     | Disables the `c` module.                               |
+
+### 変数
+
+| 変数      | 設定例    | 説明                          |
+| ------- | ------ | --------------------------- |
+| name    | clang  | The name of the compiler    |
+| version | 13.0.0 | The version of the compiler |
+| symbol  |        | オプション `記号` の値をミラーする         |
+| style   |        | オプション `style` の値をミラーする      |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[c]
+format = "via [$name $version]($style)"
 ```
 
 ## 文字
@@ -764,7 +811,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 | オプション               | デフォルト                                             | 説明                                                     |
 | ------------------- | ------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`              | moduleのフォーマットです。                                       |
+| `format`            | `"via [$symbol($version )]($style)"`              | module のフォーマットです。                                      |
 | `version_format`    | `"v${raw}"`                                       | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart        |
 | `detect_extensions` | `["dart"]`                                        | どの拡張子がこのモジュールをアクティブにするか                                |
@@ -916,7 +963,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 | オプション               | デフォルト                                                         | 説明                                                                                |
 | ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol$context]($style) "`                            | moduleのフォーマットです。                                                                  |
+| `format`            | `"via [$symbol$context]($style) "`                            | module のフォーマットです。                                                                 |
 | `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
 | `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
 | `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
@@ -1562,7 +1609,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 | オプション               | デフォルト                                                                          | 説明                                                     |
 | ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | moduleのフォーマットです。                                       |
+| `format`            | `"via [$symbol($version )]($style)"`                                           | module のフォーマットです。                                      |
 | `version_format`    | `"v${raw}"`                                                                    | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.         |
 | `detect_extensions` | `["go"]`                                                                       | どの拡張子がこのモジュールをアクティブにするか                                |
@@ -2743,7 +2790,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 | オプション               | デフォルト                                | 説明                                                      |
 | ------------------- | ------------------------------------ | ------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                        |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                       |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。  |
 | `symbol`            | `"💎 "`                               | A format string representing the symbol of Ruby.        |
 | `detect_extensions` | `["rb"]`                             | どの拡張子がこのモジュールをアクティブにするか                                 |
