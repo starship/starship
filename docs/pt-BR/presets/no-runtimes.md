@@ -8,6 +8,6 @@ Está predefinição oculta a versão do runtime da linguagem. Se você trabalha
 
 ### Configuração
 
-[Click to download TOML](/presets/toml/no-runtime-versions.toml)
+[Clique para baixar o TOML](/presets/toml/no-runtime-versions.toml)
 
 <<< @/.vuepress/public/presets/toml/no-runtime-versions.toml
