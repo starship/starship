@@ -2,7 +2,7 @@
 
 # Pastel Powerline
 
-Esta predefinição é inspirada em [M365Princesa](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Mostra também como a substituição de segmentos do caminho completo do diretório funciona no starship.
+Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Mostra também como a substituição de segmentos do caminho completo do diretório funciona no starship.
 
 ![Screenshot do preset Pastel Powerline](/presets/img/pastel-powerline.png)
 
