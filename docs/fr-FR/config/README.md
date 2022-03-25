@@ -1145,7 +1145,7 @@ default = "utilisateur inconnu"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
+Le module `erlang` affiche la version de [Erlang/OTP](https://erlang.org/doc/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `rebar.config`.
 - Le dossier courant contient un fichier `erlang.mk`.
@@ -1546,7 +1546,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
+Le module `golang` affiche la version de [Go](https://golang.org/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `go.mod`
 - Le dossier courant contient un fichier `go.sum`
@@ -1624,7 +1624,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
+Le module `helm` affiche la version de [Helm](https://helm.sh/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `helmfile.yaml`
 - Le dossier courant contient un fichier `Chart.yaml`
@@ -1698,7 +1698,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). By default the module will be shown if any of the following conditions are met:
+Le module `java` affiche la version de [Java](https://www.oracle.com/java/) installée. By default the module will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`ou `build.boot`
 - Le dossier courant contient un fichier avec l’extension `.java`, `.class`, `.gradle`, `.jar`, `.clj` ou `.cljc`
