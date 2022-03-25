@@ -12,6 +12,6 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 ### Configuração
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml)
+[Clique para baixar o TOML](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
