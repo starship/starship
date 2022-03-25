@@ -1,4 +1,4 @@
-# Advanced Installation
+# 高度なインストール
 
 Starship をインストールするには、以下の2つのことを行う必要があります。
 
