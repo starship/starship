@@ -495,16 +495,16 @@ The `c` module shows some information about your C compiler. By default the modu
 
 | Variable | Exemple | Description                            |
 | -------- | ------- | -------------------------------------- |
-| name     | clang   | The name of the compiler               |
-| version  | 13.0.0  | The version of the compiler            |
+| name     | clang   | Le nom du compilateur                  |
+| version  | 13.0.0  | La version du compilateur              |
 | symbol   |         | Reflète la valeur de l'option `symbol` |
 | style    |         | Reflète la valeur de l'option `style`  |
 
-NB that `version` is not in the default format.
+Notez que `version` n’est pas dans le format par défaut.
 
-### Commands
+### Commandes
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+L’option `commands` accepte une liste de commandes pour déterminer la version du compilateur et son nom.
 
 Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
 
@@ -727,18 +727,18 @@ Cela ne supprime pas le modificateur d'invite de conda, vous pouvez exécuter `c
 format = "[$symbol$environment](dimmed green) "
 ```
 
-## Container
+## Conteneur
 
-The `container` module displays a symbol and container name, if inside a container.
+Le module `container` affiche un symbole et le nom du conteneur, si vous êtes dans un conteneur.
 
 ### Options
 
-| Option     | Défaut                                 | Description                               |
-| ---------- | -------------------------------------- | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                    | Le style du module.                       |
-| `format`   | `"[$symbol \\[$name\\]]($style) "` | Format du module.                         |
-| `disabled` | `false`                                | Désactive le module `container`.          |
+| Option     | Défaut                                 | Description                                          |
+| ---------- | -------------------------------------- | ---------------------------------------------------- |
+| `symbol`   | `"⬢"`                                  | Le symbole affiché quand vous êtes dans un conteneur |
+| `style`    | `"bold red dimmed"`                    | Le style du module.                                  |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | Format du module.                                    |
+| `disabled` | `false`                                | Désactive le module `container`.                     |
 
 ### Variables
 
@@ -884,20 +884,20 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 
 ### Options
 
-| Option              | Défaut                                                                                                      | Description                                                                             |
-| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                                                                         | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué.   |
-| `truncate_to_repo`  | `true`                                                                                                      | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.           |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | Format du module.                                                                       |
-| `style`             | `"bold cyan"`                                                                                               | Le style du module.                                                                     |
-| `disabled`          | `false`                                                                                                     | Désactive le module `directory`.                                                        |
-| `read_only`         | `"🔒"`                                                                                                       | Le symbole indiquant que le répertoire courant est en lecture seule.                    |
-| `read_only_style`   | `"red"`                                                                                                     | Le style du symbole en lecture seule.                                                   |
-| `truncation_symbol` | `""`                                                                                                        | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                    |
-| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
-| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
-| `home_symbol`       | `"~"`                                                                                                       | Le symbole indiquant le répertoire personnel.                                           |
-| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
+| Option              | Défaut                                                                                                      | Description                                                                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | Le nombre de dossiers parents selon lesquels le répertoire courant doit être tronqué.                                     |
+| `truncate_to_repo`  | `true`                                                                                                      | Si oui ou non tronquer à la racine du repo git dans lequel vous vous trouvez.                                             |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | Format du module.                                                                                                         |
+| `style`             | `"bold cyan"`                                                                                               | Le style du module.                                                                                                       |
+| `disabled`          | `false`                                                                                                     | Désactive le module `directory`.                                                                                          |
+| `read_only`         | `"🔒"`                                                                                                       | Le symbole indiquant que le répertoire courant est en lecture seule.                                                      |
+| `read_only_style`   | `"red"`                                                                                                     | Le style du symbole en lecture seule.                                                                                     |
+| `truncation_symbol` | `""`                                                                                                        | Le symbole en préfixe aux chemins tronqués. eg: "…/"                                                                      |
+| `repo_root_style`   | `None`                                                                                                      | Le style pour la racine du dépôt Git. La valeur par défaut est équivalent à `style`.                                      |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | Le format d’un dépôt Git quand `repo_root_style` est défini.                                                              |
+| `home_symbol`       | `"~"`                                                                                                       | Le symbole indiquant le répertoire personnel.                                                                             |
+| `use_os_path_sep`   | `true`                                                                                                      | Utiliser le séparateur de chemin du système d’exploitation au lieu de toujours utiliser `/` (par ex. `\` sous Windows) |
 
 <details>
 <summary>Ce module possède quelques options de configuration avancées qui contrôlent l'affichage du répertoire.</summary>
@@ -930,17 +930,17 @@ Par exemple, donné `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>Les dépôts Git peuvent avoir des variables additionnelles.</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+Considérons le chemin `/path/to/home/git_repo/src/lib`
 
 | Variable           | Exemple               | Description                             |
 | ------------------ | --------------------- | --------------------------------------- |
-| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
-| repo_root          | `"git_repo"`          | The git root directory name             |
-| path               | `"/src/lib"`          | The remaining path                      |
+| before_root_path | `"/path/to/home/"`    | Le chemin avant le dossier racine Git   |
+| repo_root          | `"git_repo"`          | Le nom du dossier racine Git            |
+| path               | `"/src/lib"`          | Le reste du chemin                      |
 | style              | `"black bold dimmed"` | Reflète la valeur de l'option `style`   |
-| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+| repo_root_style  | `"underline white"`   | Style pour le nom du dossier racine Git |
 
 </details>
 
@@ -1135,7 +1135,7 @@ Le module `env_var` affiche la valeur actuelle de la variable d’environnement 
 - L'option `variable` correspond à une variable d'environnement existante
 - L'option `variable` n'est pas définie, mais l'option `default` l'est
 
-::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+::: tip Plusieurs variables d’environnement peuvent être affichées en utilisant un `.` (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
 Exemple : la configuration suivante va afficher la valeur de la variable d’environnement UTILISATEUR
 
