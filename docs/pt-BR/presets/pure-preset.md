@@ -1,8 +1,8 @@
-[Return to Presets](./README.md#pure)
+[Retornar para Personalizações](./README.md#pure)
 
-# Pure Preset
+# Personalização do prompt do terminal com Pure
 
-Essa configuração simula a aparência e o comportamento do [Pure](https://github.com/sindresorhus/pure).
+Essa personalização simula o comportamento e aparência do [Pure](https://github.com/sindresorhus/pure).
 
 ![Captura de tela da configuração emulando Pure](/presets/img/pure-preset.png)
 
