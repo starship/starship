@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#nerd-font-symbols)
+[Retornar para Personalizações](./README.md#nerd-font-symbols)
 
 # Símbolos Nerd Font
 
