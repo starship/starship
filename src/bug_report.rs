@@ -5,7 +5,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::time::Duration;
 
-pub fn create() {
+pub fn create(print: bool) {
     println!("{}\n", shadow::VERSION.trim());
     let os_info = os_info::get();
 
@@ -17,7 +17,12 @@ pub fn create() {
         starship_config: get_starship_config(),
     };
 
-    let link = make_github_issue_link(environment);
+    let body = get_body(environment);
+    
+    if print {
+        println!("{}", body)
+    }
+    /*let link = make_github_issue_link(environment);
 
     if open::that(&link).is_ok() {
         println!("Take a look at your browser. A GitHub issue has been populated with your configuration.");
@@ -26,7 +31,8 @@ pub fn create() {
         println!("Click this link to create a GitHub issue populated with your configuration:\n");
     }
 
-    println!("{}", link);
+    println!("{}", link);*/
+    
 }
 
 const UNKNOWN_SHELL: &str = "<unknown shell>";
@@ -50,8 +56,70 @@ fn get_pkg_branch_tag() -> &'static str {
     shadow::BRANCH
 }
 
-fn make_github_issue_link(environment: Environment) -> String {
+fn get_body(environment: Environment) -> String {
     let shell_syntax = match environment.shell_info.name.as_ref() {
+        "powershell" | "pwsh" => "pwsh",
+        "fish" => "fish",
+        "cmd" => "lua",
+        // GitHub does not seem to support elvish syntax highlighting.
+        "elvish" => "bash",
+        _ => "bash",
+    };
+
+    format!("#### Current Behavior
+<!-- A clear and concise description of the behavior. -->
+
+#### Expected Behavior
+<!-- A clear and concise description of what you expected to happen. -->
+
+#### Additional context/Screenshots
+<!-- Add any other context about the problem here. If applicable, add screenshots to help explain. -->
+
+#### Possible Solution
+<!--- Only if you have suggestions on a fix for the bug -->
+
+#### Environment
+- Starship version: {starship_version}
+- {shell_name} version: {shell_version}
+- Operating system: {os_name} {os_version}
+- Terminal emulator: {terminal_name} {terminal_version}
+- Git Commit Hash: {git_commit_hash}
+- Branch/Tag: {pkg_branch_tag}
+- Rust Version: {rust_version}
+- Rust channel: {rust_channel} {build_rust_channel}
+- Build Time: {build_time}
+#### Relevant Shell Configuration
+
+```{shell_syntax}
+{shell_config}
+```
+
+#### Starship Configuration
+
+```toml
+{starship_config}
+```",
+        starship_version = shadow::PKG_VERSION,
+        shell_name = environment.shell_info.name,
+        shell_version = environment.shell_info.version,
+        terminal_name = environment.terminal_info.name,
+        terminal_version = environment.terminal_info.version,
+        os_name = environment.os_type,
+        os_version = environment.os_version,
+        shell_config = environment.shell_info.config,
+        starship_config = environment.starship_config,
+        git_commit_hash =  shadow::SHORT_COMMIT,
+        pkg_branch_tag =  get_pkg_branch_tag(),
+        rust_version =  shadow::RUST_VERSION,
+        rust_channel =  shadow::RUST_CHANNEL,
+        build_rust_channel =  shadow::BUILD_RUST_CHANNEL,
+        build_time =  shadow::BUILD_TIME,
+        shell_syntax = shell_syntax,
+    )
+}
+
+fn make_github_issue_link(body: String) -> String {
+/*    let shell_syntax = match environment.shell_info.name.as_ref() {
         "powershell" | "pwsh" => "pwsh",
         "fish" => "fish",
         "cmd" => "lua",
@@ -111,11 +179,11 @@ fn make_github_issue_link(environment: Environment) -> String {
         shell_syntax = shell_syntax,
     ))
         .replace("%20", "+");
-
+*/
     format!(
         "https://github.com/starship/starship/issues/new?template={}&body={}",
         urlencoding::encode("Bug_report.md"),
-        body
+        urlencoding::encode(&body).replace("%20", "+")
     )
     .chars()
     .take(GITHUB_CHAR_LIMIT)

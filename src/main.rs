@@ -30,7 +30,10 @@ struct Cli {
 #[derive(Subcommand, Debug)]
 enum Commands {
     /// Create a pre-populated GitHub issue with information about your configuration
-    BugReport,
+    BugReport {
+        #[clap(short, long)]
+        print: bool
+    },
     /// Generate starship shell completions for your shell to stdout
     Completions {
         #[clap(arg_enum)]
@@ -190,7 +193,7 @@ fn main() {
         }
         Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),
         Commands::Toggle { name, value } => configure::toggle_configuration(&name, &value),
-        Commands::BugReport => bug_report::create(),
+        Commands::BugReport { print } => bug_report::create(print),
         Commands::Time => {
             match SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
