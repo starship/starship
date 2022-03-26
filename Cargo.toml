@@ -40,6 +40,7 @@ clap = { version = "3.1.6", features = ["derive", "cargo", "unicode"] }
 clap_complete = "3.1.1"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
+edit = "0.1.3"
 gethostname = "0.2.3"
 git2 = { version = "0.14.2", default-features = false }
 indexmap = { version = "1.8.0", features = ["serde"] }
@@ -68,6 +69,7 @@ starship-battery = { version = "0.7.9", optional = true }
 starship_module_config_derive = { version = "0.2.1", path = "starship_module_config_derive" }
 strsim = "0.10.0"
 sys-info = "0.9.1"
+tempfile = "3.3.0"
 terminal_size = "0.1.17"
 toml = { version = "0.5.8", features = ["preserve_order"] }
 toml_edit = "0.13.4"

@@ -32,7 +32,7 @@ enum Commands {
     /// Create a pre-populated GitHub issue with information about your configuration
     BugReport {
         #[clap(short, long)]
-        print: bool
+        print: bool,
     },
     /// Generate starship shell completions for your shell to stdout
     Completions {
