@@ -53,7 +53,7 @@ PowerShell (Windows) で同様に `$PROFILE`にこの行を追加します。
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+または、Cmd (Windows) の場合、`starship.lua`にこの行を追加します。
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -118,7 +118,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 - `(some text)` は括弧の中に変数がないので、常に何も表示しません。
 - `$all` が `\[$a$b\]` のショートカットである時、 `$a` と `$b` が両方とも `None` である場合に限り、`($all)` は何も表示しません。 これは `(\[$a$b\] )` と同じ動作をします。
 
-#### Special characters
+#### 特殊文字
 
 The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
