@@ -25,10 +25,10 @@ pub fn create(print: bool) {
     }
 
     // Drop to system editor in a temp file
-    let report = match edit::edit(report) {
+    let report = match utils::edit_temp(report) {
         Ok(r) => r,
         Err(e) => {
-            println!("Error editing bug report: {}", e);
+            eprintln!("Error editing bug report: {}", e);
             return;
         }
     };

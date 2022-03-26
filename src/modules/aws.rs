@@ -186,7 +186,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // only display if credential_process is defined or has valid credentials
-    if !has_credential_process_or_sso(context, aws_profile.as_ref())
+    if !config.force_display
+        && !has_credential_process_or_sso(context, aws_profile.as_ref())
         && get_defined_credentials(context, aws_profile.as_ref()).is_none()
     {
         return None;
@@ -782,6 +783,36 @@ region = us-east-2
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
             .collect();
         let expected = None;
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn missing_any_credentials_but_display_empty() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[profile astronauts]
+region = us-east-2
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .config(toml::toml! {
+                [aws]
+                force_display = true
+            })
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts (us-east-2) ")
+        ));
 
         assert_eq!(expected, actual);
         dir.close()

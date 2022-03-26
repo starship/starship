@@ -2,7 +2,6 @@ use std::env;
 use std::ffi::OsString;
 use std::io::ErrorKind;
 use std::process;
-use std::process::Stdio;
 use std::str::FromStr;
 
 use crate::config::RootModuleConfig;
@@ -13,11 +12,6 @@ use std::fs::File;
 use std::io::Write;
 use toml::Value;
 use toml_edit::Document;
-
-#[cfg(not(windows))]
-const STD_EDITOR: &str = "vi";
-#[cfg(windows)]
-const STD_EDITOR: &str = "notepad.exe";
 
 pub fn update_configuration(name: &str, value: &str) {
     let mut doc = get_configuration_edit();
@@ -267,48 +261,7 @@ pub fn write_configuration(doc: &Document) {
 }
 
 pub fn edit_configuration() {
-    let config_path = get_config_path();
-    let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
-
-    let command = utils::create_command(&editor_cmd[0])
-        .expect("Unable to locate editor in $PATH.")
-        .stdin(Stdio::inherit())
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .args(&editor_cmd[1..])
-        .arg(config_path)
-        .status();
-
-    match command {
-        Ok(_) => (),
-        Err(error) => match error.kind() {
-            ErrorKind::NotFound => {
-                eprintln!(
-                    "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
-                    environment variables correctly?",
-                    editor_cmd
-                );
-                std::process::exit(1)
-            }
-            other_error => panic!("failed to open file: {:?}", other_error),
-        },
-    };
-}
-
-fn get_editor() -> String {
-    get_editor_internal(env::var("VISUAL").ok(), env::var("EDITOR").ok())
-}
-
-fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String {
-    let editor_name = visual.unwrap_or_default();
-    if !editor_name.is_empty() {
-        return editor_name;
-    }
-    let editor_name = editor.unwrap_or_default();
-    if !editor_name.is_empty() {
-        return editor_name;
-    }
-    STD_EDITOR.into()
+    utils::edit(get_config_path())
 }
 
 fn get_config_path() -> OsString {
@@ -325,55 +278,6 @@ fn get_config_path() -> OsString {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    // This is every possible permutation, 3² = 9.
-    #[test]
-    fn visual_set_editor_set() {
-        let actual = get_editor_internal(Some("foo".into()), Some("bar".into()));
-        assert_eq!("foo", actual);
-    }
-    #[test]
-    fn visual_set_editor_empty() {
-        let actual = get_editor_internal(Some("foo".into()), None);
-        assert_eq!("foo", actual);
-    }
-    #[test]
-    fn visual_set_editor_not_set() {
-        let actual = get_editor_internal(Some("foo".into()), None);
-        assert_eq!("foo", actual);
-    }
-
-    #[test]
-    fn visual_empty_editor_set() {
-        let actual = get_editor_internal(Some("".into()), Some("bar".into()));
-        assert_eq!("bar", actual);
-    }
-    #[test]
-    fn visual_empty_editor_empty() {
-        let actual = get_editor_internal(Some("".into()), Some("".into()));
-        assert_eq!(STD_EDITOR, actual);
-    }
-    #[test]
-    fn visual_empty_editor_not_set() {
-        let actual = get_editor_internal(Some("".into()), None);
-        assert_eq!(STD_EDITOR, actual);
-    }
-
-    #[test]
-    fn visual_not_set_editor_set() {
-        let actual = get_editor_internal(None, Some("bar".into()));
-        assert_eq!("bar", actual);
-    }
-    #[test]
-    fn visual_not_set_editor_empty() {
-        let actual = get_editor_internal(None, Some("".into()));
-        assert_eq!(STD_EDITOR, actual);
-    }
-    #[test]
-    fn visual_not_set_editor_not_set() {
-        let actual = get_editor_internal(None, None);
-        assert_eq!(STD_EDITOR, actual);
-    }
 
     #[test]
     fn test_extract_toml_paths() {

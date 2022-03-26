@@ -1,14 +1,20 @@
 use process_control::{ChildExt, Control};
-use std::ffi::OsStr;
+use std::env;
+use std::ffi::{OsStr, OsString};
 use std::fmt::Debug;
 use std::fs::read_to_string;
-use std::io::{Error, ErrorKind, Result};
+use std::io::{Error, ErrorKind, Result, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
 use crate::context::Context;
 use crate::context::Shell;
+
+#[cfg(not(windows))]
+const STD_EDITOR: &str = "vi";
+#[cfg(windows)]
+const STD_EDITOR: &str = "notepad.exe";
 
 /// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
 #[cfg(not(test))]
@@ -94,6 +100,65 @@ impl PartialEq for CommandOutput {
     fn eq(&self, other: &Self) -> bool {
         self.stdout == other.stdout && self.stderr == other.stderr
     }
+}
+
+/// Allow the user to edit the given buffer in the system editor
+pub fn edit_temp(buffer: String) -> Result<String> {
+    let mut file = tempfile::NamedTempFile::new()?;
+    file.write(buffer.as_bytes())?;
+
+    let file = file.into_temp_path();
+    let fp = file.as_os_str().to_os_string();
+    edit(fp);
+    let buffer = read_file(&file)?;
+
+    file.close()?;
+    Ok(buffer)
+}
+
+/// Open the given path in the system editor
+pub fn edit(path: OsString) {
+    let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
+
+    let command = create_command(&editor_cmd[0])
+        .expect("Unable to locate editor in $PATH.")
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .args(&editor_cmd[1..])
+        .arg(path)
+        .status();
+
+    match command {
+        Ok(_) => (),
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => {
+                eprintln!(
+                    "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
+                    environment variables correctly?",
+                    editor_cmd
+                );
+                std::process::exit(1)
+            }
+            other_error => panic!("failed to open file: {:?}", other_error),
+        },
+    };
+}
+
+fn get_editor() -> String {
+    get_editor_internal(env::var("VISUAL").ok(), env::var("EDITOR").ok())
+}
+
+fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String {
+    let editor_name = visual.unwrap_or_default();
+    if !editor_name.is_empty() {
+        return editor_name;
+    }
+    let editor_name = editor.unwrap_or_default();
+    if !editor_name.is_empty() {
+        return editor_name;
+    }
+    STD_EDITOR.into()
 }
 
 #[cfg(test)]
