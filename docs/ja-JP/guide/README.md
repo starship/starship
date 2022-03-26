@@ -178,7 +178,7 @@
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -189,7 +189,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -202,13 +202,13 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+お使いのシステムに合わせた最新版をインストールしてください。
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
 | Distribution       | Repository                                                                                      | Instructions                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -231,13 +231,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+お使いのシステムに合わせた最新版をインストールしてください。
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
 | Repository                                               | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -251,7 +251,7 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install Starship using any of the following package managers:
+以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
 | Repository                                                                       | Instructions                            |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
@@ -280,7 +280,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+[Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) コマンドを使用する必要があります。 このパス`%LocalAppData%\clink\starship.lua` に以下の内容を含むファイルを作成する。
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -390,9 +390,9 @@ eval "$(starship init zsh)"
 
 ### Step 3. Configure Starship
 
-新しいシェルインスタンスを起動すると、美しくて新しいシェルプロンプトが表示されるはずです。 If you're happy with the defaults, enjoy!
+新しいシェルインスタンスを起動すると、美しくて新しいシェルプロンプトが表示されるはずです。 デフォルトで問題なければ、お楽しみください！
 
-If you're looking to further customize Starship:
+Starshipのさらなるカスタマイズを目指すなら以下を参考にしてみてください。
 
 - **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
 
