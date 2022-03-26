@@ -211,7 +211,7 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     singularity: singularity::SingularityConfig<'a>,
     #[serde(borrow)]
-    spack: spack::SpackConfig<`a>,
+    spack: spack::SpackConfig<'a>,
     #[serde(borrow)]
     status: status::StatusConfig<'a>,
     #[serde(borrow)]
