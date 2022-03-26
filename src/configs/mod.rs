@@ -37,6 +37,7 @@ pub mod haskell;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
+pub mod iterm2_mark;
 pub mod java;
 pub mod jobs;
 pub mod julia;
@@ -123,6 +124,7 @@ pub struct FullConfig<'a> {
     helm: helm::HelmConfig<'a>,
     hg_branch: hg_branch::HgBranchConfig<'a>,
     hostname: hostname::HostnameConfig<'a>,
+    iterm2_mark: iterm2_mark::ITerm2MarkConfig<'a>,
     java: java::JavaConfig<'a>,
     jobs: jobs::JobsConfig<'a>,
     julia: julia::JuliaConfig<'a>,
@@ -207,6 +209,7 @@ impl<'a> Default for FullConfig<'a> {
             helm: Default::default(),
             hg_branch: Default::default(),
             hostname: Default::default(),
+            iterm2_mark: Default::default(),
             java: Default::default(),
             jobs: Default::default(),
             julia: Default::default(),
