@@ -64,6 +64,12 @@ $null = New-Module starship {
         $process.StandardOutput.ReadToEnd();
     }
 
+    # Get syntax error prompt
+    $syntaxErrorPrompt = Invoke-Native -Executable ::STARSHIP:: -Arguments @(
+        "prompt",
+        "--syntax-error"
+    )
+
     function global:prompt {
         $origDollarQuestion = $global:?
         $origLastExitCode = $global:LASTEXITCODE
@@ -113,6 +119,14 @@ $null = New-Module starship {
 
         # Return the prompt
         $promptText
+
+        # Get the character module for setting the ok case of PromptText below.
+        $characterModule = Invoke-Native -Executable ::STARSHIP:: -Arguments @(
+            "module", "character", "--status=$($lastExitCodeForPrompt)"
+        )
+
+        # Set the PromptText for rendering syntax errors.
+        Set-PSReadLineOption -PromptText @($characterModule, $syntaxErrorPrompt)
 
         # Propagate the original $LASTEXITCODE from before the prompt function was invoked.
         $global:LASTEXITCODE = $origLastExitCode
