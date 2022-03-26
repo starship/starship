@@ -105,7 +105,7 @@ impl PartialEq for CommandOutput {
 /// Allow the user to edit the given buffer in the system editor
 pub fn edit_temp(buffer: String) -> Result<String> {
     let mut file = tempfile::NamedTempFile::new()?;
-    file.write(buffer.as_bytes())?;
+    file.write_all(buffer.as_bytes())?;
 
     let file = file.into_temp_path();
     let fp = file.as_os_str().to_os_string();
