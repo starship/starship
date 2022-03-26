@@ -3,7 +3,7 @@ use std::ops::Deref;
 use std::path::Path;
 use std::path::PathBuf;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::gcloud::GcloudConfig;
 use crate::formatter::StringFormatter;

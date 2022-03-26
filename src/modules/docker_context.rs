@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::docker_context::DockerContextConfig;
 use crate::formatter::StringFormatter;

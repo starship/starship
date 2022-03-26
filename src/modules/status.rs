@@ -1,6 +1,6 @@
 use std::string::ToString;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::status::StatusConfig;
 use crate::formatter::{string_formatter::StringFormatterError, StringFormatter};

@@ -6,7 +6,7 @@ use std::process::Output;
 
 use serde::Deserialize;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::rust::RustConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};

@@ -1,4 +1,4 @@
-use crate::config::{RootModuleConfig, StarshipConfig};
+use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::module::Module;
 use crate::utils::{create_command, exec_timeout, CommandOutput};

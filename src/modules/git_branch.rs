@@ -1,6 +1,6 @@
 use unicode_segmentation::UnicodeSegmentation;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_branch::GitBranchConfig;
 use crate::formatter::StringFormatter;

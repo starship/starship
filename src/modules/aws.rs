@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use chrono::DateTime;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::aws::AwsConfig;
 use crate::formatter::StringFormatter;
@@ -614,10 +614,6 @@ credential_process = /opt/bin/awscreds-retriever
         );
 
         let actual = ModuleRenderer::new("aws")
-            .config(toml::toml! {
-                [aws]
-                show_duration = true
-            })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
@@ -664,10 +660,6 @@ expiration={}
         )?;
 
         let actual = ModuleRenderer::new("aws")
-            .config(toml::toml! {
-                [aws]
-                show_duration = true
-            })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
             .env(
@@ -695,10 +687,6 @@ expiration={}
     #[test]
     fn profile_and_region_set_show_duration() {
         let actual = ModuleRenderer::new("aws")
-            .config(toml::toml! {
-                [aws]
-                show_duration = true
-            })
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
@@ -727,7 +715,6 @@ expiration={}
         let actual = ModuleRenderer::new("aws")
             .config(toml::toml! {
                 [aws]
-                show_duration = true
                 expiration_symbol = symbol
             })
             .env("AWS_PROFILE", "astronauts")

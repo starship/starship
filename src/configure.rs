@@ -5,7 +5,7 @@ use std::process;
 use std::process::Stdio;
 use std::str::FromStr;
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::config::StarshipConfig;
 use crate::configs::PROMPT_ORDER;
 use crate::utils;
@@ -83,7 +83,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
         // Get config as toml::Value
         let user_config = get_configuration();
         // Convert into FullConfig and fill in default values
-        let user_config = crate::configs::FullConfig::try_load(Some(&user_config));
+        let user_config = crate::configs::FullConfig::load(&user_config);
         // Convert back to Value because toml can't serialize FullConfig directly
         toml::value::Value::try_from(user_config).unwrap()
     };

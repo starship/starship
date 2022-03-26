@@ -1,7 +1,7 @@
 use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
-    config::{RootModuleConfig, StarshipConfig},
+    config::{ModuleConfig, StarshipConfig},
     configs::StarshipRootConfig,
     utils::{create_command, CommandOutput},
 };

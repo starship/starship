@@ -78,7 +78,7 @@ mod battery;
 #[cfg(feature = "battery")]
 pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::context::{Context, Shell};
 use crate::module::Module;
 use std::time::Instant;

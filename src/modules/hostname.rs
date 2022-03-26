@@ -1,7 +1,7 @@
 use super::{Context, Module};
 use std::ffi::OsString;
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::configs::hostname::HostnameConfig;
 use crate::formatter::StringFormatter;
 

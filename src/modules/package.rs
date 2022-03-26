@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::package::PackageConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils;

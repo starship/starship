@@ -7,7 +7,7 @@ pub fn module<'a>(_context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(target_os = "linux")]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    use super::RootModuleConfig;
+    use super::ModuleConfig;
     use crate::configs::container::ContainerConfig;
     use crate::formatter::StringFormatter;
     use crate::utils::read_file;

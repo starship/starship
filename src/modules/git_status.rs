@@ -1,7 +1,7 @@
 use once_cell::sync::OnceCell;
 use regex::Regex;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;

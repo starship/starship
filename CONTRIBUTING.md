@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 To run a external command (e.g. to get the version of a tool) and to allow for mocking use the `context.exec_cmd` function. Here's a quick example:
 
 ```rust
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
@@ -163,7 +163,7 @@ Unit tests are written using the built-in Rust testing library in the same file 
 All tests that test the rendered output of a module should use `ModuleRenderer`. For Example:
 
 ```rust
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;

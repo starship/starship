@@ -1,6 +1,6 @@
 use byte_unit::{Byte, ByteUnit};
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::memory_usage::MemoryConfig;
 use crate::formatter::StringFormatter;
