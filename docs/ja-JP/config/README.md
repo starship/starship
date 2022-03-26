@@ -120,9 +120,9 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 #### 特殊文字
 
-The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
+次の記号はフォーマット文字列で特殊な用途を持っているため、エスケープする必要があります。: `$ \ [ ] ( )`.
 
-Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+TOMLには、 [基本文字列とリテラル文字列](https://toml.io/en/v1.0.0#string)の両方があることに注意してください。 It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
 例えば、新しい行に `$` 記号を表示したい場合、以下の `format` の設定が等価です。
 
