@@ -122,7 +122,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 次の記号はフォーマット文字列で特殊な用途を持っているため、エスケープする必要があります。: `$ \ [ ] ( )`.
 
-TOMLには、 [基本文字列とリテラル文字列](https://toml.io/en/v1.0.0#string)の両方があることに注意してください。 It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+TOMLには、 [基本文字列とリテラル文字列](https://toml.io/en/v1.0.0#string)の両方があることに注意してください。 設定では、リテラル文字列(シングルクォートで囲まれた文字列)を使用することをお勧めします。基本文字列(ダブルクォートで囲まれた文字列)を使用したい場合は、バックスラッシュ自体をエスケープする必要があります。(例: `\\`を使用する)
 
 例えば、新しい行に `$` 記号を表示したい場合、以下の `format` の設定が等価です。
 
