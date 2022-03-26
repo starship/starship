@@ -173,7 +173,7 @@
 
 ### Step 1. Install Starship
 
-Select your operating system from the list below to view installation instructions:
+以下のリストからお使いのOSを選択し、インストール方法をご確認ください。
 
 <details>
 <summary>Android</summary>
@@ -264,7 +264,7 @@ Install Starship using any of the following package managers:
 
 ### Step 2. Setup your shell to use Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Starshipを初期化するためのシェルの設定。 以下のリストからお使いのシェルを選択してください。
 
 <details>
 <summary>Bash</summary>
@@ -390,7 +390,7 @@ eval "$(starship init zsh)"
 
 ### Step 3. Configure Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+新しいシェルインスタンスを起動すると、美しくて新しいシェルプロンプトが表示されるはずです。 If you're happy with the defaults, enjoy!
 
 If you're looking to further customize Starship:
 
