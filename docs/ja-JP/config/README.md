@@ -73,7 +73,7 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 #### 変数
 
-変数には、 `$` 記号と、その変数の名前が続きます。 The name of a variable can only contain letters, numbers and `_`.
+変数には、 `$` 記号と、その変数の名前が続きます。 変数の名前には英字と数字、`_`のみを含めることができます。
 
 例：
 
