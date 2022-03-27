@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::heroku::HerokuConfig;
 use crate::formatter::StringFormatter;
 use crate::utils::read_file;

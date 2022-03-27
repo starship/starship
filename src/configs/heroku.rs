@@ -1,9 +1,8 @@
-use crate::config::ModuleConfig;
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[serde(default)]
 pub struct HerokuConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
