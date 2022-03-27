@@ -1,9 +1,7 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[serde(default)]
 pub struct UsernameConfig<'a> {
     pub format: &'a str,
     pub style_root: &'a str,

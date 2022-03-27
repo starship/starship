@@ -1,4 +1,4 @@
-# Najczęściej zadawane pytania (FAQ)
+# Frequently Asked Questions
 
 ## Jakiej konfiguracji użyto w GIFie demonstracyjnym?
 

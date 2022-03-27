@@ -4,6 +4,9 @@ symbol = "  "
 [buf]
 symbol = " "
 
+[c]
+symbol = " "
+
 [conda]
 symbol = " "
 
@@ -27,6 +30,9 @@ symbol = " "
 
 [golang]
 symbol = " "
+
+[haskell]
+symbol = " "
 
 [hg_branch]
 symbol = " "

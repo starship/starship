@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#plain-text-symbols)
+[Return to Presets](./README.md#plain-text-symbols)
 
 ## Plain Text Symbols Preset
 

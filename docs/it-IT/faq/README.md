@@ -1,4 +1,4 @@
-# FAQ
+# Frequently Asked Questions
 
 ## Qual è la configurazione utilizzata nella GIF demo?
 

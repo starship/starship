@@ -1,6 +1,6 @@
 use yaml_rust::YamlLoader;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::openstack::OspConfig;
 use crate::formatter::StringFormatter;

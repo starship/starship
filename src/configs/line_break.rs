@@ -1,9 +1,6 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize, Default)]
+#[derive(Clone, Deserialize, Serialize, Default)]
 pub struct LineBreakConfig {
     pub disabled: bool,
 }

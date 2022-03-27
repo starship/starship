@@ -13,6 +13,7 @@ pub const ALL_MODULES: &[&str] = &[
     #[cfg(feature = "battery")]
     "battery",
     "buf",
+    "c",
     "character",
     "cmake",
     "cmd_duration",
@@ -37,6 +38,7 @@ pub const ALL_MODULES: &[&str] = &[
     "git_state",
     "git_status",
     "golang",
+    "haskell",
     "helm",
     "hg_branch",
     "hostname",

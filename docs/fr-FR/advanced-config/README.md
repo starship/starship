@@ -8,7 +8,7 @@ Les configurations dans cette section sont sujettes à modification dans les fut
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Cmd
+## Commandes pré-invite et pré-exécution personnalisées dans Cmd
 
 Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
 
@@ -32,7 +32,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## Commandes pré-commande et pré-exécution personnalisées en Bash
+## Commandes pré-invite et pré-exécution personnalisées en Bash
 
 Bash n'a pas de structure officielle préexec/précmd comme la plupart des autres shells. C'est pourquoi il est difficile de fournir des hooks entièrement personnalisables dans `bash`. Cependant, Starship vous permet dans une certaine mesure d'insérer vos propres fonctions dans la procédure de rendu du prompt :
 
@@ -51,7 +51,7 @@ starship_precmd_user_func="blastoff"
 function blastoff(){
     echo "🚀"
 }
-trap blastoff DEBUG     # Trap DEBUG *before* running starship
+trap blastoff DEBUG     # Capture DEBUG *avant* de lancer starship
 set -o functrace
 eval $(starship init bash)
 set +o functrace
@@ -69,9 +69,9 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Changer le titre de la fenêtre
+## Modifier le titre des fenêtres
 
-Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter votre répertoire de travail). Fish le fait même par défaut. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter le dossier courant). Fish le fait même par défaut. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
 Tout d'abord, définissez une fonction de changement de titre de fenêtre (identique en bash et zsh) :
 
@@ -97,7 +97,7 @@ precmd_functions+=(set_titre_fenetre)
 
 Si vous aimez le résultat, ajoutez ces lignes à votre fichier de configuration shell (`~/.bashrc` ou `~/.zshrc`) pour le rendre permanent.
 
-Par exemple, si vous voulez afficher votre répertoire actuel dans le titre de l'onglet de votre terminal, ajoutez le code suivant à votre `~/.bashrc` ou `~/.zshrc`:
+Par exemple, si vous voulez afficher votre dossier courant dans le titre de l'onglet de votre terminal, ajoutez le code suivant à votre `~/.bashrc` ou `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -196,7 +196,7 @@ La valeur `none` remplace toutes les autres valeurs si elle n'est pas incluse da
 
 Un spécificateur de couleur peut être l'un des éléments suivants :
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+- Une des couleurs de terminal standard: `black` (noir), `red` (rouge), `green` (vert), `blue` (bleu), `yellow` (jaune), `purple` (violet), `cyan` (cyan), `white` (blanc). Vous pouvez éventuellement les préfixer avec `bright-` pour obtenir la version claire (par exemple `bright-white`).
 - Un `#` suivi d'un nombre hexadécimal de six chiffres. Ceci spécifie un [ Code hexadécimal de couleur RVB ](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Un nombre entre 0 et 255. Ceci spécifie un [code de couleur ANSI 8 bits](https://i.stack.imgur.com/KTSQa.png).
 

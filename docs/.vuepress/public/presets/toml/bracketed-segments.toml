@@ -1,6 +1,9 @@
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
+[c]
+format = '\[[$symbol($version(-$name))]($style)\]'
+
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -47,6 +50,9 @@ format = '\[[$symbol$branch]($style)\]'
 format = '([\[$all_status$ahead_behind\]]($style))'
 
 [golang]
+format = '\[[$symbol($version)]($style)\]'
+
+[haskell]
 format = '\[[$symbol($version)]($style)\]'
 
 [helm]

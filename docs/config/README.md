@@ -207,6 +207,7 @@ $hg_branch\
 $docker_context\
 $package\
 $buf\
+$c\
 $cmake\
 $cobol\
 $container\
@@ -217,6 +218,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$haskell\
 $helm\
 $java\
 $julia\
@@ -272,7 +274,9 @@ format = "$all$directory$character"
 ## AWS
 
 The `aws` module shows the current AWS region and profile when
-credentials, a `credential_process` or a `sso_start_url` have been setup. This is based on
+credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this
+module to show the region and profile event when the credentials have not been setup
+with the `force_display` option. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file. This module also shows an expiration timer when using temporary
 credentials.
@@ -282,6 +286,8 @@ The module will display a profile only if its credentials are present in
 `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`,
 `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will
 also suffice.
+If the option `force_display` is set to `true`, all available information will be
+displayed even if the conditions above are not respected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
@@ -296,15 +302,16 @@ date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Options
 
-| Option              | Default                                                          | Description                                                       |
-| ------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                        |
-| `symbol`            | `"☁️ "`                                                          | The symbol used before displaying the current AWS profile.        |
-| `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.   |
-| `profile_aliases`   |                                                                  | Table of profile aliases to display in addition to the AWS name.  |
-| `style`             | `"bold yellow"`                                                  | The style for the module.                                         |
-| `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                          | Disables the `AWS` module.                                        |
+| Option              | Default                                                          | Description                                                                                               |
+| ------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                                                                |
+| `symbol`            | `"☁️ "`                                                          | The symbol used before displaying the current AWS profile.                                                |
+| `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.                                           |
+| `profile_aliases`   |                                                                  | Table of profile aliases to display in addition to the AWS name.                                          |
+| `style`             | `"bold yellow"`                                                  | The style for the module.                                                                                 |
+| `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired.                                         |
+| `disabled`          | `false`                                                          | Disables the `AWS` module.                                                                                |
+| `force_display`     | `false`                                                          | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variables
 
@@ -495,6 +502,54 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 symbol = "🦬 "
 ```
 
+## C
+
+The `c` module shows some information about your C compiler. By default
+the module will be shown if the current directory contains a `.c` or `.h`
+file.
+
+### Options
+
+| Option              | Default                                                                     | Description                                                               |
+| ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | The format string for the module.                                         |
+| `version_format`    | `"v${raw}"`                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                    |
+| `detect_extensions` | `["c", "h"]`                                                                | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                                        | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                        | Which folders should trigger this module.                                 |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                        |
+| `style`             | `"bold 149"`                                                                | The style for the module.                                                 |
+| `disabled`          | `false`                                                                     | Disables the `c` module.                                                  |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| name     | clang   | The name of the compiler             |
+| version  | 13.0.0  | The version of the compiler          |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style    |         | Mirrors the value of option `style`  |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[c]
+format = "via [$name $version]($style)"
+```
+
 ## Character
 
 The `character` module shows a character (usually an arrow) beside where the text
@@ -508,12 +563,6 @@ can do this in two ways:
 
 By default it only changes color. If you also want to change its shape take a
 look at [this example](#with-custom-error-shape).
-
-::: warning
-
-`error_symbol` is not supported on nu shell.
-
-:::
 
 ::: warning
 
@@ -726,12 +775,12 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Options
 
-| Option     | Default                          | Description                               |
-| ---------- | -------------------------------- | ----------------------------------------- |
-| `symbol`   | `"⬢"`                            | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`              | The style for the module.                 |
-| `format`   | "[$symbol \\[$name\\]]($style) " | The format for the module.                |
-| `disabled` | `false`                          | Disables the `container` module.          |
+| Option     | Default                            | Description                               |
+| ---------- | ---------------------------------- | ----------------------------------------- |
+| `symbol`   | `"⬢"`                              | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                | The style for the module.                 |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | The format for the module.                |
+| `disabled` | `false`                            | Disables the `container` module.          |
 
 ### Variables
 
@@ -1115,7 +1164,7 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- The current directory contains `*.elm` files
 
 ### Options
 
@@ -1671,6 +1720,39 @@ By default the module will be shown if any of the following conditions are met:
 [golang]
 format = "via [🏎💨 $version](bold cyan) "
 ```
+
+## Haskell
+
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+
+### Options
+
+| Option              | Default                              | Description                                        |
+| ------------------- | ------------------------------------ | -------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                         |
+| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Which extensions should trigger this module.       |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Which filenames should trigger this module.        |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
+| `style`             | `"bold purple"`                      | The style for the module.                          |
+| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+
+### Variables
+
+| Variable     | Example     | Description                                                                             |
+| ------------ | ----------- | --------------------------------------------------------------------------------------- |
+| version      |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot     | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| symbol       |             | Mirrors the value of option `symbol`                                                    |
+| style\*      |             | Mirrors the value of option `style`                                                     |
+
+*: This variable can only be used as a part of a style string
 
 ## Helm
 
@@ -3093,10 +3175,6 @@ The status code will cast to a signed 32-bit integer.
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
 
-:::
-
-::: warning
-This module is not supported on nu shell.
 :::
 
 ### Options

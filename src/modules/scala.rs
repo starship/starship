@@ -1,7 +1,7 @@
 use crate::configs::scala::ScalaConfig;
 use crate::formatter::StringFormatter;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::formatter::VersionFormatter;
 use crate::utils::get_command_string_output;
 

@@ -144,17 +144,19 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    #### Nushell
 
-   ::: peringatan Hal ini dapat berubah di kemudian hari. Hanya nu versi v0.33 atau versi terbaru yang mendapat dukungan pengembangan. ::: Tambahkan skrip berikut ke dalam file konfigurasi nu. Lokasi dari file ini dapat dicek dengan menjalankan `config path` pada nu.
-
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   ::: peringatan Hal ini dapat berubah di kemudian hari. Only Nushell v0.60+ is supported. ::: Run the following:
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
    ```
 
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
+   source ~/.cache/starship/init.nu
+   ```
 
    #### Xonsh
 

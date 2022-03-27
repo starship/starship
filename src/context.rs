@@ -1,4 +1,4 @@
-use crate::config::{RootModuleConfig, StarshipConfig};
+use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::module::Module;
 use crate::utils::{create_command, exec_timeout, CommandOutput};
@@ -334,6 +334,13 @@ impl<'a> Context<'a> {
             &mut cmd,
             Duration::from_millis(self.root_config.command_timeout),
         )
+    }
+
+    /// Attempt to execute several commands with exec_cmd, return the results of the first that works
+    pub fn exec_cmds_return_first(&self, commands: Vec<Vec<&str>>) -> Option<CommandOutput> {
+        commands
+            .iter()
+            .find_map(|attempt| self.exec_cmd(attempt[0], &attempt[1..]))
     }
 }
 

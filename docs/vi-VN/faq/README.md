@@ -1,4 +1,4 @@
-# CÂU HỎI THƯỜNG GẶP
+# Frequently Asked Questions
 
 ## Cấu hình sử dụng trong demo GIF là gì?
 

@@ -1,6 +1,6 @@
 use super::{Context, Module};
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::configs::vcsh::VcshConfig;
 use crate::formatter::StringFormatter;
 
