@@ -23,8 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let is_root = is_root_user();
 
-    cfg!(target_os = "windows");
-    if is_root {
+    if cfg!(target_os = "windows") && is_root {
         username = "Administrator".to_string();
     }
 
