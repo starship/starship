@@ -22,11 +22,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
     let is_root = is_root_user();
-
     if cfg!(target_os = "windows") && is_root {
         username = "Administrator".to_string();
     }
-
     let show_username = config.show_always
         || is_root // [1]
         || !is_login_user(context, &username) // [2]
@@ -75,9 +73,21 @@ fn is_login_user(context: &Context, username: &str) -> bool {
 #[cfg(all(target_os = "windows", not(test)))]
 fn is_root_user() -> bool {
     use deelevate::{PrivilegeLevel, Token};
-    let token = Token::with_current_process().unwrap();
+    let token = match Token::with_current_process() {
+        Ok(token) => token,
+        Err(e) => {
+            log::warn!("Failed to get process token: {e:?}");
+            return false;
+        }
+    };
     matches!(
-        token.privilege_level().unwrap(),
+        match token.privilege_level() {
+            Ok(level) => level,
+            Err(e) => {
+                log::warn!("Failed to get privilege level: {e:?}");
+                return false;
+            }
+        },
         PrivilegeLevel::Elevated | PrivilegeLevel::HighIntegrityAdmin
     )
 }
