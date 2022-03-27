@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::singularity::SingularityConfig;
 use crate::formatter::StringFormatter;

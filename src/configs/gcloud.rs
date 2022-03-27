@@ -1,15 +1,15 @@
-use crate::config::ModuleConfig;
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[serde(default)]
 pub struct GcloudConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
     pub region_aliases: HashMap<String, &'a str>,
+    pub project_aliases: HashMap<String, &'a str>,
 }
 
 impl<'a> Default for GcloudConfig<'a> {
@@ -20,6 +20,7 @@ impl<'a> Default for GcloudConfig<'a> {
             style: "bold blue",
             disabled: false,
             region_aliases: HashMap::new(),
+            project_aliases: HashMap::new(),
         }
     }
 }

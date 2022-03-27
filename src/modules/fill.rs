@@ -1,6 +1,6 @@
 use super::{Context, Module};
 
-use crate::config::{parse_style_string, RootModuleConfig};
+use crate::config::{parse_style_string, ModuleConfig};
 use crate::configs::fill::FillConfig;
 use crate::segment::Segment;
 

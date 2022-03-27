@@ -111,6 +111,7 @@ impl<'a> StringFormatter<'a> {
     ///
     /// - `Some(Ok(_))`: The value of this variable will be displayed in the format string.
     ///
+    #[must_use]
     pub fn map<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
@@ -131,6 +132,7 @@ impl<'a> StringFormatter<'a> {
     ///
     /// See `StringFormatter::map` for description on the parameters.
     ///
+    #[must_use]
     pub fn map_no_escaping<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,
@@ -152,6 +154,7 @@ impl<'a> StringFormatter<'a> {
     /// the format strings of meta-variables can be cached properly.
     ///
     /// See `StringFormatter::map` for description on the parameters.
+    #[must_use]
     pub fn map_meta<M>(mut self, mapper: M) -> Self
     where
         M: Fn(&str, &BTreeSet<String>) -> Option<&'a str> + Sync,
@@ -193,6 +196,7 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name to an array of segments
     ///
     /// See `StringFormatter::map` for description on the parameters.
+    #[must_use]
     pub fn map_variables_to_segments<M>(mut self, mapper: M) -> Self
     where
         M: Fn(&str) -> Option<Result<Vec<Segment>, StringFormatterError>> + Sync,
@@ -209,6 +213,7 @@ impl<'a> StringFormatter<'a> {
     /// Maps variable name in a style string to its value
     ///
     /// See `StringFormatter::map` for description on the parameters.
+    #[must_use]
     pub fn map_style<T, M>(mut self, mapper: M) -> Self
     where
         T: Into<Cow<'a, str>>,

@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Zeit
+#### Uhrzeit
 
 | Removed Property | Replacement   |
 | ---------------- | ------------- |

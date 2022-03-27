@@ -139,11 +139,13 @@
  /></a>
 </p>
 
+[![Bannière StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
 <h1></h1>
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship avec iTerm2 et le thème Snazzy"
+  alt="Starship dans iTerm2 avec le thème Snazzy"
   width="50%"
   align="right"
  />
@@ -176,7 +178,7 @@ Sélectionnez votre système d'exploitation dans la liste ci-dessous pour voir l
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                                             | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -187,11 +189,11 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Distribution | Dépôt                                                    | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| **_Toutes_** | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
 | FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
 | NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
@@ -200,42 +202,42 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+Installez la dernière version pour votre système:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de paquets:
 
-| Distribution       | Dépôt                                                                                           | Instructions                                                                   |
-| ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
-| _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
-| _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
-| Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
-| CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
-| Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
-| Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
-| Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
+| Distribution       | Dépôt                                                                                          | Instructions                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **_Toutes_**       | **[crates.io](https://crates.io/crates/starship)**                                             | `cargo install starship --locked`                                              |
+| _Toutes_           | [conda-forge](https://anaconda.org/conda-forge/starship)                                       | `conda install -c conda-forge starship`                                        |
+| _Toutes_           | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                         | `brew install starship`                                                        |
+| _Toutes_           | [Snapcraft](https://snapcraft.io/starship)                                                     | `snap install starship`                                                        |
+| Alpine Linux 3.13+ | [Paquets Alpine Linux](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
+| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)               | `pacman -S starship`                                                           |
+| CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Fedora 31+         | [Paquets Fedora](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)   | `nix-env -iA nixos.starship`                                                   |
+| Gentoo             | [Paquets Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
+| Manjaro            |                                                                                                | `pacman -S starship`                                                           |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)   | `nix-env -iA nixpkgs.starship`                                                 |
+| Void Linux         | [Paquets Void Linux](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
 
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+Installez la dernière version pour votre système:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                    | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -249,7 +251,7 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install Starship using any of the following package managers:
+Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                                            | Instructions                            |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
@@ -262,7 +264,7 @@ Install Starship using any of the following package managers:
 
 ### Étape 2. Configurer votre shell pour Starship
 
-Configurez votre shell pour initialiser starship. Sélectionnez le vôtre dans la liste ci-dessous :
+Configurez votre shell pour initialiser starship. Sélectionnez le vôtre dans la liste ci-dessous:
 
 <details>
 <summary>Bash</summary>
@@ -278,7 +280,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Créez un fichier avec le chemin `%LocalAppData%\clink\starship.lua` et le contenu suivant:
+Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Créez le fichier `%LocalAppData%\clink\starship.lua` avec le contenu suivant:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -295,14 +297,14 @@ Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note : Seul Elvish v0.17+ est supporté
+Note: Seul Elvish v0.17+ est supporté
 
 </details>
 
 <details>
 <summary>Fish</summary>
 
-Ajoutez le code suivant à la fin de `~/.config/fish/config.fish`:
+Ajoute ce qui suit à la fin de `~/.config/fish/config.fish`:
 
 ```fish
 starship init fish | source
@@ -324,23 +326,28 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Ajoutez le code suivant à la fin de votre configuration de Nushell (trouvez-la en exécutant `config path`) :
+Run the following:
 
-```toml
-startup = [
-  "mkdir ~/.cache/starship",
-  "starship init nu | save ~/.cache/starship/init.nu",
-  "source ~/.cache/starship/init.nu",
-]
-prompt = "starship_prompt"
+```sh
+mkdir ~/.cache/starship
+starship init nu | save ~/.cache/starship/init.nu
 ```
+
+And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+```sh
+starship init nu | save ~/.cache/starship/init.nu
+source ~/.cache/starship/init.nu
+```
+
+Note: Only Nushell v0.60+ is supported
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Ajoutez ce qui suit à la fin de votre configuration PowerShell (trouvez-la en exécutant `$PROFILE`) :
+Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -387,33 +394,33 @@ Start a new shell instance, and you should see your beautiful new shell prompt. 
 
 If you're looking to further customize Starship:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Configuration](https://starship.rs/config/)** – apprenez à configurer Starship pour ajuster votre prompt à vos préférences
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Préréglages](https://starship.rs/presets/)** – inspirez vous des configuration préfaites par d’autres
 
 ## 🤝 Contribuer
 
-Nous sommes toujours à la recherche de contributeurs de **tous les niveaux de compétence**! Si vous cherchez à faciliter votre entrée dans le projet, essayez un [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Si vous parlez couramment une langue autre que l'anglais, nous apprécions grandement toute aide pour que nos documents soient traduits et mis à jour dans d'autres langues. Si vous souhaitez nous aider, les traductions peuvent êtres suggérées sur le [Crowdin de Starship](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Si vous êtes intéressé à aider à contribuer à Starship, veuillez jeter un coup d'oeil à notre [Guide de contribution](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Aussi, n'hésitez pas à vous rendre sur notre [serveur Discord](https://discord.gg/8Jzqu3T) pour dire bonjour. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭Inspiré par
 
-Jetez un œil aux précédents projets qui ont inspiré la création de starship. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Un prompt ZSH pour les astronautes.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Thème robbyrussell multi-shell écrit en JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – Prompt multi-shell personnalisable, dans le style de powerline avec des icones.
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icône de roquette de Starship">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝 License
 
-Copyright © 2019-présent, [contributeurs de Starship](https://github.com/starship/starship/graphs/contributors).<br /> Ce projet est sous licence [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.

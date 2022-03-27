@@ -1,4 +1,4 @@
-# Preguntas frecuentes (FAQ)
+# Frequently Asked Questions
 
 ## ¿Cuál es la configuración usada en el GIF de demostración?
 
@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-La [implementación de Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) integrada en Starship es un poco más compleja para permitir funciones avanzadas como el [módulo Duración del Comando](https://starship.rs/config/#command-duration) y para garantizar que Starship sea compatible con las configuraciones de Bash preinstaladas.
+La [implementación de Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) en Starship es sensíblemente is ligeramente más compleja para permitir características avanzadas como [el módulo de duración de comando](https://starship.rs/config/#command-duration) y para asegurar que Starship es compatible con las configuraciones preinstaladas de Bash.
 
 Para obtener una lista de todos los parámetros aceptados por `el prompt de Starship`, usa el siguiente comando:
 
@@ -53,37 +53,37 @@ El símbolo de sistema usará tanto contexto como le proveas, pero no hay parám
 Si obtienes un error como "_version 'GLIBC_2.18' not found (required by starship)_" al usar el binario precompilado (por ejemplo, en CentOS 6 o 7), puedes usar el binario compilado con `musl` en vez de `glibc`:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
+curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## ¿Por qué veo advertencias `Executing command"..." timed out.`?
 
-Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+Starship ejecuta diferentes comandos para obtener la información que se muestra en el prompt, por ejemplo la versión de un programa o el estado actual de git. Para asegurarse que starship no se quede congelado mientras trata de ejecutar estos comandos, establecimos un límite de tiempo, si un comando tarda más tiempo que este límite starship detendrá la ejecución del comando y mostrara la advertencia anterior, este es el comportamiento esperado. Este límite de tiempo es configurable usando la [llave `command_timeout`](/config/#prompt) así que si lo desea puede aumentar el límite de tiempo. También puedes seguir los pasos de depuración a continuación para ver qué comando está siendo lento y ver si puedes optimizarlo. Finalmente, puedes establecer la variable de entorno `STARSHIP_LOG` a `error` para ocultar estas advertencias.
 
 ## Veo símbolos que no entiendo ni espero, ¿qué significan?
 
 Si ves símbolos que no reconoces, puedes usar `starship explain` para explicar los módulos que se muestran actualmente.
 
-## Starship is doing something unexpected, how can I debug it?
+## Starship está haciendo algo inesperado, ¿cómo puedo depurarlo?
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+Puede habilitar los registros de depuración usando la variable de entorno `STARSHIP_LOG`. Estos registros pueden ser muy detallados así que a menudo es útil utilizar el comando `module` si estás intentando depurar un módulo en particular, por ejemplo, si está intentando depurar el módulo `rust` podrías ejecutar el siguiente comando para obtener los registros de seguimiento y salida del módulo.
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
 ```
 
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that to blame.
+Si starship está siendo lento, puedes intentar usar el comando `timings` para ver si hay un módulo en particular o un comando a culpar.
 
 ```sh
 env STARSHIP_LOG=trace starship timings
 ```
 
-This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+Esto producirá el registro de rastreo y un desglose de todos los módulos que tomaron más de 1 ms para ejecutarse o producir alguna salida.
 
-Finally if you find a bug you can use the `bug-report` command to create a Github issue.
+Finalmente, si encuentras un error puedes usar el comando `bug-report` para crear un issue en Github.
 
 ```sh
-reporte de error starship
+starship bug-report
 ```
 
 ## ¿Por qué no veo un símbolo de glifo en mi prompt?
@@ -117,6 +117,6 @@ Si Starship fue instalado usando un gestor de paquetes, por favor refiérete a s
 Si Starship fue instalado usando el guión de instalación, el siguiente comando eliminará el binario:
 
 ```sh
-# Locate and delete the starship binary
-sh -c 'rm "$(command -v 'starship')"'
+# Localiza y elimina el binario de starship
+sh -c 'rm "$(comando -v 'starship')"'
 ```

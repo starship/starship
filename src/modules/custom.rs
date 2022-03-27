@@ -3,7 +3,7 @@ use std::io::Write;
 use std::process::{Command, Output, Stdio};
 use std::time::Instant;
 
-use super::{Context, Module, RootModuleConfig, Shell};
+use super::{Context, Module, ModuleConfig, Shell};
 
 use crate::{configs::custom::CustomConfig, formatter::StringFormatter, utils::create_command};
 
@@ -123,7 +123,7 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
                 "Could not launch command with given shell or STARSHIP_SHELL env variable, retrying with /usr/bin/env sh"
             );
 
-            #[allow(clippy::disallowed_method)]
+            #[allow(clippy::disallowed_methods)]
             Command::new("/usr/bin/env")
                 .arg("sh")
                 .stdin(Stdio::piped())

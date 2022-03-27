@@ -18,7 +18,7 @@ features:
 footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: el prompt multi-intérprete"
-description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos! Muestra la información que necesitas, a la par que es elegante y minimalista. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.'
+description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos! Muestra la información que necesitas, a la par que es elegante y minimalista. Instalación rápida disponible para Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, y PowerShell.'
 ---
 
 <div class="center">
@@ -34,7 +34,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
 ### Instalación rápida
 
-1. Instalar el binario de **Starship**:
+1. Instala el binario de **Starship**:
 
 
    #### Instalar la última versión
@@ -42,14 +42,15 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
    Con el intérprete de comandos:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    Para actualizar Starship, vuelve a ejecutar el guión anterior. Reemplazará la versión actual sin tocar la configuración de Starship.
 
 
-   #### Instalar con un gestor de paquetes
+   #### Instalar vía un gestor de paquetes
 
-   Con [Homebrew](https://brew.sh/):
+   Con [Homebew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -66,7 +67,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Bash
 
-   Añade el siguiente código al final de `~/.bashrc`:
+   Añade la siguiente línea al final de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -119,7 +120,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Elvish
 
-   ::: advertencia Solo se admite Elvish v0.17 o superior. :::
+   ::: warning Solo se admite Elvish v0.17 o superior. :::
 
    Añade el siguiente código al final de `~/.elvish/rc.elv`:
 
@@ -143,17 +144,19 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Nushell
 
-   ::: advertencia Esto cambiará en el futuro. Sólo se admite la versión nu v0.33 o superior. ::: Añade lo siguiente a tu archivo de configuración nu. Puedes comprobar la ubicación de este archivo ejecutando `ruta de configuración` en nu.
-
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   ::: advertencia Esto cambiará en el futuro. Only Nushell v0.60+ is supported. ::: Run the following:
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
    ```
 
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
+   source ~/.cache/starship/init.nu
+   ```
 
    #### Xonsh
 
@@ -168,7 +171,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Necesitas usar [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) con Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

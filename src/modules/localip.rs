@@ -1,6 +1,6 @@
 use super::{Context, Module};
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::configs::localip::LocalipConfig;
 use crate::formatter::StringFormatter;
 
@@ -11,11 +11,17 @@ use crate::formatter::StringFormatter;
 /// is to connect a UDP socket and then reading its local endpoint.
 ///
 /// Will display the ip if all of the following criteria are met:
-///     - localip.disabled is absent or false
+///     - localip.disabled is false
 ///     - localip.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("localip");
     let config: LocalipConfig = LocalipConfig::try_load(module.config);
+
+    // As we default to disabled=true, we have to check here after loading our config module,
+    // before it was only checking against whatever is in the config starship.toml
+    if config.disabled {
+        return None;
+    };
 
     let ssh_connection = context.get_env("SSH_CONNECTION");
     if config.ssh_only && ssh_connection.is_none() {
@@ -86,6 +92,7 @@ mod tests {
             .config(toml::toml! {
                 [localip]
                 ssh_only = false
+                disabled = false
             })
             .collect();
         let expected = Some(format!("{} ", style().paint(localip)));
@@ -99,6 +106,7 @@ mod tests {
             .config(toml::toml! {
                 [localip]
                 ssh_only = true
+                disabled = false
             })
             .collect();
         let expected = None;
@@ -113,12 +121,22 @@ mod tests {
             .config(toml::toml! {
                 [localip]
                 ssh_only = true
-                trim_at = ""
+                disabled = false
             })
             .env("SSH_CONNECTION", "something")
             .collect();
         let expected = Some(format!("{} ", style().paint(localip)));
 
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn config_blank() {
+        let actual = ModuleRenderer::new("localip")
+            .env("SSH_CONNECTION", "something")
+            .collect();
+
+        let expected = None;
         assert_eq!(expected, actual);
     }
 

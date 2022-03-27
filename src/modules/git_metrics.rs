@@ -2,7 +2,7 @@ use regex::Regex;
 use std::ffi::OsStr;
 
 use crate::{
-    config::RootModuleConfig, configs::git_metrics::GitMetricsConfig,
+    config::ModuleConfig, configs::git_metrics::GitMetricsConfig,
     formatter::string_formatter::StringFormatterError, formatter::StringFormatter, module::Module,
 };
 

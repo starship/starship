@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::docker_context::DockerContextConfig;
 use crate::formatter::StringFormatter;
@@ -41,9 +41,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     )
     .join("config.json");
 
-    let docker_context_env =
-        std::array::IntoIter::new(["DOCKER_MACHINE_NAME", "DOCKER_HOST", "DOCKER_CONTEXT"])
-            .find_map(|env| context.get_env(env));
+    let docker_context_env = ["DOCKER_MACHINE_NAME", "DOCKER_HOST", "DOCKER_CONTEXT"]
+        .into_iter()
+        .find_map(|env| context.get_env(env));
 
     let ctx = match docker_context_env {
         Some(data) => data,

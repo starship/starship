@@ -206,6 +206,8 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$buf\
+$c\
 $cmake\
 $cobol\
 $container\
@@ -216,6 +218,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$haskell\
 $helm\
 $java\
 $julia\
@@ -270,10 +273,21 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile. This is based on
+The `aws` module shows the current AWS region and profile when
+credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this
+module to show the region and profile event when the credentials have not been setup
+with the `force_display` option. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file. This module also shows an expiration timer when using temporary
 credentials.
+
+The module will display a profile only if its credentials are present in
+`~/.aws/credentials` or a `credential_process` is defined in
+`~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will
+also suffice.
+If the option `force_display` is set to `true`, all available information will be
+displayed even if the conditions above are not respected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
@@ -288,14 +302,16 @@ date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Options
 
-| Option              | Default                                                          | Description                                                       |
-| ------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                        |
-| `symbol`            | `"☁️ "`                                                          | The symbol used before displaying the current AWS profile.        |
-| `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.   |
-| `style`             | `"bold yellow"`                                                  | The style for the module.                                         |
-| `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                          | Disables the `AWS` module.                                        |
+| Option              | Default                                                          | Description                                                                                               |
+| ------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                                                                |
+| `symbol`            | `"☁️ "`                                                          | The symbol used before displaying the current AWS profile.                                                |
+| `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.                                           |
+| `profile_aliases`   |                                                                  | Table of profile aliases to display in addition to the AWS name.                                          |
+| `style`             | `"bold yellow"`                                                  | The style for the module.                                                                                 |
+| `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired.                                         |
+| `disabled`          | `false`                                                          | Disables the `AWS` module.                                                                                |
+| `force_display`     | `false`                                                          | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variables
 
@@ -323,6 +339,8 @@ symbol = "🅰 "
 [aws.region_aliases]
 ap-southeast-2 = "au"
 us-east-1 = "va"
+[aws.profile_aliases]
+CompanyGroupFrobozzOnCallAccess = 'Frobozz'
 ```
 
 #### Display region
@@ -348,6 +366,8 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+[aws.profile_aliases]
+Enterprise_Naming_Scheme-voidstars = 'void**'
 ```
 
 ## Azure
@@ -443,6 +463,93 @@ discharging_symbol = "💦"
 # when capacity is over 30%, the battery indicator will not be displayed
 ```
 
+## Buf
+
+The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
+
+- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
+- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+
+### Options
+
+| Option              | Default                                                    | Description                                           |
+| ------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
+| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
+| `version_format`    | `"v${raw}"`                                                | The version format.                                   |
+| `symbol`            | `"🦬 "`                                                     | The symbol used before displaying the version of Buf. |
+| `detect_extensions` | `[]`                                                       | Which extensions should trigger this module.          |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`            | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                                       | Which folders should trigger this modules.            |
+| `style`             | `"bold blue"`                                              | The style for the module.                             |
+| `disabled`          | `false`                                                    | Disables the `elixir` module.                         |
+
+### Variables
+
+| Variable      | Example  | Description                          |
+| ------------- | -------- | ------------------------------------ |
+| `buf_version` | `v1.0.0` | The version of `buf`                 |
+| `symbol`      |          | Mirrors the value of option `symbol` |
+| `style`*      |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[buf]
+symbol = "🦬 "
+```
+
+## C
+
+The `c` module shows some information about your C compiler. By default
+the module will be shown if the current directory contains a `.c` or `.h`
+file.
+
+### Options
+
+| Option              | Default                                                                     | Description                                                               |
+| ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | The format string for the module.                                         |
+| `version_format`    | `"v${raw}"`                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                    |
+| `detect_extensions` | `["c", "h"]`                                                                | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                                        | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                        | Which folders should trigger this module.                                 |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                        |
+| `style`             | `"bold 149"`                                                                | The style for the module.                                                 |
+| `disabled`          | `false`                                                                     | Disables the `c` module.                                                  |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| name     | clang   | The name of the compiler             |
+| version  | 13.0.0  | The version of the compiler          |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style    |         | Mirrors the value of option `style`  |
+
+NB that `version` is not in the default format.
+
+### Commands
+
+The `commands` option accepts a list of commands to determine the compiler version and name.
+
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[c]
+format = "via [$name $version]($style)"
+```
+
 ## Character
 
 The `character` module shows a character (usually an arrow) beside where the text
@@ -456,12 +563,6 @@ can do this in two ways:
 
 By default it only changes color. If you also want to change its shape take a
 look at [this example](#with-custom-error-shape).
-
-::: warning
-
-`error_symbol` is not supported on nu shell.
-
-:::
 
 ::: warning
 
@@ -674,12 +775,12 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Options
 
-| Option     | Default                          | Description                               |
-| ---------- | -------------------------------- | ----------------------------------------- |
-| `symbol`   | `"⬢"`                            | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`              | The style for the module.                 |
-| `format`   | "[$symbol \\[$name\\]]($style) " | The format for the module.                |
-| `disabled` | `false`                          | Disables the `container` module.          |
+| Option     | Default                            | Description                               |
+| ---------- | ---------------------------------- | ----------------------------------------- |
+| `symbol`   | `"⬢"`                              | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                | The style for the module.                 |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | The format for the module.                |
+| `disabled` | `false`                            | Disables the `container` module.          |
 
 ### Variables
 
@@ -834,19 +935,20 @@ it would have been `nixpkgs/pkgs`.
 
 ### Options
 
-| Option              | Default                                            | Description                                                                            |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                | The number of parent folders that the current directory should be truncated to.        |
-| `truncate_to_repo`  | `true`                                             | Whether or not to truncate to the root of the git repo that you're currently in.       |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "` | The format for the module.                                                             |
-| `style`             | `"bold cyan"`                                      | The style for the module.                                                              |
-| `disabled`          | `false`                                            | Disables the `directory` module.                                                       |
-| `read_only`         | `"🔒"`                                              | The symbol indicating current directory is read only.                                  |
-| `read_only_style`   | `"red"`                                            | The style for the read only symbol.                                                    |
-| `truncation_symbol` | `""`                                               | The symbol to prefix to truncated paths. eg: "…/"                                      |
-| `repo_root_style`   | `None`                                             | The style for the root of the git repo when `truncate_to_repo` option is set to false. |
-| `home_symbol`       | `"~"`                                              | The symbol indicating home directory.                                                  |
-| `use_os_path_sep`   | `true`                                             | Use the OS specific path seperator instead of always using `/` (e.g. `\` on Windows)   |
+| Option              | Default                                                                                                     | Description                                                                          |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `truncation_length` | `3`                                                                                                         | The number of parent folders that the current directory should be truncated to.      |
+| `truncate_to_repo`  | `true`                                                                                                      | Whether or not to truncate to the root of the git repo that you're currently in.     |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | The format for the module.                                                           |
+| `style`             | `"bold cyan"`                                                                                               | The style for the module.                                                            |
+| `disabled`          | `false`                                                                                                     | Disables the `directory` module.                                                     |
+| `read_only`         | `"🔒"`                                                                                                       | The symbol indicating current directory is read only.                                |
+| `read_only_style`   | `"red"`                                                                                                     | The style for the read only symbol.                                                  |
+| `truncation_symbol` | `""`                                                                                                        | The symbol to prefix to truncated paths. eg: "…/"                                    |
+| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.  |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                          |
+| `home_symbol`       | `"~"`                                                                                                       | The symbol indicating home directory.                                                |
+| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
 
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
@@ -882,6 +984,21 @@ a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/
 | style\*  | `"black bold dimmed"` | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
+
+<details>
+<summary>The git repos have additional variables.</summary>
+
+Let us consider the path `/path/to/home/git_repo/src/lib`
+
+| Variable         | Example               | Description                             |
+| ---------------- | --------------------- | --------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
+| repo_root        | `"git_repo"`          | The git root directory name             |
+| path             | `"/src/lib"`          | The remaining path                      |
+| style            | `"black bold dimmed"` | Mirrors the value of option `style`     |
+| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+
+</details>
 
 ### Example
 
@@ -1047,7 +1164,7 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `elm-package.json` file
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
-- The current directory contains a `*.elm` files
+- The current directory contains `*.elm` files
 
 ### Options
 
@@ -1224,13 +1341,14 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 
 ### Options
 
-| Option           | Default                                                  | Description                                                     |
-| ---------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`         | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                      |
-| `symbol`         | `"☁️  "`                                                 | The symbol used before displaying the current GCP profile.      |
-| `region_aliases` |                                                          | Table of region aliases to display in addition to the GCP name. |
-| `style`          | `"bold blue"`                                            | The style for the module.                                       |
-| `disabled`       | `false`                                                  | Disables the `gcloud` module.                                   |
+| Option            | Default                                                  | Description                                                      |
+| ----------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                       |
+| `symbol`          | `"☁️  "`                                                 | The symbol used before displaying the current GCP profile.       |
+| `region_aliases`  |                                                          | Table of region aliases to display in addition to the GCP name.  |
+| `project_aliases` |                                                          | Table of project aliases to display in addition to the GCP name. |
+| `style`           | `"bold blue"`                                            | The style for the module.                                        |
+| `disabled`        | `false`                                                  | Disables the `gcloud` module.                                    |
 
 ### Variables
 
@@ -1279,6 +1397,17 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
+#### Display account and aliased project
+
+```toml
+# ~/.config/starship.toml
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+[gcloud.project_aliases]
+very-long-project-name = "vlpn"
+```
+
 ## Git Branch
 
 The `git_branch` module shows the active branch of the repo in your current directory.
@@ -1294,6 +1423,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
 | `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
 | `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
+| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                      |
 | `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Variables
@@ -1317,6 +1447,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+ignore_branches = ["master", "main"]
 ```
 
 ## Git Commit
@@ -1445,25 +1576,33 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 The `git_status` module shows symbols representing the state of the repo in your
 current directory.
 
+::: tip
+
+The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment.
+You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+
+:::
+
 ### Options
 
-| Option              | Default                                       | Description                         |
-| ------------------- | --------------------------------------------- | ----------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted`        | `"="`                                         | This branch has merge conflicts.    |
-| `ahead`             | `"⇡"`                                         | The format of `ahead`               |
-| `behind`            | `"⇣"`                                         | The format of `behind`              |
-| `diverged`          | `"⇕"`                                         | The format of `diverged`            |
-| `up_to_date`        | `""`                                          | The format of `up_to_date`          |
-| `untracked`         | `"?"`                                         | The format of `untracked`           |
-| `stashed`           | `"$"`                                         | The format of `stashed`             |
-| `modified`          | `"!"`                                         | The format of `modified`            |
-| `staged`            | `"+"`                                         | The format of `staged`              |
-| `renamed`           | `"»"`                                         | The format of `renamed`             |
-| `deleted`           | `"✘"`                                         | The format of `deleted`             |
-| `style`             | `"bold red"`                                  | The style for the module.           |
-| `ignore_submodules` | `false`                                       | Ignore changes to submodules.       |
-| `disabled`          | `false`                                       | Disables the `git_status` module.   |
+| Option              | Default                                       | Description                                                                                                 |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`        | `"="`                                         | This branch has merge conflicts.                                                                            |
+| `ahead`             | `"⇡"`                                         | The format of `ahead`                                                                                       |
+| `behind`            | `"⇣"`                                         | The format of `behind`                                                                                      |
+| `diverged`          | `"⇕"`                                         | The format of `diverged`                                                                                    |
+| `up_to_date`        | `""`                                          | The format of `up_to_date`                                                                                  |
+| `untracked`         | `"?"`                                         | The format of `untracked`                                                                                   |
+| `stashed`           | `"$"`                                         | The format of `stashed`                                                                                     |
+| `modified`          | `"!"`                                         | The format of `modified`                                                                                    |
+| `staged`            | `"+"`                                         | The format of `staged`                                                                                      |
+| `renamed`           | `"»"`                                         | The format of `renamed`                                                                                     |
+| `deleted`           | `"✘"`                                         | The format of `deleted`                                                                                     |
+| `style`             | `"bold red"`                                  | The style for the module.                                                                                   |
+| `ignore_submodules` | `false`                                       | Ignore changes to submodules.                                                                               |
+| `disabled`          | `false`                                       | Disables the `git_status` module.                                                                           |
+| `windows_starship`  |                                               | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Variables
 
@@ -1527,6 +1666,15 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
+Use Windows Starship executable on Windows paths in WSL
+
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+```
+
 ## Go
 
 The `golang` module shows the currently installed version of [Go](https://golang.org/).
@@ -1572,6 +1720,39 @@ By default the module will be shown if any of the following conditions are met:
 [golang]
 format = "via [🏎💨 $version](bold cyan) "
 ```
+
+## Haskell
+
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+
+### Options
+
+| Option              | Default                              | Description                                        |
+| ------------------- | ------------------------------------ | -------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                         |
+| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Which extensions should trigger this module.       |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Which filenames should trigger this module.        |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
+| `style`             | `"bold purple"`                      | The style for the module.                          |
+| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+
+### Variables
+
+| Variable     | Example     | Description                                                                             |
+| ------------ | ----------- | --------------------------------------------------------------------------------------- |
+| version      |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot     | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| symbol       |             | Mirrors the value of option `symbol`                                                    |
+| style\*      |             | Mirrors the value of option `style`                                                     |
+
+*: This variable can only be used as a part of a style string
 
 ## Helm
 
@@ -1796,39 +1977,6 @@ By default the module will be shown if any of the following conditions are met:
 symbol = "∴ "
 ```
 
-## localip
-
-The `localip` module shows the IPv4 address of the primary network interface.
-
-### Options
-
-| Option     | Default                   | Description                                            |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | The format for the module.                             |
-| `style`    | `"bold yellow"`           | The style for the module.                              |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
-
-### Variables
-
-| Variable  | Example      | Description                         |
-| --------- | ------------ | ----------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
-| style\*   |              | Mirrors the value of option `style` |
-
-*: This variable can only be used as a part of a style string
-
-### Example
-
-```toml
-# ~/.config/starship.toml
-
-[localip]
-ssh_only = false
-format = "@[$localipv4](bold red) "
-disabled = false
-```
-
 ## Kotlin
 
 The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/).
@@ -1879,9 +2027,10 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace from the kubeconfig file.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file.
 The namespace needs to be set in the kubeconfig file, this can be done via
-`kubectl config set-context starship-cluster --namespace astronaut`.
+`kubectl config set-context starship-context --namespace astronaut`.
+Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`.
 If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
@@ -1905,8 +2054,10 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 | Variable  | Example              | Description                              |
 | --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-cluster`   | The current kubernetes context           |
+| context   | `starship-context`   | The current kubernetes context name      |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
+| user      | `starship-user`      | If set, the current kubernetes user      |
+| cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
 | symbol    |                      | Mirrors the value of option `symbol`     |
 | style\*   |                      | Mirrors the value of option `style`      |
 
@@ -1918,12 +2069,12 @@ To enable it, set `disabled` to `false` in your configuration file.
 # ~/.config/starship.toml
 
 [kubernetes]
-format = 'on [⛵ $context \($namespace\)](dimmed green) '
+format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 disabled = false
 [kubernetes.context_aliases]
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 #### Regex Matching
@@ -1943,12 +2094,12 @@ and shortened using regular expressions:
 # OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
 ".*/openshift-cluster/.*" = "openshift"
 # Or better, to rename every OpenShift cluster at once:
-".*/(?P<cluster>[\\w-]+)/.*" = "$cluster"
+".*/(?P<var_cluster>[\\w-]+)/.*" = "$var_cluster"
 
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-"gke_.*_(?P<cluster>[\\w-]+)" = "gke-$cluster"
+"gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
 ## Line Break
@@ -1968,6 +2119,39 @@ The `line_break` module separates the prompt into two lines.
 
 [line_break]
 disabled = true
+```
+
+## Local IP
+
+The `localip` module shows the IPv4 address of the primary network interface.
+
+### Options
+
+| Option     | Default                   | Description                                            |
+| ---------- | ------------------------- | ------------------------------------------------------ |
+| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
+| `format`   | `"[$localipv4]($style) "` | The format for the module.                             |
+| `style`    | `"bold yellow"`           | The style for the module.                              |
+| `disabled` | `true`                    | Disables the `localip` module.                         |
+
+### Variables
+
+| Variable  | Example      | Description                         |
+| --------- | ------------ | ----------------------------------- |
+| localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
+| style\*   |              | Mirrors the value of option `style` |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[localip]
+ssh_only = false
+format = "@[$localipv4](bold red) "
+disabled = false
 ```
 
 ## Lua
@@ -2189,21 +2373,21 @@ By default the module will be shown if any of the following conditions are met:
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts` extension
+- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
 
 ### Options
 
-| Option              | Default                              | Description                                                                                           |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                            |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Which extensions should trigger this module.                                                          |
-| `detect_files`      | `["package.json", ".node-version"]`  | Which filenames should trigger this module.                                                           |
-| `detect_folders`    | `["node_modules"]`                   | Which folders should trigger this module.                                                             |
-| `style`             | `"bold green"`                       | The style for the module.                                                                             |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Option              | Default                                    | Description                                                                                           |
+| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`       | The format for the module.                                                                            |
+| `version_format`    | `"v${raw}"`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `" "`                                     | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts", "mts", "cts"]` | Which extensions should trigger this module.                                                          |
+| `detect_files`      | `["package.json", ".node-version"]`        | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `["node_modules"]`                         | Which folders should trigger this module.                                                             |
+| `style`             | `"bold green"`                             | The style for the module.                                                                             |
+| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
 
@@ -2983,7 +3167,7 @@ format = '[📦 \[$env\]]($style) '
 ## Status
 
 The `status` module displays the exit code of the previous command.
-The module will be shown only if the exit code is not `0`.
+If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`.
 The status code will cast to a signed 32-bit integer.
 
 ::: tip
@@ -2993,17 +3177,13 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
-::: warning
-This module is not supported on nu shell.
-:::
-
 ### Options
 
 | Option                  | Default                                                                       | Description                                             |
 | ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                 | The format of the module                                |
 | `symbol`                | `"✖"`                                                                         | The symbol displayed on program error                   |
-| `success_symbol`        | `"✔️"`                                                                        | The symbol displayed on program success                 |
+| `success_symbol`        | `""`                                                                          | The symbol displayed on program success                 |
 | `not_executable_symbol` | `"🚫"`                                                                         | The symbol displayed when file isn't executable         |
 | `not_found_symbol`      | `"🔍"`                                                                         | The symbol displayed when the command can't be found    |
 | `sigint_symbol`         | `"🧱"`                                                                         | The symbol displayed on SIGINT (Ctrl + c)               |
@@ -3040,8 +3220,9 @@ This module is not supported on nu shell.
 
 [status]
 style = "bg:blue"
-symbol = "🔴"
-format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
+symbol = "🔴 "
+success_symbol = "🟢 SUCCESS"
+format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 ```

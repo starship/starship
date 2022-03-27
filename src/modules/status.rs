@@ -1,6 +1,6 @@
 use std::string::ToString;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::status::StatusConfig;
 use crate::formatter::{string_formatter::StringFormatterError, StringFormatter};
@@ -17,7 +17,7 @@ enum PipeStatusStatus<'a> {
 
 /// Creates a module with the status of the last command
 ///
-/// Will display the status only if it is not 0
+/// Will display the status
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("status");
     let config = StatusConfig::try_load(module.config);
@@ -43,8 +43,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         false => PipeStatusStatus::Disabled,
     };
 
-    // Exit code is zero and pipestatus is all zero or disabled/missing
+    // Exit code is zero while success_symbol and pipestatus are all zero or disabled/missing
     if exit_code == "0"
+        && config.success_symbol.is_empty()
         && (match pipestatus_status {
             PipeStatusStatus::Pipe(ps) => ps.iter().all(|s| s == "0"),
             _ => true,
@@ -76,13 +77,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(_) => config.pipestatus_format,
         _ => config.format,
     };
-    let parsed = format_exit_code(
-        &exit_code.to_string(),
-        main_format,
-        Some(&pipestatus),
-        &config,
-        context,
-    );
+    let parsed = format_exit_code(exit_code, main_format, Some(&pipestatus), &config, context);
 
     module.set_segments(match parsed {
         Ok(segments) => segments,
@@ -119,8 +114,8 @@ fn format_exit_code<'a>(
         false => None,
     };
     let signal_number = raw_signal_number.map(|sn| sn.to_string());
-    let signal_name = raw_signal_number
-        .and_then(|sn| status_signal_name(sn).or_else(|| signal_number.as_deref()));
+    let signal_name =
+        raw_signal_number.and_then(|sn| status_signal_name(sn).or(signal_number.as_deref()));
 
     // If not a signal and not a common meaning, it should at least print the raw exit code number
     let maybe_exit_code_number = match common_meaning.is_none() && signal_name.is_none() {
@@ -182,7 +177,7 @@ fn status_common_meaning(ex: ExitCode) -> Option<&'static str> {
         return None;
     }
     match ex {
-        0 => Some(""),
+        0 => Some(""), // SUCCESS can be defined by $success_symbol if the user wishes too.
         1 => Some("ERROR"),
         2 => Some("USAGE"),
         126 => Some("NOPERM"),
@@ -234,13 +229,59 @@ mod tests {
     use crate::test::ModuleRenderer;
 
     #[test]
-    fn success_status() {
+    fn success_status_success_symbol_empty() {
         let expected = None;
+
+        // Status code 0 and success_symbol = ""
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                success_symbol = ""
+                disabled = false
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected, actual);
+
+        // Status code 0 and success_symbol is missing
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+            })
+            .status(0)
+            .collect();
+        assert_eq!(expected, actual);
+
+        // No status code and success_symbol = ""
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                success_symbol = ""
+                disabled = false
+            })
+            .collect();
+        assert_eq!(expected, actual);
+
+        // No status code and success_symbol is missing
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                disabled = false
+            })
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn success_status_success_symbol_filled() {
+        let expected = Some(format!("{} ", Color::Red.bold().paint("✔️0")));
 
         // Status code 0
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
+                success_symbol = "✔️"
                 disabled = false
             })
             .status(0)
@@ -251,6 +292,7 @@ mod tests {
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
+                success_symbol = "✔️"
                 disabled = false
             })
             .collect();

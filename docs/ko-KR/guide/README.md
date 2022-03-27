@@ -139,6 +139,8 @@
  /></a>
 </p>
 
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
 <h1></h1>
 
 <img
@@ -148,7 +150,7 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**간결하고 화끈하게 빠르며 무제한으로 커스터마이징이 가능한 프롬프트. 어떤 쉘에서든 사용할 수 있습니다!**
 
 - ** Fast:** 빨라요 – _엄청 엄청_ 빠릅니다! 🚀
 - ** Customizable:** 프롬프트의 모든 측면을 커스텀 가능합니다.
@@ -158,7 +160,7 @@
 - **Easy:** 빠른 설치 - 몇 분 안에 사용할 수 있습니다.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -169,9 +171,9 @@
 
 - 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다. (ex. [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads))
 
-### Step 1. Starship 설치하기
+### 1단계. Starship 설치하기
 
-아래의 목록 중 해당하는 운영체제를 골라 설치 지침을 확인하세요:
+Select your operating system from the list below to view installation instructions:
 
 <details>
 <summary>Android</summary>
@@ -203,7 +205,7 @@ Install Starship using any of the following package managers:
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
@@ -232,7 +234,7 @@ Alternatively, install Starship using any of the following package managers:
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
@@ -260,9 +262,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. 쉘에 Starship 적용하기
+### 2단계. 쉘에 Starship 적용하기
 
-쉘에 Starship 초기 설정을 합니다. 아래의 리스트 중에 해당하는 것을 고르세요:
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -324,21 +326,26 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+Run the following:
 
-```toml
-startup = [
-  "mkdir ~/.cache/starship",
-  "starship init nu | save ~/.cache/starship/init.nu",
-  "source ~/.cache/starship/init.nu",
-]
-prompt = "starship_prompt"
+```sh
+mkdir ~/.cache/starship
+starship init nu | save ~/.cache/starship/init.nu
 ```
+
+And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+```sh
+starship init nu | save ~/.cache/starship/init.nu
+source ~/.cache/starship/init.nu
+```
+
+Note: Only Nushell v0.60+ is supported
 
 </details>
 
 <details>
-<summary>Powershell</summary>
+<summary>파워셀</summary>
 
 Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
@@ -381,17 +388,17 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Starship 설정하기
+### 3단계. Starship 설정하기
 
-새로운 쉘 인스턴스를 시작하면 아름다운 새 쉘 프롬프트를 볼 수 있습니다. 기본 설정에 만족한다면, 즐기세요!
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-Starship을 추가로 커스터마이징 하고싶다면:
+If you're looking to further customize Starship:
 
 - **[Configuration](https://starship.rs/config/)** – 원하는대로 프롬프트를 수정할 수 있도록 Starship 설정을 배울 수 있습니다.
 
 - **[Presets](https://starship.rs/presets/)** – 다른 사람들이 만들어둔 설정들을 보고 영감을 받을 수 있습니다.
 
-## 🤝 기여
+## 🤝 기여하기
 
 We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
@@ -411,7 +418,7 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship 로켓 아이콘">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝라이선스

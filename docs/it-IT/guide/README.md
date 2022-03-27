@@ -79,7 +79,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
-      alt="Bahasa Indonesia"
+      alt="Indonesiano"
  /></a>
   &nbsp;
   <a
@@ -139,11 +139,13 @@
  /></a>
 </p>
 
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
 <h1></h1>
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship con iTerm2 e il tema Snazzy"
+  alt="Starship with iTerm2 and the Snazzy theme"
   width="50%"
   align="right"
  />
@@ -158,7 +160,7 @@
 - **Facile:** veloce da installare - inizia ad usarlo in pochi minuti.
 
 <p align="center">
-<a href="https://starship.rs/it-IT/config/"><strong>Esplora la documentazione di Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -169,7 +171,7 @@
 
 - Un [Nerd Font](https://www.nerdfonts.com/) installato e abilitato nel tuo terminale (per esempio, prova [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Fase 1. Installa Starship
 
 Select your operating system from the list below to view installation instructions:
 
@@ -203,7 +205,7 @@ Install Starship using any of the following package managers:
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
@@ -232,7 +234,7 @@ Alternatively, install Starship using any of the following package managers:
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
@@ -260,7 +262,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Fase 2. Imposta la tua shell a utilizzare Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
 
@@ -324,16 +326,21 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+Run the following:
 
-```toml
-startup = [
-  "mkdir ~/.cache/starship",
-  "starship init nu | save ~/.cache/starship/init.nu",
-  "source ~/.cache/starship/init.nu",
-]
-prompt = "starship_prompt"
+```sh
+mkdir ~/.cache/starship
+starship init nu | save ~/.cache/starship/init.nu
 ```
+
+And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+```sh
+starship init nu | save ~/.cache/starship/init.nu
+source ~/.cache/starship/init.nu
+```
+
+Note: Only Nushell v0.60+ is supported
 
 </details>
 
@@ -381,33 +388,33 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Fase 3. Configura Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
 If you're looking to further customize Starship:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Configurazione](https://starship.rs/config/)** – impara come configurare Starship per modificare il tuo prompt a tuo piacimento
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Preset](https://starship.rs/presets/)** – ispirati dalla configurazione precostituita da altri
 
 ## 🤝 Contribuire
 
-Siamo sempre alla ricerca di collaboratori di **tutti i livelli**! Se stai cercando di entrare facilmente nel progetto, prova un [buon primo problema](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Se parli correntemente una lingua diversa dall'inglese, apprezziamo molto qualsiasi aiuto per mantenere i nostri documenti tradotti e aggiornati in altre lingue. Se desideri collaborare, le traduzioni possono essere fornite su [Starship Crowdin](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Se sei interessato ad aiutare a contribuire a Starship, dai un'occhiata alla nostra [Guida al Contributo](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Inoltre, sentiti libero di entrare nel nostro [server Discord](https://discord.gg/8Jzqu3T) e dire ciao. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 Ispirato Da
 
-Ti invito di controllare questi lavori precedenti che hanno contribuito a ispirare la creazione di Starship. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Un prompt ZSH per astronauti.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Multi-shell a tema robbyrussell scritto in JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – Un prompt multi-shell personalizzabile come powerline con icone.
 
 <p align="center">
     <br>
@@ -416,4 +423,4 @@ Ti invito di controllare questi lavori precedenti che hanno contribuito a ispira
 
 ## 📝 Licenza
 
-Copyright © 2019-presente, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Questo progetto è sotto licenza [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.

@@ -1,4 +1,4 @@
-#![warn(clippy::disallowed_method)]
+#![warn(clippy::disallowed_methods)]
 
 #[macro_use]
 extern crate shadow_rs;
@@ -18,6 +18,7 @@ pub mod module;
 mod modules;
 pub mod print;
 mod segment;
+mod serde_utils;
 mod utils;
 
 #[cfg(test)]

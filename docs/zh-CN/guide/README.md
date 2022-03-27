@@ -103,7 +103,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="Português do Brasil"
  /></a>
   &nbsp;
   <a
@@ -111,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="Pусский"
  /></a>
   &nbsp;
   <a
@@ -139,11 +139,13 @@
  /></a>
 </p>
 
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
 <h1></h1>
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="使用 iTerm 和 Snazz 主题的 Starship"
+  alt="Starship with iTerm2 and the Snazzy theme"
   width="50%"
   align="right"
  />
@@ -158,7 +160,7 @@
 - **易用：** 安装快速 —— 几分钟就可上手。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>探索 Starship 文档</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -171,12 +173,12 @@
 
 ### 步骤 1. 安装 Starship
 
-从下面的列表中选择您的操作系统以查看安装指令：
+Select your operating system from the list below to view installation instructions:
 
 <details>
 <summary>Android</summary>
 
-使用下列软件包管理器安装Starship：
+Install Starship using any of the following package managers:
 
 | 软件包来源                                                                             | 指令                     |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -187,13 +189,13 @@
 <details>
 <summary>BSD</summary>
 
-使用下列软件包管理器安装Starship：
+Install Starship using any of the following package managers:
 
-| Distribution | 软件包来源                                                    | 指令                                |
-| ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| 发行版         | 软件包来源                                                    | 指令                                |
+| ----------- | -------------------------------------------------------- | --------------------------------- |
+| **_任意发行版_** | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD     | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD      | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
 </details>
 
@@ -203,17 +205,17 @@
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
 
-| Distribution       | 软件包来源                                                                                           | 指令                                                                             |
+| 发行版                | 软件包来源                                                                                           | 指令                                                                             |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
-| _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
-| _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
+| **_任意发行版_**        | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _任意发行版_            | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _任意发行版_            | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| _任意发行版_            | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -232,7 +234,7 @@ Alternatively, install Starship using any of the following package managers:
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
@@ -249,7 +251,7 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-使用下列软件包管理器安装Starship：
+Install Starship using any of the following package managers:
 
 | 软件包来源                                                                            | 指令                                      |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
@@ -262,7 +264,7 @@ Alternatively, install Starship using any of the following package managers:
 
 ### 步骤 2. 设置你的终端以使用 Starship
 
-配置你的终端来初始化 starship。 请从下面列表选择你的终端：
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -278,7 +280,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. 在路径 `%LocalAppData%\clink\starship.lua` 下创建文件，输入以下内容
+您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -324,16 +326,21 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+Run the following:
 
-```toml
-startup = [
-  "mkdir ~/.cache/starship",
-  "starship init nu | save ~/.cache/starship/init.nu",
-  "source ~/.cache/starship/init.nu",
-]
-prompt = "starship_prompt"
+```sh
+mkdir ~/.cache/starship
+starship init nu | save ~/.cache/starship/init.nu
 ```
+
+And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+```sh
+starship init nu | save ~/.cache/starship/init.nu
+source ~/.cache/starship/init.nu
+```
+
+Note: Only Nushell v0.60+ is supported
 
 </details>
 
@@ -381,11 +388,11 @@ eval "$(starship init zsh)"
 
 </details>
 
-### 步骤 3. 配置 StarShip
+### 步骤 3. 配置 Starship
 
-打开一个新的 Shell 实例，你应该就能看到漂亮的 Shell 新提示符了。 如果你对默认配置感到满意，就可以开始享用了！
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-如果你想进一步配置 Starship，查阅下列内容：
+If you're looking to further customize Starship:
 
 - **[配置](https://starship.rs/config/)**：学习如何配置 Starship 来调节提示符到你喜欢的样子。
 
@@ -393,15 +400,15 @@ eval "$(starship init zsh)"
 
 ## 🤝 贡献
 
-我们期待着 **所有技能等级** 的参与者！ 如果你想让自己参与项目的路径轻松一些，可以先试试某个 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-如果你熟练掌握某个非英语语言，我们非常感谢任何帮助翻译与同步文档到其他语言的贡献。 如果你想要帮忙，可以在 [Starship Crowdin](https://translate.starship.rs/) 上参与。
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-如果你有兴趣贡献 Starship 这个项目，请先看看我们的 [贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 也欢迎加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 和大家打个招呼。 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭该项目受以下项目启发
 
-请看看这些之前的工作，他们启发了 Starship 项目的创造。 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 

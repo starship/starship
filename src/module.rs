@@ -12,6 +12,8 @@ pub const ALL_MODULES: &[&str] = &[
     "azure",
     #[cfg(feature = "battery")]
     "battery",
+    "buf",
+    "c",
     "character",
     "cmake",
     "cmd_duration",
@@ -36,6 +38,7 @@ pub const ALL_MODULES: &[&str] = &[
     "git_state",
     "git_status",
     "golang",
+    "haskell",
     "helm",
     "heroku",
     "hg_branch",
@@ -210,8 +213,7 @@ where
         current
     } else {
         let fill_size = term_width
-            .map(|tw| if tw > used { Some(tw - used) } else { None })
-            .flatten()
+            .and_then(|tw| if tw > used { Some(tw - used) } else { None })
             .map(|remaining| remaining / chunks.len());
         chunks
             .into_iter()
@@ -230,7 +232,7 @@ mod tests {
 
     #[test]
     fn test_all_modules_is_in_alphabetical_order() {
-        let mut sorted_modules: Vec<&str> = ALL_MODULES.iter().copied().collect();
+        let mut sorted_modules: Vec<&str> = ALL_MODULES.to_vec();
         sorted_modules.sort_unstable();
         assert_eq!(sorted_modules.as_slice(), ALL_MODULES);
     }

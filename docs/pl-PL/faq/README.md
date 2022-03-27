@@ -1,4 +1,4 @@
-# Najczęściej zadawane pytania (FAQ)
+# Frequently Asked Questions
 
 ## Jakiej konfiguracji użyto w GIFie demonstracyjnym?
 
@@ -53,7 +53,7 @@ The prompt will use as much context as is provided, but no flags are "required".
 Jeżeli podczas używania gotowych instalacji (np. na CentOS 6 lub 7) pojawia się błąd w stylu "_version 'GLIBC_2.18' not found (required by starship)_", możesz użyć instalacji zbudowanej za pomocą `musl` zamiast `glibc`:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
+curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
 ## Why do I see `Executing command "..." timed out.` warnings?

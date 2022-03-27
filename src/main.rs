@@ -1,10 +1,11 @@
-#![warn(clippy::disallowed_method)]
+#![warn(clippy::disallowed_methods)]
 
 use clap::crate_authors;
 use std::io;
+use std::thread::available_parallelism;
 use std::time::SystemTime;
 
-use clap::{AppSettings, IntoApp, Parser, Subcommand};
+use clap::{IntoApp, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
@@ -12,19 +13,15 @@ use starship::context::{Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::*;
 
-fn long_version() -> &'static str {
-    let ver = Box::new(crate::shadow::clap_version());
-    Box::leak(ver).as_str()
-}
-
 #[derive(Parser, Debug)]
 #[clap(
     author=crate_authors!(),
     version=shadow::PKG_VERSION,
-    long_version=long_version(),
-    about="The cross-shell prompt for astronauts. ☄🌌️"
+    long_version=shadow::CLAP_LONG_VERSION,
+    about="The cross-shell prompt for astronauts. ☄🌌️",
+    subcommand_required=true,
+    arg_required_else_help=true,
 )]
-#[clap(setting(AppSettings::SubcommandRequiredElseHelp))]
 struct Cli {
     #[clap(subcommand)]
     command: Commands,
@@ -88,7 +85,7 @@ enum Commands {
     /// Generate random session key
     Session,
     /// Prints time in milliseconds
-    #[clap(setting=AppSettings::Hidden)]
+    #[clap(hide = true)]
     Time,
     /// Prints timings of all active modules
     Timings(Properties),
@@ -107,6 +104,7 @@ fn main() {
     #[cfg(windows)]
     let _ = ansi_term::enable_ansi_support();
     logger::init();
+    init_global_threadpool();
 
     let args = match Cli::try_parse() {
         Ok(args) => args,
@@ -206,7 +204,7 @@ fn main() {
         Commands::Timings(props) => print::timings(props),
         Commands::Completions { shell } => generate(
             shell,
-            &mut Cli::into_app(),
+            &mut Cli::command(),
             "starship",
             &mut io::stdout().lock(),
         ),
@@ -219,4 +217,20 @@ fn main() {
                 .collect::<String>()
         ),
     }
+}
+
+/// Initialize global `rayon` thread pool
+fn init_global_threadpool() {
+    // Allow overriding the number of threads
+    let num_threads = std::env::var("STARSHIP_NUM_THREADS")
+        .ok()
+        .and_then(|s| s.parse().ok())
+        // Default to the number of logical cores,
+        // but restrict the number of threads to 8
+        .unwrap_or_else(|| available_parallelism().map(usize::from).unwrap_or(1).min(8));
+
+    rayon::ThreadPoolBuilder::new()
+        .num_threads(num_threads)
+        .build_global()
+        .expect("Failed to initialize worker thread pool");
 }

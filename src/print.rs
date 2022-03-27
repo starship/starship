@@ -75,7 +75,7 @@ pub fn get_prompt(context: Context) -> String {
 
     // A workaround for a fish bug (see #739,#279). Applying it to all shells
     // breaks things (see #808,#824,#834). Should only be printed in fish.
-    if let Shell::Fish = context.shell {
+    if Shell::Fish == context.shell && context.target == Target::Main {
         buf.push_str("\x1b[J"); // An ASCII control code to clear screen
     }
 

@@ -1,6 +1,6 @@
 use unicode_segmentation::UnicodeSegmentation;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::git_branch::GitBranchConfig;
 use crate::formatter::StringFormatter;
@@ -36,6 +36,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let branch_name = repo.branch.as_ref()?;
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
+
+    if config
+        .ignore_branches
+        .iter()
+        .any(|ignored| branch_name.eq(ignored))
+    {
+        return None;
+    }
 
     let mut remote_branch_graphemes: Vec<&str> = Vec::new();
     let mut remote_name_graphemes: Vec<&str> = Vec::new();
@@ -360,6 +368,29 @@ mod tests {
             "on {} ",
             Color::Purple.bold().paint(format!("\u{e0a0} {}", "main")),
         ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_ignore_branches() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["checkout", "-b", "test_branch"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                [git_branch]
+                    ignore_branches = ["dummy", "test_branch"]
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
