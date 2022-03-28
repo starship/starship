@@ -1785,7 +1785,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-Le module `jobs` affiche le nombre de tâches en cours d'exécution. Le module ne sera affiché que s'il y a des tâches de fond. Le module affichera le nombre de tâches en cours d’exécution s’il y en a au moins 2, ou plus que la valeur `threshold`, si elle existe. Le monde affichera un symbole s’il y a au moins 1 tâche, ou plus que la valeur de `symbol_threshold`, si elle existe. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+Le module `jobs` affiche le nombre de tâches en cours d'exécution. Le module ne sera affiché que s'il y a des tâches de fond. Le module affichera le nombre de tâches en cours d’exécution s’il y en a au moins 2, ou plus que la valeur `threshold`, si elle existe. Le monde affichera un symbole s’il y a au moins 1 tâche, ou plus que la valeur de `symbol_threshold`, si elle existe. Vous pouvez définir les deux valeurs à 0 pour _toujours_ montrer le symbole et le nombre de tâches, même s’il n’y a aucune tâche en cours d’exécution.
 
 Le fonctionnement par défaut est:
 
@@ -1813,7 +1813,7 @@ L’option `threshold` est dépréciée, mais si vous voulez l’utiliser, le mo
 | `symbol_threshold` | `1`                           | Affiche `symbol` si le nombre de tâches vaut au moins `symbol_threshold`. |
 | `number_threshold` | `2`                           | Affiche le nombre de tâches s’il y en a au moins `number_threshold`.      |
 | `format`           | `"[$symbol$number]($style) "` | Format du module.                                                         |
-| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                       |
+| `symbol`           | `"✦"`                         | La chaine utilisée pour représenter la variable `symbole`.                |
 | `style`            | `"bold blue"`                 | Le style du module.                                                       |
 | `disabled`         | `false`                       | Désactive le module `jobs`.                                               |
 
