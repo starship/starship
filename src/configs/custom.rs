@@ -1,4 +1,4 @@
-use crate::config::VecOr;
+use crate::config::{Either, VecOr};
 
 use serde::{self, Deserialize, Serialize};
 
@@ -8,8 +8,7 @@ pub struct CustomConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub command: &'a str,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub when: Option<&'a str>,
+    pub when: Either<bool, &'a str>,
     pub shell: VecOr<&'a str>,
     pub description: &'a str,
     pub style: &'a str,
@@ -27,7 +26,7 @@ impl<'a> Default for CustomConfig<'a> {
             format: "[$symbol($output )]($style)",
             symbol: "",
             command: "",
-            when: None,
+            when: Either::First(false),
             shell: VecOr::default(),
             description: "<custom config>",
             style: "green bold",
