@@ -1807,15 +1807,15 @@ L’option `threshold` est dépréciée, mais si vous voulez l’utiliser, le mo
 
 ### Options
 
-| Option             | Défaut                        | Description                                                              |
-| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*       | `1`                           | Afficher le nombre de jobs si dépassé.                                   |
-| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `"[$symbol$number]($style) "` | Format du module.                                                        |
-| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
-| `style`            | `"bold blue"`                 | Le style du module.                                                      |
-| `disabled`         | `false`                       | Désactive le module `jobs`.                                              |
+| Option             | Défaut                        | Description                                                               |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------- |
+| `threshold`*       | `1`                           | Afficher le nombre de jobs si dépassé.                                    |
+| `symbol_threshold` | `1`                           | Affiche `symbol` si le nombre de tâches vaut au moins `symbol_threshold`. |
+| `number_threshold` | `2`                           | Affiche le nombre de tâches s’il y en a au moins `number_threshold`.      |
+| `format`           | `"[$symbol$number]($style) "` | Format du module.                                                         |
+| `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                       |
+| `style`            | `"bold blue"`                 | Le style du module.                                                       |
+| `disabled`         | `false`                       | Désactive le module `jobs`.                                               |
 
 *: Cette option is dépréciée, utilisez les options `number_threshold` et `symbol_threshold` à la place.
 
