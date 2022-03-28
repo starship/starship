@@ -264,18 +264,12 @@ mod tests {
     use super::*;
 
     use crate::test::ModuleRenderer;
+    use std::io;
 
     #[cfg(not(windows))]
     const SHELL: &[&str] = &["/bin/sh"];
     #[cfg(windows)]
     const SHELL: &[&str] = &[];
-
-    /// Same thing as `SHELL`, but uses full paths for the windows shell
-    #[cfg(not(windows))]
-    const SYS_SHELL: &[&str] = &["/bin/sh"];
-
-    #[cfg(windows)]
-    const SYS_SHELL: &[&str] = &["powershell", "-NoProfile", "-Command", "-"];
 
     #[cfg(not(windows))]
     const FAILING_COMMAND: &str = "false";
@@ -348,8 +342,11 @@ mod tests {
     }
 
     #[test]
-    fn blocked_shell() {
+    fn blocked_shell() -> io::Result<()> {
+        // ScanDir fails if the directory does not exist
+        let dir = tempfile::tempdir()?;
         let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
             .config(toml::toml! {
                 [custom.test]
                 format = "test"
@@ -360,15 +357,27 @@ mod tests {
         let expected = None;
 
         assert_eq!(expected, actual);
+
+        dir.close()
     }
 
     #[test]
-    fn blocked_shell_with_shell_setting() {
+    fn blocked_shell_with_shell_setting() -> io::Result<()> {
+        // ScanDir fails if the directory does not exist
+        let dir = tempfile::tempdir()?;
+
+        // Can't use empty shell
+        let shell = if cfg!(windows) {
+            &["powershell", "-NoProfile", "-Command", "-"]
+        } else {
+            SHELL
+        };
+        let shell = shell.iter().map(|s| s.to_string()).collect::<Vec<_>>();
+
         let when = if cfg!(windows) { "$true" } else { "true" };
 
-        let shell = SYS_SHELL.iter().map(|s| s.to_string()).collect::<Vec<_>>();
-
         let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
             .config(toml::toml! {
                 [custom.test]
                 format = "test"
@@ -380,5 +389,7 @@ mod tests {
         let expected = Some("test".to_owned());
 
         assert_eq!(expected, actual);
+
+        dir.close()
     }
 }
