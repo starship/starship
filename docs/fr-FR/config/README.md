@@ -1785,7 +1785,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-Le module `jobs` affiche le nombre de tâches en cours d'exécution. Le module ne sera affiché que s'il y a des tâches de fond. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+Le module `jobs` affiche le nombre de tâches en cours d'exécution. Le module ne sera affiché que s'il y a des tâches de fond. Le module affichera le nombre de tâches en cours d’exécution s’il y en a au moins 2, ou plus que la valeur `threshold`, si elle existe. Le monde affichera un symbole s’il y a au moins 1 tâche, ou plus que la valeur de `symbol_threshold`, si elle existe. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
 Le fonctionnement par défaut est:
 
@@ -1801,7 +1801,7 @@ Ce module n'est pas pris en charge sur tcsh et nu.
 
 ::: warning
 
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. Si `threshold` est définie à 0, alors le module s'affichera également lorsqu'il n'y a pas de tâches de fond en cours.
+L’option `threshold` est dépréciée, mais si vous voulez l’utiliser, le module affichera le nombre de tâches en cours s’il y a plus d'une tâche, ou plus que la valeur de `threshold`, si elle existe. Si `threshold` est définie à 0, alors le module s'affichera également lorsqu'il n'y a pas de tâches de fond en cours.
 
 :::
 
