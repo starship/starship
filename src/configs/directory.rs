@@ -1,3 +1,5 @@
+use crate::conditional_style::StarshipConditionalStyle;
+use crate::config::VecOr;
 use indexmap::IndexMap;
 
 use serde::{Deserialize, Serialize};
@@ -13,7 +15,7 @@ pub struct DirectoryConfig<'a> {
     pub use_logical_path: bool,
     pub format: &'a str,
     pub repo_root_format: &'a str,
-    pub style: &'a str,
+    pub style: VecOr<StarshipConditionalStyle<'a>>,
     pub repo_root_style: Option<&'a str>,
     pub disabled: bool,
     pub read_only: &'a str,
@@ -33,7 +35,7 @@ impl<'a> Default for DirectoryConfig<'a> {
             substitutions: IndexMap::new(),
             format: "[$path]($style)[$read_only]($read_only_style) ",
             repo_root_format: "[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
-            style: "cyan bold",
+            style: VecOr(vec![StarshipConditionalStyle::from("cyan bold")]),
             repo_root_style: None,
             disabled: false,
             read_only: "🔒",
