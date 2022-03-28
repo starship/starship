@@ -4,7 +4,6 @@ use std::process::{Command, Output, Stdio};
 use std::time::Instant;
 
 use super::{Context, Module, ModuleConfig, Shell};
-
 use crate::{configs::custom::CustomConfig, formatter::StringFormatter, utils::create_command};
 
 /// Creates a custom module with some configuration
@@ -36,6 +35,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
 
     if !is_match {
         if let Some(when) = config.when {
+            blocked_shell(context.shell, &config.shell.0)?;
             is_match = exec_when(when, &config.shell.0);
         }
 
@@ -58,10 +58,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             })
             .map_no_escaping(|variable| match variable {
                 "output" => {
-                    if context.shell == Shell::Cmd && config.shell.0.is_empty() {
-                        log::error!("Executing custom commands with cmd shell is not currently supported. Please set a different shell with the \"shell\" option.");
-                        return None;
-                    }
+                    blocked_shell(context.shell, &config.shell.0)?;
 
                     let output = exec_command(config.command, &config.shell.0)?;
                     let trimmed = output.trim();
@@ -87,6 +84,16 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
     module.duration = elapsed;
     Some(module)
+}
+
+/// Prevent custom commands from running if the shell is not supported
+/// Allow unsupported shells to be used if the user has specified the "shell" option
+fn blocked_shell(shell: Shell, shell_setting: &[&str]) -> Option<()> {
+    if matches!(shell, Shell::Cmd | Shell::Nu | Shell::Unknown) && shell_setting.is_empty() {
+        log::error!("Executing custom commands with {shell} shell is not currently supported. Please set a different shell with the \"shell\" option.");
+        return None;
+    }
+    Some(())
 }
 
 /// Return the invoking shell, using `shell` and fallbacking in order to STARSHIP_SHELL and "sh"
@@ -256,10 +263,19 @@ fn handle_powershell(command: &mut Command, shell: &str, shell_args: &[&str]) {
 mod tests {
     use super::*;
 
+    use crate::test::ModuleRenderer;
+
     #[cfg(not(windows))]
     const SHELL: &[&str] = &["/bin/sh"];
     #[cfg(windows)]
     const SHELL: &[&str] = &[];
+
+    /// Same thing as `SHELL`, but uses full paths for the windows shell
+    #[cfg(not(windows))]
+    const SYS_SHELL: &[&str] = &["/bin/sh"];
+
+    #[cfg(windows)]
+    const SYS_SHELL: &[&str] = &["powershell", "-NoProfile", "-Command", "-"];
 
     #[cfg(not(windows))]
     const FAILING_COMMAND: &str = "false";
@@ -329,5 +345,40 @@ mod tests {
     fn command_can_fail() {
         assert_eq!(exec_command(FAILING_COMMAND, SHELL), None);
         assert_eq!(exec_command(UNKNOWN_COMMAND, SHELL), None);
+    }
+
+    #[test]
+    fn blocked_shell() {
+        let actual = ModuleRenderer::new("custom.test")
+            .config(toml::toml! {
+                [custom.test]
+                format = "test"
+                when = "true"
+            })
+            .shell(Shell::Nu)
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn blocked_shell_with_shell_setting() {
+        let when = if cfg!(windows) { "$true" } else { "true" };
+
+        let shell = SYS_SHELL.iter().map(|s| s.to_string()).collect::<Vec<_>>();
+
+        let actual = ModuleRenderer::new("custom.test")
+            .config(toml::toml! {
+                [custom.test]
+                format = "test"
+                shell = shell
+                when = when
+            })
+            .shell(Shell::Nu)
+            .collect();
+        let expected = Some("test".to_owned());
+
+        assert_eq!(expected, actual);
     }
 }

@@ -13,7 +13,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::env;
 use std::ffi::{OsStr, OsString};
-use std::fmt::Debug;
+use std::fmt::{self, Debug};
 use std::fs;
 use std::marker::PhantomData;
 use std::num::ParseIntError;
@@ -573,6 +573,24 @@ pub enum Shell {
     Xonsh,
     Cmd,
     Unknown,
+}
+
+impl fmt::Display for Shell {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Shell::Bash => write!(f, "bash"),
+            Shell::Fish => write!(f, "fish"),
+            Shell::Ion => write!(f, "ion"),
+            Shell::PowerShell => write!(f, "powershell"),
+            Shell::Zsh => write!(f, "zsh"),
+            Shell::Elvish => write!(f, "elvish"),
+            Shell::Tcsh => write!(f, "tcsh"),
+            Shell::Nu => write!(f, "nu"),
+            Shell::Xonsh => write!(f, "xonsh"),
+            Shell::Cmd => write!(f, "cmd"),
+            Shell::Unknown => write!(f, "<unknown>"),
+        }
+    }
 }
 
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
