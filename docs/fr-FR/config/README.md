@@ -476,7 +476,7 @@ symbol = "🦬 "
 
 ## C
 
-The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+Le module `c` affiche des informations à propos de votre compilateur C. Par défaut, ce module sera affiché si le dossier courant contient un fichier `.c` ou `.h`.
 
 ### Options
 
