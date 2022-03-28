@@ -2539,9 +2539,9 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 | Variable          | Exemple    | Description                            |
 | ----------------- | ---------- | -------------------------------------- |
-| version           | `v0.12.24` | The version of `pulumi`                |
+| version           | `v0.12.24` | La version de `pulumi`                 |
 | stack             | `dev`      | The current Pulumi stack               |
-| nom d'utilisateur | `alice`    | The current Pulumi username            |
+| nom d'utilisateur | `alice`    | Le nom d’utilisateur Pulumi actuel     |
 | symbol            |            | Reflète la valeur de l'option `symbol` |
 | style\*         |            | Reflète la valeur de l'option `style`  |
 
@@ -2610,7 +2610,7 @@ format = "via [$symbol$version](bold white)"
 
 Le module `python` affiche la version actuellement installée de [Python](https://www.python.org/) ainsi que la version d'[environnement virtuel Python](https://docs.python.org/tutorial/venv.html) si il y en a un d'activé.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+Si `pyenv_version_name` est défini à `true`, il affichera le nom de la version de pyenv. Sinon, il affichera le numéro de version que donne `python --version`.
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
@@ -2632,7 +2632,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | `version_format`     | `"v${raw}"`                                                                                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`             | `"🐍 "`                                                                                                       | Une chaîne de caractères représentant le symbole de Python                                 |
 | `style`              | `"yellow bold"`                                                                                              | Le style du module.                                                                        |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                            |
+| `pyenv_version_name` | `false`                                                                                                      | Utiliser pyenv pour obtenir la version de Python                                           |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                            |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version.     |
 | `detect_extensions`  | `["py"]`                                                                                                     | Quelles extensions devraient activer ce module                                             |
@@ -2650,13 +2650,13 @@ The default values and order for `python_binary` was chosen to first identify th
 
 ### Variables
 
-| Variable     | Exemple         | Description                                |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | La version de `python`                     |
-| symbol       | `"🐍 "`          | Reflète la valeur de l'option `symbol`     |
-| style        | `"yellow bold"` | Reflète la valeur de l'option `style`      |
-| pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `"venv"`        | Le nom du `virtualenv` courant             |
+| Variable     | Exemple         | Description                                  |
+| ------------ | --------------- | -------------------------------------------- |
+| version      | `"v3.8.1"`      | La version de `python`                       |
+| symbol       | `"🐍 "`          | Reflète la valeur de l'option `symbol`       |
+| style        | `"yellow bold"` | Reflète la valeur de l'option `style`        |
+| pyenv_prefix | `"pyenv "`      | Reflète la valeur de l'option `pyenv_prefix` |
+| virtualenv   | `"venv"`        | Le nom du `virtualenv` courant               |
 
 ### Exemple
 
@@ -3003,7 +3003,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 | Variable  | Exemple      | Description                            |
 | --------- | ------------ | -------------------------------------- |
-| env       | `centos.img` | The current Singularity image          |
+| env       | `centos.img` | L’image Singularity actuelle           |
 | symbol    |              | Reflète la valeur de l'option `symbol` |
 | style\* |              | Reflète la valeur de l'option `style`  |
 
@@ -3092,7 +3092,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 | Option          | Défaut                  | Description                                             |
 | --------------- | ----------------------- | ------------------------------------------------------- |
-| `format`        | `[as $symbol]($style)"` | The format of the module                                |
+| `format`        | `[as $symbol]($style)"` | Le format du module                                     |
 | `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
 | `style`         | `"bold blue"`           | Le style du module.                                     |
 | `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
@@ -3517,11 +3517,11 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 ### Variables
 
-| Variable  | Description                            |
-| --------- | -------------------------------------- |
-| output    | The output of shell command in `shell` |
-| symbol    | Reflète la valeur de l'option `symbol` |
-| style\* | Reflète la valeur de l'option `style`  |
+| Variable  | Description                                 |
+| --------- | ------------------------------------------- |
+| output    | La sortie de la commande shell dans `shell` |
+| symbol    | Reflète la valeur de l'option `symbol`      |
+| style\* | Reflète la valeur de l'option `style`       |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
