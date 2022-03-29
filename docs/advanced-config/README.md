@@ -163,7 +163,7 @@ in `format` is also supported in `right_format`. The `$all` variable will only c
 not explicitly used in either `format` or `right_format`.
 
 Note: The right prompt is a single line following the input location. To right align modules above
-the input line in a multi-line prompt, see the [fill module](/config/#fill).
+the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
 
