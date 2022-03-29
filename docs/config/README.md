@@ -302,16 +302,16 @@ date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Options
 
-| Option              | Default                                                          | Description                                                                                               |
-| ------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                                                                |
-| `symbol`            | `"☁️ "`                                                          | The symbol used before displaying the current AWS profile.                                                |
-| `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.                                           |
-| `profile_aliases`   |                                                                  | Table of profile aliases to display in addition to the AWS name.                                          |
-| `style`             | `"bold yellow"`                                                  | The style for the module.                                                                                 |
-| `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired.                                         |
-| `disabled`          | `false`                                                          | Disables the `AWS` module.                                                                                |
-| `force_display`     | `false`                                                          | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Option              | Default                                                          | Description                                                                                                 |
+| ------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                                                                  |
+| `symbol`            | `"☁️ "`                                                          | The symbol used before displaying the current AWS profile.                                                  |
+| `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.                                             |
+| `profile_aliases`   |                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `"bold yellow"`                                                  | The style for the module.                                                                                   |
+| `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired.                                           |
+| `disabled`          | `false`                                                          | Disables the `AWS` module.                                                                                  |
+| `force_display`     | `false`                                                          | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variables
 
@@ -1077,7 +1077,7 @@ setting `heuristic = false` in the module options.
 
 The module will also show the Target Framework Moniker
 (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>)
-when there is a csproj file in the current directory.
+when there is a `.csproj` file in the current directory.
 
 ### Options
 
