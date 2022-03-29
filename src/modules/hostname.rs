@@ -123,33 +123,36 @@ mod tests {
         let expected = Some(format!("{} in ", style().paint(hostname)));
         assert_eq!(expected, actual);
     }
-    
+
     #[test]
     fn no_ssh() {
         let actual = ModuleRenderer::new("hostname")
-        .config(toml::toml! {
-            [hostname]
-            ssh_only = true
-        })
-        .collect();
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = true
+            })
+            .collect();
         let expected = None;
-        
+
         assert_eq!(expected, actual);
     }
-    
+
     #[test]
     fn ssh() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
-        .config(toml::toml! {
-            [hostname]
-            ssh_only = true
-            trim_at = ""
-        })
-        .env("SSH_CONNECTION", "something")
-        .collect();
-        let expected = Some(format!("{} in ", style().paint("🌐 ".to_owned()  + &hostname)));
-        
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = true
+                trim_at = ""
+            })
+            .env("SSH_CONNECTION", "something")
+            .collect();
+        let expected = Some(format!(
+            "{} in ",
+            style().paint("🌐 ".to_owned() + &hostname)
+        ));
+
         assert_eq!(expected, actual);
     }
 
