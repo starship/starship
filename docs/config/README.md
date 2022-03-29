@@ -275,7 +275,7 @@ format = "$all$directory$character"
 
 The `aws` module shows the current AWS region and profile when
 credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this
-module to show the region and profile event when the credentials have not been setup
+module to show the region and profile even when the credentials have not been setup
 with the `force_display` option. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file. This module also shows an expiration timer when using temporary
