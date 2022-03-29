@@ -12,7 +12,7 @@ Les configurations dans cette section sont sujettes à modification dans les fut
 
 Clink fournit des APIs extrêmement flexibles pour exécuter des commandes pre-invite et pre-exec dans Cmd. Il est assez simple à utiliser avec Starship. Effectuez les modifications suivantes dans votre fichier `starship.lua`, en fonction de vos besoins:
 
-- To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
+- Pour exécuter une fonction juste avant que l’invite soit dessinée, définissez une nouvelle fonction appelée `starship_preprompt_user_func`. Cette fonction reçoit l’invite courante sous la forme d'une chaine que vous pouvez utiliser. Par exemple, pour dessiner une fusée avant l’invite, vous pouvez faire
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -155,7 +155,7 @@ Génère l’invite suivante:
 
 ## Invite de continuation
 
-Certains shells gèrent une invite de continuation en plus de l’invite normale. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+Certains shells gèrent une invite de continuation en plus de l’invite normale. Cette invite est affichée à la place de l’invite normale quand l’utilisateur a entré une expression incomplète (par exemple, une parenthèse gauche ou une apostrophe seule).
 
 Starship peut définir l’invite de continuation en utilisant l’option `continuation_prompt`. L’invite par défaut est `"[∙](bright-black) "`.
 
