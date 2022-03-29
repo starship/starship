@@ -1010,7 +1010,7 @@ Vous aurez également besoin du SDK .NET Core pour pouvoir l'utiliser correcteme
 
 En interne, ce module utilise son propre mécanisme de détection de version. Généralement, il est deux fois plus rapide que d'exécuter `dotnet --version`, mais il peut afficher une version incorrecte si votre projet .NET a une arborescence inhabituelle. Si la précision est plus importante que la vitesse, vous pouvez désactiver le mécanisme en définissant `heuristic = false` dans les options du module.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
+Le module affichera aussi le Moniker de Framework Cible ([https://docs.microsoft.com/fr-fr/dotnet/standard/frameworks#supported-target-frameworks](https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions)) quand il y a un fichier csproj dans le dossier courant.
 
 ### Options
 
@@ -1028,12 +1028,12 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variables
 
-| Variable  | Exemple          | Description                                                        |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | La version du sdk `dotnet`                                         |
-| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Reflète la valeur de l'option `symbol`                             |
-| style\* |                  | Reflète la valeur de l'option `style`                              |
+| Variable  | Exemple          | Description                                    |
+| --------- | ---------------- | ---------------------------------------------- |
+| version   | `v3.1.201`       | La version du sdk `dotnet`                     |
+| tfm       | `netstandard2.0` | Le Moniker de Framework Cible du projet actuel |
+| symbol    |                  | Reflète la valeur de l'option `symbol`         |
+| style\* |                  | Reflète la valeur de l'option `style`          |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
