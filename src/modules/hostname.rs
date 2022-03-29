@@ -43,6 +43,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
+            .map_meta(|var, _| match var {
+                "ssh_symbol" => {
+                    if ssh_connection.is_some() {
+                        Some(config.ssh_symbol)
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 _ => None,
@@ -86,7 +96,7 @@ mod tests {
     }
 
     #[test]
-    fn ssh_only_false() {
+    fn ssh_only_false_no_ssh() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
@@ -96,36 +106,50 @@ mod tests {
             })
             .collect();
         let expected = Some(format!("{} in ", style().paint(hostname)));
-
+        println!("{}", expected.as_ref().unwrap());
         assert_eq!(expected, actual);
     }
 
     #[test]
-    fn no_ssh() {
-        let actual = ModuleRenderer::new("hostname")
-            .config(toml::toml! {
-                [hostname]
-                ssh_only = true
-            })
-            .collect();
-        let expected = None;
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn ssh() {
+    fn ssh_only_false_ssh() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
                 [hostname]
-                ssh_only = true
+                ssh_only = false
                 trim_at = ""
             })
-            .env("SSH_CONNECTION", "something")
             .collect();
         let expected = Some(format!("{} in ", style().paint(hostname)));
-
+        assert_eq!(expected, actual);
+    }
+    
+    #[test]
+    fn no_ssh() {
+        let actual = ModuleRenderer::new("hostname")
+        .config(toml::toml! {
+            [hostname]
+            ssh_only = true
+        })
+        .collect();
+        let expected = None;
+        
+        assert_eq!(expected, actual);
+    }
+    
+    #[test]
+    fn ssh() {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+        .config(toml::toml! {
+            [hostname]
+            ssh_only = true
+            trim_at = ""
+        })
+        .env("SSH_CONNECTION", "something")
+        .collect();
+        let expected = Some(format!("{} in ", style().paint("🌐 ".to_owned()  + &hostname)));
+        
         assert_eq!(expected, actual);
     }
 
