@@ -658,16 +658,16 @@ Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent uti
 
 ### Options
 
-| Option                 | Défaut                        | Description                                                                                                                                                       |
-| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).                                                                                                  |
-| `show_milliseconds`    | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée.                                                                                                 |
-| `format`               | `"took [$duration]($style) "` | Format du module.                                                                                                                                                 |
-| `style`                | `"bold yellow"`               | Le style du module.                                                                                                                                               |
-| `disabled`             | `false`                       | Désactive le module `cmd_duration`.                                                                                                                               |
-| `show_notifications`   | `false`                       | Afficher les notifications du bureau lorsque la commande est terminée.                                                                                            |
-| `min_time_to_notify`   | `45_000`                      | Durée minimale après laquelle activer la notification (en millisecondes).                                                                                         |
-| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| Option                 | Défaut                        | Description                                                                                                                                                         |
+| ---------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).                                                                                                    |
+| `show_milliseconds`    | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée.                                                                                                   |
+| `format`               | `"took [$duration]($style) "` | Format du module.                                                                                                                                                   |
+| `style`                | `"bold yellow"`               | Le style du module.                                                                                                                                                 |
+| `disabled`             | `false`                       | Désactive le module `cmd_duration`.                                                                                                                                 |
+| `show_notifications`   | `false`                       | Afficher les notifications du bureau lorsque la commande est terminée.                                                                                              |
+| `min_time_to_notify`   | `45_000`                      | Durée minimale après laquelle activer la notification (en millisecondes).                                                                                           |
+| `notification_timeout` |                               | Durée d’affichage des notifications (en milisecondes). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ### Variables
 
