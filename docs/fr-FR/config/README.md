@@ -276,16 +276,16 @@ Lorsque vous utilisez [AWSume](https://awsu.me) le profil est lu à partir de la
 
 ### Options
 
-| Option              | Défaut                                                               | Description                                                                                               |
-| ------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format du module.                                                                                         |
-| `symbol`            | `"☁️ "`                                                              | Le symbole est affiché avant le profil AWS actuel.                                                        |
-| `region_aliases`    |                                                                      | Table des alias de région à afficher en plus du nom AWS.                                                  |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                          |
-| `style`             | `"bold yellow"`                                                      | Le style du module.                                                                                       |
-| `expiration_symbol` | `X`                                                                  | Le symbole est affiché lorsque les identifiants temporaires ont expiré.                                   |
-| `disabled`          | `false`                                                              | Désactive le module `AWS`.                                                                                |
-| `force_display`     | `false`                                                              | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Option              | Défaut                                                               | Description                                                                                                                      |
+| ------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Format du module.                                                                                                                |
+| `symbol`            | `"☁️ "`                                                              | Le symbole est affiché avant le profil AWS actuel.                                                                               |
+| `region_aliases`    |                                                                      | Table des alias de région à afficher en plus du nom AWS.                                                                         |
+| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                                                 |
+| `style`             | `"bold yellow"`                                                      | Le style du module.                                                                                                              |
+| `expiration_symbol` | `X`                                                                  | Le symbole est affiché lorsque les identifiants temporaires ont expiré.                                                          |
+| `disabled`          | `false`                                                              | Désactive le module `AWS`.                                                                                                       |
+| `force_display`     | `false`                                                              | Si `true`, affiche les informations même si les identifiants, `credential_process` ou `sso_start_url` n'ont pas été configurées. |
 
 ### Variables
 
@@ -509,7 +509,7 @@ L’option `commands` accepte une liste de commandes pour déterminer la version
 
 Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+Si un compilateur C n’est pas supporté par ce module, vous pouvez demander son ajout en [créant un ticket sur GitHub](https://github.com/starship/starship/).
 
 ### Exemple
 
@@ -2642,9 +2642,9 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 
 ::: tip
 
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+La variable `python_binary` accepte soit une chaine, soit une liste de chaines de caractères. Starship essayera d'exécuter chaque binaire jusqu'à obtenir un résultat. Notez que vous ne pouvez modifier que le binaire que Starship exécute pour obtenir la version de Python, mais pas les arguments utilisés.
 
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `"python3"` will hide any Python version 2, see example below.
+The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). Si vous ne travaillez plus avec Python 2 mais ne pouvez pas le supprimer du système, changer ceci par `"python3"` cachera tous les Python version 2, voir l’exemple ci-dessous.
 
 :::
 
@@ -2969,7 +2969,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| shlvl     | `3`     | The current value of `SHLVL`           |
+| shlvl     | `3`     | La valeur actuelle de `SHLVL`          |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
@@ -3032,7 +3032,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 | Option                  | Défaut                                                                               | Description                                             |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
+| `format`                | `"[$symbol$status]($style) "`                                                        | Le format du module                                     |
 | `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
 | `success_symbol`        | `""`                                                                                 | The symbol displayed on program success                 |
 | `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
