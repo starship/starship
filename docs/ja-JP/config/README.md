@@ -265,7 +265,7 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile event when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile even when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
 
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
 
@@ -277,16 +277,16 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### オプション
 
-| オプション               | デフォルト                                                                | 説明                                                                                                        |
-| ------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | module のフォーマットです。                                                                                         |
-| `symbol`            | `"☁️ "`                                                              | 現在のAWSプロファイルを表示する前に表示される記号です。                                                                             |
-| `region_aliases`    |                                                                      | AWS名に加えて表示するリージョンのエイリアスです。                                                                                |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                          |
-| `style`             | `"bold yellow"`                                                      | モジュールのスタイルです。                                                                                             |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired.                                         |
-| `disabled`          | `false`                                                              | `aws`モジュールを無効にします。                                                                                        |
-| `force_display`     | `false`                                                              | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| オプション               | デフォルト                                                                | 説明                                                                                                          |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | module のフォーマットです。                                                                                           |
+| `symbol`            | `"☁️ "`                                                              | 現在のAWSプロファイルを表示する前に表示される記号です。                                                                               |
+| `region_aliases`    |                                                                      | AWS名に加えて表示するリージョンのエイリアスです。                                                                                  |
+| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `"bold yellow"`                                                      | モジュールのスタイルです。                                                                                               |
+| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired.                                           |
+| `disabled`          | `false`                                                              | `aws`モジュールを無効にします。                                                                                          |
+| `force_display`     | `false`                                                              | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### 変数
 
@@ -1011,7 +1011,7 @@ You'll also need the .NET Core SDK installed in order to use it correctly.
 
 内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) when there is a csproj file in the current directory.
+The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
 
 ### オプション
 
