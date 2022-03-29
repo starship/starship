@@ -133,7 +133,7 @@ Certains shells peuvent gérer une invite de commande à droite, sur la même li
 
 Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. Pour aligner à droite des modules au-dessus de la ligne d’entrée dans une invite multi-ligne, voir le [module fill](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` est actuellement géré pour les shells suivants: elvish, fish, zsh, xonsh, cmd.
 
 ### Exemple
 
@@ -157,7 +157,7 @@ Génère l’invite suivante:
 
 Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+Starship peut définir l’invite de continuation en utilisant l’option `continuation_prompt`. L’invite par défaut est `"[∙](bright-black) "`.
 
 Note: la valeur de `continuation_prompt` doit être une chaine littérale, sans variable.
 
