@@ -42,4 +42,10 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
 It also shows how path substitution works in starship.
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pastel Powerline preset")](./pastel-powerline)
+
+## [Solarized Dark Powerline](./solarized-dark-powerline.md)
+
+This preset is inspired by [Agnoster ZSH theme](https://github.com/agnoster/agnoster-zsh-theme).
+
+[![Screenshot of Solarized Dark Powerline preset](/presets/img/solarized-dark-powerline.png "Click to view Solarized Dark Powerline preset")](./solarized-dark-powerline)
