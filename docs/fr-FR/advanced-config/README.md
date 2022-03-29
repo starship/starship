@@ -71,7 +71,7 @@ function Invoke-Starship-PreCommand {
 
 ## Modifier le titre des fenêtres
 
-Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter le dossier courant). Fish le fait même par défaut. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter le dossier courant). Fish le fait même par défaut. Starship ne fait pas ça, mais c’est assez facile d’ajouter cette fonctionnalité à `bash`, `zsh`, `cmd` ou `powershell`.
 
 Tout d'abord, définissez une fonction de changement de titre de fenêtre (identique en bash et zsh) :
 
@@ -131,7 +131,7 @@ Invoke-Expression (&starship init powershell)
 
 Certains shells peuvent gérer une invite de commande à droite, sur la même ligne que l’entrée utilisateur. Starship peut définir le contenu de cet invite à droite en utilisant l’option `right_format`. N’importe quel module qui peut être utilisé dans `format` est aussi géré dans `right_format`. La variable `$all` va seulement contenir les modules qui ne sont explicitement utilisés ni dans `format`, ni dans `right_format`.
 
-Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
+Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. Pour aligner à droite des modules au-dessus de la ligne d’entrée dans une invite multi-ligne, voir le [module fill](/config/#fill).
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
 
@@ -159,9 +159,9 @@ Some shells support a continuation prompt along with the normal prompt. This pro
 
 Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Note: la valeur de `continuation_prompt` doit être une chaine littérale, sans variable.
 
-Note: Continuation prompts are only available in the following shells:
+Note: les invites de confirmation sont uniquement disponibles pour les shells suivants:
 
 - `bash`
 - `zsh`
