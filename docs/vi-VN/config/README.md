@@ -264,7 +264,7 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile event when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile even when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
 
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
 
@@ -276,16 +276,16 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                             | Mô tả                                                                                                     |
-| ------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Định dạng cho module.                                                                                     |
-| `symbol`            | `"☁️ "`                                                              | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại.                                                      |
-| `region_aliases`    |                                                                      | Bảng của các region alias để hiển thị ngoài tên AWS.                                                      |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                          |
-| `style`             | `"bold yellow"`                                                      | Kiểu cho module.                                                                                          |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired.                                         |
-| `disabled`          | `false`                                                              | Vô hiệu `AWS` module.                                                                                     |
-| `force_display`     | `false`                                                              | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Tuỳ chọn            | Mặc định                                                             | Mô tả                                                                                                       |
+| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Định dạng cho module.                                                                                       |
+| `symbol`            | `"☁️ "`                                                              | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại.                                                        |
+| `region_aliases`    |                                                                      | Bảng của các region alias để hiển thị ngoài tên AWS.                                                        |
+| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `"bold yellow"`                                                      | Kiểu cho module.                                                                                            |
+| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired.                                           |
+| `disabled`          | `false`                                                              | Vô hiệu `AWS` module.                                                                                       |
+| `force_display`     | `false`                                                              | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Các biến
 
@@ -1010,7 +1010,7 @@ Bạn cũng sẽ cần cài đặt .NET Core SDK đúng cách để sử dụng 
 
 Mô đun này sử dụng cơ chế của bản thân để phát hiện phiên bản của chính nó. Thông thường, nó nhanh gấp đôi nếu chạy `dotnet --version`, nhưng nó có thể hiện sai phiên bản nếu dự án .NET của bạn có một cấu trúc thư mục bất thường. Nếu độ chính xác quan trọng hơn tốc độ, bạn có thể vô hiệu cơ chế bằng cài đặt `heuristic = false` trong các tùy chọn mô đun.
 
-Mô đun cũng sẽ hiện Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>) khi có một tệp tin csproj trong thư mục hiện tại.
+The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
 
 ### Các tuỳ chọn
 
