@@ -172,7 +172,7 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Un invite de continuation qui affiche deux flèches pleines
 continuation_prompt = "▶▶"
 ```
 
