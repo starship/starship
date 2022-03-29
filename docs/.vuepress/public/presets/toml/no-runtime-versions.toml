@@ -1,92 +1,92 @@
 [buf]
-format = "via [$symbol]($style)"
+version_format = ""
 
 [cmake]
-format = "via [$symbol]($style)"
+version_format = ""
 
 [cobol]
-format = "via [$symbol]($style)"
+version_format = ""
 
 [crystal]
-format = "via [$symbol]($style)"
+version_format = ""
 
 [dart]
-format = "via [$symbol]($style)"
+version_format = ""
 
 [deno]
-format = "via [$symbol]($style)"
+version_format = ""
 
 [dotnet]
-format = "[$symbol(🎯 $tfm )]($style)"
+version_format = ""
 
 [elixir]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [elm]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [erlang]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [golang]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [helm]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [julia]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [kotlin]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [lua]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [nim]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [nodejs]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [ocaml]
-format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
+version_format = ""
 
 [perl]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [php]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [pulumi]
-format = 'via [$symbol$stack]($style)'
+version_format = ""
 
 [purescript]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [python]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [red]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [rlang]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [ruby]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [rust]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [swift]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [vagrant]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [vlang]
-format = 'via [$symbol]($style)'
+version_format = ""
 
 [zig]
-format = 'via [$symbol]($style)'
+version_format = ""
