@@ -1076,7 +1076,7 @@ unusual directory layout. If accuracy is more important than speed, you can disa
 setting `heuristic = false` in the module options.
 
 The module will also show the Target Framework Moniker
-(<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>)
+(<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>)
 when there is a csproj file in the current directory.
 
 ### Options
