@@ -129,7 +129,7 @@ Invoke-Expression (&starship init powershell)
 
 ## Mettre l’invite à droite
 
-Certains shells peuvent gérer une invite de commande à droite, sur la même ligne que l’entrée utilisateur. Starship peut définir le contenu de cet invite à droite en utilisant l’option `right_format`. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+Certains shells peuvent gérer une invite de commande à droite, sur la même ligne que l’entrée utilisateur. Starship peut définir le contenu de cet invite à droite en utilisant l’option `right_format`. N’importe quel module qui peut être utilisé dans `format` est aussi géré dans `right_format`. La variable `$all` va seulement contenir les modules qui ne sont explicitement utilisés ni dans `format`, ni dans `right_format`.
 
 Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
 
