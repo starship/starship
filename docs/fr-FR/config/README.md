@@ -646,7 +646,7 @@ Le module `cobol` affiche la version de COBOL installée. Par défaut, le module
 
 ## Temps d'exécution
 
-Le module `cmd_duration` montre le temps qu'a pris la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
+Le module `cmd_duration` montre le temps qu'a pris la dernière commande pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
 
 ::: warning N'interceptez pas le signal DEBUG avec Bash
 
@@ -658,16 +658,16 @@ Les utilisateurs de Bash qui ont besoin de fonctionnalité pré-exec peuvent uti
 
 ### Options
 
-| Option                 | Défaut                        | Description                                                                                                                                                         |
-| ---------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).                                                                                                    |
-| `show_milliseconds`    | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée.                                                                                                   |
-| `format`               | `"took [$duration]($style) "` | Format du module.                                                                                                                                                   |
-| `style`                | `"bold yellow"`               | Le style du module.                                                                                                                                                 |
-| `disabled`             | `false`                       | Désactive le module `cmd_duration`.                                                                                                                                 |
-| `show_notifications`   | `false`                       | Afficher les notifications du bureau lorsque la commande est terminée.                                                                                              |
-| `min_time_to_notify`   | `45_000`                      | Durée minimale après laquelle activer la notification (en millisecondes).                                                                                           |
-| `notification_timeout` |                               | Durée d’affichage des notifications (en milisecondes). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| Option                 | Défaut                        | Description                                                                                                                                                                  |
+| ---------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Durée la plus courte quand afficher le temps (en millisecondes).                                                                                                             |
+| `show_milliseconds`    | `false`                       | Afficher les millisecondes en plus des secondes pendant la durée.                                                                                                            |
+| `format`               | `"took [$duration]($style) "` | Format du module.                                                                                                                                                            |
+| `style`                | `"bold yellow"`               | Le style du module.                                                                                                                                                          |
+| `disabled`             | `false`                       | Désactive le module `cmd_duration`.                                                                                                                                          |
+| `show_notifications`   | `false`                       | Afficher les notifications du bureau lorsque la commande est terminée.                                                                                                       |
+| `min_time_to_notify`   | `45_000`                      | Durée minimale après laquelle activer la notification (en millisecondes).                                                                                                    |
+| `notification_timeout` |                               | Durée d’affichage des notifications (en milisecondes). Si non défini, la durée sera déterminée par le démon. Tous les démons de notification ne respectent pas cette option. |
 
 ### Variables
 
