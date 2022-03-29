@@ -10,7 +10,7 @@ Les configurations dans cette section sont sujettes à modification dans les fut
 
 ## Commandes pré-invite et pré-exécution personnalisées dans Cmd
 
-Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. Il est assez simple à utiliser avec Starship. Effectuez les modifications suivantes dans votre fichier `starship.lua`, en fonction de vos besoins:
+Clink fournit des APIs extrêmement flexibles pour exécuter des commandes pre-invite et pre-exec dans Cmd. Il est assez simple à utiliser avec Starship. Effectuez les modifications suivantes dans votre fichier `starship.lua`, en fonction de vos besoins:
 
 - To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
 
@@ -106,7 +106,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
+Pour Cmd, vous pouvez changer le titre de la fenêtre en utilisant la fonction `starship_preprompt_user_func`.
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -116,7 +116,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+Vous pouvez également faire la même chose avec PowerShell en créant une fonction nommée `Invoke-Starship-PreCommand`.
 
 ```powershell
 # edit $PROFILE
@@ -129,7 +129,7 @@ Invoke-Expression (&starship init powershell)
 
 ## Mettre l’invite à droite
 
-Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+Certains shells peuvent gérer une invite de commande à droite, sur la même ligne que l’entrée. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
 
