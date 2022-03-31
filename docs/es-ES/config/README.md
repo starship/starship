@@ -1095,7 +1095,7 @@ El módulo `elm` muestra la versión instalada de [Elm](https://elm-lang.org/). 
 - El directorio actual contiene un archivo `elm-package.json`
 - El directorio actual contiene un archivo `.elm-version`
 - El directorio actual contiene una carpeta `elm-stuff`
-- The current directory contains `*.elm` files
+- El directorio actual contiene archivos `*.elm`
 
 ### Opciones
 
