@@ -3278,7 +3278,7 @@ time_range = "10:00:00-14:00:00"
 
 `username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- カレントユーザーがroot
+- The current user is root/admin
 - カレントユーザーが、ログインしているユーザーとは異なる
 - ユーザーがSSHセッションとして接続されている
 - `show_always`変数がtrueに設定されている
@@ -3291,13 +3291,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### オプション
 
-| オプション         | デフォルト                   | 説明                        |
-| ------------- | ----------------------- | ------------------------- |
-| `style_root`  | `"bold red"`            | ユーザーがrootのときに使用されるスタイルです。 |
-| `style_user`  | `"bold yellow"`         | 非rootユーザーに使用されるスタイルです。    |
-| `format`      | `"[$user]($style) in "` | module のフォーマットです。         |
-| `show_always` | `false`                 | `username`モジュールを常に表示します。  |
-| `disabled`    | `false`                 | `username`モジュールを無効にします。   |
+| オプション         | デフォルト                   | 説明                                          |
+| ------------- | ----------------------- | ------------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
+| `style_user`  | `"bold yellow"`         | 非rootユーザーに使用されるスタイルです。                      |
+| `format`      | `"[$user]($style) in "` | module のフォーマットです。                           |
+| `show_always` | `false`                 | `username`モジュールを常に表示します。                    |
+| `disabled`    | `false`                 | `username`モジュールを無効にします。                     |
 
 ### 変数
 
