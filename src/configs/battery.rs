@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(default)]
 pub struct BatteryConfig<'a> {
     pub full_symbol: &'a str,
@@ -30,6 +31,7 @@ impl<'a> Default for BatteryConfig<'a> {
 }
 
 #[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(default)]
 pub struct BatteryDisplayConfig<'a> {
     pub threshold: i64,

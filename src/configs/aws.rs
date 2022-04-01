@@ -2,15 +2,48 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(default)]
+/// ## AWS
+///
+/// The `aws` module shows the current AWS region and profile when
+/// credentials or a `credential_process` have been setup. This is based on
+/// `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
+/// `~/.aws/config` file. This module also shows an expiration timer when using temporary
+/// credentials.
+///
+/// The module will display a profile only if its credentials are present in
+/// `~/.aws/credentials` or a `credential_process` is defined in
+/// `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`,
+/// `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will
+/// also suffice.
+///
+/// When using [aws-vault](https://github.com/99designs/aws-vault) the profile
+/// is read from the `AWS_VAULT` env var and the credentials expiration date
+/// is read from the `AWS_SESSION_EXPIRATION` env var.
+///
+/// When using [awsu](https://github.com/kreuzwerker/awsu) the profile
+/// is read from the `AWSU_PROFILE` env var.
+///
+/// When using [AWSume](https://awsu.me) the profile
+/// is read from the `AWSUME_PROFILE` env var and the credentials expiration
+/// date is read from the `AWSUME_EXPIRATION` env var.
 pub struct AwsConfig<'a> {
+    /// The format for the module.
     pub format: &'a str,
+    /// The symbol used before displaying the current AWS profile.
     pub symbol: &'a str,
+    /// The style for the module.
     pub style: &'a str,
+    /// Disables the AWS module.
     pub disabled: bool,
+    /// Table of region aliases to display in addition to the AWS name.
     pub region_aliases: HashMap<String, &'a str>,
+    /// Table of profile aliases to display in addition to the AWS name.
     pub profile_aliases: HashMap<String, &'a str>,
+    /// The symbol displayed when the temporary credentials have expired.
     pub expiration_symbol: &'a str,
+    /// If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.
     pub force_display: bool,
 }
 

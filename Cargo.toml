@@ -16,6 +16,7 @@ include = [
   "LICENSE",
   "/README.md",
   "docs/.vuepress/public/presets/toml/",
+  ".github/config-schema.json",
 ]
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]
 license = "ISC"
@@ -31,6 +32,7 @@ The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄
 [features]
 default = ["battery"]
 battery = ["starship-battery"]
+config-schema = ["schemars"]
 
 [dependencies]
 ansi_term = "0.12.1"
@@ -80,6 +82,11 @@ yaml-rust = "0.4.5"
 process_control = { version = "3.3.0", features = ["crossbeam-channel"] }
 
 shell-words = "1.1.0"
+
+[dependencies.schemars]
+version = "0.8.8"
+optional = true
+features = ["preserve_order", "indexmap"]
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winuser", "securitybaseapi", "processthreadsapi", "handleapi", "impl-default"] }

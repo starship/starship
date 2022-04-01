@@ -78,8 +78,12 @@ pub mod zig;
 pub use starship_root::*;
 
 #[derive(Serialize, Deserialize, Clone, Default)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(default)]
 pub struct FullConfig<'a> {
+    // Meta
+    #[serde(rename = "$schema")]
+    schema: String,
     // Root config
     #[serde(flatten)]
     root: StarshipRootConfig,

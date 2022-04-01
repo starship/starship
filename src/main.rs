@@ -97,6 +97,9 @@ enum Commands {
         #[clap(default_value = "disabled")]
         value: String,
     },
+    #[cfg(feature = "config-schema")]
+    /// Generate a schema for the starship configuration as JSON-schema
+    ConfigSchema,
 }
 
 fn main() {
@@ -216,6 +219,8 @@ fn main() {
                 .map(char::from)
                 .collect::<String>()
         ),
+        #[cfg(feature = "config-schema")]
+        Commands::ConfigSchema => print::print_schema(),
     }
 }
 
