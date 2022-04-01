@@ -3277,7 +3277,7 @@ time_range = "10:00:00-14:00:00"
 
 El módulo `username` muestra el nombre de usuario activo. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- El usuario actual es root
+- The current user is root/admin
 - El usuario actual no es el mismo que el que está conectado
 - El usuario está actualmente conectado como una sesión SSH
 - La variable `show_always` se establece en true
@@ -3290,13 +3290,13 @@ La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION
 
 ### Opciones
 
-| Opción        | Por defecto             | Descripción                                |
-| ------------- | ----------------------- | ------------------------------------------ |
-| `style_root`  | `"bold red"`            | El estilo usado cuando el usuario es root. |
-| `style_user`  | `"bold yellow"`         | El estilo usado para usuarios no root.     |
-| `format`      | `"[$user]($style) in "` | El formato del módulo.                     |
-| `show_always` | `false`                 | Siempre muestra el módulo `username`.      |
-| `disabled`    | `false`                 | Desactiva el módulo `username`.            |
+| Opción        | Por defecto             | Descripción                                 |
+| ------------- | ----------------------- | ------------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
+| `style_user`  | `"bold yellow"`         | El estilo usado para usuarios no root.      |
+| `format`      | `"[$user]($style) in "` | El formato del módulo.                      |
+| `show_always` | `false`                 | Siempre muestra el módulo `username`.       |
+| `disabled`    | `false`                 | Desactiva el módulo `username`.             |
 
 ### Variables
 
