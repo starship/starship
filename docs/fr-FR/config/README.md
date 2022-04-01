@@ -9,14 +9,17 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Toute la configuration de starship est effectuée dans ce fichier [TOML](https://github.com/toml-lang/toml) :
 
 ```toml
-# Insère un saut de ligne entre les invites de commande
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
 add_newline = true
 
-# Remplace le symbole «❯» dans le prompt par «➜»
-[character] # Le nom du module qu’on configure est «character»
-success_symbol = "[➜](bold green)" # Le segment «success_symbol» est changé à «➜» avec la couleur «bold green»
+# Replace the "❯" symbol in the prompt with "➜"
+[character] # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
 
-# Désactive le module «package», le cachant complètement de l’invite
+# Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 ```
