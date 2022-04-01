@@ -42,8 +42,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    بإستخدام Shell:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    لتحديث Starship نفسه، أعد تشغيل البرنامج النصي أعلاه. سيتم استبدال الإصدار الحالي بدون لمس تكوين Starship.
 
 
@@ -61,7 +62,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    scoop install starship
    ```
 
-1. أضف البرنامج النصي إلى ملف تهيئة موجه الأوامر:
+1. أضف ما يلي إلى ملف تكوين موجه الأوامر الخاص بك:
 
 
    #### Bash
@@ -119,7 +120,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: تحذير يدعم فقط elvish v0.17 أو أعلى. :::
+   ::: warning يدعم فقط elvish v0.17 أو أعلى. :::
 
    أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
 
@@ -143,17 +144,19 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: تحذير هذا سوف يتغير في المستقبل. فقط إصدار nu v0.33 أو أعلى مدعوم. ::: أضف ما يلي إلى ملف تكوين nu الخاص بك. يمكنك التحقق من موقع هذا الملف عن طريق تشغيل `config path` في nu.
-
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   ::: تحذير هذا سوف يتغير في المستقبل. Only Nushell v0.60+ is supported. ::: Run the following:
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
    ```
 
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
+   source ~/.cache/starship/init.nu
+   ```
 
    #### Xonsh
 

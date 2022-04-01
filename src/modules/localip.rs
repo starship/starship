@@ -1,6 +1,6 @@
 use super::{Context, Module};
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::configs::localip::LocalipConfig;
 use crate::formatter::StringFormatter;
 
@@ -121,7 +121,6 @@ mod tests {
             .config(toml::toml! {
                 [localip]
                 ssh_only = true
-                trim_at = ""
                 disabled = false
             })
             .env("SSH_CONNECTION", "something")

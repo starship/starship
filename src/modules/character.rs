@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig, Shell};
+use super::{Context, Module, ModuleConfig, Shell};
 use crate::configs::character::CharacterConfig;
 use crate::formatter::StringFormatter;
 

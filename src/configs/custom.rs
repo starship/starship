@@ -1,9 +1,10 @@
-use crate::config::{ModuleConfig, VecOr};
+use crate::config::VecOr;
 
-use serde::{self, Serialize};
-use starship_module_config_derive::ModuleConfig;
+use serde::{self, Deserialize, Serialize};
 
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[serde(default)]
 pub struct CustomConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,

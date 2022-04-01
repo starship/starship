@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::formatter::string_formatter::StringFormatterError;
 use git2::Time;
 

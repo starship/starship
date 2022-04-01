@@ -32,7 +32,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## 在 Cmd 中自定义预提示和执行前命令
+## 在 Bash 中自定义预提示和预执行命令
 
 Bash 并没有类似大多数其它 shell 的正式预执行/预命令框架。 因此，很难在 `bash` 中提供完全可自定义的 hook 机制。 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
 

@@ -1,7 +1,7 @@
 use git2::RepositoryState;
 use std::path::PathBuf;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::git_state::GitStateConfig;
 use crate::context::Repo;
 use crate::formatter::StringFormatter;

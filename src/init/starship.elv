@@ -11,7 +11,7 @@ fn starship-after-command-hook {|m|
     } else {
         try {
             set cmd-status-code = $error[reason][exit-status]
-        } except {
+        } catch {
             # The error is from the built-in commands and they have no status code.
             set cmd-status-code = 1
         }

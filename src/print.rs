@@ -444,6 +444,12 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
     }
 }
 
+#[cfg(feature = "config-schema")]
+pub fn print_schema() {
+    let schema = schemars::schema_for!(crate::configs::FullConfig);
+    println!("{}", serde_json::to_string_pretty(&schema).unwrap());
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -482,5 +488,11 @@ mod test {
         let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    #[cfg(feature = "config-schema")]
+    fn print_schema_does_not_panic() {
+        print_schema();
     }
 }

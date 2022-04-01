@@ -18,6 +18,7 @@ pub mod module;
 mod modules;
 pub mod print;
 mod segment;
+mod serde_utils;
 mod utils;
 
 #[cfg(test)]

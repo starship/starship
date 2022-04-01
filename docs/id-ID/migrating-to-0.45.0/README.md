@@ -115,7 +115,7 @@ _Catatan:_ Element `character` secara otomatis menambahkan sebuah spasi setelahn
 
 | Properti Yang Digantikan | Penggantinya |
 | ------------------------ | ------------ |
-| `prefix`                 | `format`     |
+| `prefix`                 | `fromat`     |
 
 **Perubahan pada konfigurasi bawaan**
 
@@ -129,7 +129,7 @@ _Catatan:_ Element `character` secara otomatis menambahkan sebuah spasi setelahn
 
 | Properti Yang Digantikan | Penggantinya |
 | ------------------------ | ------------ |
-| `prefix`                 | `format`     |
+| `prefix`                 | `fromat`     |
 
 **Perubahan pada konfigurasi bawaan**
 
@@ -143,8 +143,8 @@ _Catatan:_ Element `character` secara otomatis menambahkan sebuah spasi setelahn
 
 | Properti Yang Digantikan | Penggantinya |
 | ------------------------ | ------------ |
-| `prefix`                 | `format`     |
-| `suffix`                 | `format`     |
+| `prefix`                 | `fromat`     |
+| `suffix`                 | `fromat`     |
 
 **Perubahan pada konfigurasi bawaan**
 
@@ -159,8 +159,8 @@ _Catatan:_ Element `character` secara otomatis menambahkan sebuah spasi setelahn
 
 | Properti Yang Digantikan | Penggantinya |
 | ------------------------ | ------------ |
-| `prefix`                 | `format`     |
-| `suffix`                 | `format`     |
+| `prefix`                 | `fromat`     |
+| `suffix`                 | `fromat`     |
 
 **Perubahan pada konfigurasi bawaan**
 
@@ -175,9 +175,9 @@ _Catatan:_ Element `character` secara otomatis menambahkan sebuah spasi setelahn
 
 | Properti Yang Digantikan | Penggantinya |
 | ------------------------ | ------------ |
-| `prefix`                 | `format`     |
-| `suffix`                 | `format`     |
-| `show_sync_count`        | `format`     |
+| `prefix`                 | `fromat`     |
+| `suffix`                 | `fromat`     |
+| `show_sync_count`        | `fromat`     |
 
 **Perubahan pada konfigurasi bawaan**
 
@@ -206,8 +206,8 @@ behind = "⇣${count}"
 
 | Properti Yang Digantikan | Penggantinya |
 | ------------------------ | ------------ |
-| `prefix`                 | `format`     |
-| `suffix`                 | `format`     |
+| `prefix`                 | `fromat`     |
+| `suffix`                 | `fromat`     |
 
 **Perubahan pada konfigurasi bawaan**
 
@@ -222,9 +222,9 @@ behind = "⇣${count}"
 
 | Properti Yang Digantikan | Penggantinya |
 | ------------------------ | ------------ |
-| `label`                  | `format`     |
-| `prefix`                 | `format`     |
-| `suffix`                 | `format`     |
+| `label`                  | `fromat`     |
+| `prefix`                 | `fromat`     |
+| `suffix`                 | `fromat`     |
 
 **Perubahan pada konfigurasi bawaan**
 
@@ -239,7 +239,7 @@ behind = "⇣${count}"
 
 | Properti Yang Digantikan | Penggantinya  |
 | ------------------------ | ------------- |
-| `format`                 | `time_format` |
+| `fromat`                 | `time_format` |
 
 **Perubahan pada konfigurasi bawaan**
 
@@ -254,8 +254,8 @@ behind = "⇣${count}"
 
 | Properti Yang Digantikan | Penggantinya |
 | ------------------------ | ------------ |
-| `prefix`                 | `format`     |
-| `suffix`                 | `format`     |
+| `prefix`                 | `fromat`     |
+| `suffix`                 | `fromat`     |
 
 **Perubahan pada konfigurasi bawaan**
 

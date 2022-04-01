@@ -1,4 +1,4 @@
-# 🚀 Zaawansowana Instalacja
+# Advanced Installation
 
 Aby zainstalować starship, musisz zrobić dwie rzeczy:
 
@@ -32,7 +32,7 @@ pkg install getconf
 ### Instalacja
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
+curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)

@@ -1,6 +1,6 @@
 use super::{Context, Module};
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::configs::shlvl::ShLvlConfig;
 use crate::formatter::StringFormatter;
 use std::borrow::Cow;

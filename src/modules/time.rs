@@ -1,6 +1,6 @@
 use chrono::{DateTime, FixedOffset, Local, NaiveTime, Utc};
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::time::TimeConfig;
 use crate::formatter::StringFormatter;
 

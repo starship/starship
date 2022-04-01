@@ -1,4 +1,4 @@
-# 🚀 Instalación avanzada
+# Advanced Installation
 
 Para instalar Starship, necesitas hacer dos cosas:
 
@@ -32,7 +32,7 @@ pkg install getconf
 ### Instalación
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir /data/data/com.termux/files/usr/bin
+curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
 ```
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)
@@ -57,7 +57,7 @@ nix-env -iA nixos.starship
 
 #### Declarativo, usuario único, a través de [home-manager](https://github.com/nix-community/home-manager)
 
-Habilita el módulo `programs.starship` en tu archivo `home.nix` y añade tus configuraciones
+Activa el módulo `programs.starship` en tu archivo `home.nix` y añade tus ajustes
 
 ```nix
 {
@@ -78,10 +78,10 @@ Habilita el módulo `programs.starship` en tu archivo `home.nix` y añade tus co
 }
 ```
 
-then run
+luego ejecutar
 
 ```sh
-home-manager switch
+interruptor home-manager
 ```
 
 #### Declarativo, en todo el sistema, con NixOS

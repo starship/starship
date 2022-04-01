@@ -85,7 +85,7 @@ format = "took [$duration]($style) "
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Alterações na Configuração Padrão**
+**Alterações na configuração padrão**
 
 ```diff
 [character]
@@ -109,7 +109,7 @@ Para configurar o prompt para usar a configuração antiga `use_symbol_for_statu
 error_symbol = "[✖](bold red)"
 ```
 
-_Nota:_ O elemento `charactere` adiciona automaticamente um espaço depois, portanto, ao contrário das outras strings de `format`, nós não adicionamos nos exemplos acima.
+_Nota:_ O elemento `charactere` adiciona automaticamente um espaço depois do mesmo, portanto ao contrario strings `format`, nós não adicionamos o espaço nos exemplos acima.
 
 #### Tempo de execução do comando
 
@@ -252,12 +252,12 @@ behind = "⇣${count}"
 
 #### Comandos Personalizados
 
-| Remover Propriedade | Substituição |
-| ------------------- | ------------ |
-| `prefix`            | `format`     |
-| `suffix`            | `format`     |
+| Propriedades Removidas | Substituição |
+| ---------------------- | ------------ |
+| `prefix`               | `format`     |
+| `suffix`               | `format`     |
 
-**Alterações na configuração padrão**
+**Alterações na Configuração Padrão**
 
 ```diff
 [custom.example]

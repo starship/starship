@@ -1,8 +1,8 @@
-use crate::config::ModuleConfig;
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[serde(default)]
 pub struct AzureConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
