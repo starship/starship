@@ -1,5 +1,6 @@
 use std::env;
 use std::io::Write;
+use std::path::Path;
 use std::process::{Command, Output, Stdio};
 use std::time::Instant;
 
@@ -36,7 +37,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
 
     if !is_match {
         if let Some(when) = config.when {
-            is_match = exec_when(when, &config.shell.0);
+            is_match = exec_when(when, &config.shell.0, &context.current_dir);
         }
 
         if !is_match {
@@ -63,7 +64,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                         return None;
                     }
 
-                    let output = exec_command(config.command, &config.shell.0)?;
+                    let output = exec_command(config.command, &config.shell.0, &context.current_dir)?;
                     let trimmed = output.trim();
 
                     if trimmed.is_empty() {
@@ -103,7 +104,7 @@ fn get_shell<'a, 'b>(shell_args: &'b [&'a str]) -> (std::borrow::Cow<'a, str>, &
 
 /// Attempt to run the given command in a shell by passing it as `stdin` to `get_shell()`
 #[cfg(not(windows))]
-fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
+fn shell_command(cmd: &str, shell_args: &[&str], current_dir: &Path) -> Option<Output> {
     let (shell, shell_args) = get_shell(shell_args);
     let mut command = create_command(shell.as_ref()).ok()?;
 
@@ -111,7 +112,8 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
         .args(shell_args)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
-        .stderr(Stdio::piped());
+        .stderr(Stdio::piped())
+        .current_dir(current_dir);
 
     handle_powershell(&mut command, &shell, shell_args);
 
@@ -141,7 +143,7 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
 /// Attempt to run the given command in a shell by passing it as `stdin` to `get_shell()`,
 /// or by invoking cmd.exe /C.
 #[cfg(windows)]
-fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
+fn shell_command(cmd: &str, shell_args: &[&str], current_dir: &Path) -> Option<Output> {
     let (shell, shell_args) = if !shell_args.is_empty() {
         (
             Some(std::borrow::Cow::Borrowed(shell_args[0])),
@@ -163,7 +165,8 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
             .args(shell_args)
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
-            .stderr(Stdio::piped());
+            .stderr(Stdio::piped())
+            .current_dir(current_dir);
 
         handle_powershell(&mut command, &forced_shell, shell_args);
 
@@ -185,16 +188,17 @@ fn shell_command(cmd: &str, shell_args: &[&str]) -> Option<Output> {
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
+        .current_dir(current_dir)
         .spawn();
 
     command.ok()?.wait_with_output().ok()
 }
 
 /// Execute the given command capturing all output, and return whether it return 0
-fn exec_when(cmd: &str, shell_args: &[&str]) -> bool {
+fn exec_when(cmd: &str, shell_args: &[&str], current_dir: &Path) -> bool {
     log::trace!("Running '{}'", cmd);
 
-    if let Some(output) = shell_command(cmd, shell_args) {
+    if let Some(output) = shell_command(cmd, shell_args, current_dir) {
         if !output.status.success() {
             log::trace!("non-zero exit code '{:?}'", output.status.code());
             log::trace!(
@@ -216,10 +220,10 @@ fn exec_when(cmd: &str, shell_args: &[&str]) -> bool {
 }
 
 /// Execute the given command, returning its output on success
-fn exec_command(cmd: &str, shell_args: &[&str]) -> Option<String> {
+fn exec_command(cmd: &str, shell_args: &[&str], current_dir: &Path) -> Option<String> {
     log::trace!("Running '{}'", cmd);
 
-    if let Some(output) = shell_command(cmd, shell_args) {
+    if let Some(output) = shell_command(cmd, shell_args, current_dir) {
         if !output.status.success() {
             log::trace!("Non-zero exit code '{:?}'", output.status.code());
             log::trace!(
@@ -256,6 +260,11 @@ fn handle_powershell(command: &mut Command, shell: &str, shell_args: &[&str]) {
 mod tests {
     use super::*;
 
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+
     #[cfg(not(windows))]
     const SHELL: &[&str] = &["/bin/sh"];
     #[cfg(windows)]
@@ -269,65 +278,135 @@ mod tests {
     const UNKNOWN_COMMAND: &str = "ydelsyiedsieudleylse dyesdesl";
 
     #[test]
-    fn when_returns_right_value() {
-        assert!(exec_when("echo hello", SHELL));
-        assert!(!exec_when(FAILING_COMMAND, SHELL));
+    fn when_returns_right_value() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        assert!(exec_when("echo hello", SHELL, dir.path()));
+        assert!(!exec_when(FAILING_COMMAND, SHELL, dir.path()));
+        dir.close()
     }
 
     #[test]
-    fn when_returns_false_if_invalid_command() {
-        assert!(!exec_when(UNKNOWN_COMMAND, SHELL));
+    fn when_returns_false_if_invalid_command() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        assert!(!exec_when(UNKNOWN_COMMAND, SHELL, dir.path()));
+        dir.close()
     }
 
     #[test]
     #[cfg(not(windows))]
-    fn command_returns_right_string() {
-        assert_eq!(exec_command("echo hello", SHELL), Some("hello\n".into()));
+    fn command_returns_right_string() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
         assert_eq!(
-            exec_command("echo 강남스타일", SHELL),
+            exec_command("echo hello", SHELL, dir.path()),
+            Some("hello\n".into())
+        );
+        assert_eq!(
+            exec_command("echo 강남스타일", SHELL, dir.path()),
             Some("강남스타일\n".into())
         );
+        dir.close()
     }
 
     #[test]
     #[cfg(windows)]
-    fn command_returns_right_string() {
-        assert_eq!(exec_command("echo hello", SHELL), Some("hello\r\n".into()));
+    fn command_returns_right_string() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
         assert_eq!(
-            exec_command("echo 강남스타일", SHELL),
+            exec_command("echo hello", SHELL, dir.path()),
+            Some("hello\r\n".into())
+        );
+        assert_eq!(
+            exec_command("echo 강남스타일", SHELL, dir.path()),
             Some("강남스타일\r\n".into())
         );
+        dir.close()
     }
 
     #[test]
     #[cfg(not(windows))]
-    fn command_ignores_stderr() {
+    fn command_ignores_stderr() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
         assert_eq!(
-            exec_command("echo foo 1>&2; echo bar", SHELL),
+            exec_command("echo foo 1>&2; echo bar", SHELL, dir.path()),
             Some("bar\n".into())
         );
         assert_eq!(
-            exec_command("echo foo; echo bar 1>&2", SHELL),
+            exec_command("echo foo; echo bar 1>&2", SHELL, dir.path()),
             Some("foo\n".into())
         );
+        dir.close()
     }
 
     #[test]
     #[cfg(windows)]
-    fn command_ignores_stderr() {
+    fn command_ignores_stderr() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
         assert_eq!(
-            exec_command("echo foo 1>&2 & echo bar", SHELL),
+            exec_command("echo foo 1>&2 & echo bar", SHELL, dir.path()),
             Some("bar\r\n".into())
         );
         assert_eq!(
-            exec_command("echo foo& echo bar 1>&2", SHELL),
+            exec_command("echo foo& echo bar 1>&2", SHELL, dir.path()),
             Some("foo\r\n".into())
         );
+        dir.close()
     }
 
     #[test]
-    fn command_can_fail() {
-        assert_eq!(exec_command(FAILING_COMMAND, SHELL), None);
-        assert_eq!(exec_command(UNKNOWN_COMMAND, SHELL), None);
+    fn command_can_fail() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        assert_eq!(exec_command(FAILING_COMMAND, SHELL, dir.path()), None);
+        assert_eq!(exec_command(UNKNOWN_COMMAND, SHELL, dir.path()), None);
+        dir.close()
+    }
+
+    #[test]
+    fn cwd_command() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let mut f = File::create(dir.path().join("a.txt"))?;
+        write!(f, "hello")?;
+        f.sync_all()?;
+
+        let cat = if cfg!(windows) { "type" } else { "cat" };
+        let cmd = format!("{cat} a.txt");
+
+        let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
+            .config(toml::toml! {
+                [custom.test]
+                command = cmd
+                files = ["a.txt"]
+            })
+            .collect();
+        let expected = Some(format!("{}", Color::Green.bold().paint("hello ")));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn cwd_when() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        File::create(dir.path().join("a.txt"))?.sync_all()?;
+
+        let cat = if cfg!(windows) { "type" } else { "cat" };
+        let cmd = format!("{cat} a.txt");
+
+        let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
+            .config(toml::toml! {
+                [custom.test]
+                format = "test"
+                when = cmd
+            })
+            .collect();
+        let expected = Some("test".to_owned());
+
+        assert_eq!(expected, actual);
+
+        dir.close()
     }
 }
