@@ -1924,7 +1924,7 @@ dependencies = [
  "regex",
  "rust-ini",
  "schemars",
- "semver",
+ "semver 1.0.7",
  "serde",
  "serde_json",
  "sha-1 0.10.0",
