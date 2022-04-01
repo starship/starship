@@ -296,7 +296,14 @@
         "read_only_style": "red",
         "repo_root_format": "[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
         "repo_root_style": null,
-        "style": "cyan bold",
+        "style": [
+          {
+            "env": null,
+            "expected_value": null,
+            "operator": null,
+            "style": "cyan bold"
+          }
+        ],
         "substitutions": {},
         "truncate_to_repo": true,
         "truncation_length": 3,
@@ -2143,8 +2150,19 @@
           "type": "string"
         },
         "style": {
-          "default": "cyan bold",
-          "type": "string"
+          "default": [
+            {
+              "env": null,
+              "expected_value": null,
+              "operator": null,
+              "style": "cyan bold"
+            }
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_StarshipConditionalStyle_and_Array_of_StarshipConditionalStyle"
+            }
+          ]
         },
         "repo_root_style": {
           "default": null,
@@ -2178,6 +2196,60 @@
           "type": "boolean"
         }
       }
+    },
+    "Either_for_StarshipConditionalStyle_and_Array_of_StarshipConditionalStyle": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/StarshipConditionalStyle"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StarshipConditionalStyle"
+          }
+        }
+      ]
+    },
+    "StarshipConditionalStyle": {
+      "type": "object",
+      "properties": {
+        "env": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "operator": {
+          "default": null,
+          "anyOf": [
+            {
+              "$ref": "#/definitions/StarshipConditionalStyleOperator"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_value": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "style": {
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "StarshipConditionalStyleOperator": {
+      "type": "string",
+      "enum": [
+        "Equal",
+        "Exists"
+      ]
     },
     "DockerContextConfig": {
       "type": "object",
