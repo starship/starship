@@ -3277,7 +3277,7 @@ time_range = "10:00:00-14:00:00"
 
 Модуль `username` показывает имя активного пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
 
-- Текущий пользователь - root
+- The current user is root/admin
 - Текущий пользователь отличается от залогиненного
 - Пользователь подключен к SSH-сессии
 - Переменная `show_always` равна true
@@ -3292,7 +3292,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 | Параметр      | По умолчанию            | Описание                                                |
 | ------------- | ----------------------- | ------------------------------------------------------- |
-| `style_root`  | `"bold red"`            | Стиль, используемый для пользователя root.              |
+| `style_root`  | `"bold red"`            | The style used when the user is root/admin.             |
 | `style_user`  | `"bold yellow"`         | Стиль, используемый для всех пользователей, кроме root. |
 | `format`      | `"[$user]($style) in "` | Формат модуля.                                          |
 | `show_always` | `false`                 | Всегда показывать модуль `username`.                    |
