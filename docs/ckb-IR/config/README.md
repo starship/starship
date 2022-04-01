@@ -9,6 +9,9 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 هەموو ڕێکخستنەکان بۆ Starship ئەنجام ئەدرێن لەم پەڕگەی [TOML](https://github.com/toml-lang/toml)ـەدا:
 
 ```toml
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
 # Inserts a blank line between shell prompts
 add_newline = true
 
