@@ -108,9 +108,9 @@ mod tests {
             expected_value: None,
             style: "",
         };
-        assert_eq!(style.should_apply(&context), false);
+        assert!(!style.should_apply(&context));
         context.env.insert("test", String::default());
-        assert_eq!(style.should_apply(&context), true);
+        assert!(style.should_apply(&context));
     }
 
     #[test]
@@ -123,11 +123,11 @@ mod tests {
             style: "",
         };
 
-        assert_eq!(style.should_apply(&context), false);
+        assert!(!style.should_apply(&context));
         context.env.insert("test", String::from("not_expected"));
-        assert_eq!(style.should_apply(&context), false);
+        assert!(!style.should_apply(&context));
         context.env.insert("test", String::from("expected"));
-        assert_eq!(style.should_apply(&context), true);
+        assert!(style.should_apply(&context));
     }
 
     #[test]
