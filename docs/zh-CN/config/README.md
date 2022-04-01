@@ -3277,7 +3277,7 @@ time_range = "10:00:00-14:00:00"
 
 `username` 组件显示当前活跃的用户名。 此组件只有满足以下条件之一时才会被显示：
 
-- 当前用户是 root
+- The current user is root/admin
 - 当前用户与登录用户不相同
 - 用户正通过 SSH 会话连接访问
 - 字段 `show_always` 被设置为 true
@@ -3290,13 +3290,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 配置项
 
-| Option        | 默认值                     | 描述                  |
-| ------------- | ----------------------- | ------------------- |
-| `style_root`  | `"bold red"`            | 当前用户为 root 时使用的样式。  |
-| `style_user`  | `"bold yellow"`         | 非 root 用户使用的样式。     |
-| `format`      | `"[$user]($style) in "` | 组件格式化模板。            |
-| `show_always` | `false`                 | 总是显示 `username` 组件。 |
-| `disabled`    | `false`                 | 禁用 `username` 组件。   |
+| Option        | 默认值                     | 描述                                          |
+| ------------- | ----------------------- | ------------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
+| `style_user`  | `"bold yellow"`         | 非 root 用户使用的样式。                             |
+| `format`      | `"[$user]($style) in "` | 组件格式化模板。                                    |
+| `show_always` | `false`                 | 总是显示 `username` 组件。                         |
+| `disabled`    | `false`                 | 禁用 `username` 组件。                           |
 
 ### Variables
 
