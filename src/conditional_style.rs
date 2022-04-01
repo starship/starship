@@ -2,6 +2,7 @@ use crate::context::Context;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 pub enum StarshipConditionalStyleOperator {
     Equal,
     Exists,
@@ -43,6 +44,8 @@ impl StarshipConditionalStyleOperator {
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Default)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[serde(default)]
 pub struct StarshipConditionalStyle<'a> {
     pub env: Option<&'a str>,
     pub operator: Option<StarshipConditionalStyleOperator>,
