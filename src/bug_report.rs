@@ -1,13 +1,12 @@
 use crate::shadow;
 use crate::utils::{self, exec_cmd};
 
-use directories_next::ProjectDirs;
 use std::fs;
 use std::path::PathBuf;
 use std::time::Duration;
 
 pub fn create() {
-    println!("{}\n", shadow::version().trim());
+    println!("{}\n", shadow::VERSION.trim());
     let os_info = os_info::get();
 
     let environment = Environment {
@@ -181,8 +180,8 @@ fn get_terminal_info() -> TerminalInfo {
 
 fn get_config_path(shell: &str) -> Option<PathBuf> {
     if shell == "nu" {
-        return ProjectDirs::from("org", "nushell", "nu")
-            .map(|project_dirs| project_dirs.config_dir().join("config.toml"));
+        return dirs_next::config_dir()
+            .map(|config_dir| config_dir.join("nushell").join("config.nu"));
     }
 
     utils::home_dir().and_then(|home_dir| {

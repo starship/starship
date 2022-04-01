@@ -13,16 +13,11 @@ use starship::context::{Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::*;
 
-fn long_version() -> &'static str {
-    let ver = Box::new(crate::shadow::clap_long_version());
-    Box::leak(ver).as_str()
-}
-
 #[derive(Parser, Debug)]
 #[clap(
     author=crate_authors!(),
     version=shadow::PKG_VERSION,
-    long_version=long_version(),
+    long_version=shadow::CLAP_LONG_VERSION,
     about="The cross-shell prompt for astronauts. ☄🌌️",
     subcommand_required=true,
     arg_required_else_help=true,
@@ -102,6 +97,9 @@ enum Commands {
         #[clap(default_value = "disabled")]
         value: String,
     },
+    #[cfg(feature = "config-schema")]
+    /// Generate a schema for the starship configuration as JSON-schema
+    ConfigSchema,
 }
 
 fn main() {
@@ -221,6 +219,8 @@ fn main() {
                 .map(char::from)
                 .collect::<String>()
         ),
+        #[cfg(feature = "config-schema")]
+        Commands::ConfigSchema => print::print_schema(),
     }
 }
 

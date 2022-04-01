@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::crystal::CrystalConfig;
 use crate::formatter::StringFormatter;

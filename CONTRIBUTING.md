@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 To run a external command (e.g. to get the version of a tool) and to allow for mocking use the `context.exec_cmd` function. Here's a quick example:
 
 ```rust
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
@@ -154,6 +154,8 @@ dprint fmt
 
 Editor plugins/functionality may help you run these automatically so that you don't accidentally create a PR that fails.
 
+If your changes cause changes to the configuration, you will need to update the configuration schema in `.github/config-schema.json` with `cargo run --features config-schema -- config-schema > .github/config-schema.json`.
+
 ## Testing
 
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
@@ -163,7 +165,7 @@ Unit tests are written using the built-in Rust testing library in the same file 
 All tests that test the rendered output of a module should use `ModuleRenderer`. For Example:
 
 ```rust
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::php::PhpConfig;
 use crate::formatter::StringFormatter;
@@ -291,6 +293,7 @@ everyone remember what they are. Don't worry: most of them are quite simple!
 - [ ] Add the variable to the appropriate location in the "Default Prompt
       Format" section of the documentation
 - [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
+- [ ] Update the config file schema by running `cargo run --features config-schema -- config-schema > .github/config-schema.json`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
       following:
   - [ ] An entry in `PROMPT_ORDER` (`src/configs/starship_root.rs`)

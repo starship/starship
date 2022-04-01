@@ -1,4 +1,4 @@
-# CÂU HỎI THƯỜNG GẶP
+# Frequently Asked Questions
 
 ## Cấu hình sử dụng trong demo GIF là gì?
 
@@ -53,7 +53,7 @@ Prompt sẽ sử dụng nhiều ngữ cảnh được cung câos, nhưng không 
 Nếu bạn nhận được một lỗi giống như "_version 'GLIBC_2.18' not found (required by starship)_" khi sử dụng prebuilt binary (ví dụ trên CentOS 6 hoặc 7), bạn có thể sử dụng tập tin đã được dịch với `musl` thay vì `glibc`:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
+curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
 ## Why do I see `Executing command "..." timed out.` warnings?

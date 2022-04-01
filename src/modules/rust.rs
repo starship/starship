@@ -1,10 +1,12 @@
 use std::fs;
 use std::path::Path;
+#[cfg(windows)]
+use std::path::PathBuf;
 use std::process::Output;
 
 use serde::Deserialize;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::rust::RustConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
@@ -123,11 +125,15 @@ fn extract_toolchain_from_rustup_override_list(stdout: &str, cwd: &Path) -> Opti
     if stdout == "no overrides\n" {
         return None;
     }
-    // use display version of path, also allows stripping \\?\
-    let cwd = cwd.to_string_lossy();
-    // rustup strips \\?\ prefix
+
     #[cfg(windows)]
-    let cwd = cwd.strip_prefix(r"\\?\").unwrap_or(&cwd);
+    let cwd = {
+        // use display version of path, also allows stripping \\?\
+        let cwd = cwd.to_string_lossy();
+        // rustup strips \\?\ prefix,
+        // so we do the same and convert back to a `Path`
+        PathBuf::from(cwd.strip_prefix(r"\\?\").unwrap_or(&cwd))
+    };
 
     stdout
         .lines()
@@ -295,6 +301,8 @@ mod tests {
         static OVERRIDES_CWD_B: &str = "/home/user/src/b/tests";
         static OVERRIDES_CWD_C: &str = "/home/user/src/c/examples";
         static OVERRIDES_CWD_D: &str = "/home/user/src/b/d c/spaces";
+        static OVERRIDES_CWD_E: &str = "/home/user/src/b_and_more";
+        static OVERRIDES_CWD_F: &str = "/home/user/src/b";
         assert_eq!(
             extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_A.as_ref()),
             Some("beta-x86_64-unknown-linux-gnu".to_owned()),
@@ -310,6 +318,14 @@ mod tests {
         assert_eq!(
             extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_D.as_ref()),
             Some("stable-x86_64-pc-windows-msvc".to_owned()),
+        );
+        assert_eq!(
+            extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_E.as_ref()),
+            None,
+        );
+        assert_eq!(
+            extract_toolchain_from_rustup_override_list(OVERRIDES_INPUT, OVERRIDES_CWD_F.as_ref()),
+            Some("nightly-x86_64-unknown-linux-gnu".to_owned()),
         );
     }
 

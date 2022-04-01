@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::java::JavaConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 use crate::utils::get_command_string_output;

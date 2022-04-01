@@ -9,7 +9,7 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use yaml_rust::{Yaml, YamlLoader};
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::pulumi::PulumiConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 

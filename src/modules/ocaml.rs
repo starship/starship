@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use once_cell::sync::Lazy;
 use std::ops::Deref;
 use std::path::Path;

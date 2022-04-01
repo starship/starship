@@ -2,7 +2,7 @@
 
 Auch wenn Starship eine vielseitige Shell ist, reichen manche Konfigurationen in der `starship.toml` nicht aus, um erweiterte Einstellungen vorzunehmen. Diese Seite beschreibt einige fortgeschrittene Konfigurationen für Starship.
 
-::: Warnung
+::: warning
 
 Die hier beschriebenen Konfigurationen werden sich mit kommenden Updates von Starship verändern.
 

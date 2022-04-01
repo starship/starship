@@ -116,7 +116,7 @@ unpack() {
       return 0
       ;;
     *.zip)
-      flags=$(test -z "${VERBOSE-}" && echo "-qq" || echo "")
+      flags=$(test -z "${VERBOSE-}" && echo "-qqo" || echo "-o")
       UNZIP="${flags}" ${sudo} unzip "${archive}" -d "${bin_dir}"
       return 0
       ;;
@@ -144,7 +144,7 @@ usage() {
     "-b, --bin-dir" "Override the bin installation directory [default: ${BIN_DIR}]" \
     "-a, --arch" "Override the architecture identified by the installer [default: ${ARCH}]" \
     "-B, --base-url" "Override the base URL used for downloading releases [default: ${BASE_URL}]" \
-    "-h, --help" "Dispays this help message"
+    "-h, --help" "Display this help message"
 }
 
 elevate_priv() {
@@ -263,7 +263,7 @@ confirm() {
 }
 
 check_bin_dir() {
-  bin_dir="$1"
+  bin_dir="${1%/}"
 
   if [ ! -d "$BIN_DIR" ]; then
     error "Installation location $BIN_DIR does not appear to be a directory"
@@ -276,7 +276,7 @@ check_bin_dir() {
   good=$(
     IFS=:
     for path in $PATH; do
-      if [ "${path}" = "${bin_dir}" ]; then
+      if [ "${path%/}" = "${bin_dir}" ]; then
         printf 1
         break
       fi
@@ -297,7 +297,7 @@ print_install() {
     # we don't want these '~' expanding
     config_file="~/.${s}rc"
     config_cmd="eval \"\$(starship init ${s})\""
- 
+
     case ${s} in
       ion )
         # shellcheck disable=SC2088
@@ -336,16 +336,14 @@ print_install() {
         ;;
       nushell )
         # shellcheck disable=SC2088
-        config_file="your nu config file."
-        config_cmd="startup = [
-          \"mkdir ~/.cache/starship\",
-          \"starship init nu | save ~/.cache/starship/init.nu\",
-          \"source ~/.cache/starship/init.nu\"
-        ]
-        prompt = \"starship_prompt\""
+        config_file="your nu config file"
+        config_cmd="mkdir ~/.cache/starship
+        starship init nu | save ~/.cache/starship/init.nu
+        source ~/.cache/starship/init.nu"
         warning="${warning} This will change in the future.
-  Only nu version v0.33 or higher is supported.
-  You can check the location of this your config file by running config path in nu"
+  Only Nushell v0.60 or higher is supported.
+  You can check the location of this your config file by running \$nu.config-path in nu.
+  ${BOLD}First run${NO_COLOR} \"mkdir ~/.cache/starship; starship init nu | save ~/.cache/starship/init.nu\""
         ;;
     esac
     printf "  %s\n  %s\n  Add the following to the end of %s:\n\n\t%s\n\n" \

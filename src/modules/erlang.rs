@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::erlang::ErlangConfig;
 use crate::formatter::StringFormatter;

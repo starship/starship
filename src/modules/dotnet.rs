@@ -5,7 +5,7 @@ use std::iter::Iterator;
 use std::path::{Path, PathBuf};
 use std::str;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::dotnet::DotnetConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;

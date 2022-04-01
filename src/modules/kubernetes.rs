@@ -4,7 +4,7 @@ use std::borrow::Cow;
 use std::env;
 use std::path;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::kubernetes::KubernetesConfig;
 use crate::formatter::StringFormatter;

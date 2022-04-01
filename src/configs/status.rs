@@ -1,9 +1,8 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[serde(default)]
 pub struct StatusConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -26,7 +25,7 @@ impl<'a> Default for StatusConfig<'a> {
         StatusConfig {
             format: "[$symbol$status]($style) ",
             symbol: "✖",
-            success_symbol: "✔️",
+            success_symbol: "",
             not_executable_symbol: "🚫",
             not_found_symbol: "🔍",
             sigint_symbol: "🧱",

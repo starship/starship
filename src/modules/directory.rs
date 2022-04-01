@@ -12,7 +12,7 @@ use unicode_segmentation::UnicodeSegmentation;
 use super::{Context, Module};
 
 use super::utils::directory::truncate;
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::configs::directory::DirectoryConfig;
 use crate::formatter::StringFormatter;
 

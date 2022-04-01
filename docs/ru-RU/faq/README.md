@@ -1,4 +1,4 @@
-# FAQ
+# Frequently Asked Questions
 
 ## Какая конфигурация используется в демо-GIF?
 
@@ -53,7 +53,7 @@ starship prompt --help
 Если вы получаете ошибку типа "_version 'GLIBC_2.18' not found (required by starship)_" при использовании заранее собранного бинарного файла (например, на CentOS 6 или 7), вы можете использовать бинарный файл, скомпилированый с `musl` вместо `glibc`:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --platform unknown-linux-musl
+curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
 ## Why do I see `Executing command "..." timed out.` warnings?

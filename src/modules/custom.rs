@@ -3,7 +3,7 @@ use std::io::Write;
 use std::process::{Command, Output, Stdio};
 use std::time::Instant;
 
-use super::{Context, Module, RootModuleConfig, Shell};
+use super::{Context, Module, ModuleConfig, Shell};
 
 use crate::{configs::custom::CustomConfig, formatter::StringFormatter, utils::create_command};
 

@@ -18,7 +18,7 @@ features:
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship : Invite Multi-Shell"
-description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship est une invite minimaliste, ultra-rapide et hautement personnalisable pour n'importe quel shell ! Montre les informations dont vous avez besoin tout en restant élégante et minimaliste. Installation rapide disponible pour Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, et PowerShell.
 ---
 
 <div class="center">
@@ -32,7 +32,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
 - Une [Nerd Font](https://www.nerdfonts.com/) est installée et activée dans votre terminal.
 
-### Installation rapide
+### Installation
 
 1. Installer le binaire **starship** :
 
@@ -42,8 +42,9 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    Avec Shell:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    Pour mettre à jour Starship, relancez le script ci-dessus. Cela remplacera la version actuelle sans toucher à la configuration de Starship.
 
 
@@ -99,7 +100,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Powershell
 
-   Ajoutez ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Habituellement, son chemin est `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix.
+   Ajouter ce qui suit à la fin de `Microsoft.PowerShell_profile.ps1`. Vous pouvez vérifier l'emplacement de ce fichier en regardant la variable `$PROFILE` dans PowerShell. Habituellement, son chemin est `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` sur -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -143,17 +144,19 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Nushell
 
-   ::: warning Cela va changer dans le futur. Seule la version nu v0.33 ou supérieure est prise en charge. Ajoutez ce qui suit à votre fichier de configuration nu. Vous pouvez vérifier l'emplacement de ce fichier en exécutant `config path` dans 'nu'.
-
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   ::: warning Cela va changer dans le futur. Only Nushell v0.60+ is supported. ::: Run the following:
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
    ```
 
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
+   source ~/.cache/starship/init.nu
+   ```
 
    #### Xonsh
 

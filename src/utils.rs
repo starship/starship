@@ -129,6 +129,34 @@ pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 ) -> Option<Option<CommandOutput>> {
     let command = display_command(&cmd, args);
     let out = match command.as_str() {
+        "buf --version" => Some(CommandOutput {
+            stdout: String::from("1.0.0"),
+            stderr: String::default(),
+        }),
+        "cc --version" => Some(CommandOutput {
+            stdout: String::from("\
+FreeBSD clang version 11.0.1 (git@github.com:llvm/llvm-project.git llvmorg-11.0.1-0-g43ff75f2c3fe)
+Target: x86_64-unknown-freebsd13.0
+Thread model: posix
+InstalledDir: /usr/bin"),
+            stderr: String::default(),
+        }),
+        "gcc --version" => Some(CommandOutput {
+            stdout: String::from("\
+cc (Debian 10.2.1-6) 10.2.1 20210110
+Copyright (C) 2020 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."),
+            stderr: String::default(),
+        }),
+        "clang --version" => Some(CommandOutput {
+            stdout: String::from("\
+OpenBSD clang version 11.1.0
+Target: amd64-unknown-openbsd7.0
+Thread model: posix
+InstalledDir: /usr/bin"),
+            stderr: String::default(),
+        }),
         "cobc -version" => Some(CommandOutput {
             stdout: String::from("\
 cobc (GnuCOBOL) 3.1.2.0
@@ -181,6 +209,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
         }),
         "go version" => Some(CommandOutput {
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
+            stderr: String::default(),
+        }),
+        "ghc --numeric-version" => Some(CommandOutput {
+            stdout: String::from("9.2.1\n"),
             stderr: String::default(),
         }),
         "helm version --short --client" => Some(CommandOutput {
@@ -508,7 +540,7 @@ fn render_time_component((component, suffix): (&u128, &&str)) -> String {
 }
 
 pub fn home_dir() -> Option<PathBuf> {
-    directories_next::BaseDirs::new().map(|base_dirs| base_dirs.home_dir().to_owned())
+    dirs_next::home_dir()
 }
 
 const HEXTABLE: &[char] = &[

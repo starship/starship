@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::nix_shell::NixShellConfig;
 use crate::formatter::StringFormatter;

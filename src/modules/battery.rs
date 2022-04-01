@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::battery::BatteryConfig;
 #[cfg(test)]
 use mockall::automock;

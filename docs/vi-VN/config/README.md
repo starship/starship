@@ -198,6 +198,7 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
+$buf\
 $cmake\
 $cobol\
 $container\
@@ -208,6 +209,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$haskell\
 $helm\
 $java\
 $julia\
@@ -261,7 +263,7 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials or a `credential_process` have been setup. Cái này dựa trên các biến môi trường `AWS_REGION`, `AWS_DEFAULT_REGION`, và `AWS_PROFILE` với tập tin `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Cái này dựa trên các biến môi trường `AWS_REGION`, `AWS_DEFAULT_REGION`, và `AWS_PROFILE` với tập tin `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
 
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
 
@@ -278,9 +280,10 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Định dạng cho module.                                             |
 | `symbol`            | `"☁️ "`                                                              | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại.              |
 | `region_aliases`    |                                                                      | Bảng của các region alias để hiển thị ngoài tên AWS.              |
+| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.  |
 | `style`             | `"bold yellow"`                                                      | Kiểu cho module.                                                  |
 | `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired. |
-| `disabled`          | `false`                                                              | Vô hiệu `AWS` module.                                             |
+| `disabled`          | `false`                                                              | Disables the `AWS` module.                                        |
 
 ### Các biến
 
@@ -292,9 +295,9 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol`            |
 | style\* |                  | Giá trị ghi đè của `style`                  |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Các vị dụ
+### Các ví dụ
 
 #### Hiển thị mọi thứ
 
@@ -308,6 +311,8 @@ symbol = "🅰 "
 [aws.region_aliases]
 ap-southeast-2 = "au"
 us-east-1 = "va"
+[aws.profile_aliases]
+CompanyGroupFrobozzOnCallAccess = 'Frobozz'
 ```
 
 #### Hiển thị region
@@ -333,6 +338,8 @@ us-east-1 = "va"
 format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
+[aws.profile_aliases]
+Enterprise_Naming_Scheme-voidstars = 'void**'
 ```
 
 ## Azure
@@ -362,7 +369,7 @@ style = "blue bold"
 
 ## Battery
 
-The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
+`battery` module cho biết cách sạc pin của thiết bị là gì và tình trạng sạc hiện tại của nó. Module chỉ được nhìn thấy khi pin của thiết bị dưới 10%.
 
 ### Các tuỳ chọn
 
@@ -390,7 +397,7 @@ discharging_symbol = "💀 "
 
 ### Hiển thị pin
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. Mặc định như sau:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). Nếu `display` không được cung cấp. Mặc định như sau:
 
 ```toml
 [[battery.display]]
@@ -402,7 +409,7 @@ The default value for the `charging_symbol` and `discharging_symbol` option is r
 
 #### Các tuỳ chọn
 
-The `display` option is an array of the following table.
+Tuỳ chọn `display` là một mảng của của bảng sau.
 
 | Tuỳ chọn             | Mặc định   | Mô tả                                                                                                     |
 | -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
@@ -426,22 +433,55 @@ discharging_symbol = "💦"
 # when capacity is over 30%, the battery indicator will not be displayed
 ```
 
+## Buf
+
+The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
+
+- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
+- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                                                     | Mô tả                                                 |
+| ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
+| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
+| `version_format`    | `"v${raw}"`                                                  | The version format.                                   |
+| `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
+| `detect_extensions` | `[]`                                                         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Những tên tệp nào sẽ kích hoạt mô-đun này.            |
+| `detect_folders`    | `[]`                                                         | Những thư mục nào nên kích hoạt các mô đun này.       |
+| `style`             | `"bold blue"`                                                | Kiểu cho module.                                      |
+| `disabled`          | `false`                                                      | Disables the `elixir` module.                         |
+
+### Các biến
+
+| Biến          | Ví dụ    | Mô tả                            |
+| ------------- | -------- | -------------------------------- |
+| `buf_version` | `v1.0.0` | The version of `buf`             |
+| `symbol`      |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| `style`*      |          | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[buf]
+symbol = "🦬 "
+```
+
 ## Character
 
 The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
 The character will tell you whether the last command was successful or not. It can do this in two ways:
 
-- thay đổi màu(`đỏ`/`xanh lá`)
-- thay đổi hình dạng (`❯`/`✖`)
+- changing color (`red`/`green`)
+- changing shape (`❯`/`✖`)
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
-
-::: cảnh báo
-
-`error_symbol` is not supported on nu shell.
-
-:::
 
 ::: cảnh báo
 
@@ -451,21 +491,21 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định            | Mô tả                                                                                |
-| ---------------- | ------------------- | ------------------------------------------------------------------------------------ |
-| `format`         | `"$symbol "`        | Định dạng chuỗi sử dụng trước văn bản nhập vào.                                      |
-| `success_symbol` | `"[❯](bold green)"` | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu câu lệnh trước đó đã thành công. |
-| `error_symbol`   | `"[❯](bold red)"`   | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu câu lệnh trước đó đã thất bại.   |
-| `vicmd_symbol`   | `"[❮](bold green)"` | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu shell trong chế độ vim normal.   |
-| `disabled`       | `false`             | Vô hiệu module `character`.                                                          |
+| Tuỳ chọn         | Mặc định            | Mô tả                                                                            |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
+| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
+| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
+| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
+| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
+| `disabled`       | `false`             | Disables the `character` module.                                                 |
 
 ### Các biến
 
-| Biến   | Ví dụ | Mô tả                                                                         |
-| ------ | ----- | ----------------------------------------------------------------------------- |
-| symbol |       | Một phản ánh của một trong `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Biến   | Ví dụ | Mô tả                                                                 |
+| ------ | ----- | --------------------------------------------------------------------- |
+| symbol |       | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
 
-### Các vị dụ
+### Các ví dụ
 
 #### Có tuỳ chỉnh hình dạng lỗi
 
@@ -500,8 +540,8 @@ vicmd_symbol = "[V](bold green) "
 
 The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `CmakeLists.txt`
-- Đường dẫn hiện tại chứa một tập tin `CMakeCache.txt`
+- The current directory contains a `CMakeLists.txt` file
+- The current directory contains a `CMakeCache.txt` file
 
 ### Các tuỳ chọn
 
@@ -509,22 +549,22 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | Định dạng cho module.                                                     |
 | `version_format`    | `"v${raw}"`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"△ "`                                 | Kí hiệu sử dụng trước phiên bản của cmake.                                |
-| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                        |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Tên tệp nào sẽ kích hoạt mô-đun này                                       |
-| `detect_folders`    | `[]`                                   | Thư mục nào sẽ kích hoạt mô-đun này                                       |
+| `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                              |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                               |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                  |
 | `style`             | `"bold blue"`                          | Kiểu cho module.                                                          |
-| `disabled`          | `false`                                | Vô hiệu module `cmake`.                                                   |
+| `disabled`          | `false`                                | Disables the `cmake` module.                                              |
 
 ### Các biến
 
 | Biến      | Ví dụ     | Mô tả                            |
 | --------- | --------- | -------------------------------- |
-| version   | `v3.17.3` | Phiên bản của cmake              |
+| version   | `v3.17.3` | The version of cmake             |
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ## COBOL / GNUCOBOL
 
@@ -554,7 +594,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |            | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ## Command Duration
 
@@ -572,23 +612,23 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 | Tuỳ chọn               | Mặc định                      | Mô tả                                                                                                                                                             |
 | ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Khoảng thời gian ngắn nhất để hiện thời gian (tính bằng milliseconds).                                                                                            |
-| `show_milliseconds`    | `false`                       | Hiện milliseconds.                                                                                                                                                |
+| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                                                                             |
+| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                        |
 | `format`               | `"took [$duration]($style) "` | Định dạng cho module.                                                                                                                                             |
 | `style`                | `"bold yellow"`               | Kiểu cho module.                                                                                                                                                  |
-| `disabled`             | `false`                       | Vô hiệu module `cmd_duration`.                                                                                                                                    |
-| `show_notifications`   | `false`                       | Hiện thông báo desktop khi câu lệnh hoàn thành.                                                                                                                   |
-| `min_time_to_notify`   | `45_000`                      | Khoảng thời gian ngắn nhất để thông báo (tính bằng milliseconds).                                                                                                 |
+| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                               |
+| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
+| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
 | `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ### Các biến
 
-| Biến      | Ví dụ    | Mô tả                                 |
-| --------- | -------- | ------------------------------------- |
-| duration  | `16m40s` | Thời gian nó lấy để thực thi câu lệnh |
-| style\* |          | Giá trị ghi đè của `style`            |
+| Biến      | Ví dụ    | Mô tả                                   |
+| --------- | -------- | --------------------------------------- |
+| duration  | `16m40s` | The time it took to execute the command |
+| style\* |          | Giá trị ghi đè của `style`              |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -614,22 +654,22 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 | Tuỳ chọn            | Mặc định                               | Mô tả                                                                                                                                                                                                       |
 | ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | Số lượng đường dẫn của biến môi trường nên được cắt bớt, nếu biến môi trường được tạo thông qua via `conda create -p [path]`. `0` nghĩa là không cắt bớt. Cũng thấy trong module [`directory`](#directory). |
-| `symbol`            | `"🅒 "`                                 | Kí hiệu sử dụng trước tên biến môi trường.                                                                                                                                                                  |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"🅒 "`                                 | The symbol used before the environment name.                                                                                                                                                                |
 | `style`             | `"bold green"`                         | Kiểu cho module.                                                                                                                                                                                            |
 | `format`            | `"via [$symbol$environment]($style) "` | Định dạng cho module.                                                                                                                                                                                       |
-| `ignore_base`       | `true`                                 | Bỏ qua biến môi trường `base` khi đã kích hoạt.                                                                                                                                                             |
-| `disabled`          | `false`                                | Vô hiệu module `conda`.                                                                                                                                                                                     |
+| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
+| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
 ### Các biến
 
-| Biến        | Ví dụ        | Mô tả                              |
-| ----------- | ------------ | ---------------------------------- |
-| environment | `astronauts` | Biến môi trường hiện tại của conda |
-| symbol      |              | Giá trị ghi đè tuỳ chọn `symbol`   |
-| style\*   |              | Giá trị ghi đè của `style`         |
+| Biến        | Ví dụ        | Mô tả                            |
+| ----------- | ------------ | -------------------------------- |
+| environment | `astronauts` | The current conda environment    |
+| symbol      |              | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\*   |              | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -646,12 +686,12 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                             | Mô tả                                     |
-| ---------- | ------------------------------------ | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                  | Kiểu cho module.                          |
-| `format`   | "[$symbol \\[$name\\]]($style) " | Định dạng cho module.                     |
-| `disabled` | `false`                              | Disables the `container` module.          |
+| Tuỳ chọn   | Mặc định                               | Mô tả                                     |
+| ---------- | -------------------------------------- | ----------------------------------------- |
+| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                    | Kiểu cho module.                          |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | Định dạng cho module.                     |
+| `disabled` | `false`                                | Disables the `container` module.          |
 
 ### Các biến
 
@@ -661,7 +701,7 @@ The `container` module displays a symbol and container name, if inside a contain
 | symbol    |                     | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |                     | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -674,33 +714,33 @@ format = "[$symbol \\[$name\\]]($style) "
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `shard.yml`
-- Đường dẫn hiện tại chứa một tập tin `.cr`
+- The current directory contains a `shard.yml` file
+- The current directory contains a `.cr` file
 
 ### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `symbol`            | `"🔮 "`                               | Kí hiệu sử dụng trước phiên bản hiển thị của crystal.                     |
+| `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal.                 |
 | `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `style`             | `"bold red"`                         | Kiểu cho module.                                                          |
 | `detect_extensions` | `["cr"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["shard.yml"]`                      | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `disabled`          | `false`                              | Vô hiệu hoá module `crystal`.                                             |
+| `disabled`          | `false`                              | Disables the `crystal` module.                                            |
 
 ### Các biến
 
 | Biến      | Ví dụ     | Mô tả                            |
 | --------- | --------- | -------------------------------- |
-| version   | `v0.32.1` | Phiên bản của `crystal`          |
+| version   | `v0.32.1` | The version of `crystal`         |
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -713,11 +753,11 @@ format = "via [✨ $version](bold blue) "
 
 ## Dart
 
-The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin với phần mở rộng `.dart`
-- Đường dẫn hiện tại chứa một đường dẫn `.dart_tool`
-- Đường dẫn hiện tại chứa một tệp tin `pubspec.yaml`, `pubspec.yml` hoặc `pubspec.lock`
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
 
 ### Các tuỳ chọn
 
@@ -725,22 +765,22 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | Định dạng cho module.                                                     |
 | `version_format`    | `"v${raw}"`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🎯 "`                                            | Một chuỗi định dạng hiển thị biểu tượng của Dart                          |
+| `symbol`            | `"🎯 "`                                            | A format string representing the symbol of Dart                           |
 | `detect_extensions` | `["dart"]`                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `[".dart_tool"]`                                  | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
 | `style`             | `"bold blue"`                                     | Kiểu cho module.                                                          |
-| `disabled`          | `false`                                           | Vô hiệu `dart` module.                                                    |
+| `disabled`          | `false`                                           | Disables the `dart` module.                                               |
 
 ### Các biến
 
 | Biến      | Ví dụ    | Mô tả                            |
 | --------- | -------- | -------------------------------- |
-| version   | `v2.8.4` | Phiên bản của `dart`             |
+| version   | `v2.8.4` | The version of `dart`            |
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -753,7 +793,7 @@ format = "via [🔰 $version](bold red) "
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
 
@@ -799,14 +839,14 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Tuỳ chọn            | Mặc định                                                                                                    | Mô tả                                                                                   |
 | ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                                                                         | Số lượng thư mục cha của thư mục hiện tại nên được rút gọn.                             |
-| `truncate_to_repo`  | `true`                                                                                                      | Có hoặc không rút gọn đường dẫn gốc của git repo hiện tại của bạn.                      |
+| `truncation_length` | `3`                                                                                                         | The number of parent folders that the current directory should be truncated to.         |
+| `truncate_to_repo`  | `true`                                                                                                      | Whether or not to truncate to the root of the git repo that you're currently in.        |
 | `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | Định dạng cho module.                                                                   |
 | `style`             | `"bold cyan"`                                                                                               | Kiểu cho module.                                                                        |
-| `disabled`          | `false`                                                                                                     | Vô hiệu mô đun `directory`.                                                             |
-| `read_only`         | `"🔒"`                                                                                                       | Biểu tượng để nhận biết thư mục hiện tại là chỉ đọc.                                    |
-| `read_only_style`   | `"red"`                                                                                                     | Style cho biểu tượng chỉ đọc.                                                           |
-| `truncation_symbol` | `""`                                                                                                        | Biểu tượng tiền tố cho các đường dẫn rút gọn. ví dụ: "…/"                               |
+| `disabled`          | `false`                                                                                                     | Disables the `directory` module.                                                        |
+| `read_only`         | `"🔒"`                                                                                                       | The symbol indicating current directory is read only.                                   |
+| `read_only_style`   | `"red"`                                                                                                     | The style for the read only symbol.                                                     |
+| `truncation_symbol` | `""`                                                                                                        | The symbol to prefix to truncated paths. eg: "…/"                                       |
 | `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
 | `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
 | `home_symbol`       | `"~"`                                                                                                       | The symbol indicating home directory.                                                   |
@@ -815,7 +855,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Tùy chọn nâng cao           | Mặc định | Mô tả                                                                                                                                                                  |
+| Advanced Option             | Mặc định | Mô tả                                                                                                                                                                  |
 | --------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `substitutions`             |          | A table of substitutions to be made to the path.                                                                                                                       |
 | `fish_style_pwd_dir_length` | `0`      | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
@@ -837,10 +877,10 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Biến      | Ví dụ                 | Mô tả                      |
 | --------- | --------------------- | -------------------------- |
-| path      | `"D:/Projects"`       | Đường dẫn thư mục hiện tại |
+| path      | `"D:/Projects"`       | The current directory path |
 | style\* | `"black bold dimmed"` | Giá trị ghi đè của `style` |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 <details>
 <summary>The git repos have additional variables.</summary>
@@ -892,7 +932,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | symbol    |                | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |                | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -934,7 +974,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                     |
 | `detect_extensions` | `["csproj", "fsproj", "xproj"]`                                                                         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                                                                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                    | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `style`             | `"bold blue"`                                                                                           | Kiểu cho module.                                                          |
 | `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                             |
 
@@ -947,7 +987,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol`                                   |
 | style\* |                  | Giá trị ghi đè của `style`                                         |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -962,9 +1002,9 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `mix.exs`.
+- The current directory contains a `mix.exs` file.
 
 ### Các tuỳ chọn
 
@@ -975,7 +1015,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang.           |
 | `detect_extensions` | `[]`                                                        | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["mix.exs"]`                                               | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                                        | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                        | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `style`             | `"bold purple"`                                             | Kiểu cho module.                                                          |
 | `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
@@ -988,7 +1028,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | symbol      |         | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\*   |         | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1001,13 +1041,13 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `elm.json`
-- Đường dẫn hiện tại chứa một tập tin `elm-package.json`
-- Đường dẫn hiện tại chứa một tệp tin `.elm-version`
-- Đường dẫn hiện tại chứa một thư mục `elm-stuff`
-- Đường dẫn hiện tại chứa một tập tin `*.elm`
+- The current directory contains a `elm.json` file
+- The current directory contains a `elm-package.json` file
+- The current directory contains a `.elm-version` file
+- The current directory contains a `elm-stuff` folder
+- The current directory contains `*.elm` files
 
 ### Các tuỳ chọn
 
@@ -1018,7 +1058,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.                           |
 | `detect_extensions` | `["elm"]`                                          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `["elm-stuff"]`                                    | Which folders should trigger this modules.                                |
+| `detect_folders`    | `["elm-stuff"]`                                    | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `style`             | `"cyan bold"`                                      | Kiểu cho module.                                                          |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
@@ -1030,7 +1070,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1045,8 +1085,8 @@ format = "via [ $version](cyan bold) "
 
 The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
-- Tùy chọn `variable` khớp với mootjj biến môi trường tồn tại
-- Tùy chọn `variable` không được định nghĩa, nhưng tùy chọn `default` là
+- The `variable` configuration option matches an existing environment variable
+- The `variable` configuration option is not defined, but the `default` configuration option is
 
 ::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
@@ -1079,7 +1119,7 @@ default = "unknown user"
 | symbol    |                                             | Giá trị ghi đè tuỳ chọn `symbol`           |
 | style\* | `black bold dimmed`                         | Giá trị ghi đè của `style`                 |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1105,10 +1145,10 @@ default = "unknown user"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `rebar.config`.
-- Đường dẫn hiện tại chứa một tập tin `erlang.mk`.
+- The current directory contains a `rebar.config` file.
+- The current directory contains a `erlang.mk` file.
 
 ### Các tuỳ chọn
 
@@ -1120,7 +1160,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `style`             | `"bold red"`                         | Kiểu cho module.                                                          |
 | `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
 ### Các biến
@@ -1131,7 +1171,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1198,9 +1238,9 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | symbol    |               | Giá trị ghi đè tuỳ chọn `symbol`                                   |
 | style\* |               | Giá trị ghi đè của `style`                                         |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Các vị dụ
+### Các ví dụ
 
 #### Hiển thị tài khoản và dự án
 
@@ -1259,6 +1299,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
 | `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
 | `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
+| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                      |
 | `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
 
 ### Các biến
@@ -1271,7 +1312,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | Giá trị ghi đè tuỳ chọn `symbol`                                                                       |
 | style\*     |          | Giá trị ghi đè của `style`                                                                             |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1282,6 +1323,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 symbol = "🌱 "
 truncation_length = 4
 truncation_symbol = ""
+ignore_branches = ["master", "main"]
 ```
 
 ## Git Commit
@@ -1307,7 +1349,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | hash      | `b703eb3` | The current git commit hash |
 | style\* |           | Giá trị ghi đè của `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1347,7 +1389,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | progress_total   | `2`        | The total operation progress   |
 | style\*        |            | Giá trị ghi đè của `style`     |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1388,7 +1430,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | added_style\*   |       | Mirrors the value of option `added_style`   |
 | deleted_style\* |       | Mirrors the value of option `deleted_style` |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1404,25 +1446,32 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 The `git_status` module shows symbols representing the state of the repo in your current directory.
 
+::: tip
+
+The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+
+:::
+
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                        | Mô tả                               |
-| ------------------- | ----------------------------------------------- | ----------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status` |
-| `conflicted`        | `"="`                                           | This branch has merge conflicts.    |
-| `ahead`             | `"⇡"`                                           | The format of `ahead`               |
-| `behind`            | `"⇣"`                                           | The format of `behind`              |
-| `diverged`          | `"⇕"`                                           | The format of `diverged`            |
-| `up_to_date`        | `""`                                            | The format of `up_to_date`          |
-| `untracked`         | `"?"`                                           | The format of `untracked`           |
-| `stashed`           | `"$"`                                           | The format of `stashed`             |
-| `modified`          | `"!"`                                           | The format of `modified`            |
-| `staged`            | `"+"`                                           | The format of `staged`              |
-| `renamed`           | `"»"`                                           | The format of `renamed`             |
-| `deleted`           | `"✘"`                                           | The format of `deleted`             |
-| `style`             | `"bold red"`                                    | Kiểu cho module.                    |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.       |
-| `disabled`          | `false`                                         | Disables the `git_status` module.   |
+| Tuỳ chọn            | Mặc định                                        | Mô tả                                                                                                       |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`        | `"="`                                           | This branch has merge conflicts.                                                                            |
+| `ahead`             | `"⇡"`                                           | The format of `ahead`                                                                                       |
+| `behind`            | `"⇣"`                                           | The format of `behind`                                                                                      |
+| `diverged`          | `"⇕"`                                           | The format of `diverged`                                                                                    |
+| `up_to_date`        | `""`                                            | The format of `up_to_date`                                                                                  |
+| `untracked`         | `"?"`                                           | The format of `untracked`                                                                                   |
+| `stashed`           | `"$"`                                           | The format of `stashed`                                                                                     |
+| `modified`          | `"!"`                                           | The format of `modified`                                                                                    |
+| `staged`            | `"+"`                                           | The format of `staged`                                                                                      |
+| `renamed`           | `"»"`                                           | The format of `renamed`                                                                                     |
+| `deleted`           | `"✘"`                                           | The format of `deleted`                                                                                     |
+| `style`             | `"bold red"`                                    | Kiểu cho module.                                                                                            |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
+| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
+| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Các biến
 
@@ -1441,7 +1490,7 @@ The following variables can be used in `format`:
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | style\*      | Giá trị ghi đè của `style`                                                                                    |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 The following variables can be used in `diverged`:
 
@@ -1486,18 +1535,27 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
+Use Windows Starship executable on Windows paths in WSL
+
+```toml
+# ~/.config/starship.toml
+
+[git_status]
+windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+```
+
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Thư mục hiện tại chứa một tập tin `go.mod`
-- Đường dẫn hiện tại chứa một tập tin `go.sum`
-- Thư mục hiện tại chứa một tập tin `glide.yaml`
-- Thư mục hiện tại chứa một tập tin `Gopkg.yml`
-- Đường dẫn hiện tại chứa một tập tin `Gopkg.lock`
-- Thư mục hiện tại chứa một tệp tin `.go-version`
-- Thư mục hiện tại chứa một thư mục `Godeps`
-- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.go`
+- The current directory contains a `go.mod` file
+- The current directory contains a `go.sum` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Các tuỳ chọn
 
@@ -1520,7 +1578,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1531,12 +1589,45 @@ The `golang` module shows the currently installed version of [Go](https://golang
 format = "via [🏎💨 $version](bold cyan) "
 ```
 
+## Haskell
+
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `stack.yaml` file
+- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                             | Mô tả                                               |
+| ------------------- | ------------------------------------ | --------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                               |
+| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell  |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này. |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Những tên tệp nào sẽ kích hoạt mô-đun này.          |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.          |
+| `style`             | `"bold purple"`                      | Kiểu cho module.                                    |
+| `disabled`          | `false`                              | Disables the `haskell` module.                      |
+
+### Các biến
+
+| Biến           | Ví dụ       | Mô tả                                                                                   |
+| -------------- | ----------- | --------------------------------------------------------------------------------------- |
+| version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
+| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
+| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
+| symbol         |             | Giá trị ghi đè tuỳ chọn `symbol`                                                        |
+| style\*      |             | Giá trị ghi đè của `style`                                                              |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `helmfile.yaml`
-- Thư mục hiện tại chứa một tập tin `Chart.yaml`
+- The current directory contains a `helmfile.yaml` file
+- The current directory contains a `Chart.yaml` file
 
 ### Các tuỳ chọn
 
@@ -1546,7 +1637,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                          |
 | `style`             | `"bold white"`                       | Kiểu cho module.                                                          |
 | `disabled`          | `false`                              | Disables the `helm` module.                                               |
@@ -1559,7 +1650,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1591,7 +1682,7 @@ The `hostname` module shows the system hostname.
 | hostname  | `computer` | The hostname of the computer |
 | style\* |            | Giá trị ghi đè của `style`   |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1607,10 +1698,10 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). By default the module will be shown if any of the following conditions are met:
 
-- Thư mục hiện tại chứa một tệp tin `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot`
-- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc`
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Các tuỳ chọn
 
@@ -1620,7 +1711,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `version_format`    | `"v${raw}"`                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", ".deps.edn", "project.clj", "build.boot"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                                                                                      | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                                                                                      | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                           |
 | `style`             | `"red dimmed"`                                                                                            | Kiểu cho module.                                                          |
 | `disabled`          | `false`                                                                                                   | Disables the `java` module.                                               |
@@ -1633,7 +1724,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1688,7 +1779,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1703,11 +1794,11 @@ symbol_threshold = 0
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `julia` module shows the currently installed version of [Julia](https://julialang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Thư mục hiện tại chứa một tệp tin `Project.toml`
-- Thư mục hiện tại chứa một tập tin `Manifest.toml`
-- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.jl`
+- The current directory contains a `Project.toml` file
+- The current directory contains a `Manifest.toml` file
+- The current directory contains a file with the `.jl` extension
 
 ### Các tuỳ chọn
 
@@ -1717,7 +1808,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["jl"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                         |
 | `style`             | `"bold purple"`                      | Kiểu cho module.                                                          |
 | `disabled`          | `false`                              | Disables the `julia` module.                                              |
@@ -1730,7 +1821,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1743,9 +1834,9 @@ symbol = "∴ "
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Thư mục hiện tại chứa một tệp tin `.kt` hoặc một tệp tin `.kts`
+- The current directory contains a `.kt` or a `.kts` file
 
 ### Các tuỳ chọn
 
@@ -1755,7 +1846,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
 | `detect_extensions` | `["kt", "kts"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                           |
 | `detect_files`      | `[]`                                 | Những tên tệp nào sẽ kích hoạt mô-đun này.                                    |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                    |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                               |
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `"bold blue"`                        | Kiểu cho module.                                                              |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
@@ -1769,7 +1860,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1819,7 +1910,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |                      | Giá trị ghi đè tuỳ chọn `symbol`         |
 | style\* |                      | Giá trị ghi đè của `style`               |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1895,7 +1986,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
 | style\* |              | Giá trị ghi đè của `style`        |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -1910,7 +2001,7 @@ disabled = false
 
 ## Lua
 
-The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.lua-version` file
 - The current directory contains a `lua` directory
@@ -1938,7 +2029,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2019,7 +2110,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2034,9 +2125,9 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `nim.cfg`
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -2062,7 +2153,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2098,7 +2189,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | symbol    |         | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |         | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2114,28 +2205,28 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
 - The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts` extension
+- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                                                                 |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                                                 |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
-| `symbol`            | `" "`                               | A format string representing the symbol of Node.js.                                                   |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts"]`         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                   |
-| `detect_files`      | `["package.json", ".node-version"]`  | Những tên tệp nào sẽ kích hoạt mô-đun này.                                                            |
-| `detect_folders`    | `["node_modules"]`                   | Những thư mục nào sẽ kích hoạt mô-đun này.                                                            |
-| `style`             | `"bold green"`                       | Kiểu cho module.                                                                                      |
-| `disabled`          | `false`                              | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                           | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Tuỳ chọn            | Mặc định                                   | Mô tả                                                                                                 |
+| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`       | Định dạng cho module.                                                                                 |
+| `version_format`    | `"v${raw}"`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `" "`                                     | A format string representing the symbol of Node.js.                                                   |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts", "mts", "cts"]` | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                   |
+| `detect_files`      | `["package.json", ".node-version"]`        | Những tên tệp nào sẽ kích hoạt mô-đun này.                                                            |
+| `detect_folders`    | `["node_modules"]`                         | Những thư mục nào sẽ kích hoạt mô-đun này.                                                            |
+| `style`             | `"bold green"`                             | Kiểu cho module.                                                                                      |
+| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
+| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Các biến
 
@@ -2145,7 +2236,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |            | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2158,7 +2249,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.opam` extension or `_opam` directory
 - The current directory contains a `esy.lock` directory
@@ -2192,7 +2283,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | Giá trị ghi đè tuỳ chọn `symbol`                                  |
 | style\*        |              | Giá trị ghi đè của `style`                                        |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2225,7 +2316,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | symbol    |        | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |        | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2280,7 +2371,7 @@ The `package` module is shown when the current directory is the repository for a
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2293,7 +2384,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Makefile.PL` or `Build.PL` file
 - The current directory contains a `cpanfile` or `cpanfile.snapshot` file
@@ -2333,9 +2424,9 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `composer.json`
+- The current directory contains a `composer.json` file
 - The current directory contains a `.php-version` file
 - The current directory contains a `.php` extension
 
@@ -2360,7 +2451,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2381,7 +2472,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 :::
 
-Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
 - A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
@@ -2406,7 +2497,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |            | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2430,9 +2521,9 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
-- Đường dẫn hiện tại chứa một tập tin `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
 ### Các tuỳ chọn
@@ -2456,7 +2547,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2473,15 +2564,15 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- Đường dẫn hiện tại chứa một tập tin `pyproject.toml`
-- Đường dẫn hiện tại chứa một tập tin `requirements.txt`
-- Đường dẫn hiện tại chứa một tập tin `setup.py`
-- Đường dẫn hiện tại chứa một tập tin `tox.ini`
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -2496,9 +2587,9 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `["py"]`                                                                                                     | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                                     |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Tên tệp nào sẽ kích hoạt mô-đun này                                                    |
-| `detect_folders`     | `[]`                                                                                                         | Thư mục nào sẽ kích hoạt mô-đun này                                                    |
+| `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                            |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                             |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
@@ -2576,9 +2667,9 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"📐"`                                | A format string representing the symbol of R.                             |
 | `style`             | `"blue bold"`                        | Kiểu cho module.                                                          |
-| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này                        |
-| `detect_files`      | `[".Rprofile"]`                      | Tên tệp nào sẽ kích hoạt mô-đun này                                       |
-| `detect_folders`    | `[".Rproj.user"]`                    | Thư mục nào sẽ kích hoạt mô-đun này                                       |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module                               |
+| `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module                                |
+| `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                  |
 | `disabled`          | `false`                              | Disables the `r` module.                                                  |
 
 ### Các biến
@@ -2600,7 +2691,7 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2625,7 +2716,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2638,7 +2729,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -2669,7 +2760,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2682,7 +2773,7 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -2708,7 +2799,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |                   | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2721,7 +2812,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
 - The current directory contains a file with the `.scala` or `.sbt` extension
@@ -2735,7 +2826,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `version_format`    | `"v${raw}"`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `["sbt", "scala"]`                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `[".scalaenv", ".sbtenv", "build.sbt"]`  | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[".metals"]`                            | Which folders should trigger this modules.                                |
+| `detect_folders`    | `[".metals"]`                            | Những thư mục nào nên kích hoạt các mô đun này.                           |
 | `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                         |
 | `style`             | `"red dimmed"`                           | Kiểu cho module.                                                          |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                              |
@@ -2748,7 +2839,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2795,9 +2886,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | indicator |          | Mirrors the value of `indicator` for currently used shell. |
 | style\* |          | Mirrors the value of option `style`.                       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Các vị dụ
+### Các ví dụ
 
 ```toml
 # ~/.config/starship.toml
@@ -2833,7 +2924,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2867,7 +2958,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | symbol    |              | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |              | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2880,7 +2971,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. The module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
+The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
 ::: tip
 
@@ -2888,15 +2979,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 :::
 
-::: warning This module is not supported on nu shell. :::
-
 ### Các tuỳ chọn
 
 | Tuỳ chọn                | Mặc định                                                                             | Mô tả                                                   |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
 | `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
-| `success_symbol`        | `"✔️"`                                                                               | The symbol displayed on program success                 |
+| `success_symbol`        | `""`                                                                                 | The symbol displayed on program success                 |
 | `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
 | `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
 | `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
@@ -2924,7 +3013,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol         |         | Giá trị ghi đè tuỳ chọn `symbol`                                                            |
 | style\*      |         | Giá trị ghi đè của `style`                                                                  |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2933,8 +3022,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 [status]
 style = "bg:blue"
-symbol = "🔴"
-format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
+symbol = "🔴 "
+success_symbol = "🟢 SUCCESS"
+format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
 ```
@@ -2966,7 +3056,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -2990,7 +3080,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3016,7 +3106,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -3037,7 +3127,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 :::
 
-Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
@@ -3064,7 +3154,7 @@ Mặc định module sẽ được hiển thị nếu có bất kì điều ki�
 | symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |            | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -3117,7 +3207,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 | time      | `13:08:10` | The current time.          |
 | style\* |            | Giá trị ghi đè của `style` |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -3134,7 +3224,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current user is root
 - The current user isn't the same as the one that is logged in
@@ -3179,7 +3269,7 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Vagrantfile` file
 
@@ -3204,7 +3294,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | symbol    |                  | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |                  | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -3217,7 +3307,7 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Mặc định module sẽ được hiển thị nếu có bất kì điều kiện nào dưới đây thoả mãn:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.v` extension
 - The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
@@ -3272,7 +3362,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | symbol    |                                             | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* | `black bold dimmed`                         | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -3285,7 +3375,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `.zig` file
 
@@ -3310,7 +3400,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 ### Ví dụ
 
@@ -3384,7 +3474,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | symbol    | Giá trị ghi đè tuỳ chọn `symbol`       |
 | style\* | Giá trị ghi đè của `style`             |
 
-*: This variable can only be used as a part of a style string
+*: Biến này có thể chỉ được sử dụng như một phần của style string
 
 #### Custom command shell
 

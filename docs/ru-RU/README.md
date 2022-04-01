@@ -42,8 +42,9 @@ description: Starship - минимальная, быстрая и бесконе
    Через Bash:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    Для обновления Starship перезапустите этот скрипт. Он заменит текущую версию без изменения конфигурации.
 
 
@@ -143,17 +144,19 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Nushell
 
-   ::: warning Это будет изменено. Поддерживается только nu версии v0.33 или выше. ::: Добавьте следующее в свой конфигурационный файл nu. Вы можете узнать расположение этого файла, выполнив `config path` в nu.
-
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   ::: warning Это будет изменено. Only Nushell v0.60+ is supported. ::: Run the following:
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
    ```
 
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
+   source ~/.cache/starship/init.nu
+   ```
 
    #### Xonsh
 

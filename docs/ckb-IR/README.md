@@ -42,8 +42,9 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
    لەگەڵ شێڵ:
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    بۆ نوێکردنەوەی Starship خۆی، نووسینەکەی سەرەوە ڕەن بکەوە. وەشانی ئێستا دەگۆڕێت بێ ئەوەی دەسکاری ڕێکخستنەکانی Starship بکات.
 
 
@@ -119,7 +120,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Elvish
 
-   ::: ئاگادارکردنەوە تەنها elvish v0.17 یان بەرزتر پشتگیری کراوە. :::
+   ::: warning تەنها elvish v0.17 یان بەرزتر پشتگیری کراوە. :::
 
    ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
 
@@ -143,17 +144,19 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Nushell
 
-   ::: warning This will change in the future. تەنها وەشانی v0.33 یان بەرزتری nu پشتگیریکراوە. ::: Add the following to your nu config file. ئەتوانی شوێنی ئەم پەڕگەیە بپشکنی بە جێبەجێکردنی `config path` لە nu دا.
-
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   ::: warning This will change in the future. Only Nushell v0.60+ is supported. ::: Run the following:
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
    ```
 
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
+   source ~/.cache/starship/init.nu
+   ```
 
    #### Xonsh
 

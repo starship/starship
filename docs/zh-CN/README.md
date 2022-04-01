@@ -42,8 +42,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    使用 Shell 命令：
 
    ```sh
-   sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+   curl -sS https://starship.rs/install.sh | sh
    ```
+
    自更新 Starship ，运行下面脚本 将会在不改动 Starship 配置文件的情况下升级版本
 
 
@@ -143,17 +144,19 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: warning This will change in the future. 仅支持 nu 版本 v0.33 或更高版本。 ::: Add the following to your nu config file. 您可以用 nu 运行 `config path` 来检查此 文件的位置。
-
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   ::: warning This will change in the future. Only Nushell v0.60+ is supported. ::: Run the following:
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
    ```
 
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save ~/.cache/starship/init.nu
+   source ~/.cache/starship/init.nu
+   ```
 
    #### Xonsh
 
@@ -168,7 +171,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. 将以下文件添加到文件 `starship.lua` 中，并将此文件放置在 Clink脚本目录中：
+   您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

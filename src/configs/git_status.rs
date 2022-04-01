@@ -1,9 +1,8 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[serde(default)]
 pub struct GitStatusConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
@@ -20,6 +19,8 @@ pub struct GitStatusConfig<'a> {
     pub untracked: &'a str,
     pub ignore_submodules: bool,
     pub disabled: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub windows_starship: Option<&'a str>,
 }
 
 impl<'a> Default for GitStatusConfig<'a> {
@@ -40,6 +41,7 @@ impl<'a> Default for GitStatusConfig<'a> {
             untracked: "?",
             ignore_submodules: false,
             disabled: false,
+            windows_starship: None,
         }
     }
 }

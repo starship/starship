@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::red::RedConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};

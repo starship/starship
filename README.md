@@ -139,6 +139,8 @@
   /></a>
 </p>
 
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
 <h1></h1>
 
 <img
@@ -203,7 +205,7 @@ Install Starship using any of the following package managers:
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
@@ -232,7 +234,7 @@ Alternatively, install Starship using any of the following package managers:
 Install the latest version for your system:
 
 ```sh
-sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 Alternatively, install Starship using any of the following package managers:
@@ -296,7 +298,7 @@ Add the following to the end of `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -325,16 +327,21 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell configuration (find it by running `config path`):
+Run the following:
 
-```toml
-startup = [
-  "mkdir ~/.cache/starship",
-  "starship init nu | save ~/.cache/starship/init.nu",
-  "source ~/.cache/starship/init.nu",
-]
-prompt = "starship_prompt"
+```sh
+mkdir ~/.cache/starship
+starship init nu | save ~/.cache/starship/init.nu
 ```
+
+And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+```sh
+starship init nu | save ~/.cache/starship/init.nu
+source ~/.cache/starship/init.nu
+```
+
+Note: Only Nushell v0.60+ is supported
 
 </details>
 
