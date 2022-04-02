@@ -1,6 +1,3 @@
-use std::fs::File;
-use std::io::Read;
-
 use super::{Context, Module};
 
 #[cfg(not(target_os = "linux"))]
@@ -10,6 +7,9 @@ pub fn module<'a>(_context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(target_os = "linux")]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    use std::fs::File;
+    use std::io::Read;
+
     use super::ModuleConfig;
     use crate::configs::container::ContainerConfig;
     use crate::formatter::StringFormatter;
