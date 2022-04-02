@@ -12,6 +12,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     use crate::formatter::StringFormatter;
     use crate::utils::read_file;
 
+    
+    fn check_if_docker_in_cgroup(context: &Context) -> Option<String> {        
+        Some(context
+            .exec_cmd("grep", &["-cim1", "/docker", "/proc/1/cgroup"])?
+            .stdout
+            .trim()
+            .to_string())        
+    }
+
     pub fn container_name(context: &Context) -> Option<String> {
         use crate::utils::context_path;
 
@@ -24,6 +33,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         if context_path(context, "/run/host/container-manager").exists() {
             // OCI
             return Some("OCI".into());
+        }
+
+        if check_if_docker_in_cgroup(context).unwrap() == "1" {
+            // Docker
+            return Some("Docker".into());
         }
 
         if context_path(context, "/run/systemd/container").exists() {
@@ -51,11 +65,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .unwrap_or_else(|_| "podman".into());
 
             return Some(image_res);
-        }
-
-        if context_path(context, "/.dockerenv").exists() {
-            // docker
-            return Some("Docker".into());
         }
 
         None
