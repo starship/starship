@@ -36,7 +36,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 1. 安装 **starship** 二进制文件：
 
-
    #### 安装最新版本
 
    使用 Shell 命令：
@@ -46,7 +45,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```
 
    自更新 Starship ，运行下面脚本 将会在不改动 Starship 配置文件的情况下升级版本
-
 
    #### 通过软件包管理器安装
 
@@ -64,7 +62,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 1. 将初始化脚本添加到您的 shell 的配置文件：
 
-
    #### Bash
 
    在 `~/.bashhrc` 的最后，添加以下内容：
@@ -74,7 +71,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval "$(starship init bash)"
    ```
-
 
    #### Fish
 
@@ -86,7 +82,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    starship init fish | source
    ```
 
-
    #### Zsh
 
    在 `~/.zshrc` 的最后，添加以下内容：
@@ -97,7 +92,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval "$(starship init zsh)"
    ```
 
-
    #### Powershell
 
    将以下内容添加到 `Microsoft.PowerShell_profile.ps1`。 你可以在 PowerShell 通过 `$PROFILE` 变量来查询文件的位置。 对于 -Nix 来说，通常文件路径是 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
@@ -105,7 +99,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
-
 
    #### Ion
 
@@ -117,10 +110,11 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval $(starship init ion)
    ```
 
-
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: warning
+   Only elvish v0.17 or higher is supported.
+   :::
 
    在 `~/.config/fish/rc.elv` 的最后，添加以下内容：
 
@@ -129,7 +123,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval (starship init elvish)
    ```
-
 
    #### Tcsh
 
@@ -141,10 +134,14 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval `starship init tcsh`
    ```
 
-
    #### Nushell
 
-   ::: warning This will change in the future. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+   This will change in the future. Only Nushell v0.60+ is supported.
+   :::
+
+   Run the following:
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -167,7 +164,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    execx($(starship init xonsh))
    ```
-
 
    #### Cmd
 
