@@ -12,13 +12,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     use crate::formatter::StringFormatter;
     use crate::utils::read_file;
 
-    
-    fn check_if_docker_in_cgroup(context: &Context) -> Option<String> {        
-        Some(context
-            .exec_cmd("grep", &["-cim1", "/docker", "/proc/1/cgroup"])?
-            .stdout
-            .trim()
-            .to_string())        
+    fn check_if_docker_in_cgroup(context: &Context) -> Option<String> {
+        Some(
+            context
+                .exec_cmd("grep", &["-cim1", "/docker", "/proc/1/cgroup"])?
+                .stdout
+                .trim()
+                .to_string(),
+        )
     }
 
     pub fn container_name(context: &Context) -> Option<String> {
