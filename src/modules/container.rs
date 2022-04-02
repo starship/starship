@@ -1,3 +1,6 @@
+use std::fs::File;
+use std::io::Read;
+
 use super::{Context, Module};
 
 #[cfg(not(target_os = "linux"))]
@@ -12,14 +15,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     use crate::formatter::StringFormatter;
     use crate::utils::read_file;
 
-    fn check_if_docker_in_cgroup(context: &Context) -> Option<String> {
-        Some(
-            context
-                .exec_cmd("grep", &["-cim1", "/docker", "/proc/1/cgroup"])?
-                .stdout
-                .trim()
-                .to_string(),
-        )
+    fn check_if_docker_in_cgroup() -> Option<bool> {
+        let mut cgroup_file = File::open("/proc/1/cgroup").ok()?;
+        let mut cgroup_content = String::new();
+        cgroup_file.read_to_string(&mut cgroup_content).ok()?;
+
+        Some(cgroup_content.contains("/docker"))
     }
 
     pub fn container_name(context: &Context) -> Option<String> {
@@ -36,7 +37,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OCI".into());
         }
 
-        if check_if_docker_in_cgroup(context).unwrap() == "1" {
+        if check_if_docker_in_cgroup().unwrap() {
             // Docker
             return Some("Docker".into());
         }
