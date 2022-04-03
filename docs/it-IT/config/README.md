@@ -239,6 +239,7 @@ $vagrant\
 $zig\
 $nix_shell\
 $conda\
+$spack\
 $memory_usage\
 $aws\
 $gcloud\
@@ -3020,6 +3021,39 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 format = '[📦 \[$env\]]($style) '
 ```
 
+## Spack
+
+The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+
+### Opzioni
+
+| Opzione             | Default                                | Descrizione                                                                                                                                    |
+| ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"🅢  "`                                | The symbol used before the environment name.                                                                                                   |
+| `style`             | `"bold blue"`                          | Lo stile per il modulo.                                                                                                                        |
+| `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                                                                     |
+| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                   |
+
+### Variables
+
+| Variable    | Esempio      | Descrizione                          |
+| ----------- | ------------ | ------------------------------------ |
+| environment | `astronauts` | The current spack environment        |
+| symbol      |              | Mirrors the value of option `symbol` |
+| style\*   |              | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+
+[spack]
+format = "[$symbol$environment](dimmed blue) "
+```
+
 ## Status
 
 The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
@@ -3255,7 +3289,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3369,12 +3403,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                                   |
 | `version_format`    | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `"V "`                                       | Una stringa di formato che rappresenta il simbolo di V                                       |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                                 |
 | `detect_extensions` | `["v"]`                                      | Quali estensioni dovrebbero attivare questo modulo.                                          |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                            |
 | `style`             | `"blu grassetto"`                            | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                                |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                 |
 
 ### Variables
 
@@ -3507,7 +3541,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
 | `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `descrizione` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
