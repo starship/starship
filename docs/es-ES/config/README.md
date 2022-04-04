@@ -268,9 +268,9 @@ format="$all$directory$character"
 
 ## AWS
 
-El módulo `aws` muestra la región y el perfil actual de AWS cuando las credenciales, un `credential_process` o un `sso_start_url` se han configurado. Alternativamente, puedes forzar a este módulo a mostrar la región y el perfil incluso cuando las credenciales no han sido configuradas con la opción `force_display`. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del archivo `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
+El módulo `aws` muestra la región y el perfil actual de AWS cuando las credenciales, un `credential_process` o un `sso_start_url` se han configurado. Alternativamente, puedes forzar a este módulo a mostrar la región y el perfil incluso cuando las credenciales no han sido configuradas con la opción `force_display`. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del archivo `~/.aws/config`. Este módulo también muestra un temporizador de caducidad al usar credenciales temporales.
 
-El módulo mostrará un perfil solamente si sus credenciales están presentes en `~/.aws/credentials` o un `credential_process` está definido en `~/.aws/config`. Alternativamente, es suficiente con tener cualquiera de las siguientes variables de entorno `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, o `AWS_SESSION_TOKEN`. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
+El módulo mostrará un perfil solamente si sus credenciales están presentes en `~/.aws/credentials` o un `credential_process` está definido en `~/.aws/config`. Alternativamente, es suficiente con tener cualquiera de las siguientes variables de entorno `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, o `AWS_SESSION_TOKEN`. Si la opción `force_display` se establece en `true`, toda la información disponible será mostrada incluso si las condiciones anteriores no se respetan.
 
 Cuando se utiliza [aws-vault](https://github.com/99designs/aws-vault), el perfil se lee de la variable de entorno `AWS_VAULT` y la fecha de expiración de credenciales se lee de la variable de entorno `AWS_SESSION_EXPIRATION`.
 
@@ -280,16 +280,16 @@ Cuando se utiliza [AWSume](https://awsu.me), el perfil se lee de la variable de 
 
 ### Opciones
 
-| Opción              | Por defecto                                                          | Descripción                                                                                                 |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | El formato del módulo.                                                                                      |
-| `symbol`            | `"☁️ "`                                                              | El símbolo que se muestra antes del perfil de AWS.                                                          |
-| `region_aliases`    |                                                                      | Tabla de alias de región para mostrar además del nombre AWS.                                                |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `"bold yellow"`                                                      | El estilo del módulo.                                                                                       |
-| `expiration_symbol` | `X`                                                                  | El símbolo mostrado cuando las credenciales temporales han caducado.                                        |
-| `disabled`          | `false`                                                              | Desactiva el módulo AWS.                                                                                    |
-| `force_display`     | `false`                                                              | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Opción              | Por defecto                                                          | Descripción                                                                                                              |
+| ------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | El formato del módulo.                                                                                                   |
+| `symbol`            | `"☁️ "`                                                              | El símbolo que se muestra antes del perfil de AWS.                                                                       |
+| `region_aliases`    |                                                                      | Tabla de alias de región para mostrar además del nombre AWS.                                                             |
+| `profile_aliases`   |                                                                      | Tabla de alias de región para mostrar además del nombre AWS.                                                             |
+| `style`             | `"bold yellow"`                                                      | El estilo del módulo.                                                                                                    |
+| `expiration_symbol` | `X`                                                                  | El símbolo mostrado cuando las credenciales temporales han caducado.                                                     |
+| `disabled`          | `false`                                                              | Desactiva el módulo AWS.                                                                                                 |
+| `force_display`     | `false`                                                              | Si `true` muestra información incluso si `credentials`, `credential_process` o `sso_start_url` no han sido configuradas. |
 
 ### Variables
 
@@ -441,29 +441,29 @@ discharging_symbol = "💦"
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
+El módulo `buf` muestra la versión instalada de [Buf](https://buf.build). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
-- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+- La CLI de [`buf`](https://github.com/bufbuild/buf) está instalada.
+- El directorio actual contiene un archivo de configuración [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), o [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml).
 
 ### Opciones
 
-| Opción              | Por defecto                                                  | Descripción                                           |
-| ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
-| `version_format`    | `"v${raw}"`                                                  | El formato de versión.                                |
-| `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                                         | Qué extensiones deberían activar este módulo.         |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Qué nombres de archivo deberían activar este módulo.  |
-| `detect_folders`    | `[]`                                                         | Qué carpetas deberían activar estos módulos.          |
-| `style`             | `"bold blue"`                                                | El estilo del módulo.                                 |
-| `disabled`          | `false`                                                      | Desactiva el módulo `elixir`.                         |
+| Opción              | Por defecto                                                  | Descripción                                          |
+| ------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
+| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | El formato para el módulo `buf`.                     |
+| `version_format`    | `"v${raw}"`                                                  | El formato de versión.                               |
+| `symbol`            | `"🦬 "`                                                       | El símbolo usado antes de mostrar la versión de Buf. |
+| `detect_extensions` | `[]`                                                         | Qué extensiones deberían activar este módulo.        |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Qué nombres de archivo deberían activar este módulo. |
+| `detect_folders`    | `[]`                                                         | Qué carpetas deberían activar estos módulos.         |
+| `style`             | `"bold blue"`                                                | El estilo del módulo.                                |
+| `disabled`          | `false`                                                      | Desactiva el módulo `elixir`.                        |
 
 ### Variables
 
 | Variable      | Ejemplo  | Descripción                            |
 | ------------- | -------- | -------------------------------------- |
-| `buf_version` | `v1.0.0` | The version of `buf`                   |
+| `buf_version` | `v1.0.0` | La versión de `buf`                    |
 | `symbol`      |          | Refleja el valor de la opción `symbol` |
 | `style`*      |          | Refleja el valor de la opción `style`  |
 
@@ -480,7 +480,7 @@ symbol = "🦬 "
 
 ## C
 
-The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+El módulo `c` muestra información sobre su compilador de C. By default the module will be shown if the current directory contains a `.c` or `.h` file.
 
 ### Opciones
 
