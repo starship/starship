@@ -1014,7 +1014,7 @@ También necesitará tener instalado .NET Core SDK para poder usarlo correctamen
 
 Internamente, este módulo utiliza su propio mecanismo para la detección de versiones. Normalmente es el doble de rápido que ejecutar `dotnet --version`, pero puede mostrar una versión incorrecta si tu proyecto .NET tiene un diseño de directorio inusual. Si la precisión es más importante que la velocidad, puede desactivar el mecanismo estableciendo `heuristic = false` en las opciones del módulo.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
+El módulo también mostrará el Target Framework Moniker ([https://docs.microsoft. om/es/dotnet/standard/frameworks#supported-target-framework-versions](https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks)) cuando exista un archivo `.csproj` en el directorio actual.
 
 ### Opciones
 
@@ -1269,14 +1269,14 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 
 ### Opciones
 
-| Opción            | Por defecto                                                | Descripción                                                      |
-| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
-| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | El formato del módulo.                                           |
-| `symbol`          | `"☁️  "`                                                   | El símbolo usado antes de mostrar el perfil actual de GCP.       |
-| `region_aliases`  |                                                            | Tabla de alias de región a mostrar además del nombre GCP.        |
-| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
-| `style`           | `"bold blue"`                                              | El estilo del módulo.                                            |
-| `disabled`        | `false`                                                    | Desactiva el módulo `gcloud`.                                    |
+| Opción            | Por defecto                                                | Descripción                                                  |
+| ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | El formato del módulo.                                       |
+| `symbol`          | `"☁️  "`                                                   | El símbolo usado antes de mostrar el perfil actual de GCP.   |
+| `region_aliases`  |                                                            | Tabla de alias de región a mostrar además del nombre GCP.    |
+| `project_aliases` |                                                            | Tabla de alias del proyecto a mostrar además del nombre GCP. |
+| `style`           | `"bold blue"`                                              | El estilo del módulo.                                        |
+| `disabled`        | `false`                                                    | Desactiva el módulo `gcloud`.                                |
 
 ### Variables
 
@@ -1325,7 +1325,7 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
-#### Display account and aliased project
+#### Mostrar cuenta y proyecto con alias
 
 ```toml
 # ~/.config/starship.toml
@@ -1351,7 +1351,7 @@ El módulo `git_branch` muestra la rama activa del repositorio en tu directorio 
 | `truncation_length`  | `2^63 - 1`                       | Trunca una rama git a grafemas `N`.                                                                     |
 | `truncation_symbol`  | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
 | `only_attached`      | `false`                          | Mostrar solo el nombre de la rama cuando no esté en un estado `HEAD`.                                   |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                                     |
+| `ignore_branches`    | `[]`                             | Una lista de nombres para evitar mostrar. Útil para "master" o "main".                                  |
 | `disabled`           | `false`                          | Desactiva el módulo `git_branch`.                                                                       |
 
 ### Variables
@@ -1500,30 +1500,30 @@ El módulo `git_status` muestra símbolos que representan el estado del reposito
 
 ::: tip
 
-The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+El módulo Git Status es muy lento en los directorios de Windows (por ejemplo bajo `/mnt/c/`) en un entorno WSL. Puedes desactivar el módulo o utilizar la opción `windows_starship` para usar un ejecutable de la Starship nativa de Windows para calcular `git_status` para esas rutas.
 
 :::
 
 ### Opciones
 
-| Opción              | Predeterminado                                  | Descripción                                                                                                 |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato por defecto para `git_status`                                                                    |
-| `conflicted`        | `"="`                                           | Esta rama tiene conflictos de fusión.                                                                       |
-| `ahead`             | `"⇡"`                                           | El formato de `ahead`                                                                                       |
-| `behind`            | `"⇣"`                                           | El formato de `behind`                                                                                      |
-| `diverged`          | `"⇕"`                                           | El formato de `diverged`                                                                                    |
-| `up_to_date`        | `""`                                            | El formato de `up_to_date`                                                                                  |
-| `untracked`         | `"?"`                                           | El formato de `untracked`                                                                                   |
-| `stashed`           | `"$"`                                           | El formato de `stashed`                                                                                     |
-| `modified`          | `"!"`                                           | El formato de `modified`                                                                                    |
-| `staged`            | `"+"`                                           | El formato de `staged`                                                                                      |
-| `renamed`           | `"»"`                                           | El formato de `renamed`                                                                                     |
-| `deleted`           | `"✘"`                                           | El formato de `deleted`                                                                                     |
-| `style`             | `"bold red"`                                    | El estilo del módulo.                                                                                       |
-| `ignore_submodules` | `false`                                         | Ignorar cambios a los submódulos.                                                                           |
-| `disabled`          | `false`                                         | Desactiva el módulo `git_status`.                                                                           |
-| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| Opción              | Predeterminado                                  | Descripción                                                                                                                               |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato por defecto para `git_status`                                                                                                  |
+| `conflicted`        | `"="`                                           | Esta rama tiene conflictos de fusión.                                                                                                     |
+| `ahead`             | `"⇡"`                                           | El formato de `ahead`                                                                                                                     |
+| `behind`            | `"⇣"`                                           | El formato de `behind`                                                                                                                    |
+| `diverged`          | `"⇕"`                                           | El formato de `diverged`                                                                                                                  |
+| `up_to_date`        | `""`                                            | El formato de `up_to_date`                                                                                                                |
+| `untracked`         | `"?"`                                           | El formato de `untracked`                                                                                                                 |
+| `stashed`           | `"$"`                                           | El formato de `stashed`                                                                                                                   |
+| `modified`          | `"!"`                                           | El formato de `modified`                                                                                                                  |
+| `staged`            | `"+"`                                           | El formato de `staged`                                                                                                                    |
+| `renamed`           | `"»"`                                           | El formato de `renamed`                                                                                                                   |
+| `deleted`           | `"✘"`                                           | El formato de `deleted`                                                                                                                   |
+| `style`             | `"bold red"`                                    | El estilo del módulo.                                                                                                                     |
+| `ignore_submodules` | `false`                                         | Ignorar cambios a los submódulos.                                                                                                         |
+| `disabled`          | `false`                                         | Desactiva el módulo `git_status`.                                                                                                         |
+| `windows_starship`  |                                                 | Utiliza esta ruta (Linux) a un ejecutable de Starship de Windows para renderizar `git_status` cuando está en las rutas de Windows en WSL. |
 
 ### Variables
 
@@ -1587,7 +1587,7 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-Use Windows Starship executable on Windows paths in WSL
+Usar el ejecutable de Starship de Windows en las rutas de Windows en WSL
 
 ```toml
 # ~/.config/starship.toml
@@ -1643,12 +1643,12 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Haskell
 
-The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+El módulo `haskell` encuentra la versión GHC seleccionada y/o la instantánea de la pila seleccionada.
 
 Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un fichero `stack.yaml`
-- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+- El directorio actual contiene cualquier archivo `.hs`, `.cabal` o `.hs-boot`
 
 ### Opciones
 
