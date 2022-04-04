@@ -3069,19 +3069,19 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | Opción                  | Por defecto                                                                          | Descripción                                             |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                        | El formato del módulo                                   |
-| `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
-| `success_symbol`        | `""`                                                                                 | The symbol displayed on program success                 |
-| `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
-| `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
-| `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
+| `symbol`                | `"✖"`                                                                                | El símbolo mostrado en el error del programa            |
+| `success_symbol`        | `""`                                                                                 | El símbolo mostrado en el éxito del programa            |
+| `not_executable_symbol` | `"🚫"`                                                                                | El símbolo mostrado cuando el archivo no es ejecutable  |
+| `not_found_symbol`      | `"🔍"`                                                                                | El símbolo mostrado cuando no se encuentra el comando   |
+| `sigint_symbol`         | `"🧱"`                                                                                | El símbolo mostrado en SIGINT (Ctrl + c)                |
+| `signal_symbol`         | `"⚡"`                                                                                | El símbolo mostrado en cualquier señal                  |
 | `style`                 | `"bold red"`                                                                         | El estilo del módulo.                                   |
-| `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
-| `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
-| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
+| `recognize_signal_code` | `true`                                                                               | Habilita el mapeo de señales desde el código de salida  |
+| `map_symbol`            | `false`                                                                              | Habilita el mapeo de símbolos desde el código de salida |
+| `pipestatus`            | `false`                                                                              | Habilita el reporte de pipstatus                        |
 | `pipestatus_separator`  | `|`                                                                                  |                                                         |
-| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
-| `disabled`              | `true`                                                                               | Disables the `status` module.                           |
+| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | El formato del módulo cuando el comando es un pipeline  |
+| `disabled`              | `true`                                                                               | Deshabilita el módulo `status`.                         |
 
 ### Variables
 
@@ -3510,7 +3510,7 @@ These modules will be shown if any of the following conditions are met:
 
 ::: tip
 
-Multiple custom modules can be defined by using a `.`.
+Múltiples módulos personalizados pueden definirse usando un `.` (un punto).
 
 :::
 
