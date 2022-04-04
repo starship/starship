@@ -3085,18 +3085,18 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                                                 |
-| -------------- | ------- | ------------------------------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                                           |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                    |
-| int            | `127`   | The exit code of the last command                                                           |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
-| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
-| symbol         |         | Refleja el valor de la opción `symbol`                                                      |
-| style\*      |         | Refleja el valor de la opción `style`                                                       |
+| Variable       | Ejemplo | Descripción                                                                                                        |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| status         | `127`   | El código de salida del último comando                                                                             |
+| hex_status     | `0x7F`  | El código de salida del último comando en hexadecimal                                                              |
+| int            | `127`   | El código de salida del último comando                                                                             |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                                                         |
+| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizada                                       |
+| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada                                    |
+| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado                               |
+| pipestatus     |         | Renderizado en los códigos de salida de los programas del pipeline, esto sólo está disponible en pipestatus_format |
+| symbol         |         | Refleja el valor de la opción `symbol`                                                                             |
+| style\*      |         | Refleja el valor de la opción `style`                                                                              |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -3116,7 +3116,7 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+El módulo `sudo` muestra si las credenciales de sudo están actualmente en caché. El módulo solo se mostrará si las credenciales están guardadas en caché.
 
 ::: tip
 
@@ -3126,13 +3126,13 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción          | Por defecto             | Descripción                                             |
-| --------------- | ----------------------- | ------------------------------------------------------- |
-| `format`        | `[as $symbol]($style)"` | El formato del módulo                                   |
-| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
-| `style`         | `"bold blue"`           | El estilo del módulo.                                   |
-| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+| Opción          | Por defecto             | Descripción                                                                      |
+| --------------- | ----------------------- | -------------------------------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | El formato del módulo                                                            |
+| `symbol`        | `"🧙 "`                  | El símbolo mostrado cuando las credenciales se almacenan en caché                |
+| `style`         | `"bold blue"`           | El estilo del módulo.                                                            |
+| `allow_windows` | `false`                 | Como Windows no tiene sudo por defecto, el valor por defecto está deshabilitado. |
+| `disabled`      | `true`                  | Deshabilita el módulo `sudo`.                                                    |
 
 ### Variables
 
@@ -3155,7 +3155,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# En Windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3165,7 +3165,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+Por defecto, el módulo `swift` muestra la versión instalada de [Swift](https://swift.org/). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `Package.swift`
 - El directorio actual contiene un archivo con la extensión `.swift`
@@ -3176,7 +3176,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐦 "`                               | A format string representing the symbol of Swift                                        |
+| `symbol`            | `"🐦 "`                               | Una cadena de formato que representa el símbolo de Swift                                |
 | `detect_extensions` | `["swift"]`                          | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["Package.swift"]`                  | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
