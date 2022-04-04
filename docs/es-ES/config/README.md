@@ -3318,26 +3318,26 @@ El módulo `username` muestra el nombre de usuario activo. El módulo se muestra
 
 ::: tip
 
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION`, `SSH_CLIENT`, y `SSH_TTY`. Si tu host SSH no configura estas variables, una solución es establecer una de ellas con un valor tonto.
 
 :::
 
 ### Opciones
 
-| Opción        | Por defecto             | Descripción                                 |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
-| `style_user`  | `"bold yellow"`         | The style used for non-root users.          |
-| `format`      | `"[$user]($style) in "` | El formato del módulo.                      |
-| `show_always` | `false`                 | Always shows the `username` module.         |
-| `disabled`    | `false`                 | Disables the `username` module.             |
+| Opción        | Por defecto             | Descripción                                      |
+| ------------- | ----------------------- | ------------------------------------------------ |
+| `style_root`  | `"bold red"`            | El estilo usado cuando el usuario es root/admin. |
+| `style_user`  | `"bold yellow"`         | El estilo usado para usuarios no root.           |
+| `format`      | `"[$user]($style) in "` | El formato del módulo.                           |
+| `show_always` | `false`                 | Siempre muestra el módulo `username`.            |
+| `disabled`    | `false`                 | Deshabilita el módulo `username`.                |
 
 ### Variables
 
-| Variable | Ejemplo      | Descripción                                                                                 |
-| -------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
+| Variable | Ejemplo      | Descripción                                                                                         |
+| -------- | ------------ | --------------------------------------------------------------------------------------------------- |
+| `style`  | `"red bold"` | Refleja el valor de la opción `style_root` cuando root inició sesión y `style_user` por otra parte. |
+| `user`   | `"matchai"`  | El ID de usuario conectado actualmente.                                                             |
 
 ### Ejemplo
 
@@ -3354,7 +3354,7 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `vagrant` muestra la versión instalada de [Vagrant](https://www.vagrantup.com/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `Vagrantfile`
 
@@ -3364,18 +3364,18 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"⍱ "`                               | A format string representing the symbol of Vagrant.                                     |
+| `symbol`            | `"⍱ "`                               | Una cadena de formato que representa el símbolo de Vagrant.                             |
 | `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["Vagrantfile"]`                    | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"cyan bold"`                        | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                                          |
+| `disabled`          | `false`                              | Deshabilita el módulo `vagrant`.                                                        |
 
 ### Variables
 
 | Variable  | Ejemplo          | Descripción                            |
 | --------- | ---------------- | -------------------------------------- |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
+| version   | `Vagrant 2.2.10` | La versión de `Vagrant`                |
 | symbol    |                  | Refleja el valor de la opción `symbol` |
 | style\* |                  | Refleja el valor de la opción `style`  |
 
@@ -3392,7 +3392,7 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `vlang` te muestra la versión instalada de [V](https://vlang.io/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - El directorio actual contiene un archivo con la extensión `.v`
 - El directorio actual contiene un archivo `v.mod`, `vpkg.json` o `.vpkg-lock.json`
@@ -3403,18 +3403,18 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                            |
+| `symbol`            | `"V "`                                       | Una cadena de formato que representa el símbolo de V                                    |
 | `detect_extensions` | `["v"]`                                      | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                         | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"blue bold"`                                | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                                            |
+| `disabled`          | `false`                                      | Deshabilita el módulo `vlang`.                                                          |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v0.2`  | The version of `v`                     |
+| version   | `v0.2`  | La versión de `v`                      |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -3428,24 +3428,24 @@ format = "via [V $version](blue bold) "
 
 ## VCSH
 
-The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
+El módulo `vcsh` muestra el repositorio activo [VCSH](https://github.com/RichiH/vcsh) actual. El módulo sólo se mostrará si un repositorio está actualmente en uso.
 
 ### Opciones
 
-| Opción     | Predeterminado                   | Descripción                                            |
-| ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   |                                  | The symbol used before displaying the repository name. |
-| `style`    | `"bold yellow"`                  | El estilo del módulo.                                  |
-| `format`   | `"vcsh [$symbol$repo]($style) "` | El formato del módulo.                                 |
-| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+| Opción     | Predeterminado                   | Descripción                                                  |
+| ---------- | -------------------------------- | ------------------------------------------------------------ |
+| `symbol`   |                                  | El símbolo usado antes de mostrar el nombre del repositorio. |
+| `style`    | `"bold yellow"`                  | El estilo del módulo.                                        |
+| `format`   | `"vcsh [$symbol$repo]($style) "` | El formato del módulo.                                       |
+| `disabled` | `false`                          | Deshabilita el módulo `vcsh`.                                |
 
 ### Variables
 
-| Variable  | Ejemplo                                     | Descripción                            |
-| --------- | ------------------------------------------- | -------------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
-| symbol    |                                             | Refleja el valor de la opción `symbol` |
-| style\* | `black bold dimmed`                         | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo                                                     | Descripción                            |
+| --------- | ----------------------------------------------------------- | -------------------------------------- |
+| repo      | `dotfiles` si está en un repositorio VCSH nombrado dotfiles | El nombre del repositorio activo       |
+| symbol    |                                                             | Refleja el valor de la opción `symbol` |
+| style\* | `black bold dimmed`                                         | Refleja el valor de la opción `style`  |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -3460,7 +3460,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
+Por defecto, el módulo `zig` muestra la versión instalada de [Zig](https://ziglang.org/). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
 - El directorio actual contiene un archivo `.zig`
 
@@ -3470,9 +3470,9 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                                                  |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                                   |
+| `symbol`            | `"↯ "`                               | El símbolo usado antes de mostrar la versión de Zig.                                    |
 | `style`             | `"bold yellow"`                      | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `zig` module.                                                              |
+| `disabled`          | `false`                              | Deshabilita el módulo `zig`.                                                            |
 | `detect_extensions` | `["zig"]`                            | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
@@ -3481,7 +3481,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v0.6.0` | The version of `zig`                   |
+| version   | `v0.6.0` | La versión de `zig`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -3496,11 +3496,11 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 symbol = "⚡️ "
 ```
 
-## Custom commands
+## Comandos personalizados
 
-The `custom` modules show the output of some arbitrary commands.
+Los módulos `personalizados` muestran la salida de algunos comandos arbitrarios.
 
-These modules will be shown if any of the following conditions are met:
+Estos módulos se mostrarán si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo cuyo nombre está en `files`
 - El directorio actual contiene un directorio cuyo nombre está en `directories`
