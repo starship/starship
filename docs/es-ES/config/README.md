@@ -1652,25 +1652,25 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Opciones
 
-| Opción              | Por defecto                          | Descripción                                          |
-| ------------------- | ------------------------------------ | ---------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                               |
-| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell   |
-| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.           |
-| `style`             | `"bold purple"`                      | El estilo del módulo.                                |
-| `disabled`          | `false`                              | Disables the `haskell` module.                       |
+| Opción              | Por defecto                          | Descripción                                                |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo.                                     |
+| `symbol`            | `"λ "`                               | Una cadena de formato que representa el símbolo de Haskell |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Qué extensiones deberían activar este módulo.              |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Qué nombres de archivo deberían activar este módulo.       |
+| `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                 |
+| `style`             | `"bold purple"`                      | El estilo del módulo.                                      |
+| `disabled`          | `false`                              | Deshabilita el módulo `haskell`.                           |
 
 ### Variables
 
-| Variable       | Ejemplo     | Descripción                                                                             |
-| -------------- | ----------- | --------------------------------------------------------------------------------------- |
-| version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
-| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
-| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
-| symbol         |             | Refleja el valor de la opción `symbol`                                                  |
-| style\*      |             | Refleja el valor de la opción `style`                                                   |
+| Variable       | Ejemplo     | Descripción                                                                          |
+| -------------- | ----------- | ------------------------------------------------------------------------------------ |
+| version        |             | `ghc_version` o `snapshot` dependiendo de si el proyecto actual es un proyecto Stack |
+| snapshot       | `lts-18.12` | Instantánea de Stack seleccionada actualmente                                        |
+| ghc\_version | `9.2.1`     | Versión GHC instalada actualmente                                                    |
+| symbol         |             | Refleja el valor de la opción `symbol`                                               |
+| style\*      |             | Refleja el valor de la opción `style`                                                |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1933,7 +1933,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
+Muestra el nombre actual del [contexto de Kubernetes](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) y, si se establece, el espacio de nombres, el usuario y el clúster del archivo kubeconfig. El espacio de nombres necesita establecerse en el archivo kubeconfig, esto puede hacerse mediante `kubectl config set-context starship-context --namespace astronaut`. Del mismo modo, el usuario y clúster pueden establecerse con `kubectl config set-context starship-context --user starship-user` y `kubectl config set-context starship-context --cluster starship-cluster`. Si se establece la variable de entorno `$KUBECONFIG`, el módulo usará eso si no usará el `~/.kube/config`.
 
 ::: tip
 
@@ -1955,10 +1955,10 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 | Variable  | Ejemplo              | Descripción                                                 |
 | --------- | -------------------- | ----------------------------------------------------------- |
-| context   | `starship-context`   | The current kubernetes context name                         |
+| context   | `starship-context`   | El nombre del contexto actual de kubernetes                 |
 | namespace | `starship-namespace` | Si se establece, el espacio de nombres actual de kubernetes |
-| user      | `starship-user`      | If set, the current kubernetes user                         |
-| cluster   | `starship-cluster`   | If set, the current kubernetes cluster                      |
+| user      | `starship-user`      | Si se establece, el espacio de nombres actual de kubernetes |
+| cluster   | `starship-cluster`   | Si se establece, el clúster actual de kubernetes            |
 | symbol    |                      | Refleja el valor de la opción `symbol`                      |
 | style\* |                      | Refleja el valor de la opción `style`                       |
 
@@ -2264,7 +2264,7 @@ El módulo `nodejs` muestra la versión instalada de [Node.js](https://nodejs.or
 - El directorio actual contiene un archivo `.nvmrc`
 - El directorio actual contiene un directorio `node_modules`
 - El directorio actual contiene un archivo con la extensión `.js`, `.mjs` o `.cjs`
-- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
+- El directorio actual contiene un archivo con la extensión `.ts`, `.mts` o `.cts`
 
 ### Opciones
 
@@ -3023,23 +3023,23 @@ format = '[📦 \[$env\]]($style) '
 
 ## Spack
 
-The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+El módulo `spack` muestra el entorno actual [Spack](https://spack.readthedocs.io/en/latest/), si `$SPACK_ENV` está configurado.
 
 ### Opciones
 
 | Opción              | Por defecto                            | Descripción                                                                                                                                               |
 | ------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` significa sin truncamiento. Mirar también el módulo [`directory`](#directory). |
+| `truncation_length` | `1`                                    | El número de directorios a los que se debe truncar la ruta de entorno. `0` significa sin truncamiento. Mirar también el módulo [`directory`](#directory). |
 | `symbol`            | `"🅢  "`                                | El símbolo usado antes del nombre del entorno.                                                                                                            |
 | `style`             | `"bold blue"`                          | El estilo del módulo.                                                                                                                                     |
 | `format`            | `"via [$symbol$environment]($style) "` | El formato del módulo.                                                                                                                                    |
-| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                              |
+| `disabled`          | `false`                                | Deshabilita el módulo `spack`.                                                                                                                            |
 
 ### Variables
 
 | Variable    | Ejemplo      | Descripción                            |
 | ----------- | ------------ | -------------------------------------- |
-| environment | `astronauts` | The current spack environment          |
+| environment | `astronauts` | El entorno de spack actual             |
 | symbol      |              | Refleja el valor de la opción `symbol` |
 | style\*   |              | Refleja el valor de la opción `style`  |
 
@@ -3056,7 +3056,7 @@ format = "[$symbol$environment](dimmed blue) "
 
 ## Status
 
-The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
+El módulo `status` muestra el código de salida del comando anterior. Si $success_symbol está vacío (por defecto), el módulo solo se mostrará si el código de salida no es `0`. El código de estado se convertirá a un entero con signo de 32 bits.
 
 ::: tip
 
