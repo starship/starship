@@ -34,8 +34,8 @@ Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.
 
 [![Captura de pantalla del ajuste de Pure](/presets/img/pure-preset.png "Haga clic para ver el preajuste del Prompt de Pure")](./pure-preset)
 
-## [Powerline Pastel](./pastel-powerline.md)
+## [Pastel Powerline](./pastel-powerline.md)
 
 Este preajuste está inspirado en [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). También muestra cómo funciona la sustitución de rutas en Starship.
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Haga clic para ver el preajuste del Prompt de Pure")](./pastel-powerline)
+[![Captura de pantalla del preajuste de Pastel Powerline](/presets/img/pastel-powerline.png "Haga clic para ver el preajuste del Prompt de Pure")](./pastel-powerline)
