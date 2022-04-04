@@ -268,7 +268,7 @@ format="$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternativamente, puedes forzar a este módulo a mostrar la región y el perfil incluso cuando las credenciales no han sido configuradas con la opción `force_display`. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
+El módulo `aws` muestra la región y el perfil actual de AWS cuando las credenciales, un `credential_process` o un `sso_start_url` se han configurado. Alternativamente, puedes forzar a este módulo a mostrar la región y el perfil incluso cuando las credenciales no han sido configuradas con la opción `force_display`. Éste se basa en las variables de entorno `AWS_REGION`, `AWS_DEFAULT_REGION`, y `AWS_PROFILE` del archivo `~/.aws/config`. This module also shows an expiration timer when using temporary credentials.
 
 El módulo mostrará un perfil solamente si sus credenciales están presentes en `~/.aws/credentials` o un `credential_process` está definido en `~/.aws/config`. Alternativamente, es suficiente con tener cualquiera de las siguientes variables de entorno `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, o `AWS_SESSION_TOKEN`. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
 
