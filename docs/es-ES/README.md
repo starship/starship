@@ -144,7 +144,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Nushell
 
-   ::: advertencia Esto cambiará en el futuro. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: advertencia Esto cambiará en el futuro. Sólo se admite Nushell v0.60+. ::: Ejecuta lo siguiente:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
