@@ -480,7 +480,7 @@ symbol = "🦬 "
 
 ## C
 
-El módulo `c` muestra información sobre su compilador de C. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+El módulo `c` muestra información sobre su compilador de C. Por defecto el módulo se mostrará si el directorio actual contiene un archivo `.c` o `.h`.
 
 ### Opciones
 
@@ -488,32 +488,32 @@ El módulo `c` muestra información sobre su compilador de C. By default the mod
 | ------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | La cadena de formato para el módulo.                                                    |
 | `version_format`    | `"v${raw}"`                                                                 | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                                  |
+| `symbol`            | `"C "`                                                                      | El símbolo usado antes de mostrar los detalles del compilador                           |
 | `detect_extensions` | `["c", "h"]`                                                                | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `[]`                                                                        | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                        | Qué carpetas deberían activar este módulo.                                              |
-| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                                      |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | Cómo detectar cuál compilador es                                                        |
 | `style`             | `"bold 149"`                                                                | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                                                                |
+| `disabled`          | `false`                                                                     | Deshabilita el módulo `c`.                                                              |
 
 ### Variables
 
 | Variable | Ejemplo | Descripción                            |
 | -------- | ------- | -------------------------------------- |
-| name     | clang   | The name of the compiler               |
-| version  | 13.0.0  | The version of the compiler            |
+| name     | clang   | El nombre del compilador               |
+| version  | 13.0.0  | La versión del compilador              |
 | symbol   |         | Refleja el valor de la opción `symbol` |
 | style    |         | Refleja el valor de la opción `style`  |
 
-NB that `version` is not in the default format.
+NB que `versión` no está en el formato por defecto.
 
 ### Commands
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+La opción de `commands` acepta una lista de comandos para determinar la versión y el nombre del compilador.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+Cada comando se representa como una lista del nombre del ejecutable seguido de sus argumentos, generalmente algo como `["mycc", "--version"]`. Starship intentará ejecutar cada comando hasta que obtenga un resultado en STDOUT.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+Si un compilador C no es compatible con este módulo, puede solicitarlo [planteando un problema en GitHub](https://github.com/starship/starship/).
 
 ### Ejemplo
 
@@ -889,20 +889,20 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 
 ### Opciones
 
-| Opción              | Predeterminado                                                                                              | Descripción                                                                             |
-| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                                                                         | El número de directorios padre a los que se debe truncar el directorio actual.          |
-| `truncate_to_repo`  | `true`                                                                                                      | Trunca o no hasta la raíz del repositorio git en el que estés.                          |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | El formato del módulo.                                                                  |
-| `style`             | `"bold cyan"`                                                                                               | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                                                     | Desactiva el módulo `directory`.                                                        |
-| `read_only`         | `"🔒"`                                                                                                       | El símbolo que indica si el directorio actual es de sólo lectura.                       |
-| `read_only_style`   | `"red"`                                                                                                     | El estilo para el símbolo de sólo lectura.                                              |
-| `truncation_symbol` | `""`                                                                                                        | El símbolo a prefijar a las rutas truncadas. ej: "…/"                                   |
-| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
-| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
-| `home_symbol`       | `"~"`                                                                                                       | El símbolo que indica el directorio personal.                                           |
-| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
+| Opción              | Predeterminado                                                                                              | Descripción                                                                                                                 |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | El número de directorios padre a los que se debe truncar el directorio actual.                                              |
+| `truncate_to_repo`  | `true`                                                                                                      | Trunca o no hasta la raíz del repositorio git en el que estés.                                                              |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | El formato del módulo.                                                                                                      |
+| `style`             | `"bold cyan"`                                                                                               | El estilo del módulo.                                                                                                       |
+| `disabled`          | `false`                                                                                                     | Desactiva el módulo `directory`.                                                                                            |
+| `read_only`         | `"🔒"`                                                                                                       | El símbolo que indica si el directorio actual es de sólo lectura.                                                           |
+| `read_only_style`   | `"red"`                                                                                                     | El estilo para el símbolo de sólo lectura.                                                                                  |
+| `truncation_symbol` | `""`                                                                                                        | El símbolo a prefijar a las rutas truncadas. ej: "…/"                                                                       |
+| `repo_root_style`   | `None`                                                                                                      | El estilo para la raíz del repositorio de git. El valor por defecto es equivalente al `style`.                              |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | El formato de un repositorio de git cuando `repo_root_style` está definido.                                                 |
+| `home_symbol`       | `"~"`                                                                                                       | El símbolo que indica el directorio personal.                                                                               |
+| `use_os_path_sep`   | `true`                                                                                                      | Utiliza el separador de ruta del sistema operativo específico en lugar de usar siempre `/` (por ejemplo, `\` en Windows) |
 
 <details>
 <summary>Este módulo tiene algunas opciones avanzadas de configuración que controlan cómo se muestra el directorio.</summary>
@@ -935,17 +935,17 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>Los repositorios de git tienen variables adicionales.</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+Consideremos la ruta `/path/to/home/git_repo/src/lib`
 
-| Variable           | Ejemplo               | Descripción                             |
-| ------------------ | --------------------- | --------------------------------------- |
-| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
-| repo_root          | `"git_repo"`          | The git root directory name             |
-| path               | `"/src/lib"`          | The remaining path                      |
-| style              | `"black bold dimmed"` | Refleja el valor de la opción `style`   |
-| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+| Variable           | Ejemplo               | Descripción                                         |
+| ------------------ | --------------------- | --------------------------------------------------- |
+| before_root_path | `"/path/to/home/"`    | La ruta antes de la ruta del directorio raíz de git |
+| repo_root          | `"git_repo"`          | El nombre del directorio raíz de git                |
+| path               | `"/src/lib"`          | La ruta restante                                    |
+| style              | `"black bold dimmed"` | Refleja el valor de la opción `style`               |
+| repo_root_style  | `"underline white"`   | Estilo para el nombre del directorio raíz de git    |
 
 </details>
 
@@ -961,7 +961,7 @@ truncation_symbol = "…/"
 
 ## Docker context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+El módulo `docker_context` muestra el [contexto de Docker](https://docs.docker.com/engine/context/working-with-contexts/) actualmente activo si no está definido en `default` o si las variables de entorno `DOCKER_MACHINE_NAME`, `DOCKER_HOST` o `DOCKER_CONTEXT` están definidas (como se entiende para sobrescribir el contexto en uso).
 
 ### Opciones
 
