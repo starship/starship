@@ -4,7 +4,7 @@ use crate::formatter::StringFormatter;
 
 /// Creates a module for the prompt character
 ///
-/// The character segment prints an arrow character in a color dependant on the
+/// The character segment prints an arrow character in a color dependent on the
 /// exit-code of the last executed command:
 /// - If the exit-code was "0", it will be formatted with `success_symbol`
 ///   (green arrow by default)
@@ -13,6 +13,9 @@ use crate::formatter::StringFormatter;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
+        Visual,
+        Replace,
+        ReplaceOne,
         Insert,
     }
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
@@ -35,11 +38,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         (Shell::Fish, "default") | (Shell::Zsh, "vicmd") | (Shell::Cmd, "vi") => {
             ShellEditMode::Normal
         }
+        (Shell::Fish, "visual") => ShellEditMode::Visual,
+        (Shell::Fish, "replace") => ShellEditMode::Replace,
+        (Shell::Fish, "replace_one") => ShellEditMode::ReplaceOne,
         _ => ASSUMED_MODE,
     };
 
     let symbol = match mode {
         ShellEditMode::Normal => config.vicmd_symbol,
+        ShellEditMode::Visual => config.vimcmd_visual_symbol,
+        ShellEditMode::Replace => config.vimcmd_replace_symbol,
+        ShellEditMode::ReplaceOne => config.vimcmd_replace_one_symbol,
         ShellEditMode::Insert => {
             if exit_success {
                 config.success_symbol
