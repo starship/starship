@@ -1,3 +1,4 @@
+use crate::config::Either;
 use crate::context::Context;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
@@ -75,6 +76,21 @@ impl<'a> StarshipConditionalStyle<'a> {
     }
 }
 
+#[derive(Clone, Debug, Default, Serialize, PartialEq)]
+pub struct StarshipConditionalStyleConfig<'a>(pub StarshipConditionalStyle<'a>);
+
+impl<'de: 'a, 'a> Deserialize<'de> for StarshipConditionalStyleConfig<'a> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let either = Either::<StarshipConditionalStyle<'a>, &'a str>::deserialize(deserializer)?;
+        match either {
+            Either::First(v) => Ok(Self(v)),
+            Either::Second(s) => Ok(Self(StarshipConditionalStyle::from(s))),
+        }
+    }
+}
 pub fn get_conditional_style<'a>(
     context: &Context,
     items: &[StarshipConditionalStyle<'a>],
@@ -138,16 +154,16 @@ mod tests {
         let config = toml::value::Value::String(String::from("bold red dimmed"));
         let deserializer = ValueDeserializer::new(&config);
 
-        let result = StarshipConditionalStyle::deserialize(deserializer);
+        let result = StarshipConditionalStyleConfig::deserialize(deserializer);
 
         assert_eq!(
             result,
-            Ok(StarshipConditionalStyle {
+            Ok(StarshipConditionalStyleConfig(StarshipConditionalStyle {
                 env: None,
                 operator: None,
                 expected_value: None,
-                style: "bold dimmed red"
-            })
+                style: "bold red dimmed"
+            }))
         );
     }
 
@@ -161,16 +177,16 @@ mod tests {
         };
         let deserializer = ValueDeserializer::new(&config);
 
-        let result = StarshipConditionalStyle::deserialize(deserializer);
+        let result = StarshipConditionalStyleConfig::deserialize(deserializer);
 
         assert_eq!(
             result,
-            Ok(StarshipConditionalStyle {
+            Ok(StarshipConditionalStyleConfig(StarshipConditionalStyle {
                 env: Some("HOSTNAME"),
                 operator: Some(StarshipConditionalStyleOperator::Equal),
                 expected_value: Some("home"),
                 style: "bold dimmed red"
-            })
+            }))
         );
     }
 

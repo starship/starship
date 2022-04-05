@@ -49,7 +49,7 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
     }
 }
 
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(untagged)]
 pub enum Either<A, B> {
