@@ -177,6 +177,9 @@ mod test {
     fn fish_keymap() {
         let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
         let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_visual = Some(format!("{} ", Color::Yellow.bold().paint("❮")));
+        let expected_replace = Some(format!("{} ", Color::Purple.bold().paint("❮")));
+        let expected_replace_one = expected_replace.clone();
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
         // fish keymap is default
@@ -197,12 +200,33 @@ mod test {
             .collect();
         assert_eq!(expected_specified, actual);
 
-        // fish keymap is other
+        // fish keymap is visual
         let actual = ModuleRenderer::new("character")
             .shell(Shell::Fish)
             .keymap("visual")
             .collect();
-        assert_eq!(expected_other, actual);
+        assert_eq!(expected_visual, actual);
+
+        // fish keymap is replace
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("replace")
+            .collect();
+        assert_eq!(expected_replace, actual);
+
+        // fish keymap is replace_one
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("replace_one")
+            .collect();
+        assert_eq!(expected_replace_one, actual);
+
+        // fish keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("other")
+            .collect();
+        assert_eq!(expected_replace_one, actual);
     }
 
     #[test]
