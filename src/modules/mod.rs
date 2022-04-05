@@ -60,6 +60,7 @@ mod scala;
 mod shell;
 mod shlvl;
 mod singularity;
+mod spack;
 mod status;
 mod sudo;
 mod swift;
@@ -150,6 +151,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
+            "spack" => spack::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
             "sudo" => sudo::module(context),
@@ -245,6 +247,7 @@ pub fn description(module: &str) -> &'static str {
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
+        "spack" => "The current spack environment, if $SPACK_ENV is set",
         "status" => "The status of the last command",
         "sudo" => "The sudo credentials are currently cached",
         "swift" => "The currently installed version of Swift",

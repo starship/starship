@@ -107,7 +107,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
 
-            if ((num_segments_after_root - 1) as i64) < config.truncation_length {
+            if config.truncation_length == 0
+                || ((num_segments_after_root - 1) as i64) < config.truncation_length
+            {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&contracted_path, "");
                 [prefix + &before, root.to_string(), after_repo_root]
@@ -1671,6 +1673,36 @@ mod tests {
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
+
+    #[test]
+    fn highlight_git_root_dir_zero_truncation_length() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 0
+                truncate_to_repo = false
+                repo_root_style = "green"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}repo{} ",
+            Color::Cyan.bold().paint(convert_path_sep(
+                tmp_dir.path().join("above/").to_str().unwrap()
+            )),
+            Color::Green.prefix(),
+            Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
     // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
     #[cfg(any(unix, target_os = "redox"))]
     fn invalid_path() -> PathBuf {

@@ -1244,6 +1244,20 @@
         }
       ]
     },
+    "spack": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$environment]($style) ",
+        "style": "blue bold",
+        "symbol": "🅢 ",
+        "truncation_length": 1
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SpackConfig"
+        }
+      ]
+    },
     "status": {
       "default": {
         "disabled": true,
@@ -4284,6 +4298,33 @@
         },
         "style": {
           "default": "blue bold dimmed",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "SpackConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 1,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        },
+        "format": {
+          "default": "via [$symbol$environment]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🅢 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
           "type": "string"
         },
         "disabled": {
