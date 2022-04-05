@@ -36,7 +36,7 @@ PowerShell (Windows) で同様に `$PROFILE` にこの行を追加します。
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+または、Cmd (Windows) の場合、`starship.lua`にこの行を追加します。
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -269,7 +269,7 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile even when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile even when the credentials have not been setup with the `force_display` option. これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。 This module also shows an expiration timer when using temporary credentials.
 
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
 
@@ -3205,11 +3205,11 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+`terraform` モジュールは、現在選択されている[Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) とバージョンを表示します。
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+Terraformのバージョンはデフォルトでは表示されません。多くのプラグインが使用されている場合、現在のTerraformのバージョンでは遅くなるからです。 それでも有効にしたい場合は、 [以下の例に従ってください](#with-terraform-version).
 
 :::
 
@@ -3224,21 +3224,21 @@ By default the Terraform version is not shown, since this is slow for current ve
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `"via [$symbol$workspace]($style) "` | モジュールのフォーマット文字列。                                       |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"💠"`                                | A format string shown before the terraform workspace.  |
+| `symbol`            | `"💠"`                                | ワークスペースの前に表示されるフォーマット文字列。                              |
 | `detect_extensions` | `["tf", "tfplan", "tfstate"]`        | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[".terraform"]`                     | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `"bold 105"`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | Disables the `terraform` module.                       |
+| `disabled`          | `false`                              | `terraform`モジュールを無効にします。                               |
 
 ### 変数
 
-| 変数        | 設定例        | 説明                              |
-| --------- | ---------- | ------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`      |
-| workspace | `default`  | The current Terraform workspace |
-| symbol    |            | オプション `記号` の値をミラーする             |
-| style\* |            | オプション `style` の値をミラーする          |
+| 変数        | 設定例        | 説明                     |
+| --------- | ---------- | ---------------------- |
+| version   | `v0.12.24` | `terraform` のバージョン     |
+| workspace | `default`  | 現在のTerraformワークスペース    |
+| symbol    |            | オプション `記号` の値をミラーする    |
+| style\* |            | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -3264,7 +3264,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## 時刻
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
 ::: tip
 
@@ -3274,23 +3274,23 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ### オプション
 
-| オプション             | デフォルト                   | 説明                                                                                                                                 |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | モジュールのフォーマット文字列。                                                                                                                   |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| オプション             | デフォルト                   | 説明                                                                                                    |
+| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | モジュールのフォーマット文字列。                                                                                      |
+| `use_12hr`        | `false`                 | 12時間のフォーマットを有効にします。                                                                                   |
+| `time_format`     | この表の下を参照してください          | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。     |
+| `style`           | `"bold yellow"`         | モジュールのスタイルです。                                                                                         |
+| `utc_time_offset` | `"local"`               | 使用するUTCオフセットを設定します。 Range from -24 &lt; x &lt; 24. フロートが30/45分のタイムゾーンオフセットに対応できるようにします。   |
+| `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. それ以外の場合、デフォルトは`"%T"`です。 Manually setting `time_format` will override the `use_12hr` setting.
 
 ### 変数
 
 | 変数        | 設定例        | 説明                     |
 | --------- | ---------- | ---------------------- |
-| time      | `13:08:10` | The current time.      |
+| 時刻        | `13:08:10` | The current time.      |
 | style\* |            | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
@@ -3308,9 +3308,9 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## ユーザー名
 
-The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます:
+`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - The current user is root/admin
 - カレントユーザーが、ログインしているユーザーとは異なる
@@ -3328,10 +3328,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | オプション         | デフォルト                   | 説明                                          |
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
-| `style_user`  | `"bold yellow"`         | The style used for non-root users.          |
+| `style_user`  | `"bold yellow"`         | 非rootユーザーに使用されるスタイルです。                      |
 | `format`      | `"[$user]($style) in "` | module のフォーマットです。                           |
-| `show_always` | `false`                 | Always shows the `username` module.         |
-| `disabled`    | `false`                 | Disables the `username` module.             |
+| `show_always` | `false`                 | `username`モジュールを常に表示します。                    |
+| `disabled`    | `false`                 | `username`モジュールを無効にします。                     |
 
 ### 変数
 
@@ -3541,8 +3541,8 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
 | `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `description` | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
+| `shell`       |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                       |
+| `説明`          | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                  |
 | `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
 | `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
 | `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
