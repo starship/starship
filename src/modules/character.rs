@@ -226,7 +226,7 @@ mod test {
             .shell(Shell::Fish)
             .keymap("other")
             .collect();
-        assert_eq!(expected_replace_one, actual);
+        assert_eq!(expected_other, actual);
     }
 
     #[test]
