@@ -134,6 +134,24 @@ mod tests {
     }
 
     #[test]
+    fn should_deserialize_from_string_value() {
+        let config = toml::value::Value::String(String::from("bold red dimmed"));
+        let deserializer = ValueDeserializer::new(&config);
+
+        let result = StarshipConditionalStyle::deserialize(deserializer);
+
+        assert_eq!(
+            result,
+            Ok(StarshipConditionalStyle {
+                env: None,
+                operator: None,
+                expected_value: None,
+                style: "bold dimmed red"
+            })
+        );
+    }
+
+    #[test]
     fn should_deserialize_from_table_value() {
         let config = toml::toml! {
             env = "HOSTNAME"
