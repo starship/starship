@@ -22,6 +22,7 @@ pub struct CustomConfig<'a> {
     pub detect_folders: Vec<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub os: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub use_stdin: Option<bool>,
     pub ignore_timeout: bool,
 }

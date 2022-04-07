@@ -4708,7 +4708,6 @@
           ]
         },
         "use_stdin": {
-          "default": null,
           "type": [
             "boolean",
             "null"
