@@ -38,6 +38,7 @@ pub struct BatteryDisplayConfig<'a> {
     pub style: &'a str,
     pub charging_symbol: Option<&'a str>,
     pub discharging_symbol: Option<&'a str>,
+    pub only_on_discharge: bool,
 }
 
 impl<'a> Default for BatteryDisplayConfig<'a> {
@@ -47,6 +48,7 @@ impl<'a> Default for BatteryDisplayConfig<'a> {
             style: "red bold",
             charging_symbol: None,
             discharging_symbol: None,
+            only_on_discharge: false,
         }
     }
 }
