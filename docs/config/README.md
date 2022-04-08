@@ -446,8 +446,9 @@ The default value for the `charging_symbol` and `discharging_symbol` option is r
 The `display` option is an array of the following table.
 
 | Option               | Default    | Description                                                                                               |
-| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
+|----------------------|------------|-----------------------------------------------------------------------------------------------------------|
 | `threshold`          | `10`       | The upper bound for the display option.                                                                   |
+| `only_on_discharge`  | `false`    | Display only when discharging.                                                                            |
 | `style`              | `bold red` | The style used if the display option is in use.                                                           |
 | `charging_symbol`    | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
 | `discharging_symbol` | `-`        | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
@@ -459,8 +460,9 @@ The `display` option is an array of the following table.
 threshold = 10
 style = "bold red"
 
-[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30% and battery is discharging
 threshold = 30
+only_on_discharge = true
 style = "bold yellow"
 discharging_symbol = "💦"
 
