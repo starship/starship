@@ -18,15 +18,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Parse config under `display`.
     // Select the first style that match the threshold,
     // if all thresholds are lower do not display battery module.
-    let display_style = config
-        .display
-        .iter()
-        .find(|display_style| {
-            if percentage <= display_style.threshold as f32 {
-                return state == State::Discharging || !display_style.only_on_discharge
-            }
-            false
-        })?;
+    let display_style = config.display.iter().find(|display_style| {
+        if percentage <= display_style.threshold as f32 {
+            return state == State::Discharging || !display_style.only_on_discharge;
+        }
+        false
+    })?;
 
     // Parse the format string and build the module
     match StringFormatter::new(config.format) {
