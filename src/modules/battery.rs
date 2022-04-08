@@ -375,6 +375,58 @@ mod tests {
     }
 
     #[test]
+    fn battery_only_on_discharge_charging() {
+        let mut mock = MockBatteryInfoProvider::new();
+
+        mock.expect_get_battery_info().times(1).returning(|| {
+            Some(BatteryInfo {
+                energy: 100.0,
+                energy_full: 1000.0,
+                state: battery::State::Charging,
+            })
+        });
+
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 10
+                only_on_discharge = true
+                style = ""
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn battery_only_on_discharge_discharging() {
+        let mut mock = MockBatteryInfoProvider::new();
+
+        mock.expect_get_battery_info().times(1).returning(|| {
+            Some(BatteryInfo {
+                energy: 100.0,
+                energy_full: 1000.0,
+                state: battery::State::Discharging,
+            })
+        });
+
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 10
+                only_on_discharge = true
+                style = ""
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = Some(String::from(" 10% "));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn battery_uses_style() {
         let mut mock = MockBatteryInfoProvider::new();
 
