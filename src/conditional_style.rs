@@ -47,7 +47,7 @@ impl StarshipConditionalStyleOperator {
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Default)]
 #[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(default)]
-pub struct StarshipConditionalStyle<'a> {
+struct StarshipConditionalStyle<'a> {
     pub env: Option<&'a str>,
     pub operator: Option<StarshipConditionalStyleOperator>,
     pub expected_value: Option<&'a str>,
@@ -77,7 +77,7 @@ impl<'a> StarshipConditionalStyle<'a> {
 }
 
 #[derive(Clone, Debug, Default, Serialize, PartialEq)]
-pub struct StarshipConditionalStyleConfig<'a>(pub StarshipConditionalStyle<'a>);
+pub struct StarshipConditionalStyleConfig<'a>(StarshipConditionalStyle<'a>);
 
 impl<'de: 'a, 'a> Deserialize<'de> for StarshipConditionalStyleConfig<'a> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -91,12 +91,25 @@ impl<'de: 'a, 'a> Deserialize<'de> for StarshipConditionalStyleConfig<'a> {
         }
     }
 }
+
+impl<'a> From<&'a str> for StarshipConditionalStyleConfig<'a> {
+    fn from(value: &'a str) -> Self {
+        StarshipConditionalStyleConfig(StarshipConditionalStyle {
+            env: None,
+            operator: None,
+            expected_value: None,
+            style: value,
+        })
+    }
+}
+
 pub fn get_conditional_style<'a>(
     context: &Context,
-    items: &[StarshipConditionalStyle<'a>],
+    items: &[StarshipConditionalStyleConfig<'a>],
 ) -> &'a str {
-    let matching_style = items.iter().find(|s| s.should_apply(context));
-    let last = items.iter().last();
+    let mut conditional_style_values = items.iter().map(|x| &x.0);
+    let matching_style = conditional_style_values.find(|s| s.should_apply(context));
+    let last = conditional_style_values.last();
 
     matching_style.or(last).map(|x| x.style).unwrap_or("")
 }
@@ -193,35 +206,35 @@ mod tests {
     #[test]
     fn get_conditional_style_fallback() {
         let context = create_context();
-        let items: Vec<StarshipConditionalStyle> = vec![];
+        let items: Vec<StarshipConditionalStyleConfig> = vec![];
         assert_eq!(get_conditional_style(&context, &items), "");
     }
 
     #[test]
     fn get_conditional_style_no_match() {
         let context = create_context();
-        let items: Vec<StarshipConditionalStyle> = vec![
-            StarshipConditionalStyle {
+        let items: Vec<StarshipConditionalStyleConfig> = vec![
+            StarshipConditionalStyleConfig(StarshipConditionalStyle {
                 env: Some("env"),
                 operator: Some(StarshipConditionalStyleOperator::Equal),
                 expected_value: Some("value"),
                 style: "red",
-            },
-            StarshipConditionalStyle::from("red bold"),
+            }),
+            StarshipConditionalStyleConfig(StarshipConditionalStyle::from("red bold")),
         ];
         assert_eq!(get_conditional_style(&context, &items), "red bold");
     }
 
     #[test]
     fn get_conditional_style_match_operator() {
-        let items: Vec<StarshipConditionalStyle> = vec![
-            StarshipConditionalStyle {
+        let items: Vec<StarshipConditionalStyleConfig> = vec![
+            StarshipConditionalStyleConfig(StarshipConditionalStyle {
                 env: Some("env"),
                 operator: Some(StarshipConditionalStyleOperator::Exists),
                 expected_value: None,
                 style: "red",
-            },
-            StarshipConditionalStyle::from("style"),
+            }),
+            StarshipConditionalStyleConfig(StarshipConditionalStyle::from("style")),
         ];
         let mut context = create_context();
         context.env.insert("env", "value".into());
