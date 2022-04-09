@@ -4694,9 +4694,11 @@
           "type": "string"
         },
         "when": {
-          "type": [
-            "string",
-            "null"
+          "default": false,
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_Boolean_and_String"
+            }
           ]
         },
         "shell": {
@@ -4719,21 +4721,21 @@
           "default": false,
           "type": "boolean"
         },
-        "files": {
+        "detect_files": {
           "default": [],
           "type": "array",
           "items": {
             "type": "string"
           }
         },
-        "extensions": {
+        "detect_extensions": {
           "default": [],
           "type": "array",
           "items": {
             "type": "string"
           }
         },
-        "directories": {
+        "detect_folders": {
           "default": [],
           "type": "array",
           "items": {
@@ -4745,8 +4747,28 @@
             "string",
             "null"
           ]
+        },
+        "use_stdin": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "ignore_timeout": {
+          "default": false,
+          "type": "boolean"
         }
       }
+    },
+    "Either_for_Boolean_and_String": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
     }
   }
 }
