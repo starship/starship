@@ -3500,9 +3500,9 @@ O módulo `custom` exibe a saída de alguns comandos arbitrários.
 
 Este módulo vai ser exibir se algumas das condições a seguir for atendida:
 
-- O diretório atual tenha um arquivo cujo o nome esta em `files`
-- O diretório atual tenha um diretório cujo o nome esta em `directories`
-- O diretório atual tenha um arquivo com extensão que esteja em `extensions`
+- The current directory contains a file whose name is in `detect_files`
+- The current directory contains a directory whose name is in `detect_folders`
+- The current directory contains a file whose extension is in `detect_extensions`
 - O comando `when` retorna 0
 - O sistema operacional (std::env::consts::OS) corresponde com o `os` se definido.
 
@@ -3534,20 +3534,21 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 ### Opções
 
-| Opções        | Padrão                          | Descrição                                                                                                                                                                        |
-| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     | `""`                            | O comando cuja a saída deve ser exibida. O comando será passado no stdin para o shell.                                                                                           |
-| `when`        |                                 | Um comando de shell usado como condição para exibir o módulo. O módulo será exibido se o comando retornar `0` como código de status.                                             |
-| `shell`       |                                 | [Veja abaixo](#custom-command-shell)                                                                                                                                             |
-| `description` | `"<custom module>"`       | A descrição do módulo, isto será exibido quando executar `starship explain`.                                                                                                     |
-| `files`       | `[]`                            | Os arquivos que serão buscados por correspondência no diretório atual.                                                                                                           |
-| `directories` | `[]`                            | Os diretórios que serão buscados por correspondência no diretório atual.                                                                                                         |
-| `extensions`  | `[]`                            | As extensões que serão buscadas por correspondência no diretório atual.                                                                                                          |
-| `symbol`      | `""`                            | O simbolo usado antes de exibir a saída do comando.                                                                                                                              |
-| `style`       | `"bold green"`                  | O estilo do módulo.                                                                                                                                                              |
-| `format`      | `"[$symbol($output )]($style)"` | O formato do módulo.                                                                                                                                                             |
-| `disabled`    | `false`                         | Desabilita este módulo `custom`.                                                                                                                                                 |
-| `os`          |                                 | Nome do sistema operacional onde módulo sera exibido (unix, linux, macos, windows, ... ) [Veja os possíveis valores](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
+| Opções              | Padrão                          | Descrição                                                                                                                                                                                                                                                                                     |
+| ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `""`                            | O comando cuja a saída deve ser exibida. O comando será passado no stdin para o shell.                                                                                                                                                                                                        |
+| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `shell`             |                                 | [Veja abaixo](#custom-command-shell)                                                                                                                                                                                                                                                          |
+| `description`       | `"<custom module>"`       | A descrição do módulo, isto será exibido quando executar `starship explain`.                                                                                                                                                                                                                  |
+| `detect_files`      | `[]`                            | Os arquivos que serão buscados por correspondência no diretório atual.                                                                                                                                                                                                                        |
+| `detect_folders`    | `[]`                            | Os diretórios que serão buscados por correspondência no diretório atual.                                                                                                                                                                                                                      |
+| `detect_extensions` | `[]`                            | As extensões que serão buscadas por correspondência no diretório atual.                                                                                                                                                                                                                       |
+| `symbol`            | `""`                            | O simbolo usado antes de exibir a saída do comando.                                                                                                                                                                                                                                           |
+| `style`             | `"bold green"`                  | O estilo do módulo.                                                                                                                                                                                                                                                                           |
+| `format`            | `"[$symbol($output )]($style)"` | O formato do módulo.                                                                                                                                                                                                                                                                          |
+| `disabled`          | `false`                         | Desabilita este módulo `custom`.                                                                                                                                                                                                                                                              |
+| `os`                |                                 | Nome do sistema operacional onde módulo sera exibido (unix, linux, macos, windows, ... ) [Veja os possíveis valores](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                              |
+| `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
 
 ### Variáveis
 
@@ -3570,7 +3571,7 @@ Se não definido, ele retornará para o STARSHIP_SHELl e então para o "sh" no L
 
 O `command` será passado no stdin.
 
-Se o `shell` não for dado ou apenas conter um elemento e o Starship detectar PowerShell ele será usado, os seguintes argumentos serão automaticamente adicionados: `-NoProfile -Command -`. Este comportamento pode ser evitado passando explicitamente argumento para o shell, ex.
+Se o `shell` não for dado ou apenas conter um elemento e o Starship detectar PowerShell ele será usado, os seguintes argumentos serão automaticamente adicionados: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
 ```toml
 shell = ["pwsh", "-Command", "-"]
@@ -3595,12 +3596,18 @@ Detecção automática de shell e adição de parâmetros estão sendo implement
 
 [custom.foo]
 command = "echo foo" # shows output of command
-files = ["foo"] # can specify filters but wildcards are not supported
+detect_files = ["foo"] # can specify filters but wildcards are not supported
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-extensions = ["pst"] # filters *.pst files
+detect_extensions = ["pst"] # filters *.pst files
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
+
+[custom.time-as-arg]
+command = "time /T"
+detect_extensions = ["pst"] # filters *.pst files
+shell = ["pwsh.exe", "-NoProfile", "-Command"]
+use_stdin = false
 ```
