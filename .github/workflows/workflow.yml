@@ -177,8 +177,12 @@ jobs:
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: ${{ matrix.rust }}
+          components: llvm-tools-preview
           profile: minimal
           override: true
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
 
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
@@ -187,7 +191,18 @@ jobs:
 
       # Run the ignored tests that expect the above setup
       - name: Build | Test
-        run: cargo test --workspace --locked --all-features -- -Z unstable-options --include-ignored
+        run: "cargo llvm-cov
+          --all-features
+          --locked
+          --workspace
+          --lcov --output-path lcov.info
+          -- --include-ignored"
         env:
           # Avoid -D warnings on nightly builds
           RUSTFLAGS: ""
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: lcov.info
+          fail_ci_if_error: true
