@@ -2174,7 +2174,7 @@
           ],
           "allOf": [
             {
-              "$ref": "#/definitions/Either_for_StarshipConditionalStyle_and_Array_of_StarshipConditionalStyle"
+              "$ref": "#/definitions/Either_for_StarshipConditionalStyleConfig_and_Array_of_StarshipConditionalStyleConfig"
             }
           ]
         },
@@ -2211,18 +2211,21 @@
         }
       }
     },
-    "Either_for_StarshipConditionalStyle_and_Array_of_StarshipConditionalStyle": {
+    "Either_for_StarshipConditionalStyleConfig_and_Array_of_StarshipConditionalStyleConfig": {
       "anyOf": [
         {
-          "$ref": "#/definitions/StarshipConditionalStyle"
+          "$ref": "#/definitions/StarshipConditionalStyleConfig"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/StarshipConditionalStyle"
+            "$ref": "#/definitions/StarshipConditionalStyleConfig"
           }
         }
       ]
+    },
+    "StarshipConditionalStyleConfig": {
+      "$ref": "#/definitions/StarshipConditionalStyle"
     },
     "StarshipConditionalStyle": {
       "type": "object",
