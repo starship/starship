@@ -77,6 +77,7 @@ impl<'a> StarshipConditionalStyle<'a> {
 }
 
 #[derive(Clone, Debug, Default, Serialize, PartialEq)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 pub struct StarshipConditionalStyleConfig<'a>(StarshipConditionalStyle<'a>);
 
 impl<'de: 'a, 'a> Deserialize<'de> for StarshipConditionalStyleConfig<'a> {
