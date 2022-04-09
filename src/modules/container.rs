@@ -7,21 +7,10 @@ pub fn module<'a>(_context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(target_os = "linux")]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    use std::fs::File;
-    use std::io::Read;
-
     use super::ModuleConfig;
     use crate::configs::container::ContainerConfig;
     use crate::formatter::StringFormatter;
     use crate::utils::read_file;
-
-    fn check_if_docker_in_cgroup() -> Option<bool> {
-        let mut cgroup_file = File::open("/proc/1/cgroup").ok()?;
-        let mut cgroup_content = String::new();
-        cgroup_file.read_to_string(&mut cgroup_content).ok()?;
-
-        Some(cgroup_content.contains("/docker"))
-    }
 
     pub fn container_name(context: &Context) -> Option<String> {
         use crate::utils::context_path;
@@ -37,9 +26,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OCI".into());
         }
 
-        if check_if_docker_in_cgroup().unwrap() {
-            // Docker
-            return Some("Docker".into());
+        if context_path(context, "/proc/1/cgroup").exists() {
+            let cgroup_content = crate::utils::read_file("/proc/1/cgroup").ok()?;
+            if cgroup_content.contains("/docker") {
+                // Docker
+                return Some("Docker".into());
+            }
         }
 
         if context_path(context, "/run/systemd/container").exists() {
