@@ -79,7 +79,7 @@ versions = "4.0.0"
 which = "4.2.5"
 yaml-rust = "0.4.5"
 
-process_control = { version = "3.3.0", features = ["crossbeam-channel"] }
+process_control = { version = "3.4.0", features = ["crossbeam-channel"] }
 
 shell-words = "1.1.0"
 
