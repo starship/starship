@@ -1,4 +1,3 @@
----
 name: Format + Docs Workflow
 on:
   push:
