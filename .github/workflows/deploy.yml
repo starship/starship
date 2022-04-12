@@ -14,6 +14,7 @@ jobs:
   release_please:
     name: Release Please
     runs-on: ubuntu-latest
+    if: github.repository == 'starship/starship'
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
@@ -21,8 +22,9 @@ jobs:
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: rust
+          command: manifest
+          token: ${{secrets.GITHUB_TOKEN}}
+          default-branch: master
 
   # Build sources for every OS
   github_build:

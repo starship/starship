@@ -1,0 +1,6 @@
+{
+  "release-type": "rust",
+  "packages": {
+    ".": {}
+  }
+}
