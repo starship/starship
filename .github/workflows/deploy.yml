@@ -116,7 +116,7 @@ jobs:
           cd -
 
       - name: Deploy | Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -195,7 +195,7 @@ jobs:
       run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
     - name: Notarize | Upload Notarized Flat Installer
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.pkgname }}
         path: ${{ matrix.pkgname }}
@@ -204,7 +204,7 @@ jobs:
       run: tar czvf ${{ matrix.name }} starship
 
     - name: Notarize | Upload Notarized Binary
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.name }}
         path: ${{ matrix.name }}
