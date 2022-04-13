@@ -446,7 +446,7 @@ The default value for the `charging_symbol` and `discharging_symbol` option is r
 The `display` option is an array of the following table.
 
 | Option               | Default    | Description                                                                                               |
-|----------------------|------------|-----------------------------------------------------------------------------------------------------------|
+| -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
 | `threshold`          | `10`       | The upper bound for the display option.                                                                   |
 | `only_on_discharge`  | `false`    | Display only when discharging.                                                                            |
 | `style`              | `bold red` | The style used if the display option is in use.                                                           |
