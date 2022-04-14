@@ -271,7 +271,7 @@ format = "$all$directory$character"
 ## Ansible
 
 The `ansible` module shows the current Ansible version. This will be displayed
-when a file with the name `ansible.cfg` or `galaxy-requirements.txt` is 
+when a file with the name `ansible.cfg` or `galaxy-requirements.txt` is
 present in the current directory. It will also be enabled when a directory
 named `host_vars` or `group_vars` exists in the current directory.
 
@@ -284,7 +284,7 @@ named `host_vars` or `group_vars` exists in the current directory.
 | `detect_extensions` | `[]`                                         | Which extensions should trigger this module.                              |
 | `detect_files`      | `["ansible.cfg", "galaxy-requirements.txt"]` | Which filenames should trigger this module.                               |
 | `detect_folders`    | `["group_vars", "host_vars"]`                | Which folders should trigger this modules.                                |
-| `symbol`            | `"Ⓐ "`                                      | A format string representing the symbol of Ansible.                       |
+| `symbol`            | `"Ⓐ "`                                       | A format string representing the symbol of Ansible.                       |
 | `style`             | `"bold white"`                               | The style for the module.                                                 |
 | `disabled`          | `false`                                      | Disables the `ansible` module.                                            |
 
