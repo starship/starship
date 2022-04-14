@@ -633,7 +633,7 @@ credential_process = /opt/bin/awscreds-retriever
             "on {}",
             Color::Yellow
                 .bold()
-                .paint("☁️  astronauts (ap-northeast-2) [30m]")
+                .paint("☁️  astronauts (ap-northeast-2) [30m] ")
         ));
 
         assert_eq!(expected, actual);
@@ -679,7 +679,7 @@ expiration={}
         // on shared runners may delay it. Allow for up to 2 seconds of delay.
         let possible_values = ["30m", "29m59s", "29m58s"];
         let possible_values = possible_values.map(|duration| {
-            let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}]", duration);
+            let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}] ", duration);
             Some(format!(
                 "on {}",
                 Color::Yellow.bold().paint(segment_colored)
@@ -736,7 +736,7 @@ expiration={}
             "on {}",
             Color::Yellow
                 .bold()
-                .paint(format!("☁️  astronauts (ap-northeast-2) [{}]", symbol))
+                .paint(format!("☁️  astronauts (ap-northeast-2) [{}] ", symbol))
         ));
 
         assert_eq!(expected, actual);
