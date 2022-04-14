@@ -14,6 +14,7 @@ jobs:
   release_please:
     name: Release Please
     runs-on: ubuntu-latest
+    if: github.repository == 'starship/starship'
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
@@ -199,7 +200,7 @@ jobs:
       with:
         name: ${{ matrix.pkgname }}
         path: ${{ matrix.pkgname }}
-    
+
     - name: Notarize | Package Notarized Binary
       run: tar czvf ${{ matrix.name }} starship
 
