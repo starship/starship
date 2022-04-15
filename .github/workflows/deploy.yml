@@ -268,7 +268,7 @@ jobs:
       - uses: mislav/bump-homebrew-formula-action@v1.16
         with:
           formula-name: starship
-          tag_name: ${{ needs.release_please.outputs.tag_name }}
+          tag-name: ${{ needs.release_please.outputs.tag_name }}
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
