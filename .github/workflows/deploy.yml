@@ -29,7 +29,7 @@ jobs:
   github_build:
     name: Build release binaries
     needs: release_please
-    if: ${{ needs.release_please.outputs.release_created }}
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
     strategy:
       fail-fast: false
       matrix:
@@ -144,77 +144,77 @@ jobs:
       KEYCHAIN_FILENAME: app-signing.keychain-db
       KEYCHAIN_ENTRY: AC_PASSWORD
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Notarize | Set up secrets
-      env:
-        APP_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_APPSIGNKEY_BASE64 }}
-        INSTALL_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_INSTALLERSIGNKEY_BASE64 }}
-        P12_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
-        KEYCHAIN_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
-        APPLEID_USERNAME: ${{ secrets.APPLEDEV_ID_NAME }}
-        APPLEID_TEAMID: ${{ secrets.APPLEDEV_TEAM_ID }}
-        APPLEID_PASSWORD: ${{ secrets.APPLEDEV_PASSWORD }}
-      run: |
-        APP_CERTIFICATE_PATH="$RUNNER_TEMP/app_certificate.p12"
-        INSTALL_CERTIFICATE_PATH="$RUNNER_TEMP/install_certificate.p12"
-        KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Notarize | Set up secrets
+        env:
+          APP_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_APPSIGNKEY_BASE64 }}
+          INSTALL_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_INSTALLERSIGNKEY_BASE64 }}
+          P12_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
+          KEYCHAIN_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
+          APPLEID_USERNAME: ${{ secrets.APPLEDEV_ID_NAME }}
+          APPLEID_TEAMID: ${{ secrets.APPLEDEV_TEAM_ID }}
+          APPLEID_PASSWORD: ${{ secrets.APPLEDEV_PASSWORD }}
+        run: |
+          APP_CERTIFICATE_PATH="$RUNNER_TEMP/app_certificate.p12"
+          INSTALL_CERTIFICATE_PATH="$RUNNER_TEMP/install_certificate.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
 
-        # import certificates from secrets
-        echo -n "$APP_CERTIFICATE_BASE64" | base64 --decode --output $APP_CERTIFICATE_PATH
-        echo -n "$INSTALL_CERTIFICATE_BASE64" | base64 --decode --output $INSTALL_CERTIFICATE_PATH
+          # import certificates from secrets
+          echo -n "$APP_CERTIFICATE_BASE64" | base64 --decode --output $APP_CERTIFICATE_PATH
+          echo -n "$INSTALL_CERTIFICATE_BASE64" | base64 --decode --output $INSTALL_CERTIFICATE_PATH
 
-        # create temporary keychain
-        security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-        security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
-        security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
-        # import certificates to keychain
-        security import $APP_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-        security import $INSTALL_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-        security list-keychain -d user -s $KEYCHAIN_PATH
+          # import certificates to keychain
+          security import $APP_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $INSTALL_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
 
-        # Add Apple Developer ID credentials to keychain
-        xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
+          # Add Apple Developer ID credentials to keychain
+          xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
 
-    - name: Notarize | Build docs
-      run: |
-        cd docs
-        npm install
-        npm run build
+      - name: Notarize | Build docs
+        run: |
+          cd docs
+          npm install
+          npm run build
 
-    - name: Notarize | Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: ${{ matrix.name }}
-        path: artifacts
+      - name: Notarize | Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.name }}
+          path: artifacts
 
-    - name: Notarize | Unpack Binaries
-      run: tar xf artifacts/${{ matrix.name }}
+      - name: Notarize | Unpack Binaries
+        run: tar xf artifacts/${{ matrix.name }}
 
-    - name: Notarize | Build, Sign, and Notarize Pkg
-      run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
+      - name: Notarize | Build, Sign, and Notarize Pkg
+        run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
-    - name: Notarize | Upload Notarized Flat Installer
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ matrix.pkgname }}
-        path: ${{ matrix.pkgname }}
+      - name: Notarize | Upload Notarized Flat Installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.pkgname }}
+          path: ${{ matrix.pkgname }}
 
-    - name: Notarize | Package Notarized Binary
-      run: tar czvf ${{ matrix.name }} starship
+      - name: Notarize | Package Notarized Binary
+        run: tar czvf ${{ matrix.name }} starship
 
-    - name: Notarize | Upload Notarized Binary
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ matrix.name }}
-        path: ${{ matrix.name }}
+      - name: Notarize | Upload Notarized Binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ matrix.name }}
 
-    - name: Cleanup Secrets
-      if: ${{ always() }}
-      run: |
-        KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
-        security delete-keychain $KEYCHAIN_PATH
+      - name: Cleanup Secrets
+        if: ${{ always() }}
+        run: |
+          KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
+          security delete-keychain $KEYCHAIN_PATH
 
   # Create GitHub release with Rust build targets and release notes
   upload_artifacts:
@@ -244,7 +244,7 @@ jobs:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
     needs: release_please
-    if: ${{ needs.release_please.outputs.release_created }}
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
@@ -263,7 +263,7 @@ jobs:
     name: Update Brew Formula
     runs-on: ubuntu-latest
     needs: release_please
-    if: ${{ needs.release_please.outputs.release_created }}
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - uses: mislav/bump-homebrew-formula-action@v1.16
         with:
@@ -275,7 +275,7 @@ jobs:
     name: Publish docs to Netlify
     runs-on: ubuntu-latest
     needs: release_please
-    if: ${{ needs.release_please.outputs.release_created }}
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
