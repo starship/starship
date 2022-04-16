@@ -9,6 +9,7 @@ mod cmd_duration;
 mod cobol;
 mod conda;
 mod container;
+mod cpp;
 mod crystal;
 pub(crate) mod custom;
 mod dart;
@@ -102,6 +103,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "cobol" => cobol::module(context),
             "conda" => conda::module(context),
             "container" => container::module(context),
+            "cpp" => cpp::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
             "directory" => directory::module(context),
@@ -203,6 +205,7 @@ pub fn description(module: &str) -> &'static str {
         "cobol" => "The currently installed version of COBOL/GNUCOBOL",
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "container" => "The container indicator, if inside a container.",
+        "cpp" => "Your C++ compiler type",
         "crystal" => "The currently installed version of Crystal",
         "dart" => "The currently installed version of Dart",
         "deno" => "The currently installed version of Deno",

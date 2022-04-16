@@ -10,6 +10,9 @@ symbol = " "
 [conda]
 symbol = " "
 
+[cpp]
+symbol = " "
+
 [dart]
 symbol = " "
 

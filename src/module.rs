@@ -20,6 +20,7 @@ pub const ALL_MODULES: &[&str] = &[
     "cobol",
     "conda",
     "container",
+    "cpp",
     "crystal",
     "dart",
     "deno",

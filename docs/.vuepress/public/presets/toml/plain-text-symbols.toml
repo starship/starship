@@ -25,6 +25,9 @@ symbol = "cobol "
 [conda]
 symbol = "conda "
 
+[cpp]
+symbol = "C++ "
+
 [crystal]
 symbol = "cr "
 
