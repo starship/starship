@@ -16,7 +16,7 @@ include = [
   "LICENSE",
   "/README.md",
   "docs/.vuepress/public/presets/toml/",
-  ".github/config-schema.json",
+  "docs/.vuepress/public/config-schema.json",
 ]
 keywords = ["prompt", "shell", "bash", "fish", "zsh"]
 license = "ISC"
