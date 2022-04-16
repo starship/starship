@@ -1469,6 +1469,13 @@
     "add_newline": {
       "default": true,
       "type": "boolean"
+    },
+    "profiles": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
     }
   },
   "definitions": {
