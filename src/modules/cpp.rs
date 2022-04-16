@@ -167,6 +167,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
         // The case when it claims to be clang++ is covered in folder_with_hpp_file,
         // and uses the mock in src/test/mod.rs.
         let actual = ModuleRenderer::new("cpp")
+            .cmd("c++ --version", None)
             .cmd(
                 "cpp --version",
                 Some(CommandOutput {
@@ -190,6 +191,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
 
         // What happens when `cpp --version` says it's ancient g++?
         let actual = ModuleRenderer::new("cpp")
+            .cmd("c++ --version", None)
             .cmd(
                 "cpp --version",
                 Some(CommandOutput {
@@ -215,6 +217,22 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
         // not running on a Z80 so we're never going to see this one in reality!
         let actual = ModuleRenderer::new("cpp")
             .cmd(
+                "c++ --version",
+                Some(CommandOutput {
+                    stdout: String::from("HISOFT-C++ Compiler  V1.2\nCopyright © 1984 HISOFT"),
+                    stderr: String::default(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint("C++ ")));
+        assert_eq!(expected, actual);
+
+        // What happens with an unknown C++ compiler? Needless to say, we're
+        // not running on a Z80 so we're never going to see this one in reality!
+        let actual = ModuleRenderer::new("cpp")
+            .cmd("c++ --version", None)
+            .cmd(
                 "cpp --version",
                 Some(CommandOutput {
                     stdout: String::from("HISOFT-C++ Compiler  V1.2\nCopyright © 1984 HISOFT"),
@@ -226,8 +244,8 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
         let expected = Some(format!("via {}", Color::Cyan.bold().paint("C++ ")));
         assert_eq!(expected, actual);
 
-        // What happens when 'c++ --version' doesn't work, but 'g++ --version' does?
-        // This stubs out `c++` but we'll fall back to `g++ --version` as defined in
+        // What happens when 'c++ --version' doesn't work, but 'cpp --version' does?
+        // This stubs out `c++` but we'll fall back to `cpp --version` as defined in
         // src/test/mod.rs.
         // Also we don't bother to redefine the config for this one, as we've already
         // proved we can parse its version.
@@ -241,18 +259,19 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
         ));
         assert_eq!(expected, actual);
 
-        // What happens when 'cpp --version' doesn't work, but 'g++ --version' does?
-        // This stubs out `cpp` but we'll fall back to `g++ --version` as defined in
+        // What happens when 'c++/cpp --version' doesn't work, but 'g++ --version' does?
+        // This stubs out `c++/cpp` but we'll fall back to `g++ --version` as defined in
         // src/test/mod.rs.
         // Also we don't bother to redefine the config for this one, as we've already
         // proved we can parse its version.
         let actual = ModuleRenderer::new("cpp")
+            .cmd("c++ --version", None)
             .cmd("cpp --version", None)
             .path(dir.path())
             .collect();
         let expected = Some(format!(
             "via {}",
-            Color::Cyan.bold().paint("C++ v10.2.1-g++ ")
+            Color::Cyan.bold().paint("C++ v10.2.2-g++ ")
         ));
         assert_eq!(expected, actual);
 

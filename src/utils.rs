@@ -159,10 +159,10 @@ InstalledDir: /usr/bin"),
         }),
         "c++ --version" => Some(CommandOutput {
             stdout: String::from("\
-c++ (Debian 10.2.1-6) 10.2.1 20210110
-Copyright (C) 2020 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."),
+FreeBSD clang version 11.0.1 (git@github.com:llvm/llvm-project.git llvmorg-11.0.1-0-g43ff75f2c3fe)
+Target: x86_64-unknown-freebsd13.0
+Thread model: posix
+InstalledDir: /usr/bin"),
             stderr: String::default(),
         }),
         "cpp --version" => Some(CommandOutput {
@@ -175,7 +175,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."),
         }),
         "g++ --version" => Some(CommandOutput {
             stdout: String::from("\
-g++ (Debian 10.2.1-6) 10.2.1 20210110
+g++ (Debian 10.2.2-6) 10.2.2 20210110
 Copyright (C) 2020 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."),
