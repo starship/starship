@@ -1,4 +1,4 @@
-# 準備するもの
+# プリセット
 
 以下は、Starship用にコミュニティに提供された構成プリセットのコレクションです。 共有するプリセットがある場合は、このファイルを更新して[PR](https://github.com/starship/starship/edit/master/docs/presets/README.md)を送信してください！ 😊
 
