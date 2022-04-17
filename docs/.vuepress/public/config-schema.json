@@ -370,7 +370,14 @@
         "format": "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
         "style": "bold purple",
         "symbol": "💧 ",
-        "version_format": "v${raw}"
+        "version_command": "--version",
+        "version_extract_map": {
+          "otp_version": "Erlang/OTP\\s([\\d\\.\\-\\w]+)",
+          "version": "Elixir\\s([\\d\\.\\-\\w]+)"
+        },
+        "version_format_map": {
+          "version": "v${raw}"
+        }
       },
       "allOf": [
         {
@@ -2310,8 +2317,27 @@
           "default": "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
           "type": "string"
         },
-        "version_format": {
-          "default": "v${raw}",
+        "version_extract_map": {
+          "default": {
+            "otp_version": "Erlang/OTP\\s([\\d\\.\\-\\w]+)",
+            "version": "Elixir\\s([\\d\\.\\-\\w]+)"
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "version_format_map": {
+          "default": {
+            "version": "v${raw}"
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "version_command": {
+          "default": "--version",
           "type": "string"
         },
         "symbol": {
