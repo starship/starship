@@ -1128,16 +1128,18 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                                   | Description                                                               |
-| ------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
-| `version_format`    | `"v${raw}"`                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💧 "`                                                    | The symbol used before displaying the version of Elixir/Erlang.           |
-| `detect_extensions` | `[]`                                                      | Which extensions should trigger this module.                              |
-| `detect_files`      | `["mix.exs"]`                                             | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                      | Which folders should trigger this modules.                                |
-| `style`             | `"bold purple"`                                           | The style for the module.                                                 |
-| `disabled`          | `false`                                                   | Disables the `elixir` module.                                             |
+| Option                | Default                                                                     | Description                                                     |
+| --------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `format`              | `'via [$symbol($version \(OTP $otp_version\) )]($style)'`                   | The format for the module elixir.                               |
+| `version_extract_map` | `"version = Elixir\\s([\d\.-\w]+) otp_version = Erlang/OTP\\s([\d\.-\w]+)"` | A table describing regexes to extract format's variables        |
+| `version_format_map`  | `"version = v${raw}"`                                                       | A table describing how to format format's variables             |
+| `version_command`     | `"--version"`                                                               | The command to obtain plain text describing elixir's variables  |
+| `symbol`              | `"💧 "`                                                                      | The symbol used before displaying the version of Elixir/Erlang. |
+| `detect_extensions`   | `[]`                                                                        | Which extensions should trigger this module.                    |
+| `detect_files`        | `["mix.exs"]`                                                               | Which filenames should trigger this module.                     |
+| `detect_folders`      | `[]`                                                                        | Which folders should trigger this modules.                      |
+| `style`               | `"bold purple"`                                                             | The style for the module.                                       |
+| `disabled`            | `false`                                                                     | Disables the `elixir` module.                                   |
 
 ### Variables
 
@@ -1157,6 +1159,9 @@ By default the module will be shown if any of the following conditions are met:
 
 [elixir]
 symbol = "🔮 "
+[elixir.version_extract_map]
+version = "Elixir\\s([\\d\\.\\-\\w]+)"
+otp_version = "Erlang/OTP\\s([\\d\\.\\-\\w]+)"
 ```
 
 ## Elm
