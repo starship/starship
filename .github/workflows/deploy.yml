@@ -272,7 +272,7 @@ jobs:
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
-  merge_i18n_pr:
+  merge_crowdin_pr:
     name: Merge Crowdin PR
     runs-on: ubuntu-latest
     needs: release_please
@@ -294,7 +294,7 @@ jobs:
   publish_docs:
     name: Publish docs to Netlify
     runs-on: ubuntu-latest
-    needs: merge_i18n_pr
+    needs: merge_crowdin_pr
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
