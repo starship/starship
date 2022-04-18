@@ -34,7 +34,7 @@ Essa personalização simula a aparência e o comportamento do [Pure](https://gi
 
 [![Captura de tela da personalização do prompt do terminal usando Pure](/presets/img/pure-preset.png "Clique para ver as personalização para usar no prompt do terminal com Pure")](./pure-preset)
 
-## [Pastel Powerline](./pastel-powerline.md)
+## [Pastel Powerine](./pastel-powerline.md)
 
 Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Mostra também como a substituição de segmentos do caminho completo do diretório funciona no starship.
 
