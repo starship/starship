@@ -120,7 +120,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: warning 警告 只支持 elvish v0.18 及以上。 :::
 
    在 `~/.config/fish/rc.elv` 的最后，添加以下内容：
 
@@ -144,7 +144,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: warning This will change in the future. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning 警告 将来可能会改变。 Only Nushell v0.60+ is supported. ::: Run the following:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -171,7 +171,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. 将以下文件添加到文件 `starship.lua` 中，并将此文件放置在 Clink脚本目录中：
 
    ```lua
    -- starship.lua

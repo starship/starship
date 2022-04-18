@@ -18,7 +18,7 @@ features:
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship はミニマルで、非常に高速で、カスタマイズ性の高い、あらゆるシェルのためのプロンプトです！ ミニマルかつ洗練された形で、あなたに必要な情報を表示します。 Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship はミニマルで、非常に高速で、カスタマイズ性の高い、あらゆるシェルのためのプロンプトです！ ミニマルかつ洗練された形で、あなたに必要な情報を表示します。 Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, PowerShellで簡単に利用できます。
 ---
 
 <div class="center">
@@ -120,7 +120,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Elvish
 
-   ::: warning elvish v0.17以上のみサポートされています。 :::
+   ::: warning elvish v0.18以上のみサポートされています。 :::
 
    `~/.elvish/rc.elv` の最後に以下を追記してください。
 
@@ -144,13 +144,13 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Nushell
 
-   ::: warning This will change in the future. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: 警告 これは将来的に変更されます。 Only Nushell v0.60+ is supported. 以下を実行します:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
 
    ```sh
    mkdir ~/.cache/starship
@@ -171,7 +171,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) コマンドを使用する必要があります。 以下をファイル `starship.lua` に追加し、Clinkスクリプトディレクトリに配置します:
 
    ```lua
    -- starship.lua
