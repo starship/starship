@@ -473,18 +473,6 @@ mod tests {
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
     use crate::utils::create_command;
 
-    /// Right after the calls to git the filesystem state may not have finished
-    /// updating yet causing some of the tests to fail. These barriers are placed
-    /// after each call to git.
-    /// This barrier is windows-specific though other operating systems may need it
-    /// in the future.
-    #[cfg(not(windows))]
-    fn barrier() {}
-    #[cfg(windows)]
-    fn barrier() {
-        std::thread::sleep(std::time::Duration::from_millis(500));
-    }
-
     #[allow(clippy::unnecessary_wraps)]
     fn format_output(symbols: &str) -> Option<String> {
         Some(format!(
@@ -705,7 +693,6 @@ mod tests {
             .args(&["config", "status.showUntrackedFiles", "no"])
             .current_dir(repo_dir.path())
             .output()?;
-        barrier();
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -719,7 +706,6 @@ mod tests {
     #[test]
     fn shows_stashed() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
-        barrier();
 
         create_stash(repo_dir.path())?;
 
@@ -727,7 +713,6 @@ mod tests {
             .args(&["reset", "--hard", "HEAD"])
             .current_dir(repo_dir.path())
             .output()?;
-        barrier();
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -741,16 +726,13 @@ mod tests {
     #[test]
     fn shows_stashed_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
-        barrier();
 
         create_stash(repo_dir.path())?;
-        barrier();
 
         create_command("git")?
             .args(&["reset", "--hard", "HEAD"])
             .current_dir(repo_dir.path())
             .output()?;
-        barrier();
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -1014,7 +996,6 @@ mod tests {
 
         fs::remove_file(repo_dir.path().join("a"))?;
         fs::rename(repo_dir.path().join("b"), repo_dir.path().join("c"))?;
-        barrier();
 
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
@@ -1040,7 +1021,6 @@ mod tests {
             .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(&repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1050,7 +1030,6 @@ mod tests {
             .args(&["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1060,7 +1039,6 @@ mod tests {
             .args(&["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         fs::write(repo_dir.join("Cargo.toml"), " ")?;
 
@@ -1068,7 +1046,6 @@ mod tests {
             .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1078,7 +1055,6 @@ mod tests {
             .args(&["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         fs::write(repo_dir.join("readme.md"), "# goodbye")?;
 
@@ -1086,32 +1062,27 @@ mod tests {
             .args(&["add", "."])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         create_command("git")?
             .args(&["commit", "-m", "Change readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         create_command("git")?
             .args(&["pull", "--rebase"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
 
     fn create_stash(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
-        barrier();
 
         create_command("git")?
             .args(&["stash", "--all"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1129,7 +1100,6 @@ mod tests {
             .args(&["add", "-A", "-N"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1147,7 +1117,6 @@ mod tests {
             .args(&["add", "."])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1160,7 +1129,6 @@ mod tests {
             .args(&["add", "."])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         writeln!(&mut file, "modified")?;
         file.sync_all()?;
@@ -1173,13 +1141,11 @@ mod tests {
             .args(&["mv", "readme.md", "readme.md.bak"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         create_command("git")?
             .args(&["add", "-A"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1189,13 +1155,11 @@ mod tests {
             .args(&["mv", "readme.md", "readme.md.bak"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         create_command("git")?
             .args(&["add", "-A"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         let mut file = File::create(repo_dir.join("readme.md.bak"))?;
         writeln!(&mut file, "modified")?;
@@ -1219,7 +1183,6 @@ mod tests {
             .args(&["add", ".gitignore"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         let mut file = File::create(repo_dir.join("ignored.txt"))?;
         writeln!(&mut file, "modified")?;

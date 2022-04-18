@@ -189,6 +189,16 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .output()?;
 
             create_command("git")?
+                .args(&["config", "--local", "core.fsync", "all"])
+                .current_dir(&path.path())
+                .output()?;
+
+            create_command("git")?
+                .args(&["config", "--local", "core.fsyncObjectFiles", "true"])
+                .current_dir(&path.path())
+                .output()?;
+
+            create_command("git")?
                 .args(&["reset", "--hard", "HEAD"])
                 .current_dir(&path.path())
                 .output()?;
