@@ -125,7 +125,7 @@ jobs:
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
     runs-on: macos-latest
-    needs: github_build
+    needs: [github_build, merge_crowdin_pr]
     strategy:
       fail-fast: false
       matrix:
@@ -226,6 +226,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: master
 
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
