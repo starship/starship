@@ -279,17 +279,10 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     continue-on-error: true
     steps:
-      - name: Setup | Find Crowdin PR
-        uses: juliangruber/find-pull-request-action@v1
-        id: find-crowdin-pr
-        with:
-          branch: i18n_master
       - name: Merge | Merge Crowdin PR
-        uses: juliangruber/merge-pull-request-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          number: ${{ steps.find-crowdin-pr.outputs.number }}
-          method: squash
+        run: gh pr merge --squash i18n_master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish_docs:
     name: Publish docs to Netlify
