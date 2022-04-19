@@ -125,7 +125,7 @@ jobs:
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
     runs-on: macos-latest
-    needs: github_build
+    needs: [github_build, merge_crowdin_pr]
     strategy:
       fail-fast: false
       matrix:
@@ -146,6 +146,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          # Required to include the recently merged Crowdin PR
+          ref: master
+
       - name: Notarize | Set up secrets
         env:
           APP_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_APPSIGNKEY_BASE64 }}
@@ -272,14 +276,28 @@ jobs:
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
-  publish_docs:
-    name: Publish docs to Netlify
+  merge_crowdin_pr:
+    name: Merge Crowdin PR
     runs-on: ubuntu-latest
     needs: release_please
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    continue-on-error: true
+    steps:
+      - name: Merge | Merge Crowdin PR
+        run: gh pr merge --squash i18n_master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish_docs:
+    name: Publish docs to Netlify
+    runs-on: ubuntu-latest
+    needs: merge_crowdin_pr
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
+        with:
+          # Required to include the recently merged Crowdin PR
+          ref: master
 
       - name: Setup | Install dependencies
         run: npm install
