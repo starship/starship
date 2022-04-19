@@ -291,6 +291,8 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
+        with:
+          ref: master
 
       - name: Setup | Install dependencies
         run: npm install
