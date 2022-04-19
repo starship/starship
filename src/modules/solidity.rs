@@ -36,8 +36,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                         module.get_name(),
                         &version,
                         config.version_format,
-                    ).map(Ok)
-                },
+                    )
+                    .map(Ok)
+                }
                 _ => None,
             })
             .parse(None, Some(context))
