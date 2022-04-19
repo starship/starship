@@ -146,6 +146,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          # Required to include the recently merged Crowdin PR
+          ref: master
+
       - name: Notarize | Set up secrets
         env:
           APP_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_APPSIGNKEY_BASE64 }}
@@ -226,8 +230,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          # Required to include the recently merged Crowdin PR
-          ref: master
 
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
