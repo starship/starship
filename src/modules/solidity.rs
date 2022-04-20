@@ -70,6 +70,10 @@ fn parse_solc_version(version_output: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::parse_solc_version;
+    use crate::test::ModuleRenderer;
+    use ansi_term::Color;
+    use std::fs::File;
+    use std::io;
 
     #[test]
     fn test_parse_solc_version() {
@@ -79,5 +83,30 @@ mod tests {
             parse_solc_version(input),
             Some(String::from("0.8.13+commit.abaa5c0e.Linux.g++"))
         );
+    }
+
+    #[test]
+    fn folder_without_solidity_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("solidity.txt"))?.sync_all()?;
+        let actual = ModuleRenderer::new("solidity").path(dir.path()).collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_solidity_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("main.sol"))?.sync_all()?;
+        let actual = ModuleRenderer::new("solidity").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Blue
+                .bold()
+                .paint("S v0.8.12+commit.abaa5c0e.Linux.g++ ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }

@@ -327,6 +327,13 @@ https://www.gnu.org/licenses/."#
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
         }),
+        "solc --version" => Some(CommandOutput {
+            stdout: String::from(
+                "solc, the solidity compiler commandline interface
+        Version: 0.8.12+commit.abaa5c0e.Linux.g++",
+            ),
+            stderr: String::default(),
+        }),
         "swift --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
