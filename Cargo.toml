@@ -105,7 +105,7 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = "0.23.1"
+nix = "0.24.0"
 
 [build-dependencies]
 shadow-rs = "0.11.0"
