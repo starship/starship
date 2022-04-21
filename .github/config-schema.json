@@ -12,7 +12,7 @@
         "disabled": false,
         "expiration_symbol": "X",
         "force_display": false,
-        "format": "on [$symbol($profile )(\\($region\\) )(\\[$duration\\])]($style)",
+        "format": "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",
         "profile_aliases": {},
         "region_aliases": {},
         "style": "bold yellow",
@@ -1479,7 +1479,7 @@
       "properties": {
         "format": {
           "description": "The format for the module.",
-          "default": "on [$symbol($profile )(\\($region\\) )(\\[$duration\\])]($style)",
+          "default": "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",
           "type": "string"
         },
         "symbol": {
