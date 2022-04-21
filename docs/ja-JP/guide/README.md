@@ -160,7 +160,7 @@
 - **簡単:** 迅速なインストールが可能であり、数分で使用開始可能です。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starshipのドキュメントを見る&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -173,12 +173,12 @@
 
 ### Step 1. Install Starship
 
-Select your operating system from the list below to view installation instructions:
+以下のリストからお使いのOSを選択し、インストール方法をご確認ください。
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -189,7 +189,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -202,13 +202,13 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+お使いのシステムに合わせた最新版をインストールしてください。
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
 | Distribution       | Repository                                                                                      | Instructions                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -231,13 +231,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+お使いのシステムに合わせた最新版をインストールしてください。
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
 | Repository                                               | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -251,7 +251,7 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install Starship using any of the following package managers:
+以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
 | Repository                                                                       | Instructions                            |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
@@ -264,7 +264,7 @@ Install Starship using any of the following package managers:
 
 ### Step 2. Setup your shell to use Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Starshipを初期化するためのシェルの設定。 以下のリストからお使いのシェルを選択してください。
 
 <details>
 <summary>Bash</summary>
@@ -280,7 +280,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+[Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) コマンドを使用する必要があります。 このパス`%LocalAppData%\clink\starship.lua` に以下の内容を含むファイルを作成する。
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -297,7 +297,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -333,7 +333,7 @@ mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
 
 ```sh
 starship init nu | save ~/.cache/starship/init.nu
@@ -390,9 +390,9 @@ eval "$(starship init zsh)"
 
 ### Step 3. Configure Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+新しいシェルインスタンスを起動すると、美しくて新しいシェルプロンプトが表示されるはずです。 デフォルトで問題なければ、お楽しみください！
 
-If you're looking to further customize Starship:
+Starshipのさらなるカスタマイズを目指すなら以下を参考にしてみてください。
 
 - **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
 
@@ -400,15 +400,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 貢献
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+私たちは常に**すべてのスキルレベル**の貢献者を探しています！ もし簡単にプロジェクトへ参加する方法をお探しなら、 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) に取り組んでみてください。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+あなたが英語以外の言語に堪能な場合、ドキュメントの翻訳と更新に協力していただけると嬉しいです。 協力してくれる場合、翻訳は [Starship Crowdin](https://translate.starship.rs/) から貢献できます。
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+もしあなたが Starship への貢献に興味がある場合は、我々の[貢献ガイド](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)をご覧ください。 また、気軽に我々の[Discord サーバー](https://discord.gg/8Jzqu3T)へ顔を出してください。 👋
 
 ## 💭影響を受けたプロダクト
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -423,4 +423,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 ライセンス
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> このプロジェクトは [ISC](https://github.com/starship/starship/blob/master/LICENSE) でライセンスされています。

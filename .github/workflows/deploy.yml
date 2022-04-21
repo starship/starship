@@ -1,8 +1,8 @@
 name: Deploy
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - master
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
@@ -10,9 +10,26 @@ env:
   RUSTUP_MAX_RETRIES: 10
 
 jobs:
+  # Update release PR
+  release_please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    if: github.repository == 'starship/starship'
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: rust
+
   # Build sources for every OS
   github_build:
     name: Build release binaries
+    needs: release_please
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
     strategy:
       fail-fast: false
       matrix:
@@ -100,7 +117,7 @@ jobs:
           cd -
 
       - name: Deploy | Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -108,7 +125,7 @@ jobs:
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
     runs-on: macos-latest
-    needs: github_build
+    needs: [github_build, merge_crowdin_pr]
     strategy:
       fail-fast: false
       matrix:
@@ -127,82 +144,86 @@ jobs:
       KEYCHAIN_FILENAME: app-signing.keychain-db
       KEYCHAIN_ENTRY: AC_PASSWORD
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Notarize | Set up secrets
-      env:
-        APP_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_APPSIGNKEY_BASE64 }}
-        INSTALL_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_INSTALLERSIGNKEY_BASE64 }}
-        P12_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
-        KEYCHAIN_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
-        APPLEID_USERNAME: ${{ secrets.APPLEDEV_ID_NAME }}
-        APPLEID_TEAMID: ${{ secrets.APPLEDEV_TEAM_ID }}
-        APPLEID_PASSWORD: ${{ secrets.APPLEDEV_PASSWORD }}
-      run: |
-        APP_CERTIFICATE_PATH="$RUNNER_TEMP/app_certificate.p12"
-        INSTALL_CERTIFICATE_PATH="$RUNNER_TEMP/install_certificate.p12"
-        KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # Required to include the recently merged Crowdin PR
+          ref: master
 
-        # import certificates from secrets
-        echo -n "$APP_CERTIFICATE_BASE64" | base64 --decode --output $APP_CERTIFICATE_PATH
-        echo -n "$INSTALL_CERTIFICATE_BASE64" | base64 --decode --output $INSTALL_CERTIFICATE_PATH
+      - name: Notarize | Set up secrets
+        env:
+          APP_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_APPSIGNKEY_BASE64 }}
+          INSTALL_CERTIFICATE_BASE64: ${{ secrets.APPLEDEV_INSTALLERSIGNKEY_BASE64 }}
+          P12_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
+          KEYCHAIN_PASSWORD: ${{ secrets.APPLEDEV_SIGNKEY_PASS }}
+          APPLEID_USERNAME: ${{ secrets.APPLEDEV_ID_NAME }}
+          APPLEID_TEAMID: ${{ secrets.APPLEDEV_TEAM_ID }}
+          APPLEID_PASSWORD: ${{ secrets.APPLEDEV_PASSWORD }}
+        run: |
+          APP_CERTIFICATE_PATH="$RUNNER_TEMP/app_certificate.p12"
+          INSTALL_CERTIFICATE_PATH="$RUNNER_TEMP/install_certificate.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
 
-        # create temporary keychain
-        security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-        security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
-        security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # import certificates from secrets
+          echo -n "$APP_CERTIFICATE_BASE64" | base64 --decode --output $APP_CERTIFICATE_PATH
+          echo -n "$INSTALL_CERTIFICATE_BASE64" | base64 --decode --output $INSTALL_CERTIFICATE_PATH
 
-        # import certificates to keychain
-        security import $APP_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-        security import $INSTALL_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-        security list-keychain -d user -s $KEYCHAIN_PATH
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
-        # Add Apple Developer ID credentials to keychain
-        xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
+          # import certificates to keychain
+          security import $APP_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $INSTALL_CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
 
-    - name: Notarize | Build docs
-      run: |
-        cd docs
-        npm install
-        npm run build
+          # Add Apple Developer ID credentials to keychain
+          xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
 
-    - name: Notarize | Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: ${{ matrix.name }}
-        path: artifacts
+      - name: Notarize | Build docs
+        run: |
+          cd docs
+          npm install
+          npm run build
 
-    - name: Notarize | Unpack Binaries
-      run: tar xf artifacts/${{ matrix.name }}
+      - name: Notarize | Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.name }}
+          path: artifacts
 
-    - name: Notarize | Build, Sign, and Notarize Pkg
-      run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
+      - name: Notarize | Unpack Binaries
+        run: tar xf artifacts/${{ matrix.name }}
 
-    - name: Notarize | Upload Notarized Flat Installer
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ matrix.pkgname }}
-        path: ${{ matrix.pkgname }}
-    
-    - name: Notarize | Package Notarized Binary
-      run: tar czvf ${{ matrix.name }} starship
+      - name: Notarize | Build, Sign, and Notarize Pkg
+        run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
-    - name: Notarize | Upload Notarized Binary
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ matrix.name }}
-        path: ${{ matrix.name }}
+      - name: Notarize | Upload Notarized Flat Installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.pkgname }}
+          path: ${{ matrix.pkgname }}
 
-    - name: Cleanup Secrets
-      if: ${{ always() }}
-      run: |
-        KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
-        security delete-keychain $KEYCHAIN_PATH
+      - name: Notarize | Package Notarized Binary
+        run: tar czvf ${{ matrix.name }} starship
+
+      - name: Notarize | Upload Notarized Binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.name }}
+          path: ${{ matrix.name }}
+
+      - name: Cleanup Secrets
+        if: ${{ always() }}
+        run: |
+          KEYCHAIN_PATH="$RUNNER_TEMP/$KEYCHAIN_FILENAME"
+          security delete-keychain $KEYCHAIN_PATH
 
   # Create GitHub release with Rust build targets and release notes
-  github_release:
-    name: Create GitHub Release
-    needs: [github_build, notarize_and_pkgbuild]
+  upload_artifacts:
+    name: Add Build Artifacts to Release
+    needs: [release_please, github_build, notarize_and_pkgbuild]
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
@@ -210,33 +231,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup | Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.16"
-
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
 
-      - name: Setup | Release notes
-        run: |
-          go install github.com/git-chglog/git-chglog/cmd/git-chglog@v0.15.0
-          git-chglog -c .github/chglog/release.yml $(git describe --tags) > RELEASE.md
-
-      - name: Build | Publish
+      - name: Build | Add Artifacts to Release
         uses: softprops/action-gh-release@v1
         with:
           files: starship-*/starship-*
-          body_path: RELEASE.md
+          tag_name: ${{ needs.release_please.outputs.tag_name }}
 
   # Publish starship to Crates.io
   cargo_publish:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
-    needs: github_release
+    needs: release_please
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
@@ -254,21 +266,38 @@ jobs:
   update_brew_formula:
     name: Update Brew Formula
     runs-on: ubuntu-latest
-    needs: github_release
+    needs: release_please
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - uses: mislav/bump-homebrew-formula-action@v1.16
         with:
           formula-name: starship
+          tag-name: ${{ needs.release_please.outputs.tag_name }}
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+
+  merge_crowdin_pr:
+    name: Merge Crowdin PR
+    runs-on: ubuntu-latest
+    needs: release_please
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    continue-on-error: true
+    steps:
+      - name: Merge | Merge Crowdin PR
+        run: gh pr merge --squash i18n_master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish_docs:
     name: Publish docs to Netlify
     runs-on: ubuntu-latest
-    needs: github_release
+    needs: merge_crowdin_pr
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
+        with:
+          # Required to include the recently merged Crowdin PR
+          ref: master
 
       - name: Setup | Install dependencies
         run: npm install

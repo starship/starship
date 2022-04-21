@@ -131,7 +131,7 @@ Invoke-Expression (&starship init powershell)
 
 Algunos intérpretes de órdenes soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt correcto usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
 
-Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo fill](/config/#fill).
+Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear los módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo `fill`](/config/#fill).
 
 `right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh, xonsh, cmd.
 

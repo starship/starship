@@ -145,7 +145,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="使用 iTerm 和 Snazz 主题的 Starship"
   width="50%"
   align="right"
  />
@@ -160,7 +160,7 @@
 - **易用：** 安装快速 —— 几分钟就可上手。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>探索 Starship 文档</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -173,12 +173,12 @@
 
 ### 步骤 1. 安装 Starship
 
-Select your operating system from the list below to view installation instructions:
+从下面的列表中选择您的操作系统以查看安装指令：
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+使用下列软件包管理器安装Starship：
 
 | 软件包来源                                                                             | 指令                     |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -189,7 +189,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+使用下列软件包管理器安装Starship：
 
 | 发行版         | 软件包来源                                                    | 指令                                |
 | ----------- | -------------------------------------------------------- | --------------------------------- |
@@ -202,13 +202,13 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+安装最新版本：
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+或者，使用以下任一软件包管理器安装Starship：
 
 | 发行版                | 软件包来源                                                                                           | 指令                                                                             |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -231,13 +231,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+安装最新版本：
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+或者，使用以下任一软件包管理器安装Starship：
 
 | 软件包来源                                                    | 指令                                      |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -251,7 +251,7 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install Starship using any of the following package managers:
+使用下列软件包管理器安装Starship：
 
 | 软件包来源                                                                            | 指令                                      |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
@@ -264,7 +264,7 @@ Install Starship using any of the following package managers:
 
 ### 步骤 2. 设置你的终端以使用 Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+配置你的终端来初始化 starship。 请从下面列表选择你的终端：
 
 <details>
 <summary>Bash</summary>
@@ -280,7 +280,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+您需要使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 与 Cmd. 在路径 `%LocalAppData%\clink\starship.lua` 下创建文件，输入以下内容
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -297,7 +297,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+注意：仅支持 v0.18 及以上版本的 Elvish
 
 </details>
 
@@ -347,7 +347,7 @@ Note: Only Nushell v0.60+ is supported
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+将以下内容添加到您 PowerShell 配置文件的末尾（通过运行 `$PROFILE` 来获取配置文件的路径）
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -390,9 +390,9 @@ eval "$(starship init zsh)"
 
 ### 步骤 3. 配置 Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+打开一个新的 Shell 实例，你应该就能看到漂亮的 Shell 新提示符了。 如果你对默认配置感到满意，就可以开始享用了！
 
-If you're looking to further customize Starship:
+如果你想进一步配置 Starship，查阅下列内容：
 
 - **[配置](https://starship.rs/config/)**：学习如何配置 Starship 来调节提示符到你喜欢的样子。
 
@@ -400,15 +400,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 贡献
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+我们一直在寻找贡献者！**不论你的技能如何**你都可以参与贡献 。 如果您希望快速为项目作出贡献，请尝试解决 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+如果你能流利地使用非英语语种，我们非常感谢你帮助翻译我们的文件并将其更新到其他语言。 如果您想要帮助，可以在 [Starship Crowdin](https://translate.starship.rs/) 上贡献翻译。
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
 ## 💭该项目受以下项目启发
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+请参考这些曾经为 Starship 提供启发的工程。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -418,7 +418,7 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship 图标">
 </p>
 
 ## 📝 License

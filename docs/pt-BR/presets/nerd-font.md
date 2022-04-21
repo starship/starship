@@ -1,8 +1,8 @@
-[Return to Presets](./README.md#nerd-font-symbols)
+[Retornar para Personalizações](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Símbolos Nerd Font
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Essa predefinição altera os símbolos para cada módulo usar símbolos com Nerd Font.
 
 ![Captura de tela da predefinição Nerd Font Symbols](/presets/img/nerd-font-symbols.png)
 
@@ -12,6 +12,6 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 ### Configuração
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml)
+[Clique para baixar o TOML](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
