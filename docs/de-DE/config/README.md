@@ -280,16 +280,16 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Optionen
 
-| Option              | Standardwert                                                         | Beschreibung                                                                                                |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Das Format für das Modul.                                                                                   |
-| `symbol`            | `"☁️ "`                                                              | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                                                     |
-| `region_aliases`    |                                                                      | Tabelle der Regionaliasen, die zusätzlich zum AWS-Namen angezeigt werden sollen.                            |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `"bold yellow"`                                                      | Stil für dieses Modul.                                                                                      |
-| `expiration_symbol` | `X`                                                                  | Das Symbol, das angezeigt wird, wenn die temporären Anmeldeinformationen abgelaufen sind.                   |
-| `disabled`          | `false`                                                              | Deaktiviert das `aws`-Modul.                                                                                |
-| `force_display`     | `false`                                                              | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Option              | Standardwert                                                          | Beschreibung                                                                                                |
+| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Das Format für das Modul.                                                                                   |
+| `symbol`            | `"☁️ "`                                                               | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                                                     |
+| `region_aliases`    |                                                                       | Tabelle der Regionaliasen, die zusätzlich zum AWS-Namen angezeigt werden sollen.                            |
+| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `"bold yellow"`                                                       | Stil für dieses Modul.                                                                                      |
+| `expiration_symbol` | `X`                                                                   | Das Symbol, das angezeigt wird, wenn die temporären Anmeldeinformationen abgelaufen sind.                   |
+| `disabled`          | `false`                                                               | Deaktiviert das `aws`-Modul.                                                                                |
+| `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variables
 
