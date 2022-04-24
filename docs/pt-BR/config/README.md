@@ -2514,7 +2514,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
+O módulo `pulumi` mostra o nome de usuário atual, a [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) selcionada e a versão.
 
 ::: tip
 
@@ -2543,7 +2543,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | --------- | ---------- | --------------------------------- |
 | version   | `v0.12.24` | A versão do `pulumi`              |
 | stack     | `dev`      | A stack Pulumi atual              |
-| username  | `alice`    | The current Pulumi username       |
+| username  | `alice`    | O nome de usuário Pulumi atual    |
 | symbol    |            | Espelha o valor da opção `symbol` |
 | style\* |            | Espelha o valor da opção `style`  |
 
@@ -2922,7 +2922,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | `elvish_indicator`     | `esh`                     | Uma string usada para representar o elvish.             |
 | `tcsh_indicator`       | `tsh`                     | Uma string usada para representar o tcsh.               |
 | `xonsh_indicator`      | `xsh`                     | Uma string usada para representar o xonsh.              |
-| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                  |
+| `cmd_indicator`        | `cmd`                     | Uma string usada para representar o cmd.                |
 | `nu_indicator`         | `nu`                      | Uma string usada para representar o nu.                 |
 | `unknown_indicator`    |                           | Valor padrão para exibir quando o shell é desconhecido. |
 | `format`               | `"[$indicator]($style) "` | O formato do módulo.                                    |
@@ -3021,23 +3021,23 @@ format = '[📦 \[$env\]]($style) '
 
 ## Spack
 
-The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+O módulo `spack` mostra o ambiente [Spack](https://spack.readthedocs.io/en/latest/) atual, se o `$SPACK_ENV` estiver definido.
 
 ### Opções
 
-| Opções              | Padrão                                 | Descrição                                                                                                                                                |
-| ------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` quer dizer sem truncação. Também consulte o módulo [`directory`](#directory). |
-| `symbol`            | `"🅢  "`                                | O simbolo usado antes do nome do environment.                                                                                                            |
-| `style`             | `"bold blue"`                          | O estilo do módulo.                                                                                                                                      |
-| `format`            | `"via [$symbol$environment]($style) "` | O formato do módulo.                                                                                                                                     |
-| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                             |
+| Opções              | Padrão                                 | Descrição                                                                                                                                                       |
+| ------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | O número de diretórios para os quais o caminho do ambiente deve ser truncado. `0` quer dizer sem truncação. Também consulte o módulo [`directory`](#directory). |
+| `symbol`            | `"🅢  "`                                | O simbolo usado antes do nome do environment.                                                                                                                   |
+| `style`             | `"bold blue"`                          | O estilo do módulo.                                                                                                                                             |
+| `format`            | `"via [$symbol$environment]($style) "` | O formato do módulo.                                                                                                                                            |
+| `disabled`          | `false`                                | Desabilita o módulo `spack`.                                                                                                                                    |
 
 ### Variáveis
 
 | Variável    | Exemplo      | Descrição                         |
 | ----------- | ------------ | --------------------------------- |
-| environment | `astronauts` | The current spack environment     |
+| environment | `astronauts` | O ambiente spack atual            |
 | symbol      |              | Espelha o valor da opção `symbol` |
 | style\*   |              | Espelha o valor da opção `style`  |
 
@@ -3054,7 +3054,7 @@ format = "[$symbol$environment](dimmed blue) "
 
 ## Status
 
-O módulo `status` exibe o código de saída do comando anterior. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
+O módulo `status` exibe o código de saída do comando anterior. Se o $success_symbol estiver vazio (padrão), o módulo será exibido apenas se o código de saída não for `0.`. O código de status será convertido em um inteiro de 32 bits signed.
 
 ::: tip
 
@@ -3309,7 +3309,7 @@ time_range = "10:00:00-14:00:00"
 
 O módulo `username` exibe o username do usuário ativo. O módulo será mostrado se alguma das seguintes condições for atendida:
 
-- The current user is root/admin
+- O usuário atual é root/admin
 - O usuário atual não é o mesmo que está logado
 - O usuário atual esta conectado em uma sessão SSH
 - A variável `show_always` esta definida como true
@@ -3322,13 +3322,13 @@ Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION
 
 ### Opções
 
-| Opções        | Padrão                  | Descrição                                   |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
-| `style_user`  | `"bold yellow"`         | O estilo usado para usuários não root.      |
-| `format`      | `"[$user]($style) in "` | O formato do módulo.                        |
-| `show_always` | `false`                 | Sempre exibe o módulo `username`.           |
-| `disabled`    | `false`                 | Desabilita o módulo `username`.             |
+| Opções        | Padrão                  | Descrição                                     |
+| ------------- | ----------------------- | --------------------------------------------- |
+| `style_root`  | `"bold red"`            | O estilo usado quando o usuário é root/admin. |
+| `style_user`  | `"bold yellow"`         | O estilo usado para usuários não root.        |
+| `format`      | `"[$user]($style) in "` | O formato do módulo.                          |
+| `show_always` | `false`                 | Sempre exibe o módulo `username`.             |
+| `disabled`    | `false`                 | Desabilita o módulo `username`.               |
 
 ### Variáveis
 
@@ -3500,9 +3500,9 @@ O módulo `custom` exibe a saída de alguns comandos arbitrários.
 
 Este módulo vai ser exibir se algumas das condições a seguir for atendida:
 
-- The current directory contains a file whose name is in `detect_files`
-- The current directory contains a directory whose name is in `detect_folders`
-- The current directory contains a file whose extension is in `detect_extensions`
+- O diretório atual contém um arquivo cujo nome está em `detect_files`
+- O diretório atual contém um diretório cujo nome está em `detect_folders`
+- O diretório atual contém um arquivo cuja extensão está em `detect_extensions`
 - O comando `when` retorna 0
 - O sistema operacional (std::env::consts::OS) corresponde com o `os` se definido.
 
@@ -3537,7 +3537,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 | Opções              | Padrão                          | Descrição                                                                                                                                                                                                                                                                                     |
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `""`                            | O comando cuja a saída deve ser exibida. O comando será passado no stdin para o shell.                                                                                                                                                                                                        |
-| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `when`              | `false`                         | Ou um valor booleano (`true` ou `false`, sem aspas) ou um comando shell de string usado como condição para mostrar o módulo. No caso de uma string, o módulo será mostrado se o comando retornar um código de status `0`.                                                                     |
 | `shell`             |                                 | [Veja abaixo](#custom-command-shell)                                                                                                                                                                                                                                                          |
 | `description`       | `"<custom module>"`       | A descrição do módulo, isto será exibido quando executar `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | Os arquivos que serão buscados por correspondência no diretório atual.                                                                                                                                                                                                                        |
