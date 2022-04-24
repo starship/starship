@@ -1267,14 +1267,14 @@ O módulo `gcloud` exibe a configuração atual para o [`gcloud`](https://cloud.
 
 ### Opções
 
-| Opções            | Padrão                                                     | Descrição                                                        |
-| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
-| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                             |
-| `symbol`          | `"☁️  "`                                                   | O simbolo usado antes de exibir o perfil atual do GCP.           |
-| `region_aliases`  |                                                            | Tabela de aliases de região para exibir além do nome do GCP.     |
-| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
-| `style`           | `"bold blue"`                                              | O estilo do módulo.                                              |
-| `disabled`        | `false`                                                    | Desabilita o módulo `gcloud`.                                    |
+| Opções            | Padrão                                                     | Descrição                                                           |
+| ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                                |
+| `symbol`          | `"☁️  "`                                                   | O simbolo usado antes de exibir o perfil atual do GCP.              |
+| `region_aliases`  |                                                            | Tabela de aliases de região para exibir além do nome do GCP.        |
+| `project_aliases` |                                                            | Tabela de apelidos do projeto a serem exibidos além do nome do GCP. |
+| `style`           | `"bold blue"`                                              | O estilo do módulo.                                                 |
+| `disabled`        | `false`                                                    | Desabilita o módulo `gcloud`.                                       |
 
 ### Variáveis
 
@@ -1323,7 +1323,7 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
-#### Display account and aliased project
+#### Exibir conta e projeto apelidado
 
 ```toml
 # ~/.config/starship.toml
@@ -1331,7 +1331,7 @@ asia-northeast1 = "an1"
 [gcloud]
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 [gcloud.project_aliases]
-very-long-project-name = "vlpn"
+nome-do-projeto-muito-longo = "npml"
 ```
 
 ## Git Branch
@@ -1349,7 +1349,7 @@ O módulo `git_branch` exibe o branch ativo do repositório no diretório atual.
 | `truncation_length`  | `2^63 - 1`                       | Truncates um braço do git para `N` caracteres.                                                    |
 | `truncation_symbol`  | `"…"`                            | O simbolo usado para indicar que o nome braço foi truncado. Você pode usar `""` para sem simbolo. |
 | `only_attached`      | `false`                          | Apenas exibe o nome do braço quando o estado não for detached `HEAD`.                             |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                               |
+| `ignore_branches`    | `[]`                             | Uma lista de nomes para evitar a exibição. Útil para "master" ou "main".                          |
 | `disabled`           | `false`                          | Desabilita o módulo `git_branch`.                                                                 |
 
 ### Variáveis
@@ -1498,30 +1498,30 @@ O módulo `git_status` exibe o simbolo que representa o estado do repositório n
 
 ::: tip
 
-The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+O módulo Git Status é muito lento nos diretórios do Windows (por exemplo, em `/mnt/c/`) quando em um ambiente WSL. Você pode desabilitar o módulo ou usar a opção `windows_starship` para usar um executável Starship nativo do Windows para calcular o `git_status` para esses caminhos.
 
 :::
 
 ### Opções
 
-| Opções              | Padrão                                          | Descrição                                                                                                   |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status`                                                                          |
-| `conflicted`        | `"="`                                           | Este braço tem conflitos.                                                                                   |
-| `ahead`             | `"⇡"`                                           | O formato do `ahead`                                                                                        |
-| `behind`            | `"⇣"`                                           | O formato do `behind`                                                                                       |
-| `diverged`          | `"⇕"`                                           | O formato do `diverged`                                                                                     |
-| `up_to_date`        | `""`                                            | O formato do `up_to_date`                                                                                   |
-| `untracked`         | `"?"`                                           | O formato do `untracked`                                                                                    |
-| `stashed`           | `"$"`                                           | O formato do `stashed`                                                                                      |
-| `modified`          | `"!"`                                           | O formato do `modified`                                                                                     |
-| `staged`            | `"+"`                                           | O formato do `staged`                                                                                       |
-| `renamed`           | `"»"`                                           | O formato do `renamed`                                                                                      |
-| `deleted`           | `"✘"`                                           | O formato do `deleted`                                                                                      |
-| `style`             | `"bold red"`                                    | O estilo do módulo.                                                                                         |
-| `ignore_submodules` | `false`                                         | Ignora as alterações de submódulos.                                                                         |
-| `disabled`          | `false`                                         | Desabilita o módulo `git_status`.                                                                           |
-| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| Opções              | Padrão                                          | Descrição                                                                                                                               |
+| ------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | O formato padrão para `git_status`                                                                                                      |
+| `conflicted`        | `"="`                                           | Este braço tem conflitos.                                                                                                               |
+| `ahead`             | `"⇡"`                                           | O formato do `ahead`                                                                                                                    |
+| `behind`            | `"⇣"`                                           | O formato do `behind`                                                                                                                   |
+| `diverged`          | `"⇕"`                                           | O formato do `diverged`                                                                                                                 |
+| `up_to_date`        | `""`                                            | O formato do `up_to_date`                                                                                                               |
+| `untracked`         | `"?"`                                           | O formato do `untracked`                                                                                                                |
+| `stashed`           | `"$"`                                           | O formato do `stashed`                                                                                                                  |
+| `modified`          | `"!"`                                           | O formato do `modified`                                                                                                                 |
+| `staged`            | `"+"`                                           | O formato do `staged`                                                                                                                   |
+| `renamed`           | `"»"`                                           | O formato do `renamed`                                                                                                                  |
+| `deleted`           | `"✘"`                                           | O formato do `deleted`                                                                                                                  |
+| `style`             | `"bold red"`                                    | O estilo do módulo.                                                                                                                     |
+| `ignore_submodules` | `false`                                         | Ignora as alterações de submódulos.                                                                                                     |
+| `disabled`          | `false`                                         | Desabilita o módulo `git_status`.                                                                                                       |
+| `windows_starship`  |                                                 | Use este caminho (Linux) para um executável do Windows Starship renderizar o `git_status` quando estiver em caminhos do Windows no WSL. |
 
 ### Variáveis
 
@@ -1585,13 +1585,13 @@ diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 behind = "⇣${count}"
 ```
 
-Use Windows Starship executable on Windows paths in WSL
+Use o executável do Windows Starship em caminhos do Windows em WSL
 
 ```toml
 # ~/.config/starship.toml
 
 [git_status]
-windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+windows_starship = '/mnt/c/Users/nomedousuario/scoop/apps/starship/current/starship.exe'
 ```
 
 ## Go
@@ -1641,34 +1641,34 @@ format = "via [🏎💨 $version](bold cyan) "
 
 ## Haskell
 
-The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+O módulo `haskell` encontra a versão atual do GHC selecionada e/ou o snapshot do Stack selecionado.
 
 Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual contem um arquivo `stack.yaml`
-- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+- O diretório atual contém qualquer arquivo `.hs`, `.cabal`, ou `.hs-boot`
 
 ### Opções
 
-| Opções              | Padrão                               | Descrição                                          |
-| ------------------- | ------------------------------------ | -------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                               |
-| `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell |
-| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Quais extensões devem ativar este módulo.          |
-| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Quais nomes de arquivos devem ativar este módulo.  |
-| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.             |
-| `style`             | `"bold purple"`                      | O estilo do módulo.                                |
-| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+| Opções              | Padrão                               | Descrição                                                 |
+| ------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                      |
+| `symbol`            | `"λ "`                               | Uma string de formato que representa o símbolo de Haskell |
+| `detect_extensions` | `["hs", "cabal", "hs-boot"]`         | Quais extensões devem ativar este módulo.                 |
+| `detect_files`      | `["stack.yaml", "cabal.project"]`    | Quais nomes de arquivos devem ativar este módulo.         |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                    |
+| `style`             | `"bold purple"`                      | O estilo do módulo.                                       |
+| `disabled`          | `false`                              | Desativa o módulo `haskell`.                              |
 
 ### Variáveis
 
-| Variável       | Exemplo     | Descrição                                                                               |
-| -------------- | ----------- | --------------------------------------------------------------------------------------- |
-| version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
-| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
-| ghc\_version | `9.2.1`     | Currently installed GHC version                                                         |
-| symbol         |             | Espelha o valor da opção `symbol`                                                       |
-| style\*      |             | Espelha o valor da opção `style`                                                        |
+| Variável       | Exemplo     | Descrição                                                                      |
+| -------------- | ----------- | ------------------------------------------------------------------------------ |
+| version        |             | `ghc_version` ou o `snapshot` dependendo se o projeto atual é um projeto Stack |
+| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                              |
+| ghc\_version | `9.2.1`     | Versão do GHC instalada                                                        |
+| symbol         |             | Espelha o valor da opção `symbol`                                              |
+| style\*      |             | Espelha o valor da opção `style`                                               |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
