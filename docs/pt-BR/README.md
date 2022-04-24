@@ -150,7 +150,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   E adicione o seguinte ao final da sua configuração do Nushell (encontre-o executando `$nu.config-path`):
 
    ```sh
    mkdir ~/.cache/starship
