@@ -9,17 +9,17 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Todas as configurações do starship são feitas neste arquivo [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Get editor completions based on the config schema
+# Obtém os preenchimentos automáticos do editor com base em um esquema de configuração
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# Insere uma quebra de linha entre os prompts do shell
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character] # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Substitui o símbolo "❯" no prompt por "➜"
+[character] # O nome do módulo que estamos configurando é "character"
+success_symbol = "[➜](bold green)" # O segmento "success_symbol" está sendo definido como "➜" com a cor verde em negrito
 
-# Disable the package module, hiding it from the prompt completely
+# Desativa o módulo do pacote, ocultando-o completamente do prompt
 [package]
 disabled = true
 ```
@@ -183,7 +183,7 @@ O `formato` padrão é usado para definir o formato do prompt, se um valor vazio
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# O que equivale a
 format = """
 $username\
 $hostname\
