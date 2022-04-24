@@ -1665,7 +1665,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | Variável       | Exemplo     | Descrição                                                                      |
 | -------------- | ----------- | ------------------------------------------------------------------------------ |
 | version        |             | `ghc_version` ou o `snapshot` dependendo se o projeto atual é um projeto Stack |
-| snapshot       | `lts-18.12` | Currently selected Stack snapshot                                              |
+| snapshot       | `lts-18.12` | Snapshot do Stack selecionado                                                  |
 | ghc\_version | `9.2.1`     | Versão do GHC instalada                                                        |
 | symbol         |             | Espelha o valor da opção `symbol`                                              |
 | style\*      |             | Espelha o valor da opção `style`                                               |
@@ -1931,7 +1931,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Se a env var `$KUBECONFIG` estiver definida o módulo vai usa-la ao invés de usar o `~/.kube/config`.
+Exibe o nome atual do [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) e, se definido, o namespace, usuário e cluster do arquivo kubeconfig. O namespace precisa ser definido no arquivo kubeconfig, isso pode ser feito via `kubectl config set-context starship-context --namespace astronaut`. Da mesma forma, o usuário e o cluster podem ser definidos com `kubectl config set-context starship-context --user starship-user` e `kubectl config set-context starship-context --cluster starship-cluster`. Se a env var `$KUBECONFIG` estiver definida o módulo vai usa-la ao invés de usar o `~/.kube/config`.
 
 ::: tip
 
@@ -1953,10 +1953,10 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 | Variável  | Exemplo              | Descrição                                   |
 | --------- | -------------------- | ------------------------------------------- |
-| context   | `starship-context`   | The current kubernetes context name         |
+| context   | `starship-context`   | O nome atual do kubernetes context          |
 | namespace | `starship-namespace` | Se definido o namespace atual do kubernetes |
-| user      | `starship-user`      | If set, the current kubernetes user         |
-| cluster   | `starship-cluster`   | If set, the current kubernetes cluster      |
+| user      | `starship-user`      | Se definido, o usuário atual do kubernetes  |
+| cluster   | `starship-cluster`   | Se definido, o cluster atual do kubernetes  |
 | symbol    |                      | Espelha o valor da opção `symbol`           |
 | style\* |                      | Espelha o valor da opção `style`            |
 
@@ -2016,25 +2016,25 @@ O módulo `line_break` separa o prompt em duas linhas.
 disabled = true
 ```
 
-## Local IP
+## IP Local
 
-The `localip` module shows the IPv4 address of the primary network interface.
+O módulo `localip` mostra o endereço IPv4 da interface primária de rede.
 
 ### Opções
 
-| Opções     | Padrão                    | Descrição                                              |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | O formato do módulo.                                   |
-| `style`    | `"bold yellow"`           | O estilo do módulo.                                    |
-| `disabled` | `true`                    | Desabilita o módulo `localip`.                         |
+| Opções     | Padrão                    | Descrição                                                      |
+| ---------- | ------------------------- | -------------------------------------------------------------- |
+| `ssh_only` | `true`                    | Apenas mostre o endereço IP quando conectado a uma sessão SSH. |
+| `format`   | `"[$localipv4]($style) "` | O formato do módulo.                                           |
+| `style`    | `"bold yellow"`           | O estilo do módulo.                                            |
+| `disabled` | `true`                    | Desabilita o módulo `localip`.                                 |
 
 ### Variáveis
 
-| Variável  | Exemplo      | Descrição                         |
-| --------- | ------------ | --------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
-| style\* |              | Espelha o valor da opção `style`  |
+| Variável  | Exemplo      | Descrição                        |
+| --------- | ------------ | -------------------------------- |
+| localipv4 | 192.168.1.13 | Contém o endereço IPv4 principal |
+| style\* |              | Espelha o valor da opção `style` |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -2262,7 +2262,7 @@ O módulo `nodejs` exibe a versão atual instalada do [Node.js](https://nodejs.o
 - O diretório atual tenha um arquivo`.nvmrc`
 - O diretório atual tenha um diretório `node_modules`
 - O diretório atual tenha um arquivo com a extensão `.js`, `.mjs` or `.cjs`
-- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
+- O diretório atual contém um arquivo com a extensão `.ts`, `.mts` ou `.cts`
 
 ### Opções
 
