@@ -120,7 +120,7 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    #### Elvish
 
-   ::: warning Hanya elvish v0.18 atau versi yang lebih baru yang mendapat dukungan pengembangan. :::
+   ::: peringatan Hanya elvish v0.18 atau versi yang lebih baru yang mendapat dukungan pengembangan. :::
 
    Tambahkan skrip berikut pada baris akhir `~/.elvish/rc.elv`:
 
@@ -144,7 +144,7 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    #### Nushell
 
-   ::: peringatan Hal ini dapat berubah di kemudian hari. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: peringatan Hal ini dapat berubah di kemudian hari. Hanya Nushell v0.60+ yang menerima dukungan. Jalankan perintah berikut:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
