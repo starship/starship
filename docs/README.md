@@ -136,9 +136,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning
    This will change in the future.
-   Only Nushell v0.60+ is supported.
+   Only Nushell v0.61+ is supported.
    :::
-   Run the following:
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -147,8 +147,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
    #### Xonsh
