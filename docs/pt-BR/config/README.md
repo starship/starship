@@ -492,28 +492,28 @@ O módulo `c` mostra algumas informações sobre o seu compilador de C. Por padr
 | `detect_extensions` | `["c", "h"]`                                                                | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[]`                                                                        | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                        | Quais pastas devem ativar este módulo.                                               |
-| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                                                   |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | Como detectar qual é o compilador                                                    |
 | `style`             | `"bold 149"`                                                                | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                                                             |
+| `disabled`          | `false`                                                                     | Desabilita o módulo `c`.                                                             |
 
 ### Variáveis
 
 | Variável | Exemplo | Descrição                         |
 | -------- | ------- | --------------------------------- |
-| name     | clang   | The name of the compiler          |
-| version  | 13.0.0  | The version of the compiler       |
+| name     | clang   | O nome do compilador              |
+| version  | 13.0.0  | A versão do compilador            |
 | symbol   |         | Espelha o valor da opção `symbol` |
 | style    |         | Espelha o valor da opção `style`  |
 
-NB that `version` is not in the default format.
+Note que `version` não está no formato padrão.
 
-### Commands
+### Comandos
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+A opção `commands` aceita uma lista de comandos para determinar a versão e o nome do compilador.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+Cada comando é representado como uma lista do nome do executável, seguido de seus argumentos, geralmente algo como `["mycc", "--version"]`. Starship tentará executar cada comando até que obtenha um resultado no STDOUT.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+Se um compilador C não é suportado por este módulo, você pode solicitá-lo [criando uma issue no GitHub](https://github.com/starship/starship/).
 
 ### Exemplo
 
@@ -537,7 +537,7 @@ Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olh
 
 ::: atenção
 
-`vicmd_symbol` is only supported in cmd, fish and zsh.
+`vicmd_symbol` só é suportado no cmd, fish e zsh.
 
 :::
 
