@@ -268,9 +268,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-O módulo `aws` exibe a região e perfil atual do AWS quando as credenciais, um `credential_process` ou um `sso_start_url` foram configurados. Alternatively, you can force this module to show the region and profile even when the credentials have not been setup with the `force_display` option. Isto é baseado nas variáveis de env `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` contidas no arquivo `~/.aws/config`. Este módulo exibe também o tempo de expiração de credenciais temporárias.
+O módulo `aws` exibe a região e perfil atual do AWS quando as credenciais, um `credential_process` ou um `sso_start_url` foram configurados. Como alternativa, você pode forçar este módulo a mostrar a região e o perfil mesmo quando as credenciais não foram configuradas com a opção `force_display`. Isto é baseado nas variáveis de env `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` contidas no arquivo `~/.aws/config`. Este módulo exibe também o tempo de expiração de credenciais temporárias.
 
-O módulo vai exibir o perfil somente se as credenciais estiverem presentes em `~/.aws/credentials` ou se `credentials_process` constar no arquivo `~/.aws/config`. Como alternativa, basta ter uma ou mais das seguintes variáveis definidas: `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_KEY` ou `AWS_SESSION_TOKEN`. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
+O módulo vai exibir o perfil somente se as credenciais estiverem presentes em `~/.aws/credentials` ou se `credentials_process` constar no arquivo `~/.aws/config`. Como alternativa, basta ter uma ou mais das seguintes variáveis definidas: `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_KEY` ou `AWS_SESSION_TOKEN`. Se a opção `force_display` estiver definida como `true`, todas as informações disponíveis serão exibidas mesmo que as condições acima não sejam respeitadas.
 
 Quando usar [aws-vault](https://github.com/99designs/aws-vault), o perfil é lido da variável de ambiente `AWS_VAULT` e o tempo de expiração de credenciais é lido da variável de ambiente `AWS_SESSION_EXPIRATION`.
 
@@ -280,16 +280,16 @@ Quando usar [AWSume](https://awsu.me) o perfil é lido da variável `AWSUME_PROF
 
 ### Opções
 
-| Opções              | Padrão                                                                | Descrição                                                                                                   |
-| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | O formato do módulo.                                                                                        |
-| `symbol`            | `"☁️ "`                                                               | O símbolo usado antes de exibir o perfil atual da AWS.                                                      |
-| `region_aliases`    |                                                                       | Tabela de aleases de regiões a serem exibidas, além do nome da AWS.                                         |
-| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `"bold yellow"`                                                       | O estilo do módulo.                                                                                         |
-| `expiration_symbol` | `X`                                                                   | O simbolo exibido quando as credenciais temporárias estão expiradas.                                        |
-| `disabled`          | `false`                                                               | Desabilita o módulo `AWS`.                                                                                  |
-| `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Opções              | Padrão                                                                | Descrição                                                                                                                     |
+| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | O formato do módulo.                                                                                                          |
+| `symbol`            | `"☁️ "`                                                               | O símbolo usado antes de exibir o perfil atual da AWS.                                                                        |
+| `region_aliases`    |                                                                       | Tabela de aleases de regiões a serem exibidas, além do nome da AWS.                                                           |
+| `profile_aliases`   |                                                                       | Tabela de apelidos de perfil a serem exibidos além do nome da AWS.                                                            |
+| `style`             | `"bold yellow"`                                                       | O estilo do módulo.                                                                                                           |
+| `expiration_symbol` | `X`                                                                   | O simbolo exibido quando as credenciais temporárias estão expiradas.                                                          |
+| `disabled`          | `false`                                                               | Desabilita o módulo `AWS`.                                                                                                    |
+| `force_display`     | `false`                                                               | Se `true` exibe as informações mesmo que `credentials`, `credential_process` ou `sso_start_url` não tenham sido configurados. |
 
 ### Variáveis
 
@@ -318,7 +318,7 @@ symbol = "🅰 "
 ap-southeast-2 = "au"
 us-east-1 = "va"
 [aws.profile_aliases]
-CompanyGroupFrobozzOnCallAccess = 'Frobozz'
+ChamadaDeAcessoDoGrupoDaEmpresaFrobozz = 'Frobozz'
 ```
 
 #### Exibir região
@@ -345,7 +345,7 @@ format = "on [$symbol$profile]($style) "
 style = "bold blue"
 symbol = "🅰 "
 [aws.profile_aliases]
-Enterprise_Naming_Scheme-voidstars = 'void**'
+Esquema_De_Nomenclatura_Empresarial-voidstars = 'void**'
 ```
 
 ## Azure
