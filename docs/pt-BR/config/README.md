@@ -427,43 +427,43 @@ A opção `display` é um array da seguinte tabela.
 #### Exemplo
 
 ```toml
-[[battery.display]] # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # estilo negrito com vermelho e discharging_symbol quando a capacidade está entre 0% e 10%
 threshold = 10
 style = "bold red"
 
-[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # estilo negrito com amarelo e símbolo 💦 quando a capacidade está entre 10% e 30%
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "💦"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# quando a capacidade for superior a 30%, o indicador da bateria não será exibido
 ```
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
+O módulo `buf` mostra a versão instalada do [Buf](https://buf.build). Por padrão, o módulo é mostrado se todas as seguintes condições forem atendidas:
 
-- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
-- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+- A CLI [`buf`](https://github.com/bufbuild/buf) está instalada.
+- O atual diretório contém um [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml) ou arquivo de configuração [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml).
 
 ### Opções
 
-| Opções              | Padrão                                                       | Descrição                                             |
-| ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
-| `version_format`    | `"v${raw}"`                                                  | O formato da versão.                                  |
-| `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                                         | Quais extensões devem ativar este módulo.             |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Quais nomes de arquivos devem ativar este módulo.     |
-| `detect_folders`    | `[]`                                                         | Quais pastas devem ativar este módulo.                |
-| `style`             | `"bold blue"`                                                | O estilo do módulo.                                   |
-| `disabled`          | `false`                                                      | Desabilita o módulo `elixir`.                         |
+| Opções              | Padrão                                                       | Descrição                                         |
+| ------------------- | ------------------------------------------------------------ | ------------------------------------------------- |
+| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | O formato do módulo `buf`.                        |
+| `version_format`    | `"v${raw}"`                                                  | O formato da versão.                              |
+| `symbol`            | `"🦬 "`                                                       | O símbolo usado antes de exibir a versão do Buf.  |
+| `detect_extensions` | `[]`                                                         | Quais extensões devem ativar este módulo.         |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Quais nomes de arquivos devem ativar este módulo. |
+| `detect_folders`    | `[]`                                                         | Quais pastas devem ativar este módulo.            |
+| `style`             | `"bold blue"`                                                | O estilo do módulo.                               |
+| `disabled`          | `false`                                                      | Desabilita o módulo `elixir`.                     |
 
 ### Variáveis
 
 | Variável      | Exemplo  | Descrição                         |
 | ------------- | -------- | --------------------------------- |
-| `buf_version` | `v1.0.0` | The version of `buf`              |
+| `buf_version` | `v1.0.0` | A versão do `buf`                 |
 | `symbol`      |          | Espelha o valor da opção `symbol` |
 | `style`*      |          | Espelha o valor da opção `style`  |
 
@@ -480,7 +480,7 @@ symbol = "🦬 "
 
 ## C
 
-The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+O módulo `c` mostra algumas informações sobre o seu compilador de C. Por padrão o módulo será exibido se o diretório atual contém um arquivo `.c` ou `.h`.
 
 ### Opções
 
@@ -488,7 +488,7 @@ The `c` module shows some information about your C compiler. By default the modu
 | ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | A string de formato do módulo.                                                       |
 | `version_format`    | `"v${raw}"`                                                                 | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"C "`                                                                      | The symbol used before displaying the compiler details                               |
+| `symbol`            | `"C "`                                                                      | O símbolo utilizado antes de exibir os detalhes do compilador                        |
 | `detect_extensions` | `["c", "h"]`                                                                | Quais extensões devem ativar este módulo.                                            |
 | `detect_files`      | `[]`                                                                        | Quais nomes de arquivos devem ativar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                        | Quais pastas devem ativar este módulo.                                               |
