@@ -662,16 +662,16 @@ Usuários do bash que precisam de funções pre-executadas podem usar [rcaloras'
 
 ### Opções
 
-| Opções                 | Padrão                        | Descrição                                                                                                                                                         |
-| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Duração mais curta para exibir o tempo (em milissegundos).                                                                                                        |
-| `show_milliseconds`    | `false`                       | Exibir milissegundos ou invés de segundos para duração.                                                                                                           |
-| `format`               | `"took [$duration]($style) "` | O formato do módulo.                                                                                                                                              |
-| `style`                | `"bold yellow"`               | O estilo do módulo.                                                                                                                                               |
-| `disabled`             | `false`                       | Desabilita o módulo `cmd_duration`.                                                                                                                               |
-| `show_notifications`   | `false`                       | Exibi notificações no desktop quando o comando for concluído.                                                                                                     |
-| `min_time_to_notify`   | `45_000`                      | Tempo minimo para notificação (em milissegundos).                                                                                                                 |
-| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| Opções                 | Padrão                        | Descrição                                                                                                                                                                                           |
+| ---------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Duração mais curta para exibir o tempo (em milissegundos).                                                                                                                                          |
+| `show_milliseconds`    | `false`                       | Exibir milissegundos ou invés de segundos para duração.                                                                                                                                             |
+| `format`               | `"took [$duration]($style) "` | O formato do módulo.                                                                                                                                                                                |
+| `style`                | `"bold yellow"`               | O estilo do módulo.                                                                                                                                                                                 |
+| `disabled`             | `false`                       | Desabilita o módulo `cmd_duration`.                                                                                                                                                                 |
+| `show_notifications`   | `false`                       | Exibi notificações no desktop quando o comando for concluído.                                                                                                                                       |
+| `min_time_to_notify`   | `45_000`                      | Tempo minimo para notificação (em milissegundos).                                                                                                                                                   |
+| `notification_timeout` |                               | Duração para mostrar a notificação (em milissegundos). Se não estiver definido, o tempo limite de notificação será determinado pelo daemon. Nem todos os daemons de notificação aceitam essa opção. |
 
 ### Variáveis
 
@@ -734,22 +734,22 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Container
 
-The `container` module displays a symbol and container name, if inside a container.
+O módulo `container` exibe um símbolo e nome do contêiner, se dentro de um container.
 
 ### Opções
 
-| Opções     | Padrão                                 | Descrição                                 |
-| ---------- | -------------------------------------- | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                    | O estilo do módulo.                       |
-| `format`   | `"[$symbol \\[$name\\]]($style) "` | O formato do módulo.                      |
-| `disabled` | `false`                                | Desabilita o módulo `container`.          |
+| Opções     | Padrão                                 | Descrição                                         |
+| ---------- | -------------------------------------- | ------------------------------------------------- |
+| `symbol`   | `"⬢"`                                  | O símbolo mostrado, quando dentro de um contêiner |
+| `style`    | `"bold red dimmed"`                    | O estilo do módulo.                               |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | O formato do módulo.                              |
+| `disabled` | `false`                                | Desabilita o módulo `container`.                  |
 
 ### Variáveis
 
 | Variável  | Exemplo             | Descrição                         |
 | --------- | ------------------- | --------------------------------- |
-| name      | `fedora-toolbox:35` | The name of the container         |
+| name      | `fedora-toolbox:35` | O nome do contêiner               |
 | symbol    |                     | Espelha o valor da opção `symbol` |
 | style\* |                     | Espelha o valor da opção `style`  |
 
@@ -889,20 +889,20 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 
 ### Opções
 
-| Opções              | Padrão                                                                                                      | Descrição                                                                               |
-| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                                                                         | O número de pastas pais do diretório atual que serão truncadas.                         |
-| `truncate_to_repo`  | `true`                                                                                                      | Seu diretório será truncado ou não para a raiz do repositório git atual.                |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | O formato do módulo.                                                                    |
-| `style`             | `"bold cyan"`                                                                                               | O estilo do módulo.                                                                     |
-| `disabled`          | `false`                                                                                                     | Desabilita o módulo `directory`.                                                        |
-| `read_only`         | `"🔒"`                                                                                                       | O simbolo que indica que o diretório atual é somente leitura.                           |
-| `read_only_style`   | `"red"`                                                                                                     | O estilo para o simbolo de somente leitura.                                             |
-| `truncation_symbol` | `""`                                                                                                        | O simbolo para prefixo de caminhos truncados. ex: "…/"                                  |
-| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
-| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
-| `home_symbol`       | `"~"`                                                                                                       | O simbolo para indicar o diretório home.                                                |
-| `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
+| Opções              | Padrão                                                                                                      | Descrição                                                                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `3`                                                                                                         | O número de pastas pais do diretório atual que serão truncadas.                                                        |
+| `truncate_to_repo`  | `true`                                                                                                      | Seu diretório será truncado ou não para a raiz do repositório git atual.                                               |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | O formato do módulo.                                                                                                   |
+| `style`             | `"bold cyan"`                                                                                               | O estilo do módulo.                                                                                                    |
+| `disabled`          | `false`                                                                                                     | Desabilita o módulo `directory`.                                                                                       |
+| `read_only`         | `"🔒"`                                                                                                       | O simbolo que indica que o diretório atual é somente leitura.                                                          |
+| `read_only_style`   | `"red"`                                                                                                     | O estilo para o simbolo de somente leitura.                                                                            |
+| `truncation_symbol` | `""`                                                                                                        | O simbolo para prefixo de caminhos truncados. ex: "…/"                                                                 |
+| `repo_root_style`   | `None`                                                                                                      | O estilo para a raiz do repositório git. O valor padrão é equivalente a `style`.                                       |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | O formato de um repositório git quando `repo_root_style` é definido.                                                   |
+| `home_symbol`       | `"~"`                                                                                                       | O simbolo para indicar o diretório home.                                                                               |
+| `use_os_path_sep`   | `true`                                                                                                      | Use o separador de caminho específico do sistema opracional em vez de sempre usar `/` (por exemplo, `\` no Windows) |
 
 <details>
 <summary>Este módulo tem algumas configurações avançadas que controlam como o diretório é exibido.</summary>
@@ -935,7 +935,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>Os repositórios git têm variáveis adicionais.</summary>
 
 Let us consider the path `/path/to/home/git_repo/src/lib`
 
@@ -1014,7 +1014,7 @@ Você também precisa do .NET Core SDK instalado para usá-lo corretamente.
 
 Internamente, este módulo usa seu próprio mecanismo de detecção de versão. Normalmente é duas vezes mais rápido que executar `dotnet --version`, mas pode exibir uma versão errado se o projeto .NET tiver o layout de diretório incomum. Se a precisão é mais importante que velocidade, você pode desabilitar o mecanismo definindo `heuristic = false` nas opções do modulo.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
+O módulo também mostrará o Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) quando houver um arquivo `.csproj` no diretório atual.
 
 ### Opções
 
@@ -1099,7 +1099,7 @@ O módulo `elm` exibe a versão instalada do [Elm](https://elm-lang.org/). Por p
 - O diretório atual contem o arquivo `elm-package.json`
 - O diretório atual contem um arquivo `.elm-version`
 - O diretório atual contem uma pasta `elm-stuff`
-- The current directory contains `*.elm` files
+- O diretório atual contém arquivos `*.elm`
 
 ### Opções
 
