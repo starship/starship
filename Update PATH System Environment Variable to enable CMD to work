@@ -1,0 +1,1 @@
+Update PATH System Environment Variable to enable CMD to work. 1. Type: environ in the Search box and select "Edit" the system environment variables to open "System Properties with Advanced"
