@@ -120,7 +120,11 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Elvish
 
-   ::: warning Поддерживается только elvish v0.18 или выше. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    Добавьте следующую строку в конец `~/.elvish/rc.elv`:
 
@@ -144,7 +148,13 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Nushell
 
-   ::: warning Это будет изменено. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.60+ is supported.
+
+   :::
+
+   Run the following:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
