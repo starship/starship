@@ -1211,7 +1211,6 @@ The module will be shown only if any of the following conditions are met:
 - The `variable` configuration option is not defined, but the `default` configuration option is
 
 ::: tip
-
 Multiple environmental variables can be displayed by using a `.`. (see example)
 If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
