@@ -120,7 +120,11 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Elvish
 
-   ::: warning Seul elvish v0.18 ou supérieur est pris en charge. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
 
@@ -144,7 +148,13 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Nushell
 
-   ::: warning Cela va changer dans le futur. Seul Nushell v0.60+ est supporté. ::: Exécutez les commandes suivantes:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.60+ is supported.
+
+   :::
+
+   Exécutez les commandes suivantes:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -171,7 +181,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Cmd
 
-   Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Ajoutez le code ci-dessous dans un fichier `starship.lua` et placez-le dans le dossier des scripts Clink:
+   Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
