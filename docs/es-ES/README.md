@@ -150,7 +150,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.60+ is supported.
+   This will change in the future. Sólo se admite Nushell v0.60+.
 
    :::
 
@@ -181,7 +181,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Cmd
 
-   Necesitas usar [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) con Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Necesitas usar [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) con Cmd. Añade lo siguiente a un archivo `starship.lua` y coloca este archivo en el directorio de scripts de Clink:
 
    ```lua
    -- starship.lua
