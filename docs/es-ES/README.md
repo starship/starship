@@ -120,7 +120,11 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Elvish
 
-   ::: warning Solo se admite Elvish v0.18 o superior. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    Añade el siguiente código al final de `~/.elvish/rc.elv`:
 
@@ -144,7 +148,13 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Nushell
 
-   ::: advertencia Esto cambiará en el futuro. Sólo se admite Nushell v0.60+. ::: Ejecuta lo siguiente:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.60+ is supported.
+
+   :::
+
+   Ejecuta lo siguiente:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -171,7 +181,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Cmd
 
-   Necesitas usar [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) con Cmd. Añade lo siguiente a un archivo `starship.lua` y coloca este archivo en el directorio de scripts de Clink:
+   Necesitas usar [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) con Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
