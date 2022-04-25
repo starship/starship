@@ -120,7 +120,11 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Elvish
 
-   ::: warning Nur elvish v0.18 oder höher ist unterstützt. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
@@ -144,7 +148,13 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Nushell
 
-   ::: warning Dies wird sich in der Zukunft ändern. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.60+ is supported.
+
+   :::
+
+   Run the following:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
