@@ -1142,9 +1142,9 @@ Modul `env_var` menampilkan nilai terkini dari variabel environment yang dipilih
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+Multiple environmental variables can be displayed by using a `.`. (lihat contoh) Jika opsi konfigurasi `variable` tidak diset, modul akan menampilkan nilai variabel di bawah teks nama setelah karakter `.`.
 
-Example: following configuration will display value of USER environment variable
+Contoh: konfigurasi berikut akan menampilkan nilai dari variabel USER environment
 
 ```toml
 # ~/.config/starship.toml
@@ -1185,7 +1185,7 @@ variable = "SHELL"
 default = "unknown shell"
 ```
 
-Displaying multiple environmental variables:
+Menampilkan multi-variabel environment:
 
 ```toml
 # ~/.config/starship.toml
