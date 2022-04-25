@@ -21,6 +21,7 @@ pub struct GitStatusConfig<'a> {
     pub modified: &'a str,
     pub staged: &'a str,
     pub untracked: &'a str,
+    pub lfs: &'a str,
     pub ignore_submodules: bool,
     pub disabled: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -43,6 +44,7 @@ impl<'a> Default for GitStatusConfig<'a> {
             modified: "!",
             staged: "+",
             untracked: "?",
+            lfs: "lfs",
             ignore_submodules: false,
             disabled: false,
             windows_starship: None,
