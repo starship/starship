@@ -120,7 +120,11 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Elvish
 
-   ::: warning elvish v0.18以上のみサポートされています。 :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    `~/.elvish/rc.elv` の最後に以下を追記してください。
 
@@ -144,7 +148,13 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Nushell
 
-   ::: 警告 これは将来的に変更されます。 Only Nushell v0.60+ is supported. 以下を実行します:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.60+ is supported.
+
+   :::
+
+   Run the following:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -171,7 +181,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Cmd
 
-   [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) コマンドを使用する必要があります。 以下をファイル `starship.lua` に追加し、Clinkスクリプトディレクトリに配置します:
+   [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) コマンドを使用する必要があります。 Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
