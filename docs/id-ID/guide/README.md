@@ -280,7 +280,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Kamu perlu menggunakan [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) pada Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -333,7 +333,7 @@ mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+Lalu tambahkan baris berikut di baris terakhir konfigurasi Nushell (temukan dengan menjalankan `$nu.config-path`):
 
 ```sh
 starship init nu | save ~/.cache/starship/init.nu
