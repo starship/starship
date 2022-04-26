@@ -155,9 +155,9 @@
 - **Hızlı:** _gerçekten_ hızlı! 🚀
 - **Özelleştirilebilir:** promptunuzu en ince ayrıntısına kadar özelleştirin.
 - **Evrensel:** herhangi bir shell ve işletim sisteminde çalışır.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Akıllı:** bir bakışta ilgili bilgilere ulaş.
+- **Zengin içerik:** bütün sevdiğiniz araçları destekler.
+- **Kolay:** hızlı kurulum -  dakikalar içinde kullanmaya başla.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
