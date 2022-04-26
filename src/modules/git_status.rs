@@ -372,7 +372,12 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 
     // Ensure this is WSL
     // This is lowercase in WSL1 and uppercase in WSL2, just skip the first letter
-    if !uname().release().contains("icrosoft") {
+    if !uname()
+        .ok()?
+        .release()
+        .to_string_lossy()
+        .contains("icrosoft")
+    {
         return None;
     }
 
