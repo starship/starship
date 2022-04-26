@@ -137,7 +137,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   `~/.tcshrc` dosyasının sonuna ekleyın:
 
    ```sh
    # ~/.tcshrc
@@ -170,7 +170,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   `~/.xonshrc` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.xonshrc
