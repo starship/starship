@@ -37,9 +37,9 @@
 <p align="center">
   <a href="https://starship.rs">Website</a>
   ·
-  <a href="#🚀-installation">Installation</a>
+  <a href="#🚀-installation">Kurulum</a>
   ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs/config/">Yapılandırma</a>
 </p>
 
 <p align="center">
@@ -160,20 +160,20 @@
 - **Kolay:** hızlı kurulum -  dakikalar içinde kullanmaya başla.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starship dokümantasyonunu incele &nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 Kurulum
 
 ### Ön koşullar
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- [Nerd Font](https://www.nerdfonts.com/) kurulu ve terminalinizde kullanılıyor olmalı (başlarken [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)'u deneyebilirsiniz).
 
-### Step 1. Install Starship
+### 1. Adım Starship'i Kur
 
-Select your operating system from the list below to view installation instructions:
+Kurulum talimatlarını görmek için aşağıdaki listeden işletim sisteminizi seçiniz:
 
 <details>
 <summary>Android</summary>
@@ -262,9 +262,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### 2. Adım Shell'inizi Starship kullanmaya hazır hale getirin
 
-Configure your shell to initialize starship. Select yours from the list below:
+Shell'ı starshiple çalışması için ayarla. Aşağıdaki listeden shell'inizi seçin:
 
 <details>
 <summary>Bash</summary>
