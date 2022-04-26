@@ -152,7 +152,7 @@
 
 **The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
+- **Hızlı:** _gerçekten_ hızlı! 🚀
 - **Customizable:** configure every aspect of your prompt.
 - **Universal:** works on any shell, on any operating system.
 - **Intelligent:** shows relevant information at a glance.
