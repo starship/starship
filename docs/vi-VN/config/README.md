@@ -1344,17 +1344,17 @@ Mô đun `git_branch` hiển thị nhánh hiệu lực của repo trong thư m�
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                         | Mô tả                                                                                                 |
-| -------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Hiển thị tên nhánh remote tracking, thậm chí nếu nó bằng với tên nhánh local.                         |
-| `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.                       |
-| `symbol`             | `" "`                           | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                                |
-| `style`              | `"bold purple"`                  | Kiểu cho module.                                                                                      |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                              |
-| `truncation_symbol`  | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. Bạn có thể sử dụng `""` để ẩn biểu tượng. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                                        |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                                   |
-| `disabled`           | `false`                          | Vô hiệu mô đun `git_branch`.                                                                          |
+| Tuỳ chọn             | Mặc định                                          | Mô tả                                                                                                 |
+| -------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Hiển thị tên nhánh remote tracking, thậm chí nếu nó bằng với tên nhánh local.                         |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.                       |
+| `symbol`             | `" "`                                            | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                                |
+| `style`              | `"bold purple"`                                   | Kiểu cho module.                                                                                      |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                              |
+| `truncation_symbol`  | `"…"`                                             | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. Bạn có thể sử dụng `""` để ẩn biểu tượng. |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                                        |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                                   |
+| `disabled`           | `false`                                           | Vô hiệu mô đun `git_branch`.                                                                          |
 
 ### Các biến
 
