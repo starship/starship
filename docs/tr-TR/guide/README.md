@@ -297,7 +297,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Not: Sadece Elvish 0.18 ve sonraki sürümler desteklenmektedir
+Not: Elvish v0.18'den sonraki sürümler desteklenmektedir
 
 </details>
 
@@ -340,14 +340,14 @@ starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.60+ is supported
+Not: Nushell v0.60'tan sonraki sürümler desteklenmektedir
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Aşağıdaki kodu PowerShell ayarlarınızın (`$PROFILE` komutu ile ulaşabilirsiniz) sonuna ekleyin:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -358,7 +358,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-Add the following to the end of `~/.tcshrc`:
+`~/.tcshrc` dosyasının sonuna ekleyın:
 
 ```sh
 eval `starship init tcsh`
@@ -369,7 +369,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-Add the following to the end of `~/.xonshrc`:
+`~/.xonshrc` dosyasının sonuna ekleyin:
 
 ```python
 execx($(starship init xonsh))
@@ -380,7 +380,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-Add the following to the end of `~/.zshrc`:
+`~/.zshrc` dosyasının sonuna ekleyin:
 
 ```sh
 eval "$(starship init zsh)"
@@ -388,11 +388,11 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### 3. Adım Starship'i Yapılandır
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-If you're looking to further customize Starship:
+Daha fazla özelleştirme seçeneği için:
 
 - **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
 
@@ -408,7 +408,7 @@ If you are interested in helping contribute to starship, please take a look at o
 
 ## 💭 Inspired By
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Lütfen starship'in oluşmasında ilham kaynağı olan çalışmalara da göz atın. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
