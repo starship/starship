@@ -1342,17 +1342,17 @@ O módulo `git_branch` exibe o branch ativo do repositório no diretório atual.
 
 ### Opções
 
-| Opções               | Padrão                           | Descrição                                                                                         |
-| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Exibe o nome do braço remoto, mesmo se ele for igual ao nome do braço local.                      |
-| `format`             | `"on [$symbol$branch]($style) "` | O formato do módulo. Use `"$branch"` para se referir ao nome do braço atual.                      |
-| `symbol`             | `" "`                           | Um formato de string que representa o simbolo do git branch.                                      |
-| `style`              | `"bold purple"`                  | O estilo do módulo.                                                                               |
-| `truncation_length`  | `2^63 - 1`                       | Truncates um braço do git para `N` caracteres.                                                    |
-| `truncation_symbol`  | `"…"`                            | O simbolo usado para indicar que o nome braço foi truncado. Você pode usar `""` para sem simbolo. |
-| `only_attached`      | `false`                          | Apenas exibe o nome do braço quando o estado não for detached `HEAD`.                             |
-| `ignore_branches`    | `[]`                             | Uma lista de nomes para evitar a exibição. Útil para "master" ou "main".                          |
-| `disabled`           | `false`                          | Desabilita o módulo `git_branch`.                                                                 |
+| Opções               | Padrão                                            | Descrição                                                                                         |
+| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Exibe o nome do braço remoto, mesmo se ele for igual ao nome do braço local.                      |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | O formato do módulo. Use `"$branch"` para se referir ao nome do braço atual.                      |
+| `symbol`             | `" "`                                            | Um formato de string que representa o simbolo do git branch.                                      |
+| `style`              | `"bold purple"`                                   | O estilo do módulo.                                                                               |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates um braço do git para `N` caracteres.                                                    |
+| `truncation_symbol`  | `"…"`                                             | O simbolo usado para indicar que o nome braço foi truncado. Você pode usar `""` para sem simbolo. |
+| `only_attached`      | `false`                                           | Apenas exibe o nome do braço quando o estado não for detached `HEAD`.                             |
+| `ignore_branches`    | `[]`                                              | Uma lista de nomes para evitar a exibição. Útil para "master" ou "main".                          |
+| `disabled`           | `false`                                           | Desabilita o módulo `git_branch`.                                                                 |
 
 ### Variáveis
 
