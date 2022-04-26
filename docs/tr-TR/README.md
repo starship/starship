@@ -126,7 +126,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   `~/.elvish/rc.elv` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -154,13 +154,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    :::
 
-   Run the following:
+   Aşağıdaki komutu çalıştırın:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşabilirsiniz) sonuna ekleyin:
 
    ```sh
    mkdir ~/.cache/starship
@@ -181,7 +181,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Cmd ıle beraber [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) kullanmalısınız. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
