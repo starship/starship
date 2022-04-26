@@ -67,6 +67,9 @@ format = 'via [$symbol]($style)'
 [python]
 format = 'via [$symbol]($style)'
 
+[solidity]
+format = 'via [$symbol]($style)'
+
 [red]
 format = 'via [$symbol]($style)'
 

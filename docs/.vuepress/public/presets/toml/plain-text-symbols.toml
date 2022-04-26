@@ -112,6 +112,9 @@ symbol = "rs "
 [scala]
 symbol = "scala "
 
+[solidity]
+symbol = "sol "
+
 [spack]
 symbol = "spack "
 
