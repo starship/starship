@@ -1344,17 +1344,17 @@ very-long-project-name = "vlpn"
 
 ### 選項
 
-| Option               | 預設                               | 說明                                                                                   |
-| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name. |
-| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.      |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                               |
-| `style`              | `"bold purple"`                  | 這個模組的風格。                                                                             |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                             |
-| `truncation_symbol`  | `"…"`                            | 用來指示分支名稱被縮減的符號。 You can use `""` for no symbol.                                      |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                       |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                  |
-| `disabled`           | `false`                          | 停用 `git_branch` 模組。                                                                  |
+| Option               | 預設                                                | 說明                                                                                   |
+| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name. |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.      |
+| `symbol`             | `" "`                                            | A format string representing the symbol of git branch.                               |
+| `style`              | `"bold purple"`                                   | 這個模組的風格。                                                                             |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                             |
+| `truncation_symbol`  | `"…"`                                             | 用來指示分支名稱被縮減的符號。 You can use `""` for no symbol.                                      |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                       |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                  |
+| `disabled`           | `false`                                           | 停用 `git_branch` 模組。                                                                  |
 
 ### Variables
 
