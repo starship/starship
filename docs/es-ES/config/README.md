@@ -1344,17 +1344,17 @@ El módulo `git_branch` muestra la rama activa del repositorio en tu directorio 
 
 ### Opciones
 
-| Opción               | Por defecto                      | Descripción                                                                                             |
-| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Muestra el nombre de la rama de seguimiento remoto, incluso si es igual al nombre de la rama local.     |
-| `format`             | `"on [$symbol$branch]($style) "` | El formato del módulo. Use `"$branch"` para referirse al nombre de la rama actual.                      |
-| `symbol`             | `" "`                           | Una cadena de formato que representa el símbolo de la rama git.                                         |
-| `style`              | `"bold purple"`                  | El estilo del módulo.                                                                                   |
-| `truncation_length`  | `2^63 - 1`                       | Trunca una rama git a grafemas `N`.                                                                     |
-| `truncation_symbol`  | `"…"`                            | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
-| `only_attached`      | `false`                          | Mostrar solo el nombre de la rama cuando no esté en un estado `HEAD`.                                   |
-| `ignore_branches`    | `[]`                             | Una lista de nombres para evitar mostrar. Útil para "master" o "main".                                  |
-| `disabled`           | `false`                          | Desactiva el módulo `git_branch`.                                                                       |
+| Opción               | Por defecto                                       | Descripción                                                                                             |
+| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Muestra el nombre de la rama de seguimiento remoto, incluso si es igual al nombre de la rama local.     |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | El formato del módulo. Use `"$branch"` para referirse al nombre de la rama actual.                      |
+| `symbol`             | `" "`                                            | Una cadena de formato que representa el símbolo de la rama git.                                         |
+| `style`              | `"bold purple"`                                   | El estilo del módulo.                                                                                   |
+| `truncation_length`  | `2^63 - 1`                                        | Trunca una rama git a grafemas `N`.                                                                     |
+| `truncation_symbol`  | `"…"`                                             | El símbolo usado para indicar que un nombre de rama fue truncado. Puedes usar `""` para ningún símbolo. |
+| `only_attached`      | `false`                                           | Mostrar solo el nombre de la rama cuando no esté en un estado `HEAD`.                                   |
+| `ignore_branches`    | `[]`                                              | Una lista de nombres para evitar mostrar. Útil para "master" o "main".                                  |
+| `disabled`           | `false`                                           | Desactiva el módulo `git_branch`.                                                                       |
 
 ### Variables
 
