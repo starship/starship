@@ -1344,17 +1344,17 @@ Le module `git_branch` affiche la branche active du dépôt dans votre répertoi
 
 ### Options
 
-| Option               | Défaut                           | Description                                                                                                                     |
-| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Affiche le nom de la branche suivie distante, même si elle est égale au nom de la branche locale.                               |
-| `format`             | `"on [$symbol$branch]($style) "` | Format du module. Utilisez `"$branch"` pour vous référer au nom de la branche courante.                                         |
-| `symbol`             | `" "`                           | Une chaîne de format représentant le symbole de la branche git.                                                                 |
-| `style`              | `"bold purple"`                  | Le style du module.                                                                                                             |
-| `truncation_length`  | `2^63 - 1`                       | Tronque une branche git à `N` graphèmes.                                                                                        |
-| `truncation_symbol`  | `"…"`                            | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué. Vous pouvez utiliser `""` pour ne pas afficher de symbole. |
-| `only_attached`      | `false`                          | Ne montrer le nom de la branche que si elle n'est pas dans un état `HEAD` détachée.                                             |
-| `ignore_branches`    | `[]`                             | Une liste de noms à ne pas afficher. Utile pour "master" ou "main".                                                             |
-| `disabled`           | `false`                          | Désactive le module `git_branch`.                                                                                               |
+| Option               | Défaut                                            | Description                                                                                                                     |
+| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Affiche le nom de la branche suivie distante, même si elle est égale au nom de la branche locale.                               |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | Format du module. Utilisez `"$branch"` pour vous référer au nom de la branche courante.                                         |
+| `symbol`             | `" "`                                            | Une chaîne de format représentant le symbole de la branche git.                                                                 |
+| `style`              | `"bold purple"`                                   | Le style du module.                                                                                                             |
+| `truncation_length`  | `2^63 - 1`                                        | Tronque une branche git à `N` graphèmes.                                                                                        |
+| `truncation_symbol`  | `"…"`                                             | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué. Vous pouvez utiliser `""` pour ne pas afficher de symbole. |
+| `only_attached`      | `false`                                           | Ne montrer le nom de la branche que si elle n'est pas dans un état `HEAD` détachée.                                             |
+| `ignore_branches`    | `[]`                                              | Une liste de noms à ne pas afficher. Utile pour "master" ou "main".                                                             |
+| `disabled`           | `false`                                           | Désactive le module `git_branch`.                                                                                               |
 
 ### Variables
 
