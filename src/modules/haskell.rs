@@ -2,7 +2,6 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::haskell::HaskellConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Haskell version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -64,7 +63,7 @@ fn get_snapshot(context: &Context) -> Option<String> {
     if !is_stack_project(context) {
         return None;
     }
-    let file_contents = utils::read_file(context.current_dir.join("stack.yaml")).ok()?;
+    let file_contents = context.read_file_from_pwd("stack.yaml")?;
     let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
     let version = yaml.first()?["resolver"]
         .as_str()

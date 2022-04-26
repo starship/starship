@@ -50,7 +50,7 @@ pub struct AwsConfig<'a> {
 impl<'a> Default for AwsConfig<'a> {
     fn default() -> Self {
         AwsConfig {
-            format: "on [$symbol($profile )(\\($region\\) )(\\[$duration\\])]($style)",
+            format: "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",
             symbol: "☁️  ",
             style: "bold yellow",
             disabled: false,
