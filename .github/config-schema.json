@@ -461,7 +461,7 @@
       "default": {
         "always_show_remote": false,
         "disabled": false,
-        "format": "on [$symbol$branch]($style)(:[$remote]($style)) ",
+        "format": "on [$symbol$branch(:$remote_branch)]($style) ",
         "ignore_branches": [],
         "only_attached": false,
         "style": "bold purple",
@@ -2543,7 +2543,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "on [$symbol$branch]($style)(:[$remote]($style)) ",
+          "default": "on [$symbol$branch(:$remote_branch)]($style) ",
           "type": "string"
         },
         "symbol": {
