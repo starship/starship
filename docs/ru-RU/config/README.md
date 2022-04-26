@@ -1344,17 +1344,17 @@ very-long-project-name = "vlpn"
 
 ### Опции
 
-| Параметр             | По умолчанию                     | Описание                                                                                      |
-| -------------------- | -------------------------------- | --------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.          |
-| `format`             | `"on [$symbol$branch]($style) "` | Формат модуля. Use `"$branch"` to refer to the current branch name.                           |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                        |
-| `style`              | `"bold purple"`                  | Стиль модуля.                                                                                 |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                      |
-| `truncation_symbol`  | `"…"`                            | Символ, используемый для обозначения усечения названия ветки. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                                |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                           |
-| `disabled`           | `false`                          | Отключает модуль `git_branch`.                                                                |
+| Параметр             | По умолчанию                                      | Описание                                                                                      |
+| -------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name.          |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | Формат модуля. Use `"$branch"` to refer to the current branch name.                           |
+| `symbol`             | `" "`                                            | A format string representing the symbol of git branch.                                        |
+| `style`              | `"bold purple"`                                   | Стиль модуля.                                                                                 |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                      |
+| `truncation_symbol`  | `"…"`                                             | Символ, используемый для обозначения усечения названия ветки. You can use `""` for no symbol. |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                                |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                           |
+| `disabled`           | `false`                                           | Отключает модуль `git_branch`.                                                                |
 
 ### Переменные
 
