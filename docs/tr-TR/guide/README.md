@@ -150,11 +150,11 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Sade, hızlı, dilediğiniz gibi özelleştirilebilen ve istenilen shell'de kullanılabilen prompt!**
 
 - **Hızlı:** _gerçekten_ hızlı! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
+- **Özelleştirilebilir:** promptunuzu en ince ayrıntısına kadar özelleştirin.
+- **Evrensel:** herhangi bir shell ve işletim sisteminde çalışır.
 - **Intelligent:** shows relevant information at a glance.
 - **Feature rich:** support for all your favorite tools.
 - **Easy:** quick to install – start using it in minutes.
