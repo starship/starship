@@ -390,19 +390,19 @@ eval "$(starship init zsh)"
 
 ### 3. Adım Starship'i Yapılandır
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+Shellinizi yeniden başlatın, işte yeni shell promptunuzun güzelliği ile karşı karşıyasınız. Eğer varsayılan görünümden memnunsanız, keyfini çıkartın!
 
 Daha fazla özelleştirme seçeneği için:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Configuration](https://starship.rs/config/)** – Starship'i yapılandırmayı ve dilediğiniz gibi düzenlenemeyi öğrenin
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Presets](https://starship.rs/presets/)** – başkalaranın oluşturduğu düzenlemelerden ilham alın
 
-## 🤝 Contributing
+## 🤝 Katkıda Bulunmak
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! Eğer katkıda bulunmaya kolay bir şekilde başlamak istiyorsanız [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)'lardan bir tanesini deneyin.
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+Eğer ingilizce harici bir dili akıcı seviyede kullanabiliyorsanız, dosyaların diğer diller ile güncel bir şekilde çevirilebilmesi için yardımlarınızı bekliyoruz. Çeviriye [Starship Crowdin](https://translate.starship.rs/)'den destekte bulunabilirsiniz.
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
