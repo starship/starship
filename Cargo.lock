@@ -1958,7 +1958,7 @@ dependencies = [
  "urlencoding",
  "versions",
  "which",
- "windows 0.35.0",
+ "windows 0.36.0",
  "winres",
  "yaml-rust",
 ]
@@ -2421,15 +2421,15 @@ dependencies = [
 
 [[package]]
 name = "windows"
-version = "0.35.0"
+version = "0.36.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "08746b4b7ac95f708b3cccceb97b7f9a21a8916dd47fc99b0e6aaf7208f26fd7"
+checksum = "36e5436ab30c3d1422272fc6f7b5e7d46e93c94bfca83be808404df9ea5bea76"
 dependencies = [
- "windows_aarch64_msvc",
- "windows_i686_gnu 0.35.0",
- "windows_i686_msvc 0.35.0",
- "windows_x86_64_gnu 0.35.0",
- "windows_x86_64_msvc 0.35.0",
+ "windows_aarch64_msvc 0.36.0",
+ "windows_i686_gnu 0.36.0",
+ "windows_i686_msvc 0.36.0",
+ "windows_x86_64_gnu 0.36.0",
+ "windows_x86_64_msvc 0.36.0",
 ]
 
 [[package]]
@@ -2438,7 +2438,7 @@ version = "0.35.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c700bb45cfcbdb738ce92c41fc13e512514d4eaf6a99e8c87e2260a227175c16"
 dependencies = [
- "windows_aarch64_msvc",
+ "windows_aarch64_msvc 0.35.0",
  "windows_i686_gnu 0.35.0",
  "windows_i686_msvc 0.35.0",
  "windows_x86_64_gnu 0.35.0",
@@ -2450,6 +2450,12 @@ name = "windows_aarch64_msvc"
 version = "0.35.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db3bc5134e8ce0da5d64dcec3529793f1d33aee5a51fc2b4662e0f881dd463e6"
+
+[[package]]
+name = "windows_aarch64_msvc"
+version = "0.36.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4bee8cd327bbef19bf86d30bd66379f57905166d3103b0e2eff4a491b85e421d"
 
 [[package]]
 name = "windows_i686_gnu"
@@ -2464,6 +2470,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0343a6f35bf43a07b009b8591b78b10ea03de86b06f48e28c96206cd0f453b50"
 
 [[package]]
+name = "windows_i686_gnu"
+version = "0.36.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3b759cc6e3d97970c98cffe461739e89ab6d424ba5e2e7d3b9b05a2d56116057"
+
+[[package]]
 name = "windows_i686_msvc"
 version = "0.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2474,6 +2486,12 @@ name = "windows_i686_msvc"
 version = "0.35.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1acdcbf4ca63d8e7a501be86fee744347186275ec2754d129ddeab7a1e3a02e4"
+
+[[package]]
+name = "windows_i686_msvc"
+version = "0.36.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7a0cee91bff283876711f91e7db0aa234438bc663a9d8304596df00b0a6fd6ef"
 
 [[package]]
 name = "windows_x86_64_gnu"
@@ -2488,6 +2506,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "893c0924c5a990ec73cd2264d1c0cba1773a929e1a3f5dbccffd769f8c4edebb"
 
 [[package]]
+name = "windows_x86_64_gnu"
+version = "0.36.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "51e8c6f778aa4383b033ff785191aea0f1ebeceedc160c2c92f944ef7e191476"
+
+[[package]]
 name = "windows_x86_64_msvc"
 version = "0.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2498,6 +2522,12 @@ name = "windows_x86_64_msvc"
 version = "0.35.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a29bd61f32889c822c99a8fdf2e93378bd2fae4d7efd2693fab09fcaaf7eff4b"
+
+[[package]]
+name = "windows_x86_64_msvc"
+version = "0.36.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1dd6a8b0b1ea4331e4db47192729fce42ac8a110fd22bb3abac555d8d7700f29"
 
 [[package]]
 name = "winres"
