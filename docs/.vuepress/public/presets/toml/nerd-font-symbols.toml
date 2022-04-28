@@ -55,6 +55,9 @@ symbol = " "
 [nodejs]
 symbol = " "
 
+[npm]
+symbol = " "
+
 [package]
 symbol = " "
 

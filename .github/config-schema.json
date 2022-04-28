@@ -884,6 +884,25 @@
         }
       ]
     },
+    "npm": {
+      "default": {
+        "detect_files": [
+          "package-lock.json",
+          ".npmrc"
+        ],
+        "disabled": true,
+        "format": "via [$symbol($version )]($style)",
+        "not_capable_style": "bold red",
+        "style": "bold 88",
+        "symbol": " ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NpmConfig"
+        }
+      ]
+    },
     "ocaml": {
       "default": {
         "detect_extensions": [
@@ -3451,6 +3470,45 @@
         "detect_folders": {
           "default": [
             "node_modules"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "NpmConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold 88",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "not_capable_style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "detect_files": {
+          "default": [
+            "package-lock.json",
+            ".npmrc"
           ],
           "type": "array",
           "items": {

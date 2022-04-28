@@ -262,6 +262,10 @@ active boot switches: -d:release\n",
             stdout: String::from("v12.0.0\n"),
             stderr: String::default(),
         }),
+        "npm --version" => Some(CommandOutput {
+            stdout: String::from("8.1.0\n"),
+            stderr: String::default(),
+        }),
         "ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.10.0\n"),
             stderr: String::default(),

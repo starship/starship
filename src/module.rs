@@ -54,6 +54,7 @@ pub const ALL_MODULES: &[&str] = &[
     "nim",
     "nix_shell",
     "nodejs",
+    "npm",
     "ocaml",
     "openstack",
     "package",

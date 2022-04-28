@@ -44,6 +44,7 @@ mod memory_usage;
 mod nim;
 mod nix_shell;
 mod nodejs;
+mod npm;
 mod ocaml;
 mod openstack;
 mod package;
@@ -135,6 +136,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
             "nodejs" => nodejs::module(context),
+            "npm" => npm::module(context),
             "ocaml" => ocaml::module(context),
             "openstack" => openstack::module(context),
             "package" => package::module(context),
@@ -237,6 +239,7 @@ pub fn description(module: &str) -> &'static str {
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
+        "npm" => "The currently installed version of npm",
         "ocaml" => "The currently installed version of OCaml",
         "openstack" => "The current OpenStack cloud and project",
         "package" => "The package version of the current directory's project",

@@ -88,6 +88,9 @@ format = '\[[$symbol$state( \($name\))]($style)\]'
 [nodejs]
 format = '\[[$symbol($version)]($style)\]'
 
+[npm]
+format = '\[[$symbol($version)]($style)\]'
+
 [ocaml]
 format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
 

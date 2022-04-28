@@ -47,6 +47,7 @@ pub mod memory_usage;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
+pub mod npm;
 pub mod ocaml;
 pub mod openstack;
 pub mod package;
@@ -178,6 +179,8 @@ pub struct FullConfig<'a> {
     nix_shell: nix_shell::NixShellConfig<'a>,
     #[serde(borrow)]
     nodejs: nodejs::NodejsConfig<'a>,
+    #[serde(borrow)]
+    npm: npm::NpmConfig<'a>,
     #[serde(borrow)]
     ocaml: ocaml::OCamlConfig<'a>,
     #[serde(borrow)]

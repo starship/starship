@@ -49,6 +49,9 @@ format = 'via [$symbol]($style)'
 [nodejs]
 format = 'via [$symbol]($style)'
 
+[npm]
+format = 'via [$symbol]($style)'
+
 [ocaml]
 format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
 

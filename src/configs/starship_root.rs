@@ -54,6 +54,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "lua",
     "nim",
     "nodejs",
+    "npm",
     "ocaml",
     "perl",
     "php",
