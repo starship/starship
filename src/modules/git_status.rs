@@ -578,6 +578,41 @@ mod tests {
     }
 
     #[test]
+    fn shows_lfs() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        // First test when the repo uses LFS but there are no changes
+        lfs(repo_dir.path())?;
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("lfs");
+        assert_eq!(expected, actual);
+
+        // ... with a custom format instead of the default
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                lfs="L"
+            })
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("L");
+        assert_eq!(expected, actual);
+
+        // and now when there are changes
+        File::create(repo_dir.path().join("readme.md"))?.sync_all()?;
+        ahead(repo_dir.path())?;
+        let actual = ModuleRenderer::new("git_status")
+            .path(&repo_dir.path())
+            .collect();
+        let expected = format_output("lfs⇡");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_diverged() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -1033,6 +1068,15 @@ mod tests {
         create_command("git")?
             .args(["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
+    fn lfs(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(&["config", "--add", "lfs.repositoryformatversion", "94"])
+            .current_dir(&repo_dir)
             .output()?;
 
         Ok(())
