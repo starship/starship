@@ -577,6 +577,7 @@
         "diverged": "⇕",
         "format": "([\\[$all_status$ahead_behind\\]]($style) )",
         "ignore_submodules": false,
+        "lfs": "lfs",
         "modified": "!",
         "renamed": "»",
         "staged": "+",
@@ -3076,6 +3077,10 @@
         },
         "untracked": {
           "default": "?",
+          "type": "string"
+        },
+        "lfs": {
+          "default": "lfs",
           "type": "string"
         },
         "ignore_submodules": {
