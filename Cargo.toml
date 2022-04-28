@@ -12,7 +12,6 @@ include = [
   "src/**/*",
   "/starship.exe.manifest",
   "build.rs",
-  "Cross.toml",
   "LICENSE",
   "/README.md",
   "docs/.vuepress/public/presets/toml/",
@@ -74,7 +73,7 @@ strsim = "0.10.0"
 sys-info = "0.9.1"
 terminal_size = "0.1.17"
 toml = { version = "0.5.9", features = ["preserve_order"] }
-toml_edit = "0.14.2"
+toml_edit = "0.14.3"
 unicode-segmentation = "1.9.0"
 unicode-width = "0.1.9"
 urlencoding = "2.1.0"
@@ -95,7 +94,7 @@ features = ["preserve_order", "indexmap"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.35.0"
+version = "0.36.1"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
