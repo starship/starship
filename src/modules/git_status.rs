@@ -57,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "lfs" => context
                     .exec_cmd("git", &["config", "--get", "lfs.repositoryformatversion"])
-                    .and_then(|_| Some(Ok(config.lfs))),
+                    .map(|_| Ok(config.lfs)),
                 _ => None,
             })
             .map_variables_to_segments(|variable: &str| {
