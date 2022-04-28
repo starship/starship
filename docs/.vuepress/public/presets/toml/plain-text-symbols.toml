@@ -12,6 +12,7 @@ behind = "<"
 diverged = "<>"
 renamed = "r"
 deleted = "x"
+lfs = "L"
 
 [aws]
 symbol = "aws "

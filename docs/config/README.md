@@ -1775,6 +1775,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `lfs`          | Displays `lfs` when a repository uses git lfs. See https://git-lfs.github.com/ for more info.                 |
 | style\*        | Mirrors the value of option `style`                                                                           |
 
 *: This variable can only be used as a part of a style string
