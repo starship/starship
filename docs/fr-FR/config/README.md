@@ -9,17 +9,17 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Toute la configuration de starship est effectuée dans ce fichier [TOML](https://github.com/toml-lang/toml) :
 
 ```toml
-# Get editor completions based on the config schema
+# Pour avoir des complétions dans votre éditeur basées sur le schéma de la config
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# Insère un ligne vide entre les invites de shells
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character] # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# Remplace le symbole «❯» dans l’invite par «➜»
+[character] # Le nom du module que nous configurons est «character»
+success_symbol = "[➜](bold green)" # Le segment «success_symbol» est mis défini à «➜» avec la couleur «bold green»
 
-# Disable the package module, hiding it from the prompt completely
+# Désactive le module «package», le cachant complètement de l’invite
 [package]
 disabled = true
 ```
@@ -268,7 +268,7 @@ format = "$all$directory$character"
 
 ## AWS
 
-Le module `aws` affiche la région et le profil AWS actuelle quand des identifiants, un `credential_process` ou une `sso_start_url` ont été configurées. Alternatively, you can force this module to show the region and profile even when the credentials have not been setup with the `force_display` option. Il se base sur les variables d’environnement `AWS_REGION`, `AWS_DEFAULT_REGION` et `AWS_PROFILE` avec un fichier `~/.aws/config`. Ce module montre aussi un minuteur d’expiration lors de l’utilisation d’identifiants temporaires.
+Le module `aws` affiche la région et le profil AWS actuelle quand des identifiants, un `credential_process` ou une `sso_start_url` ont été configurées. Vous pouvez aussi forcer ce module à afficher la région et le profil, même quand les identifiants n’ont pas été configurés, avec l’option `force_display`. Il se base sur les variables d’environnement `AWS_REGION`, `AWS_DEFAULT_REGION` et `AWS_PROFILE` avec un fichier `~/.aws/config`. Ce module montre aussi un minuteur d’expiration lors de l’utilisation d’identifiants temporaires.
 
 Le module n’affichera un profil que si ses identifiants sont présents dans `~/.aws/credentials` ou si un `credential_process` est définie dans `~/.aws/config`. Sinon, avoir l’une des variables d’environnement `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` ou `AWS_SESSION_TOKEN` définie est suffisant. Si l’option `force_display` est définie à `true`, toutes les informations disponibles seront affichées même si les conditions ne sont pas respectées.
 
@@ -3541,7 +3541,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 | Option              | Défaut                          | Description                                                                                                                                                                                                                                                                                   |
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
+| `command`           | `""`                            | La commande dont la sortie doit être affichée. La commande sera transmise au shell sur l’entrée standard.                                                                                                                                                                                     |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
