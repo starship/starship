@@ -2366,7 +2366,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
 | cloud     | `corp`  | Le cloud OpenStack courant             |
-| project   | `dev`   | The current OpenStack project          |
+| project   | `dev`   | Le projet OpenStack courant            |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
