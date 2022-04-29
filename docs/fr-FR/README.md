@@ -122,7 +122,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Seul elvish v0.18 ou supérieur est pris en charge.
 
    :::
 
@@ -150,7 +150,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    ::: warning
 
-   This will change in the future. Seul Nushell v0.60+ est supporté.
+   Ceci va changer dans le futur. Seul Nushell v0.60+ est supporté.
 
    :::
 
