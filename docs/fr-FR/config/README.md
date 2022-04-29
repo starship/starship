@@ -2528,8 +2528,8 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- Le dossier courant contient soit un `Pulumi.yaml`, soit un `Pulumi.yml`
+- Un dossier parent contient soit un `Pulumi.yaml`, soit un `Pulumi.yml`
 
 ### Options
 
