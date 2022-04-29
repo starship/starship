@@ -2401,7 +2401,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
-- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
+- [**SBT**](https://scala-sbt.org) - La version du paquet `sbt` est extraite du `build.sbt` présent dans le dossier courant
 - [**Dart**](https://pub.dev/) – La version du paquet `dart` est extrait du `pubspec.yaml` présent dans le répertoire courant
 
 > ⚠️ La version montrée est celle du paquet dont le code source est dans votre dossier courant, pas votre gestionnaire de paquet.
@@ -2414,7 +2414,7 @@ The `package` module is shown when the current directory is the repository for a
 | `symbol`          | `"📦 "`                            | Le symbole utilisé avant d'afficher la version du paquet.                                  |
 | `version_format`  | `"v${raw}"`                       | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `style`           | `"bold 208"`                      | Le style du module.                                                                        |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.                                  |
+| `display_private` | `false`                           | Active l’affichage des versions des paquets marqués comme privés.                          |
 | `disabled`        | `false`                           | Désactive le module `package`.                                                             |
 
 ### Variables
