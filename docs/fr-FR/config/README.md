@@ -280,16 +280,16 @@ Lorsque vous utilisez [AWSume](https://awsu.me) le profil est lu à partir de la
 
 ### Options
 
-| Option              | Défaut                                                                | Description                                                                                                 |
-| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Format du module.                                                                                           |
-| `symbol`            | `"☁️ "`                                                               | Le symbole est affiché avant le profil AWS actuel.                                                          |
-| `region_aliases`    |                                                                       | Table des alias de région à afficher en plus du nom AWS.                                                    |
-| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `"bold yellow"`                                                       | Le style du module.                                                                                         |
-| `expiration_symbol` | `X`                                                                   | Le symbole est affiché lorsque les identifiants temporaires ont expiré.                                     |
-| `disabled`          | `false`                                                               | Désactive le module `AWS`.                                                                                  |
-| `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Option              | Défaut                                                                | Description                                                                                                                   |
+| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Format du module.                                                                                                             |
+| `symbol`            | `"☁️ "`                                                               | Le symbole est affiché avant le profil AWS actuel.                                                                            |
+| `region_aliases`    |                                                                       | Tableau des alias de région à afficher en plus du nom AWS.                                                                    |
+| `profile_aliases`   |                                                                       | Tableau des alias de profil à afficher en plus du nom AWS.                                                                    |
+| `style`             | `"bold yellow"`                                                       | Le style du module.                                                                                                           |
+| `expiration_symbol` | `X`                                                                   | Le symbole est affiché lorsque les identifiants temporaires ont expiré.                                                       |
+| `disabled`          | `false`                                                               | Désactive le module `AWS`.                                                                                                    |
+| `force_display`     | `false`                                                               | Si `true`, affiche les informations même si `credentials`, `credential_process` ou `sso_start_url` n'ont pas été configurées. |
 
 ### Variables
 
@@ -511,7 +511,7 @@ Notez que `version` n’est pas dans le format par défaut.
 
 L’option `commands` accepte une liste de commandes pour déterminer la version du compilateur et son nom.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+Chaque commande est représentée par une liste du nom de l'exécutable suivie de ses arguments, généralement quelque chose comme `["mycc", "--version"]`. Starship essayera d'exécuter chaque commande jusqu'à obtenir un résultat sur STDOUT.
 
 Si un compilateur C n’est pas supporté par ce module, vous pouvez demander son ajout en [créant un ticket sur GitHub](https://github.com/starship/starship/).
 
@@ -1014,7 +1014,7 @@ Vous aurez également besoin du SDK .NET Core pour pouvoir l'utiliser correcteme
 
 En interne, ce module utilise son propre mécanisme de détection de version. Généralement, il est deux fois plus rapide que d'exécuter `dotnet --version`, mais il peut afficher une version incorrecte si votre projet .NET a une arborescence inhabituelle. Si la précision est plus importante que la vitesse, vous pouvez désactiver le mécanisme en définissant `heuristic = false` dans les options du module.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
+Le module affichera aussi le Moniker de Framework Cible (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) quand il y a un fichier `.csproj` dans le dossier courant.
 
 ### Options
 
