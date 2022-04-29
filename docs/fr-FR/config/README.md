@@ -3505,15 +3505,15 @@ Les modules `custom` affichent la sortie d’une commande arbitaitre.
 
 Ces modules seront affichés si l'une de ces conditions est remplie:
 
-- The current directory contains a file whose name is in `detect_files`
-- The current directory contains a directory whose name is in `detect_folders`
-- The current directory contains a file whose extension is in `detect_extensions`
+- Le dossier courant contient un fichier dont le nom est dans `detect_files`
+- Le dossier courant contient un dossier dont le nom est dans `detect_folders`
+- Le dossier courant contient un fichier dont l’extension est dans `detect_extensions`
 - La commande `when` retourne 0
-- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
+- Le système d’exploitation courant (std::env::consts::OS) correspond au champ `os` si défini.
 
 ::: tip
 
-Multiple custom modules can be defined by using a `.`.
+Plusieurs modules personnalisés peuvent être définis en utilisant un `.`.
 
 :::
 
@@ -3554,7 +3554,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `disabled`          | `false`                         | Désactive le module `custom`.                                                                                                                                                                                                                                                                 |
 | `os`                |                                 | Nom du système d'exploitation sur lequel le module sera affiché (unix, linux, macos, windows, ... ) [Voir les valeurs possibles](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                  |
 | `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
-| `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
+| `ignore_timeout`    | `false`                         | Ignore le paramètre global `command_timeout` et continuer à exécuter des commandes externes, peu importe le temps qu'elles prennent.                                                                                                                                                          |
 
 ### Variables
 
