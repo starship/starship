@@ -2270,17 +2270,17 @@ Le module `nodejs` affiche la version actuellement installée de [Node.js](https
 
 ### Options
 
-| Option              | Défaut                                     | Description                                                                                           |
-| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`       | Format du module.                                                                                     |
-| `version_format`    | `"v${raw}"`                                | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch`            |
-| `symbol`            | `" "`                                     | Une chaîne de caractères représentant le symbole de Node.js.                                          |
-| `detect_extensions` | `["js", "mjs", "cjs", "ts", "mts", "cts"]` | Quelles extensions devraient activer ce module.                                                       |
-| `detect_files`      | `["package.json", ".node-version"]`        | Les fichiers qui activent ce module.                                                                  |
-| `detect_folders`    | `["node_modules"]`                         | Les dossiers qui activent ce module.                                                                  |
-| `style`             | `"bold green"`                             | Le style du module.                                                                                   |
-| `disabled`          | `false`                                    | Désactive le module `nodejs`.                                                                         |
-| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
+| Option              | Défaut                                     | Description                                                                                                 |
+| ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`       | Format du module.                                                                                           |
+| `version_format`    | `"v${raw}"`                                | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch`                  |
+| `symbol`            | `" "`                                     | Une chaîne de caractères représentant le symbole de Node.js.                                                |
+| `detect_extensions` | `["js", "mjs", "cjs", "ts", "mts", "cts"]` | Quelles extensions devraient activer ce module.                                                             |
+| `detect_files`      | `["package.json", ".node-version"]`        | Les fichiers qui activent ce module.                                                                        |
+| `detect_folders`    | `["node_modules"]`                         | Les dossiers qui activent ce module.                                                                        |
+| `style`             | `"bold green"`                             | Le style du module.                                                                                         |
+| `disabled`          | `false`                                    | Désactive le module `nodejs`.                                                                               |
+| `not_capable_style` | `bold red`                                 | Le style du module quand une propriété engines dans le package.json ne correspond pas à la version Node.js. |
 
 ### Variables
 
@@ -2365,7 +2365,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| cloud     | `corp`  | The current OpenStack cloud            |
+| cloud     | `corp`  | Le cloud OpenStack courant             |
 | project   | `dev`   | The current OpenStack project          |
 | symbol    |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
