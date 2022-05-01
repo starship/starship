@@ -639,8 +639,8 @@
       "default": {
         "disabled": false,
         "format": "[$ssh_symbol$hostname]($style) in ",
-        "ssh_symbol": "🌐 ",
         "ssh_only": true,
+        "ssh_symbol": "🌐 ",
         "style": "green dimmed bold",
         "trim_at": "."
       },
