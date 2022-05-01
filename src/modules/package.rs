@@ -66,27 +66,25 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
     Some(formatted_version)
 }
 
-fn get_poetry_version(pyproject: &toml::Value, config: &PackageConfig) -> Option<String> {
-    let raw_version = pyproject
+fn get_poetry_version(pyproject: &toml::Value) -> Option<&str> {
+    pyproject
         .get("tool")?
         .get("poetry")?
         .get("version")?
-        .as_str()?;
-
-    format_version(raw_version, config.version_format)
+        .as_str()
 }
 
-fn get_pep621_version(pyproject: &toml::Value, config: &PackageConfig) -> Option<String> {
-    let raw_version = pyproject.get("project")?.get("version")?.as_str()?;
-    format_version(raw_version, config.version_format)
+fn get_pep621_version(pyproject: &toml::Value) -> Option<&str> {
+    pyproject.get("project")?.get("version")?.as_str()
 }
 
 fn get_pyproject_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pyproject.toml")?;
     let pyproject_toml: toml::Value = toml::from_str(&file_contents).ok()?;
 
-    get_pep621_version(&pyproject_toml, config)
-        .or_else(|| get_poetry_version(&pyproject_toml, config))
+    get_pep621_version(&pyproject_toml)
+        .or_else(|| get_poetry_version(&pyproject_toml))
+        .and_then(|raw_version| format_version(raw_version, config.version_format))
 }
 
 fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<String> {
