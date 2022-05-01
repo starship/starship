@@ -63,6 +63,7 @@ pub mod scala;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
+pub mod spack;
 mod starship_root;
 pub mod status;
 pub mod sudo;
@@ -78,8 +79,12 @@ pub mod zig;
 pub use starship_root::*;
 
 #[derive(Serialize, Deserialize, Clone, Default)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(default)]
 pub struct FullConfig<'a> {
+    // Meta
+    #[serde(rename = "$schema")]
+    schema: String,
     // Root config
     #[serde(flatten)]
     root: StarshipRootConfig,
@@ -205,6 +210,8 @@ pub struct FullConfig<'a> {
     shlvl: shlvl::ShLvlConfig<'a>,
     #[serde(borrow)]
     singularity: singularity::SingularityConfig<'a>,
+    #[serde(borrow)]
+    spack: spack::SpackConfig<'a>,
     #[serde(borrow)]
     status: status::StatusConfig<'a>,
     #[serde(borrow)]

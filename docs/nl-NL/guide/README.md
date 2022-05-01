@@ -143,7 +143,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="Starship met iTerm2 en het thema Snazzy"
   width="50%"
   align="right"
  />
@@ -158,7 +158,7 @@
 - **Makkelijk:** snel te installeren - begin in een handomdraai met het te gebruiken.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Verken de Starship-documentatie&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -295,7 +295,7 @@ Add the following to the end of `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Note: Only Elvish v0.18+ is supported
 
 </details>
 

@@ -99,6 +99,9 @@ else
     fi
 fi
 
+# Ensure that $COLUMNS gets set
+shopt -s checkwinsize
+
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="bash"

@@ -154,6 +154,8 @@ dprint fmt
 
 Editor plugins/functionality may help you run these automatically so that you don't accidentally create a PR that fails.
 
+If your changes cause changes to the configuration, you will need to update the configuration schema in `.github/config-schema.json` with `cargo run --features config-schema -- config-schema > .github/config-schema.json`.
+
 ## Testing
 
 Testing is critical to making sure starship works as intended on systems big and small. Starship interfaces with many applications and system APIs when generating the prompt, so there's a lot of room for bugs to slip in.
@@ -291,6 +293,7 @@ everyone remember what they are. Don't worry: most of them are quite simple!
 - [ ] Add the variable to the appropriate location in the "Default Prompt
       Format" section of the documentation
 - [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
+- [ ] Update the config file schema by running `cargo run --features config-schema -- config-schema > .github/config-schema.json`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
       following:
   - [ ] An entry in `PROMPT_ORDER` (`src/configs/starship_root.rs`)

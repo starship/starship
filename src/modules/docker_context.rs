@@ -57,6 +57,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
+    if ctx == "default" {
+        return None;
+    }
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -301,6 +305,24 @@ mod tests {
             })
             .collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("🐳 starship")));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_context_default() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_CONTEXT", "default")
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
 

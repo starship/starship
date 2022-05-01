@@ -13,8 +13,9 @@ use std::path::Path;
 /// 2a) (not implemented on macOS) one of the supplementary groups of the current user is the
 /// directory group owner and whether it has write access
 /// 3) 'others' part of the access mask has the write access
-pub fn is_write_allowed(folder_path: &Path) -> Result<bool, &'static str> {
-    let meta = fs::metadata(folder_path).map_err(|_| "Unable to stat() directory")?;
+pub fn is_write_allowed(folder_path: &Path) -> Result<bool, String> {
+    let meta =
+        fs::metadata(folder_path).map_err(|e| format!("Unable to stat() directory: {e:?}"))?;
     let perms = meta.permissions().mode();
 
     let euid = Uid::effective();
@@ -54,9 +55,9 @@ mod tests {
     #[ignore]
     fn read_only_test() {
         assert_eq!(is_write_allowed(Path::new("/etc")), Ok(false));
-        assert_eq!(
-            is_write_allowed(Path::new("/i_dont_exist")),
-            Err("Unable to stat() directory")
-        );
+        assert!(match is_write_allowed(Path::new("/i_dont_exist")) {
+            Ok(_) => false,
+            Err(e) => e.starts_with("Unable to stat() directory"),
+        });
     }
 }

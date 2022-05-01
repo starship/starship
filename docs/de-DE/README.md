@@ -120,7 +120,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Elvish
 
-   ::: warning Nur elvish v0.17 oder höher ist unterstützt. :::
+   ::: warning Nur elvish v0.18 oder höher ist unterstützt. :::
 
    Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
@@ -169,7 +169,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    ```
 
 
-   #### Cmd
+   #### ⌘ Cmd
 
    You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 

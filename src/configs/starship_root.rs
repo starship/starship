@@ -1,8 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
+#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 #[serde(default)]
 pub struct StarshipRootConfig {
+    #[serde(rename = "$schema")]
+    schema: String,
     pub format: String,
     pub right_format: String,
     pub continuation_prompt: String,
@@ -71,6 +74,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "buf",
     "nix_shell",
     "conda",
+    "spack",
     "memory_usage",
     "aws",
     "gcloud",
@@ -96,6 +100,7 @@ pub const PROMPT_ORDER: &[&str] = &[
 impl<'a> Default for StarshipRootConfig {
     fn default() -> Self {
         StarshipRootConfig {
+            schema: "https://starship.rs/config-schema.json".to_string(),
             format: "$all".to_string(),
             right_format: "".to_string(),
             continuation_prompt: "[∙](bright-black) ".to_string(),

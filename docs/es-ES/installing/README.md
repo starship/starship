@@ -1,4 +1,4 @@
-# Advanced Installation
+# Instalación avanzada
 
 Para instalar Starship, necesitas hacer dos cosas:
 
@@ -63,7 +63,7 @@ Activa el módulo `programs.starship` en tu archivo `home.nix` y añade tus ajus
 {
   programs.starship = {
     enable = true;
-    # Configuration written to ~/.config/starship.toml
+    # Configuración escrita en ~/.config/starship.toml
     settings = {
       # add_newline = false;
 

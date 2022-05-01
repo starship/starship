@@ -9,6 +9,9 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
 ```toml
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
 # Inserts a blank line between shell prompts
 add_newline = true
 
@@ -244,6 +247,7 @@ $vagrant\
 $zig\
 $nix_shell\
 $conda\
+$spack\
 $memory_usage\
 $aws\
 $gcloud\
@@ -275,7 +279,7 @@ format = "$all$directory$character"
 
 The `aws` module shows the current AWS region and profile when
 credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this
-module to show the region and profile event when the credentials have not been setup
+module to show the region and profile even when the credentials have not been setup
 with the `force_display` option. This is based on
 `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
 `~/.aws/config` file. This module also shows an expiration timer when using temporary
@@ -302,16 +306,16 @@ date is read from the `AWSUME_EXPIRATION` env var.
 
 ### Options
 
-| Option              | Default                                                          | Description                                                                                               |
-| ------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                                                                |
-| `symbol`            | `"☁️ "`                                                          | The symbol used before displaying the current AWS profile.                                                |
-| `region_aliases`    |                                                                  | Table of region aliases to display in addition to the AWS name.                                           |
-| `profile_aliases`   |                                                                  | Table of profile aliases to display in addition to the AWS name.                                          |
-| `style`             | `"bold yellow"`                                                  | The style for the module.                                                                                 |
-| `expiration_symbol` | `X`                                                              | The symbol displayed when the temporary credentials have expired.                                         |
-| `disabled`          | `false`                                                          | Disables the `AWS` module.                                                                                |
-| `force_display`     | `false`                                                          | If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Option              | Default                                                           | Description                                                                                                 |
+| ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
+| `symbol`            | `"☁️ "`                                                           | The symbol used before displaying the current AWS profile.                                                  |
+| `region_aliases`    |                                                                   | Table of region aliases to display in addition to the AWS name.                                             |
+| `profile_aliases`   |                                                                   | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `"bold yellow"`                                                   | The style for the module.                                                                                   |
+| `expiration_symbol` | `X`                                                               | The symbol displayed when the temporary credentials have expired.                                           |
+| `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
+| `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variables
 
@@ -1076,8 +1080,8 @@ unusual directory layout. If accuracy is more important than speed, you can disa
 setting `heuristic = false` in the module options.
 
 The module will also show the Target Framework Moniker
-(<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-framework-versions>)
-when there is a csproj file in the current directory.
+(<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>)
+when there is a `.csproj` file in the current directory.
 
 ### Options
 
@@ -1207,6 +1211,7 @@ The module will be shown only if any of the following conditions are met:
 - The `variable` configuration option is not defined, but the `default` configuration option is
 
 ::: tip
+
 Multiple environmental variables can be displayed by using a `.`. (see example)
 If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
@@ -1414,17 +1419,17 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Options
 
-| Option               | Default                          | Description                                                                              |
-| -------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
-| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                   |
-| `style`              | `"bold purple"`                  | The style for the module.                                                                |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                 |
-| `truncation_symbol`  | `"…"`                            | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                           |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                      |
-| `disabled`           | `false`                          | Disables the `git_branch` module.                                                        |
+| Option               | Default                                           | Description                                                                              |
+| -------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name.     |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.          |
+| `symbol`             | `" "`                                            | A format string representing the symbol of git branch.                                   |
+| `style`              | `"bold purple"`                                   | The style for the module.                                                                |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                 |
+| `truncation_symbol`  | `"…"`                                             | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                           |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                      |
+| `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
 
 ### Variables
 
@@ -3165,6 +3170,39 @@ and `$SINGULARITY_NAME` is set.
 format = '[📦 \[$env\]]($style) '
 ```
 
+## Spack
+
+The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+
+### Options
+
+| Option              | Default                                | Description                                                                                                                                    |
+| ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
+| `symbol`            | `"🅢  "`                                | The symbol used before the environment name.                                                                                                   |
+| `style`             | `"bold blue"`                          | The style for the module.                                                                                                                      |
+| `format`            | `"via [$symbol$environment]($style) "` | The format for the module.                                                                                                                     |
+| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                   |
+
+### Variables
+
+| Variable    | Example      | Description                          |
+| ----------- | ------------ | ------------------------------------ |
+| environment | `astronauts` | The current spack environment        |
+| symbol      |              | Mirrors the value of option `symbol` |
+| style\*     |              | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[spack]
+format = "[$symbol$environment](dimmed blue) "
+```
+
 ## Status
 
 The `status` module displays the exit code of the previous command.
@@ -3433,7 +3471,7 @@ time_range = "10:00:00-14:00:00"
 The `username` module shows active user's username.
 The module will be shown if any of the following conditions are met:
 
-- The current user is root
+- The current user is root/admin
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
@@ -3448,13 +3486,13 @@ these variables, one workaround is to set one of them with a dummy value.
 
 ### Options
 
-| Option        | Default                 | Description                           |
-| ------------- | ----------------------- | ------------------------------------- |
-| `style_root`  | `"bold red"`            | The style used when the user is root. |
-| `style_user`  | `"bold yellow"`         | The style used for non-root users.    |
-| `format`      | `"[$user]($style) in "` | The format for the module.            |
-| `show_always` | `false`                 | Always shows the `username` module.   |
-| `disabled`    | `false`                 | Disables the `username` module.       |
+| Option        | Default                 | Description                                 |
+| ------------- | ----------------------- | ------------------------------------------- |
+| `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.          |
+| `format`      | `"[$user]($style) in "` | The format for the module.                  |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### Variables
 
@@ -3630,9 +3668,9 @@ The `custom` modules show the output of some arbitrary commands.
 
 These modules will be shown if any of the following conditions are met:
 
-- The current directory contains a file whose name is in `files`
-- The current directory contains a directory whose name is in `directories`
-- The current directory contains a file whose extension is in `extensions`
+- The current directory contains a file whose name is in `detect_files`
+- The current directory contains a directory whose name is in `detect_folders`
+- The current directory contains a file whose extension is in `detect_extensions`
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
 
@@ -3672,20 +3710,22 @@ Format strings can also contain shell specific prompt sequences, e.g.
 
 ### Options
 
-| Option        | Default                         | Description                                                                                                                                                                   |
-| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`     | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                 |
-| `when`        |                                 | A shell command used as a condition to show the module. The module will be shown if the command returns a `0` status code.                                                    |
-| `shell`       |                                 | [See below](#custom-command-shell)                                                                                                                                            |
-| `description` | `"<custom module>"`             | The description of the module that is shown when running `starship explain`.                                                                                                  |
-| `files`       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                         |
-| `directories` | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                   |
-| `extensions`  | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                    |
-| `symbol`      | `""`                            | The symbol used before displaying the command output.                                                                                                                         |
-| `style`       | `"bold green"`                  | The style for the module.                                                                                                                                                     |
-| `format`      | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                                                                    |
-| `disabled`    | `false`                         | Disables this `custom` module.                                                                                                                                                |
-| `os`          |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html). |
+| Option              | Default                         | Description                                                                                                                                                                                                                                                                                   |
+| ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
+| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
+| `description`       | `"<custom module>"`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
+| `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
+| `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
+| `symbol`            | `""`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
+| `style`             | `"bold green"`                  | The style for the module.                                                                                                                                                                                                                                                                     |
+| `format`            | `"[$symbol($output )]($style)"` | The format for the module.                                                                                                                                                                                                                                                                    |
+| `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
+| `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
+| `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
+| `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
 
 ### Variables
 
@@ -3710,6 +3750,10 @@ The `command` will be passed in on stdin.
 
 If `shell` is not given or only contains one element and Starship detects PowerShell will be used,
 the following arguments will automatically be added: `-NoProfile -Command -`.
+If `shell` is not given or only contains one element and Starship detects Cmd will be used,
+the following argument will automatically be added: `/C` and `stdin` will be set to `false`.
+If `shell` is not given or only contains one element and Starship detects Nushell will be used,
+the following arguments will automatically be added: `-c` and `stdin` will be set to `false`.
 This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
 ```toml
@@ -3746,12 +3790,18 @@ with shell details and starship configuration if you hit such scenario.
 
 [custom.foo]
 command = "echo foo" # shows output of command
-files = ["foo"] # can specify filters but wildcards are not supported
+detect_files = ["foo"] # can specify filters but wildcards are not supported
 when = """ test "$HOME" == "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
 command = "time /T"
-extensions = ["pst"] # filters *.pst files
+detect_extensions = ["pst"] # filters *.pst files
 shell = ["pwsh.exe", "-NoProfile", "-Command", "-"]
+
+[custom.time-as-arg]
+command = "time /T"
+detect_extensions = ["pst"] # filters *.pst files
+shell = ["pwsh.exe", "-NoProfile", "-Command"]
+use_stdin = false
 ```

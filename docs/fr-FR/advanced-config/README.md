@@ -10,9 +10,9 @@ Les configurations dans cette section sont sujettes à modification dans les fut
 
 ## Commandes pré-invite et pré-exécution personnalisées dans Cmd
 
-Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
+Clink fournit des APIs extrêmement flexibles pour exécuter des commandes pre-invite et pre-exec dans Cmd. Il est assez simple à utiliser avec Starship. Effectuez les modifications suivantes dans votre fichier `starship.lua`, en fonction de vos besoins:
 
-- To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
+- Pour exécuter une fonction juste avant que l’invite soit dessinée, définissez une nouvelle fonction appelée `starship_preprompt_user_func`. Cette fonction reçoit l’invite courante sous la forme d’une chaine que vous pouvez utiliser. Par exemple, pour dessiner une fusée avant l’invite, vous pouvez faire
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -22,7 +22,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
+- Pour exécuter une fonction personnalisée juste avant qu’une commande soit exécutée, définissez une nouvelle fonction appelée `starship_precmd_user_func`. Cette fonction reçoit la ligne de commande courante sous la forme d’une chaine que vous pouvez utiliser. Par exemple, pour afficher la commande sur le point d’être exécutée, vous pouvez faire
 
 ```lua
 function starship_precmd_user_func(line)
@@ -71,7 +71,7 @@ function Invoke-Starship-PreCommand {
 
 ## Modifier le titre des fenêtres
 
-Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter le dossier courant). Fish le fait même par défaut. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+Certaines commandes du shell changeront automatiquement le titre de la fenêtre (par exemple, pour refléter le dossier courant). Fish le fait même par défaut. Starship ne fait pas ça, mais c’est assez facile d’ajouter cette fonctionnalité à `bash`, `zsh`, `cmd` ou `powershell`.
 
 Tout d'abord, définissez une fonction de changement de titre de fenêtre (identique en bash et zsh) :
 
@@ -106,7 +106,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
+Pour Cmd, vous pouvez changer le titre de la fenêtre en utilisant la fonction `starship_preprompt_user_func`.
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -116,7 +116,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+Vous pouvez également faire la même chose avec PowerShell en créant une fonction nommée `Invoke-Starship-PreCommand`.
 
 ```powershell
 # edit $PROFILE
@@ -129,11 +129,11 @@ Invoke-Expression (&starship init powershell)
 
 ## Mettre l’invite à droite
 
-Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+Certains shells peuvent gérer une invite de commande à droite, sur la même ligne que l’entrée utilisateur. Starship peut définir le contenu de cet invite à droite en utilisant l’option `right_format`. N’importe quel module qui peut être utilisé dans `format` est aussi géré dans `right_format`. La variable `$all` va seulement contenir les modules qui ne sont explicitement utilisés ni dans `format`, ni dans `right_format`.
 
-Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [fill module](/config/#fill).
+Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` est actuellement géré pour les shells suivants: elvish, fish, zsh, xonsh, cmd.
 
 ### Exemple
 
@@ -155,13 +155,13 @@ Génère l’invite suivante:
 
 ## Invite de continuation
 
-Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+Certains shells gèrent une invite de continuation en plus de l’invite normale. Cette invite est affichée à la place de l’invite normale quand l’utilisateur a entré une expression incomplète (par exemple, une parenthèse gauche ou une apostrophe seule).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+Starship peut définir l’invite de continuation en utilisant l’option `continuation_prompt`. L’invite par défaut est `"[∙](bright-black) "`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Note: la valeur de `continuation_prompt` doit être une chaine littérale, sans variable.
 
-Note: Continuation prompts are only available in the following shells:
+Note: les invites de confirmation sont uniquement disponibles pour les shells suivants:
 
 - `bash`
 - `zsh`
@@ -172,7 +172,7 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Un invite de continuation qui affiche deux flèches pleines
 continuation_prompt = "▶▶"
 ```
 

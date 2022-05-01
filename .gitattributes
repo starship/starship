@@ -1,2 +1,3 @@
 /src/init/* text eol=lf
 *.sh text eol=lf
+/.github/config-schema.json text eol=lf

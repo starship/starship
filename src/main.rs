@@ -55,7 +55,7 @@ enum Commands {
     ///  Prints a specific prompt module
     Module {
         /// The name of the module to be printed
-        #[clap(required = true, required_unless_present = "list")]
+        #[clap(required_unless_present("list"))]
         name: Option<String>,
         /// List out all supported modules
         #[clap(short, long)]
@@ -97,6 +97,9 @@ enum Commands {
         #[clap(default_value = "disabled")]
         value: String,
     },
+    #[cfg(feature = "config-schema")]
+    /// Generate a schema for the starship configuration as JSON-schema
+    ConfigSchema,
 }
 
 fn main() {
@@ -216,6 +219,8 @@ fn main() {
                 .map(char::from)
                 .collect::<String>()
         ),
+        #[cfg(feature = "config-schema")]
+        Commands::ConfigSchema => print::print_schema(),
     }
 }
 

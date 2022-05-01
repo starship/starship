@@ -112,6 +112,9 @@ symbol = "rs "
 [scala]
 symbol = "scala "
 
+[spack]
+symbol = "spack "
+
 [sudo]
 symbol = "sudo "
 

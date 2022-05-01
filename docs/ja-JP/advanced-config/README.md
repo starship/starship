@@ -131,7 +131,7 @@ Invoke-Expression (&starship init powershell)
 
 シェルによっては、入力と同じ行にレンダリングされる右プロンプトをサポートしています。 Starship では `right_format` オプションを使って右プロンプトの内容を設定できます。 `format`で使用できるモジュールはすべて`right_format`でも使用できます。 変数`$all`には、`format`や`right_format`で明示的に使用されていないモジュールのみが格納されます。
 
-注意: 右プロンプトは入力の場所に続く単一の行です。 複数行のプロンプトで入力行の上を右寄せにするには、[fillモジュール](/config/#fill)を参照してください。
+注意: 右プロンプトは入力の場所に続く単一の行です。 To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
 
