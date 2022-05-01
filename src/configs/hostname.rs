@@ -18,7 +18,7 @@ impl<'a> Default for HostnameConfig<'a> {
             ssh_only: true,
             ssh_symbol: "🌐 ",
             trim_at: ".",
-            format: "[$ssh_symbol($hostname)]($style) in ",
+            format: "[$ssh_symbol$hostname]($style) in ",
             style: "green dimmed bold",
             disabled: false,
         }
