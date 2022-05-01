@@ -638,8 +638,8 @@
     "hostname": {
       "default": {
         "disabled": false,
-        "ssh_symbol": "🌐 ",
         "format": "[$ssh_symbol$hostname]($style) in ",
+        "ssh_symbol": "🌐 ",
         "ssh_only": true,
         "style": "green dimmed bold",
         "trim_at": "."
