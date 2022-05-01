@@ -77,14 +77,8 @@ fn get_poetry_version(pyproject: &toml::Value, config: &PackageConfig) -> Option
 }
 
 fn get_pep621_version(pyproject: &toml::Value, config: &PackageConfig) -> Option<String> {
-    let version = pyproject.get("project")?.get("version")?;
-
-    if version.is_table() {
-        None
-    } else {
-        let raw_version = version.as_str()?;
-        format_version(raw_version, config.version_format)
-    }
+    let raw_version = pyproject.get("project")?.get("version")?.as_str()?;
+    format_version(raw_version, config.version_format)
 }
 
 fn get_pyproject_version(context: &Context, config: &PackageConfig) -> Option<String> {
