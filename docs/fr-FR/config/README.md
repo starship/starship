@@ -1142,7 +1142,7 @@ Le module `env_var` affiche la valeur actuelle de la variable d’environnement 
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (voir exemple). Si l’option de configuration `variable` n’est pas définie, le module affichera la valeur de la variable dont le nom est le texte après le caractère `.`.
+Plusieurs variables d’environnement peuvent être affichées en utilisant un `.`. (voir exemple). Si l’option de configuration `variable` n’est pas définie, le module affichera la valeur de la variable dont le nom est le texte après le caractère `.`.
 
 Exemple : la configuration suivante va afficher la valeur de la variable d’environnement UTILISATEUR
 
