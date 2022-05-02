@@ -2522,7 +2522,7 @@ The `pulumi` module shows the current username, selected [Pulumi Stack](https://
 
 ::: tip
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+Par défaut, la version de Pulumi n'est pas affichée, car cela prendre un ordre de magnitude plus de temps à charger que la plupart des plugins (~70ms). Si vous voulez quand même l’activer, [suivez l’exemple montré plus bas](#with-pulumi-version).
 
 :::
 
@@ -2936,10 +2936,10 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Variables
 
-| Variable  | Défaut | Description                                                |
-| --------- | ------ | ---------------------------------------------------------- |
-| indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\* |        | Reflète la valeur de l'option `style`.                     |
+| Variable  | Défaut | Description                                       |
+| --------- | ------ | ------------------------------------------------- |
+| indicator |        | Reflète la valeur de `indicator` du shell actuel. |
+| style\* |        | Reflète la valeur de l'option `style`.            |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -2958,18 +2958,18 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+Le module `shlvl` montre la variable d’environnement [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) («niveau de shell») actuelle, si elle a une valeur numérique qui est égale ou dépasse le seuil défini.
 
 ### Options
 
-| Option      | Défaut                       | Description                                                   |
-| ----------- | ---------------------------- | ------------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                            |
-| `format`    | `"[$symbol$shlvl]($style) "` | Format du module.                                             |
-| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
-| `style`     | `"bold yellow"`              | Le style du module.                                           |
-| `disabled`  | `true`                       | Désactive le module `shlvl`.                                  |
+| Option      | Défaut                       | Description                                                             |
+| ----------- | ---------------------------- | ----------------------------------------------------------------------- |
+| `threshold` | `2`                          | Seuil d’affichage.                                                      |
+| `format`    | `"[$symbol$shlvl]($style) "` | Format du module.                                                       |
+| `symbol`    | `"↕️  "`                     | Le symbole utilisée pour représenter le `SHLVL`.                        |
+| `repeat`    | `false`                      | Fait répéter `symbol` autant de fois que la valeur actuelle de `SHLVL`. |
+| `style`     | `"bold yellow"`              | Le style du module.                                                     |
+| `disabled`  | `true`                       | Désactive le module `shlvl`.                                            |
 
 ### Variables
 
