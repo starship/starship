@@ -593,7 +593,7 @@ mod tests {
         let actual = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
-                command_timeout = 10000
+                command_timeout = 100000
                 [custom.test]
                 format = "test"
                 when = when
