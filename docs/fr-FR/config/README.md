@@ -2994,7 +2994,7 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
+Le module `singularity` affiche l’image [Singularity](https://sylabs.io/singularity/) courante, quand vous êtes à l’intérieur d’un conteneur et que `$SINGULARITY_NAME` est définie.
 
 ### Options
 
@@ -3026,23 +3026,23 @@ format = '[📦 \[$env\]]($style) '
 
 ## Spack
 
-The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+Le module `spack` affiche l’environnement [Spack](https://spack.readthedocs.io/en/latest/) courant, si `$SPACK_ENV` est définie.
 
 ### Options
 
-| Option              | Défaut                                 | Description                                                                                                                                                   |
-| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` ne signifie pas de troncature. Regardez aussi le module [`directory`](#directory). |
-| `symbol`            | `"🅢  "`                                | Le symbole utilisé avant le nom d'environnement.                                                                                                              |
-| `style`             | `"bold blue"`                          | Le style du module.                                                                                                                                           |
-| `format`            | `"via [$symbol$environment]($style) "` | Format du module.                                                                                                                                             |
-| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                                  |
+| Option              | Défaut                                 | Description                                                                                                                                                        |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `truncation_length` | `1`                                    | Le nombre de dossiers auxquels le chemin d’environnement doit être tronqué. `0` ne signifie pas de troncature. Regardez aussi le module [`directory`](#directory). |
+| `symbol`            | `"🅢  "`                                | Le symbole utilisé avant le nom d'environnement.                                                                                                                   |
+| `style`             | `"bold blue"`                          | Le style du module.                                                                                                                                                |
+| `format`            | `"via [$symbol$environment]($style) "` | Format du module.                                                                                                                                                  |
+| `disabled`          | `false`                                | Désactive le module `spack`.                                                                                                                                       |
 
 ### Variables
 
 | Variable      | Exemple      | Description                            |
 | ------------- | ------------ | -------------------------------------- |
-| environnement | `astronauts` | The current spack environment          |
+| environnement | `astronauts` | L’environnement de spack courant       |
 | symbol        |              | Reflète la valeur de l'option `symbol` |
 | style\*     |              | Reflète la valeur de l'option `style`  |
 
@@ -3119,7 +3119,7 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+Le moduel `sudo` affiche si les identifiants sudo sont actuellement en cache. Le module sera uniquement affiché si les identifiants sont en cache.
 
 ::: tip
 
@@ -3129,13 +3129,13 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option          | Défaut                  | Description                                             |
-| --------------- | ----------------------- | ------------------------------------------------------- |
-| `format`        | `[as $symbol]($style)"` | Le format du module                                     |
-| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
-| `style`         | `"bold blue"`           | Le style du module.                                     |
-| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                  | Désactive le module `sudo`.                             |
+| Option          | Défaut                  | Description                                                       |
+| --------------- | ----------------------- | ----------------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | Le format du module                                               |
+| `symbol`        | `"🧙 "`                  | Le symbole affiché quand les identifiants sont en cache           |
+| `style`         | `"bold blue"`           | Le style du module.                                               |
+| `allow_windows` | `false`                 | Puisque Windows n’a pas de sudo par défaut, désactivé par défaut. |
+| `disabled`      | `true`                  | Désactive le module `sudo`.                                       |
 
 ### Variables
 
@@ -3211,7 +3211,7 @@ Le module `terraform` affiche [l’espace de travail Terraform](https://www.terr
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+Par défaut, la version de Terraform n’est pas affichée, car elle est lente pour les versions actuelles de Terraform quand beaucoup de plugins sont utilisés. Si vous voulez quand même l’activer, [suivez l’exemple montré plus bas](#with-terraform-version).
 
 :::
 
@@ -3284,7 +3284,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `style`           | `"bold yellow"`         | Le style utilisé par le module                                                                                                                                        |
 | `utc_time_offset` | `"local"`               | Définir le décalage horaire UTC à utiliser. Intervalle de -24 &lt; x &lt; 24. Accepte des nombres décimaux pour s'adapter aux décalages de 30/45 minutes. |
 | `disabled`        | `true`                  | Désactiver le module `time`.                                                                                                                                          |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                                 |
+| `time_range`      | `"-"`                   | Définit la plage de temps pendant laquelle le module sera affiché. Les heures doivent être spécifiées au format 24 heures                                             |
 
 Si `use_12hr` est à `true`, alors `time_format` vaut `"%r"`. Sinon, il est défini comme `"%T"`. Définir manuellement `time_format` outrepasse le paramètre `use_12hr`.
 
@@ -3314,7 +3314,7 @@ time_range = "10:00:00-14:00:00"
 
 Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une de ces conditions est remplie :
 
-- The current user is root/admin
+- L'utilisateur courant est root/admin
 - L'utilisateur courant est différent de celui connecté
 - L'utilisateur est actuellement connecté à une session SSH
 - La variable `show_always` a comme valeur true
@@ -3327,13 +3327,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Options
 
-| Option        | Défaut                  | Description                                      |
-| ------------- | ----------------------- | ------------------------------------------------ |
-| `style_root`  | `"bold green"`          | The style used when the user is root/admin.      |
-| `style_user`  | `"bold yellow"`         | Le style utilisé pour les utilisateurs non-root. |
-| `format`      | `"[$user]($style) in "` | Format du module.                                |
-| `show_always` | `false`                 | Toujours afficher le module `username`.          |
-| `disabled`    | `false`                 | Désactiver le module `username`.                 |
+| Option        | Défaut                  | Description                                          |
+| ------------- | ----------------------- | ---------------------------------------------------- |
+| `style_root`  | `"bold green"`          | Le style utilisé quand l'utilisateur est root/admin. |
+| `style_user`  | `"bold yellow"`         | Le style utilisé pour les utilisateurs non-root.     |
+| `format`      | `"[$user]($style) in "` | Format du module.                                    |
+| `show_always` | `false`                 | Toujours afficher le module `username`.              |
+| `disabled`    | `false`                 | Désactiver le module `username`.                     |
 
 ### Variables
 
