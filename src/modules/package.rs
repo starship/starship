@@ -66,16 +66,25 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
     Some(formatted_version)
 }
 
-fn get_poetry_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let file_contents = context.read_file_from_pwd("pyproject.toml")?;
-    let poetry_toml: toml::Value = toml::from_str(&file_contents).ok()?;
-    let raw_version = poetry_toml
+fn get_poetry_version(pyproject: &toml::Value) -> Option<&str> {
+    pyproject
         .get("tool")?
         .get("poetry")?
         .get("version")?
-        .as_str()?;
+        .as_str()
+}
 
-    format_version(raw_version, config.version_format)
+fn get_pep621_version(pyproject: &toml::Value) -> Option<&str> {
+    pyproject.get("project")?.get("version")?.as_str()
+}
+
+fn get_pyproject_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = context.read_file_from_pwd("pyproject.toml")?;
+    let pyproject_toml: toml::Value = toml::from_str(&file_contents).ok()?;
+
+    get_pep621_version(&pyproject_toml)
+        .or_else(|| get_poetry_version(&pyproject_toml))
+        .and_then(|raw_version| format_version(raw_version, config.version_format))
 }
 
 fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<String> {
@@ -252,7 +261,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_cargo_version,
         get_nimble_version,
         get_node_package_version,
-        get_poetry_version,
+        get_pyproject_version,
         get_setup_cfg_version,
         get_composer_version,
         get_gradle_version,
@@ -623,6 +632,69 @@ license = "MIT"
         let config_content = toml::toml! {
             [tool.poetry]
             name = "starship"
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_pep621_version() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
+            [project]
+            name = "starship"
+            version = "0.1.0"
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_pep621_version_without_version() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
+            [project]
+            name = "starship"
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_pep621_version_attr_directive() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
+            [project]
+            name = "starship"
+            version = {attr = "starship.__version__"}
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_pep621_version_file_directive() -> io::Result<()> {
+        let config_name = "pyproject.toml";
+        let config_content = toml::toml! {
+            [project]
+            name = "starship"
+            version = {file = "VERSION.txt"}
         }
         .to_string();
 
