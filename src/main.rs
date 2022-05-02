@@ -187,11 +187,9 @@ fn main() {
                 if let Some(value) = value {
                     configure::update_configuration(&name, &value)
                 }
-            } else {
-                if let Err(reason) = configure::edit_configuration(None) {
-                    eprintln!("Could not edit configuration: {}", reason);
-                    std::process::exit(1);
-                }
+            } else if let Err(reason) = configure::edit_configuration(None) {
+                eprintln!("Could not edit configuration: {}", reason);
+                std::process::exit(1);
             }
         }
         Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),
