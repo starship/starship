@@ -1935,7 +1935,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Afficher le nom du [contexte Kubernetes](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) courant, et, si défini, l’espace de nom, l’utilisateur, et le cluster depuis le fichier kubeconfig. L'espace de noms doit être défini dans le fichier kubeconfig, ce qui peut être fait via `kubectl config set-context starship-cluster --namespace astronaut`. De même, l'utilisateur et l'instance peuvent être définies avec `kubectl config set-context starship-context --user starship-user` et `kubectl config set-context starship-context --cluster starship-cluster`. Si la variable d'environnement `$KUBECONFIG` est définie, le module l'utilisera sinon il utilisera le fichier `~/.kube/config`.
+Afficher le nom du [contexte Kubernetes](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) courant, et, si défini, l’espace de nom, l’utilisateur, et le cluster depuis le fichier kubeconfig. L'espace de noms doit être défini dans le fichier kubeconfig, ce qui peut être fait via `kubectl config set-context starship-cluster --namespace astronaut`. De même, l'utilisateur et l'instance peuvent être définies avec `kubectl config set-context starship-context --user starship-user` et `kubectl config set-context starship-context --cluster starship-cluster`. Si la variable d'environnement `$KUBECONFIG` est définie, le module l'utilisera, sinon il utilisera le fichier `~/.kube/config`.
 
 ::: tip
 
@@ -1984,9 +1984,9 @@ disabled = false
 
 Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
 
-The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. Ceci est expliqué plus en détails dans la documentation de [la crate regex](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace).
 
-Long and automatically generated cluster names can be identified and shortened using regular expressions:
+Les noms de cluster long ou générés automatiquement peuvent être identifiés et raccourcis en utilisant des expressions rationnelles:
 
 ```toml
 [kubernetes.context_aliases]
@@ -2385,13 +2385,13 @@ symbol = "☁️ "
 
 ## Version du package
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. Le module gère actuellement les paquets `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` et `dart`.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – La version du paquet `npm` est extraite du `package.json` présent dans le répertoire courant
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – La version du paquet `cargo` est extraite du `Cargo.toml` présent dans le répertoire courant
 - [**Nimble**](https://github.com/nim-lang/nimble) - La version du paquet `nimble` est extraite du fichier `*.nimble` dans le répertoire courant avec la commande `nimble dump`
 - [**Poetry**](https://python-poetry.org/) – La version du paquet `poetry` est extraite du `pyproject.toml` présent dans le répertoire courant
-- [**Python**](https://www.python.org) - La version du paquet `python` est extraite du `setup.cfg` présent dans le répertoire courant
+- [**Python**](https://www.python.org) - The `python` package version is extracted from a [PEP 621](https://peps.python.org/pep-0621/) compliant `pyproject.toml` or a `setup.cfg` present in the current directory
 - [**Composer**](https://getcomposer.org/) – La version du paquet `composer` est extraite du `composer.json` présent dans le répertoire courant
 - [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
 - [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
