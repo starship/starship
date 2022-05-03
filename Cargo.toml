@@ -38,8 +38,8 @@ notify = ["notify-rust"]
 ansi_term = "0.12.1"
 byte-unit = "4.0.14"
 chrono = "0.4.19"
-clap = { version = "3.1.12", features = ["derive", "cargo", "unicode"] }
-clap_complete = "3.1.2"
+clap = { version = "3.1.15", features = ["derive", "cargo", "unicode"] }
+clap_complete = "3.1.3"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
 gethostname = "0.2.3"
@@ -52,7 +52,7 @@ log = { version = "0.4.16", features = ["std"] }
 notify-rust = { version = "4.5.8", optional = true }
 once_cell = "1.10.0"
 open = "2.1.2"
-os_info = "3.2.0"
+os_info = "3.3.0"
 path-slash = "0.1.4"
 pest = "2.1.3"
 pest_derive = "2.1.0"
@@ -61,9 +61,9 @@ rand = "0.8.5"
 rayon = "1.5.2"
 regex = "1.5.5"
 rust-ini = "0.18.0"
-semver = "1.0.7"
-serde = { version = "1.0.136", features = ["derive"] }
-serde_json = "1.0.79"
+semver = "1.0.9"
+serde = { version = "1.0.137", features = ["derive"] }
+serde_json = "1.0.80"
 sha-1 = "0.10.0"
 shadow-rs = "0.11.0"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
