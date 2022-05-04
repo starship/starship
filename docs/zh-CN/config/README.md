@@ -1721,20 +1721,22 @@ format = "via [⎈ $version](bold white) "
 
 ### 配置项
 
-| Option     | 默认值                         | 描述                                                                 |
-| ---------- | --------------------------- | ------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | 仅在连接到 SSH 会话时显示主机名。                                                |
-| `trim_at`  | `"."`                       | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `"."` 会让主机名截断到第一个点处。 `""` 会禁用任何截断。 |
-| `format`   | `"[$hostname]($style) in "` | 组件格式化模板。                                                           |
-| `style`    | `"bold dimmed green"`       | 此组件的样式。                                                            |
-| `disabled` | `false`                     | 禁用 `hostname` 组件。                                                  |
+| Option       | 默认值                                    | 描述                                                                                                                                   |
+| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`   | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                                                  |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
+| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | 组件格式化模板。                                                                                                                             |
+| `style`      | `"bold dimmed green"`                  | 此组件的样式。                                                                                                                              |
+| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### Variables
 
-| 字段        | 示例         | 描述                           |
-| --------- | ---------- | ---------------------------- |
-| hostname  | `computer` | The hostname of the computer |
-| style\* |            | `style`对应值                   |
+| 字段         | 示例         | 描述                                                    |
+| ---------- | ---------- | ----------------------------------------------------- |
+| hostname   | `computer` | The hostname of the computer                          |
+| style\*  |            | `style`对应值                                            |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: This variable can only be used as a part of a style string
 
@@ -1745,7 +1747,7 @@ format = "via [⎈ $version](bold white) "
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
