@@ -1721,20 +1721,22 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                    | Mô tả                                                                                                                            |
-| ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                        |
-| `trim_at`  | `"."`                       | Chuỗi mà hostname được cắt ngắn, sau khi khớp lần đầu tiên. `"."` sẽ dừng sau dấu chấm đầu tiên. `""` sẽ vô hiệu mọi sự cắt ngắn |
-| `format`   | `"[$hostname]($style) in "` | Định dạng cho module.                                                                                                            |
-| `style`    | `"bold dimmed green"`       | Kiểu cho module.                                                                                                                 |
-| `disabled` | `false`                     | Vô hiệu `hastname` module.                                                                                                       |
+| Tuỳ chọn     | Mặc định                               | Mô tả                                                                                                                                |
+| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`   | `true`                                 | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                            |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
+| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Định dạng cho module.                                                                                                                |
+| `style`      | `"bold dimmed green"`                  | Kiểu cho module.                                                                                                                     |
+| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### Các biến
 
-| Biến      | Ví dụ      | Mô tả                        |
-| --------- | ---------- | ---------------------------- |
-| hostname  | `computer` | The hostname of the computer |
-| style\* |            | Giá trị ghi đè của `style`   |
+| Biến       | Ví dụ      | Mô tả                                                 |
+| ---------- | ---------- | ----------------------------------------------------- |
+| hostname   | `computer` | The hostname of the computer                          |
+| style\*  |            | Giá trị ghi đè của `style`                            |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1745,7 +1747,7 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
