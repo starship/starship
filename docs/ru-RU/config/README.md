@@ -2849,11 +2849,13 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Переменные
 
-| Переменная | Пример            | Описание                             |
-| ---------- | ----------------- | ------------------------------------ |
-| version    | `v1.43.0-nightly` | The version of `rustc`               |
-| symbol     |                   | Отражает значение параметра `symbol` |
-| style\*  |                   | Отражает значение параметра `style`  |
+| Переменная | Пример            | Описание                                     |
+| ---------- | ----------------- | -------------------------------------------- |
+| version    | `v1.43.0-nightly` | The version of `rustc`                       |
+| numver     | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain  | `beta`            | The toolchain version                        |
+| symbol     |                   | Отражает значение параметра `symbol`         |
+| style\*  |                   | Отражает значение параметра `style`          |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
