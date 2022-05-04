@@ -1722,20 +1722,22 @@ format = "via [⎈ $version](bold white) "
 
 ### オプション
 
-| オプション      | デフォルト                       | 説明                                                                          |
-| ---------- | --------------------------- | --------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | SSHセッションに接続されている場合にのみホスト名を表示します。                                            |
-| `trim_at`  | `"."`                       | この文字が最初にマッチするまでをホスト名と認識します。 `"."`は最初の. までをホスト名として認識します。 `""`を指定した場合トリムしません。 |
-| `format`   | `"[$hostname]($style) in "` | module のフォーマットです。                                                           |
-| `style`    | `"bold dimmed green"`       | モジュールのスタイルです。                                                               |
-| `disabled` | `false`                     | `hostname`モジュールを無効にします。                                                     |
+| オプション        | デフォルト                                  | 説明                                                                                                                                   |
+| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`   | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                                                                     |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
+| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | module のフォーマットです。                                                                                                                    |
+| `style`      | `"bold dimmed green"`                  | モジュールのスタイルです。                                                                                                                        |
+| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### 変数
 
-| 変数        | 設定例        | 説明                           |
-| --------- | ---------- | ---------------------------- |
-| ホスト名      | `computer` | The hostname of the computer |
-| style\* |            | オプション `style` の値をミラーする       |
+| 変数         | 設定例        | 説明                                                    |
+| ---------- | ---------- | ----------------------------------------------------- |
+| ホスト名       | `computer` | The hostname of the computer                          |
+| style\*  |            | オプション `style` の値をミラーする                                |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1746,7 +1748,7 @@ format = "via [⎈ $version](bold white) "
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
