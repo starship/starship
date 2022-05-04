@@ -1727,7 +1727,7 @@ The `hostname` module shows the system hostname.
 | `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
 | `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `format`     | `"[$ssh_symbol$hostname]($style) in "` | The format for the module.                                                                                                           |
-| `style`      | `"bold dimmed green"`                  | The style for the module.                                                                                                            |
+| `stil`       | `"bold dimmed green"`                  | The style for the module.                                                                                                            |
 | `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### Variables
