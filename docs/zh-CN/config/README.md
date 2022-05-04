@@ -2849,11 +2849,13 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variables
 
-| 字段        | 示例                | 描述                     |
-| --------- | ----------------- | ---------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc` |
-| symbol    |                   | `symbol`对应值            |
-| style\* |                   | `style`对应值             |
+| 字段        | 示例                | 描述                                           |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`                       |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | `symbol`对应值                                  |
+| style\* |                   | `style`对应值                                   |
 
 *: This variable can only be used as a part of a style string
 
