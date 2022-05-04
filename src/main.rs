@@ -55,7 +55,7 @@ enum Commands {
     ///  Prints a specific prompt module
     Module {
         /// The name of the module to be printed
-        #[clap(required = true, required_unless_present = "list")]
+        #[clap(required_unless_present("list"))]
         name: Option<String>,
         /// List out all supported modules
         #[clap(short, long)]
@@ -187,8 +187,9 @@ fn main() {
                 if let Some(value) = value {
                     configure::update_configuration(&name, &value)
                 }
-            } else {
-                configure::edit_configuration()
+            } else if let Err(reason) = configure::edit_configuration(None) {
+                eprintln!("Could not edit configuration: {}", reason);
+                std::process::exit(1);
             }
         }
         Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),

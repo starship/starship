@@ -269,7 +269,7 @@ jobs:
     needs: release_please
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v1.16
+      - uses: mislav/bump-homebrew-formula-action@v2.0
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
@@ -284,7 +284,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Merge | Merge Crowdin PR
-        run: gh pr merge --squash i18n_master
+        run: gh pr merge i18n_master --squash --repo=starship/starship
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

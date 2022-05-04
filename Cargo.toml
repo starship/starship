@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.6.2"
+version = "1.6.3"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -12,7 +12,6 @@ include = [
   "src/**/*",
   "/starship.exe.manifest",
   "build.rs",
-  "Cross.toml",
   "LICENSE",
   "/README.md",
   "docs/.vuepress/public/presets/toml/",
@@ -39,8 +38,8 @@ notify = ["notify-rust"]
 ansi_term = "0.12.1"
 byte-unit = "4.0.14"
 chrono = "0.4.19"
-clap = { version = "3.1.11", features = ["derive", "cargo", "unicode"] }
-clap_complete = "3.1.2"
+clap = { version = "3.1.15", features = ["derive", "cargo", "unicode"] }
+clap_complete = "3.1.3"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
 gethostname = "0.2.3"
@@ -52,8 +51,8 @@ log = { version = "0.4.16", features = ["std"] }
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.5.8", optional = true }
 once_cell = "1.10.0"
-open = "2.1.1"
-os_info = "3.2.0"
+open = "2.1.2"
+os_info = "3.3.0"
 path-slash = "0.1.4"
 pest = "2.1.3"
 pest_derive = "2.1.0"
@@ -62,9 +61,9 @@ rand = "0.8.5"
 rayon = "1.5.2"
 regex = "1.5.5"
 rust-ini = "0.18.0"
-semver = "1.0.7"
-serde = { version = "1.0.136", features = ["derive"] }
-serde_json = "1.0.79"
+semver = "1.0.9"
+serde = { version = "1.0.137", features = ["derive"] }
+serde_json = "1.0.81"
 sha-1 = "0.10.0"
 shadow-rs = "0.11.0"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
@@ -74,7 +73,7 @@ strsim = "0.10.0"
 sys-info = "0.9.1"
 terminal_size = "0.1.17"
 toml = { version = "0.5.9", features = ["preserve_order"] }
-toml_edit = "0.14.2"
+toml_edit = "0.14.3"
 unicode-segmentation = "1.9.0"
 unicode-width = "0.1.9"
 urlencoding = "2.1.0"
@@ -84,6 +83,8 @@ yaml-rust = "0.4.5"
 
 process_control = { version = "3.4.0", features = ["crossbeam-channel"] }
 
+guess_host_triple = "0.1.3"
+home = "0.5.3"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
@@ -95,7 +96,7 @@ features = ["preserve_order", "indexmap"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.35.0"
+version = "0.36.1"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
@@ -105,7 +106,7 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = "0.23.1"
+nix = { version = "0.24.1", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
 shadow-rs = "0.11.0"

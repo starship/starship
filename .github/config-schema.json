@@ -461,7 +461,7 @@
       "default": {
         "always_show_remote": false,
         "disabled": false,
-        "format": "on [$symbol$branch]($style)(:[$remote]($style)) ",
+        "format": "on [$symbol$branch(:$remote_branch)]($style) ",
         "ignore_branches": [],
         "only_attached": false,
         "style": "bold purple",
@@ -638,8 +638,9 @@
     "hostname": {
       "default": {
         "disabled": false,
-        "format": "[$hostname]($style) in ",
+        "format": "[$ssh_symbol$hostname]($style) in ",
         "ssh_only": true,
+        "ssh_symbol": "🌐 ",
         "style": "green dimmed bold",
         "trim_at": "."
       },
@@ -2543,7 +2544,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "on [$symbol$branch]($style)(:[$remote]($style)) ",
+          "default": "on [$symbol$branch(:$remote_branch)]($style) ",
           "type": "string"
         },
         "symbol": {
@@ -2956,12 +2957,16 @@
           "default": true,
           "type": "boolean"
         },
+        "ssh_symbol": {
+          "default": "🌐 ",
+          "type": "string"
+        },
         "trim_at": {
           "default": ".",
           "type": "string"
         },
         "format": {
-          "default": "[$hostname]($style) in ",
+          "default": "[$ssh_symbol$hostname]($style) in ",
           "type": "string"
         },
         "style": {
