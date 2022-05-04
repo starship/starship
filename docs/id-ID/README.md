@@ -150,11 +150,11 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    ::: warning
 
-   This will change in the future. Hanya Nushell v0.60+ yang menerima dukungan.
+   This will change in the future. Only Nushell v0.61+ is supported.
 
    :::
 
-   Run the following:
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -163,8 +163,6 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
    Lalu tambahkan baris berikut di baris terakhir konfigurasi Nushell (temukan dengan menjalankan `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
