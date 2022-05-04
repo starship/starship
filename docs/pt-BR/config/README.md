@@ -1719,20 +1719,22 @@ O módulo `hostname` exibe o nome do hostname.
 
 ### Opções
 
-| Opções     | Padrão                      | Descrição                                                                                                                                                |
-| ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | Apenas exibe o hostname quando conectado em uma sessão SSH.                                                                                              |
-| `trim_at`  | `"."`                       | String na qual vai truncar o hostname, após a primeira correspondência. `"."` vai truncar após o primeiro ponto. `""` vai desabilitar qualquer truncação |
-| `format`   | `"[$hostname]($style) in "` | O formato do módulo.                                                                                                                                     |
-| `style`    | `"bold dimmed green"`       | O estilo do módulo.                                                                                                                                      |
-| `disabled` | `false`                     | Desabilita o módulo `hostname`.                                                                                                                          |
+| Opções       | Padrão                                 | Descrição                                                                                                                            |
+| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`   | `true`                                 | Apenas exibe o hostname quando conectado em uma sessão SSH.                                                                          |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
+| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | O formato do módulo.                                                                                                                 |
+| `style`      | `"bold dimmed green"`                  | O estilo do módulo.                                                                                                                  |
+| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### Variáveis
 
-| Variável  | Exemplo    | Descrição                        |
-| --------- | ---------- | -------------------------------- |
-| hostname  | `computer` | O hostname do computador         |
-| style\* |            | Espelha o valor da opção `style` |
+| Variável   | Exemplo    | Descrição                                             |
+| ---------- | ---------- | ----------------------------------------------------- |
+| hostname   | `computer` | O hostname do computador                              |
+| style\*  |            | Espelha o valor da opção `style`                      |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1743,7 +1745,7 @@ O módulo `hostname` exibe o nome do hostname.
 
 [hostname]
 ssh_only = false
-format = "em [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
