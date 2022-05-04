@@ -2850,11 +2850,13 @@ Par défaut, le module `rust` affiche la version actuellement installée de [Rus
 
 ### Variables
 
-| Variable  | Exemple           | Description                            |
-| --------- | ----------------- | -------------------------------------- |
-| version   | `v1.43.0-nightly` | La version de `rustc`                  |
-| symbol    |                   | Reflète la valeur de l'option `symbol` |
-| style\* |                   | Reflète la valeur de l'option `style`  |
+| Variable  | Exemple           | Description                                  |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | La version de `rustc`                        |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | Reflète la valeur de l'option `symbol`       |
+| style\* |                   | Reflète la valeur de l'option `style`        |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
