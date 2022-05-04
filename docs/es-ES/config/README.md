@@ -1721,20 +1721,22 @@ El módulo `hostname` muestra el nombre de host del sistema.
 
 ### Opciones
 
-| Opción     | Por defecto                 | Descripción                                                                                                                                                       |
-| ---------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                            |
-| `trim_at`  | `"."`                       | Cadena en la que el nombre de host se corta, después de la primera partida. `"."` se detendrá después del primer punto. `""` deshabilitará cualquier truncamiento |
-| `format`   | `"[$hostname]($style) in "` | El formato del módulo.                                                                                                                                            |
-| `style`    | `"bold dimmed green"`       | El estilo del módulo.                                                                                                                                             |
-| `disabled` | `false`                     | Desactiva el módulo `hostname`.                                                                                                                                   |
+| Opción       | Por defecto                            | Descripción                                                                                                                          |
+| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`   | `true`                                 | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                               |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
+| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | El formato del módulo.                                                                                                               |
+| `style`      | `"bold dimmed green"`                  | El estilo del módulo.                                                                                                                |
+| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### Variables
 
-| Variable  | Ejemplo    | Descripción                           |
-| --------- | ---------- | ------------------------------------- |
-| hostname  | `computer` | El nombre de host del ordenador       |
-| style\* |            | Refleja el valor de la opción `style` |
+| Variable   | Ejemplo    | Descripción                                           |
+| ---------- | ---------- | ----------------------------------------------------- |
+| hostname   | `computer` | El nombre de host del ordenador                       |
+| style\*  |            | Refleja el valor de la opción `style`                 |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1745,7 +1747,7 @@ El módulo `hostname` muestra el nombre de host del sistema.
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
