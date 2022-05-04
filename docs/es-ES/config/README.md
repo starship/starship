@@ -2849,11 +2849,13 @@ Por defecto, el módulo `rust` muestra la versión instalada de [Rust](https://w
 
 ### Variables
 
-| Variable  | Ejemplo           | Descripción                            |
-| --------- | ----------------- | -------------------------------------- |
-| version   | `v1.43.0-nightly` | La versión de `rustc`                  |
-| symbol    |                   | Refleja el valor de la opción `symbol` |
-| style\* |                   | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo           | Descripción                                  |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | La versión de `rustc`                        |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | Refleja el valor de la opción `symbol`       |
+| style\* |                   | Refleja el valor de la opción `style`        |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
