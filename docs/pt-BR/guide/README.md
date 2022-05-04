@@ -326,7 +326,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Execute o seguinte comando:
+Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -336,11 +336,10 @@ starship init nu | save ~/.cache/starship/init.nu
 E adicione o seguinte ao final da sua configuração do Nushell (encontre-o executando `$nu.config-path`):
 
 ```sh
-starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Nota: Somente o Nushell v0.60+ é suportado
+Note: Only Nushell v0.61+ is supported
 
 </details>
 
