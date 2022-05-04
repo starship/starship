@@ -1721,20 +1721,22 @@ The `hostname` module shows the system hostname.
 
 ### Opsi
 
-| Opsi       | Bawaan                      | Deskripsi                                                                                                                            |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only` | `true`                      | Only show hostname when connected to an SSH session.                                                                                 |
-| `trim_at`  | `"."`                       | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `fromat`   | `"[$hostname]($style) in "` | Format dari modul.                                                                                                                   |
-| `style`    | `"bold dimmed green"`       | Gaya penataan untuk modul.                                                                                                           |
-| `disabled` | `false`                     | Disables the `hostname` module.                                                                                                      |
+| Opsi         | Bawaan                                 | Deskripsi                                                                                                                            |
+| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`   | `true`                                 | Only show hostname when connected to an SSH session.                                                                                 |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
+| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `fromat`     | `"[$ssh_symbol$hostname]($style) in "` | Format dari modul.                                                                                                                   |
+| `style`      | `"bold dimmed green"`                  | Gaya penataan untuk modul.                                                                                                           |
+| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### Variabel
 
-| Variabel  | Contoh     | Deskripsi                        |
-| --------- | ---------- | -------------------------------- |
-| hostname  | `computer` | The hostname of the computer     |
-| style\* |            | Menyalin nilai dari opsi `style` |
+| Variabel   | Contoh     | Deskripsi                                             |
+| ---------- | ---------- | ----------------------------------------------------- |
+| hostname   | `computer` | The hostname of the computer                          |
+| style\*  |            | Menyalin nilai dari opsi `style`                      |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1745,7 +1747,7 @@ The `hostname` module shows the system hostname.
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
