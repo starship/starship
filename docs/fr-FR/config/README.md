@@ -1721,20 +1721,22 @@ Le module `hostname` affiche le nom d'hôte du système.
 
 ### Options
 
-| Option     | Défaut                      | Description                                                                                                                                             |
-| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | Afficher uniquement le nom d'hôte lorsque vous êtes connecté à une session SSH.                                                                         |
-| `trim_at`  | `"."`                       | Chaîne à laquelle le nom d'hôte est coupé, après la première correspondance. `"."` s'arrêtera après le premier point. `""` désactivera toute troncature |
-| `format`   | `"[$hostname]($style) in "` | Format du module.                                                                                                                                       |
-| `style`    | `"bold dimmed green"`       | Le style du module.                                                                                                                                     |
-| `disabled` | `false`                     | Désactive le module `hostname`.                                                                                                                         |
+| Option       | Défaut                                 | Description                                                                                                                          |
+| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`   | `true`                                 | Afficher uniquement le nom d'hôte lorsque vous êtes connecté à une session SSH.                                                      |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
+| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Format du module.                                                                                                                    |
+| `style`      | `"bold dimmed green"`                  | Le style du module.                                                                                                                  |
+| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### Variables
 
-| Variable   | Exemple    | Description                           |
-| ---------- | ---------- | ------------------------------------- |
-| nom d'hôte | `computer` | Le nom d’hôte de l’ordinateur         |
-| style\*  |            | Reflète la valeur de l'option `style` |
+| Variable   | Exemple    | Description                                           |
+| ---------- | ---------- | ----------------------------------------------------- |
+| nom d'hôte | `computer` | Le nom d’hôte de l’ordinateur                         |
+| style\*  |            | Reflète la valeur de l'option `style`                 |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1745,8 +1747,8 @@ Le module `hostname` affiche le nom d'hôte du système.
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
-trim_at = ".nom-entreprise.com"
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
+trim_at = ".companyname.com"
 disabled = false
 ```
 
