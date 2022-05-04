@@ -2849,11 +2849,13 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Các biến
 
-| Biến      | Ví dụ             | Mô tả                            |
-| --------- | ----------------- | -------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`           |
-| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |                   | Giá trị ghi đè của `style`       |
+| Biến      | Ví dụ             | Mô tả                                        |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`                       |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol`             |
+| style\* |                   | Giá trị ghi đè của `style`                   |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
