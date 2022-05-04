@@ -2849,11 +2849,13 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variabel
 
-| Variabel  | Contoh            | Deskripsi                         |
-| --------- | ----------------- | --------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`            |
-| symbol    |                   | Menyalin nilai dari opsi `symbol` |
-| style\* |                   | Menyalin nilai dari opsi `style`  |
+| Variabel  | Contoh            | Deskripsi                                    |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`                       |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | Menyalin nilai dari opsi `symbol`            |
+| style\* |                   | Menyalin nilai dari opsi `style`             |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
