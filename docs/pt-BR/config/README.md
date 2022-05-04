@@ -2847,11 +2847,13 @@ Por padrão o módulo `rust` vai exibir a versão atual instalada do [Rust](http
 
 ### Variáveis
 
-| Variável  | Exemplo           | Descrição                         |
-| --------- | ----------------- | --------------------------------- |
-| version   | `v1.43.0-nightly` | A versão do `rustc`               |
-| symbol    |                   | Espelha o valor da opção `symbol` |
-| style\* |                   | Espelha o valor da opção `style`  |
+| Variável  | Exemplo           | Descrição                                    |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | A versão do `rustc`                          |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | Espelha o valor da opção `symbol`            |
+| style\* |                   | Espelha o valor da opção `style`             |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
