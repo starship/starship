@@ -150,11 +150,11 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    ::: warning
 
-   Ceci va changer dans le futur. Seul Nushell v0.60+ est supporté.
+   Ceci va changer dans le futur. Only Nushell v0.61+ is supported.
 
    :::
 
-   Exécutez les commandes suivantes:
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -163,8 +163,6 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en exécutant `$nu.config path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
