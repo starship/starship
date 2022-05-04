@@ -150,11 +150,11 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.60+ is supported.
+   This will change in the future. Only Nushell v0.61+ is supported.
 
    :::
 
-   Run the following:
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -163,8 +163,6 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
