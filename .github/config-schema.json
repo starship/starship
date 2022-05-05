@@ -645,8 +645,9 @@
     "hostname": {
       "default": {
         "disabled": false,
-        "format": "[$hostname]($style) in ",
+        "format": "[$ssh_symbol$hostname]($style) in ",
         "ssh_only": true,
+        "ssh_symbol": "🌐 ",
         "style": "green dimmed bold",
         "trim_at": "."
       },
@@ -3031,12 +3032,16 @@
           "default": true,
           "type": "boolean"
         },
+        "ssh_symbol": {
+          "default": "🌐 ",
+          "type": "string"
+        },
         "trim_at": {
           "default": ".",
           "type": "string"
         },
         "format": {
-          "default": "[$hostname]($style) in ",
+          "default": "[$ssh_symbol$hostname]($style) in ",
           "type": "string"
         },
         "style": {
