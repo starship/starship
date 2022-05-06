@@ -211,6 +211,20 @@ mod tests {
 
     #[test]
     #[ignore]
+    fn test_hg_topic() -> io::Result<()> {
+        let tempdir = fixture_repo(FixtureProvider::Hg)?;
+        let repo_dir = tempdir.path();
+        run_hg(&["topics", "feature-topic"], repo_dir)?;
+        expect_hg_branch_with_config(
+            repo_dir,
+            None,
+            &[Expect::BranchName("feature-topic"), Expect::NoTruncation],
+        );
+        tempdir.close()
+    }
+
+    #[test]
+    #[ignore]
     fn test_default_truncation_symbol() -> io::Result<()> {
         let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();

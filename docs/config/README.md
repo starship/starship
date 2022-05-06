@@ -2254,7 +2254,7 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+The `hg_branch` module shows the active topic, bookmark or branch of the repo in your current directory.
 
 ### Options
 
