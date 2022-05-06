@@ -1,19 +1,19 @@
 use unicode_segmentation::UnicodeSegmentation;
 
+use std::path::{Path, PathBuf};
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
 
-/// Creates a module with the Hg bookmark or branch in the current directory
+/// Creates a module with the Hg topic, bookmark or branch in the current directory
 ///
-/// Will display the bookmark or branch name if the current directory is an hg repo
+/// Will display the topic, bookmark or branch name if the current directory is an hg repo
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let is_hg_repo = context.try_begin_scan()?.set_folders(&[".hg"]).is_match();
-
-    if !is_hg_repo {
-        return None;
-    }
+    let dothg_path = match find_dothg_path(&context.current_dir) {
+        None => return None,
+        Some(d) => d,
+    };
 
     let mut module = context.new_module("hg_branch");
     let config: HgBranchConfig = HgBranchConfig::try_load(module.config);
@@ -35,7 +35,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let branch_name =
-        get_hg_current_bookmark(context).unwrap_or_else(|| get_hg_branch_name(context));
+        get_hg_current_topic(&dothg_path).unwrap_or_else(
+            || get_hg_current_bookmark(&dothg_path).unwrap_or_else(
+                || get_hg_branch_name(&dothg_path)));
 
     let truncated_graphemes = get_graphemes(&branch_name, len);
     // The truncation symbol should only be added if we truncated
@@ -74,13 +76,34 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_hg_branch_name(ctx: &Context) -> String {
-    std::fs::read_to_string(ctx.current_dir.join(".hg").join("branch"))
+fn find_dothg_path(cwd: &PathBuf) -> Option<PathBuf> {
+    let mut path = cwd.to_owned();
+    let hgdir = Path::new(".hg");
+
+    loop {
+        path.push(hgdir);
+        if path.is_dir() {
+            break Some(path.to_path_buf())
+        }
+        if !(path.pop() && path.pop()) {
+            break None
+        }
+    }
+}
+
+fn get_hg_branch_name(dothg_path: &PathBuf) -> String {
+    std::fs::read_to_string(dothg_path.join("branch"))
         .map_or_else(|_| "default".to_string(), |s| s.trim().into())
 }
 
-fn get_hg_current_bookmark(ctx: &Context) -> Option<String> {
-    std::fs::read_to_string(ctx.current_dir.join(".hg").join("bookmarks.current"))
+fn get_hg_current_bookmark(dothg_path: &PathBuf) -> Option<String> {
+    std::fs::read_to_string(dothg_path.join("bookmarks.current"))
+        .map(|s| s.trim().into())
+        .ok()
+}
+
+fn get_hg_current_topic(dothg_path: &PathBuf) -> Option<String> {
+    std::fs::read_to_string(dothg_path.join("topic"))
         .map(|s| s.trim().into())
         .ok()
 }
