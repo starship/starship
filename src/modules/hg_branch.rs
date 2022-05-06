@@ -1,7 +1,7 @@
 use unicode_segmentation::UnicodeSegmentation;
 
-use std::path::{Path, PathBuf};
 use super::{Context, Module, ModuleConfig};
+use std::path::{Path, PathBuf};
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
@@ -34,10 +34,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let branch_name =
-        get_hg_current_topic(&dothg_path).unwrap_or_else(
-            || get_hg_current_bookmark(&dothg_path).unwrap_or_else(
-                || get_hg_branch_name(&dothg_path)));
+    let branch_name = get_hg_current_topic(&dothg_path).unwrap_or_else(|| {
+        get_hg_current_bookmark(&dothg_path).unwrap_or_else(|| get_hg_branch_name(&dothg_path))
+    });
 
     let truncated_graphemes = get_graphemes(&branch_name, len);
     // The truncation symbol should only be added if we truncated
@@ -83,10 +82,10 @@ fn find_dothg_path(cwd: &PathBuf) -> Option<PathBuf> {
     loop {
         path.push(hgdir);
         if path.is_dir() {
-            break Some(path.to_path_buf())
+            break Some(path.to_path_buf());
         }
         if !(path.pop() && path.pop()) {
-            break None
+            break None;
         }
     }
 }
