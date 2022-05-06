@@ -91,18 +91,18 @@ fn find_dothg_path(cwd: &PathBuf) -> Option<PathBuf> {
     }
 }
 
-fn get_hg_branch_name(dothg_path: &PathBuf) -> String {
+fn get_hg_branch_name(dothg_path: &Path) -> String {
     std::fs::read_to_string(dothg_path.join("branch"))
         .map_or_else(|_| "default".to_string(), |s| s.trim().into())
 }
 
-fn get_hg_current_bookmark(dothg_path: &PathBuf) -> Option<String> {
+fn get_hg_current_bookmark(dothg_path: &Path) -> Option<String> {
     std::fs::read_to_string(dothg_path.join("bookmarks.current"))
         .map(|s| s.trim().into())
         .ok()
 }
 
-fn get_hg_current_topic(dothg_path: &PathBuf) -> Option<String> {
+fn get_hg_current_topic(dothg_path: &Path) -> Option<String> {
     std::fs::read_to_string(dothg_path.join("topic"))
         .map(|s| s.trim().into())
         .ok()
