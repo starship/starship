@@ -1602,25 +1602,26 @@ O módulo `golang` exibe a versão instalada atual do [Go](https://golang.org/).
 
 - O diretório atual contem um arquivo `go.mod`
 - O diretório atual contem um arquivo `go.sum`
-- O diretório atual contem um arquivo `glide.yaml`
-- O diretório atual contem um arquivo `Gopkg.yml`
-- O diretório atual contém um arquivo `Gopkg.lock`
-- O diretório atual contem um arquivo `.go-version`
-- O diretório atual contem um diretório `Godeps`
-- O diretório atual contem arquivos com a extensão `.go`
+- The current directory contains a `go.work` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Opções
 
-| Opções              | Padrão                                                                         | Descrição                                                                            |
-| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | O formato do módulo.                                                                 |
-| `version_format`    | `"v${raw}"`                                                                    | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | O formato da string que representa o simbolo do Go.                                  |
-| `detect_extensions` | `["go"]`                                                                       | Quais extensões devem ativar este módulo.                                            |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
-| `detect_folders`    | `["Godeps"]`                                                                   | Quais pastas devem ativar este módulo.                                               |
-| `style`             | `"bold cyan"`                                                                  | O estilo do módulo.                                                                  |
-| `disabled`          | `false`                                                                        | Desabilita o módulo `golang`.                                                        |
+| Opções              | Padrão                                                                                    | Descrição                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                                                      | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                                                                               | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                                    | O formato da string que representa o simbolo do Go.                                  |
+| `detect_extensions` | `["go"]`                                                                                  | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `["Godeps"]`                                                                              | Quais pastas devem ativar este módulo.                                               |
+| `style`             | `"bold cyan"`                                                                             | O estilo do módulo.                                                                  |
+| `disabled`          | `false`                                                                                   | Desabilita o módulo `golang`.                                                        |
 
 ### Variáveis
 
