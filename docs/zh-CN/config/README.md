@@ -92,7 +92,7 @@ The first part, which is enclosed in a `[]`, is a [format string](#format-string
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-For example:
+例如：
 
 - `[on](red bold)` will print a string `on` with bold text colored red.
 - `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
