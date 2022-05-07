@@ -1604,7 +1604,8 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - Direktori terkini yang berisikan sebuah file `go.mod`
 - Direktori terkini yang berisikan sebuah file `go.sum`
-- Direktori terkini yang berisikan sebuah file `glide.yaml`
+- The current directory contains a `go.work` file
+- The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
@@ -1613,16 +1614,16 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Opsi
 
-| Opsi                | Bawaan                                                                         | Deskripsi                                                                           |
-| ------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| `fromat`            | `"via [$symbol($version )]($style)"`                                           | Format dari modul.                                                                  |
-| `version_format`    | `"v${raw}"`                                                                    | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                                      |
-| `detect_extensions` | `["go"]`                                                                       | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `["Godeps"]`                                                                   | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `"bold cyan"`                                                                  | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                                                       |
+| Opsi                | Bawaan                                                                                    | Deskripsi                                                                           |
+| ------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `fromat`            | `"via [$symbol($version )]($style)"`                                                      | Format dari modul.                                                                  |
+| `version_format`    | `"v${raw}"`                                                                               | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                                    | A format string representing the symbol of Go.                                      |
+| `detect_extensions` | `["go"]`                                                                                  | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `["Godeps"]`                                                                              | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `"bold cyan"`                                                                             | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                       |
 
 ### Variabel
 
