@@ -150,7 +150,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   Esto cambiará en el futuro. Only Nushell v0.61+ is supported.
 
    :::
 
