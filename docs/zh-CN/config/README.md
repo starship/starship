@@ -86,11 +86,11 @@ For example:
 
 #### Text Group
 
-A text group is made up of two different parts.
+文本由以下两种括号来进行分组：
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+第一种`[]`括号中的内容是[格式字符串](#format-strings)， 你可以在当中添加文本，变量甚至嵌套其他括号。
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
+第二种`()`括号中的内容是[样式字符串](#style-strings)， 可用于指定第一种括号中内容的样式。
 
 例如：
 
