@@ -1604,25 +1604,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - 当前目录包含 `go.mod` 文件
 - 当前目录包含 `go.sum` 文件
-- 当前目录包含 `glide.yaml` 文件
-- 当前目录包含 `Gopkg.yml` 文件
-- 当前目录包含 `Gopkg.lock` 文件
+- The current directory contains a `go.work` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
 - The current directory contains a `.go-version` file
-- 当前目录包含 `Godeps` 目录
-- 当前目录包含一个使用 `.go` 扩展名的文件
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### 配置项
 
-| Option              | 默认值                                                                            | 描述                                                                        |
-| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | 组件格式化模板。                                                                  |
-| `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                            |
-| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this module.                              |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.                                 |
-| `style`             | `"bold cyan"`                                                                  | 此组件的样式。                                                                   |
-| `disabled`          | `false`                                                                        | 禁用 `golang` 组件。                                                           |
+| Option              | 默认值                                                                                       | 描述                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                      | 组件格式化模板。                                                                  |
+| `version_format`    | `"v${raw}"`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                                    | A format string representing the symbol of Go.                            |
+| `detect_extensions` | `["go"]`                                                                                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["Godeps"]`                                                                              | Which folders should trigger this module.                                 |
+| `style`             | `"bold cyan"`                                                                             | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                                                                   | 禁用 `golang` 组件。                                                           |
 
 ### Variables
 
