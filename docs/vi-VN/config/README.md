@@ -1604,25 +1604,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - Thư mục hiện tại chứa một tập tin `go.mod`
 - Đường dẫn hiện tại chứa một tập tin `go.sum`
-- Thư mục hiện tại chứa một tập tin `glide.yaml`
-- Thư mục hiện tại chứa một tập tin `Gopkg.yml`
-- Đường dẫn hiện tại chứa một tập tin `Gopkg.lock`
-- Thư mục hiện tại chứa một tệp tin `.go-version`
-- Thư mục hiện tại chứa một thư mục `Godeps`
-- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.go`
+- The current directory contains a `go.work` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                                       | Mô tả                                                                     |
-| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | Định dạng cho module.                                                     |
-| `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | Một format string đại diện cho biểu tượng của Go.                         |
-| `detect_extensions` | `["go"]`                                                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `["Godeps"]`                                                                   | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `style`             | `"bold cyan"`                                                                  | Kiểu cho module.                                                          |
-| `disabled`          | `false`                                                                        | Vô hiệu `golang` module.                                                  |
+| Tuỳ chọn            | Mặc định                                                                                  | Mô tả                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                      | Định dạng cho module.                                                     |
+| `version_format`    | `"v${raw}"`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                                    | Một format string đại diện cho biểu tượng của Go.                         |
+| `detect_extensions` | `["go"]`                                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `["Godeps"]`                                                                              | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold cyan"`                                                                             | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                                                                   | Vô hiệu `golang` module.                                                  |
 
 ### Các biến
 
