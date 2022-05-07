@@ -130,6 +130,18 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_go_work() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("go.work"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("golang").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🐹 v1.12.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_godeps() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let godeps = dir.path().join("Godeps");

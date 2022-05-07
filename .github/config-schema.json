@@ -556,6 +556,7 @@
         "detect_files": [
           "go.mod",
           "go.sum",
+          "go.work",
           "glide.yaml",
           "Gopkg.yml",
           "Gopkg.lock",
@@ -2797,6 +2798,7 @@
           "default": [
             "go.mod",
             "go.sum",
+            "go.work",
             "glide.yaml",
             "Gopkg.yml",
             "Gopkg.lock",
