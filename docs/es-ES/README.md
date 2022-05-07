@@ -122,7 +122,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Sólo se admite elvish v0.18 o superior.
 
    :::
 
@@ -150,11 +150,11 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    ::: warning
 
-   Esto cambiará en el futuro. Only Nushell v0.61+ is supported.
+   Esto cambiará en el futuro. Sólo se admite Nushell v0.61+.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Añade lo siguiente al final de tu archivo Nushell env (encuéntralo ejecutando `$nu.env-path` en Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
