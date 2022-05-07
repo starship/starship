@@ -115,13 +115,13 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+例如：
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(some text)` will always show nothing since there are no variables wrapped in the braces.
 - When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
 
-#### Special characters
+#### 特殊字符
 
 The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
 
@@ -150,7 +150,7 @@ format = '''
 
 ### 配置项
 
-| Option            | 默认值                           | 描述                                                               |
+| 选项                | 默认值                           | 描述                                                               |
 | ----------------- | ----------------------------- | ---------------------------------------------------------------- |
 | `format`          | [见下文](#default-prompt-format) | 配置提示符的格式。                                                        |
 | `right_format`    | `""`                          | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
@@ -259,10 +259,10 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+如果你只是想扩展默认的格式，你可以使用 `$all`; 你另外添加到格式中的modules不会重复出现。 例如：
 
 ```toml
-# Move the directory to the second line
+# 将目录信息移到第二行
 format = "$all$directory$character"
 ```
 
@@ -280,7 +280,7 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### 配置项
 
-| Option              | 默认值                                                                   | 描述                                                                                                          |
+| 选项                  | 默认值                                                                   | 描述                                                                                                          |
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | 组件格式化模板。                                                                                                    |
 | `symbol`            | `"☁️ "`                                                               | 这个字段的内容会显示在当前 AWS 配置信息之前。                                                                                   |
@@ -379,7 +379,7 @@ style = "blue bold"
 
 ### 配置项
 
-| Option               | 默认值                               | 描述               |
+| 选项                   | 默认值                               | 描述               |
 | -------------------- | --------------------------------- | ---------------- |
 | `full_symbol`        | `" "`                            | 显示于电池充满时。        |
 | `charging_symbol`    | `" "`                            | 显示于正在充电时。        |
@@ -417,7 +417,7 @@ The default value for the `charging_symbol` and `discharging_symbol` option is r
 
 `display` 字段的子字段如下：
 
-| Option               | 默认值        | 描述                                                                                                        |
+| 选项                   | 默认值        | 描述                                                                                                        |
 | -------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
 | `threshold`          | `10`       | 当前显示设置的电量上限（见示例）                                                                                          |
 | `style`              | `bold red` | 若组件被显示，则使用此样式                                                                                             |
@@ -448,7 +448,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 ### 配置项
 
-| Option              | 默认值                                                          | 描述                                                    |
+| 选项                  | 默认值                                                          | 描述                                                    |
 | ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
 | `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
 | `version_format`    | `"v${raw}"`                                                  | The version format.                                   |
@@ -484,7 +484,7 @@ The `c` module shows some information about your C compiler. By default the modu
 
 ### 配置项
 
-| Option              | 默认值                                                                         | 描述                                                                        |
+| 选项                  | 默认值                                                                         | 描述                                                                        |
 | ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version(-$name) )]($style)"`                                | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -543,7 +543,7 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### 配置项
 
-| Option           | 默认值                 | 描述                                                                               |
+| 选项               | 默认值                 | 描述                                                                               |
 | ---------------- | ------------------- | -------------------------------------------------------------------------------- |
 | `format`         | `"$symbol "`        | The format string used before the text input.                                    |
 | `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
@@ -597,7 +597,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### 配置项
 
-| Option              | 默认值                                    | 描述                                                                        |
+| 选项                  | 默认值                                    | 描述                                                                        |
 | ------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`   | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                            | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -627,7 +627,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `symbol`            | `"⚙️ "`                              | The symbol used before displaying the version of COBOL.                   |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
@@ -662,7 +662,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ### 配置项
 
-| Option                 | 默认值                           | 描述                                                                                                                                                                |
+| 选项                     | 默认值                           | 描述                                                                                                                                                                |
 | ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `min_time`             | `2_000`                       | 显示此组件所需的最短执行时长（单位：毫秒）。                                                                                                                                            |
 | `show_milliseconds`    | `false`                       | 除了秒数外在执行时长中额外显示毫秒。                                                                                                                                                |
@@ -704,7 +704,7 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 
 ### 配置项
 
-| Option              | 默认值                                    | 描述                                                                                                               |
+| 选项                  | 默认值                                    | 描述                                                                                                               |
 | ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | 如果这个 conda 环境是通过 `conda create -p [path]` 创建的，环境路径的目录深度应该被截断到此数量。 `0` 表示不用截断。 另请参阅 [`directory`](#directory) 组件。 |
 | `symbol`            | `"🅒 "`                                 | 在环境名之前显示的符号。                                                                                                     |
@@ -738,7 +738,7 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### 配置项
 
-| Option     | 默认值                                    | 描述                                        |
+| 选项         | 默认值                                    | 描述                                        |
 | ---------- | -------------------------------------- | ----------------------------------------- |
 | `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
 | `style`    | `"bold red dimmed"`                    | 此组件的样式。                                   |
@@ -773,7 +773,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `symbol`            | `"🔮 "`                               | The symbol used before displaying the version of crystal.                 |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
@@ -813,7 +813,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### 配置项
 
-| Option              | 默认值                                               | 描述                                                                        |
+| 选项                  | 默认值                                               | 描述                                                                        |
 | ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`              | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -851,7 +851,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### 配置项
 
-| Option              | 默认值                                                                     | 描述                                                                        |
+| 选项                  | 默认值                                                                     | 描述                                                                        |
 | ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                    | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -889,7 +889,7 @@ format = "via [🦕 $version](green bold) "
 
 ### 配置项
 
-| Option              | 默认值                                                                                                         | 描述                                                                                      |
+| 选项                  | 默认值                                                                                                         | 描述                                                                                      |
 | ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `truncation_length` | `3`                                                                                                         | 当前目录路径被截断后最多保留的父目录数量。                                                                   |
 | `truncate_to_repo`  | `true`                                                                                                      | 是否只截断到您当前处于的 git 仓库根目录下。                                                                |
@@ -965,7 +965,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### 配置项
 
-| Option              | 默认值                                                           | 描述                                                                                |
+| 选项                  | 默认值                                                           | 描述                                                                                |
 | ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$context]($style) "`                            | 组件格式化模板。                                                                          |
 | `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
@@ -1018,7 +1018,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### 配置项
 
-| Option              | 默认值                                                                                                     | 描述                                                                        |
+| 选项                  | 默认值                                                                                                     | 描述                                                                        |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                                                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1060,7 +1060,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### 配置项
 
-| Option              | 默认值                                                         | 描述                                                                        |
+| 选项                  | 默认值                                                         | 描述                                                                        |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                         |
 | `version_format`    | `"v${raw}"`                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1103,7 +1103,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### 配置项
 
-| Option              | 默认值                                                | 描述                                                                        |
+| 选项                  | 默认值                                                | 描述                                                                        |
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`               | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1157,7 +1157,7 @@ default = "unknown user"
 
 ### 配置项
 
-| Option     | 默认值                            | 描述                  |
+| 选项         | 默认值                            | 描述                  |
 | ---------- | ------------------------------ | ------------------- |
 | `symbol`   | `""`                           | 这个字段的内容会显示在环境变量值之前。 |
 | `variable` |                                | 要显示的环境变量。           |
@@ -1206,7 +1206,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1242,7 +1242,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 
 ### 配置项
 
-| Option     | 默认值            | 描述                                |
+| 选项         | 默认值            | 描述                                |
 | ---------- | -------------- | --------------------------------- |
 | `symbol`   | `"."`          | The symbol used to fill the line. |
 | `style`    | `"bold black"` | 此组件的样式。                           |
@@ -1271,7 +1271,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### 配置项
 
-| Option            | 默认值                                                        | 描述                                                               |
+| 选项                | 默认值                                                        | 描述                                                               |
 | ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | 组件格式化模板。                                                         |
 | `symbol`          | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.       |
@@ -1344,7 +1344,7 @@ very-long-project-name = "vlpn"
 
 ### 配置项
 
-| Option               | 默认值                                               | 描述                                                                                   |
+| 选项                   | 默认值                                               | 描述                                                                                   |
 | -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name. |
 | `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | 组件格式化模板。 Use `"$branch"` to refer to the current branch name.                        |
@@ -1386,7 +1386,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### 配置项
 
-| Option               | 默认值                                | 描述                                                      |
+| 选项                   | 默认值                                | 描述                                                      |
 | -------------------- | ---------------------------------- | ------------------------------------------------------- |
 | `commit_hash_length` | `7`                                | 显示的 git 提交哈希值的长度。                                       |
 | `format`             | `"[\\($hash$tag\\)]($style) "` | 组件格式化模板。                                                |
@@ -1421,7 +1421,7 @@ tag_symbol = "🔖 "
 
 ### 配置项
 
-| Option         | 默认值                                                             | 描述                                                                                      |
+| 选项             | 默认值                                                             | 描述                                                                                      |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
 | `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
@@ -1467,7 +1467,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ### 配置项
 
-| Option               | 默认值                                                          | 描述                                    |
+| 选项                   | 默认值                                                          | 描述                                    |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------- |
 | `added_style`        | `"bold green"`                                               | The style for the added count.        |
 | `deleted_style`      | `"bold red"`                                                 | The style for the deleted count.      |
@@ -1508,7 +1508,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 ### 配置项
 
-| Option              | 默认值                                             | 描述                                                                                                          |
+| 选项                  | 默认值                                             | 描述                                                                                                          |
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
 | `conflicted`        | `"="`                                           | 这个分支有合并冲突。                                                                                                  |
@@ -1614,7 +1614,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### 配置项
 
-| Option              | 默认值                                                                                       | 描述                                                                        |
+| 选项                  | 默认值                                                                                       | 描述                                                                        |
 | ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                                      | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1655,7 +1655,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                 |
+| 选项                  | 默认值                                  | 描述                                                 |
 | ------------------- | ------------------------------------ | -------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                           |
 | `symbol`            | `"λ "`                               | A format string representing the symbol of Haskell |
@@ -1686,7 +1686,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1722,7 +1722,7 @@ format = "via [⎈ $version](bold white) "
 
 ### 配置项
 
-| Option       | 默认值                                    | 描述                                                                                                                                   |
+| 选项           | 默认值                                    | 描述                                                                                                                                   |
 | ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only`   | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                                                  |
 | `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
@@ -1762,7 +1762,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### 配置项
 
-| Option              | 默认值                                                                                                       | 描述                                                                        |
+| 选项                  | 默认值                                                                                                       | 描述                                                                        |
 | ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"`                                                                  | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1816,7 +1816,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### 配置项
 
-| Option             | 默认值                           | 描述                                                                       |
+| 选项                 | 默认值                           | 描述                                                                       |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
 | `threshold`*       | `1`                           | 如果超过此字段的值，显示任务数量。                                                        |
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
@@ -1859,7 +1859,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -1897,7 +1897,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                            |
+| 选项                  | 默认值                                  | 描述                                                                            |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                      |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
@@ -1948,7 +1948,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ### 配置项
 
-| Option            | 默认值                                                  | 描述                                                                    |
+| 选项                | 默认值                                                  | 描述                                                                    |
 | ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | 组件格式化模板。                                                              |
@@ -2010,7 +2010,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ### 配置项
 
-| Option     | 默认值     | 描述                          |
+| 选项         | 默认值     | 描述                          |
 | ---------- | ------- | --------------------------- |
 | `disabled` | `false` | 禁用 `line_break` 组件，使提示成为单行。 |
 
@@ -2029,7 +2029,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### 配置项
 
-| Option     | 默认值                       | 描述                                                     |
+| 选项         | 默认值                       | 描述                                                     |
 | ---------- | ------------------------- | ------------------------------------------------------ |
 | `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
 | `format`   | `"[$localipv4]($style) "` | 组件格式化模板。                                               |
@@ -2066,7 +2066,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                         |
+| 选项                  | 默认值                                  | 描述                                                                         |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                   |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`  |
@@ -2111,7 +2111,7 @@ format = "via [🌕 $version](bold blue) "
 
 ### 配置项
 
-| Option      | 默认值                                             | 描述                     |
+| 选项          | 默认值                                             | 描述                     |
 | ----------- | ----------------------------------------------- | ---------------------- |
 | `threshold` | `75`                                            | 隐藏内存使用情况，除非它超过这个百分比。   |
 | `format`    | `"via $symbol [${ram}( \| ${swap})]($style) "` | 组件格式化模板。               |
@@ -2150,7 +2150,7 @@ style = "bold dimmed green"
 
 ### 配置项
 
-| Option              | 默认值                              | 描述                                            |
+| 选项                  | 默认值                              | 描述                                            |
 | ------------------- | -------------------------------- | --------------------------------------------- |
 | `symbol`            | `" "`                           | 该字段的内容显示于当前仓库的 hg 书签或活动分支名之前。                 |
 | `style`             | `"bold purple"`                  | 此组件的样式。                                       |
@@ -2191,7 +2191,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                 |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2228,7 +2228,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### 配置项
 
-| Option       | 默认值                                            | 描述                                                    |
+| 选项           | 默认值                                            | 描述                                                    |
 | ------------ | ---------------------------------------------- | ----------------------------------------------------- |
 | `format`     | `'via [$symbol$state( \($name\))]($style) '` | 组件格式化模板。                                              |
 | `symbol`     | `"❄️ "`                                        | A format string representing the symbol of nix-shell. |
@@ -2273,7 +2273,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### 配置项
 
-| Option              | 默认值                                        | 描述                                                                                                    |
+| 选项                  | 默认值                                        | 描述                                                                                                    |
 | ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`       | 组件格式化模板。                                                                                              |
 | `version_format`    | `"v${raw}"`                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
@@ -2317,7 +2317,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### 配置项
 
-| Option                    | 默认值                                                                        | 描述                                                                        |
+| 选项                        | 默认值                                                                        | 描述                                                                        |
 | ------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`                  | `"via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)"` | The format string for the module.                                         |
 | `version_format`          | `"v${raw}"`                                                                | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2357,7 +2357,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### 配置项
 
-| Option     | 默认值                                                 | 描述                                                             |
+| 选项         | 默认值                                                 | 描述                                                             |
 | ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | 组件格式化模板。                                                       |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
@@ -2411,7 +2411,7 @@ symbol = "☁️ "
 
 ### 配置项
 
-| Option            | 默认值                               | 描述                                                                        |
+| 选项                | 默认值                               | 描述                                                                        |
 | ----------------- | --------------------------------- | ------------------------------------------------------------------------- |
 | `format`          | `"is [$symbol$version]($style) "` | 组件格式化模板。                                                                  |
 | `symbol`          | `"📦 "`                            | 这个字段的内容会显示在当前软件包版本之前。                                                     |
@@ -2451,7 +2451,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### 配置项
 
-| Option              | 默认值                                                                                                      | 描述                                                                        |
+| 选项                  | 默认值                                                                                                      | 描述                                                                        |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`                                                                     | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                                                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2489,7 +2489,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2536,7 +2536,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### 配置项
 
-| Option           | 默认值                                          | 描述                                                                        |
+| 选项               | 默认值                                          | 描述                                                                        |
 | ---------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`         | `"via [$symbol($username@)$stack]($style) "` | The format string for the module.                                         |
 | `version_format` | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2585,7 +2585,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2635,7 +2635,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### 配置项
 
-| Option               | 默认值                                                                                                          | 描述                                                                                     |
+| 选项                   | 默认值                                                                                                          | 描述                                                                                     |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | 组件格式化模板。                                                                               |
 | `version_format`     | `"v${raw}"`                                                                                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch`              |
@@ -2718,7 +2718,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2754,7 +2754,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2797,7 +2797,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2837,7 +2837,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2879,7 +2879,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### 配置项
 
-| Option              | 默认值                                      | 描述                                                                        |
+| 选项                  | 默认值                                      | 描述                                                                        |
 | ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [${symbol}(${version} )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -2921,7 +2921,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ### 配置项
 
-| Option                 | 默认值                       | 描述                                                           |
+| 选项                     | 默认值                       | 描述                                                           |
 | ---------------------- | ------------------------- | ------------------------------------------------------------ |
 | `bash_indicator`       | `bsh`                     | A format string used to represent bash.                      |
 | `fish_indicator`       | `fsh`                     | A format string used to represent fish.                      |
@@ -2966,7 +2966,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### 配置项
 
-| Option      | 默认值                          | 描述                                                            |
+| 选项          | 默认值                          | 描述                                                            |
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
 | `format`    | `"[$symbol$shlvl]($style) "` | 组件格式化模板。                                                      |
@@ -3002,7 +3002,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### 配置项
 
-| Option     | 默认值                              | 描述                                               |
+| 选项         | 默认值                              | 描述                                               |
 | ---------- | -------------------------------- | ------------------------------------------------ |
 | `format`   | `'[$symbol\[$env\]]($style) '` | 组件格式化模板。                                         |
 | `symbol`   | `""`                             | A format string displayed before the image name. |
@@ -3034,7 +3034,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 ### 配置项
 
-| Option              | 默认值                                    | 描述                                                                                                                    |
+| 选项                  | 默认值                                    | 描述                                                                                                                    |
 | ------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` 表示不用截断。 另请参阅 [`directory`](#directory) 组件。 |
 | `symbol`            | `"🅢  "`                                | 在环境名之前显示的符号。                                                                                                          |
@@ -3073,7 +3073,7 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ### 配置项
 
-| Option                  | 默认值                                                                                  | 描述                                                      |
+| 选项                      | 默认值                                                                                  | 描述                                                      |
 | ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
 | `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
 | `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
@@ -3133,7 +3133,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ### 配置项
 
-| Option          | 默认值                     | 描述                                                      |
+| 选项              | 默认值                     | 描述                                                      |
 | --------------- | ----------------------- | ------------------------------------------------------- |
 | `format`        | `[as $symbol]($style)"` | The format of the module                                |
 | `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
@@ -3179,7 +3179,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -3226,7 +3226,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$workspace]($style) "` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -3280,7 +3280,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ### 配置项
 
-| Option            | 默认值                     | 描述                                                                                                    |
+| 选项                | 默认值                     | 描述                                                                                                    |
 | ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | The format string for the module.                                                                     |
 | `use_12hr`        | `false`                 | 启用 12 小时格式                                                                                            |
@@ -3331,7 +3331,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### 配置项
 
-| Option        | 默认值                     | 描述                                          |
+| 选项            | 默认值                     | 描述                                          |
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
 | `style_user`  | `"bold yellow"`         | 非 root 用户使用的样式。                             |
@@ -3367,7 +3367,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -3406,7 +3406,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 ### 配置项
 
-| Option              | 默认值                                          | 描述                                                                        |
+| 选项                  | 默认值                                          | 描述                                                                        |
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -3439,7 +3439,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### 配置项
 
-| Option     | 默认值                              | 描述                                                     |
+| 选项         | 默认值                              | 描述                                                     |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
 | `symbol`   |                                  | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | 此组件的样式。                                                |
@@ -3473,7 +3473,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 ### 配置项
 
-| Option              | 默认值                                  | 描述                                                                        |
+| 选项                  | 默认值                                  | 描述                                                                        |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
@@ -3543,7 +3543,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 ### 配置项
 
-| Option              | 默认值                             | 描述                                                                                                                                                                                                                                                                                            |
+| 选项                  | 默认值                             | 描述                                                                                                                                                                                                                                                                                            |
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
