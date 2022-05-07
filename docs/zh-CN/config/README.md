@@ -72,7 +72,7 @@ By convention, most modules have a prefix of default terminal color (e.g. `via` 
 
 ### 格式字符串
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+模块通过格式字符串定义的格式输出它所有的变量。 大多数模块拥有一个名为 `format` 的入口来配置它的显示格式。 你可以在其中使用文本，变量或者文本组。
 
 #### 字段
 
@@ -84,7 +84,7 @@ For example:
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
 - `$git_branch $git_commit` has the two variables separated with a space.
 
-#### Text Group
+#### 文本组
 
 文本由以下两种括号来进行分组：
 
