@@ -1604,13 +1604,13 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - Direktori terkini yang berisikan sebuah file `go.mod`
 - Direktori terkini yang berisikan sebuah file `go.sum`
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- Direktori ini memiliki berkas `go.work`
+- Direktori ini memiliki berkas `glide.yaml`
+- Direktori ini memiliki berkas `Gopkg.yml`
+- Direktori ini memiliki berkas `Gopkg.lock`
+- Direktori ini memiliki berkas `.go-version`
+- Direktori ini memiliki berkas `Godeps`
+- Direktori ini memiliki berkas dengan ekstensi `.go`
 
 ### Opsi
 
