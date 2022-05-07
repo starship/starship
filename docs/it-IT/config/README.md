@@ -1604,6 +1604,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - The current directory contains a `go.mod` file
 - The current directory contains a `go.sum` file
+- The current directory contains a `go.work` file
 - The current directory contains a `glide.yaml` file
 - The current directory contains a `Gopkg.yml` file
 - The current directory contains a `Gopkg.lock` file
@@ -1613,16 +1614,16 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Opzioni
 
-| Opzione             | Default                                                                        | Descrizione                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | The format for the module.                                                                   |
-| `version_format`    | `"v${raw}"`                                                                    | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                                               |
-| `detect_extensions` | `["go"]`                                                                       | Quali estensioni dovrebbero attivare questo modulo.                                          |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
-| `detect_folders`    | `["Godeps"]`                                                                   | Quali cartelle dovrebbero attivare questo modulo.                                            |
-| `style`             | `"bold cyan"`                                                                  | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                                                                        | Disables the `golang` module.                                                                |
+| Opzione             | Default                                                                                   | Descrizione                                                                                  |
+| ------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                      | The format for the module.                                                                   |
+| `version_format`    | `"v${raw}"`                                                                               | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                                    | A format string representing the symbol of Go.                                               |
+| `detect_extensions` | `["go"]`                                                                                  | Quali estensioni dovrebbero attivare questo modulo.                                          |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
+| `detect_folders`    | `["Godeps"]`                                                                              | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `style`             | `"bold cyan"`                                                                             | Lo stile per il modulo.                                                                      |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                |
 
 ### Variables
 
