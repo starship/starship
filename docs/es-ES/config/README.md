@@ -1142,7 +1142,7 @@ El módulo `env_var` muestra el valor actual de una variable de entorno seleccio
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (ver ejemplo) Si la opción de configuración de la `variable` no está definida, el módulo mostrará el valor de la variable bajo el nombre del texto después del caracter `.`.
+Múltiples variables de entorno pueden mostrarse usando una `.`. (ver ejemplo) Si la opción de configuración de la `variable` no está definida, el módulo mostrará el valor de la variable bajo el nombre del texto después del caracter `.`.
 
 Ejemplo: la siguiente configuración mostrará el valor de la variable de entorno USER
 
@@ -1604,13 +1604,13 @@ El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). 
 
 - El directorio actual contiene un archivo `go.mod`
 - El directorio actual contiene un archivo `go.sum`
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- El directorio actual contiene un archivo `go.work`
+- El directorio actual contiene un archivo `glide.yaml`
+- El directorio actual contiene un archivo `Gopkg.yml`
+- El directorio actual contiene un archivo `Gopkg.lock`
+- El directorio actual contiene un archivo `.go-version`
+- El directorio actual contiene un directorio `Godeps`
+- El directorio actual contiene un archivo con la extensión `.go`
 
 ### Opciones
 
@@ -2853,8 +2853,8 @@ Por defecto, el módulo `rust` muestra la versión instalada de [Rust](https://w
 | Variable  | Ejemplo           | Descripción                                  |
 | --------- | ----------------- | -------------------------------------------- |
 | version   | `v1.43.0-nightly` | La versión de `rustc`                        |
-| numver    | `1.51.0`          | The numeric component of the `rustc` version |
-| toolchain | `beta`            | The toolchain version                        |
+| numver    | `1.51.0`          | El componente numérico de la versión `rustc` |
+| toolchain | `beta`            | La versión de toolchain                      |
 | symbol    |                   | Refleja el valor de la opción `symbol`       |
 | style\* |                   | Refleja el valor de la opción `style`        |
 
@@ -3509,9 +3509,9 @@ Los módulos `personalizados` muestran la salida de algunos comandos arbitrarios
 
 Estos módulos se mostrarán si se cumplen alguna de las siguientes condiciones:
 
-- The current directory contains a file whose name is in `detect_files`
-- The current directory contains a directory whose name is in `detect_folders`
-- The current directory contains a file whose extension is in `detect_extensions`
+- El directorio actual contiene un archivo cuyo nombre está en `detect_files`
+- El directorio actual contiene un directorio cuyo nombre está en `detect_folders`
+- El directorio actual contiene un archivo cuya extensión está en `detect_extensions`
 - El comando `when` devuelve 0
 - El sistema operativo actual (std::env::consts::OS) coincide con el campo `os` si está definido.
 
@@ -3546,7 +3546,7 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 | Opción              | Predeterminado                  | Descripción                                                                                                                                                                                                                                                                                   |
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `""`                            | El comando cuya salida debe ser impresa. El comando se pasará en stdin al intérprete de comandos.                                                                                                                                                                                             |
-| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `when`              | `false`                         | Valor booleano (`true` o `false`, sin comillas) o un comando de shell usado como una condición para mostrar el módulo. En caso de una cadena, el módulo se mostrará si el comando devuelve un código de estado `0`.                                                                           |
 | `shell`             |                                 | [Ver abajo](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `description`       | `"<custom module>"`       | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                                                                                                                                                                                      |
 | `detect_files`      | `[]`                            | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                                                                                                                                                                                       |
@@ -3557,7 +3557,7 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 | `format`            | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                                                                                                                                                                                        |
 | `disabled`          | `false`                         | Deshabilita este `módulo personalizado`.                                                                                                                                                                                                                                                      |
 | `os`                |                                 | Nombre del sistema operativo en el que se mostrará el módulo (unix, linux, macos, windows, ... ) [Ver valores posibles](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                           |
-| `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
+| `use_stdin`         |                                 | Un valor booleano opcional que anula si los comandos deben ser reenviados al shell a través de la entrada estándar o como argumento. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
 | `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
 
 ### Variables
