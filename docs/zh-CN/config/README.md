@@ -178,7 +178,7 @@ add_newline = false
 
 ### 默认提示符格式
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. 默认设置如下：
+如果没有提供`format`字段或者它的值是空的，将会使用默认的`format`配置来指定提示符的格式。 默认配置如下：
 
 ```toml
 format = "$all"
