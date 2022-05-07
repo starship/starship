@@ -1605,25 +1605,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
-- カレントディレクトリに`glide.yaml`ファイルが含まれている
-- カレントディレクトリに`Gopkg.yml`ファイルが含まれている
-- カレントディレクトリに`Gopkg.lock`ファイルが含まれている
-- カレントディレクトリに`.go-version`ファイルが含まれている
-- カレントディレクトリに`Godeps`ファイルが含まれている
-- カレントディレクトリに`.go`の拡張子のファイルが含まれている
+- The current directory contains a `go.work` file
+- The current directory contains a `glide.yaml` file
+- The current directory contains a `Gopkg.yml` file
+- The current directory contains a `Gopkg.lock` file
+- The current directory contains a `.go-version` file
+- The current directory contains a `Godeps` directory
+- The current directory contains a file with the `.go` extension
 
 ### オプション
 
-| オプション               | デフォルト                                                                          | 説明                                                     |
-| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | module のフォーマットです。                                      |
-| `version_format`    | `"v${raw}"`                                                                    | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.         |
-| `detect_extensions` | `["go"]`                                                                       | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `["Godeps"]`                                                                   | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `"bold cyan"`                                                                  | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                        | `golang`モジュールを無効にします。                                  |
+| オプション               | デフォルト                                                                                     | 説明                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"`                                                      | module のフォーマットです。                                      |
+| `version_format`    | `"v${raw}"`                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"🐹 "`                                                                                    | A format string representing the symbol of Go.         |
+| `detect_extensions` | `["go"]`                                                                                  | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `["Godeps"]`                                                                              | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold cyan"`                                                                             | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                                   | `golang`モジュールを無効にします。                                  |
 
 ### 変数
 
