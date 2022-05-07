@@ -70,7 +70,7 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
-### Format Strings
+### 格式字符串
 
 Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
@@ -117,13 +117,13 @@ A conditional format string wrapped in `(` and `)` will not render if all variab
 
 例如：
 
-- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
+- 如果变量 `region` 是 `None` 或者为空，`(@$region)` 将不会显示，否则 `@` 之后会显示 region 的值。
+- `(some text)` 将永远不会显示因为在括号里并没有变量。
 - When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
 
 #### 特殊字符
 
-The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
+以下符号在格式字符串中具有特殊用途，必须转义： `$ [ ] ( )`。
 
 Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
 
