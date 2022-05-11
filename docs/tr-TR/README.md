@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: Sade, hızlı, dilediğiniz gibi özelleştirilebilen ve istenilen shell'de kullanılabilen prompt!
 actionText: Get Started →
 actionLink: ./guide/
 features:
@@ -67,7 +67,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   `~/.bashrc` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.bashrc
@@ -78,7 +78,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   `~/.config/fish/config.fish` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -89,7 +89,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   `~/.zshrc` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.zshrc
@@ -109,7 +109,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   `~/.config/ion/initrc` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.config/ion/initrc
