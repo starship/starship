@@ -1604,13 +1604,13 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
+- 現在資料夾中含有一個 `go.work` 檔案
+- 現在資料夾中含有一個 `glide.yaml` 檔案
+- 現在資料夾中含有一個 `Gopkg.yml` 檔案
+- 現在資料夾中含有一個 `Gopkg.lock` 檔案
 - The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- 現在資料夾中含有一個 `Godeps` 資料夾
+- 現在資料夾中含有一個檔案具有 `.go` 副檔名
 
 ### 選項
 
@@ -1722,14 +1722,14 @@ format = "via [⎈ $version](bold white) "
 
 ### 選項
 
-| Option       | 預設                                     | 說明                                                                                                                                   |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`   | `true`                                 | 只在連接到一個 SSH session 時顯示主機名稱。                                                                                                         |
-| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
-| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`     | `"[$ssh_symbol$hostname]($style) in "` | The format for the module.                                                                                                           |
-| `style`      | `"bold dimmed green"`                  | 這個模組的風格。                                                                                                                             |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| Option       | 預設                                     | 說明                                                                     |
+| ------------ | -------------------------------------- | ---------------------------------------------------------------------- |
+| `ssh_only`   | `true`                                 | 只在連接到一個 SSH session 時顯示主機名稱。                                           |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session. |
+| `trim_at`    | `"."`                                  | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。             |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | The format for the module.                                             |
+| `style`      | `"bold dimmed green"`                  | 這個模組的風格。                                                               |
+| `disabled`   | `false`                                | 停用 `hostname` 模組。                                                      |
 
 ### Variables
 
