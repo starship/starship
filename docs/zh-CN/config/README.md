@@ -78,7 +78,7 @@ By convention, most modules have a prefix of default terminal color (e.g. `via` 
 
 A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
-For example:
+例如：
 
 - `$version` is a format string with a variable named `version`.
 - `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
@@ -1604,13 +1604,13 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - 当前目录包含 `go.mod` 文件
 - 当前目录包含 `go.sum` 文件
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
+- 当前目录包含 `go.work` 文件
+- 当前目录包含 `glide.yaml` 文件
+- 当前目录包含 `Gopkg.yml` 文件
+- 当前目录包含 `Gopkg.lock` 文件
 - The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- 当前目录包含 `Godeps` 目录
+- 当前目录包含一个使用 `.go` 扩展名的文件
 
 ### 配置项
 
@@ -1722,14 +1722,14 @@ format = "via [⎈ $version](bold white) "
 
 ### 配置项
 
-| 选项           | 默认值                                    | 描述                                                                                                                                   |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`   | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                                                  |
-| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
-| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`     | `"[$ssh_symbol$hostname]($style) in "` | 组件格式化模板。                                                                                                                             |
-| `style`      | `"bold dimmed green"`                  | 此组件的样式。                                                                                                                              |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| 选项           | 默认值                                    | 描述                                                                     |
+| ------------ | -------------------------------------- | ---------------------------------------------------------------------- |
+| `ssh_only`   | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                    |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session. |
+| `trim_at`    | `"."`                                  | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `"."` 会让主机名截断到第一个点处。 `""` 会禁用任何截断。     |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | 组件格式化模板。                                                               |
+| `style`      | `"bold dimmed green"`                  | 此组件的样式。                                                                |
+| `disabled`   | `false`                                | 禁用 `hostname` 组件。                                                      |
 
 ### Variables
 
