@@ -1604,13 +1604,13 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - Текущий каталог содержит файл `go.mod`
 - Текущий каталог содержит файл `go.sum`
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
+- Текущий каталог содержит файл `go.work`
+- Текущий каталог содержит файл `glide.yaml`
+- Текущий каталог содержит файл `Gopkg.yml`
+- Текущий каталог содержит файл `Gopkg.lock`
 - The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- Текущий каталог содержит папку `Godeps`
+- Текущий каталог содержит файл с расширением `.go`
 
 ### Опции
 
@@ -1722,14 +1722,14 @@ format = "via [⎈ $version](bold white) "
 
 ### Опции
 
-| Параметр     | По умолчанию                           | Описание                                                                                                                             |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`   | `true`                                 | Показывать имя хоста только при подключении к SSH-сессии.                                                                            |
-| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
-| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Формат модуля.                                                                                                                       |
-| `style`      | `"bold dimmed green"`                  | Стиль модуля.                                                                                                                        |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| Параметр     | По умолчанию                           | Описание                                                                                                                                 |
+| ------------ | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`   | `true`                                 | Показывать имя хоста только при подключении к SSH-сессии.                                                                                |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                                   |
+| `trim_at`    | `"."`                                  | Строка, по которую имя хоста будет сокращено после первого совпадения. `"."` остановится после первой точки. `"` отключит любое усечение |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Формат модуля.                                                                                                                           |
+| `style`      | `"bold dimmed green"`                  | Стиль модуля.                                                                                                                            |
+| `disabled`   | `false`                                | Отключает модуль `hostname`.                                                                                                             |
 
 ### Переменные
 
