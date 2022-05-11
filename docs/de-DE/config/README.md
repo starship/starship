@@ -1604,13 +1604,13 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - Das aktuelle Verzeichnis enthält eine `go.mod`-Datei
 - Das aktuelle Verzeichnis enthält eine `go.sum`-Datei
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
+- Das aktuelle Verzeichnis enthält eine `go.work`-Datei
+- Das aktuelle Verzeichnis enthält eine `glide.yaml`-Datei
+- Das aktuelle Verzeichnis enthält eine `Gopkg.yml`-Datei
+- Das aktuelle Verzeichnis enthält eine `Gopkg.lock`-Datei
 - The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- Das aktuelle Verzeichnis enthält ein `Godeps`-Verzeichnis
+- Das aktuelle Verzeichnis enthält eine Datei mit der `.go`-Erweiterung
 
 ### Optionen
 
@@ -1729,7 +1729,7 @@ Das `hostname`-Modul zeigt den Hostnamen des Systems an.
 | `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
 | `format`     | `"[$ssh_symbol$hostname]($style) in "` | Das Format für das Modul.                                                                                                            |
 | `style`      | `"bold dimmed green"`                  | Stil für dieses Modul.                                                                                                               |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| `disabled`   | `false`                                | Deaktiviert das `hostname`-Modul.                                                                                                    |
 
 ### Variables
 
