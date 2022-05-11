@@ -1602,13 +1602,13 @@ O módulo `golang` exibe a versão instalada atual do [Go](https://golang.org/).
 
 - O diretório atual contem um arquivo `go.mod`
 - O diretório atual contem um arquivo `go.sum`
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- O diretório atual contem um arquivo `go.work`
+- O diretório atual contem um arquivo `glide.yaml`
+- O diretório atual contem um arquivo `Gopkg.yml`
+- O diretório atual contém um arquivo `Gopkg.lock`
+- O diretório atual contem um arquivo `.go-version`
+- O diretório atual contem um diretório `Godeps`
+- O diretório atual contem arquivos com a extensão `.go`
 
 ### Opções
 
@@ -1720,14 +1720,14 @@ O módulo `hostname` exibe o nome do hostname.
 
 ### Opções
 
-| Opções       | Padrão                                 | Descrição                                                                                                                            |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`   | `true`                                 | Apenas exibe o hostname quando conectado em uma sessão SSH.                                                                          |
-| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
-| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`     | `"[$ssh_symbol$hostname]($style) in "` | O formato do módulo.                                                                                                                 |
-| `style`      | `"bold dimmed green"`                  | O estilo do módulo.                                                                                                                  |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| Opções       | Padrão                                 | Descrição                                                                                                                                                |
+| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`   | `true`                                 | Apenas exibe o hostname quando conectado em uma sessão SSH.                                                                                              |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                                                   |
+| `trim_at`    | `"."`                                  | String na qual vai truncar o hostname, após a primeira correspondência. `"."` vai truncar após o primeiro ponto. `""` vai desabilitar qualquer truncação |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | O formato do módulo.                                                                                                                                     |
+| `style`      | `"bold dimmed green"`                  | O estilo do módulo.                                                                                                                                      |
+| `disabled`   | `false`                                | Desabilita o módulo `hostname`.                                                                                                                          |
 
 ### Variáveis
 
