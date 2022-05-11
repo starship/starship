@@ -1604,13 +1604,13 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - Thư mục hiện tại chứa một tập tin `go.mod`
 - Đường dẫn hiện tại chứa một tập tin `go.sum`
-- The current directory contains a `go.work` file
-- The current directory contains a `glide.yaml` file
-- The current directory contains a `Gopkg.yml` file
-- The current directory contains a `Gopkg.lock` file
-- The current directory contains a `.go-version` file
-- The current directory contains a `Godeps` directory
-- The current directory contains a file with the `.go` extension
+- Đường dẫn hiện tại chứa một tập tin `go.work`
+- Thư mục hiện tại chứa một tập tin `glide.yaml`
+- Thư mục hiện tại chứa một tập tin `Gopkg.yml`
+- Đường dẫn hiện tại chứa một tập tin `Gopkg.lock`
+- Thư mục hiện tại chứa một tệp tin `.go-version`
+- Thư mục hiện tại chứa một thư mục `Godeps`
+- Thư mục hiện tại chứa một tệp tin với phần mở rộng `.go`
 
 ### Các tuỳ chọn
 
@@ -1722,14 +1722,14 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn     | Mặc định                               | Mô tả                                                                                                                                |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`   | `true`                                 | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                            |
-| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
-| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
-| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Định dạng cho module.                                                                                                                |
-| `style`      | `"bold dimmed green"`                  | Kiểu cho module.                                                                                                                     |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| Tuỳ chọn     | Mặc định                               | Mô tả                                                                                                                            |
+| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`   | `true`                                 | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                        |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                           |
+| `trim_at`    | `"."`                                  | Chuỗi mà hostname được cắt ngắn, sau khi khớp lần đầu tiên. `"."` sẽ dừng sau dấu chấm đầu tiên. `""` sẽ vô hiệu mọi sự cắt ngắn |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Định dạng cho module.                                                                                                            |
+| `style`      | `"bold dimmed green"`                  | Kiểu cho module.                                                                                                                 |
+| `disabled`   | `false`                                | Vô hiệu `hastname` module.                                                                                                       |
 
 ### Các biến
 
