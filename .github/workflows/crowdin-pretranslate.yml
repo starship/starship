@@ -1,0 +1,15 @@
+# Run pre-translate with translation memory, all files/langs, at midnight daily.
+name: Crowdin Updates
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  trigger_crowdin_tm:
+    name: Crowdin Translation Memory Trigger
+    runs-on: ubuntu-latest
+    steps:
+      - uses: starship/crowdin-pretranslate-action@main
+        with:
+          project_id: 372655
+          api_key: ${{ secrets.CROWDIN_API_KEY }}
