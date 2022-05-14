@@ -1424,12 +1424,12 @@ tag_symbol = "🔖 "
 
 | オプション          | デフォルト                                                           | 説明                                                                                      |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                    | `rebase`が進行中の場合に表示されるフォーマット文字列                                                          |
-| `merge`        | `"MERGING"`                                                     | `merge`が進行中の場合に表示されるフォーマット文字列                                                           |
-| `revert`       | `"REVERTING"`                                                   | `revert`が進行中の場合に表示されるフォーマット文字列                                                          |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
-| `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
-| `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
+| `rebase`       | `"REBASING"`                                                    | `rebase`進行中に表示されるフォーマット文字列です。                                                           |
+| `merge`        | `"MERGING"`                                                     | `merge`進行中に表示されるフォーマット文字列です。                                                            |
+| `revert`       | `"REVERTING"`                                                   | `revert`進行中に表示されるフォーマット文字列です。                                                           |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | `cherry-pick`進行中に表示されるフォーマット文字列です。                                                      |
+| `bisect`       | `"BISECTING"`                                                   | `bisect`進行中に表示されるフォーマット文字列です。                                                           |
+| `am`           | `"AM"`                                                          | `apply-mailbox` (`git am`) 進行中に表示されるフォーマット文字列です。                                        |
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | モジュールのスタイルです。                                                                           |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | module のフォーマットです。                                                                       |
