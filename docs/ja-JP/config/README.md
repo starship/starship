@@ -1503,7 +1503,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ::: tip
 
-WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Statusモジュールは動作が非常に遅いです。 You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Statusモジュールは動作が非常に遅いです。 モジュールを無効にするか、`windows_starship`オプションを使用することで、WindowsネイティブのStarshipを使用し、対象の`git_status`を計算できます。
 
 :::
 
@@ -1516,15 +1516,15 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `ahead`             | `"⇡"`                                           | `ahead`のフォーマット                                                                                              |
 | `behind`            | `"⇣"`                                           | `behind`のフォーマット                                                                                             |
 | `diverged`          | `"⇕"`                                           | `diverged`のフォーマット                                                                                           |
-| `up_to_date`        | `""`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`         | `"?"`                                           | The format of `untracked`                                                                                   |
-| `stashed`           | `"$"`                                           | The format of `stashed`                                                                                     |
-| `modified`          | `"!"`                                           | The format of `modified`                                                                                    |
-| `staged`            | `"+"`                                           | The format of `staged`                                                                                      |
-| `renamed`           | `"»"`                                           | The format of `renamed`                                                                                     |
-| `deleted`           | `"✘"`                                           | The format of `deleted`                                                                                     |
+| `up_to_date`        | `""`                                            | `up_to_date`のフォーマット                                                                                         |
+| `untracked`         | `"?"`                                           | `untracked`のフォーマット                                                                                          |
+| `stashed`           | `"$"`                                           | `stashed`のフォーマット                                                                                            |
+| `modified`          | `"!"`                                           | `modified`のフォーマット                                                                                           |
+| `staged`            | `"+"`                                           | `staged`のフォーマット                                                                                             |
+| `renamed`           | `"»"`                                           | `renamed`のフォーマット                                                                                            |
+| `deleted`           | `"✘"`                                           | `deleted`のフォーマット                                                                                            |
 | `style`             | `"bold red"`                                    | モジュールのスタイルです。                                                                                               |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
+| `ignore_submodules` | `false`                                         | サブモジュールの変更を無視します。                                                                                           |
 | `disabled`          | `false`                                         | `git_status`モジュールを無効にします。                                                                                   |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
