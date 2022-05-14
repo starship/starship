@@ -1063,7 +1063,7 @@ heuristic = false
 
 | オプション               | デフォルト                                                       | 説明                                                     |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                      |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | module elixirのフォーマットです。                                |
 | `version_format`    | `"v${raw}"`                                                 | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`            | `"💧 "`                                                      | Elixir/Erlangのバージョンを表示する前に使用される記号です。                   |
 | `detect_extensions` | `[]`                                                        | どの拡張子がこのモジュールをアクティブにするか                                |
@@ -1100,7 +1100,7 @@ symbol = "🔮 "
 - カレントディレクトリに`elm-package.json`ファイルが含まれている
 - カレントディレクトリに`.elm-version`ファイルが含まれている
 - カレントディレクトリに`elm-stuff`フォルダが含まれている
-- The current directory contains `*.elm` files
+- カレントディレクトリに`*.elm`ファイルが含まれている
 
 ### オプション
 
@@ -1108,7 +1108,7 @@ symbol = "🔮 "
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`               | module のフォーマットです。                                      |
 | `version_format`    | `"v${raw}"`                                        | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"🌳 "`                                             | A format string representing the symbol of Elm.        |
+| `symbol`            | `"🌳 "`                                             | Elmのシンボルを表すフォーマット文字列                                   |
 | `detect_extensions` | `["elm"]`                                          | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `["elm-stuff"]`                                    | どのフォルダーがこのモジュールをアクティブにするか                              |
