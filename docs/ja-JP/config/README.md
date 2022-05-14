@@ -735,16 +735,16 @@ format = "[$symbol$environment](dimmed green) "
 
 ## Container
 
-The `container` module displays a symbol and container name, if inside a container.
+`container`モジュールは、コンテナ内の場合、シンボルとコンテナ名を表示します。
 
 ### オプション
 
-| オプション      | デフォルト                                  | 説明                                        |
-| ---------- | -------------------------------------- | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                    | モジュールのスタイルです。                             |
-| `format`   | `"[$symbol \\[$name\\]]($style) "` | module のフォーマットです。                         |
-| `disabled` | `false`                                | Disables the `container` module.          |
+| オプション      | デフォルト                                  | 説明                               |
+| ---------- | -------------------------------------- | -------------------------------- |
+| `symbol`   | `"⬢"`                                  | コンテナ内にいる場合、このシンボルが表示されます。        |
+| `style`    | `"bold red dimmed"`                    | モジュールのスタイルです。                    |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | module のフォーマットです。                |
+| `disabled` | `false`                                | Disables the `container` module. |
 
 ### 変数
 
