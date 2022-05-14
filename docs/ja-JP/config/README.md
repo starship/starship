@@ -481,7 +481,7 @@ symbol = "🦬 "
 
 ## C
 
-The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+`c` モジュールは、利用しているCコンパイラに関するいくつかの情報を表示します。 デフォルトでは、カレントディレクトリに`.c`または`.h`ファイルが含まれている場合、モジュールが表示されます。
 
 ### オプション
 
