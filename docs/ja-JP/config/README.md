@@ -260,16 +260,16 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. 例:
 
 ```toml
-# Move the directory to the second line
+# ディレクトリを2行目に移動
 format = "$all$directory$character"
 ```
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile even when the credentials have not been setup with the `force_display` option. これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。 This module also shows an expiration timer when using temporary credentials.
+`aws`モジュールは、`credential_process`または`sso_start_url`が設定されている場合、現在のAWSリージョンとプロファイルを表示します。 また、認証情報が設定されていない場合でも`force_display`オプションを利用して、このモジュールにリージョンとプロファイルを強制的に表示させることができます。 これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。 This module also shows an expiration timer when using temporary credentials.
 
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
 
