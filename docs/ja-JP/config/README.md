@@ -1207,16 +1207,16 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                       |
-| ------------------- | ------------------------------------ | -------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                        |
-| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。   |
-| `symbol`            | `" "`                               | The symbol used before displaying the version of erlang. |
-| `style`             | `"bold red"`                         | モジュールのスタイルです。                                            |
-| `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                  |
-| `detect_files`      | `["rebar.config", "elang.mk"]`       | どのファイル名がこのモジュールをアクティブにするか                                |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                |
-| `disabled`          | `false`                              | `erlang`モジュールを無効にします。                                    |
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
+| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `" "`                               | Erlangのバージョンを表示する前に使用される記号です。                          |
+| `style`             | `"bold red"`                         | モジュールのスタイルです。                                          |
+| `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["rebar.config", "elang.mk"]`       | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `disabled`          | `false`                              | `erlang`モジュールを無効にします。                                  |
 
 ### 変数
 
@@ -1247,7 +1247,7 @@ format = "via [e $version](bold red) "
 | ---------- | -------------- | --------------------------------- |
 | `symbol`   | `"."`          | The symbol used to fill the line. |
 | `style`    | `"bold black"` | モジュールのスタイルです。                     |
-| `disabled` | `false`        | Disables the `fill` module        |
+| `disabled` | `false`        | `fill`モジュールを無効にします。               |
 
 ### 設定例
 
@@ -1272,14 +1272,14 @@ AA -------------------------------------------- BB -----------------------------
 
 ### オプション
 
-| オプション             | デフォルト                                                      | 説明                                                               |
-| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
-| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | module のフォーマットです。                                                |
-| `symbol`          | `"☁️ "`                                                    | 現在のGCPプロファイルを表示する前に表示される記号です。                                    |
-| `region_aliases`  |                                                            | GCP名に加えて表示するリージョンのエイリアスです。                                       |
-| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
-| `style`           | `"bold blue"`                                              | モジュールのスタイルです。                                                    |
-| `disabled`        | `false`                                                    | `gcloud`モジュールを無効にします。                                            |
+| オプション             | デフォルト                                                      | 説明                            |
+| ----------------- | ---------------------------------------------------------- | ----------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | module のフォーマットです。             |
+| `symbol`          | `"☁️ "`                                                    | 現在のGCPプロファイルを表示する前に表示される記号です。 |
+| `region_aliases`  |                                                            | GCP名に加えて表示するリージョンのエイリアスです。    |
+| `project_aliases` |                                                            | GCP名に加えて表示するプロジェクトのエイリアスです。   |
+| `style`           | `"bold blue"`                                              | モジュールのスタイルです。                 |
+| `disabled`        | `false`                                                    | `gcloud`モジュールを無効にします。         |
 
 ### 変数
 
@@ -1359,13 +1359,13 @@ very-long-project-name = "vlpn"
 
 ### 変数
 
-| 変数            | 設定例      | 説明                                                                                                     |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                       |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
-| symbol        |          | オプション `記号` の値をミラーする                                                                                    |
-| style\*     |          | オプション `style` の値をミラーする                                                                                 |
+| 変数            | 設定例      | 説明                                                          |
+| ------------- | -------- | ----------------------------------------------------------- |
+| branch        | `master` | 現在のブランチがない場合は、現在のブランチ名は`HEAD`に戻ります(例: git detached `HEAD`)。 |
+| remote_name   | `origin` | リモート名                                                       |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.            |
+| symbol        |          | オプション `記号` の値をミラーする                                         |
+| style\*     |          | オプション `style` の値をミラーする                                      |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
