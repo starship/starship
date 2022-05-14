@@ -440,23 +440,23 @@ discharging_symbol = "💦"
 
 ## Buf
 
-`buf`モジュールは、現在インストールされている[Buf](https://buf.build)のバージョンを表示します。 By default, the module is shown if all of the following conditions are met:
+`buf`モジュールは、現在インストールされている[Buf](https://buf.build)のバージョンを表示します。 デフォルトでは次のすべての条件が満たされると、モジュールが表示されます。
 
-- The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
-- The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
+- [`buf`](https://github.com/bufbuild/buf)CLI がインストールされている
+- カレントディレクトリに、[`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml)、[`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml)または[`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml)が含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                                        | 説明                                                    |
-| ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | `buf`モジュールの形式。                                        |
-| `version_format`    | `"v${raw}"`                                                  | バージョンのフォーマット。                                         |
-| `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                                         | どの拡張子がこのモジュールをアクティブにするか                               |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | どのファイル名がこのモジュールをアクティブにするか                             |
-| `detect_folders`    | `[]`                                                         | どのフォルダーがこのモジュールをアクティブにするか                             |
-| `style`             | `"bold blue"`                                                | モジュールのスタイルです。                                         |
-| `disabled`          | `false`                                                      | Disables the `elixir` module.                         |
+| オプション               | デフォルト                                                        | 説明                            |
+| ------------------- | ------------------------------------------------------------ | ----------------------------- |
+| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | `buf`モジュールの形式。                |
+| `version_format`    | `"v${raw}"`                                                  | バージョンのフォーマット。                 |
+| `symbol`            | `"🦬 "`                                                       | Bufのバージョンを表示する前に使用される記号です。    |
+| `detect_extensions` | `[]`                                                         | どの拡張子がこのモジュールをアクティブにするか       |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | どのファイル名がこのモジュールをアクティブにするか     |
+| `detect_folders`    | `[]`                                                         | どのフォルダーがこのモジュールをアクティブにするか     |
+| `style`             | `"bold blue"`                                                | モジュールのスタイルです。                 |
+| `disabled`          | `false`                                                      | Disables the `elixir` module. |
 
 ### 変数
 
