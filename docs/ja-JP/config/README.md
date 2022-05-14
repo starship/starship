@@ -733,7 +733,7 @@ Note: これはconda自身の プロンプト修飾子 を抑制しません。`
 format = "[$symbol$environment](dimmed green) "
 ```
 
-## Container
+## コンテナ
 
 `container`モジュールは、コンテナ内の場合、シンボルとコンテナ名を表示します。
 
@@ -2551,7 +2551,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 | --------- | ---------- | --------------------------- |
 | version   | `v0.12.24` | The version of `pulumi`     |
 | stack     | `dev`      | The current Pulumi stack    |
-| ユーザ名      | `alice`    | The current Pulumi username |
+| username  | `alice`    | The current Pulumi username |
 | symbol    |            | オプション `記号` の値をミラーする         |
 | style\* |            | オプション `style` の値をミラーする      |
 
