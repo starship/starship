@@ -848,7 +848,7 @@ format = "via [🔰 $version](bold red) "
 
 `deno`モジュールは、現在インストールされている[Deno](https://deno.land/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- カレントディレクトリに`deno.json`、`deno.jsonc`、`mod.ts`、`mod.js`、`deps.ts`もしくは`deps.js`が含まれている
 
 ### オプション
 
@@ -899,7 +899,7 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 | `disabled`          | `false`                                                                                                     | `directory`モジュールを無効にします。                                                                |
 | `read_only`         | `"🔒"`                                                                                                       | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。                                                     |
 | `read_only_style`   | `"red"`                                                                                                     | 読み取り専用シンボルのスタイルです。                                                                      |
-| `truncation_symbol` | `""`                                                                                                        | The symbol to prefix to truncated paths. 例: "…/"                                        |
+| `truncation_symbol` | `""`                                                                                                        | 切り捨てられたパスの接頭辞として付けるシンボルです。 例: "…/"                                                      |
 | `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
 | `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
 | `home_symbol`       | `"~"`                                                                                                       | ホームディレクトリを示すシンボルです。                                                                     |
@@ -1168,11 +1168,11 @@ default = "unknown user"
 
 ### 変数
 
-| 変数        | 設定例                                         | 説明                                         |
-| --------- | ------------------------------------------- | ------------------------------------------ |
-| env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
-| symbol    |                                             | オプション `記号` の値をミラーする                        |
-| style\* | `black bold dimmed`                         | オプション `style` の値をミラーする                     |
+| 変数        | 設定例                                         | 説明                     |
+| --------- | ------------------------------------------- | ---------------------- |
+| env_value | `Windows NT` (if _variable_ would be `$OS`) | オプション`variable`の値      |
+| symbol    |                                             | オプション `記号` の値をミラーする    |
+| style\* | `black bold dimmed`                         | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1200,7 +1200,7 @@ default = "unknown user"
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`erlang`モジュールは、現在インストールされている[Erlang/OTP](https://erlang.org/doc/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`rebar.config`ファイルが含まれている.
 - カレントディレクトリに`erlang.mk`ファイルが含まれている.
@@ -1348,8 +1348,8 @@ very-long-project-name = "vlpn"
 | オプション                | デフォルト                                             | 説明                                                                                   |
 | -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name. |
-| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 Use `"$branch"` to refer to the current branch name.               |
-| `symbol`             | `" "`                                            | A format string representing the symbol of git branch.                               |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。                                 |
+| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                                            |
 | `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                                        |
 | `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                             |
 | `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.                          |
