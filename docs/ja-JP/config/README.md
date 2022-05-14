@@ -1011,7 +1011,7 @@ format = "via [🐋 $context](blue bold)"
 - `*.fsproj`
 - `*.xproj`
 
-You'll also need the .NET Core SDK installed in order to use it correctly.
+正しく使用するには、.NET Core SDKもインストールする必要があります。
 
 内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
 
@@ -1033,12 +1033,12 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### 変数
 
-| 変数        | 設定例              | 説明                                                                 |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | `dotnet sdk` のバージョンです                                              |
-| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | オプション `記号` の値をミラーする                                                |
-| style\* |                  | オプション `style` の値をミラーする                                             |
+| 変数        | 設定例              | 説明                                  |
+| --------- | ---------------- | ----------------------------------- |
+| version   | `v3.1.201`       | `dotnet sdk` のバージョンです               |
+| tfm       | `netstandard2.0` | 現在のプロジェクトが対象としているターゲット フレームワーク モニカー |
+| symbol    |                  | オプション `記号` の値をミラーする                 |
+| style\* |                  | オプション `style` の値をミラーする              |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1055,22 +1055,22 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`elixir` モジュールは、現在インストールされている[Elixir](https://elixir-lang.org/)と[Erlang/OTP](https://erlang.org/doc/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`mix.exs`ファイルが含まれている.
 
 ### オプション
 
-| オプション               | デフォルト                                                       | 説明                                                              |
-| ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                               |
-| `version_format`    | `"v${raw}"`                                                 | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。          |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang. |
-| `detect_extensions` | `[]`                                                        | どの拡張子がこのモジュールをアクティブにするか                                         |
-| `detect_files`      | `["mix.exs"]`                                               | どのファイル名がこのモジュールをアクティブにするか                                       |
-| `detect_folders`    | `[]`                                                        | どのフォルダーがこのモジュールをアクティブにするか                                       |
-| `style`             | `"bold purple"`                                             | モジュールのスタイルです。                                                   |
-| `disabled`          | `false`                                                     | Disables the `elixir` module.                                   |
+| オプション               | デフォルト                                                       | 説明                                                     |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                      |
+| `version_format`    | `"v${raw}"`                                                 | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"💧 "`                                                      | Elixir/Erlangのバージョンを表示する前に使用される記号です。                   |
+| `detect_extensions` | `[]`                                                        | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["mix.exs"]`                                               | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                        | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold purple"`                                             | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                     | `elixir`モジュールを無効にします。                                  |
 
 ### 変数
 
