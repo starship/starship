@@ -721,6 +721,21 @@
         }
       ]
     },
+    "kerberos": {
+      "default": {
+        "disabled": true,
+        "expired_style": "bold red",
+        "expired_symbol": "❌ ",
+        "format": "[krb5_$symbol]($style)",
+        "style": "bold green",
+        "symbol": "🎫 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/KerberosConfig"
+        }
+      ]
+    },
     "kotlin": {
       "default": {
         "detect_extensions": [
@@ -3126,6 +3141,35 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "KerberosConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[krb5_$symbol]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🎫 ",
+          "type": "string"
+        },
+        "expired_symbol": {
+          "default": "❌ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "expired_style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
         }
       }
     },
