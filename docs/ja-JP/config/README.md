@@ -1422,27 +1422,27 @@ tag_symbol = "🔖 "
 
 ### オプション
 
-| オプション          | デフォルト                                                           | 説明                                                                                      |
-| -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                    | `rebase`進行中に表示されるフォーマット文字列です。                                                           |
-| `merge`        | `"MERGING"`                                                     | `merge`進行中に表示されるフォーマット文字列です。                                                            |
-| `revert`       | `"REVERTING"`                                                   | `revert`進行中に表示されるフォーマット文字列です。                                                           |
-| `cherry_pick`  | `"CHERRY-PICKING"`                                              | `cherry-pick`進行中に表示されるフォーマット文字列です。                                                      |
-| `bisect`       | `"BISECTING"`                                                   | `bisect`進行中に表示されるフォーマット文字列です。                                                           |
-| `am`           | `"AM"`                                                          | `apply-mailbox` (`git am`) 進行中に表示されるフォーマット文字列です。                                        |
-| `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
-| `style`        | `"bold yellow"`                                                 | モジュールのスタイルです。                                                                           |
-| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | module のフォーマットです。                                                                       |
-| `disabled`     | `false`                                                         | `git_state`モジュールを無効にします。                                                                |
+| オプション          | デフォルト                                                           | 説明                                                       |
+| -------------- | --------------------------------------------------------------- | -------------------------------------------------------- |
+| `rebase`       | `"REBASING"`                                                    | `rebase`進行中に表示されるフォーマット文字列です。                            |
+| `merge`        | `"MERGING"`                                                     | `merge`進行中に表示されるフォーマット文字列です。                             |
+| `revert`       | `"REVERTING"`                                                   | `revert`進行中に表示されるフォーマット文字列です。                            |
+| `cherry_pick`  | `"CHERRY-PICKING"`                                              | `cherry-pick`進行中に表示されるフォーマット文字列です。                       |
+| `bisect`       | `"BISECTING"`                                                   | `bisect`進行中に表示されるフォーマット文字列です。                            |
+| `am`           | `"AM"`                                                          | `apply-mailbox` (`git am`) 進行中に表示されるフォーマット文字列です。         |
+| `am_or_rebase` | `"AM/REBASE"`                                                   | あいまいな`apply-mailbox`または`rebase`が進行中のときに表示されるフォーマット文字列です。 |
+| `style`        | `"bold yellow"`                                                 | モジュールのスタイルです。                                            |
+| `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | module のフォーマットです。                                        |
+| `disabled`     | `false`                                                         | `git_state`モジュールを無効にします。                                 |
 
 ### 変数
 
-| 変数               | 設定例        | 説明                             |
-| ---------------- | ---------- | ------------------------------ |
-| state            | `REBASING` | The current state of the repo  |
-| progress_current | `1`        | The current operation progress |
-| progress_total   | `2`        | The total operation progress   |
-| style\*        |            | オプション `style` の値をミラーする         |
+| 変数               | 設定例        | 説明                     |
+| ---------------- | ---------- | ---------------------- |
+| state            | `REBASING` | 現在のリポジトリの状態            |
+| progress_current | `1`        | 現在の進行状態                |
+| progress_total   | `2`        | 全体の進行状態                |
+| style\*        |            | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1503,7 +1503,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ::: tip
 
-The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Statusモジュールは動作が非常に遅いです。 You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
 :::
 
