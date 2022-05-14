@@ -1359,13 +1359,13 @@ very-long-project-name = "vlpn"
 
 ### 変数
 
-| 変数            | 設定例      | 説明                                                          |
-| ------------- | -------- | ----------------------------------------------------------- |
-| branch        | `master` | 現在のブランチがない場合は、現在のブランチ名は`HEAD`に戻ります(例: git detached `HEAD`)。 |
-| remote_name   | `origin` | リモート名                                                       |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.            |
-| symbol        |          | オプション `記号` の値をミラーする                                         |
-| style\*     |          | オプション `style` の値をミラーする                                      |
+| 変数            | 設定例      | 説明                                                         |
+| ------------- | -------- | ---------------------------------------------------------- |
+| branch        | `master` | 現在のブランチがない場合は、現在のブランチ名は`HEAD`に戻ります(例: git detached `HEAD`) |
+| remote_name   | `origin` | リモート名                                                      |
+| remote_branch | `master` | `remote_name`で追跡されたブランチ名                                   |
+| symbol        |          | オプション `記号` の値をミラーする                                        |
+| style\*     |          | オプション `style` の値をミラーする                                     |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1424,9 +1424,9 @@ tag_symbol = "🔖 "
 
 | オプション          | デフォルト                                                           | 説明                                                                                      |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
-| `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
+| `rebase`       | `"REBASING"`                                                    | `rebase`が進行中の場合に表示されるフォーマット文字列                                                          |
+| `merge`        | `"MERGING"`                                                     | `merge`が進行中の場合に表示されるフォーマット文字列                                                           |
+| `revert`       | `"REVERTING"`                                                   | `revert`が進行中の場合に表示されるフォーマット文字列                                                          |
 | `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
 | `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
 | `am`           | `"AM"`                                                          | A format string displayed when an `apply-mailbox` (`git am`) is in progress.            |
