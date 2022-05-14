@@ -1731,11 +1731,11 @@ O módulo `hostname` exibe o nome do hostname.
 
 ### Variáveis
 
-| Variável   | Exemplo    | Descrição                                             |
-| ---------- | ---------- | ----------------------------------------------------- |
-| hostname   | `computer` | O hostname do computador                              |
-| style\*  |            | Espelha o valor da opção `style`                      |
-| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
+| Variável   | Exemplo    | Descrição                                                      |
+| ---------- | ---------- | -------------------------------------------------------------- |
+| hostname   | `computer` | O hostname do computador                                       |
+| style\*  |            | Espelha o valor da opção `style`                               |
+| ssh_symbol | `"🌏 "`     | O símbolo a ser representado quando conectado à uma sessão SSH |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -1747,7 +1747,7 @@ O módulo `hostname` exibe o nome do hostname.
 [hostname]
 ssh_only = false
 format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
-trim_at = ".companyname.com"
+trim_at = ".nomedacompanhia.com"
 disabled = false
 ```
 
@@ -2386,7 +2386,7 @@ symbol = "☁️ "
 
 ## Package Version
 
-O módulo `package` é exibido quando o diretório atual é um repositorio para um pacote e exibe sua versão atual. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+O módulo `package` é exibido quando o diretório atual é um repositorio para um pacote e exibe sua versão atual. Atualmente o módulo dá suporte aos pacotes `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` e `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – O versionamento de pacotes `npm` é extraído do `package.json` presente no diretório atual
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – O versionamento de pacotes `cargo`é extraído do arquivo `Cargo.toml` presente no diretório atual
