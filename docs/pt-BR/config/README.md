@@ -2392,7 +2392,7 @@ O módulo `package` é exibido quando o diretório atual é um repositorio para 
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – O versionamento de pacotes `cargo`é extraído do arquivo `Cargo.toml` presente no diretório atual
 - [**Nimble**](https://github.com/nim-lang/nimble) - O versionamento de pacotes `nimble` é extraído do arquivo `*.nimble` presente no diretório atual com o comando`nimble dump`
 - [**Poetry**](https://python-poetry.org/) – O versionamento de pacotes `poetry` é extraído do arquivo `pyproject.toml` presente no diretório atual
-- [**Python**](https://www.python.org) - The `python` package version is extracted from a [PEP 621](https://peps.python.org/pep-0621/) compliant `pyproject.toml` or a `setup.cfg` present in the current directory
+- [**Python**](https://www.python.org) - O versionamento de pacotes `python` é extraída de um `pyproject.toml` compatível com [PEP 621](https://peps.python.org/pep-0621/) ou um `setup.cfg` presente no diretório atual
 - [**Composer**](https://getcomposer.org/) – O versionamento de pacotes `composer` é extraído do arquivo`composer.json` presente no diretório atual
 - [**Gradle**](https://gradle.org/) – O versionamento de pacotes `gradle` é extraído do arquivo `build.gradle` presente no diretório atual
 - [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - O versionamento de pacotes é extraído do arquivo `Project.toml` presente no diretório atual
@@ -2848,13 +2848,13 @@ Por padrão o módulo `rust` vai exibir a versão atual instalada do [Rust](http
 
 ### Variáveis
 
-| Variável  | Exemplo           | Descrição                                    |
-| --------- | ----------------- | -------------------------------------------- |
-| version   | `v1.43.0-nightly` | A versão do `rustc`                          |
-| numver    | `1.51.0`          | The numeric component of the `rustc` version |
-| toolchain | `beta`            | The toolchain version                        |
-| symbol    |                   | Espelha o valor da opção `symbol`            |
-| style\* |                   | Espelha o valor da opção `style`             |
+| Variável  | Exemplo           | Descrição                               |
+| --------- | ----------------- | --------------------------------------- |
+| version   | `v1.43.0-nightly` | A versão do `rustc`                     |
+| numver    | `1.51.0`          | O componente numérico da versão `rustc` |
+| toolchain | `beta`            | A versão do toolchain                   |
+| symbol    |                   | Espelha o valor da opção `symbol`       |
+| style\* |                   | Espelha o valor da opção `style`        |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
