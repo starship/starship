@@ -2024,25 +2024,25 @@ Long and automatically generated cluster names can be identified and shortened u
 disabled = true
 ```
 
-## Local IP
+## ローカルIP
 
-The `localip` module shows the IPv4 address of the primary network interface.
+`localip`モジュールは、プライマリネットワークインターフェイスのIPv4アドレスを表示します。
 
 ### オプション
 
-| オプション      | デフォルト                     | 説明                                                     |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `"[$localipv4]($style) "` | module のフォーマットです。                                      |
-| `style`    | `"bold yellow"`           | モジュールのスタイルです。                                          |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
+| オプション      | デフォルト                     | 説明                                  |
+| ---------- | ------------------------- | ----------------------------------- |
+| `ssh_only` | `true`                    | SSHセッションに接続されている場合にのみ、IPアドレスを表示します。 |
+| `format`   | `"[$localipv4]($style) "` | module のフォーマットです。                   |
+| `style`    | `"bold yellow"`           | モジュールのスタイルです。                       |
+| `disabled` | `true`                    | `localip`モジュールを無効にします。              |
 
 ### 変数
 
-| 変数        | 設定例          | 説明                                |
-| --------- | ------------ | --------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
-| style\* |              | オプション `style` の値をミラーする            |
+| 変数        | 設定例          | 説明                     |
+| --------- | ------------ | ---------------------- |
+| localipv4 | 192.168.1.13 | プライマリIPv4アドレスが含まれています  |
+| style\* |              | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
