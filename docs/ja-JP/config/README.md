@@ -1076,7 +1076,7 @@ heuristic = false
 
 | 変数          | 設定例     | 説明                          |
 | ----------- | ------- | --------------------------- |
-| version     | `v1.10` | The version of `elixir`     |
+| version     | `v1.10` | `elixir`のバージョン              |
 | otp_version |         | The otp version of `elixir` |
 | symbol      |         | オプション `記号` の値をミラーする         |
 | style\*   |         | オプション `style` の値をミラーする      |
@@ -1094,7 +1094,7 @@ symbol = "🔮 "
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`elm`モジュールは、現在インストールされている[Elm](https://elm-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`elm.json`ファイルが含まれている
 - カレントディレクトリに`elm-package.json`ファイルが含まれている
@@ -1119,7 +1119,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 | 変数        | 設定例       | 説明                     |
 | --------- | --------- | ---------------------- |
-| version   | `v0.19.1` | The version of `elm`   |
+| version   | `v0.19.1` | `elm`のバージョン            |
 | symbol    |           | オプション `記号` の値をミラーする    |
 | style\* |           | オプション `style` の値をミラーする |
 
@@ -1136,7 +1136,7 @@ format = "via [ $version](cyan bold) "
 
 ## 環境変数
 
-The `env_var` module displays the current value of a selected environment variables. 次の条件のいずれかが満たされると、モジュールが表示されます。
+`env_var`モジュールは、選択された環境変数の現在の値を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - `variable`オプションが、既存の環境変数と一致する
 - `variable`オプションが定義されておらず、`default`オプションが定義されている
