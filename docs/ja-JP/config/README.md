@@ -538,7 +538,7 @@ format = "via [$name $version]($style)"
 
 ::: warning
 
-`vicmd_symbol` is only supported in cmd, fish and zsh.
+`vicmd_symbol` はcmd、fish、zshでのみサポートされている。
 
 :::
 
@@ -621,10 +621,10 @@ vicmd_symbol = "[V](bold green) "
 
 ## COBOL / GNUCOBOL
 
-`COBOL` モジュールは、現在インストールされているCOBOLのバージョンを表示します。 By default, the module will be shown if any of the following conditions are met:
+`COBOL` モジュールは、現在インストールされているCOBOLのバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains any files ending in `.cob` or `.COB`
-- The current directory contains any files ending in `.cbl` or `.CBL`
+- カレントディレクトリに、`.cob`または`.COB`の拡張子のファイルが含まれている
+- カレントディレクトリに、`.cbl`または`.CBL`の拡張子のファイルが含まれている
 
 ### オプション
 
