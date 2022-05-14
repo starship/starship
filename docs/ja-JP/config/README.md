@@ -538,7 +538,7 @@ format = "via [$name $version]($style)"
 
 ::: warning
 
-`vicmd_symbol` はcmd、fish、zshでのみサポートされている。
+`vicmd_symbol` はcmd、fish、zshでのみサポートされています。
 
 :::
 
@@ -2059,25 +2059,25 @@ disabled = false
 
 ## Lua
 
-The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`lua`モジュールは、現在インストールされている[Lua](http://www.lua.org/) のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `.lua-version` file
-- The current directory contains a `lua` directory
+- カレントディレクトリに`.lua-version`ファイルが含まれている
+- カレントディレクトリに`lua`ディレクトリが含まれている
 - The current directory contains a file with the `.lua` extension
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                                         |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                                          |
-| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                     |
-| `symbol`            | `"🌙 "`                               | A format string representing the symbol of Lua.                            |
-| `detect_extensions` | `["lua"]`                            | どの拡張子がこのモジュールをアクティブにするか                                                    |
-| `detect_files`      | `[".lua-version"]`                   | どのファイル名がこのモジュールをアクティブにするか                                                  |
-| `detect_folders`    | `["lua"]`                            | どのフォルダーがこのモジュールをアクティブにするか                                                  |
-| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                                              |
-| `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
+| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"🌙 "`                               | Luaのシンボルを表すフォーマット文字列                                   |
+| `detect_extensions` | `["lua"]`                            | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[".lua-version"]`                   | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `["lua"]`                            | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                          |
+| `lua_binary`        | `"lua"`                              | Starshipがバージョンを取得するときに実行するLuaバイナリを設定します。               |
+| `disabled`          | `false`                              | `lua`モジュールを無効にします。                                     |
 
 ### 変数
 
