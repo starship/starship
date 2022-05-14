@@ -271,7 +271,7 @@ format = "$all$directory$character"
 
 `aws`モジュールは、`credential_process`または`sso_start_url`が設定されている場合、現在のAWSリージョンとプロファイルを表示します。 また、認証情報が設定されていない場合でも`force_display`オプションを利用して、このモジュールにリージョンとプロファイルを強制的に表示させることができます。 これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。 This module also shows an expiration timer when using temporary credentials.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. 上記の条件を満たさない場合でも、`force_display`を`true`にすると、利用可能なすべての情報が表示されます。
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -281,16 +281,16 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### オプション
 
-| オプション               | デフォルト                                                                 | 説明                                                                                                          |
-| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | module のフォーマットです。                                                                                           |
-| `symbol`            | `"☁️ "`                                                               | 現在のAWSプロファイルを表示する前に表示される記号です。                                                                               |
-| `region_aliases`    |                                                                       | AWS名に加えて表示するリージョンのエイリアスです。                                                                                  |
-| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `"bold yellow"`                                                       | モジュールのスタイルです。                                                                                               |
-| `expiration_symbol` | `X`                                                                   | The symbol displayed when the temporary credentials have expired.                                           |
-| `disabled`          | `false`                                                               | `aws`モジュールを無効にします。                                                                                          |
-| `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| オプション               | デフォルト                                                                 | 説明                                                                                   |
+| ------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | module のフォーマットです。                                                                    |
+| `symbol`            | `"☁️ "`                                                               | 現在のAWSプロファイルを表示する前に表示される記号です。                                                        |
+| `region_aliases`    |                                                                       | AWS名に加えて表示するリージョンのエイリアスです。                                                           |
+| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                     |
+| `style`             | `"bold yellow"`                                                       | モジュールのスタイルです。                                                                        |
+| `expiration_symbol` | `X`                                                                   | The symbol displayed when the temporary credentials have expired.                    |
+| `disabled`          | `false`                                                               | `aws`モジュールを無効にします。                                                                   |
+| `force_display`     | `false`                                                               | `true`の場合、`credentials`、`credential_process`または`sso_start_url`が設定されていない場合でも情報を表示します。 |
 
 ### 変数
 
@@ -309,8 +309,6 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 #### すべてを表示
 
 ```toml
-# ~/.config/starship.toml
-
 [aws]
 format = 'on [$symbol($profile )(\($region\) )]($style)'
 style = "bold blue"
@@ -442,7 +440,7 @@ discharging_symbol = "💦"
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
+`buf`モジュールは、現在インストールされている[Buf](https://buf.build)のバージョンを表示します。 By default, the module is shown if all of the following conditions are met:
 
 - The [`buf`](https://github.com/bufbuild/buf) CLI is installed.
 - The current directory contains a [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), or [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml) configuration file.
