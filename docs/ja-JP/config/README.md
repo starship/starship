@@ -451,7 +451,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 | オプション               | デフォルト                                                        | 説明                                                    |
 | ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
+| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | `buf`モジュールの形式。                                        |
 | `version_format`    | `"v${raw}"`                                                  | バージョンのフォーマット。                                         |
 | `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                                         | どの拡張子がこのモジュールをアクティブにするか                               |
@@ -628,22 +628,22 @@ vicmd_symbol = "[V](bold green) "
 
 ### オプション
 
-| オプション               | デフォルト                                | 説明                                                      |
-| ------------------- | ------------------------------------ | ------------------------------------------------------- |
-| `symbol`            | `"⚙️ "`                              | The symbol used before displaying the version of COBOL. |
-| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                       |
-| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。  |
-| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                           |
-| `detect_extensions` | `["cbl", "cob", "CBL", "COB"]`       | どの拡張子がこのモジュールをアクティブにするか                                 |
-| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                               |
-| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                               |
-| `disabled`          | `false`                              | Disables the `cobol` module.                            |
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `symbol`            | `"⚙️ "`                              | COBOLのバージョンを表示する前に使用される記号です。                           |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
+| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                          |
+| `detect_extensions` | `["cbl", "cob", "CBL", "COB"]`       | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `disabled`          | `false`                              | `cobol`モジュールを無効にします。                                   |
 
 ### 変数
 
 | 変数        | 設定例        | 説明                     |
 | --------- | ---------- | ---------------------- |
-| version   | `v3.1.2.0` | The version of `cobol` |
+| version   | `v3.1.2.0` | `cobol`のバージョン          |
 | symbol    |            | オプション `記号` の値をミラーする    |
 | style\* |            | オプション `style` の値をミラーする |
 
@@ -739,20 +739,20 @@ format = "[$symbol$environment](dimmed green) "
 
 ### オプション
 
-| オプション      | デフォルト                                  | 説明                               |
-| ---------- | -------------------------------------- | -------------------------------- |
-| `symbol`   | `"⬢"`                                  | コンテナ内にいる場合、このシンボルが表示されます。        |
-| `style`    | `"bold red dimmed"`                    | モジュールのスタイルです。                    |
-| `format`   | `"[$symbol \\[$name\\]]($style) "` | module のフォーマットです。                |
-| `disabled` | `false`                                | Disables the `container` module. |
+| オプション      | デフォルト                                  | 説明                        |
+| ---------- | -------------------------------------- | ------------------------- |
+| `symbol`   | `"⬢"`                                  | コンテナ内にいる場合、このシンボルが表示されます。 |
+| `style`    | `"bold red dimmed"`                    | モジュールのスタイルです。             |
+| `format`   | `"[$symbol \\[$name\\]]($style) "` | module のフォーマットです。         |
+| `disabled` | `false`                                | `container`モジュールを無効にします。  |
 
 ### 変数
 
-| 変数        | 設定例                 | 説明                        |
-| --------- | ------------------- | ------------------------- |
-| name      | `fedora-toolbox:35` | The name of the container |
-| symbol    |                     | オプション `記号` の値をミラーする       |
-| style\* |                     | オプション `style` の値をミラーする    |
+| 変数        | 設定例                 | 説明                     |
+| --------- | ------------------- | ---------------------- |
+| name      | `fedora-toolbox:35` | コンテナ名                  |
+| symbol    |                     | オプション `記号` の値をミラーする    |
+| style\* |                     | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
