@@ -1140,7 +1140,7 @@ O módulo `env_var` exibe o valor atual de uma variável de ambiente selecionada
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (Veja o exemplo) se a configuração `variable` não é definida, o módulo irá exibir o valor da variável após o caractere `.`.
+Múltiplas variáveis de ambiente podem ser exibidas usando um `.`. (Veja o exemplo) se a configuração `variable` não é definida, o módulo irá exibir o valor da variável após o caractere `.`.
 
 Exemplo: a configuração a seguir irá mostrar o valor da variável de ambiente USER
 
@@ -1723,7 +1723,7 @@ O módulo `hostname` exibe o nome do hostname.
 | Opções       | Padrão                                 | Descrição                                                                                                                                                |
 | ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ssh_only`   | `true`                                 | Apenas exibe o hostname quando conectado em uma sessão SSH.                                                                                              |
-| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                                                   |
+| `ssh_symbol` | `"🌐 "`                                 | Uma formatação de string que representa o símbolo quando conectado à sessão SSH.                                                                         |
 | `trim_at`    | `"."`                                  | String na qual vai truncar o hostname, após a primeira correspondência. `"."` vai truncar após o primeiro ponto. `""` vai desabilitar qualquer truncação |
 | `format`     | `"[$ssh_symbol$hostname]($style) in "` | O formato do módulo.                                                                                                                                     |
 | `style`      | `"bold dimmed green"`                  | O estilo do módulo.                                                                                                                                      |
