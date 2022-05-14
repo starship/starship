@@ -2063,7 +2063,7 @@ disabled = false
 
 - カレントディレクトリに`.lua-version`ファイルが含まれている
 - カレントディレクトリに`lua`ディレクトリが含まれている
-- The current directory contains a file with the `.lua` extension
+- カレントディレクトリに`.lua`の拡張子のファイルが含まれている
 
 ### オプション
 
