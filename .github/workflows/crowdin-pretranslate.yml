@@ -12,4 +12,4 @@ jobs:
       - uses: starship/crowdin-pretranslate-action@v0.1.1
         with:
           project_id: 372655
-          api_key: ${{ secrets.CROWDIN_API_KEY }}
+          api_key: ${{ secrets.CROWDIN_API_TOKEN }}
