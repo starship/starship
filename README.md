@@ -439,7 +439,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [gentoo packages]: https://packages.gentoo.org/packages/app-shells/starship
 [linuxbrew]: https://formulae.brew.sh/formula/starship
 [homebrew]: https://formulae.brew.sh/formula/starship
-[makedeb Package Repository]: https://mpr.makedeb.org/starship
+[makedeb Package Repository]: https://mpr.makedeb.org/packages/starship
 [macports]: https://ports.macports.org/port/starship
 [nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix
 [pkgsrc]: https://pkgsrc.se/shells/starship
