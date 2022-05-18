@@ -447,16 +447,16 @@ discharging_symbol = "💦"
 
 ### オプション
 
-| オプション               | デフォルト                                                        | 説明                            |
-| ------------------- | ------------------------------------------------------------ | ----------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | `buf`モジュールの形式。                |
-| `version_format`    | `"v${raw}"`                                                  | バージョンのフォーマット。                 |
-| `symbol`            | `"🦬 "`                                                       | Bufのバージョンを表示する前に使用される記号です。    |
-| `detect_extensions` | `[]`                                                         | どの拡張子がこのモジュールをアクティブにするか       |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | どのファイル名がこのモジュールをアクティブにするか     |
-| `detect_folders`    | `[]`                                                         | どのフォルダーがこのモジュールをアクティブにするか     |
-| `style`             | `"bold blue"`                                                | モジュールのスタイルです。                 |
-| `disabled`          | `false`                                                      | Disables the `elixir` module. |
+| オプション               | デフォルト                                                        | 説明                         |
+| ------------------- | ------------------------------------------------------------ | -------------------------- |
+| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | `buf`モジュールの形式。             |
+| `version_format`    | `"v${raw}"`                                                  | バージョンのフォーマット。              |
+| `symbol`            | `"🦬 "`                                                       | Bufのバージョンを表示する前に使用される記号です。 |
+| `detect_extensions` | `[]`                                                         | どの拡張子がこのモジュールをアクティブにするか    |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | どのファイル名がこのモジュールをアクティブにするか  |
+| `detect_folders`    | `[]`                                                         | どのフォルダーがこのモジュールをアクティブにするか  |
+| `style`             | `"bold blue"`                                                | モジュールのスタイルです。              |
+| `disabled`          | `false`                                                      | `elixir`モジュールを無効にします。      |
 
 ### 変数
 
