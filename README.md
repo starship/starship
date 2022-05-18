@@ -210,21 +210,22 @@ curl -sS https://starship.rs/install.sh | sh
 
 Alternatively, install Starship using any of the following package managers:
 
-| Distribution       | Repository              | Instructions                                                  |
-| ------------------ | ----------------------- | ------------------------------------------------------------- |
-| **_Any_**          | **[crates.io]**         | `cargo install starship --locked`                             |
-| _Any_              | [conda-forge]           | `conda install -c conda-forge starship`                       |
-| _Any_              | [Linuxbrew]             | `brew install starship`                                       |
-| _Any_              | [Snapcraft]             | `snap install starship`                                       |
-| Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
-| Arch Linux         | [Arch Linux Community]  | `pacman -S starship`                                          |
-| CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages]       | `dnf install starship`                                        |
-| NixOS              | [nixpkgs]               | `nix-env -iA nixos.starship`                                  |
-| Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
-| Manjaro            |                         | `pacman -S starship`                                          |
-| NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
-| Void Linux         | [Void Linux Packages]   | `xbps-install -S starship`                                    |
+| Distribution       | Repository                   | Instructions                                                  |
+| ------------------ | -----------------------      | ------------------------------------------------------------- |
+| **_Any_**          | **[crates.io]**              | `cargo install starship --locked`                             |
+| _Any_              | [conda-forge]                | `conda install -c conda-forge starship`                       |
+| _Any_              | [Linuxbrew]                  | `brew install starship`                                       |
+| _Any_              | [Snapcraft]                  | `snap install starship`                                       |
+| Alpine Linux 3.13+ | [Alpine Linux Packages]      | `apk add starship`                                            |
+| Arch Linux         | [Arch Linux Community]       | `pacman -S starship`                                          |
+| CentOS 7+          | [Copr]                       | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Fedora 31+         | [Fedora Packages]            | `dnf install starship`                                        |
+| NixOS              | [nixpkgs]                    | `nix-env -iA nixos.starship`                                  |
+| Gentoo             | [Gentoo Packages]            | `emerge app-shells/starship`                                  |
+| makedeb            | [makedeb Package Repository] | `git clone 'https://mpr.makedeb.org/starship'` <br /> `cd starship/` <br /> `makedeb -si` |
+| Manjaro            |                              | `pacman -S starship`                                          |
+| NixOS              | [nixpkgs]                    | `nix-env -iA nixpkgs.starship`                                |
+| Void Linux         | [Void Linux Packages]        | `xbps-install -S starship`                                    |
 
 </details>
 
