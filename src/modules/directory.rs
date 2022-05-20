@@ -111,8 +111,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 || ((num_segments_after_root - 1) as i64) < config.truncation_length
             {
                 let root = repo_path_vec[0];
-                let before = dir_string.replace(&contracted_path, "");
-                [prefix + before.as_str(), root.to_string(), after_repo_root]
+                let before = dir_string.trim_end_matches(&contracted_path);
+                [prefix + before, root.to_string(), after_repo_root]
             } else {
                 ["".to_string(), "".to_string(), prefix + dir_string.as_str()]
             }
@@ -970,6 +970,38 @@ mod tests {
             Color::Cyan.bold().paint(convert_path_sep(
                 "above-repo/rocket-controls/src/meters/fuel-gauge"
             ))
+        ));
+
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
+    #[test]
+    fn parent_with_name_name_as_git_repo_truncate_to_repo_false_and_repo_root_style_set(
+    ) -> io::Result<()> {
+        let tmp_dir = TempDir::new()?;
+        let repo_dir = tmp_dir
+            .path()
+            .join("rocket-controls")
+            .join("rocket-controls");
+        fs::create_dir_all(&repo_dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncate_to_repo = false
+                truncation_length = 0
+                repo_root_style = "cyan bold"
+            })
+            .path(repo_dir)
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            Color::Cyan.bold().paint(convert_path_sep(&format!(
+                "{}/rocket-controls/rocket-controls",
+                tmp_dir.path().to_slash_lossy()
+            )))
         ));
 
         assert_eq!(expected, actual);
