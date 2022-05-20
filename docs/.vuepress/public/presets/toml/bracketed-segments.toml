@@ -19,6 +19,9 @@ format = '\[[$symbol$environment]($style)\]'
 [crystal]
 format = '\[[$symbol($version)]($style)\]'
 
+[daml]
+format = '\[[$symbol($version)]($style)\]'
+
 [dart]
 format = '\[[$symbol($version)]($style)\]'
 

@@ -10,6 +10,9 @@ format = "via [$symbol]($style)"
 [crystal]
 format = "via [$symbol]($style)"
 
+[daml]
+format = "via [$symbol]($style)"
+
 [dart]
 format = "via [$symbol]($style)"
 
