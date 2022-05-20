@@ -18,7 +18,7 @@ features:
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship：可用于各种 Shell 的提示符"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship是一款轻量级、反应迅速、可自定义的高颜值终端！ Shows the information you need, while staying sleek and minimal. 可以为Bash、Fish、ZSH、Ion、Tcsh、Elvish、Nu、Xonsh、Cmd和PowerShell执行快速安装。
 ---
 
 <div class="center">
@@ -30,7 +30,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### 前置要求
 
-- 安装并在你的终端启用一种 [Nerd Font](https://www.nerdfonts.com/) 。
+- 安装并在你的终端启用 [Nerd Font](https://www.nerdfonts.com/) 。
 
 ### 快速安装
 
