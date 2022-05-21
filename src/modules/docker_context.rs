@@ -9,15 +9,15 @@ use crate::utils;
 /// Creates a module with the currently active Docker context
 ///
 /// Will display the Docker context if the following criteria are met:
-///     - There is a non-empty environment variable named DOCKER_HOST
-///     - Or there is a non-empty environment variable named DOCKER_CONTEXT
+///     - There is a non-empty environment variable named `DOCKER_HOST`
+///     - Or there is a non-empty environment variable named `DOCKER_CONTEXT`
 ///     - Or there is a file named `$HOME/.docker/config.json`
 ///     - Or a file named `$DOCKER_CONFIG/config.json`
 ///     - The file is JSON and contains a field named `currentContext`
 ///     - The value of `currentContext` is not `default`
 ///     - If multiple criterias are met, we use the following order to define the docker context:
-///     - DOCKER_HOST, DOCKER_CONTEXT, $HOME/.docker/config.json, $DOCKER_CONFIG/config.json
-///     - (This is the same order docker follows, as DOCKER_HOST and DOCKER_CONTEXT override the
+///     - `DOCKER_HOST`, `DOCKER_CONTEXT`, $HOME/.docker/config.json, $`DOCKER_CONFIG/config.json`
+///     - (This is the same order docker follows, as `DOCKER_HOST` and `DOCKER_CONTEXT` override the
 ///     config)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("docker_context");

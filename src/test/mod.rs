@@ -51,7 +51,7 @@ pub struct ModuleRenderer<'a> {
 }
 
 impl<'a> ModuleRenderer<'a> {
-    /// Creates a new ModuleRenderer
+    /// Creates a new `ModuleRenderer`
     pub fn new(name: &'a str) -> Self {
         // Start logger
         Lazy::force(&LOGGER);
@@ -91,13 +91,13 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
-    /// Adds the variable to the env_mocks of the underlying context
+    /// Adds the variable to the `env_mocks` of the underlying context
     pub fn env<V: Into<String>>(mut self, key: &'a str, val: V) -> Self {
         self.context.env.insert(key, val.into());
         self
     }
 
-    /// Adds the command to the commandv_mocks of the underlying context
+    /// Adds the command to the `command_mocks` of the underlying context
     pub fn cmd(mut self, key: &'a str, val: Option<CommandOutput>) -> Self {
         self.context.cmd.insert(key, val);
         self
@@ -161,6 +161,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 }
 
+#[derive(Clone, Copy)]
 pub enum FixtureProvider {
     Git,
     Hg,

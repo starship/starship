@@ -337,7 +337,7 @@ impl<'a> Context<'a> {
         )
     }
 
-    /// Attempt to execute several commands with exec_cmd, return the results of the first that works
+    /// Attempt to execute several commands with `exec_cmd`, return the results of the first that works
     pub fn exec_cmds_return_first(&self, commands: Vec<Vec<&str>>) -> Option<CommandOutput> {
         commands
             .iter()
@@ -513,7 +513,7 @@ impl<'a> ScanDir<'a> {
         self
     }
 
-    /// based on the current PathBuf check to see
+    /// based on the current `PathBuf` check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
         self.dir_contents.has_any_extension(self.extensions)
@@ -628,7 +628,7 @@ pub struct Properties {
 
 impl Default for Properties {
     fn default() -> Self {
-        Properties {
+        Self {
             status_code: None,
             pipestatus: None,
             terminal_width: default_width(),

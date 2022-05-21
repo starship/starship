@@ -61,8 +61,7 @@ fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> R
     }
 
     let mut new_value = toml_edit::Value::from_str(value)
-        .map(toml_edit::Item::Value)
-        .unwrap_or_else(|_| toml_edit::value(value));
+        .map_or_else(|_| toml_edit::value(value), toml_edit::Item::Value);
 
     if let Some(value) = current_item.as_value() {
         *new_value.as_value_mut().unwrap().decor_mut() = value.decor().clone();
@@ -147,7 +146,7 @@ fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value 
         for &segment in parents {
             source_cursor = if let Some(child) = source_cursor
                 .get_mut(segment)
-                .and_then(|value| value.as_table_mut())
+                .and_then(toml::Value::as_table_mut)
             {
                 child
             } else {
