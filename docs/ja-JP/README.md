@@ -122,7 +122,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   elvish v0.18 以降のみサポートされます。
 
    :::
 
@@ -148,13 +148,13 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Nushell
 
-   ::: warning
+   ::: 警告
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   これは将来的に変更される可能性があります。 Nushell v0.61+ のみサポートされています。
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.env-path` を実行してください）:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
