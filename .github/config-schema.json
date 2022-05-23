@@ -745,11 +745,11 @@
     "kubernetes": {
       "default": {
         "context_aliases": {},
-        "user_aliases": {},
         "disabled": true,
         "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "style": "cyan bold",
-        "symbol": "☸ "
+        "symbol": "☸ ",
+        "user_aliases": {}
       },
       "allOf": [
         {
