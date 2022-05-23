@@ -180,7 +180,7 @@
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| リポジトリ                                                                             | Instructions           |
+| リポジトリ                                                                             | 手順                     |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -191,7 +191,7 @@
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| ディストリビューション | リポジトリ                                                    | Instructions                      |
+| ディストリビューション | リポジトリ                                                    | 手順                                |
 | ----------- | -------------------------------------------------------- | --------------------------------- |
 | **_Any_**   | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
 | FreeBSD     | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
@@ -210,7 +210,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
-| ディストリビューション        | リポジトリ                                                                                           | Instructions                                                                   |
+| ディストリビューション        | リポジトリ                                                                                           | 手順                                                                             |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
@@ -239,7 +239,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
-| リポジトリ                                                    | Instructions                            |
+| リポジトリ                                                    | 手順                                      |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -253,7 +253,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| リポジトリ                                                                            | Instructions                            |
+| リポジトリ                                                                            | 手順                                      |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
@@ -326,7 +326,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）:
 
 ```sh
 mkdir ~/.cache/starship
@@ -346,7 +346,7 @@ source ~/.cache/starship/init.nu
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+そして、Nushellの設定ファイルの最後に以下を追加してください（ `$PROFILE.config-path` を実行してください）:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -413,7 +413,7 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – JavaScript で書かれた Cross-shell 対応の robbyrussell テーマ。
 
-- **[reujab/silver](https://github.com/reujab/silver)** – アイコンと cross-shell 対応のカスタマイズ可能な powerline ライクのプロンプト。
+- **[reujab/silver](https://github.com/reujab/silver)** – アイコンと cross-shell 対応のカスタマイズ可能な powerline ライクなプロンプト。
 
 <p align="center">
     <br>
