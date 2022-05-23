@@ -63,8 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Ok(segments) => segments
                         .into_iter()
                         .map(|s| s.to_string())
-                        .collect::<Vec<String>>()
-                        .join(""),
+                        .collect::<String>(),
                     Err(_) => "".to_string(),
                 },
             )
@@ -330,7 +329,7 @@ mod tests {
 
     #[test]
     fn failure_hex_status() {
-        let exit_values = [1, 2, 130, -2147467260, 2147500036];
+        let exit_values = [1, 2, 130, -2_147_467_260, 2_147_500_036];
         let string_values = ["0x1", "0x2", "0x82", "0x80004004", "0x80004004"];
 
         for (exit_value, string_value) in exit_values.iter().zip(string_values) {

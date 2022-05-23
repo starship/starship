@@ -102,9 +102,9 @@ fn format_time_fixed_offset(time_format: &str, utc_time: DateTime<FixedOffset>) 
     utc_time.format(time_format).to_string()
 }
 
-/// Returns true if time_now is between time_start and time_end.
+/// Returns true if `time_now` is between `time_start` and `time_end`.
 /// If one of these values is not given, then it is ignored.
-/// It also handles cases where time_start and time_end have a midnight in between
+/// It also handles cases where `time_start` and `time_end` have a midnight in between
 fn is_inside_time_range(
     time_now: NaiveTime,
     time_start: Option<NaiveTime>,
@@ -124,8 +124,8 @@ fn is_inside_time_range(
     }
 }
 
-/// Parses the config's time_range field and returns the starting time and ending time.
-/// The range is in the format START_TIME-END_TIME, with START_TIME and END_TIME being optional.
+/// Parses the config's `time_range` field and returns the starting time and ending time.
+/// The range is in the format START_TIME-END_TIME, with `START_TIME` and `END_TIME` being optional.
 ///
 /// If one of the ranges is invalid or not provided, then the corresponding field in the output
 /// tuple is None
@@ -327,8 +327,7 @@ mod tests {
         let utc_time_offset_str = "+24";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
-            .err()
-            .expect("Invalid timezone offset.");
+            .expect_err("Invalid timezone offset.");
     }
 
     #[test]
@@ -337,8 +336,7 @@ mod tests {
         let utc_time_offset_str = "-24";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
-            .err()
-            .expect("Invalid timezone offset.");
+            .expect_err("Invalid timezone offset.");
     }
 
     #[test]
@@ -347,8 +345,7 @@ mod tests {
         let utc_time_offset_str = "+9001";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
-            .err()
-            .expect("Invalid timezone offset.");
+            .expect_err("Invalid timezone offset.");
     }
 
     #[test]
@@ -357,8 +354,7 @@ mod tests {
         let utc_time_offset_str = "-4242";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
-            .err()
-            .expect("Invalid timezone offset.");
+            .expect_err("Invalid timezone offset.");
     }
 
     #[test]
@@ -367,8 +363,7 @@ mod tests {
         let utc_time_offset_str = "completely wrong config";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
-            .err()
-            .expect("Invalid timezone offset.");
+            .expect_err("Invalid timezone offset.");
     }
 
     #[test]

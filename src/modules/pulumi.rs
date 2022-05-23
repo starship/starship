@@ -276,7 +276,7 @@ mod tests {
         yaml.sync_all()?;
 
         let workspace_path = root.join(".pulumi").join("workspaces");
-        let _ = std::fs::create_dir_all(&workspace_path)?;
+        std::fs::create_dir_all(&workspace_path)?;
         let workspace_path = &workspace_path.join("starship-test-workspace.json");
         let mut workspace = File::create(&workspace_path)?;
         serde_json::to_writer_pretty(
@@ -290,7 +290,7 @@ mod tests {
         workspace.sync_all()?;
 
         let credential_path = root.join(".pulumi");
-        let _ = std::fs::create_dir_all(&credential_path)?;
+        std::fs::create_dir_all(&credential_path)?;
         let credential_path = &credential_path.join("credentials.json");
         let mut credential = File::create(&credential_path)?;
         serde_json::to_writer_pretty(
@@ -343,7 +343,7 @@ mod tests {
         yaml.sync_all()?;
 
         let workspace_path = root.join(".pulumi").join("workspaces");
-        let _ = std::fs::create_dir_all(&workspace_path)?;
+        std::fs::create_dir_all(&workspace_path)?;
         let workspace_path = &workspace_path.join("starship-test-workspace.json");
         let mut workspace = File::create(&workspace_path)?;
         serde_json::to_writer_pretty(
@@ -357,7 +357,7 @@ mod tests {
         workspace.sync_all()?;
 
         let credential_path = root.join(".pulumi");
-        let _ = std::fs::create_dir_all(&credential_path)?;
+        std::fs::create_dir_all(&credential_path)?;
         let credential_path = &credential_path.join("starship-test-credential.json");
         let mut credential = File::create(&credential_path)?;
         serde_json::to_writer_pretty(

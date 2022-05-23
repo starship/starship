@@ -22,7 +22,7 @@ use crate::formatter::StringFormatter;
 ///
 /// **Contraction**
 /// - Paths beginning with the home directory or with a git repo right inside
-///   the home directory will be contracted to `~`, or the set HOME_SYMBOL
+///   the home directory will be contracted to `~`, or the set `HOME_SYMBOL`
 /// - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Substitution**

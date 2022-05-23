@@ -1,4 +1,5 @@
 use crate::context::Shell;
+use crate::segment;
 use crate::segment::{FillSegment, Segment};
 use crate::utils::wrap_colorseq_for_shell;
 use ansi_term::{ANSIString, ANSIStrings};
@@ -139,13 +140,10 @@ impl<'a> Module<'a> {
 
     /// Get values of the module's segments
     pub fn get_segments(&self) -> Vec<&str> {
-        self.segments
-            .iter()
-            .map(|segment| segment.value())
-            .collect()
+        self.segments.iter().map(segment::Segment::value).collect()
     }
 
-    /// Returns a vector of colored ANSIString elements to be later used with
+    /// Returns a vector of colored `ANSIString` elements to be later used with
     /// `ANSIStrings()` to optimize ANSI codes
     pub fn ansi_strings(&self) -> Vec<ANSIString> {
         self.ansi_strings_for_shell(Shell::Unknown, None)

@@ -125,7 +125,7 @@ pub fn get_prompt(context: Context) -> String {
     }
 
     // escape \n and ! characters for tcsh
-    if let Shell::Tcsh = context.shell {
+    if context.shell == Shell::Tcsh {
         buf = buf.replace('!', "\\!");
         // space is required before newline
         buf = buf.replace('\n', " \\n");

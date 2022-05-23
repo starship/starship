@@ -62,7 +62,7 @@ pub struct StringFormatter<'a> {
 }
 
 impl<'a> StringFormatter<'a> {
-    /// Creates an instance of StringFormatter from a format string
+    /// Creates an instance of `StringFormatter` from a format string
     ///
     /// This method will throw an Error when the given format string fails to parse.
     pub fn new(format: &'a str) -> Result<Self, StringFormatterError> {
@@ -88,7 +88,7 @@ impl<'a> StringFormatter<'a> {
         })
     }
 
-    /// A StringFormatter that does no formatting, parse just returns the raw text
+    /// A `StringFormatter` that does no formatting, parse just returns the raw text
     pub fn raw(text: &'a str) -> Self {
         Self {
             format: vec![FormatElement::Text(text.into())],

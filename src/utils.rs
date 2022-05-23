@@ -102,7 +102,7 @@ pub fn display_command<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     args: &[U],
 ) -> String {
     std::iter::once(cmd.as_ref())
-        .chain(args.iter().map(|i| i.as_ref()))
+        .chain(args.iter().map(std::convert::AsRef::as_ref))
         .map(|i| i.to_string_lossy().into_owned())
         .collect::<Vec<String>>()
         .join(" ")

@@ -83,7 +83,7 @@ impl RustToolingEnvironmentInfo {
     }
 
     /// Gets the output of running `rustup rustc --version` with a toolchain
-    /// specified by self.get_env_toolchain_override()
+    /// specified by `self.get_env_toolchain_override()`
     fn get_rustup_rustc_version(&self, context: &Context) -> &RustupRunRustcVersionOutcome {
         self.rustup_rustc_output.get_or_init(|| {
             let out = if let Some(toolchain) = self.get_env_toolchain_override(context) {
@@ -377,8 +377,9 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
 
 fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> String {
     default_host_triple
-        .map(|triple| toolchain.trim_end_matches(&format!("-{}", triple)))
-        .unwrap_or(toolchain)
+        .map_or(toolchain, |triple| {
+            toolchain.trim_end_matches(&format!("-{}", triple))
+        })
         .to_owned()
 }
 
@@ -394,17 +395,12 @@ fn format_rustc_version_verbose(stdout: &str, toolchain: Option<&str>) -> Option
     }
     let (release, host) = (release?, host?);
     let version = format_semver(release);
-    let toolchain = toolchain
-        .map(ToOwned::to_owned)
-        .unwrap_or_else(|| host.to_string());
+    let toolchain = toolchain.map_or_else(|| host.to_string(), ToOwned::to_owned);
     Some((version, toolchain))
 }
 
 fn format_semver(semver: &str) -> String {
-    format!(
-        "v{}",
-        semver.find('-').map(|i| &semver[..i]).unwrap_or(semver)
-    )
+    format!("v{}", semver.find('-').map_or(semver, |i| &semver[..i]))
 }
 
 #[derive(Debug, PartialEq)]
@@ -470,10 +466,10 @@ impl RustupSettings {
         let cwd = strip_dos_path(cwd.to_owned());
         self.overrides
             .iter()
-            .map(|(dir, toolchain)| (strip_dos_path(dir.to_owned()), toolchain))
+            .map(|(dir, toolchain)| (strip_dos_path(dir.clone()), toolchain))
             .filter(|(dir, _)| cwd.starts_with(dir))
             .max_by_key(|(dir, _)| dir.components().count())
-            .map(|(_, name)| name.to_owned())
+            .map(|(_, name)| name.clone())
     }
 }
 
