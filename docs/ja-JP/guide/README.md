@@ -297,7 +297,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+注意: Elvish v0.18以降でサポートされています
 
 </details>
 
@@ -339,7 +339,7 @@ starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+注意: Elvish v0.61以降でサポートされています
 
 </details>
 
