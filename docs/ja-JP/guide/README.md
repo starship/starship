@@ -171,7 +171,7 @@
 
 - [Nerd Font](https://www.nerdfonts.com/)がインストールされ、端末にて有効になっている（例えば、[Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)を試してみてください）。
 
-### Step 1. Install Starship
+### Step 1. Starshipをインストール
 
 以下のリストからお使いのOSを選択し、インストール方法をご確認ください。
 
@@ -180,7 +180,7 @@
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| Repository                                                                        | Instructions           |
+| リポジトリ                                                                             | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -191,11 +191,11 @@
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| Distribution | Repository                                               | Instructions                      |
-| ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| ディストリビューション | リポジトリ                                                    | Instructions                      |
+| ----------- | -------------------------------------------------------- | --------------------------------- |
+| **_Any_**   | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD     | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD      | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
 </details>
 
@@ -210,7 +210,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| ディストリビューション        | リポジトリ                                                                                           | Instructions                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
@@ -239,7 +239,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
-| Repository                                               | Instructions                            |
+| リポジトリ                                                    | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -253,7 +253,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| Repository                                                                       | Instructions                            |
+| リポジトリ                                                                            | Instructions                            |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
