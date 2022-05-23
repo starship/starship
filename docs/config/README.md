@@ -2056,7 +2056,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
 | `style`           | `"cyan bold"`                                      | The style for the module.                                             |
 | `context_aliases` |                                                    | Table of context aliases to display.                                  |
-| `user_aliases`    |                                                    | Table of context aliases to display.                                  |
+| `user_aliases`    |                                                    | Table of user aliases to display.                                     |
 | `disabled`        | `true`                                             | Disables the `kubernetes` module.                                     |
 
 ### Variables
