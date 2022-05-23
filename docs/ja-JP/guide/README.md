@@ -262,7 +262,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Step 2. Starshipをシェルにセットアップ
 
 Starshipを初期化するためのシェルの設定。 以下のリストからお使いのシェルを選択してください。
 
@@ -387,13 +387,13 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Step 3. Starshipの設定
 
 新しいシェルインスタンスを起動すると、美しくて新しいシェルプロンプトが表示されるはずです。 デフォルトで問題なければ、お楽しみください！
 
 Starshipのさらなるカスタマイズを目指すなら以下を参考にしてみてください。
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[設定](https://starship.rs/config/)** - あなたの好みに応じてプロンプトを調整するためにStarshipを設定する方法を学ぶ
 
 - **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
 
