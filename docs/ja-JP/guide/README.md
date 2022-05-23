@@ -409,11 +409,11 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** - 宇宙飛行士のための ZSH プロンプト。
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – 宇宙飛行士のための ZSH プロンプト。
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - JavaScript で書かれた Cross-shell 対応の robbyrussell テーマ。
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – JavaScript で書かれた Cross-shell 対応の robbyrussell テーマ。
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – アイコンと cross-shell 対応のカスタマイズ可能な powerline ライクのプロンプト。
 
 <p align="center">
     <br>
