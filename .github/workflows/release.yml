@@ -1,4 +1,4 @@
-name: Deploy
+name: Release
 on:
   push:
     branches:
@@ -117,7 +117,7 @@ jobs:
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
-      - name: Deploy | Upload artifacts
+      - name: Release | Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}
@@ -126,6 +126,7 @@ jobs:
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
     runs-on: macos-latest
+    continue-on-error: true
     needs: [github_build, merge_crowdin_pr]
     strategy:
       fail-fast: false
