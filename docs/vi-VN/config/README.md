@@ -280,16 +280,16 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                             | Mô tả                                                                                                       |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Định dạng cho module.                                                                                       |
-| `symbol`            | `"☁️ "`                                                              | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại.                                                        |
-| `region_aliases`    |                                                                      | Bảng của các region alias để hiển thị ngoài tên AWS.                                                        |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `"bold yellow"`                                                      | Kiểu cho module.                                                                                            |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired.                                           |
-| `disabled`          | `false`                                                              | Vô hiệu `AWS` module.                                                                                       |
-| `force_display`     | `false`                                                              | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Tuỳ chọn            | Mặc định                                                              | Mô tả                                                                                                       |
+| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Định dạng cho module.                                                                                       |
+| `symbol`            | `"☁️ "`                                                               | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại.                                                        |
+| `region_aliases`    |                                                                       | Bảng của các region alias để hiển thị ngoài tên AWS.                                                        |
+| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `"bold yellow"`                                                       | Kiểu cho module.                                                                                            |
+| `expiration_symbol` | `X`                                                                   | The symbol displayed when the temporary credentials have expired.                                           |
+| `disabled`          | `false`                                                               | Vô hiệu `AWS` module.                                                                                       |
+| `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Các biến
 
@@ -1140,7 +1140,9 @@ The `env_var` module displays the current value of a selected environment variab
 - Tùy chọn `variable` khớp với mootjj biến môi trường tồn tại
 - Tùy chọn `variable` không được định nghĩa, nhưng tùy chọn `default` là
 
-::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+::: tip
+
+Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
 Example: following configuration will display value of USER environment variable
 
@@ -1342,17 +1344,17 @@ Mô đun `git_branch` hiển thị nhánh hiệu lực của repo trong thư m�
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                         | Mô tả                                                                                                 |
-| -------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Hiển thị tên nhánh remote tracking, thậm chí nếu nó bằng với tên nhánh local.                         |
-| `format`             | `"on [$symbol$branch]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.                       |
-| `symbol`             | `" "`                           | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                                |
-| `style`              | `"bold purple"`                  | Kiểu cho module.                                                                                      |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                              |
-| `truncation_symbol`  | `"…"`                            | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. Bạn có thể sử dụng `""` để ẩn biểu tượng. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                                        |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                                   |
-| `disabled`           | `false`                          | Vô hiệu mô đun `git_branch`.                                                                          |
+| Tuỳ chọn             | Mặc định                                          | Mô tả                                                                                                 |
+| -------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Hiển thị tên nhánh remote tracking, thậm chí nếu nó bằng với tên nhánh local.                         |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | Định dạng cho module. Sử dụng `"$branch"` để tham chiếu tới tên nhánh hiện tại.                       |
+| `symbol`             | `" "`                                            | Một chuỗi định dạng hiển thị biểu tượng của nhánh git.                                                |
+| `style`              | `"bold purple"`                                   | Kiểu cho module.                                                                                      |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                              |
+| `truncation_symbol`  | `"…"`                                             | Biểu tượng sử dụng để nhận biết một tên nhánh được rút gọn. Bạn có thể sử dụng `""` để ẩn biểu tượng. |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                                        |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                                   |
+| `disabled`           | `false`                                           | Vô hiệu mô đun `git_branch`.                                                                          |
 
 ### Các biến
 
@@ -1602,6 +1604,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - Thư mục hiện tại chứa một tập tin `go.mod`
 - Đường dẫn hiện tại chứa một tập tin `go.sum`
+- Đường dẫn hiện tại chứa một tập tin `go.work`
 - Thư mục hiện tại chứa một tập tin `glide.yaml`
 - Thư mục hiện tại chứa một tập tin `Gopkg.yml`
 - Đường dẫn hiện tại chứa một tập tin `Gopkg.lock`
@@ -1611,16 +1614,16 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                                       | Mô tả                                                                     |
-| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | Định dạng cho module.                                                     |
-| `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | Một format string đại diện cho biểu tượng của Go.                         |
-| `detect_extensions` | `["go"]`                                                                       | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `["Godeps"]`                                                                   | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `style`             | `"bold cyan"`                                                                  | Kiểu cho module.                                                          |
-| `disabled`          | `false`                                                                        | Vô hiệu `golang` module.                                                  |
+| Tuỳ chọn            | Mặc định                                                                                  | Mô tả                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                      | Định dạng cho module.                                                     |
+| `version_format`    | `"v${raw}"`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                                    | Một format string đại diện cho biểu tượng của Go.                         |
+| `detect_extensions` | `["go"]`                                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `["Godeps"]`                                                                              | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold cyan"`                                                                             | Kiểu cho module.                                                          |
+| `disabled`          | `false`                                                                                   | Vô hiệu `golang` module.                                                  |
 
 ### Các biến
 
@@ -1719,20 +1722,22 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn   | Mặc định                    | Mô tả                                                                                                                            |
-| ---------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                        |
-| `trim_at`  | `"."`                       | Chuỗi mà hostname được cắt ngắn, sau khi khớp lần đầu tiên. `"."` sẽ dừng sau dấu chấm đầu tiên. `""` sẽ vô hiệu mọi sự cắt ngắn |
-| `format`   | `"[$hostname]($style) in "` | Định dạng cho module.                                                                                                            |
-| `style`    | `"bold dimmed green"`       | Kiểu cho module.                                                                                                                 |
-| `disabled` | `false`                     | Vô hiệu `hastname` module.                                                                                                       |
+| Tuỳ chọn     | Mặc định                               | Mô tả                                                                                                                            |
+| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`   | `true`                                 | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                        |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                           |
+| `trim_at`    | `"."`                                  | Chuỗi mà hostname được cắt ngắn, sau khi khớp lần đầu tiên. `"."` sẽ dừng sau dấu chấm đầu tiên. `""` sẽ vô hiệu mọi sự cắt ngắn |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Định dạng cho module.                                                                                                            |
+| `style`      | `"bold dimmed green"`                  | Kiểu cho module.                                                                                                                 |
+| `disabled`   | `false`                                | Vô hiệu `hastname` module.                                                                                                       |
 
 ### Các biến
 
-| Biến      | Ví dụ      | Mô tả                        |
-| --------- | ---------- | ---------------------------- |
-| hostname  | `computer` | The hostname of the computer |
-| style\* |            | Giá trị ghi đè của `style`   |
+| Biến       | Ví dụ      | Mô tả                                                 |
+| ---------- | ---------- | ----------------------------------------------------- |
+| hostname   | `computer` | The hostname of the computer                          |
+| style\*  |            | Giá trị ghi đè của `style`                            |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1743,7 +1748,7 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -2383,22 +2388,22 @@ symbol = "☁️ "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- [**Python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
+- [**Python**](https://www.python.org) - The `python` package version is extracted from a [PEP 621](https://peps.python.org/pep-0621/) compliant `pyproject.toml` or a `setup.cfg` present in the current directory
 - [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
-- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
-- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
-- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
-- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
-- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
-- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
-- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
-- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present in the current directory
+- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present in the current directory
+- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present in the current directory
+- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present in the current directory
+- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present in the current directory
+- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present in the current directory
+- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
+- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 - [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
 
@@ -2845,11 +2850,13 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Các biến
 
-| Biến      | Ví dụ             | Mô tả                            |
-| --------- | ----------------- | -------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`           |
-| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |                   | Giá trị ghi đè của `style`       |
+| Biến      | Ví dụ             | Mô tả                                        |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`                       |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | Giá trị ghi đè tuỳ chọn `symbol`             |
+| style\* |                   | Giá trị ghi đè của `style`                   |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 

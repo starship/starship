@@ -120,7 +120,11 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Elvish
 
-   ::: warning Somente a versão v0.18 ou superior do elvish é suportada. :::
+   ::: atenção
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
@@ -144,17 +148,21 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Nushell
 
-   ::: Atenção Isto vai mudar no futuro. Somente Nushell v0.60+ é suportado. ::: Execute os seguintes comandos:
+   ::: atenção
+
+   This will change in the future. Somente Nushell v0.61+ é suportado.
+
+   :::
+
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   E adicione o seguinte ao final da sua configuração do Nushell (encontre-o executando `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
