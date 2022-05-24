@@ -121,8 +121,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             .project_aliases
                             .get(project.as_ref())
                             .copied()
-                            .map(Cow::Borrowed)
-                            .unwrap_or(project)
+                            .map_or(project, Cow::Borrowed)
                     })
                     .map(Ok),
                 "active" => Some(Ok(Cow::Borrowed(&gcloud_context.config_name))),

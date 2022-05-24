@@ -89,7 +89,7 @@ fn get_aws_region_from_config(
     let config = get_config(context, aws_config)?;
     let section = get_profile_config(config, aws_profile)?;
 
-    section.get("region").map(|region| region.to_owned())
+    section.get("region").map(std::borrow::ToOwned::to_owned)
 }
 
 fn get_aws_profile_and_region(

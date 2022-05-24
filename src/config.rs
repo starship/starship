@@ -34,15 +34,15 @@ where
         }
     }
 
-    /// Helper function that will call ModuleConfig::from_config(config) if config is Some,
-    /// or ModuleConfig::default() if config is None.
+    /// Helper function that will call `ModuleConfig::from_config(config)  if config is Some,
+    /// or `ModuleConfig::default()` if config is None.
     fn try_load(config: Option<&'a Value>) -> Self {
         config.map(Self::load).unwrap_or_default()
     }
 }
 
 impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
-    /// Create ValueDeserializer wrapper and use it to call Deserialize::deserialize on it.
+    /// Create `ValueDeserializer` wrapper and use it to call `Deserialize::deserialize` on it.
     fn from_config(config: &'a Value) -> Result<Self, ValueError> {
         let deserializer = ValueDeserializer::new(config);
         T::deserialize(deserializer)
@@ -72,8 +72,8 @@ where
     {
         let either = Either::<Vec<T>, T>::deserialize(deserializer)?;
         match either {
-            Either::First(v) => Ok(VecOr(v)),
-            Either::Second(s) => Ok(VecOr(vec![s])),
+            Either::First(v) => Ok(Self(v)),
+            Either::Second(s) => Ok(Self(vec![s])),
         }
     }
 }
@@ -244,7 +244,7 @@ impl StarshipConfig {
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["custom"])?.as_table()
     }
-    /// Get the table of all the registered env_var modules, if any
+    /// Get the table of all the registered `env_var` modules, if any
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
     }
@@ -268,7 +268,7 @@ where
  - 'bold'
  - 'italic'
  - 'inverted'
- - '<color>'       (see the parse_color_string doc for valid color strings)
+ - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
 pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
     style_string
@@ -506,8 +506,8 @@ mod tests {
             {
                 let s = String::deserialize(deserializer)?;
                 match s.to_ascii_lowercase().as_str() {
-                    "on" => Ok(Switch::On),
-                    _ => Ok(Switch::Off),
+                    "on" => Ok(Self::On),
+                    _ => Ok(Self::Off),
                 }
             }
         }

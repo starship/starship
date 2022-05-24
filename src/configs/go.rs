@@ -26,6 +26,7 @@ impl<'a> Default for GoConfig<'a> {
             detect_files: vec![
                 "go.mod",
                 "go.sum",
+                "go.work",
                 "glide.yaml",
                 "Gopkg.yml",
                 "Gopkg.lock",

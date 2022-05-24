@@ -1,4 +1,4 @@
-use std::{ffi::c_void, mem, os::windows::ffi::OsStrExt, path::Path};
+use std::{mem, os::windows::ffi::OsStrExt, path::Path};
 
 use windows::{
     core::PCWSTR,
@@ -53,7 +53,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
     }
 
     let mut buf = vec![0u8; length as usize];
-    let psecurity_descriptor = PSECURITY_DESCRIPTOR(buf.as_mut_ptr() as *mut c_void);
+    let psecurity_descriptor = PSECURITY_DESCRIPTOR(buf.as_mut_ptr().cast::<std::ffi::c_void>());
 
     let rc = unsafe {
         GetFileSecurityW(

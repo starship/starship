@@ -140,9 +140,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    This will change in the future.
    Only Nushell v0.61+ is supported.
-   
+
    :::
-   
+
    Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship

@@ -8,6 +8,7 @@ env:
   CARGO_NET_RETRY: 10
   RUST_BACKTRACE: short
   RUSTUP_MAX_RETRIES: 10
+  MACOSX_DEPLOYMENT_TARGET: 10.7
 
 jobs:
   # Update release PR
@@ -261,7 +262,7 @@ jobs:
           override: true
 
       - name: Build | Publish
-        run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+        run: cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
   update_brew_formula:
     name: Update Brew Formula

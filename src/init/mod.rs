@@ -40,7 +40,7 @@ impl StarshipPath {
         self.str_path().map(|p| shell_words::quote(p).into_owned())
     }
 
-    /// PowerShell specific path escaping
+    /// `PowerShell` specific path escaping
     fn sprint_pwsh(&self) -> io::Result<String> {
         self.str_path()
             .map(|s| s.replace('\'', "''"))
