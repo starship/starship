@@ -1913,7 +1913,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.4.0` | The version of `julia`                 |
+| version   | `v1.4.0` | La versión de `julia`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2232,7 +2232,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Opción              | Por defecto                          | Descripción                                                                             |
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                               |
+| `format`            | `"via [$symbol($version )]($style)"` | El formato del módulo                                                                   |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"👑 "`                               | El símbolo usado antes de mostrar la versión de Nim.                                    |
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Qué extensiones deberían activar este módulo.                                           |
@@ -2321,7 +2321,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | `detect_files`      | `["package.json", ".node-version"]`        | Qué nombres de archivo deberían activar este módulo.                                                  |
 | `detect_folders`    | `["node_modules"]`                         | Qué carpetas deberían activar este módulo.                                                            |
 | `style`             | `"bold green"`                             | El estilo del módulo.                                                                                 |
-| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
+| `disabled`          | `false`                                    | Desactiva el módulo `nodejs`.                                                                         |
 | `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
@@ -2458,7 +2458,7 @@ The `package` module is shown when the current directory is the repository for a
 | `version_format`  | `"v${raw}"`                       | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `style`           | `"bold 208"`                      | El estilo del módulo.                                                                   |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.                               |
-| `disabled`        | `false`                           | Disables the `package` module.                                                          |
+| `disabled`        | `false`                           | Desactiva el módulo `package`.                                                          |
 
 ### Variables
 
@@ -2640,7 +2640,7 @@ El módulo `purescript` muestra la versión instalada de [PureScript](https://ww
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `0.13.5` | The version of `purescript`            |
+| version   | `0.13.5` | La versión de `purescript`             |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2681,7 +2681,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `version_format`     | `"v${raw}"`                                                                                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`             | `"🐍 "`                                                                                                       | A format string representing the symbol of Python                                       |
 | `style`              | `"yellow bold"`                                                                                              | El estilo del módulo.                                                                   |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                         |
+| `pyenv_version_name` | `false`                                                                                                      | Usar pyenv para obtener la versión de Python                                            |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                         |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version.  |
 | `detect_extensions`  | `["py"]`                                                                                                     | Qué extensiones deben activar este módulo                                               |
@@ -2773,7 +2773,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 | Variable | Ejemplo       | Descripción                            |
 | -------- | ------------- | -------------------------------------- |
-| version  | `v4.0.5`      | The version of `R`                     |
+| version  | `v4.0.5`      | La versión de `R`                      |
 | symbol   |               | Refleja el valor de la opción `symbol` |
 | style    | `"blue bold"` | Refleja el valor de la opción `style`  |
 
@@ -2803,7 +2803,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"red bold"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `red` module.                                                              |
+| `disabled`          | `false`                              | Deshabilita el módulo `red`.                                                            |
 
 ### Variables
 
@@ -3320,15 +3320,15 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 
 ### Opciones
 
-| Opción            | Por defecto             | Descripción                                                                                                                                        |
-| ----------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | La cadena de formato para el módulo.                                                                                                               |
-| `use_12hr`        | `false`                 | Habilita el formato de 12 horas                                                                                                                    |
-| `time_format`     | ver abajo               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                                |
-| `style`           | `"bold yellow"`         | The style for the module time                                                                                                                      |
-| `utc_time_offset` | `"local"`               | Establece el desplazamiento UTC a utilizar. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Deshabilita el módulo `time`.                                                                                                                      |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                              |
+| Opción            | Por defecto             | Descripción                                                                                                                                      |
+| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `format`          | `"at [$time]($style) "` | La cadena de formato para el módulo.                                                                                                             |
+| `use_12hr`        | `false`                 | Habilita el formato de 12 horas                                                                                                                  |
+| `time_format`     | ver abajo               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                              |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                                    |
+| `utc_time_offset` | `"local"`               | Establece el desplazamiento UTC a utilizar. Rango de -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Deshabilita el módulo `time`.                                                                                                                    |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                            |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3484,7 +3484,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | `symbol`   |                                  | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | El estilo del módulo.                                  |
 | `format`   | `"vcsh [$symbol$repo]($style) "` | El formato del módulo.                                 |
-| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+| `disabled` | `false`                          | Deshabilita el módulo `vcsh`.                          |
 
 ### Variables
 
