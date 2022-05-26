@@ -867,7 +867,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.8.4` | The version of `dart`                  |
+| version   | `v2.8.4` | La versión de `dart`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -899,13 +899,13 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                    | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"green bold"`                                                          | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                 | Disables the `deno` module.                                                             |
+| `disabled`          | `false`                                                                 | Deshabilita el módulo `deno`.                                                           |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.8.3` | The version of `deno`                  |
+| version   | `v1.8.3` | La versión de `deno`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
