@@ -31,6 +31,9 @@ symbol = "cr "
 [cmake]
 symbol = "cmake "
 
+[daml]
+symbol = "daml "
+
 [dart]
 symbol = "dart "
 

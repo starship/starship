@@ -237,6 +237,25 @@
         }
       ]
     },
+    "daml": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "daml.yaml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold cyan",
+        "symbol": "Λ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DamlConfig"
+        }
+      ]
+    },
     "dart": {
       "default": {
         "detect_extensions": [
@@ -2000,6 +2019,54 @@
         "detect_files": {
           "default": [
             "shard.yml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "DamlConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "Λ ",
+          "type": "string"
+        },
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold cyan",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "daml.yaml"
           ],
           "type": "array",
           "items": {

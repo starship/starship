@@ -247,6 +247,15 @@ fn get_shard_version(context: &Context, config: &PackageConfig) -> Option<String
     format_version(raw_version, config.version_format)
 }
 
+fn get_daml_project_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = context.read_file_from_pwd("daml.yaml")?;
+
+    let daml_yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
+    let raw_version = daml_yaml.first()?["version"].as_str()?;
+
+    format_version(raw_version, config.version_format)
+}
+
 fn get_dart_pub_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pubspec.yaml")?;
 
@@ -274,6 +283,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_vmod_version,
         get_vpkg_version,
         get_sbt_version,
+        get_daml_project_version,
         get_dart_pub_version,
     ];
 
@@ -1210,6 +1220,19 @@ scalaVersion := \"2.13.7\"
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_daml_project_version() -> io::Result<()> {
+        let config_name = "daml.yaml";
+        let config_content = "
+sdk-version: 2.2.0
+version: 6.8.65
+";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v6.8.65"), None);
         project_dir.close()
     }
 
