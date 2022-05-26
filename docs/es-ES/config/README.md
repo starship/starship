@@ -982,7 +982,7 @@ Let us consider the path `/path/to/home/git_repo/src/lib`
 | ------------------ | --------------------- | --------------------------------------- |
 | before_root_path | `"/path/to/home/"`    | The path before git root directory path |
 | repo_root          | `"git_repo"`          | El nombre del directorio raíz de git    |
-| path               | `"/src/lib"`          | The remaining path                      |
+| ruta               | `"/src/lib"`          | La ruta restante                        |
 | style              | `"black bold dimmed"` | Refleja el valor de la opción `style`   |
 | repo_root_style  | `"underline white"`   | Style for git root directory name       |
 
@@ -1008,7 +1008,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol$context]($style) "`                            | El formato del módulo.                                                            |
 | `symbol`            | `"🐳 "`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
+| `only_with_files`   | `true`                                                        | Mostrar solo cuando haya una coincidencia                                         |
 | `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
 | `detect_files`      | `["docker-compose.yml", "docker-compose.yaml", "Dockerfile"]` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
 | `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
@@ -1019,7 +1019,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 | Variable  | Ejemplo        | Descripción                            |
 | --------- | -------------- | -------------------------------------- |
-| context   | `test_context` | The current docker context             |
+| context   | `test_context` | El contexto actual de docker           |
 | symbol    |                | Refleja el valor de la opción `symbol` |
 | style\* |                | Refleja el valor de la opción `style`  |
 
@@ -1067,7 +1067,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `detect_files`      | `["global.json", "project.json", "Directory.Build.props", "Directory.Build.targets", "Packages.props"]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                                                    | Qué carpetas deberían activar estos módulos.                                            |
 | `style`             | `"bold blue"`                                                                                           | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                                           |
+| `disabled`          | `false`                                                                                                 | Deshabilita el módulo `dotnet`.                                                         |
 
 ### Variables
 
@@ -1317,7 +1317,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `region_aliases`  |                                                            | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
 | `style`           | `"bold blue"`                                              | El estilo del módulo.                                            |
-| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
+| `disabled`        | `false`                                                    | Deshabilita el módulo `gcloud`.                                  |
 
 ### Variables
 
@@ -1326,7 +1326,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | region    | `us-central1`    | La actual región GCP                                               |
 | cuenta    | `foo`            | El perfil actual de GCP                                            |
 | domain    | `example.com`    | The current GCP profile domain                                     |
-| project   |                  | The current GCP project                                            |
+| proyecto  |                  | El proyecto GCP actual                                             |
 | activo    | `predeterminado` | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |                  | Refleja el valor de la opción `symbol`                             |
 | style\* |                  | Refleja el valor de la opción `style`                              |
@@ -1392,7 +1392,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                 |
 | `truncation_symbol`  | `"…"`                                             | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
 | `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                           |
-| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Útil para "master" o "main".                        |
+| `ignore_branches`    | `[]`                                              | Una lista de nombres a evitar ser visualizados. Útil para "master" o "main".             |
 | `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
 
 ### Variables
@@ -1400,7 +1400,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | Variable      | Ejemplo  | Descripción                                                                                            |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                       |
+| remote_name   | `origen` | El nombre remoto.                                                                                      |
 | remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
 | symbol        |          | Refleja el valor de la opción `symbol`                                                                 |
 | style\*     |          | Refleja el valor de la opción `style`                                                                  |
@@ -1433,7 +1433,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state |
 | `tag_disabled`       | `true`                             | Disables showing tag info in `git_commit` module.       |
 | `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                     |
-| `disabled`           | `false`                            | Disables the `git_commit` module.                       |
+| `disabled`           | `false`                            | Deshabilita el módulo `git_commit`.                     |
 
 ### Variables
 
@@ -1471,7 +1471,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am_or_rebase` | `"AM/REBASE"`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `"bold yellow"`                                                 | El estilo del módulo.                                                                   |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | El formato del módulo.                                                                  |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+| `disabled`     | `false`                                                         | Deshabilita el módulo `git_state`.                                                      |
 
 ### Variables
 
@@ -1549,9 +1549,9 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 | Opción              | Predeterminado                                  | Descripción                                                                                                 |
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | El formato predeterminado para `git_status`                                                                 |
 | `conflicted`        | `"="`                                           | Esta rama tiene conflictos de fusión.                                                                       |
-| `ahead`             | `"⇡"`                                           | The format of `ahead`                                                                                       |
+| `ahead`             | `"⇡"`                                           | El formato de `ahead`                                                                                       |
 | `behind`            | `"⇣"`                                           | El formato de `behind`                                                                                      |
 | `diverged`          | `"⇕"`                                           | The format of `diverged`                                                                                    |
 | `up_to_date`        | `""`                                            | The format of `up_to_date`                                                                                  |
@@ -1702,7 +1702,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_files`      | `["stack.yaml", "cabal.project"]`    | Qué nombres de archivo deberían activar este módulo. |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.           |
 | `style`             | `"bold purple"`                      | El estilo del módulo.                                |
-| `disabled`          | `false`                              | Disables the `haskell` module.                       |
+| `disabled`          | `false`                              | Deshabilita el módulo `haskell`.                     |
 
 ### Variables
 
@@ -1734,7 +1734,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.                                            |
 | `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                                        |
 | `style`             | `"bold white"`                       | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `helm` module.                                                             |
+| `disabled`          | `false`                              | Deshabilita el módulo `helm`.                                                           |
 
 ### Variables
 
@@ -1810,7 +1810,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `detect_folders`    | `[]`                                                                                                      | Qué carpetas deberían activar estos módulos.                                            |
 | `symbol`            | `"☕ "`                                                                                                    | A format string representing the symbol of Java                                         |
 | `style`             | `"red dimmed"`                                                                                            | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                                                   | Disables the `java` module.                                                             |
+| `disabled`          | `false`                                                                                                   | Deshabilita el módulo `java`.                                                           |
 
 ### Variables
 
@@ -1837,7 +1837,7 @@ The `jobs` module shows the current number of jobs running. The module will be s
 
 La funcionalidad por defecto es:
 
-- 0 jobs -> Nothing is shown.
+- 0 tareas -> No se muestra nada.
 - 1 job -> `symbol` is shown.
 - 2 jobs or more -> `symbol` + `number` are shown.
 
@@ -1857,7 +1857,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Opción             | Por defecto                   | Descripción                                                              |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
+| `threshold`*       | `1`                           | Muestra el número de tareas si se exceden.                               |
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
 | `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
 | `format`           | `"[$symbol$number]($style) "` | El formato del módulo.                                                   |
@@ -1871,7 +1871,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| número    | `1`     | The number of jobs                     |
+| número    | `1`     | El número de tareas                    |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -1907,7 +1907,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.                                            |
 | `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                                       |
 | `style`             | `"bold purple"`                      | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `julia` module.                                                            |
+| `disabled`          | `false`                              | Deshabilita el módulo `julia`.                                                          |
 
 ### Variables
 
@@ -2982,7 +2982,7 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 
 | Variable  | Predeterminado | Descripción                                                |
 | --------- | -------------- | ---------------------------------------------------------- |
-| indicator |                | Mirrors the value of `indicator` for currently used shell. |
+| indicador |                | Mirrors the value of `indicator` for currently used shell. |
 | style\* |                | Mirrors the value of option `style`.                       |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -3047,7 +3047,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                           |
 | `symbol`   | `""`                             | A format string displayed before the image name. |
 | `style`    | `"bold dimmed blue"`             | El estilo del módulo.                            |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| `disabled` | `false`                          | Deshabilita el módulo `singularity`.             |
 
 ### Variables
 
@@ -3125,7 +3125,7 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 | `style`                 | `"bold red"`                                                                         | El estilo del módulo.                                   |
 | `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
 | `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
-| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
+| `pipestatus`            | `false`                                                                              | Habilita el reporte de pipstatus                        |
 | `pipestatus_separator`  | `|`                                                                                  |                                                         |
 | `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
 | `disabled`              | `true`                                                                               | Disables the `status` module.                           |
@@ -3134,7 +3134,7 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 
 | Variable       | Ejemplo | Descripción                                                                                 |
 | -------------- | ------- | ------------------------------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                                           |
+| estado         | `127`   | The exit code of the last command                                                           |
 | hex_status     | `0x7F`  | The exit code of the last command in hex                                                    |
 | int            | `127`   | The exit code of the last command                                                           |
 | common_meaning | `ERROR` | Comprobación del código si no es una señal                                                  |
@@ -3275,16 +3275,16 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[".terraform"]`                     | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold 105"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                                        |
+| `disabled`          | `false`                              | Desactiva el módulo `terraform`.                                                        |
 
 ### Variables
 
-| Variable  | Ejemplo          | Descripción                            |
-| --------- | ---------------- | -------------------------------------- |
-| version   | `v0.12.24`       | The version of `terraform`             |
-| workspace | `predeterminado` | The current Terraform workspace        |
-| symbol    |                  | Refleja el valor de la opción `symbol` |
-| style\* |                  | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo          | Descripción                               |
+| --------- | ---------------- | ----------------------------------------- |
+| version   | `v0.12.24`       | La versión de `terraform`                 |
+| workspace | `predeterminado` | El espacio de trabajo actual de Terraform |
+| symbol    |                  | Refleja el valor de la opción `symbol`    |
+| style\* |                  | Refleja el valor de la opción `style`     |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -3320,15 +3320,15 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 
 ### Opciones
 
-| Opción            | Por defecto             | Descripción                                                                                                                        |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | La cadena de formato para el módulo.                                                                                               |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| Opción            | Por defecto             | Descripción                                                                                                                                        |
+| ----------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | La cadena de formato para el módulo.                                                                                                               |
+| `use_12hr`        | `false`                 | Habilita el formato de 12 horas                                                                                                                    |
+| `time_format`     | ver abajo               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                                      |
+| `utc_time_offset` | `"local"`               | Establece el desplazamiento UTC a utilizar. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Deshabilita el módulo `time`.                                                                                                                      |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3488,11 +3488,11 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Variable  | Ejemplo                                     | Descripción                            |
-| --------- | ------------------------------------------- | -------------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
-| symbol    |                                             | Refleja el valor de la opción `symbol` |
-| style\* | `black bold dimmed`                         | Refleja el valor de la opción `style`  |
+| Variable    | Ejemplo                                     | Descripción                            |
+| ----------- | ------------------------------------------- | -------------------------------------- |
+| repositorio | `dotfiles` if in a VCSH repo named dotfiles | El nombre del repositorio activo       |
+| symbol      |                                             | Refleja el valor de la opción `symbol` |
+| style\*   | `black bold dimmed`                         | Refleja el valor de la opción `style`  |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -3519,7 +3519,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"↯ "`                               | The symbol used before displaying the version of Zig.                                   |
 | `style`             | `"bold yellow"`                      | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `zig` module.                                                              |
+| `disabled`          | `false`                              | Deshabilita el módulo `zig`.                                                            |
 | `detect_extensions` | `["zig"]`                            | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
@@ -3543,7 +3543,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 symbol = "⚡️ "
 ```
 
-## Custom commands
+## Comandos personalizados
 
 The `custom` modules show the output of some arbitrary commands.
 
@@ -3595,7 +3595,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `symbol`            | `""`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
 | `style`             | `"bold green"`                  | El estilo del módulo.                                                                                                                                                                                                                                                                         |
 | `format`            | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                                                                                                                                                                                        |
-| `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
+| `disabled`          | `false`                         | Deshabilita este módulo `custom`.                                                                                                                                                                                                                                                             |
 | `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
 | `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
 | `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
