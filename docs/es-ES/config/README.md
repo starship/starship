@@ -2280,8 +2280,8 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| state     | `pure`  | The state of the nix-shell             |
-| name      | `lorri` | The name of the nix-shell              |
+| state     | `pure`  | El estado de nix-shell                 |
+| name      | `lorri` | El nombre de nix-shell                 |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2328,7 +2328,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 | Variable  | Ejemplo    | Descripción                            |
 | --------- | ---------- | -------------------------------------- |
-| version   | `v13.12.0` | The version of `node`                  |
+| version   | `v13.12.0` | La versión de `node`                   |
 | symbol    |            | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
@@ -2367,14 +2367,14 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | `detect_files`            | `["dune", "dune-project", "jbuild", "jbuild-ignore", ".merlin"]`           | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`          | `["_opam", "esy.lock"]`                                                    | Qué carpetas deberían activar este módulo.                                              |
 | `style`                   | `"bold yellow"`                                                            | El estilo del módulo.                                                                   |
-| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                                            |
+| `disabled`                | `false`                                                                    | Desactiva el módulo `ocaml`.                                                            |
 
 ### Variables
 
 | Variable         | Ejemplo      | Descripción                                                       |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
-| version          | `v4.10.0`    | The version of `ocaml`                                            |
-| switch_name      | `my-project` | The active OPAM switch                                            |
+| version          | `v4.10.0`    | La versión de `ocaml`                                             |
+| switch_name      | `my-project` | El interruptor OPAM activo                                        |
 | switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
 | symbol           |              | Refleja el valor de la opción `symbol`                            |
 | style\*        |              | Refleja el valor de la opción `style`                             |
@@ -2392,7 +2392,7 @@ format = "via [🐪 $version]($style) "
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). para obtener el proyecto actual en uso.
 
 ### Opciones
 
@@ -2401,14 +2401,14 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | El formato del módulo.                                         |
 | `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `"bold yellow"`                                     | El estilo del módulo.                                          |
-| `disabled` | `false`                                             | Disables the `openstack` module.                               |
+| `disabled` | `false`                                             | Deshabilita el módulo `openstack`.                             |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| cloud     | `corp`  | The current OpenStack cloud            |
-| project   | `dev`   | The current OpenStack project          |
+| nube      | `corp`  | La nube OpenStack actual               |
+| proyecto  | `dev`   | The current OpenStack project          |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
