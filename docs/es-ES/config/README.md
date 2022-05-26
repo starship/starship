@@ -2408,7 +2408,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
 | nube      | `corp`  | La nube OpenStack actual               |
-| proyecto  | `dev`   | The current OpenStack project          |
+| proyecto  | `dev`   | El actual proyecto OpenStack           |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2425,7 +2425,7 @@ style = "bold yellow"
 symbol = "☁️ "
 ```
 
-## Package Version
+## Versión del paquete
 
 The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
@@ -2500,13 +2500,13 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 | `detect_files`      | `["Makefile.PL", "Build.PL", "cpanfile", "cpanfile.snapshot", "META.json", "META.yml", ".perl-version"]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                                                                                     | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold 149"`                                                                                             | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                                             |
+| `disabled`          | `false`                                                                                                  | Desactiva el módulo `perl`.                                                             |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v5.26.1` | The version of `perl`                  |
+| version   | `v5.26.1` | La versión de `perl`                   |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -2538,13 +2538,13 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | `detect_files`      | `["composer.json", ".php-version"]`  | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"147 bold"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `php` module.                                                              |
+| `disabled`          | `false`                              | Desactiva el módulo `php`.                                                              |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v7.3.8` | The version of `php`                   |
+| version   | `v7.3.8` | La versión de `php`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2561,7 +2561,7 @@ format = "via [🔹 $version](147 bold) "
 
 ## Pulumi
 
-The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
+El módulo `pulumi` muestra el nombre de usuario actual, [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/)seleccionado y la versión.
 
 ::: tip
 
@@ -2582,17 +2582,17 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `version_format` | `"v${raw}"`                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                          |
 | `style`          | `"bold 5"`                                   | El estilo del módulo.                                                                   |
-| `disabled`       | `false`                                      | Disables the `pulumi` module.                                                           |
+| `disabled`       | `false`                                      | Deshabilita el módulo `pulumi`.                                                         |
 
 ### Variables
 
-| Variable  | Ejemplo    | Descripción                            |
-| --------- | ---------- | -------------------------------------- |
-| version   | `v0.12.24` | The version of `pulumi`                |
-| stack     | `dev`      | The current Pulumi stack               |
-| username  | `alice`    | The current Pulumi username            |
-| symbol    |            | Refleja el valor de la opción `symbol` |
-| style\* |            | Refleja el valor de la opción `style`  |
+| Variable          | Ejemplo    | Descripción                            |
+| ----------------- | ---------- | -------------------------------------- |
+| version           | `v0.12.24` | La versión de `pulumi`                 |
+| stack             | `dev`      | The current Pulumi stack               |
+| nombre de usuario | `alice`    | El usuario actual de Pulumi            |
+| symbol            |            | Refleja el valor de la opción `symbol` |
+| style\*         |            | Refleja el valor de la opción `style`  |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2618,7 +2618,7 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `purescript` muestra la versión instalada de [PureScript](https://www.purescript.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
 - The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
@@ -2687,7 +2687,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 | `detect_extensions`  | `["py"]`                                                                                                     | Qué extensiones deben activar este módulo                                               |
 | `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`     | `[]`                                                                                                         | Qué carpetas deben activar este módulo                                                  |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                           |
+| `disabled`           | `false`                                                                                                      | Desactiva el módulo `python`.                                                           |
 
 ::: tip
 
@@ -2701,11 +2701,11 @@ The default values and order for `python_binary` was chosen to first identify th
 
 | Variable     | Ejemplo         | Descripción                                |
 | ------------ | --------------- | ------------------------------------------ |
-| version      | `"v3.8.1"`      | The version of `python`                    |
+| version      | `"v3.8.1"`      | La versión de `python`                     |
 | symbol       | `"🐍 "`          | Refleja el valor de la opción `symbol`     |
 | style        | `"yellow bold"` | Refleja el valor de la opción `style`      |
 | pyenv_prefix | `"pyenv "`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `"venv"`        | The current `virtualenv` name              |
+| virtualenv   | `"venv"`        | El nombre actual del `virtualenv`          |
 
 ### Ejemplo
 
@@ -2767,7 +2767,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Qué extensiones deben activar este módulo                                               |
 | `detect_files`      | `[".Rprofile"]`                      | Qué nombres de archivo deben activar este módulo                                        |
 | `detect_folders`    | `[".Rproj.user"]`                    | Qué carpetas deben activar este módulo                                                  |
-| `disabled`          | `false`                              | Disables the `r` module.                                                                |
+| `disabled`          | `false`                              | Deshabilita el módulo `r`.                                                              |
 
 ### Variables
 
@@ -2853,7 +2853,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.5.1` | The version of `ruby`                  |
+| version   | `v2.5.1` | La versión de `ruby`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2886,15 +2886,15 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `detect_files`      | `["Cargo.toml"]`                     | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `rust` module.                                                             |
+| `disabled`          | `false`                              | Desactiva el módulo `rust`.                                                             |
 
 ### Variables
 
 | Variable  | Ejemplo           | Descripción                                  |
 | --------- | ----------------- | -------------------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`                       |
+| version   | `v1.43.0-nightly` | La versión de `rustc`                        |
 | numver    | `1.51.0`          | The numeric component of the `rustc` version |
-| toolchain | `beta`            | The toolchain version                        |
+| toolchain | `beta`            | La versión de toolchain                      |
 | symbol    |                   | Refleja el valor de la opción `symbol`       |
 | style\* |                   | Refleja el valor de la opción `style`        |
 
@@ -2934,7 +2934,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `2.13.5` | The version of `scala`                 |
+| version   | `2.13.5` | La versión de `scala`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -3019,7 +3019,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| shlvl     | `3`     | The current value of `SHLVL`           |
+| shlvl     | `3`     | El valor actual de `SHLVL`             |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -3076,11 +3076,11 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 | Opción              | Por defecto                            | Descripción                                                                                                                                               |
 | ------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` significa sin truncamiento. Mirar también el módulo [`directory`](#directory). |
+| `truncation_length` | `1`                                    | El número de directorios a los que se debe truncar la ruta de entorno. `0` significa sin truncamiento. Mirar también el módulo [`directory`](#directory). |
 | `symbol`            | `"🅢  "`                                | El símbolo usado antes del nombre del entorno.                                                                                                            |
 | `style`             | `"bold blue"`                          | El estilo del módulo.                                                                                                                                     |
 | `format`            | `"via [$symbol$environment]($style) "` | El formato del módulo.                                                                                                                                    |
-| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                              |
+| `disabled`          | `false`                                | Deshabilita el módulo `spack`.                                                                                                                            |
 
 ### Variables
 
@@ -3101,7 +3101,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 format = "[$symbol$environment](dimmed blue) "
 ```
 
-## Status
+## Estado
 
 The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
@@ -3173,13 +3173,13 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 
 ### Opciones
 
-| Opción          | Por defecto             | Descripción                                             |
-| --------------- | ----------------------- | ------------------------------------------------------- |
-| `format`        | `[as $symbol]($style)"` | El formato del módulo                                   |
-| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
-| `style`         | `"bold blue"`           | El estilo del módulo.                                   |
-| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+| Opción          | Por defecto             | Descripción                                                       |
+| --------------- | ----------------------- | ----------------------------------------------------------------- |
+| `format`        | `[as $symbol]($style)"` | El formato del módulo                                             |
+| `symbol`        | `"🧙 "`                  | El símbolo mostrado cuando las credenciales se almacenan en caché |
+| `style`         | `"bold blue"`           | El estilo del módulo.                                             |
+| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled.           |
+| `disabled`      | `true`                  | Deshabilita el módulo `sudo`.                                     |
 
 ### Variables
 
@@ -3228,13 +3228,13 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | `detect_files`      | `["Package.swift"]`                  | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold 202"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `swift` module.                                                            |
+| `disabled`          | `false`                              | Desactiva el módulo `swift`.                                                            |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.2.4` | The version of `swift`                 |
+| version   | `v5.2.4` | La versión de `swift`                  |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -3336,7 +3336,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Ejemplo    | Descripción                           |
 | --------- | ---------- | ------------------------------------- |
-| time      | `13:08:10` | The current time.                     |
+| time      | `13:08:10` | La hora actual.                       |
 | style\* |            | Refleja el valor de la opción `style` |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
