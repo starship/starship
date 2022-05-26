@@ -1740,7 +1740,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v3.1.1` | The version of `helm`                  |
+| version   | `v3.1.1` | La versión de `helm`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -1816,7 +1816,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v14`   | The version of `java`                  |
+| version   | `v14`   | La versión de `java`                   |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -1863,7 +1863,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `format`           | `"[$symbol$number]($style) "` | El formato del módulo.                                                   |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `"bold blue"`                 | El estilo del módulo.                                                    |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+| `disabled`         | `false`                       | Desactiva el módulo `jobs`.                                              |
 
 *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
@@ -1871,7 +1871,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| number    | `1`     | The number of jobs                     |
+| número    | `1`     | The number of jobs                     |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -1997,14 +1997,14 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 
 ### Variables
 
-| Variable  | Ejemplo              | Descripción                              |
-| --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-context`   | The current kubernetes context name      |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| user      | `starship-user`      | If set, the current kubernetes user      |
-| cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
-| symbol    |                      | Refleja el valor de la opción `symbol`   |
-| style\* |                      | Refleja el valor de la opción `style`    |
+| Variable  | Ejemplo              | Descripción                                 |
+| --------- | -------------------- | ------------------------------------------- |
+| contexto  | `starship-context`   | El nombre del contexto actual de kubernetes |
+| namespace | `starship-namespace` | If set, the current kubernetes namespace    |
+| user      | `starship-user`      | If set, the current kubernetes user         |
+| cluster   | `starship-cluster`   | If set, the current kubernetes cluster      |
+| symbol    |                      | Refleja el valor de la opción `symbol`      |
+| style\* |                      | Refleja el valor de la opción `style`       |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -2043,7 +2043,7 @@ Long and automatically generated cluster names can be identified and shortened u
 "gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
 ```
 
-## Line Break
+## Salto de línea
 
 The `line_break` module separates the prompt into two lines.
 
@@ -2062,7 +2062,7 @@ The `line_break` module separates the prompt into two lines.
 disabled = true
 ```
 
-## Local IP
+## IP local
 
 The `localip` module shows the IPv4 address of the primary network interface.
 
@@ -2183,7 +2183,7 @@ symbol = " "
 style = "bold dimmed green"
 ```
 
-## Mercurial Branch
+## Rama Mercurial
 
 The `hg_branch` module shows the active branch of the repo in your current directory.
 
@@ -2202,7 +2202,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| branch    | `master` | The active mercurial branch            |
+| rama      | `master` | La rama mercurial activa               |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2223,8 +2223,8 @@ truncation_symbol = ""
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `nim.cfg` file
-- The current directory contains a file with the `.nim` extension
+- El directorio actual contiene un archivo `nim.cfg`
+- El directorio actual contiene un archivo con la extensión `.nim`
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
 
@@ -2234,7 +2234,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                               |
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                                   |
+| `symbol`            | `"👑 "`                               | El símbolo usado antes de mostrar la versión de Nim.                                    |
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["nim.cfg"]`                        | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
