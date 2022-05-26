@@ -1196,13 +1196,13 @@ default = "unknown user"
 
 ### Opciones
 
-| Opción           | Predeterminado                 | Descripción                                                                  |
-| ---------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`         | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable`       |                                | La variable de entorno a mostrar.                                            |
-| `predeterminado` |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`         | `"with [$env_value]($style) "` | El formato del módulo.                                                       |
-| `disabled`       | `false`                        | Disables the `env_var` module.                                               |
+| Opción           | Predeterminado                | Descripción                                                                  |
+| ---------------- | ----------------------------- | ---------------------------------------------------------------------------- |
+| `symbol`         | `""`                          | The symbol used before displaying the variable value.                        |
+| `variable`       |                               | La variable de entorno a mostrar.                                            |
+| `predeterminado` |                               | The default value to be displayed when the selected variable is not defined. |
+| `format`         | `"con [$env_value]($style) "` | El formato del módulo.                                                       |
+| `disabled`       | `false`                       | Disables the `env_var` module.                                               |
 
 ### Variables
 
@@ -1392,7 +1392,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                 |
 | `truncation_symbol`  | `"…"`                                             | The symbol used to indicate a branch name was truncated. You can use `""` for no symbol. |
 | `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                           |
-| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                      |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Útil para "master" o "main".                        |
 | `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
 
 ### Variables
@@ -1518,8 +1518,8 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 
 | Variable          | Ejemplo | Descripción                                 |
 | ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
+| añadido           | `1`     | El número actual de líneas añadidas         |
+| borrado           | `2`     | The current number of deleted lines         |
 | added_style\*   |         | Mirrors the value of option `added_style`   |
 | deleted_style\* |         | Mirrors the value of option `deleted_style` |
 
@@ -1580,7 +1580,7 @@ The following variables can be used in `format`:
 | `modificado`      | Displays `modified` when there are file modifications in the working directory.                               |
 | `staged`          | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`         | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`         | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `borrado`         | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | style\*         | Refleja el valor de la opción `style`                                                                         |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -1594,9 +1594,9 @@ The following variables can be used in `diverged`:
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variable | Descripción              |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Variable | Descripción                   |
+| -------- | ----------------------------- |
+| `count`  | Muestra el número de archivos |
 
 ### Ejemplo
 
@@ -1772,11 +1772,11 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable   | Ejemplo    | Descripción                                           |
-| ---------- | ---------- | ----------------------------------------------------- |
-| hostname   | `computer` | The hostname of the computer                          |
-| style\*  |            | Refleja el valor de la opción `style`                 |
-| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
+| Variable        | Ejemplo       | Descripción                                           |
+| --------------- | ------------- | ----------------------------------------------------- |
+| nombre del host | `computadora` | El nombre de host de la computadora                   |
+| style\*       |               | Refleja el valor de la opción `style`                 |
+| ssh_symbol      | `"🌏 "`        | The symbol to represent when connected to SSH session |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1835,7 +1835,7 @@ symbol = "🌟 "
 
 The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
-The default functionality is:
+La funcionalidad por defecto es:
 
 - 0 jobs -> Nothing is shown.
 - 1 job -> `symbol` is shown.
@@ -1946,13 +1946,13 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                                      |
 | `style`             | `"bold blue"`                        | El estilo del módulo.                                                                   |
 | `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version.           |
-| `disabled`          | `false`                              | Disables the `kotlin` module.                                                           |
+| `disabled`          | `false`                              | Deshabilita el módulo `kotlin`.                                                         |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`                |
+| version   | `v1.4.21` | La versión de `kotlin`                 |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1993,7 +1993,7 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | El formato del módulo.                                                |
 | `style`           | `"cyan bold"`                                        | El estilo del módulo.                                                 |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| `disabled`        | `true`                                               | Desactiva el módulo `kubernetes`.                                     |
 
 ### Variables
 
@@ -2001,7 +2001,7 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 | --------- | -------------------- | ------------------------------------------- |
 | contexto  | `starship-context`   | El nombre del contexto actual de kubernetes |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace    |
-| user      | `starship-user`      | If set, the current kubernetes user         |
+| usuario   | `starship-user`      | If set, the current kubernetes user         |
 | cluster   | `starship-cluster`   | If set, the current kubernetes cluster      |
 | symbol    |                      | Refleja el valor de la opción `symbol`      |
 | style\* |                      | Refleja el valor de la opción `style`       |
@@ -2115,13 +2115,13 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | `detect_folders`    | `["lua"]`                            | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold blue"`                        | El estilo del módulo.                                                                   |
 | `lua_binary`        | `"lua"`                              | Configures the lua binary that Starship executes when getting the version.              |
-| `disabled`          | `false`                              | Disables the `lua` module.                                                              |
+| `disabled`          | `false`                              | Desactiva el módulo `lua`.                                                              |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.4.0` | The version of `lua`                   |
+| version   | `v5.4.0` | La versión de `lua`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2136,7 +2136,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 format = "via [🌕 $version](bold blue) "
 ```
 
-## Memory Usage
+## Uso de la memoria
 
 The `memory_usage` module shows current system memory and swap usage.
 
@@ -2239,13 +2239,13 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | `detect_files`      | `["nim.cfg"]`                        | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold yellow"`                      | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `nim` module.                                                              |
+| `disabled`          | `false`                              | Desactiva el módulo `nim`.                                                              |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.2.0` | The version of `nimc`                  |
+| version   | `v1.2.0` | La versión de `nimc`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2464,7 +2464,7 @@ The `package` module is shown when the current directory is the repository for a
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v1.0.0` | The version of your package            |
+| version   | `v1.0.0` | La versión de su paquete               |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -2634,7 +2634,7 @@ El módulo `purescript` muestra la versión instalada de [PureScript](https://ww
 | `detect_files`      | `["spago.dhall"]`                    | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold white"`                       | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                                       |
+| `disabled`          | `false`                              | Deshabilita el módulo `purescript`.                                                     |
 
 ### Variables
 
@@ -2721,7 +2721,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Solo usa el binario `python3` para obtener la versión.
 python_binary = "python3"
 ```
 
@@ -2847,7 +2847,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                                 |
 | `style`             | `"bold red"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                                             |
+| `disabled`          | `false`                              | Desactiva el módulo `ruby`.                                                             |
 
 ### Variables
 
@@ -2928,7 +2928,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `detect_folders`    | `[".metals"]`                            | Qué carpetas deberían activar estos módulos.                                            |
 | `symbol`            | `"🆂 "`                                   | A format string representing the symbol of Scala.                                       |
 | `style`             | `"red dimmed"`                           | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                  | Disables the `scala` module.                                                            |
+| `disabled`          | `false`                                  | Deshabilita el módulo `scala`.                                                          |
 
 ### Variables
 
@@ -2976,7 +2976,7 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | El formato del módulo.                                       |
 | `style`                | `"white bold"`            | El estilo del módulo.                                        |
-| `disabled`             | `true`                    | Disables the `shell` module.                                 |
+| `disabled`             | `true`                    | Deshabilita el módulo `shell`.                               |
 
 ### Variables
 
@@ -3008,12 +3008,12 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 | Opción      | Por defecto                  | Descripción                                                   |
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                            |
+| `threshold` | `2`                          | Mostrar umbral.                                               |
 | `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                        |
-| `symbol`    | `"↕️  "`                     | The symbol used to represent the `SHLVL`.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
+| `symbol`    | `"↕️  "`                     | El símbolo utilizado para representar el `SHLVL`.             |
+| `repetir`   | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `"bold yellow"`              | El estilo del módulo.                                         |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
+| `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                                  |
 
 ### Variables
 
@@ -3137,7 +3137,7 @@ Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `f
 | status         | `127`   | The exit code of the last command                                                           |
 | hex_status     | `0x7F`  | The exit code of the last command in hex                                                    |
 | int            | `127`   | The exit code of the last command                                                           |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                                  |
 | signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
 | signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
 | maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
