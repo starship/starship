@@ -70,6 +70,9 @@ symbol = "jl "
 [kotlin]
 symbol = "kt "
 
+[lua]
+symbol = "lua "
+
 [nodejs]
 symbol = "nodejs "
 
