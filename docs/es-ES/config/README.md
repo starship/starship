@@ -1463,7 +1463,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | Opción         | Predeterminado                                                  | Descripción                                                                             |
 | -------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `rebase`       | `"REBASING"`                                                    | A format string displayed when a `rebase` is in progress.                               |
-| `merge`        | `"MERGING"`                                                     | A format string displayed when a `merge` is in progress.                                |
+| `fusionar`     | `"FUSIONANDO"`                                                  | A format string displayed when a `merge` is in progress.                                |
 | `revert`       | `"REVERTING"`                                                   | A format string displayed when a `revert` is in progress.                               |
 | `cherry_pick`  | `"CHERRY-PICKING"`                                              | A format string displayed when a `cherry-pick` is in progress.                          |
 | `bisect`       | `"BISECTING"`                                                   | A format string displayed when a `bisect` is in progress.                               |
@@ -1494,13 +1494,13 @@ format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒 PICKING](bold red)"
 ```
 
-## Git Metrics
+## Métricas de Git
 
 The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1550,17 +1550,17 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | Opción              | Predeterminado                                  | Descripción                                                                                                 |
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`        | `"="`                                           | This branch has merge conflicts.                                                                            |
+| `conflicted`        | `"="`                                           | Esta rama tiene conflictos de fusión.                                                                       |
 | `ahead`             | `"⇡"`                                           | The format of `ahead`                                                                                       |
-| `behind`            | `"⇣"`                                           | The format of `behind`                                                                                      |
+| `behind`            | `"⇣"`                                           | El formato de `behind`                                                                                      |
 | `diverged`          | `"⇕"`                                           | The format of `diverged`                                                                                    |
 | `up_to_date`        | `""`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`         | `"?"`                                           | The format of `untracked`                                                                                   |
+| `sin seguimiento`   | `"?"`                                           | The format of `untracked`                                                                                   |
 | `stashed`           | `"$"`                                           | The format of `stashed`                                                                                     |
-| `modified`          | `"!"`                                           | The format of `modified`                                                                                    |
+| `modificado`        | `"!"`                                           | The format of `modified`                                                                                    |
 | `staged`            | `"+"`                                           | The format of `staged`                                                                                      |
 | `renamed`           | `"»"`                                           | The format of `renamed`                                                                                     |
-| `deleted`           | `"✘"`                                           | The format of `deleted`                                                                                     |
+| `eliminado`         | `"✘"`                                           | The format of `deleted`                                                                                     |
 | `style`             | `"bold red"`                                    | El estilo del módulo.                                                                                       |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
@@ -1570,18 +1570,18 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 The following variables can be used in `format`:
 
-| Variable       | Descripción                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
-| `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
-| `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
-| `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
-| `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
-| `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
-| `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
-| style\*      | Refleja el valor de la opción `style`                                                                         |
+| Variable          | Descripción                                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| `all_status`      | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
+| `ahead_behind`    | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
+| `conflicted`      | Displays `conflicted` when this branch has merge conflicts.                                                   |
+| `sin seguimiento` | Displays `untracked` when there are untracked files in the working directory.                                 |
+| `stashed`         | Displays `stashed` when a stash exists for the local repository.                                              |
+| `modificado`      | Displays `modified` when there are file modifications in the working directory.                               |
+| `staged`          | Displays `staged` when a new file has been added to the staging area.                                         |
+| `renamed`         | Displays `renamed` when a renamed file has been added to the staging area.                                    |
+| `deleted`         | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| style\*         | Refleja el valor de la opción `style`                                                                         |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1668,7 +1668,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.12.1` | The version of `go`                    |
+| version   | `v1.12.1` | La versión de `go`                     |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1981,7 +1981,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2144,7 +2144,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2955,7 +2955,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3107,7 +3107,7 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3167,7 +3167,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3314,7 +3314,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+Este módulo está deshabilitado por defecto. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
