@@ -821,13 +821,13 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | `detect_extensions` | `[]`                               | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["daml.yaml"]`                    | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                               | Qué carpetas deberían activar este módulo.                                              |
-| `disabled`          | `false`                            | Disables the `daml` module.                                                             |
+| `disabled`          | `false`                            | Deshabilita el módulo `daml`.                                                           |
 
 ### Variables
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v2.2.0` | The version of `daml`                  |
+| version   | `v2.2.0` | La versión de `daml`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
@@ -861,7 +861,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | `detect_files`      | `["pubspec.yaml", "pubspec.yml", "pubspec.lock"]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[".dart_tool"]`                                  | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold blue"`                                     | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                           | Disables the `dart` module.                                                             |
+| `disabled`          | `false`                                           | Deshabilita el módulo `dart`.                                                           |
 
 ### Variables
 
@@ -934,11 +934,11 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncate_to_repo`  | `true`                                                                                                      | Whether or not to truncate to the root of the git repo that you're currently in.        |
 | `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | El formato del módulo.                                                                  |
 | `style`             | `"bold cyan"`                                                                                               | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                                                     | Disables the `directory` module.                                                        |
+| `disabled`          | `false`                                                                                                     | Desactiva el módulo `directory`.                                                        |
 | `read_only`         | `"🔒"`                                                                                                       | The symbol indicating current directory is read only.                                   |
-| `read_only_style`   | `"red"`                                                                                                     | The style for the read only symbol.                                                     |
-| `truncation_symbol` | `""`                                                                                                        | The symbol to prefix to truncated paths. eg: "…/"                                       |
-| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
+| `read_only_style`   | `"red"`                                                                                                     | El estilo para el símbolo de sólo lectura.                                              |
+| `truncation_symbol` | `""`                                                                                                        | The symbol to prefix to truncated paths. ej: "…/"                                       |
+| `repo_root_style`   | `Ninguno`                                                                                                   | The style for the root of the git repo. The default value is equivalent to `style`.     |
 | `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
 | `home_symbol`       | `"~"`                                                                                                       | The symbol indicating home directory.                                                   |
 | `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
@@ -998,7 +998,7 @@ truncation_length = 8
 truncation_symbol = "…/"
 ```
 
-## Docker Context
+## Contexto de Docker
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
@@ -1073,7 +1073,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 | Variable  | Ejemplo          | Descripción                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
+| version   | `v3.1.201`       | La version del sdk de `dotnet`                                     |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
 | symbol    |                  | Refleja el valor de la opción `symbol`                             |
 | style\* |                  | Refleja el valor de la opción `style`                              |
@@ -1196,13 +1196,13 @@ default = "unknown user"
 
 ### Opciones
 
-| Opción     | Predeterminado                 | Descripción                                                                  |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `"with [$env_value]($style) "` | El formato del módulo.                                                       |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Opción           | Predeterminado                 | Descripción                                                                  |
+| ---------------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`         | `""`                           | The symbol used before displaying the variable value.                        |
+| `variable`       |                                | La variable de entorno a mostrar.                                            |
+| `predeterminado` |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`         | `"with [$env_value]($style) "` | El formato del módulo.                                                       |
+| `disabled`       | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
 
@@ -3279,12 +3279,12 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Variables
 
-| Variable  | Ejemplo    | Descripción                            |
-| --------- | ---------- | -------------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`             |
-| workspace | `default`  | The current Terraform workspace        |
-| symbol    |            | Refleja el valor de la opción `symbol` |
-| style\* |            | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo          | Descripción                            |
+| --------- | ---------------- | -------------------------------------- |
+| version   | `v0.12.24`       | The version of `terraform`             |
+| workspace | `predeterminado` | The current Terraform workspace        |
+| symbol    |                  | Refleja el valor de la opción `symbol` |
+| style\* |                  | Refleja el valor de la opción `style`  |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -3336,7 +3336,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Ejemplo    | Descripción                           |
 | --------- | ---------- | ------------------------------------- |
-| time      | `13:08:10` | La hora actual.                       |
+| hora      | `13:08:10` | La hora actual.                       |
 | style\* |            | Refleja el valor de la opción `style` |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -3354,11 +3354,11 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Username
+## Nombre de usuario
 
 The `username` module shows active user's username. El módulo se muestra si algunas de las siguientes condiciones se cumplen:
 
-- The current user is root/admin
+- El usuario actual es root/admin
 - The current user isn't the same as the one that is logged in
 - The user is currently connected as an SSH session
 - The variable `show_always` is set to true
@@ -3381,10 +3381,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Variables
 
-| Variable | Ejemplo      | Descripción                                                                                 |
-| -------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
+| Variable  | Ejemplo      | Descripción                                                                                 |
+| --------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `style`   | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `usuario` | `"matchai"`  | The currently logged-in user ID.                                                            |
 
 ### Ejemplo
 
@@ -3416,13 +3416,13 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | `detect_files`      | `["Vagrantfile"]`                    | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"cyan bold"`                        | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                                          |
+| `disabled`          | `false`                              | Deshabilita el módulo `vagrant`.                                                        |
 
 ### Variables
 
 | Variable  | Ejemplo          | Descripción                            |
 | --------- | ---------------- | -------------------------------------- |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
+| version   | `Vagrant 2.2.10` | La versión de `Vagrant`                |
 | symbol    |                  | Refleja el valor de la opción `symbol` |
 | style\* |                  | Refleja el valor de la opción `style`  |
 
@@ -3455,13 +3455,13 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                         | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"blue bold"`                                | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                                            |
+| `disabled`          | `false`                                      | Deshabilita el módulo `vlang`.                                                          |
 
 ### Variables
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v0.2`  | The version of `v`                     |
+| version   | `v0.2`  | La versión de `v`                      |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -3587,8 +3587,8 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
-| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `shell`             |                                 | [Ver abajo](#custom-command-shell)                                                                                                                                                                                                                                                            |
+| `descripción`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
