@@ -1321,15 +1321,15 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Variables
 
-| Variable  | Ejemplo       | Descripción                                                        |
-| --------- | ------------- | ------------------------------------------------------------------ |
-| region    | `us-central1` | La actual región GCP                                               |
-| account   | `foo`         | The current GCP profile                                            |
-| domain    | `example.com` | The current GCP profile domain                                     |
-| project   |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
-| symbol    |               | Refleja el valor de la opción `symbol`                             |
-| style\* |               | Refleja el valor de la opción `style`                              |
+| Variable  | Ejemplo          | Descripción                                                        |
+| --------- | ---------------- | ------------------------------------------------------------------ |
+| region    | `us-central1`    | La actual región GCP                                               |
+| cuenta    | `foo`            | El perfil actual de GCP                                            |
+| domain    | `example.com`    | The current GCP profile domain                                     |
+| project   |                  | The current GCP project                                            |
+| activo    | `predeterminado` | The active config name written in `~/.config/gcloud/active_config` |
+| symbol    |                  | Refleja el valor de la opción `symbol`                             |
+| style\* |                  | Refleja el valor de la opción `style`                              |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1377,7 +1377,7 @@ format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 very-long-project-name = "vlpn"
 ```
 
-## Git Branch
+## Rama Git
 
 The `git_branch` module shows the active branch of the repo in your current directory.
 
