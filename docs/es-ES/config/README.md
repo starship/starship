@@ -946,9 +946,9 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Predeterminado | Descripción                                                                                                                                                            |
+| Opción avanzada             | Predeterminado | Descripción                                                                                                                                                            |
 | --------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |                | A table of substitutions to be made to the path.                                                                                                                       |
+| `sustituciones`             |                | A table of substitutions to be made to the path.                                                                                                                       |
 | `fish_style_pwd_dir_length` | `0`            | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
 | `use_logical_path`          | `true`         | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
 
@@ -968,7 +968,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Variable  | Ejemplo               | Descripción                           |
 | --------- | --------------------- | ------------------------------------- |
-| path      | `"D:/Projects"`       | The current directory path            |
+| path      | `"D:/Projects"`       | La ruta de directorio actual          |
 | style\* | `"black bold dimmed"` | Refleja el valor de la opción `style` |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -981,7 +981,7 @@ Let us consider the path `/path/to/home/git_repo/src/lib`
 | Variable           | Ejemplo               | Descripción                             |
 | ------------------ | --------------------- | --------------------------------------- |
 | before_root_path | `"/path/to/home/"`    | The path before git root directory path |
-| repo_root          | `"git_repo"`          | The git root directory name             |
+| repo_root          | `"git_repo"`          | El nombre del directorio raíz de git    |
 | path               | `"/src/lib"`          | The remaining path                      |
 | style              | `"black bold dimmed"` | Refleja el valor de la opción `style`   |
 | repo_root_style  | `"underline white"`   | Style for git root directory name       |
@@ -1101,9 +1101,9 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 | Opción              | Por defecto                                                 | Descripción                                                                             |
 | ------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                                       |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | El formato para el módulo elixir.                                                       |
 | `version_format`    | `"v${raw}"`                                                 | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"💧 "`                                                      | The symbol used before displaying the version of Elixir/Erlang.                         |
+| `symbol`            | `"💧 "`                                                      | El símbolo usado antes de mostrar la version de Elixir/Erlang.                          |
 | `detect_extensions` | `[]`                                                        | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["mix.exs"]`                                               | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                                        | Qué carpetas deberían activar estos módulos.                                            |
@@ -1114,8 +1114,8 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 | Variable    | Ejemplo | Descripción                            |
 | ----------- | ------- | -------------------------------------- |
-| version     | `v1.10` | The version of `elixir`                |
-| otp_version |         | The otp version of `elixir`            |
+| version     | `v1.10` | La version de `elixir`                 |
+| otp_version |         | La version de otp de `elixir`          |
 | symbol      |         | Refleja el valor de la opción `symbol` |
 | style\*   |         | Refleja el valor de la opción `style`  |
 
@@ -1151,7 +1151,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `detect_files`      | `["elm.json", "elm-package.json", ".elm-version"]` | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `["elm-stuff"]`                                    | Qué carpetas deberían activar estos módulos.                                            |
 | `style`             | `"cyan bold"`                                      | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                            | Disables the `elm` module.                                                              |
+| `disabled`          | `false`                                            | Desactiva el módulo `elm`.                                                              |
 
 ### Variables
 
@@ -1254,13 +1254,13 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["rebar.config", "elang.mk"]`       | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar estos módulos.                                            |
-| `disabled`          | `false`                              | Disables the `erlang` module.                                                           |
+| `disabled`          | `false`                              | Desactiva el módulo `erlang`.                                                           |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v22.1.3` | The version of `erlang`                |
+| version   | `v22.1.3` | La versión de `erlang`                 |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -1275,17 +1275,17 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 format = "via [e $version](bold red) "
 ```
 
-## Fill
+## Rellenar
 
-The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. Esto es útil para alinear otros módulos.
 
 ### Opciones
 
-| Opción     | Predeterminado | Descripción                       |
-| ---------- | -------------- | --------------------------------- |
-| `symbol`   | `"."`          | The symbol used to fill the line. |
-| `style`    | `"bold black"` | El estilo del módulo.             |
-| `disabled` | `false`        | Disables the `fill` module        |
+| Opción     | Predeterminado | Descripción                                |
+| ---------- | -------------- | ------------------------------------------ |
+| `symbol`   | `"."`          | El símbolo utilizado para llenar la línea. |
+| `style`    | `"bold black"` | El estilo del módulo.                      |
+| `disabled` | `false`        | Deshabilita el módulo `fill`               |
 
 ### Ejemplo
 
@@ -1298,7 +1298,7 @@ symbol = "-"
 style = "bold green"
 ```
 
-Produces a prompt that looks like:
+Produce un prompt que se ve como:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
@@ -1313,7 +1313,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | Opción            | Por defecto                                                | Descripción                                                      |
 | ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | El formato del módulo.                                           |
-| `symbol`          | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.       |
+| `symbol`          | `"☁️  "`                                                   | El símbolo usado antes de mostrar el perfil actual de GCP.       |
 | `region_aliases`  |                                                            | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
 | `style`           | `"bold blue"`                                              | El estilo del módulo.                                            |
@@ -1323,7 +1323,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 | Variable  | Ejemplo       | Descripción                                                        |
 | --------- | ------------- | ------------------------------------------------------------------ |
-| region    | `us-central1` | The current GCP region                                             |
+| region    | `us-central1` | La actual región GCP                                               |
 | account   | `foo`         | The current GCP profile                                            |
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
