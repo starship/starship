@@ -206,6 +206,7 @@ $c\
 $cmake\
 $cobol\
 $container\
+$daml\
 $dart\
 $deno\
 $dotnet\
@@ -801,6 +802,44 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 [crystal]
 format = "via [✨ $version](bold blue) "
+```
+
+## Daml
+
+The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `daml.yaml` file
+
+### Opzioni
+
+| Opzione             | Default                            | Descrizione                                                                                  |
+| ------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------- |
+| `format`            | `via [$symbol($version )]($style)` | The format for the module.                                                                   |
+| `version_format`    | `v${raw}`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`            | `"Λ "`                             | A format string representing the symbol of Daml                                              |
+| `style`             | `"bold cyan"`                      | Lo stile per il modulo.                                                                      |
+| `detect_extensions` | `[]`                               | Quali estensioni dovrebbero attivare questo modulo.                                          |
+| `detect_files`      | `["daml.yaml"]`                    | Quali nomi di file dovrebbero attivare questo modulo.                                        |
+| `detect_folders`    | `[]`                               | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `disabled`          | `false`                            | Disables the `daml` module.                                                                  |
+
+### Variables
+
+| Variable  | Esempio  | Descrizione                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `v2.2.0` | The version of `daml`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+
+[daml]
+format = "via [D $version](bold bright-green) "
 ```
 
 ## Dart
@@ -2388,7 +2427,7 @@ symbol = "☁️ "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2405,6 +2444,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
+- [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
 - [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
@@ -2417,8 +2457,8 @@ The `package` module is shown when the current directory is the repository for a
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                                   |
 | `version_format`  | `"v${raw}"`                       | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
 | `style`           | `"bold 208"`                      | Lo stile per il modulo.                                                                      |
-| `display_private` | `false`                           | Abilita la visualizzazione della versione per i pacchetti contrassegnati come privati.       |
-| `disabled`        | `false`                           | Disabilita il modulo `package`.                                                              |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                                    |
+| `disabled`        | `false`                           | Disables the `package` module.                                                               |
 
 ### Variables
 
@@ -3296,7 +3336,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3410,12 +3450,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                                   |
 | `version_format`    | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `"V "`                                       | Una stringa di formato che rappresenta il simbolo di V                                       |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                                 |
 | `detect_extensions` | `["v"]`                                      | Quali estensioni dovrebbero attivare questo modulo.                                          |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                            |
 | `style`             | `"blu grassetto"`                            | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                                |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                 |
 
 ### Variables
 
@@ -3548,7 +3588,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `descrizione`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
