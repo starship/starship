@@ -26,7 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OCI".into());
         }
 
-        if let Ok(cgroup_content) = crate::utils::read_file(context_path(context, "/proc/1/cgroup")) {
+        if let Ok(cgroup_content) = crate::utils::read_file(context_path(context, "/proc/1/cgroup"))
+        {
             if cgroup_content.contains("/docker") {
                 // Docker
                 return Some("Docker".into());
