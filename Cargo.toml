@@ -21,9 +21,9 @@ keywords = ["prompt", "shell", "bash", "fish", "zsh"]
 license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
-# MSRV is specified to use std::thread::availabe_parallelism, which was stabilized in Rust version 1.59
+# MSRV is specified due to our dependency in git2
 # Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
-rust-version = "1.59"
+rust-version = "1.60"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
