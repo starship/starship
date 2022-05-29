@@ -99,6 +99,7 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Setup | Install cargo-wix [Windows]
+        continue-on-error: true
         # aarch64 is only supported in wix 4.0 development builds
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
         run: cargo install --version 0.3.2 cargo-wix
@@ -114,8 +115,9 @@ jobs:
           use-cross: ${{ matrix.os == 'ubuntu-latest' }}
 
       - name: Build | Installer [Windows]
-        uses: actions-rs/cargo@v1.0.3
+        continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        uses: actions-rs/cargo@v1.0.3
         with:
           command: wix
           args: -v --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship.msi
@@ -144,6 +146,7 @@ jobs:
           path: ${{ matrix.name }}
 
       - name: Release | Upload installer artifacts [Windows]
+        continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
         uses: actions/upload-artifact@v3
         with:
