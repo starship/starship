@@ -2099,6 +2099,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
 | `style`           | `"cyan bold"`                                      | The style for the module.                                             |
 | `context_aliases` |                                                    | Table of context aliases to display.                                  |
+| `user_aliases`    |                                                    | Table of user aliases to display.                                     |
 | `disabled`        | `true`                                             | Disables the `kubernetes` module.                                     |
 
 ### Variables
@@ -2126,11 +2127,14 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
 "gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
+[kubernetes.user_aliases]
+"dev.local.cluster.k8s" = "dev"
+"root/.*" = "root"
 ```
 
 #### Regex Matching
 
-Additional to simple aliasing, `context_aliases` also supports
+Additional to simple aliasing, `context_aliases` and `user_aliases` also supports
 extended matching and renaming using regular expressions.
 
 The regular expression must match on the entire kube context,

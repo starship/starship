@@ -10,6 +10,7 @@ pub struct KubernetesConfig<'a> {
     pub style: &'a str,
     pub disabled: bool,
     pub context_aliases: HashMap<String, &'a str>,
+    pub user_aliases: HashMap<String, &'a str>,
 }
 
 impl<'a> Default for KubernetesConfig<'a> {
@@ -20,6 +21,7 @@ impl<'a> Default for KubernetesConfig<'a> {
             style: "cyan bold",
             disabled: true,
             context_aliases: HashMap::new(),
+            user_aliases: HashMap::new(),
         }
     }
 }

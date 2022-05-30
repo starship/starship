@@ -767,7 +767,8 @@
         "disabled": true,
         "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "style": "cyan bold",
-        "symbol": "☸ "
+        "symbol": "☸ ",
+        "user_aliases": {}
       },
       "allOf": [
         {
@@ -3269,6 +3270,13 @@
           "type": "boolean"
         },
         "context_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "user_aliases": {
           "default": {},
           "type": "object",
           "additionalProperties": {
