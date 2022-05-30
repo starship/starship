@@ -101,7 +101,8 @@ fn get_alias<'a>(
 
     return aliases.iter().find_map(|(k, v)| {
         let re = regex::Regex::new(&format!("^{}$", k)).ok()?;
-        match re.replace(alias_candidate, *v) {
+        let replaced = re.replace(alias_candidate, *v);
+        match replaced {
             Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
             _ => None,
         }
@@ -639,6 +640,22 @@ users: []
                 "input[.*" = "this does not match"
             },
             "☸ test_context (input)",
+        )
+    }
+
+    #[test]
+    fn test_user_should_use_default_if_no_matching_alias() -> io::Result<()> {
+        base_test_user_alias(
+            "gke_infra-user-28cccff6_europe-west4_cluster-1",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "[$symbol$context( \\($user\\))]($style) in "
+                [kubernetes.user_aliases]
+                "([A-Z])\\w+" = "this does not match"
+                "gke_infra-user-28cccff6" = "this does not match"
+            },
+            "☸ test_context (gke_infra-user-28cccff6_europe-west4_cluster-1)",
         )
     }
 
