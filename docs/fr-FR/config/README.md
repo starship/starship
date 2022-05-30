@@ -1993,7 +1993,8 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                      |
 | `style`           | `"cyan bold"`                                        | Le style du module.                                                    |
 | `context_aliases` |                                                      | Tableau des alias de contexte à afficher.                              |
-| `disabled`        | `true`                                               | Désactiver le module `kubernetes`.                                     |
+| `user_aliases`    |                                                      | Table of user aliases to display.                                      |
+| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                      |
 
 ### Variables
 
@@ -2020,11 +2021,14 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
 "gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
+[kubernetes.user_aliases]
+"dev.local.cluster.k8s" = "dev"
+"root/.*" = "root"
 ```
 
 #### Filtrage par regex
 
-En plus des alias simples, `context_aliases` gère aussi un filtrage avancé et le renommage en utilisant des expressions rationnelles.
+Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
 
 L’expression rationnelle doit correspondre au contexte kube entier, et des groupes de capture peuvent être référencés en utilisant `$name` et `$N` dans la valeur de remplacement. Ceci est expliqué plus en détails dans la documentation de [la crate regex](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace).
 
