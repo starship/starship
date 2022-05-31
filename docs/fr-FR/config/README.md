@@ -1994,7 +1994,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `style`           | `"cyan bold"`                                        | Le style du module.                                                    |
 | `context_aliases` |                                                      | Tableau des alias de contexte à afficher.                              |
 | `user_aliases`    |                                                      | Table of user aliases to display.                                      |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                      |
+| `disabled`        | `true`                                               | Désactiver le module `kubernetes`.                                     |
 
 ### Variables
 
