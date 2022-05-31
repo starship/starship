@@ -1993,7 +1993,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 | `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                     |
 | `context_aliases` |                                                      | コンテキストの表示エイリアスを定義するテーブル。          |
 | `user_aliases`    |                                                      | Table of user aliases to display. |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module. |
+| `disabled`        | `true`                                               | `kubernetes` モジュールを無効にする。         |
 
 ### 変数
 
