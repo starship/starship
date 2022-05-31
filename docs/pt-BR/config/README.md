@@ -1992,7 +1992,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | `style`           | `"cyan bold"`                                        | O estilo do módulo.                                           |
 | `context_aliases` |                                                      | Tabela de aliases de contexto para exibir.                    |
 | `user_aliases`    |                                                      | Table of user aliases to display.                             |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                             |
+| `disabled`        | `true`                                               | Desabilita o módulo `kubernetes`.                             |
 
 ### Variáveis
 
