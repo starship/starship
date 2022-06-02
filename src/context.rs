@@ -726,6 +726,17 @@ mod tests {
         .is_match());
         node.close()?;
 
+        let tarballs = testdir(&["foo.tgz", "foo.tar.gz"])?;
+        let tarballs_dc = DirContents::from_path(tarballs.path())?;
+        assert!(ScanDir {
+            dir_contents: &tarballs_dc,
+            files: &[],
+            extensions: &["tar.gz"],
+            folders: &[],
+        }
+        .is_match());
+        tarballs.close()?;
+
         Ok(())
     }
 
