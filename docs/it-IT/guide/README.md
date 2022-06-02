@@ -251,6 +251,8 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Install Starship using any of the following package managers:
 
 | Repository                                                                       | Instructions                            |
@@ -264,7 +266,7 @@ Install Starship using any of the following package managers:
 
 ### Fase 2. Imposta la tua shell a utilizzare Starship
 
-Configura la shell a inizializzare Starship. Seleziona la tua dalla lista qui sotto:
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -389,9 +391,9 @@ eval "$(starship init zsh)"
 
 ### Fase 3. Configura Starship
 
-Inizia una nuova istanza del shell, e dovresti vedere il tuo bellissimo nuovo shell prompt. Se sei soddisfatto dei valori predefiniti, ottimo!
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-Se stai cercando di personalizzare ulteriormente Starship:
+If you're looking to further customize Starship:
 
 - **[Configurazione](https://starship.rs/config/)** – impara come configurare Starship per modificare il tuo prompt a tuo piacimento
 
@@ -399,15 +401,15 @@ Se stai cercando di personalizzare ulteriormente Starship:
 
 ## 🤝 Contribuire
 
-Siamo sempre alla ricerca di collaboratori di **tutti i livelli**! Se stai cercando di entrare facilmente nel progetto, prova un [buon primo problema](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Se parli correntemente una lingua diversa dall'inglese, apprezziamo molto qualsiasi aiuto per mantenere i nostri documenti tradotti e aggiornati in altre lingue. Se desideri collaborare, le traduzioni possono essere fornite su [Starship Crowdin](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Se sei interessato ad aiutare a contribuire a Starship, dai un'occhiata alla nostra [Guida al Contributo](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Inoltre, sentiti libero di entrare nel nostro [server Discord](https://discord.gg/8Jzqu3T) e dire ciao. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 Ispirato Da
 
-Ti invito di controllare questi lavori precedenti che hanno contribuito a ispirare la creazione di Starship. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Un prompt ZSH per astronauti.
 
@@ -422,4 +424,4 @@ Ti invito di controllare questi lavori precedenti che hanno contribuito a ispira
 
 ## 📝 Licenza
 
-Copyright © 2019-presente, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Questo progetto è sotto licenza [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
