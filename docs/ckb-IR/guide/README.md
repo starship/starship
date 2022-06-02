@@ -247,6 +247,8 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Install Starship using any of the following package managers:
 
 | Repository                                                                       | Instructions                            |
@@ -395,15 +397,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 بەژداریکردن
 
-ئێمە هەموو کات ئەگەڕێین بۆ بەژداریکەرێک لە هەر **ئاست و توانایەکدا بێت**! ئەگەر بەدوای ئەوەوەی کە بێیتە ئەم پڕۆژەیەوە [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) تاقیبکەرەوە.
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-ئەگەر پاراویت لە زمانێک جگە لە ئینگلیزی، ئێمە زۆر خۆشحاڵدەبین بە هەر یارمەتییەک کە بەڵگەنامەکانمان بە وەرگێڕدراوی بهێڵێتەوە و نوێکراوی بهێڵێتەوە بە زمانەکانی دیکە. ئەگەر نیازت هەیە یارمەتی بدەیت، ئەتوانی بەژداری لە وەرگێڕاندا بکەیت لەسەر [Starship Crowdin](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-ئەگەر حەزئەکەیت یارمەتی بدەیت بە بەژداریکردن لە starship، تکایە سەیری [ڕێبەری بەژداریکردن](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)ـەکەمان بکە. هەروەها، شەرم مەکە وەرە نێوە [ڕاژەی Discord](https://discord.gg/8Jzqu3T)ـەکەمانەوە و سڵاوێک بکە. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 ئیلهامبەخشەکان
 
-تکایە ئەم کارە کۆنانە سەیربکەوە کە ئیلهامی دروستکردنی starship دا. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -413,9 +415,9 @@ If you're looking to further customize Starship:
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="ئایکۆنی مووشەکی Starship">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝 مۆڵەتنامە
 
-هەموو مافێکی پارێزراوە © 2019-ئێستا، [بەژداریکەرانی Starship](https://github.com/starship/starship/graphs/contributors). <br />ئەم پڕۆژەیە لە ژێر مۆڵەتنامەی [ISC](https://github.com/starship/starship/blob/master/LICENSE)ـە.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
