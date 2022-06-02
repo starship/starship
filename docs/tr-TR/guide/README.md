@@ -251,6 +251,8 @@ Alternatif olarak aşağıdaki paket yöneticileri ile de Starship'i yükleyebil
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Starship'i herhangi bir paket yöneticisi ile yükleyin:
 
 | Repository                                                                       | Instructions                            |
@@ -264,7 +266,7 @@ Starship'i herhangi bir paket yöneticisi ile yükleyin:
 
 ### 2. Adım Shell'inizi Starship kullanmaya hazır hale getirin
 
-Shell'ı starshiple çalışması için ayarla. Aşağıdaki listeden shell'inizi seçin:
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -280,7 +282,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Cmd ıle beraber [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) kullanmalısınız. `%LocalAppData%\clink\starship.lua` dosyasını belirtilen dizinde aşağıdaki kod içeriği olacak şekilde oluşturun:
+Cmd ıle beraber [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) kullanmalısınız. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -297,7 +299,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Not: Elvish v0.18'den sonraki sürümler desteklenmektedir
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -339,14 +341,14 @@ Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşab
 source ~/.cache/starship/init.nu
 ```
 
-Not: Nushell v0.61'tan sonraki sürümler desteklenmektedir
+Note: Only Nushell v0.61+ is supported
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Aşağıdaki kodu PowerShell ayarlarınızın (`$PROFILE` komutu ile ulaşabilirsiniz) sonuna ekleyin:
+Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -389,9 +391,9 @@ eval "$(starship init zsh)"
 
 ### 3. Adım Starship'i Yapılandır
 
-Shellinizi yeniden başlatın, işte yeni shell promptunuzun güzelliği ile karşı karşıyasınız. Eğer varsayılan görünümden memnunsanız, keyfini çıkartın!
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-Daha fazla özelleştirme seçeneği için:
+If you're looking to further customize Starship:
 
 - **[Configuration](https://starship.rs/config/)** – Starship'i yapılandırmayı ve dilediğiniz gibi düzenlenemeyi öğrenin
 
@@ -399,15 +401,15 @@ Daha fazla özelleştirme seçeneği için:
 
 ## 🤝 Katkıda Bulunmak
 
-Katılımcılara **yetenek düzeyleri fark etmeksizin**, her zaman açığız! Eğer katkıda bulunmaya kolay bir şekilde başlamak istiyorsanız [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)'lardan bir tanesini deneyin.
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Eğer ingilizce harici bir dili akıcı seviyede kullanabiliyorsanız, dosyaların diğer diller ile güncel bir şekilde çevirilebilmesi için yardımlarınızı bekliyoruz. Çeviriye [Starship Crowdin](https://translate.starship.rs/)'den destekte bulunabilirsiniz.
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Eğer starship'e katkıda bulunmak istiyorsanız lütfen [Katkı Kılavuzu](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)'na göz atınız. Ayrıca, istediğiniz zaman [Discord server](https://discord.gg/8Jzqu3T)'ımıza gelip merhaba diyebilir, iletişime geçebilirsiniz. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 İlham Kaynakları
 
-Lütfen starship'in oluşmasında ilham kaynağı olan çalışmalara da göz atın. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
