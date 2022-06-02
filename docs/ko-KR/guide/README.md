@@ -251,6 +251,8 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
 | Repository                                                                       | Instructions                            |
@@ -264,7 +266,7 @@ Alternatively, install Starship using any of the following package managers:
 
 ### 2단계. 쉘에 Starship 적용하기
 
-쉘에 Starship 초기 설정을 합니다. 아래의 리스트 중에 해당하는 것을 고르세요:
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -346,7 +348,7 @@ Note: Only Nushell v0.61+ is supported
 <details>
 <summary>파워셀</summary>
 
-다음 내용을 PowerShell 설정파일 (찾으려면 `$PROFILE` 실행) 마지막 부분에 추가하세요:
+Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -389,9 +391,9 @@ eval "$(starship init zsh)"
 
 ### 3단계. Starship 설정하기
 
-새로운 쉘 인스턴스를 시작하면 아름다운 새 쉘 프롬프트를 볼 수 있습니다. 기본 설정에 만족한다면, 즐기세요!
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-Starship을 추가로 커스터마이징 하고싶다면:
+If you're looking to further customize Starship:
 
 - **[Configuration](https://starship.rs/config/)** – 원하는대로 프롬프트를 수정할 수 있도록 Starship 설정을 배울 수 있습니다.
 
@@ -399,15 +401,15 @@ Starship을 추가로 커스터마이징 하고싶다면:
 
 ## 🤝 기여하기
 
-우리는 언제나 **기술 수준에 관계없이** 기여자를 찾고 있습니다! 프로젝트에 참여하고자 한다면, [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) 를 보내보세요.
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. 번역에 도움을 주고자 한다면, [Starship Crowdin](https://translate.starship.rs/) 에서 기여할 수 있습니다.
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Starship 에 기여하는데 관심이 있다면, [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 를 한 번 살펴봐 주세요 그리고 부담갖지 말고 [Discord 서버](https://discord.gg/8Jzqu3T) 에 들러 인사 한 마디 남겨보세요 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 Inspired By
 
-Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보세요. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -417,7 +419,7 @@ Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보�
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship 로켓 아이콘">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝라이선스
