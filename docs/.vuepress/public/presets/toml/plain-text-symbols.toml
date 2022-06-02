@@ -31,6 +31,9 @@ symbol = "cr "
 [cmake]
 symbol = "cmake "
 
+[daml]
+symbol = "daml "
+
 [dart]
 symbol = "dart "
 
@@ -69,6 +72,9 @@ symbol = "jl "
 
 [kotlin]
 symbol = "kt "
+
+[lua]
+symbol = "lua "
 
 [nodejs]
 symbol = "nodejs "

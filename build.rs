@@ -6,7 +6,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(windows)]
     {
         let mut res = winres::WindowsResource::new();
-        res.set_manifest_file("starship.exe.manifest");
+        res.set_manifest_file("starship.exe.manifest")
+            .set_icon("media/icon.ico");
         res.compile()?;
     }
 

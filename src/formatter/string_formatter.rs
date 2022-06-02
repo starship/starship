@@ -292,7 +292,16 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(Segment::from_text(style, text)),
+                        FormatElement::Text(text) => Ok(Segment::from_text(
+                            style,
+                            shell_prompt_escape(
+                                text,
+                                match context {
+                                    None => Shell::Unknown,
+                                    Some(c) => c.shell,
+                                },
+                            ),
+                        )),
                         FormatElement::TextGroup(textgroup) => {
                             let textgroup = TextGroup {
                                 format: textgroup.format,

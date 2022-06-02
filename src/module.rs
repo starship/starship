@@ -22,6 +22,7 @@ pub const ALL_MODULES: &[&str] = &[
     "conda",
     "container",
     "crystal",
+    "daml",
     "dart",
     "deno",
     "directory",

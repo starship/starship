@@ -11,6 +11,7 @@ mod conda;
 mod container;
 mod crystal;
 pub(crate) mod custom;
+mod daml;
 mod dart;
 mod deno;
 mod directory;
@@ -102,6 +103,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "cobol" => cobol::module(context),
             "conda" => conda::module(context),
             "container" => container::module(context),
+            "daml" => daml::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
             "directory" => directory::module(context),
@@ -204,6 +206,7 @@ pub fn description(module: &str) -> &'static str {
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "container" => "The container indicator, if inside a container.",
         "crystal" => "The currently installed version of Crystal",
+        "daml" => "The Daml SDK version of your project",
         "dart" => "The currently installed version of Dart",
         "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",

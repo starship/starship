@@ -171,7 +171,7 @@
 
 - [Nerd Font](https://www.nerdfonts.com/)がインストールされ、端末にて有効になっている（例えば、[Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)を試してみてください）。
 
-### Step 1. Install Starship
+### Step 1. Starshipをインストール
 
 以下のリストからお使いのOSを選択し、インストール方法をご確認ください。
 
@@ -180,7 +180,7 @@
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| Repository                                                                        | Instructions           |
+| リポジトリ                                                                             | 手順                     |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -191,11 +191,11 @@
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| Distribution | Repository                                               | Instructions                      |
-| ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| ディストリビューション | リポジトリ                                                    | 手順                                |
+| ----------- | -------------------------------------------------------- | --------------------------------- |
+| **_Any_**   | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD     | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD      | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
 </details>
 
@@ -210,7 +210,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| ディストリビューション        | リポジトリ                                                                                           | 手順                                                                             |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
@@ -239,7 +239,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 または、以下のパッケージマネージャを使用して、Starshipをインストールします。
 
-| Repository                                               | Instructions                            |
+| リポジトリ                                                    | 手順                                      |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -253,7 +253,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 以下のいずれかのパッケージマネージャーを使用して、Starshipをインストールします。
 
-| Repository                                                                       | Instructions                            |
+| リポジトリ                                                                            | 手順                                      |
 | -------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
@@ -262,7 +262,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Step 2. Starshipをシェルにセットアップ
 
 Starshipを初期化するためのシェルの設定。 以下のリストからお使いのシェルを選択してください。
 
@@ -297,7 +297,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+注意: Elvish v0.18以降でサポートされています
 
 </details>
 
@@ -326,7 +326,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Run the following:
+そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）:
 
 ```sh
 mkdir ~/.cache/starship
@@ -336,18 +336,17 @@ starship init nu | save ~/.cache/starship/init.nu
 そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
 
 ```sh
-starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.60+ is supported
+注意: Elvish v0.61以降でサポートされています
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+そして、Nushellの設定ファイルの最後に以下を追加してください（ `$PROFILE.config-path` を実行してください）:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -388,15 +387,15 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Step 3. Starshipの設定
 
 新しいシェルインスタンスを起動すると、美しくて新しいシェルプロンプトが表示されるはずです。 デフォルトで問題なければ、お楽しみください！
 
 Starshipのさらなるカスタマイズを目指すなら以下を参考にしてみてください。
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[設定](https://starship.rs/config/)** - あなたの好みに応じてプロンプトを調整するためにStarshipを設定する方法を学ぶ
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[プリセット](https://starship.rs/presets/)** - コミュニティのために用意されたコンフィグから刺激を受ける
 
 ## 🤝 貢献
 
@@ -410,11 +409,11 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 よければStarship の作成に影響を与えた、これまでのプロジェクトをチェックしてください 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – 宇宙飛行士のための ZSH プロンプト。
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – JavaScript で書かれた Cross-shell 対応の robbyrussell テーマ。
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – アイコンと cross-shell 対応のカスタマイズ可能な powerline ライクなプロンプト。
 
 <p align="center">
     <br>

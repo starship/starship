@@ -280,16 +280,16 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### Опции
 
-| Параметр            | По умолчанию                                                         | Описание                                                                                                    |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | Формат модуля.                                                                                              |
-| `symbol`            | `"☁️ "`                                                              | Символ перед отображением текущего профиля AWS.                                                             |
-| `region_aliases`    |                                                                      | Таблица региона псевдонимов, отображаемая вместе с именем AWS.                                              |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `"bold yellow"`                                                      | Стиль модуля.                                                                                               |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired.                                           |
-| `disabled`          | `false`                                                              | Отключение модуля `AWS`.                                                                                    |
-| `force_display`     | `false`                                                              | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Параметр            | По умолчанию                                                          | Описание                                                                                                    |
+| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Формат модуля.                                                                                              |
+| `symbol`            | `"☁️ "`                                                               | Символ перед отображением текущего профиля AWS.                                                             |
+| `region_aliases`    |                                                                       | Таблица региона псевдонимов, отображаемая вместе с именем AWS.                                              |
+| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `"bold yellow"`                                                       | Стиль модуля.                                                                                               |
+| `expiration_symbol` | `X`                                                                   | The symbol displayed when the temporary credentials have expired.                                           |
+| `disabled`          | `false`                                                               | Отключение модуля `AWS`.                                                                                    |
+| `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Переменные
 
@@ -1140,7 +1140,9 @@ The `env_var` module displays the current value of a selected environment variab
 - Опция `variable` соответствует существующей переменной среды
 - Опция `variable` не определена, но определена опция `default`
 
-::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+::: tip Подсказка
+
+Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
 Example: following configuration will display value of USER environment variable
 
@@ -1342,17 +1344,17 @@ very-long-project-name = "vlpn"
 
 ### Опции
 
-| Параметр             | По умолчанию                     | Описание                                                                                      |
-| -------------------- | -------------------------------- | --------------------------------------------------------------------------------------------- |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name.          |
-| `format`             | `"on [$symbol$branch]($style) "` | Формат модуля. Use `"$branch"` to refer to the current branch name.                           |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                                        |
-| `style`              | `"bold purple"`                  | Стиль модуля.                                                                                 |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                                      |
-| `truncation_symbol`  | `"…"`                            | Символ, используемый для обозначения усечения названия ветки. You can use `""` for no symbol. |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                                |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                           |
-| `disabled`           | `false`                          | Отключает модуль `git_branch`.                                                                |
+| Параметр             | По умолчанию                                      | Описание                                                                                      |
+| -------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name.          |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | Формат модуля. Use `"$branch"` to refer to the current branch name.                           |
+| `symbol`             | `" "`                                            | A format string representing the symbol of git branch.                                        |
+| `style`              | `"bold purple"`                                   | Стиль модуля.                                                                                 |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                                      |
+| `truncation_symbol`  | `"…"`                                             | Символ, используемый для обозначения усечения названия ветки. You can use `""` for no symbol. |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                                |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                           |
+| `disabled`           | `false`                                           | Отключает модуль `git_branch`.                                                                |
 
 ### Переменные
 
@@ -1602,6 +1604,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - Текущий каталог содержит файл `go.mod`
 - Текущий каталог содержит файл `go.sum`
+- Текущий каталог содержит файл `go.work`
 - Текущий каталог содержит файл `glide.yaml`
 - Текущий каталог содержит файл `Gopkg.yml`
 - Текущий каталог содержит файл `Gopkg.lock`
@@ -1611,16 +1614,16 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Опции
 
-| Параметр            | По умолчанию                                                                   | Описание                                                                  |
-| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | Формат модуля.                                                            |
-| `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                            |
-| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this module.                              |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.                                 |
-| `style`             | `"bold cyan"`                                                                  | Стиль модуля.                                                             |
-| `disabled`          | `false`                                                                        | Отключает модуль `golang`.                                                |
+| Параметр            | По умолчанию                                                                              | Описание                                                                  |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                      | Формат модуля.                                                            |
+| `version_format`    | `"v${raw}"`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                                    | A format string representing the symbol of Go.                            |
+| `detect_extensions` | `["go"]`                                                                                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["Godeps"]`                                                                              | Which folders should trigger this module.                                 |
+| `style`             | `"bold cyan"`                                                                             | Стиль модуля.                                                             |
+| `disabled`          | `false`                                                                                   | Отключает модуль `golang`.                                                |
 
 ### Переменные
 
@@ -1719,20 +1722,22 @@ format = "via [⎈ $version](bold white) "
 
 ### Опции
 
-| Параметр   | По умолчанию                | Описание                                                                                                                                 |
-| ---------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only` | `true`                      | Показывать имя хоста только при подключении к SSH-сессии.                                                                                |
-| `trim_at`  | `"."`                       | Строка, по которую имя хоста будет сокращено после первого совпадения. `"."` остановится после первой точки. `"` отключит любое усечение |
-| `format`   | `"[$hostname]($style) in "` | Формат модуля.                                                                                                                           |
-| `style`    | `"bold dimmed green"`       | Стиль модуля.                                                                                                                            |
-| `disabled` | `false`                     | Отключает модуль `hostname`.                                                                                                             |
+| Параметр     | По умолчанию                           | Описание                                                                                                                                 |
+| ------------ | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`   | `true`                                 | Показывать имя хоста только при подключении к SSH-сессии.                                                                                |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                                   |
+| `trim_at`    | `"."`                                  | Строка, по которую имя хоста будет сокращено после первого совпадения. `"."` остановится после первой точки. `"` отключит любое усечение |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Формат модуля.                                                                                                                           |
+| `style`      | `"bold dimmed green"`                  | Стиль модуля.                                                                                                                            |
+| `disabled`   | `false`                                | Отключает модуль `hostname`.                                                                                                             |
 
 ### Переменные
 
-| Переменная | Пример     | Описание                            |
-| ---------- | ---------- | ----------------------------------- |
-| имя хоста  | `computer` | The hostname of the computer        |
-| style\*  |            | Отражает значение параметра `style` |
+| Переменная | Пример     | Описание                                              |
+| ---------- | ---------- | ----------------------------------------------------- |
+| имя хоста  | `computer` | The hostname of the computer                          |
+| style\*  |            | Отражает значение параметра `style`                   |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
@@ -1743,7 +1748,7 @@ format = "via [⎈ $version](bold white) "
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -2383,22 +2388,22 @@ symbol = "☁️ "
 
 ## Версия пакета
 
-Модуль `package` отображается, когда текущий каталог является репозиторием для пакета и показывает его текущую версию. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+Модуль `package` отображается, когда текущий каталог является репозиторием для пакета и показывает его текущую версию. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- [**Python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
+- [**Python**](https://www.python.org) - The `python` package version is extracted from a [PEP 621](https://peps.python.org/pep-0621/) compliant `pyproject.toml` or a `setup.cfg` present in the current directory
 - [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
-- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
-- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
-- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
-- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
-- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
-- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
-- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
-- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present in the current directory
+- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present in the current directory
+- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present in the current directory
+- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present in the current directory
+- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present in the current directory
+- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present in the current directory
+- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
+- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 - [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
 
@@ -2845,11 +2850,13 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Переменные
 
-| Переменная | Пример            | Описание                             |
-| ---------- | ----------------- | ------------------------------------ |
-| version    | `v1.43.0-nightly` | The version of `rustc`               |
-| symbol     |                   | Отражает значение параметра `symbol` |
-| style\*  |                   | Отражает значение параметра `style`  |
+| Переменная | Пример            | Описание                                     |
+| ---------- | ----------------- | -------------------------------------------- |
+| version    | `v1.43.0-nightly` | The version of `rustc`                       |
+| numver     | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain  | `beta`            | The toolchain version                        |
+| symbol     |                   | Отражает значение параметра `symbol`         |
+| style\*  |                   | Отражает значение параметра `style`          |
 
 *: Эта переменная может использоваться только в качестве части строки style
 

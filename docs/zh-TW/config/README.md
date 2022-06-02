@@ -280,16 +280,16 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 
 ### 選項
 
-| Option              | 預設                                                                   | 說明                                                                                                          |
-| ------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\])]($style)'` | The format for the module.                                                                                  |
-| `symbol`            | `"☁️ "`                                                              | 顯示在目前 AWS 配置之前的符號。                                                                                          |
-| `region_aliases`    |                                                                      | 除了AWS名稱外，顯示區域別名表                                                                                            |
-| `profile_aliases`   |                                                                      | Table of profile aliases to display in addition to the AWS name.                                            |
-| `style`             | `"bold yellow"`                                                      | 這個模組的風格。                                                                                                    |
-| `expiration_symbol` | `X`                                                                  | The symbol displayed when the temporary credentials have expired.                                           |
-| `disabled`          | `false`                                                              | 停用 `AWS` 模組。                                                                                                |
-| `force_display`     | `false`                                                              | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
+| Option              | 預設                                                                    | 說明                                                                                                          |
+| ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
+| `symbol`            | `"☁️ "`                                                               | 顯示在目前 AWS 配置之前的符號。                                                                                          |
+| `region_aliases`    |                                                                       | 除了AWS名稱外，顯示區域別名表                                                                                            |
+| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
+| `style`             | `"bold yellow"`                                                       | 這個模組的風格。                                                                                                    |
+| `expiration_symbol` | `X`                                                                   | The symbol displayed when the temporary credentials have expired.                                           |
+| `disabled`          | `false`                                                               | 停用 `AWS` 模組。                                                                                                |
+| `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
 ### Variables
 
@@ -1140,7 +1140,9 @@ The `env_var` module displays the current value of a selected environment variab
 - `variable` 設定選項符合一個存在的環境變數。
 - 沒有設定 `variable` 選項，但是有設定 `default` 選項。
 
-::: tip Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+::: tip
+
+Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
 Example: following configuration will display value of USER environment variable
 
@@ -1342,17 +1344,17 @@ very-long-project-name = "vlpn"
 
 ### 選項
 
-| Option               | 預設                               | 說明                                                                                   |
-| -------------------- | -------------------------------- | ------------------------------------------------------------------------------------ |
-| `always_show_remote` | `false`                          | Shows the remote tracking branch name, even if it is equal to the local branch name. |
-| `format`             | `"on [$symbol$branch]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.      |
-| `symbol`             | `" "`                           | A format string representing the symbol of git branch.                               |
-| `style`              | `"bold purple"`                  | 這個模組的風格。                                                                             |
-| `truncation_length`  | `2^63 - 1`                       | Truncates a git branch to `N` graphemes.                                             |
-| `truncation_symbol`  | `"…"`                            | 用來指示分支名稱被縮減的符號。 You can use `""` for no symbol.                                      |
-| `only_attached`      | `false`                          | Only show the branch name when not in a detached `HEAD` state.                       |
-| `ignore_branches`    | `[]`                             | A list of names to avoid displaying. Useful for "master" or "main".                  |
-| `disabled`           | `false`                          | 停用 `git_branch` 模組。                                                                  |
+| Option               | 預設                                                | 說明                                                                                   |
+| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name. |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | The format for the module. Use `"$branch"` to refer to the current branch name.      |
+| `symbol`             | `" "`                                            | A format string representing the symbol of git branch.                               |
+| `style`              | `"bold purple"`                                   | 這個模組的風格。                                                                             |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                             |
+| `truncation_symbol`  | `"…"`                                             | 用來指示分支名稱被縮減的符號。 You can use `""` for no symbol.                                      |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                       |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                  |
+| `disabled`           | `false`                                           | 停用 `git_branch` 模組。                                                                  |
 
 ### Variables
 
@@ -1602,6 +1604,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
+- 現在資料夾中含有一個 `go.work` 檔案
 - 現在資料夾中含有一個 `glide.yaml` 檔案
 - 現在資料夾中含有一個 `Gopkg.yml` 檔案
 - 現在資料夾中含有一個 `Gopkg.lock` 檔案
@@ -1611,16 +1614,16 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### 選項
 
-| Option              | 預設                                                                             | 說明                                                                        |
-| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                           | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                                                                    | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🐹 "`                                                                         | A format string representing the symbol of Go.                            |
-| `detect_extensions` | `["go"]`                                                                       | Which extensions should trigger this module.                              |
-| `detect_files`      | `["go.mod", "go.sum", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `["Godeps"]`                                                                   | Which folders should trigger this module.                                 |
-| `style`             | `"bold cyan"`                                                                  | 這個模組的風格。                                                                  |
-| `disabled`          | `false`                                                                        | 停用 `golang` 模組。                                                           |
+| Option              | 預設                                                                                        | 說明                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                      | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🐹 "`                                                                                    | A format string representing the symbol of Go.                            |
+| `detect_extensions` | `["go"]`                                                                                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.yml", "Gopkg.lock", ".go-version"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["Godeps"]`                                                                              | Which folders should trigger this module.                                 |
+| `style`             | `"bold cyan"`                                                                             | 這個模組的風格。                                                                  |
+| `disabled`          | `false`                                                                                   | 停用 `golang` 模組。                                                           |
 
 ### Variables
 
@@ -1719,20 +1722,22 @@ format = "via [⎈ $version](bold white) "
 
 ### 選項
 
-| Option     | 預設                          | 說明                                                         |
-| ---------- | --------------------------- | ---------------------------------------------------------- |
-| `ssh_only` | `true`                      | 只在連接到一個 SSH session 時顯示主機名稱。                               |
-| `trim_at`  | `"."`                       | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。 |
-| `format`   | `"[$hostname]($style) in "` | The format for the module.                                 |
-| `style`    | `"bold dimmed green"`       | 這個模組的風格。                                                   |
-| `disabled` | `false`                     | 停用 `hostname` 模組。                                          |
+| Option       | 預設                                     | 說明                                                                     |
+| ------------ | -------------------------------------- | ---------------------------------------------------------------------- |
+| `ssh_only`   | `true`                                 | 只在連接到一個 SSH session 時顯示主機名稱。                                           |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session. |
+| `trim_at`    | `"."`                                  | 擷取出主機名稱的斷點，以第一個符合的為準。 `"."` 會讓它停在第一個點的符號。 `""` 會停用任何的截斷功能。             |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | The format for the module.                                             |
+| `style`      | `"bold dimmed green"`                  | 這個模組的風格。                                                               |
+| `disabled`   | `false`                                | 停用 `hostname` 模組。                                                      |
 
 ### Variables
 
-| 變數        | 範例         | 說明                                  |
-| --------- | ---------- | ----------------------------------- |
-| 主機名稱      | `computer` | The hostname of the computer        |
-| style\* |            | Mirrors the value of option `style` |
+| 變數         | 範例         | 說明                                                    |
+| ---------- | ---------- | ----------------------------------------------------- |
+| 主機名稱       | `computer` | The hostname of the computer                          |
+| style\*  |            | Mirrors the value of option `style`                   |
+| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
 
 *: This variable can only be used as a part of a style string
 
@@ -1743,7 +1748,7 @@ format = "via [⎈ $version](bold white) "
 
 [hostname]
 ssh_only = false
-format = "on [$hostname](bold red) "
+format = "[$ssh_symbol](bold blue) on [$hostname](bold red) "
 trim_at = ".companyname.com"
 disabled = false
 ```
@@ -2383,22 +2388,22 @@ symbol = "☁️ "
 
 ## 套件版本
 
-The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
 - [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
 - [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- [**Python**](https://www.python.org) - The `python` package version is extracted from the `setup.cfg` present in the current directory
+- [**Python**](https://www.python.org) - The `python` package version is extracted from a [PEP 621](https://peps.python.org/pep-0621/) compliant `pyproject.toml` or a `setup.cfg` present in the current directory
 - [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
-- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present
-- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present
-- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present
-- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present
-- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present
-- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present
-- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present
-- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present
+- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present in the current directory
+- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present in the current directory
+- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present in the current directory
+- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present in the current directory
+- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present in the current directory
+- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present in the current directory
+- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
+- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
 - [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
 
@@ -2845,11 +2850,13 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variables
 
-| 變數        | 範例                | 說明                                   |
-| --------- | ----------------- | ------------------------------------ |
-| version   | `v1.43.0-nightly` | The version of `rustc`               |
-| symbol    |                   | Mirrors the value of option `symbol` |
-| style\* |                   | Mirrors the value of option `style`  |
+| 變數        | 範例                | 說明                                           |
+| --------- | ----------------- | -------------------------------------------- |
+| version   | `v1.43.0-nightly` | The version of `rustc`                       |
+| numver    | `1.51.0`          | The numeric component of the `rustc` version |
+| toolchain | `beta`            | The toolchain version                        |
+| symbol    |                   | Mirrors the value of option `symbol`         |
+| style\* |                   | Mirrors the value of option `style`          |
 
 *: This variable can only be used as a part of a style string
 

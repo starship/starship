@@ -1,4 +1,4 @@
-name: Deploy
+name: Release
 on:
   push:
     branches:
@@ -66,14 +66,17 @@ jobs:
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             name: starship-x86_64-pc-windows-msvc.zip
+            rustflags: -C target-feature=+crt-static
 
           - target: i686-pc-windows-msvc
             os: windows-latest
             name: starship-i686-pc-windows-msvc.zip
+            rustflags: -C target-feature=+crt-static
 
           - target: aarch64-pc-windows-msvc
             os: windows-latest
             name: starship-aarch64-pc-windows-msvc.zip
+            rustflags: -C target-feature=+crt-static
 
           - target: x86_64-unknown-freebsd
             os: ubuntu-latest
@@ -81,6 +84,8 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     continue-on-error: true
+    env:
+      RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
@@ -93,12 +98,29 @@ jobs:
           profile: minimal
           target: ${{ matrix.target }}
 
+      - name: Setup | Install cargo-wix [Windows]
+        continue-on-error: true
+        # aarch64 is only supported in wix 4.0 development builds
+        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        run: cargo install --version 0.3.2 cargo-wix
+        env:
+          # cargo-wix does not require static crt
+          RUSTFLAGS: ''
+
       - name: Build | Build
         uses: actions-rs/cargo@v1.0.3
         with:
           command: build
           args: --release --locked --target ${{ matrix.target }}
           use-cross: ${{ matrix.os == 'ubuntu-latest' }}
+
+      - name: Build | Installer [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        uses: actions-rs/cargo@v1.0.3
+        with:
+          command: wix
+          args: -v --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship.msi
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -117,15 +139,24 @@ jobs:
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
-      - name: Deploy | Upload artifacts
+      - name: Release | Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
 
+      - name: Release | Upload installer artifacts [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        uses: actions/upload-artifact@v3
+        with:
+          name: starship-${{ matrix.target }}.msi
+          path: target/wix/starship.msi
+
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
     runs-on: macos-latest
+    continue-on-error: true
     needs: [github_build, merge_crowdin_pr]
     strategy:
       fail-fast: false

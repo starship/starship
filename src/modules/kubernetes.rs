@@ -1,6 +1,7 @@
 use yaml_rust::YamlLoader;
 
 use std::borrow::Cow;
+use std::collections::HashMap;
 use std::env;
 use std::path;
 
@@ -82,22 +83,30 @@ fn get_kube_ctx_component(
     Some(ctx_components)
 }
 
+fn get_kube_user<'a>(config: &'a KubernetesConfig, kube_user: &'a str) -> Cow<'a, str> {
+    return get_alias(&config.user_aliases, kube_user).unwrap_or(Cow::Borrowed(kube_user));
+}
+
 fn get_kube_context_name<'a>(config: &'a KubernetesConfig, kube_ctx: &'a str) -> Cow<'a, str> {
-    if let Some(val) = config.context_aliases.get(kube_ctx) {
-        return Cow::Borrowed(val);
+    return get_alias(&config.context_aliases, kube_ctx).unwrap_or(Cow::Borrowed(kube_ctx));
+}
+
+fn get_alias<'a>(
+    aliases: &'a HashMap<String, &'a str>,
+    alias_candidate: &'a str,
+) -> Option<Cow<'a, str>> {
+    if let Some(val) = aliases.get(alias_candidate) {
+        return Some(Cow::Borrowed(val));
     }
 
-    config
-        .context_aliases
-        .iter()
-        .find_map(|(k, v)| {
-            let re = regex::Regex::new(&format!("^{}$", k)).ok()?;
-            match re.replace(kube_ctx, *v) {
-                Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
-                _ => None,
-            }
-        })
-        .unwrap_or(Cow::Borrowed(kube_ctx))
+    return aliases.iter().find_map(|(k, v)| {
+        let re = regex::Regex::new(&format!("^{}$", k)).ok()?;
+        let replaced = re.replace(alias_candidate, *v);
+        match replaced {
+            Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
+            _ => None,
+        }
+    });
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -157,7 +166,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "user" => kube_user.and_then(|ctx| {
                     ctx.as_ref().map(|kube| {
                         // unwrap is safe as kube_user only holds kube.user.is_some()
-                        Ok(Cow::Borrowed(kube.user.as_ref().unwrap().as_str()))
+                        Ok(get_kube_user(&config, kube.user.as_ref().unwrap().as_str()))
                     })
                 }),
                 "cluster" => kube_cluster.and_then(|ctx| {
@@ -527,6 +536,127 @@ users: []
         assert_eq!(expected, actual_ctx_first);
 
         dir.close()
+    }
+
+    fn base_test_user_alias(
+        user_name: &str,
+        config: toml::Value,
+        expected: &str,
+    ) -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            format!(
+                "
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: test_cluster
+      user: {}
+      namespace: test_namespace
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {{}}
+users: []
+",
+                user_name
+            )
+            .as_bytes(),
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!("{} in ", Color::Cyan.bold().paint(expected)));
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_user_alias_simple() -> io::Result<()> {
+        base_test_user_alias(
+            "test_user",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "[$symbol$context( \\($user\\))]($style) in "
+                [kubernetes.user_aliases]
+                "test_user" = "test_alias"
+                ".*" = "literal match has precedence"
+            },
+            "☸ test_context (test_alias)",
+        )
+    }
+
+    #[test]
+    fn test_user_alias_regex() -> io::Result<()> {
+        base_test_user_alias(
+            "openshift-cluster/user",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "[$symbol$context( \\($user\\))]($style) in "
+                [kubernetes.user_aliases]
+                "openshift-cluster/.*" = "test_alias"
+            },
+            "☸ test_context (test_alias)",
+        )
+    }
+
+    #[test]
+    fn test_user_alias_regex_replace() -> io::Result<()> {
+        base_test_user_alias(
+            "gke_infra-user-28cccff6_europe-west4_cluster-1",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "[$symbol$context( \\($user\\))]($style) in "
+                [kubernetes.user_aliases]
+                "gke_.*_(?P<cluster>[\\w-]+)" = "example: $cluster"
+            },
+            "☸ test_context (example: cluster-1)",
+        )
+    }
+
+    #[test]
+    fn test_user_alias_broken_regex() -> io::Result<()> {
+        base_test_user_alias(
+            "input",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "[$symbol$context( \\($user\\))]($style) in "
+                [kubernetes.user_aliases]
+                "input[.*" = "this does not match"
+            },
+            "☸ test_context (input)",
+        )
+    }
+
+    #[test]
+    fn test_user_should_use_default_if_no_matching_alias() -> io::Result<()> {
+        base_test_user_alias(
+            "gke_infra-user-28cccff6_europe-west4_cluster-1",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "[$symbol$context( \\($user\\))]($style) in "
+                [kubernetes.user_aliases]
+                "([A-Z])\\w+" = "this does not match"
+                "gke_infra-user-28cccff6" = "this does not match"
+            },
+            "☸ test_context (gke_infra-user-28cccff6_europe-west4_cluster-1)",
+        )
     }
 
     #[test]

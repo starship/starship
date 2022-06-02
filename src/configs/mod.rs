@@ -14,6 +14,7 @@ pub mod conda;
 pub mod container;
 pub mod crystal;
 pub mod custom;
+pub mod daml;
 pub mod dart;
 pub mod deno;
 pub mod directory;
@@ -113,6 +114,8 @@ pub struct FullConfig<'a> {
     container: container::ContainerConfig<'a>,
     #[serde(borrow)]
     crystal: crystal::CrystalConfig<'a>,
+    #[serde(borrow)]
+    daml: daml::DamlConfig<'a>,
     #[serde(borrow)]
     dart: dart::DartConfig<'a>,
     #[serde(borrow)]
