@@ -757,7 +757,7 @@ mod tests {
         assert!(!ScanDir {
             dir_contents: &dont_match_ext_dc,
             files: &[],
-            extensions: &["js", "!ts"],
+            extensions: &["js", "!notfound", "!ts"],
             folders: &[],
         }
         .is_match());
