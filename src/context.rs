@@ -463,8 +463,18 @@ impl DirContents {
         self.extensions.contains(ext)
     }
 
-    pub fn has_any_extension(&self, exts: &[&str]) -> bool {
-        exts.iter().any(|ext| self.has_extension(ext))
+    pub fn has_any_positive_extension(&self, exts: &[&str]) -> bool {
+        exts.iter().any(|ext| {
+            !ext.starts_with("!") &&
+            self.has_extension(ext)
+        })
+    }
+
+    pub fn has_no_negative_extension(&self, exts: &[&str]) -> bool {
+        !exts.iter().any(|ext| {
+            ext.starts_with("!") &&
+            self.has_extension(&ext[1..])
+        })
     }
 }
 
@@ -531,9 +541,14 @@ impl<'a> ScanDir<'a> {
     /// based on the current `PathBuf` check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
-        self.dir_contents.has_any_extension(self.extensions)
-            || self.dir_contents.has_any_folder(self.folders)
-            || self.dir_contents.has_any_file_name(self.files)
+        // if there exists a file with an extension we've said we don't want,
+        // fail the match straight away
+        self.dir_contents.has_no_negative_extension(self.extensions) &&
+        (
+            self.dir_contents.has_any_positive_extension(self.extensions)
+                || self.dir_contents.has_any_folder(self.folders)
+                || self.dir_contents.has_any_file_name(self.files)
+        )
     }
 }
 
