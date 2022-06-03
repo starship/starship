@@ -397,8 +397,23 @@ impl DirContents {
                     folders.insert(path);
                 } else {
                     if !path.to_string_lossy().starts_with('.') {
+                        // Extract the file extensions (yes, that's plural) from a filename.
+                        // Why plural? Consider the case of foo.tar.gz. It's a compressed
+                        // tarball (tar.gz), and it's a gzipped file (gz). We should be able
+                        // to match both.
+
+                        // find the minimal extension on a file. ie, the gz in foo.tar.gz
                         path.extension()
                             .map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
+
+                        // find the full extension on a file. ie, the tar.gz in foo.tar.gz
+                        path.file_name().map(|file_name| {
+                            file_name
+                                .to_string_lossy()
+                                .to_string()
+                                .split_once('.')
+                                .map(|(_, after)| extensions.insert(after.to_string()))
+                        });
                     }
                     if let Some(file_name) = path.file_name() {
                         file_names.insert(file_name.to_string_lossy().to_string());
