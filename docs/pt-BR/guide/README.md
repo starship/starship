@@ -266,7 +266,7 @@ Instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 
 ### 2º passo. Configure seu shell para usar o Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Configure seu shell para inicializar o starship. Selecione o seu na lista abaixo:
 
 <details>
 <summary>Bash</summary>
@@ -282,7 +282,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Você precisa do [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) com Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Você precisa do [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) com Cmd. Crie um arquivo neste caminho `%LocalAppData%\clink\starship.lua` com o seguinte conteúdo:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -299,7 +299,7 @@ Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+Nota: Somente Elvish v0.18+ é suportado
 
 </details>
 
@@ -341,14 +341,14 @@ E adicione o seguinte ao final da sua configuração do Nushell (encontre-o exec
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+Nota: Somente o Nushell v0.61+ é suportado
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Adicione o seguinte no final da sua configuração PowerShell (encontre executando `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -391,9 +391,9 @@ eval "$(starship init zsh)"
 
 ### 3º passo. Configurar o Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+Inicie uma nova instância de shell e você deverá ver seu belo novo prompt de shell. Se você estiver feliz com as configurações padrões, aproveite!
 
-If you're looking to further customize Starship:
+Se você estiver procurando personalizar ainda mais a Starship:
 
 - **[Configuração](https://starship.rs/config/)** – saiba como configurar o Starship para ajustar seu prompt ao seu gosto
 
@@ -401,15 +401,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 Contribuindo
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+Se você é fluente em uma linguá não inglesa, nos ficaríamos gratos por qualquer ajuda em manter nossas documentações traduzidas e atualizadas em outras linguás. Se você deseja ajudar nas traduções, você pode contribuir no [Crowdin do Starship](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada no nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor no Discord](https://discord.gg/8Jzqu3T) e dizer oi. 👋
 
 ## 💭 Inspirado por
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação do startship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Um prompt ZSH para astronautas.
 
@@ -419,9 +419,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Ícone de foguete do Starship">
 </p>
 
 ## 📝 Licença
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Todos os direitos reservados © 2019-Presente, [Contribuidores Starship](https://github.com/starship/starship/graphs/contributors).<br /> Este projeto está licenciado pelo [ISC](https://github.com/starship/starship/blob/master/LICENSE).
