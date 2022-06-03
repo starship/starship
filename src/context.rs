@@ -752,6 +752,17 @@ mod tests {
         .is_match());
         tarballs.close()?;
 
+        let dont_match_ext = testdir(&["foo.js", "foo.ts"])?;
+        let dont_match_ext_dc = DirContents::from_path(dont_match_ext.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_ext_dc,
+            files: &[],
+            extensions: &["js", "!ts"],
+            folders: &[],
+        }
+        .is_match());
+        dont_match_ext.close()?;
+
         Ok(())
     }
 
