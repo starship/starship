@@ -308,6 +308,21 @@ jobs:
         env:
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
+  winget_update:
+    name: Update Winget Manifest
+    runs-on: windows-latest
+    needs: [release_please, github_build, upload_artifacts]
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    steps:
+      - run: |
+          $releaseUrl = ${{ needs.release_please.outputs.html_url }}
+          $urlPrefix = $releaseUrl.Insert($releaseUrl.lastIndexOf('/'), '/download')
+          $url64 = Write-Host $urlPrefix/starship-x86_64-pc-windows-msvc.msi
+          $url32 = Write-Host $urlPrefix/starship-i686-pc-windows-msvc.msi
+          $version = ${{ needs.release_please.outputs.tag_name }}.replace('v', '')
+          iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+          ./wingetcreate.exe update Starship.Starship -s -v $version -u $url64 $url32 -t ${{ secrets.GITHUB_TOKEN }}
+
   merge_crowdin_pr:
     name: Merge Crowdin PR
     runs-on: ubuntu-latest
