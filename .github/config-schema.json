@@ -122,7 +122,10 @@
         "error_symbol": "[❯](bold red)",
         "format": "$symbol ",
         "success_symbol": "[❯](bold green)",
-        "vicmd_symbol": "[❮](bold green)"
+        "vicmd_symbol": "[❮](bold green)",
+        "vimcmd_replace_one_symbol": "[❮](bold purple)",
+        "vimcmd_replace_symbol": "[❮](bold purple)",
+        "vimcmd_visual_symbol": "[❮](bold yellow)"
       },
       "allOf": [
         {
@@ -1782,6 +1785,18 @@
         },
         "vicmd_symbol": {
           "default": "[❮](bold green)",
+          "type": "string"
+        },
+        "vimcmd_visual_symbol": {
+          "default": "[❮](bold yellow)",
+          "type": "string"
+        },
+        "vimcmd_replace_symbol": {
+          "default": "[❮](bold purple)",
+          "type": "string"
+        },
+        "vimcmd_replace_one_symbol": {
+          "default": "[❮](bold purple)",
           "type": "string"
         },
         "disabled": {
