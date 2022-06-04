@@ -538,19 +538,22 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ::: cảnh báo
 
-`vicmd_symbol` is only supported in cmd, fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn         | Mặc định            | Mô tả                                                                                |
-| ---------------- | ------------------- | ------------------------------------------------------------------------------------ |
-| `format`         | `"$symbol "`        | Định dạng chuỗi sử dụng trước văn bản nhập vào.                                      |
-| `success_symbol` | `"[❯](bold green)"` | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu câu lệnh trước đó đã thành công. |
-| `error_symbol`   | `"[❯](bold red)"`   | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu câu lệnh trước đó đã thất bại.   |
-| `vicmd_symbol`   | `"[❮](bold green)"` | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu shell trong chế độ vim normal.   |
-| `disabled`       | `false`             | Vô hiệu module `character`.                                                          |
+| Tuỳ chọn                   | Mặc định             | Mô tả                                                                                   |
+| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                   | `"$symbol "`         | Định dạng chuỗi sử dụng trước văn bản nhập vào.                                         |
+| `success_symbol`           | `"[❯](bold green)"`  | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu câu lệnh trước đó đã thành công.    |
+| `error_symbol`             | `"[❯](bold red)"`    | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu câu lệnh trước đó đã thất bại.      |
+| `vicmd_symbol`             | `"[❮](bold green)"`  | Định dạng chuỗi sửa dụng trước văn bản nhập vào nếu shell trong chế độ vim normal.      |
+| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                 | `false`              | Disables the `character` module.                                                        |
 
 ### Các biến
 
