@@ -553,7 +553,7 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 | `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.                 |
 | `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.                       |
 | `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.                       |
-| `disabled`                 | `false`              | Disables the `character` module.                                                                        |
+| `disabled`                 | `false`              | Desactiva el módulo `character`.                                                                        |
 
 ### Variables
 
