@@ -537,19 +537,22 @@ format = "via [$name $version]($style)"
 
 ::: warning
 
-`vicmd_symbol` はcmd、fish、zshでのみサポートされています。
+`vicmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### オプション
 
-| オプション            | デフォルト               | 説明                                           |
-| ---------------- | ------------------- | -------------------------------------------- |
-| `format`         | `"$symbol"`         | テキスト入力の前に使用される書式文字列。                         |
-| `success_symbol` | `"[❯](bold green)"` | 前のコマンドが成功した場合にテキスト入力の前に使用される書式文字列です。         |
-| `error_symbol`   | `"[❯](bold red)"`   | 前のコマンドが失敗した場合にテキスト入力の前に使用される書式文字列です。         |
-| `vicmd_symbol`   | `"[❮](bold green)"` | シェルが vim ノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列。 |
-| `disabled`       | `false`             | `character`モジュールを無効にします。                     |
+| オプション                      | デフォルト                | 説明                                                                                      |
+| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                   | `"$symbol"`          | テキスト入力の前に使用される書式文字列。                                                                    |
+| `success_symbol`           | `"[❯](bold green)"`  | 前のコマンドが成功した場合にテキスト入力の前に使用される書式文字列です。                                                    |
+| `error_symbol`             | `"[❯](bold red)"`    | 前のコマンドが失敗した場合にテキスト入力の前に使用される書式文字列です。                                                    |
+| `vicmd_symbol`             | `"[❮](bold green)"`  | シェルが vim ノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列。                                            |
+| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                 | `false`              | Disables the `character` module.                                                        |
 
 ### 変数
 
