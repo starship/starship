@@ -48,5 +48,4 @@ It also shows how path substitution works in starship.
 
 This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json) and is a modified version of [Pastel Powerline](./pastel-powerline-reloaded.md)
 
-
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline-reloaded.png "Click to view Pastel Powerline Reloaded preset")](./pastel-powerline-reloaded.md)
