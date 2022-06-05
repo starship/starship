@@ -113,6 +113,30 @@ unpack() {
     *.tar.gz)
       flags=$(test -n "${VERBOSE-}" && echo "-xzvf" || echo "-xzf")
       ${sudo} tar "${flags}" "${archive}" -C "${bin_dir}"
+      if [ "$sudo" != "" ]; then
+        # set the owner to root instead of whatever was in the tarball
+        "${sudo}" chown root "${bin_dir}/starship"
+        # group ownership of root's binaries varies by platform. It's not
+        # even always groupid 0! This copies the group_id from /bin/sh.
+        # This list includes some platforms that aren't (yet) supported as
+        # future-proofing. NB that GNU stat and BSD stat are annoyingly
+        # different.
+        platform=`uname`
+      # script tested on these platforms
+        if [ "$platform" = "Linux" ]; then
+          "${sudo}" chgrp `stat -c %g /bin/sh` "${bin_dir}/starship"
+        elif [ "$platform" = "Darwin" ]; then # MacOS
+          "${sudo}" chgrp `stat -f %g /bin/sh` "${bin_dir}/starship"
+      # chgrp/stat trick tested on these platforms but not as part of this script
+      # as the rest of the install script / starship / rust aren't fully supported
+        elif [ "$platform" = "FreeBSD" ]; then
+          "${sudo}" chgrp `stat -f %g /bin/sh` "${bin_dir}/starship"
+        elif [ "$platform" = "OpenBSD" ]; then
+          "${sudo}" chgrp `stat -f %g /bin/sh` "${bin_dir}/starship"
+        elif [ "$platform" = "SunOS" ]; then  # tested on IllumOS, but not real Solaris
+          "${sudo}" chgrp `stat -c %g /bin/sh` "${bin_dir}/starship"
+        fi
+      fi
       return 0
       ;;
     *.zip)
