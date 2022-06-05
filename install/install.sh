@@ -111,7 +111,7 @@ unpack() {
 
   case "$archive" in
     *.tar.gz)
-      flags=$(test -n "${VERBOSE-}" && echo "-xzvf" || echo "-xzf")
+      flags=$(test -n "${VERBOSE-}" && echo "-xzvof" || echo "-xzof")
       ${sudo} tar "${flags}" "${archive}" -C "${bin_dir}"
       return 0
       ;;
