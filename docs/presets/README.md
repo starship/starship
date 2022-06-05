@@ -42,10 +42,11 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
 It also shows how path substitution works in starship.
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pastel Powerline preset")](./pastel-powerline)
 
 ## [Pastel Powerline Reloaded](./pastel-powerline-reloaded.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json) and is a modified version of [Pastel Powerline](./pastel-powerline.md)
+This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json) and is a modified version of [Pastel Powerline](./pastel-powerline-reloaded.md)
 
-[![Screenshot of Pastel Powerline Reloaded preset](https://user-images.githubusercontent.com/50550545/172042536-18de6ffa-925a-4dc2-9b4a-3f7f2ec46450.png)](./pastel-powerline-reloaded.md)
+[![Screenshot of Pastel Powerline Reloaded preset](
+[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pastel Powerline Reloaded preset")](./pastel-powerline-reloaded.md)

@@ -9,7 +9,7 @@ It also shows how path substitution works in starship.
 
 ### Prerequisites
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses the Caskaydia Cove Nerd Font)
 
 ### Configuration
 
