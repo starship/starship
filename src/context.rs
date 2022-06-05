@@ -465,13 +465,13 @@ impl DirContents {
 
     pub fn has_any_positive_extension(&self, exts: &[&str]) -> bool {
         exts.iter()
-            .any(|ext| !ext.starts_with("!") && self.has_extension(ext))
+            .any(|ext| !ext.starts_with('!') && self.has_extension(ext))
     }
 
     pub fn has_no_negative_extension(&self, exts: &[&str]) -> bool {
         !exts
             .iter()
-            .any(|ext| ext.starts_with("!") && self.has_extension(&ext[1..]))
+            .any(|ext| ext.starts_with('!') && self.has_extension(&ext[1..]))
     }
 }
 
