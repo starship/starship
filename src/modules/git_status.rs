@@ -9,13 +9,12 @@ use crate::segment::Segment;
 use std::ffi::OsStr;
 use std::sync::Arc;
 
-const ALL_STATUS_FORMAT: &str = "$lfs$conflicted$stashed$deleted$renamed$modified$staged$untracked";
+const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
 
 /// Creates a module with the Git branch in the current directory
 ///
 /// Will display the branch name if the current directory is a git repo
 /// By default, the following symbols will be used to represent the repo's status:
-///   - `lfs` - The repository uses `git lfs` - https://git-lfs.github.com/
 ///   - `=` – This branch has merge conflicts
 ///   - `⇡` – This branch is ahead of the branch being tracked
 ///   - `⇣` – This branch is behind of the branch being tracked
@@ -33,9 +32,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let info = Arc::new(GitStatusInfo::load(context, config.clone()));
 
-    // Return None if not in git repository
+    //Return None if not in git repository
     context.get_repo().ok()?;
-
     if let Some(git_status) = git_status_wsl(context, &config) {
         if git_status.is_empty() {
             return None;
@@ -52,12 +50,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map_style(|variable: &str| match variable {
                 "style" => Some(Ok(config.style)),
-                _ => None,
-            })
-            .map(|variable| match variable {
-                "lfs" => context
-                    .exec_cmd("git", &["config", "--get", "lfs.repositoryformatversion"])
-                    .and_then(|_| Some(Ok(config.lfs))),
                 _ => None,
             })
             .map_variables_to_segments(|variable: &str| {
