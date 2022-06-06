@@ -37,6 +37,7 @@ pub const ALL_MODULES: &[&str] = &[
     "gcloud",
     "git_branch",
     "git_commit",
+    "git_extensions",
     "git_metrics",
     "git_state",
     "git_status",

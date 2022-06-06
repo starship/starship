@@ -38,6 +38,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "vcsh",
     "git_branch",
     "git_commit",
+    "git_extensions",
     "git_state",
     "git_metrics",
     "git_status",
