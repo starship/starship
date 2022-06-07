@@ -1,6 +1,5 @@
 use super::{Context, Module, ModuleConfig};
 use crate::configs::git_extensions::GitExtensionsConfig;
-use crate::context::Repo;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with any git extensions active in the repo at the current directory
@@ -8,15 +7,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_extensions");
     let config: GitExtensionsConfig = GitExtensionsConfig::try_load(module.config);
 
-    let repo = context.get_repo().ok()?;
+    let git_config = context.get_repo().ok()?.open().ok()?.config().ok()?;
 
     let exts = config.extensions;
-    let mut active_exts = "active exts detected: ";
+    let mut active_exts: Vec<&'a str> = vec![];
 
-    // iterate over exts, running functions and appending (with trailing ', ') to active_exts
-
-    // strip trailing ', '
-
+    // iterate over exts, running functions for each one that we know
+    // about and appending to active_exts when a match is found
+    for ext_configured in &exts {
+        match *ext_configured {
+            "lfs" => {
+                // we don't care what the value is, merely that it exists.
+                git_config.get_entry("lfs.repositoryformatversion").ok()?;
+                active_exts.push("lfs")
+            }
+            "no such extension" => {
+                // this exists solely for testing that output works correctly
+                // for multiple detected extensions. If the config says to
+                // look for it it will always be found.
+                active_exts.push("no such extension")
+            }
+            _ => {
+                panic!("I don't know about git extension '{}'", ext_configured)
+            }
+        };
+    }
+    active_exts.sort_unstable();
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -29,7 +45,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "active_exts" => Some(Ok(active_exts)),
+                "active_exts" => {
+                    if active_exts.is_empty() {
+                        None
+                    } else {
+                        Some(Ok(active_exts.join(", ")))
+                    }
+                }
                 _ => None,
             })
             .parse(None, Some(context))
@@ -78,7 +100,6 @@ mod tests {
     #[test]
     fn show_nothing_on_repo_without_extensions() -> io::Result<()> {
         let repo_dir = create_repo()?;
-        // let path = repo_dir.path();
 
         let actual = ModuleRenderer::new("git_extensions")
             .config(toml::toml! {
@@ -96,19 +117,24 @@ mod tests {
     #[test]
     fn show_lfs() -> io::Result<()> {
         let repo_dir = add_lfs_to_repo(create_repo()?)?;
-        // let path = repo_dir.path();
 
+        // NB the order of the exts we're going to look for, it's
+        // not the same as what we expect in the output. The output
+        // is sorted, and this proves it.
         let actual = ModuleRenderer::new("git_extensions")
             .config(toml::toml! {
                 [git_extensions]
                 disabled=false
+                extensions=["no such extension", "lfs"]
             })
             .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(
-            "{} ",
-            Color::Fixed(149).bold().paint("git_exts: lemon curry")
+            "{}",
+            Color::Fixed(149)
+                .bold()
+                .paint("git exts: lfs, no such extension ")
         ));
 
         assert_eq!(expected, actual);
@@ -117,13 +143,9 @@ mod tests {
 
     fn add_lfs_to_repo(repo_dir: tempfile::TempDir) -> io::Result<tempfile::TempDir> {
         run_git_cmd(
-            &[
-                "config",
-                "lfs.repositoryformatversion",
-                "0",
-            ],
+            &["config", "lfs.repositoryformatversion", "0"],
             Some(repo_dir.path()),
-            true
+            true,
         )?;
 
         Ok(repo_dir)
@@ -222,7 +244,7 @@ mod tests {
         //     Some(path),
         //     true,
         // )?;
-        // 
+        //
         // // Switch back to master, and commit a third change to the file
         // run_git_cmd(&["checkout", "master"], Some(path), true)?;
         // write_file("Version C")?;
@@ -234,5 +256,4 @@ mod tests {
 
         Ok(repo_dir)
     }
-
 }
