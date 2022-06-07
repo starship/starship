@@ -319,6 +319,15 @@ For more information about these matters see
 https://www.gnu.org/licenses/."#
             ),
         }),
+        "raku --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Welcome to Rakudo™ v2021.12.
+Implementing the Raku® Programming Language v6.d.
+Built on MoarVM version 2021.12.\n",
+            ),
+            stderr: String::default(),
+        }),
         "red --version" => Some(CommandOutput {
             stdout: String::from("0.6.4\n"),
             stderr: String::default()
