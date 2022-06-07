@@ -534,6 +534,22 @@
         }
       ]
     },
+    "git_extensions": {
+      "default": {
+        "disabled": true,
+        "extensions": [
+          "lfs"
+        ],
+        "format": "[($symbol$active_exts )]($style)",
+        "style": "149 bold",
+        "symbol": "git exts: "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GitExtensionsConfig"
+        }
+      ]
+    },
     "git_metrics": {
       "default": {
         "added_style": "bold green",
@@ -2950,6 +2966,36 @@
         }
       },
       "additionalProperties": false
+    },
+    "GitExtensionsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[($symbol$active_exts )]($style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "149 bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "git exts: ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "extensions": {
+          "default": [
+            "lfs"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "GitMetricsConfig": {
       "type": "object",
