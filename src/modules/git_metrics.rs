@@ -118,7 +118,7 @@ mod tests {
 
     use nu_ansi_term::Color;
 
-    use crate::test::ModuleRenderer;
+    use crate::test::{create_repo, write_file, ModuleRenderer};
 
     #[test]
     fn shows_nothing_on_empty_dir() -> io::Result<()> {
@@ -135,7 +135,7 @@ mod tests {
 
     #[test]
     fn shows_added_lines() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
+        let repo_dir = create_repo()?;
         let path = repo_dir.path();
 
         let the_file = path.join("the_file");
@@ -153,7 +153,7 @@ mod tests {
 
     #[test]
     fn shows_deleted_lines() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
+        let repo_dir = create_repo()?;
         let path = repo_dir.path();
 
         let file_path = path.join("the_file");
@@ -169,7 +169,7 @@ mod tests {
 
     #[test]
     fn shows_all_changes() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
+        let repo_dir = create_repo()?;
         let path = repo_dir.path();
 
         let file_path = path.join("the_file");
@@ -189,7 +189,7 @@ mod tests {
 
     #[test]
     fn shows_nothing_if_no_changes() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
+        let repo_dir = create_repo()?;
         let path = repo_dir.path();
 
         let actual = render_metrics(path);
@@ -201,7 +201,7 @@ mod tests {
 
     #[test]
     fn shows_all_if_only_nonzero_diffs_is_false() -> io::Result<()> {
-        let repo_dir = create_repo_with_commit()?;
+        let repo_dir = create_repo()?;
         let path = repo_dir.path();
 
         let the_file = path.join("the_file");

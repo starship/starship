@@ -159,12 +159,14 @@ struct StateDescription<'a> {
 mod tests {
     use nu_ansi_term::Color;
     use std::ffi::OsStr;
-    use std::io::{self, Error, ErrorKind};
+    use std::fs::OpenOptions;
+    use std::io::{self, Error, ErrorKind, Write};
     use std::path::Path;
     use std::process::Stdio;
 
     use crate::test::ModuleRenderer;
     use crate::utils::{create_command, write_file};
+    use crate::test::{create_repo, run_git_cmd, ModuleRenderer};
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -182,7 +184,7 @@ mod tests {
 
     #[test]
     fn shows_rebasing() -> io::Result<()> {
-        let repo_dir = create_repo_with_conflict()?;
+        let repo_dir = make_conflict_on_repo(create_repo()?)?;
         let path = repo_dir.path();
 
         run_git_cmd(["rebase", "other-branch"], Some(path), false)?;
@@ -197,7 +199,7 @@ mod tests {
 
     #[test]
     fn shows_merging() -> io::Result<()> {
-        let repo_dir = create_repo_with_conflict()?;
+        let repo_dir = make_conflict_on_repo(create_repo()?)?;
         let path = repo_dir.path();
 
         run_git_cmd(["merge", "other-branch"], Some(path), false)?;
@@ -212,7 +214,7 @@ mod tests {
 
     #[test]
     fn shows_cherry_picking() -> io::Result<()> {
-        let repo_dir = create_repo_with_conflict()?;
+        let repo_dir = make_conflict_on_repo(create_repo()?)?;
         let path = repo_dir.path();
 
         run_git_cmd(["cherry-pick", "other-branch"], Some(path), false)?;
@@ -230,7 +232,7 @@ mod tests {
 
     #[test]
     fn shows_bisecting() -> io::Result<()> {
-        let repo_dir = create_repo_with_conflict()?;
+        let repo_dir = make_conflict_on_repo(create_repo()?)?;
         let path = repo_dir.path();
 
         run_git_cmd(["bisect", "start"], Some(path), false)?;
@@ -245,7 +247,7 @@ mod tests {
 
     #[test]
     fn shows_reverting() -> io::Result<()> {
-        let repo_dir = create_repo_with_conflict()?;
+        let repo_dir = make_conflict_on_repo(create_repo()?)?;
         let path = repo_dir.path();
 
         run_git_cmd(["revert", "--no-commit", "HEAD~1"], Some(path), false)?;
@@ -258,35 +260,8 @@ mod tests {
         repo_dir.close()
     }
 
-    fn run_git_cmd<A, S>(args: A, dir: Option<&Path>, should_succeed: bool) -> io::Result<()>
-    where
-        A: IntoIterator<Item = S>,
-        S: AsRef<OsStr>,
-    {
-        let mut command = create_command("git")?;
-        command
-            .args(args)
-            .stdout(Stdio::null())
-            .stderr(Stdio::null())
-            .stdin(Stdio::null());
-
-        if let Some(dir) = dir {
-            command.current_dir(dir);
-        }
-
-        let status = command.status()?;
-
-        if should_succeed && !status.success() {
-            Err(Error::from(ErrorKind::Other))
-        } else {
-            Ok(())
-        }
-    }
-
-    fn create_repo_with_conflict() -> io::Result<tempfile::TempDir> {
-        let repo_dir = tempfile::tempdir()?;
+    fn make_conflict_on_repo(repo_dir: tempfile::TempDir) -> io::Result<tempfile::TempDir> {
         let path = repo_dir.path();
-        let conflicted_file = repo_dir.path().join("the_file");
 
         // Initialize a new git repo
         run_git_cmd(

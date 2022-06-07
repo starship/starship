@@ -7,8 +7,11 @@ use crate::{
 };
 use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
-use std::io;
+use std::ffi::OsStr;
+use std::fs::OpenOptions;
+use std::io::{self, Error, ErrorKind, Write};
 use std::path::{Path, PathBuf};
+use std::process::Stdio;
 use tempfile::TempDir;
 
 static FIXTURE_DIR: Lazy<PathBuf> =
@@ -42,6 +45,100 @@ pub fn default_context() -> Context<'static> {
     );
     context.config = StarshipConfig { config: None };
     context
+}
+
+pub fn create_repo() -> io::Result<tempfile::TempDir> {
+    let repo_dir = tempfile::tempdir()?;
+    let path = repo_dir.path();
+    let file_in_repo = repo_dir.path().join("some_file");
+
+    // let write_file = |text: &str| {
+    //     let mut file = OpenOptions::new()
+    //         .write(true)
+    //         .create(true)
+    //         .truncate(true)
+    //         .open(&file_in_repo)?;
+    //     writeln!(file, "{}", text)
+    // };
+
+    // Initialize a new git repo
+    run_git_cmd(
+        &[
+            "init",
+            "--quiet",
+            path.to_str().expect("Path was not UTF-8"),
+        ],
+        None,
+        true,
+    )?;
+
+    // Set local author info
+    run_git_cmd(
+        &["config", "--local", "user.email", "starship@example.com"],
+        Some(path),
+        true,
+    )?;
+    run_git_cmd(
+        &["config", "--local", "user.name", "starship"],
+        Some(path),
+        true,
+    )?;
+
+    // Ensure on the expected branch.
+    // If build environment has `init.defaultBranch` global set
+    // it will default to an unknown branch, so need to make & change branch
+    run_git_cmd(
+        &["checkout", "-b", "master"],
+        Some(path),
+        // command expected to fail if already on the expected branch
+        false,
+    )?;
+
+    // Write a file on master and commit it
+    write_file(file_in_repo, "First Line\nSecond Line\nThird Line")?;
+    run_git_cmd(&["add", "some_file"], Some(path), true)?;
+    run_git_cmd(
+        &["commit", "--message", "Commit A", "--no-gpg-sign"],
+        Some(path),
+        true,
+    )?;
+
+    Ok(repo_dir)
+}
+
+pub fn run_git_cmd<A, S>(args: A, dir: Option<&Path>, should_succeed: bool) -> io::Result<()>
+where
+    A: IntoIterator<Item = S>,
+    S: AsRef<OsStr>,
+{
+    let mut command = create_command("git")?;
+    command
+        .args(args)
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .stdin(Stdio::null());
+
+    if let Some(dir) = dir {
+        command.current_dir(dir);
+    }
+
+    let status = command.status()?;
+
+    if should_succeed && !status.success() {
+        Err(Error::from(ErrorKind::Other))
+    } else {
+        Ok(())
+    }
+}
+
+pub fn write_file(file: PathBuf, text: &str) -> io::Result<()> {
+    let mut file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(&file)?;
+    writeln!(file, "{}", text)?;
+    file.sync_all()
 }
 
 /// Render a specific starship module by name
