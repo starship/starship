@@ -1641,6 +1641,44 @@ commit_hash_length = 4
 tag_symbol = '🔖 '
 ```
 
+## Git Extensions
+
+The `git_extensions` module shows which git extenions (if any) are enabled in the repo in your current directory.
+
+### Options
+
+| Option       | Default                              | Description                                     |
+| ------------ | ------------------------------------ | ----------------------------------------------- |
+| `format`     | `"[($symbol$active_exts )]($style)"` | The format for the module.                      |
+| `style`      | `"bold green"`                       | The style for the module.                       |
+| `symbol`     | `"git exts: "`                       | The symbol for the module.                      |
+| `disabled`   | `true`                               | Disables the `git_extensions` module.           |
+| `extensions` | `[ "lfs" ]`                          | The list of extensions to look for when enabled |
+
+Starship needs extension-specific code for each extension. The extensions currently supported are:
+
+- lfs - extension for versioning large files: https://git-lfs.github.com/
+
+If an extensions you're interested in is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+
+### Variables
+
+| Variable    | Example | Description                              |
+| ----------- | ------- | ---------------------------------------- |
+| active_exts | `lfs`   | Comma-seperated list of extensions found |
+| style       |         | Mirrors the value of option `style`      |
+| symbol      |         | Mirrors the value of option `symbol`     |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_extensions]
+active_exts = ["lfs"]
+disabled = false
+```
+
 ## Git State
 
 The `git_state` module will show in directories which are part of a git
