@@ -8,7 +8,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 ### Prerequisite
 
-- A [Jetbrains Font](https://www.jetbrains.com/lp/mono/) installed and enabled in the terminal.
+- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) installed and enabled in the terminal.
 
 ### Configuration
 
