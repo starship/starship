@@ -31,3 +31,6 @@ docs/.vuepress/dist/
 
 # Ignore pkg files within the install directory
 install/**/*.pkg
+
+# DS Store
+.DS_Store
