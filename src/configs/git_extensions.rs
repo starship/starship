@@ -18,7 +18,7 @@ impl<'a> Default for GitExtensionsConfig<'a> {
             style: "149 bold",
             symbol: "git exts: ",
             disabled: true,
-            extensions: vec!["lfs"],
+            extensions: vec!["lfs", "svn"],
         }
     }
 }

@@ -21,11 +21,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 git_config.get_entry("lfs.repositoryformatversion").ok()?;
                 active_exts.push("lfs")
             }
-            "no such extension" => {
-                // this exists solely for testing that output works correctly
-                // for multiple detected extensions. If the config says to
-                // look for it it will always be found.
-                active_exts.push("no such extension")
+            "svn" => {
+                git_config.get_entry("svn-remote.svn.url").ok()?;
+                active_exts.push("svn")
             }
             _ => {
                 panic!("I don't know about git extension '{}'", ext_configured)
@@ -113,23 +111,65 @@ mod tests {
     fn show_lfs() -> io::Result<()> {
         let repo_dir = add_lfs_to_repo(create_repo()?)?;
 
-        // NB the order of the exts we're going to look for, it's
-        // not the same as what we expect in the output. The output
-        // is sorted, and this proves it.
         let actual = ModuleRenderer::new("git_extensions")
             .config(toml::toml! {
                 [git_extensions]
                 disabled=false
-                extensions=["no such extension", "lfs"]
+                extensions=["lfs"]
             })
             .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(
             "{}",
-            Color::Fixed(149)
-                .bold()
-                .paint("git exts: lfs, no such extension ")
+            Color::Fixed(149).bold().paint("git exts: lfs ")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn show_svn() -> io::Result<()> {
+        let repo_dir = add_svn_to_repo(create_repo()?)?;
+
+        let actual = ModuleRenderer::new("git_extensions")
+            .config(toml::toml! {
+                [git_extensions]
+                disabled=false
+                extensions=["svn"]
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{}",
+            Color::Fixed(149).bold().paint("git exts: svn ")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn show_multiple() -> io::Result<()> {
+        let repo_dir = add_svn_to_repo(add_lfs_to_repo(create_repo()?)?)?;
+
+        let actual = ModuleRenderer::new("git_extensions")
+            // NB that the order of extensions in this config is reversed
+            // from what we expect. This proves both that a comma-seperated
+            // list is generated, and that it is sorted.
+            .config(toml::toml! {
+                [git_extensions]
+                disabled=false
+                extensions=["svn", "lfs"]
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{}",
+            Color::Fixed(149).bold().paint("git exts: lfs, svn ")
         ));
 
         assert_eq!(expected, actual);
@@ -139,6 +179,16 @@ mod tests {
     fn add_lfs_to_repo(repo_dir: tempfile::TempDir) -> io::Result<tempfile::TempDir> {
         run_git_cmd(
             &["config", "lfs.repositoryformatversion", "0"],
+            Some(repo_dir.path()),
+            true,
+        )?;
+
+        Ok(repo_dir)
+    }
+
+    fn add_svn_to_repo(repo_dir: tempfile::TempDir) -> io::Result<tempfile::TempDir> {
+        run_git_cmd(
+            &["config", "svn-remote.svn.url", "0"],
             Some(repo_dir.path()),
             true,
         )?;

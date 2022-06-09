@@ -1653,11 +1653,12 @@ The `git_extensions` module shows which git extenions (if any) are enabled in th
 | `style`      | `"bold green"`                       | The style for the module.                       |
 | `symbol`     | `"git exts: "`                       | The symbol for the module.                      |
 | `disabled`   | `true`                               | Disables the `git_extensions` module.           |
-| `extensions` | `[ "lfs" ]`                          | The list of extensions to look for when enabled |
+| `extensions` | `[ "lfs", "svn" ]`                   | The list of extensions to look for when enabled |
 
 Starship needs extension-specific code for each extension. The extensions currently supported are:
 
 - lfs - extension for versioning large files: https://git-lfs.github.com/
+- svn - bidirectional operation between a subversion repository and git: https://git-scm.com/docs/git-svn
 
 If an extensions you're interested in is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
 
