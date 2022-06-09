@@ -328,14 +328,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）:
+Nushellの環境ファイルの最後に以下を追記してください ( `$nu.env-path` を実行してください):
 
 ```sh
 mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
+そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):
 
 ```sh
 source ~/.cache/starship/init.nu
@@ -348,7 +348,7 @@ source ~/.cache/starship/init.nu
 <details>
 <summary>PowerShell</summary>
 
-PowerShellの設定ファイルの最後に以下を追加してください。(`$PROFILE` を実行してください):
+PowerShellの設定ファイルの最後に以下を追記してください (`$PROFILE` を実行してください):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
