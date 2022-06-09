@@ -278,21 +278,11 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when
-credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this
-module to show the region and profile even when the credentials have not been setup
-with the `force_display` option. This is based on
-`AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
-`~/.aws/config` file. This module also shows an expiration timer when using temporary
-credentials.
+The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.
+The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in
-`~/.aws/credentials` or a `credential_process` is defined in
-`~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`,
-`AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will
-also suffice.
-If the option `force_display` is set to `true`, all available information will be
-displayed even if the conditions above are not respected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
+If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
