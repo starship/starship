@@ -538,7 +538,8 @@
       "default": {
         "disabled": true,
         "extensions": [
-          "lfs"
+          "lfs",
+          "svn"
         ],
         "format": "[($symbol$active_exts )]($style)",
         "style": "149 bold",
@@ -2988,7 +2989,8 @@
         },
         "extensions": {
           "default": [
-            "lfs"
+            "lfs",
+            "svn"
           ],
           "type": "array",
           "items": {
