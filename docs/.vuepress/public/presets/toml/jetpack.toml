@@ -11,9 +11,9 @@ right_format = """$battery$time$git_status"""
 
 add_newline = true
 
-[character] 
+[character]
 format = "$symbol "
-success_symbol = "[●](italic bright-green)" 
+success_symbol = "[●](italic bright-green)"
 error_symbol = "[▼](italic red)"
 vicmd_symbol = "[◆](italic bright-yellow)"
 
@@ -61,11 +61,11 @@ discharging_symbol = "[▽](italic)"
 unknown_symbol = "[░](italic yellow)"
 empty_symbol = "[▃](italic red)"
 
-[[battery.display]] 
+[[battery.display]]
 threshold = 40
 style = "dimmed yellow"
 
-[[battery.display]] 
+[[battery.display]]
 threshold = 70
 style = "dimmed white"
 
@@ -78,7 +78,7 @@ style = "bold cyan"
 style = "italic cyan"
 format = """ ([⎪$ahead_behind$staged$modified$untracked$renamed$deleted$conflicted$stashed⎥]($style))"""
 conflicted = "[─◪](italic bright-magenta)"
-ahead = "[▲│[${count}](bold white)│](italic green)" 
+ahead = "[▲│[${count}](bold white)│](italic green)"
 behind = "[▽│[${count}](bold white)│](italic red)"
 diverged = "[─◇ ▲┤[${ahead_count}](regular white)│▽┤[${behind_count}](regular white)│](italic bright-magenta)"
 untracked = "[◌─](italic bright-yellow)"
@@ -194,4 +194,3 @@ format = "nix [$symbol$state $name]($style) "
 [spack]
 symbol = "◇ "
 format = "spack [$symbol$environment]($style) "
-
