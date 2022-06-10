@@ -85,7 +85,7 @@ style = "bold cyan"
 
 [git_status]
 style = "italic cyan"
-format = """ ([⎪$ahead_behind$modified$untracked$renamed$deleted$conflicted$stashed$staged⎥]($style))"""
+format = """ ([⎪$ahead_behind$staged$modified$untracked$renamed$deleted$conflicted$stashed⎥]($style))"""
 conflicted = "[─◪](italic bright-magenta)"
 ahead = "[▲│[${count}](bold white)│](italic green)" 
 behind = "[▽│[${count}](bold white)│](italic red)"
