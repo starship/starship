@@ -11,20 +11,17 @@ right_format = """$battery$time$git_status"""
 
 add_newline = true
 
-
 [character] 
 format = "$symbol "
 success_symbol = "[●](italic bright-green)" 
 error_symbol = "[▼](italic red)"
 vicmd_symbol = "[◆](italic bright-yellow)"
 
-
 [sudo]
 format = "[$symbol]($style)"
 style = "italic bright-purple"
-symbol = "◇┈" # ⊙⊃⊔
+symbol = "◇┈"
 disabled = false
-
 
 [directory]
 home_symbol = "⌂"
@@ -34,23 +31,19 @@ read_only = " △"
 use_os_path_sep = true
 style = "italic bright-blue"
 
-
 [cmd_duration]
 min_time = 500
 format = "[ ◕ $duration](bold dimmed yellow)"
-
 
 [jobs]
 format = "[$symbol$number]($style) "
 style = "white"
 symbol = "[▶ ](blue italic)"
 
-
 [localip]
 ssh_only = true
 format = "◯[$localipv4](bold magenta) "
 disabled = false
-
 
 [time]
 disabled = false
@@ -59,7 +52,6 @@ time_format = "%R"
 utc_time_offset = "local"
 style = "dimmed white" # not working
 # time_range = "00:00:00-07:00:00"
-
 
 [battery]
 format = "[$percentage $symbol]($style)"
@@ -76,7 +68,6 @@ style = "dimmed yellow"
 [[battery.display]] 
 threshold = 70
 style = "dimmed white"
-
 
 [git_branch]
 format = "[$symbol $branch(:$remote_branch)]($style) "
@@ -96,7 +87,6 @@ modified = "[●─](italic bright-yellow)"
 staged = "[■┤[$count](bold white)│](italic bright-cyan)"
 renamed = "[◎─](italic yellow)"
 deleted = "[✕](italic red)"
-
 
 [deno]
 format = "deno [∫ $version](blue italic) "
