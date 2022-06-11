@@ -47,7 +47,7 @@ disabled = false
 
 [time]
 disabled = false
-format = "[$time [◔](italic white)]($style)"
+format = "[ $time [◔](italic white)]($style)"
 time_format = "%R"
 utc_time_offset = "local"
 style = "dimmed white" # not working
