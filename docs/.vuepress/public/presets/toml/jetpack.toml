@@ -100,19 +100,19 @@ version_format = "${major}.${minor}"
 # detect_extensions = ["js", "mjs", "cjs", "ts", "mts", "cts"]
 
 [python]
-format = "py [${symbol}${pyenv_prefix} ${version} $virtualenv]($style)"
-symbol = "∫∫ "
+format = "py [${symbol}${version}]($style) "
+symbol = "[⌉](italic bright-blue)⌊ "
 version_format = "${major}.${minor}"
 style = "italic bright-yellow"
 
 [ruby]
-format = "rb [${symbol}${pyenv_prefix} ${version} $virtualenv ]($style)"
+format = "rb [${symbol}${version}]($style) "
 symbol = "◆ "
 version_format = "${major}.${minor}"
-style = "tialic red"
+style = "italic red"
 
 [rust]
-format = "rust [$symbol$version]($style)"
+format = "rust [$symbol$version]($style) "
 symbol = "⊃ "
 version_format = "${major}.${minor}"
 style = "italic red"
@@ -124,24 +124,24 @@ symbol = "◫ "
 style = "bright-yellow italic"
 
 [swift]
-format = "sw [${symbol}${pyenv_prefix} ${version} $virtualenv]($style)"
+format = "sw [${symbol}${version}]($style) "
 symbol = "◁ "
 style = "italic bright-red"
 version_format = "${major}.${minor}"
 
 [aws]
 disabled = true
-format = "aws [$symbol $profile $region]($style)"
+format = "aws [$symbol $profile $region]($style) "
 style = "italic blue"
 symbol = "▲ "
 
 [buf]
 symbol = "■ "
-format = "buf [$symbol $version $buf_version]($style)"
+format = "buf [$symbol $version $buf_version]($style) "
 
 [c]
 symbol = "∁ "
-format = "c [$symbol($version(-$name) )]($style)"
+format = "c [$symbol($version(-$name))]($style) "
 
 [conda]
 symbol = "◯ "
@@ -149,7 +149,7 @@ format = "conda [$symbol$environment]($style) "
 
 [dart]
 symbol = "◁◅ "
-format = "dart [$symbol($version )]($style)"
+format = "dart [$symbol($version )]($style) "
 
 [docker_context]
 symbol = "◧ "
@@ -157,27 +157,27 @@ format = "dock [$symbol$context]($style) "
 
 [elixir]
 symbol = "△ "
-format = "elixir [$symbol $version OTP $otp_version]($style)"
+format = "elixir [$symbol $version OTP $otp_version ]($style) "
 
 [elm]
 symbol = "◩ "
-format = "elm [$symbol($version )]($style)"
+format = "elm [$symbol($version )]($style) "
 
 [golang]
 symbol = "∩ "
-format = "go [$symbol($version )]($style)"
+format = "go [$symbol($version )]($style) "
 
 [haskell]
 symbol = "❯λ "
-format = "hs [$symbol($version )]($style)"
+format = "hs [$symbol($version )]($style) "
 
 [java]
 symbol = "∪ "
-format = "java [${symbol}(${version} )]($style)"
+format = "java [${symbol}(${version} )]($style) "
 
 [julia]
 symbol = "◎ "
-format = "julia [$symbol($version )]($style)"
+format = "julia [$symbol($version )]($style) "
 
 [memory_usage]
 symbol = "▪▫▪ "
@@ -185,7 +185,7 @@ format = "mem [${ram}( ${swap})]($style) "
 
 [nim]
 symbol = "▴▲▴ "
-format = "nim [$symbol($version )]($style)"
+format = "nim [$symbol($version )]($style) "
 
 [nix_shell]
 symbol = "⊛ "
@@ -194,3 +194,4 @@ format = "nix [$symbol$state $name]($style) "
 [spack]
 symbol = "◇ "
 format = "spack [$symbol$environment]($style) "
+
