@@ -269,9 +269,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-Le module `aws` affiche la région et le profil AWS actuelle quand des identifiants, un `credential_process` ou une `sso_start_url` ont été configurées. Vous pouvez aussi forcer ce module à afficher la région et le profil, même quand les identifiants n’ont pas été configurés, avec l’option `force_display`. Il se base sur les variables d’environnement `AWS_REGION`, `AWS_DEFAULT_REGION` et `AWS_PROFILE` avec un fichier `~/.aws/config`. Ce module montre aussi un minuteur d’expiration lors de l’utilisation d’identifiants temporaires.
+The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-Le module n’affichera un profil que si ses identifiants sont présents dans `~/.aws/credentials` ou si un `credential_process` est définie dans `~/.aws/config`. Sinon, avoir l’une des variables d’environnement `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` ou `AWS_SESSION_TOKEN` définie est suffisant. Si l’option `force_display` est définie à `true`, toutes les informations disponibles seront affichées même si les conditions ne sont pas respectées.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 Lorsque vous utilisez [aws-vault](https://github.com/99designs/aws-vault) le profil est lu à partir de la variable d'environnement `AWS_VAULT` et la date d'expiration des identifiants est lue à partir de la variable d'environnement `AWS_SESSION_EXPIRATION`.
 
