@@ -34,7 +34,7 @@ STATUS=$?
 # 获取运行后台程序的数量
 NUM_JOBS=$(jobs -p | wc -l)
 
-# Set the prompt to the output of `starship prompt`
+# 设置提示符为 `starship prompt` 的输出
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
