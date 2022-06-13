@@ -403,6 +403,8 @@ impl DirContents {
                         // to match both.
 
                         // find the minimal extension on a file. ie, the gz in foo.tar.gz
+                        // NB the .to_string_lossy().to_string() here looks weird but is
+                        // required to convert it from a Cow.
                         path.extension()
                             .map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
 
@@ -410,12 +412,12 @@ impl DirContents {
                         path.file_name().map(|file_name| {
                             file_name
                                 .to_string_lossy()
-                                .to_string()
                                 .split_once('.')
                                 .map(|(_, after)| extensions.insert(after.to_string()))
                         });
                     }
                     if let Some(file_name) = path.file_name() {
+                        // this .to_string_lossy().to_string() is also required
                         file_names.insert(file_name.to_string_lossy().to_string());
                     }
                     files.insert(path);
