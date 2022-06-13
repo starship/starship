@@ -50,19 +50,19 @@ Starship 会处理所提供的全部上下文参数并在提示符中显示，�
 
 ## 我如何在 Linux 发行版上使用旧版本 glibc 运行 Starship？
 
-If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
+若您在使用预构建的程序时，遇到类似“_version 'GLIBC_2.18' not found (required by starship)_”的错误（例如在 CentOS 6 或 7 里运行）您可以使用 `musl` 的编译版本，而非 `glibc` 版本。
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## 为什么我会遇到 `Executing command "..." timed out.` 警告？
 
-Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+Starship 会执行数个不同的命令来获取应该显示的信息，例如某个程序的版本号、现在 Git 的工作树状态。 为保证 Starship 不会在执行某条命令时卡住，Starship 会终止执行时间过长的命令并且输出以上警告。这是正常现象。 若希望增加时长限制，它可以在 [`command_timeout` 设置](/config/#prompt) 处自定义。 您也可以按照下文的调试步骤查看并优化运行慢的命令。 最后，您也可以设置环境变量 `STARSHIP_LOG` 为 `error` 来隐藏这些警告。
 
-## I see symbols I don't understand or expect, what do they mean?
+## 我不理解某些符号，它们是什么意思？
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+若您不清楚某些符号，可以使用 `starship explain` 查看正在显示的组件。
 
 ## Starship is doing something unexpected, how can I debug it?
 
@@ -86,15 +86,15 @@ Finally if you find a bug you can use the `bug-report` command to create a Githu
 starship bug-report
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## 为什么我在提示符中看不到某个字符？
 
 最常见的原因是系统配置有问题。 有个别Linux发行版不自带对字体的支持。 请确保：
 
-- Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
+- 您的字符集应设置为 UTF-8，例如 `de_DE.UTF-8` 或 `ja_JP.UTF-8`。 若 `LC_ALL` 不是 UTF-8， [你需要手动设置它](https://www.tecmint.com/set-system-locales-in-linux/)。
 - 安装了 emoji 字体。 大部分系统都会自带 emoji 字体，但有些系统（例如 Arch Linux）则没有。 字体一般可以用系统的包管理器安装，常见的字体有 [Noto emoji](https://www.google.com/get/noto/help/emoji/) 等。
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- 您正在使用 [Nerd Font](https://www.nerdfonts.com/)。
 
-To test your system, run the following commands in a terminal:
+在终端内运行以下命令来测试：
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
@@ -103,7 +103,7 @@ echo -e "\xee\x82\xa0"
 
 第一行应该显示出一个[蛇的 emoji](https://emojipedia.org/snake/)，第二行应该显示出 [powerline 的分支符号（e0a0）。](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+若任一符号显示错误，则您的系统配置不正确。 有些时候正确配置字体并不简单。 Discord 里的用户或许能提供帮助。 若两个字符显示正确，但您仍然不能在 Starship 中看到那个字符，请 [提交错误报告](https://github.com/starship/starship/issues/new/choose)！
 
 ## 如何卸载 Starship？
 
@@ -117,6 +117,6 @@ Starship 的卸载过程与安装过程一样简单。
 如果 Starship 是用安装脚本安装的，可以用以下命令删除二进制文件：
 
 ```sh
-# Locate and delete the starship binary
+# 找到并且删除 Starship 二进制文件
 sh -c 'rm "$(command -v 'starship')"'
 ```
