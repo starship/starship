@@ -64,23 +64,23 @@ Starship 会执行数个不同的命令来获取应该显示的信息，例如�
 
 若您不清楚某些符号，可以使用 `starship explain` 查看正在显示的组件。
 
-## Starship is doing something unexpected, how can I debug it?
+## Starship 运行不正常，我该如何调试？
 
-You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
+您可以使用环境变量 `STARSHIP_LOG` 来开启调试日志。 这些日志可能过于详细，所以更常使用 `module` 来调试特定的组件。例如要调试 `rust` 组件，您可以使用下列命令来获取它的日志和输出。
 
 ```sh
 env STARSHIP_LOG=trace starship module rust
 ```
 
-If starship is being slow you can try using the `timings` command to see if there is a particular module or command that to blame.
+若 Starship 运行缓慢，您可以使用 `timings` 命令查看运行缓慢的组件或命令。
 
 ```sh
 env STARSHIP_LOG=trace starship timings
 ```
 
-This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
+它会输出日志，并且记录有输出的组件、运行时长超过 1 毫秒的组件。
 
-Finally if you find a bug you can use the `bug-report` command to create a Github issue.
+最后，如果您发现了错误，可以使用 `bug-report` 命令创建 GitHub Issue。
 
 ```sh
 starship bug-report
