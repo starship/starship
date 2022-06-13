@@ -1,4 +1,4 @@
-# Frequently Asked Questions
+# 常见问题
 
 ## 主页示例图中的效果用的是什么配置？
 
@@ -12,26 +12,26 @@
 
 ## 如何实现示例图中自动补全的功能？
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+命令自动补全功能是由您选择的 Shell 提供。 演示中的自动补全由 [Fish Shell](https://fishshell.com/) 完成，它默认开启自动补全。 若您使用 Z Shell (zsh)，推荐您查看 [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)。
 
-## Do top level `format` and `<module>.disabled` do the same thing?
+## 顶层配置 `format` 与 `<module>.disabled` 的功能是相同的吗？
 
 是的，他们都可以用来禁用提示符中的组件。 如果你只是想禁用组件，推荐使用 `<module>.disabled`，原因如下：
 
-- Disabling modules is more explicit than omitting them from the top level `format`
+- 在顶层配置 `format` 里忽略组件与禁用组件相比较，后者更加明确
 - 当 Starship 升级后，新组件将能够自动被加入提示符中
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## 文档中写 Starship 在任何 Shell 中都能运行。 为什么我常用的 Shell 不支持？
 
 Starship 的构建方式决定了它应当能够增加对几乎所有 shell 的支持。 Starship 的二进制文件是无状态、不知道当前 shell 的，所以只要你的 shell 支持自定义提示符和 shell 扩展，就能使用 Starship。
 
 这是一个在 bash 上使用 Starship 的简单例子：
 
 ```sh
-# Get the status code from the last command executed
+# 获取最后执行命令的返回值
 STATUS=$?
 
-# Get the number of jobs running.
+# 获取运行后台程序的数量
 NUM_JOBS=$(jobs -p | wc -l)
 
 # Set the prompt to the output of `starship prompt`
@@ -48,7 +48,7 @@ starship prompt --help
 
 Starship 会处理所提供的全部上下文参数并在提示符中显示，但没有参数是“必需”的。
 
-## How do I run Starship on Linux distributions with older versions of glibc?
+## 我如何在 Linux 发行版上使用旧版本 glibc 运行 Starship？
 
 If you get an error like "_version 'GLIBC_2.18' not found (required by starship)_" when using the prebuilt binary (for example, on CentOS 6 or 7), you can use a binary compiled with `musl` instead of `glibc`:
 
