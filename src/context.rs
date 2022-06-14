@@ -449,25 +449,41 @@ impl DirContents {
         self.file_names.contains(name)
     }
 
-    pub fn has_any_file_name(&self, names: &[&str]) -> bool {
-        names.iter().any(|name| self.has_file_name(name))
-    }
-
     pub fn has_folder(&self, path: &str) -> bool {
         self.folders.contains(Path::new(path))
-    }
-
-    pub fn has_any_folder(&self, paths: &[&str]) -> bool {
-        paths.iter().any(|path| self.has_folder(path))
     }
 
     pub fn has_extension(&self, ext: &str) -> bool {
         self.extensions.contains(ext)
     }
 
+    pub fn has_any_positive_file_name(&self, names: &[&str]) -> bool {
+        names
+            .iter()
+            .any(|name| !name.starts_with('!') && self.has_file_name(name))
+    }
+
+    pub fn has_any_positive_folder(&self, paths: &[&str]) -> bool {
+        paths
+            .iter()
+            .any(|path| !path.starts_with('!') && self.has_folder(path))
+    }
+
     pub fn has_any_positive_extension(&self, exts: &[&str]) -> bool {
         exts.iter()
             .any(|ext| !ext.starts_with('!') && self.has_extension(ext))
+    }
+
+    pub fn has_no_negative_file_name(&self, names: &[&str]) -> bool {
+        !names
+            .iter()
+            .any(|name| name.starts_with('!') && self.has_file_name(&name[1..]))
+    }
+
+    pub fn has_no_negative_folder(&self, paths: &[&str]) -> bool {
+        !paths
+            .iter()
+            .any(|path| path.starts_with('!') && self.has_folder(&path[1..]))
     }
 
     pub fn has_no_negative_extension(&self, exts: &[&str]) -> bool {
@@ -540,14 +556,16 @@ impl<'a> ScanDir<'a> {
     /// based on the current `PathBuf` check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
-        // if there exists a file with an extension we've said we don't want,
+        // if there exists a file with a file/folder/ext we've said we don't want,
         // fail the match straight away
         self.dir_contents.has_no_negative_extension(self.extensions)
+            && self.dir_contents.has_no_negative_file_name(self.files)
+            && self.dir_contents.has_no_negative_folder(self.folders)
             && (self
                 .dir_contents
                 .has_any_positive_extension(self.extensions)
-                || self.dir_contents.has_any_folder(self.folders)
-                || self.dir_contents.has_any_file_name(self.files))
+                || self.dir_contents.has_any_positive_file_name(self.files)
+                || self.dir_contents.has_any_positive_folder(self.folders))
     }
 }
 
