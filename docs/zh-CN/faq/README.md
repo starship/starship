@@ -21,7 +21,7 @@
 - 在顶层配置 `format` 里忽略组件与禁用组件相比较，后者更加明确
 - 当 Starship 升级后，新组件将能够自动被加入提示符中
 
-## 文档中写 Starship 在任何 Shell 中都能运行。 为什么我常用的 Shell 不支持？
+## 文档中写 Starship 适用于任何 Shell。 为什么我常用的 Shell 不支持？
 
 Starship 的构建方式决定了它应当能够增加对几乎所有 shell 的支持。 Starship 的二进制文件是无状态、不知道当前 shell 的，所以只要你的 shell 支持自定义提示符和 shell 扩展，就能使用 Starship。
 
