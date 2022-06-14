@@ -777,6 +777,28 @@ mod tests {
         .is_match());
         dont_match_ext.close()?;
 
+        let dont_match_file = testdir(&["goodfile", "evilfile"])?;
+        let dont_match_file_dc = DirContents::from_path(dont_match_file.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_file_dc,
+            files: &["goodfile", "!notfound", "!evilfile"],
+            extensions: &[],
+            folders: &[],
+        }
+        .is_match());
+        dont_match_file.close()?;
+
+        let dont_match_folder = testdir(&["gooddir/somefile", "evildir/somefile"])?;
+        let dont_match_folder_dc = DirContents::from_path(dont_match_folder.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_folder_dc,
+            files: &[],
+            extensions: &[],
+            folders: &["gooddir", "!notfound", "!evildir"],
+        }
+        .is_match());
+        dont_match_folder.close()?;
+
         Ok(())
     }
 
