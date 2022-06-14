@@ -354,12 +354,12 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ### オプション
 
-| 変数         | デフォルト                                    | 説明                                         |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
-| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
-| `style`    | `"blue bold"`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| 変数         | デフォルト                                    | 説明                      |
+| ---------- | ---------------------------------------- | ----------------------- |
+| `format`   | `"on [$symbol($subscription)]($style) "` | Azure module のフォーマットです。 |
+| `symbol`   | `"ﴃ "`                                   | フォーマットで使用される記号です。       |
+| `style`    | `"blue bold"`                            | フォーマットで使用されるスタイルです。     |
+| `disabled` | `true`                                   | `azure`モジュールを無効にします。    |
 
 ### 設定例
 
@@ -697,7 +697,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
+`conda` モジュールは、`$CONDA_DEFAULT_ENV` が設定されている場合、現在の[Conda](https://docs.conda.io/en/latest/) 環境を表示します。
 
 ::: tip
 
@@ -850,7 +850,7 @@ format = "via [D $version](bold bright-green) "
 
 - カレントディレクトリに`.dart`の拡張子のファイルが含まれている
 - カレントディレクトリに`.dart_tool`ディレクトリが含まれている
-- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+- カレントディレクトリに `pubspec.yaml`、 `pubspec.yml` もしくは `pubspec.lock` が含まれている
 
 ### オプション
 
@@ -930,20 +930,20 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 ### オプション
 
-| オプション               | デフォルト                                                                                                       | 説明                                                                                  |
-| ------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                                                                         | 現在のディレクトリを切り捨てる親フォルダーの数です。                                                          |
-| `truncate_to_repo`  | `true`                                                                                                      | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                                                       |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | module のフォーマットです。                                                                   |
-| `style`             | `"bold cyan"`                                                                                               | モジュールのスタイルです。                                                                       |
-| `disabled`          | `false`                                                                                                     | `directory`モジュールを無効にします。                                                            |
-| `read_only`         | `"🔒"`                                                                                                       | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。                                                 |
-| `read_only_style`   | `"red"`                                                                                                     | 読み取り専用シンボルのスタイルです。                                                                  |
-| `truncation_symbol` | `""`                                                                                                        | 切り捨てられたパスの接頭辞として付けるシンボルです。 例: "…/"                                                  |
-| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`. |
-| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                         |
-| `home_symbol`       | `"~"`                                                                                                       | ホームディレクトリを示すシンボルです。                                                                 |
-| `use_os_path_sep`   | `true`                                                                                                      | `/`を使用する代わりに、OS固有のパスの区切り文字を使用します。(例: Windowsの場合`\`)                              |
+| オプション               | デフォルト                                                                                                       | 説明                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `truncation_length` | `3`                                                                                                         | 現在のディレクトリを切り捨てる親フォルダーの数です。                             |
+| `truncate_to_repo`  | `true`                                                                                                      | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                          |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | module のフォーマットです。                                      |
+| `style`             | `"bold cyan"`                                                                                               | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                                                     | `directory`モジュールを無効にします。                               |
+| `read_only`         | `"🔒"`                                                                                                       | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。                    |
+| `read_only_style`   | `"red"`                                                                                                     | 読み取り専用シンボルのスタイルです。                                     |
+| `truncation_symbol` | `""`                                                                                                        | 切り捨てられたパスの接頭辞として付けるシンボルです。 例: "…/"                     |
+| `repo_root_style`   | `None`                                                                                                      | gitリポジトリのルートのスタイルです。 デフォルトの値は `style` と同じです。           |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | `repo_root_style` が定義されている場合の git リポジトリのフォーマットです。      |
+| `home_symbol`       | `"~"`                                                                                                       | ホームディレクトリを示すシンボルです。                                    |
+| `use_os_path_sep`   | `true`                                                                                                      | `/`を使用する代わりに、OS固有のパスの区切り文字を使用します。(例: Windowsの場合`\`) |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
@@ -1055,7 +1055,7 @@ format = "via [🐋 $context](blue bold)"
 
 内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
+このモジュールは、カレントディレクトリに `.csproj` ファイルがある場合、Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) も表示します。
 
 ### オプション
 
@@ -1385,17 +1385,17 @@ very-long-project-name = "vlpn"
 
 ### オプション
 
-| オプション                | デフォルト                                             | 説明                                                                                   |
-| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name. |
-| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。                                 |
-| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                                            |
-| `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                                        |
-| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                             |
-| `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.                          |
-| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                       |
-| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                  |
-| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                                            |
+| オプション                | デフォルト                                             | 説明                                                                  |
+| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                                |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。                |
+| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                           |
+| `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                       |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                            |
+| `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.         |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.      |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main". |
+| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                           |
 
 ### 変数
 
@@ -1641,7 +1641,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`golang`モジュールは、現在インストールされている[Go](https://golang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
@@ -1692,7 +1692,7 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`stack.yaml`ファイルが含まれている
-- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+- カレントディレクトリに`.hs`、`.cabal`もしくは`.hs-boot`のファイルが含まれている
 
 ### オプション
 
@@ -1720,10 +1720,10 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`helm`モジュールは、現在インストールされている[Helm](https://helm.sh/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`helmfile.yaml`ファイルが含まれている
-- The current directory contains a `Chart.yaml` file
+- カレントディレクトリに`Chart.yaml`ファイルが含まれている
 
 ### オプション
 
@@ -1796,10 +1796,10 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`Java`モジュールは、現在インストールされている[Java](https://www.oracle.com/java/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+- カレントディレクトリに`pom.xml`、`build.gradle.kts`、`build.sbt`、`.java-version`、`.deps.edn`、`project.clj`もしくは`build.boot`が含まれている
+- カレントディレクトリに拡張子が`.java`、`.class`、`.gradle`、`.jar`、`.clj`もしくは`.cljc`のファイルが含まれている
 
 ### オプション
 
