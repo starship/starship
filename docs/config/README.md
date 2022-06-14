@@ -152,26 +152,23 @@ format = '''
 \$'''
 ```
 
-### File Extensions
+### Negative matching
 
-Many modules have a `detect_extensions` variable, which takes a list of file extensions to match or not match.
-"Negative" extensions, those which should not be matched, are indicated with a leading "!" character.
+Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take
+lists of strings to match or not match. "Negative" options, those which should not be matched, are
+indicated with a leading "!" character. The presence of _any_ negative indicator in the directory
+will result in the module not being matched.
 
-Extensions are matched against both the characters after the last dot in a filename, and the characters after
-the first dot in a filename. For example, consider the filename `foo.bar.tar.gz`. To see if that matches anything
-mentioned in `detect_extensions` we will consider both the characters after the last dot, "gz", and those after
-the first dot, "bar.tar.gz".
+Extensions are matched against both the characters after the last dot in a filename, and the
+characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched
+against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a
+dot are not considered to have extensions at all.
 
-We first look for any files matching a negative extension. If there are any, the module is not triggered.
+To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
 
-If there were none, we then look for any files matching a positive extension.
-
-To see how this works in practice, and why you might want to use negative extensions, consider how a Node
-programmer who also works with video might configure the Nodejs module. By default its `detect_extensions`
-is `["js", "mjs", "cjs", "ts", "mts", "cts"]`. However, in their video work they also deal with `.video.ts`
-and `.audio.ts` files containing MPEG Transport Stream encoded data. They don't want a directory full of
-video data to trigger the Nodejs module! So they add two negative extensions to the list:
-`["js", "mjs", "cjs", "ts", "mts", "cts", "!audio.ts", "!video.ts"]`.
+```toml
+detect_extensions = ["ts", "!video.ts", "!audio.ts"]
+```
 
 ## Prompt
 
