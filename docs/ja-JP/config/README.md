@@ -350,7 +350,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+`azure` モジュールは、現在のAzureサブスクリプションを表示します。 これは、 `~/.azure/azureProfile.json` ファイルで定義されているデフォルトのサブスクリプションの名前の表示に基づいています。
 
 ### オプション
 
