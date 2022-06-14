@@ -251,7 +251,7 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+在 [发布页](https://github.com/starship/starship/releases/latest) 下载 MSI 包来安装最新版。
 
 使用下列软件包管理器安装Starship：
 
@@ -328,7 +328,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+将以下内容添加到您 Nushell 环境文件的末尾（使用 `$nu.env-path` 来获取它的路径）：
 
 ```sh
 mkdir ~/.cache/starship
@@ -341,7 +341,7 @@ starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+注意：仅支持 Nushell v0.61+
 
 </details>
 
