@@ -2,7 +2,7 @@
 
 # Nerd Font Symbols Preset
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+此预设使用 Nerd 字体的符号显示所有组件。
 
 ![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png)
 
