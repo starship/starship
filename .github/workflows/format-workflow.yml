@@ -16,6 +16,18 @@ jobs:
       - name: Docs | Format
         uses: dprint/check@v2.0
 
+  # Validate preset files
+  taplo:
+    name: Taplo [Preset schema validation]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
+      - name: Install | Taplo
+        run: cargo install --debug --locked --version 0.6.3 taplo-cli
+      - name: Presets | Validate with schema
+        run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/.vuepress/public/presets/toml/*.toml
+
   # If this is not a Crowdin PR, block changes to translated documentation
   block-crowdin:
     name: Block Translated Changes
