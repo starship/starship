@@ -850,7 +850,7 @@ format = "via [D $version](bold bright-green) "
 
 - カレントディレクトリに`.dart`の拡張子のファイルが含まれている
 - カレントディレクトリに`.dart_tool`ディレクトリが含まれている
-- カレントディレクトリに `pubspec.yaml`、 `pubspec.yml` もしくは `pubspec.lock` が含まれている
+- カレントディレクトリに`pubspec.yaml`、`pubspec.yml`または`pubspec.lock` が含まれている
 
 ### オプション
 
@@ -1692,7 +1692,7 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`stack.yaml`ファイルが含まれている
-- カレントディレクトリに`.hs`、`.cabal`もしくは`.hs-boot`のファイルが含まれている
+- カレントディレクトリに`.hs`、`.cabal`または`.hs-boot`のファイルが含まれている
 
 ### オプション
 
@@ -1798,8 +1798,8 @@ disabled = false
 
 `Java`モジュールは、現在インストールされている[Java](https://www.oracle.com/java/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`pom.xml`、`build.gradle.kts`、`build.sbt`、`.java-version`、`.deps.edn`、`project.clj`もしくは`build.boot`が含まれている
-- カレントディレクトリに拡張子が`.java`、`.class`、`.gradle`、`.jar`、`.clj`もしくは`.cljc`のファイルが含まれている
+- カレントディレクトリに`pom.xml`、`build.gradle.kts`、`build.sbt`、`.java-version`、`.deps.edn`、`project.clj`または`build.boot`が含まれている
+- カレントディレクトリに拡張子が`.java`、`.class`、`.gradle`、`.jar`、`.clj`または`.cljc`のファイルが含まれている
 
 ### オプション
 
@@ -1892,7 +1892,7 @@ symbol_threshold = 0
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`julia`モジュールは、現在インストールされている[Julia](https://julialang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Project.toml`ファイルが含まれている
 - カレントディレクトリに`Manifest.toml`ファイルが含まれている
@@ -2227,12 +2227,12 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`nim`モジュールは、現在インストールされている[Nim](https://nim-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`nim.cfg`ファイルが含まれている
-- The current directory contains a file with the `.nim` extension
-- The current directory contains a file with the `.nims` extension
-- The current directory contains a file with the `.nimble` extension
+- カレントディレクトリに拡張子が`.nim`のファイルが含まれている
+- カレントディレクトリに拡張子が`.nims`のファイルが含まれている
+- カレントディレクトリに拡張子が`.nimble`のファイルが含まれている
 
 ### オプション
 
@@ -2269,7 +2269,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. このモジュールは、nixシェル環境内にあるときに表示されます。
+`nix_shell`モジュールは[nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html)環境を表示します。 このモジュールは、nixシェル環境内にあるときに表示されます。
 
 ### オプション
 
@@ -2307,14 +2307,14 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`nodejs`モジュールは、現在インストールされている[Node.js](https://nodejs.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`package.json`ファイルが含まれている
-- The current directory contains a `.node-version` file
-- The current directory contains a `.nvmrc` file
+- カレントディレクトリに`.node-version`ファイルが含まれている
+- カレントディレクトリに`.nvmrc`ファイルが含まれている
 - カレントディレクトリに`node_modules`ディレクトリが含まれている
-- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
+- カレントディレクトリに拡張子が`.js`、`.mjs`または`.cjs`のファイルが含まれている
+- カレントディレクトリに拡張子が`.ts`、`.mts`または`.cts`のファイルが含まれている
 
 ### オプション
 
@@ -2351,14 +2351,14 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`ocaml`モジュールは、現在インストールされている[OCaml](https://ocaml.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a file with `.opam` extension or `_opam` directory
-- The current directory contains a `esy.lock` directory
-- The current directory contains a `dune` or `dune-project` file
-- The current directory contains a `jbuild` or `jbuild-ignore` file
-- The current directory contains a `.merlin` file
-- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+- カレントディレクトリに拡張子`.opam`のファイルまたは`_opam`ディレクトリが含まれている
+- カレントディレクトリに`esy.lock`ディレクトリが含まれている
+- カレントディレクトリに`dune`または`dune-project`ファイルが含まれている
+- カレントディレクトリに`jbuild`または`jbuild-ignore`ファイルが含まれている
+- カレントディレクトリに`.merlin`ファイルが含まれている
+- カレントディレクトリに拡張子が`.ml`、`.mli`、`.re`または`.rei`のファイルが含まれている
 
 ### オプション
 
@@ -2487,13 +2487,13 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`perl`モジュールは、現在インストールされている[Perl](https://www.perl.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Makefile.PL` or `Build.PL` file
-- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
-- The current directory contains a `META.json` file or `META.yml` file
-- The current directory contains a `.perl-version` file
-- The current directory contains a `.pl`, `.pm` or `.pod`
+- カレントディレクトリに`Makefile.PL`または`Build.PL`ファイルが含まれている
+- カレントディレクトリに`cpanfile`または`cpanfile.snapshot`ファイルが含まれている
+- カレントディレクトリに`META.json`または`META.yml`ファイルが含まれている
+- カレントディレクトリに`.perl-version`ファイルが含まれている
+- カレントディレクトリに拡張子が`.pl`、`.pm`または`.pod`のファイルが含まれている
 
 ### オプション
 
@@ -2527,11 +2527,11 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`php`モジュールは、現在インストールされている[PHP](https://www.php.net/) のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
-- The current directory contains a `.php-version` file
-- The current directory contains a `.php` extension
+- カレントディレクトリに`.php-version`ファイルが含まれている
+- カレントディレクトリに拡張子が`.php`のファイルが含まれている
 
 ### オプション
 
@@ -2577,8 +2577,8 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- カレントディレクトリに`Pulumi.yaml`または`Pulumi.yml`ファイルが含まれている
+- 親ディレクトリに`Pulumi.yaml`または`Pulumi.yml`ファイルが含まれている
 
 ### オプション
 
@@ -2624,10 +2624,10 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`purescript`モジュールは、現在インストールされている[PureScript](https://www.purescript.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`spago.dhall`ファイルが含まれている
-- The current directory contains a file with the `.purs` extension
+- カレントディレクトリに拡張子が`.purs`のファイルが含まれている
 
 ### オプション
 
@@ -2752,15 +2752,15 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+`rlang`モジュールは、現在インストールされている[R](https://www.r-project.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a file with the `.R` extension.
-- The current directory contains a file with the `.Rd` extension.
-- The current directory contains a file with the `.Rmd` extension.
-- The current directory contains a file with the `.Rproj` extension.
-- The current directory contains a file with the `.Rsx` extension.
-- The current directory contains a `.Rprofile` file
-- The current directory contains a `.Rproj.user` folder
+- カレントディレクトリに拡張子が`.R`のファイルが含まれている
+- カレントディレクトリに拡張子が`.Rd`のファイルが含まれている
+- カレントディレクトリに拡張子が`.Rmd`のファイルが含まれている
+- カレントディレクトリに拡張子が`.Rproj`のファイルが含まれている
+- カレントディレクトリに拡張子が`.Rsx`のファイルが含まれている
+- カレントディレクトリに`.Rprofile`ファイルが含まれている
+- カレントディレクトリに`.Rproj.user`フォルダが含まれている
 
 ### オプション
 
@@ -2794,9 +2794,9 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
+デフォルトでは`red`モジュールは、現在インストールされている[Red](https://www.red-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current directory contains a file with `.red` or `.reds` extension
+- カレントディレクトリに拡張子が`.red` or `.reds`のファイルが含まれている
 
 ### オプション
 
@@ -2837,7 +2837,7 @@ symbol = "🔴 "
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - カレントディレクトリに `.ruby-version` ファイルが含まれている
 - カレントディレクトリに`.rb`の拡張子のファイルが含まれている
-- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+- 環境変数に`RUBY_VERSION`または`RBENV_VERSION`が設定されている
 
 Starship gets the current Ruby version by running `ruby -v`.
 
@@ -2917,11 +2917,11 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`scala` モジュールは、現在インストールされている[Scala](https://www.scala-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
-- The current directory contains a directory named `.metals`
+- カレントディレクトリに`build.sbt`、`.scalaenv`または`.sbtenv`ファイルが含まれている
+- カレントディレクトリに拡張子が`.scala`または`.sbt`のファイルが含まれている
+- カレントディレクトリに`.metals`ディレクトリが含まれている
 
 ### オプション
 
@@ -3218,10 +3218,10 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
+デフォルトでは`swift` モジュールは、現在インストールされている[Swift](https://swift.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
+- カレントディレクトリに`Package.swift`ファイルが含まれている
+- カレントディレクトリに拡張子が`.swift`のファイルが含まれている
 
 ### オプション
 
@@ -3407,9 +3407,9 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`vagrant`モジュールは、現在インストールされている[Vagrant](https://www.vagrantup.com/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Vagrantfile` file
+- カレントディレクトリに`Vagrantfile`ファイルが含まれている
 
 ### オプション
 
@@ -3445,10 +3445,10 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`vlang`モジュールは、現在インストールされている[V](https://vlang.io/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a file with `.v` extension
-- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
+- カレントディレクトリに拡張子が`.v`のファイルが含まれている
+- カレントディレクトリに`v.mod`、`vpkg.json`または`.vpkg-lock.json`ファイルが含まれている
 
 ### オプション
 
@@ -3513,9 +3513,9 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
+デフォルトでは`zig`モジュールは、現在インストールされている[Zig](https://ziglang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current directory contains a `.zig` file
+- カレントディレクトリに拡張子が`.zig`のファイルが含まれている
 
 ### オプション
 
