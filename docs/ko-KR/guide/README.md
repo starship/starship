@@ -251,6 +251,8 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
 | Repository                                                                       | Instructions                            |

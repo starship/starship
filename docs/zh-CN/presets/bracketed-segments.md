@@ -2,7 +2,7 @@
 
 # Bracketed Segments Preset
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+此预设使用括号来分隔所有组件的提示符，不使用 Starship 默认的分隔词（“via”，“on” 等等）。
 
 ![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png)
 

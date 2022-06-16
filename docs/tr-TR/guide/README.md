@@ -251,6 +251,8 @@ Alternatif olarak aşağıdaki paket yöneticileri ile de Starship'i yükleyebil
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Starship'i herhangi bir paket yöneticisi ile yükleyin:
 
 | Repository                                                                       | Instructions                            |

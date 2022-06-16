@@ -1,6 +1,6 @@
 # 高级配置
 
-`Starship 功能繁多，有时您必须在编辑 <code>starship.toml` 之外做更多工作才能实现某些效果。 此页面详细介绍了一些在 starship 中使用的高级配置技巧。
+Starship 功能繁多，有时您必须在编辑 `starship.toml` 之外做更多工作才能实现某些效果。 此页面详细介绍了一些在 starship 中使用的高级配置技巧。
 
 ::: warning
 
@@ -8,7 +8,7 @@
 
 :::
 
-## 在 Cmd 中自定义预提示和执行前命令
+## 在 Cmd 中自定义提示符显示前和执行前的命令
 
 Clink 提供了很灵活的 API，能在 Cmd shell 中运行预提示和执行前命令。 在 Starship 中使用这些 API 很容易。 对你的 `starship.lua` 按需做出如下修改：
 
@@ -32,11 +32,11 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## 在 Bash 中自定义预提示和预执行命令
+## 在 Bash 中自定义提示符显示前和执行前的命令
 
-Bash 并没有类似大多数其它 shell 的正式预执行/预命令框架。 因此，很难在 `bash` 中提供完全可自定义的 hook 机制。 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
+Bash 不像多数其他的 Shell 有成体系的预执行框架。 因此，很难在 `bash` 中提供完全可自定义的 hook 机制。 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
 
-- 若要在提示符显示之前运行自定义函数，需要定义此函数，然后将函数名赋值给 `starship_reserved_user_func`。 例如，要在提示符之前绘制一枚火箭，您应该写
+- 若要在提示符显示之前运行自定义函数，需要定义此函数，然后将函数名赋值给 `starship_reserved_user_func`。 例如，如果想在提示符前绘制一个火箭，可以这样写：
 
 ```bash
 function blastoff(){
@@ -57,11 +57,11 @@ eval $(starship init bash)
 set +o functrace
 ```
 
-## Custom pre-prompt and pre-execution Commands in PowerShell
+## 在 Powershell 中自定义提示符显示前和执行前的命令
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
+Powershell 不像多数其他的 Shell 有成体系的预执行框架。 因此，很难在 `Powershell` 中提供完全可自定义的 hook 机制。 然而，Starship 确实能使您有限地在提示符渲染过程中插入自己的函数执行：
 
-Create a function named `Invoke-Starship-PreCommand`
+创建一个名为 `Invoke-Starship-PreCommand` 的函数
 
 ```powershell
 function Invoke-Starship-PreCommand {
@@ -71,7 +71,7 @@ function Invoke-Starship-PreCommand {
 
 ## 更改窗口标题
 
-一些 shell 会自动更改您的窗口标题（比如改成您的工作目录）。 Fish 甚至默认会执行此功能。 Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+一些 shell 会自动更改您的窗口标题（比如改成您的工作目录）。 Fish 甚至默认会执行此功能。 Starship 没有实现此功能，但将这个功能添加到 `bash`、`zsh`、`cmd` 或 `powershell` 是相当简单的。
 
 首先，定义窗口标题更改函数（在 bash 和 zsh 中相同）：
 
@@ -106,7 +106,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
+对于 Cmd，您可以使用 `starship_preprompt_user_func` 函数修改窗口标题。
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -116,7 +116,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
+您也可以为 Powershell 创建一个函数 `Invoke-Starship-PreCommand`，来设置类似的输出。
 
 ```powershell
 # edit $PROFILE
