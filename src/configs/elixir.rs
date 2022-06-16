@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -5,7 +7,9 @@ use serde::{Deserialize, Serialize};
 #[serde(default)]
 pub struct ElixirConfig<'a> {
     pub format: &'a str,
-    pub version_format: &'a str,
+    pub version_extract_map: HashMap<&'a str, &'a str>,
+    pub version_format_map: HashMap<&'a str, &'a str>,
+    pub version_command: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
@@ -18,7 +22,12 @@ impl<'a> Default for ElixirConfig<'a> {
     fn default() -> Self {
         ElixirConfig {
             format: "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
-            version_format: "v${raw}",
+            version_extract_map: HashMap::from([
+                ("version", "Elixir\\s([\\d\\.\\-\\w]+)"),
+                ("otp_version", "Erlang/OTP\\s([\\d\\.\\-\\w]+)"),
+            ]),
+            version_format_map: HashMap::from([("version", "v${raw}")]),
+            version_command: "--version",
             symbol: "💧 ",
             style: "bold purple",
             disabled: false,
