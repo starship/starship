@@ -38,7 +38,7 @@ pub struct Context<'a> {
     /// E.g. when navigating to a PSDrive in PowerShell, or a path without symlinks resolved.
     pub logical_dir: PathBuf,
 
-    /// A struct containing directory contents in a lookup-optimised format.
+    /// A struct containing directory contents in a lookup-optimized format.
     dir_contents: OnceCell<DirContents>,
 
     /// Properties to provide to modules.

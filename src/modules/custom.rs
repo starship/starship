@@ -110,7 +110,7 @@ fn get_shell<'a, 'b>(
 }
 
 /// Attempt to run the given command in a shell by passing it as either `stdin` or an argument to `get_shell()`,
-/// depending on the configuration or by invoking a platform-specific falback shell if `shell` is empty.
+/// depending on the configuration or by invoking a platform-specific fallback shell if `shell` is empty.
 fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<Output> {
     let (shell, shell_args) = get_shell(config.shell.0.as_ref(), context);
     let mut use_stdin = config.use_stdin;
