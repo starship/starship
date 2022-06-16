@@ -160,8 +160,8 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
             Ok(QXEvent::Text(t)) if in_ver => {
                 let ver = t.unescape_and_decode(&reader).ok();
                 return match ver {
-                    // Ignore version which is just a property reference
-                    Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
+                    Some(ref v) if v.starts_with('$') => break,
+                    Some(ref v) => format_version(v, config.version_format),
                     _ => None,
                 };
             }
@@ -175,7 +175,20 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
         }
     }
 
-    None
+    let cmd_output = context.exec_cmd(
+        "mvn",
+        &[
+            "help:evaluate",
+            "-Dexpression=project.version",
+            "-q",
+            "-DforceStdout",
+        ],
+    )?;
+    // Ignore version with a property but without a value
+    if cmd_output.stdout == "null object or invalid expression" {
+        return None;
+    }
+    format_version(cmd_output.stdout.as_str(), config.version_format)
 }
 
 fn get_meson_version(context: &Context, config: &PackageConfig) -> Option<String> {
@@ -998,6 +1011,7 @@ end";
             <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
 
               <modelVersion>4.0.0</modelVersion>
+              <groupId>org.apache.maven.ci</groupId>
               <artifactId>parent</artifactId>
               <packaging>pom</packaging>
 
@@ -1067,12 +1081,11 @@ end";
 
     #[test]
     fn test_extract_maven_version_no_version() -> io::Result<()> {
-        // pom.xml with common nested tags and dependencies
         let pom = "
             <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
-
               <modelVersion>4.0.0</modelVersion>
-
+              <groupId>org.apache.maven.ci</groupId>
+              <artifactId>parent</artifactId>
               <dependencies>
                   <dependency>
                       <groupId>jta</groupId>
@@ -1085,45 +1098,183 @@ end";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(pom))?;
-        expect_output(&project_dir, None, None);
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd(
+                "mvn help:evaluate -Dexpression=project.version -q -DforceStdout",
+                None,
+            )
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+        assert_eq!(actual, None);
+
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_maven_version_inherited_version() -> io::Result<()> {
+        // parent pom.xml
+        let parent_pom = "
+            <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
+              <modelVersion>4.0.0</modelVersion>
+              <groupId>org.apache.maven.ci</groupId>
+              <artifactId>parent</artifactId>
+              <version>${revision}</version>
+              <properties>
+                <revision>0.3.20-SNAPSHOT</revision>
+              </properties>
+              <modules>
+                <module>child</module>
+              <modules>
+            </project>";
+        // child pom.xml
+        let child_pom = "
+            <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
+              <modelVersion>4.0.0</modelVersion>
+              <parent>
+                <groupId>org.apache.maven.ci</groupId>
+                <artifactId>child</artifactId>
+                <version>${revision}</version>
+                <relativePath>./parent-pom.xml</relativePath>
+              </parent>
+              <artifactId>child</artifactId>
+            </project>";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, "parent-pom.xml", Some(parent_pom))?;
+        fill_config(&project_dir, "pom.xml", Some(child_pom))?;
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd(
+                "mvn help:evaluate -Dexpression=project.version -q -DforceStdout",
+                Some(CommandOutput {
+                    stdout: "0.3.20-SNAPSHOT".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+        let expected = Some(format!(
+            "is {} ",
+            Color::Fixed(208)
+                .bold()
+                .paint(format!("📦 {}", "v0.3.20-SNAPSHOT"))
+        ));
+        assert_eq!(actual, expected);
+
         project_dir.close()
     }
 
     #[test]
     fn test_extract_maven_version_is_prop() -> io::Result<()> {
-        // pom.xml with common nested tags and dependencies
         let pom = "
             <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
-
               <modelVersion>4.0.0</modelVersion>
-              <version>${pom.parent.version}</version>
-
+              <groupId>org.apache.maven.ci</groupId>
+              <artifactId>parent</artifactId>
+              <version>${revision}</version>
+              <properties>
+                <revision>0.3.20-SNAPSHOT</revision>
+              </properties>
             </project>";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(pom))?;
-        expect_output(&project_dir, None, None);
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd(
+                "mvn help:evaluate -Dexpression=project.version -q -DforceStdout",
+                Some(CommandOutput {
+                    stdout: "0.3.20-SNAPSHOT".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+        let expected = Some(format!(
+            "is {} ",
+            Color::Fixed(208)
+                .bold()
+                .paint(format!("📦 {}", "v0.3.20-SNAPSHOT"))
+        ));
+        assert_eq!(actual, expected);
+
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_maven_version_is_undefined_prop() -> io::Result<()> {
+        let pom = "
+            <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
+              <modelVersion>4.0.0</modelVersion>
+              <groupId>org.apache.maven.ci</groupId>
+              <artifactId>parent</artifactId>
+              <version>${revision}</version>
+            </project>";
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, "pom.xml", Some(pom))?;
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd(
+                "mvn help:evaluate -Dexpression=project.version -q -DforceStdout",
+                Some(CommandOutput {
+                    stdout: "null object or invalid expression".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+        assert_eq!(actual, None);
+
         project_dir.close()
     }
 
     #[test]
     fn test_extract_maven_version_no_version_but_deps() -> io::Result<()> {
-        // pom.xml with common nested tags and dependencies
         let pom = "
             <project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd\">
-
               <modelVersion>4.0.0</modelVersion>
+              <groupId>org.apache.maven.ci</groupId>
               <artifactId>parent</artifactId>
               <packaging>pom</packaging>
-
               <name>Test POM</name>
               <description>Test POM</description>
-
             </project>";
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, "pom.xml", Some(pom))?;
-        expect_output(&project_dir, None, None);
+
+        let starship_config = toml::toml! {
+            [package]
+            disabled = false
+        };
+        let actual = ModuleRenderer::new("package")
+            .cmd(
+                "mvn help:evaluate -Dexpression=project.version -q -DforceStdout",
+                None,
+            )
+            .path(project_dir.path())
+            .config(starship_config)
+            .collect();
+        assert_eq!(actual, None);
+
         project_dir.close()
     }
 
