@@ -665,16 +665,16 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| オプション                  | デフォルト                         | 説明                                                                                                                                 |
-| ---------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | 実行時間を表示する最短期間（ミリ秒単位）です。                                                                                                            |
-| `show_milliseconds`    | `false`                       | 実行時間の秒に加えてミリ秒を表示します。                                                                                                               |
-| `format`               | `"took [$duration]($style) "` | module のフォーマットです。                                                                                                                  |
-| `style`                | `"bold yellow"`               | モジュールのスタイルです。                                                                                                                      |
-| `disabled`             | `false`                       | `cmd_duration`モジュールを無効にします。                                                                                                        |
-| `show_notifications`   | `false`                       | コマンドが完了したらデスクトップ通知を表示します。                                                                                                          |
-| `min_time_to_notify`   | `45_000`                      | 通知を持続する最短期間 (ミリ秒単位) です。                                                                                                            |
-| `notification_timeout` |                               | 通知を表示する期間 (ミリ秒単位) です。 If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| オプション                  | デフォルト                         | 説明                                                                                              |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | 実行時間を表示する最短期間（ミリ秒単位）です。                                                                         |
+| `show_milliseconds`    | `false`                       | 実行時間の秒に加えてミリ秒を表示します。                                                                            |
+| `format`               | `"took [$duration]($style) "` | module のフォーマットです。                                                                               |
+| `style`                | `"bold yellow"`               | モジュールのスタイルです。                                                                                   |
+| `disabled`             | `false`                       | `cmd_duration`モジュールを無効にします。                                                                     |
+| `show_notifications`   | `false`                       | コマンドが完了したらデスクトップ通知を表示します。                                                                       |
+| `min_time_to_notify`   | `45_000`                      | 通知を持続する最短期間 (ミリ秒単位) です。                                                                         |
+| `notification_timeout` |                               | 通知を表示する期間 (ミリ秒単位) です。 もし設定されていない場合、通知のタイムアウトはデーモンによって決定されます。 すべての通知デーモンがこのオプションを受け入れるわけではありません。 |
 
 ### 変数
 
@@ -808,9 +808,9 @@ format = "via [✨ $version](bold blue) "
 
 ## Daml
 
-The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`daml`モジュールは、Damlプロジェクトのルートディレクトリにいるときに、使用している[Daml](https://www.digitalasset.com/developers) SDKバージョンを表示します。 環境変数`DAML_SDK_VERSION`を上書きしない限り、`daml.yaml`ファイルの`sdk-version`が使用されます。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `daml.yaml` file
+- カレントディレクトリに`daml.yaml`ファイルが含まれている
 
 ### オプション
 
@@ -818,18 +818,18 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | ------------------- | ---------------------------------- | ------------------------------------------------------ |
 | `format`            | `via [$symbol($version )]($style)` | module のフォーマットです。                                      |
 | `version_format`    | `v${raw}`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"Λ "`                             | A format string representing the symbol of Daml        |
+| `symbol`            | `"Λ "`                             | Damlの記号を表すフォーマット文字列です。                                 |
 | `style`             | `"bold cyan"`                      | モジュールのスタイルです。                                          |
 | `detect_extensions` | `[]`                               | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["daml.yaml"]`                    | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                               | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `disabled`          | `false`                            | Disables the `daml` module.                            |
+| `disabled`          | `false`                            | `daml`モジュールを無効にします。                                    |
 
 ### 変数
 
 | 変数        | 設定例      | 説明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v2.2.0` | The version of `daml`  |
+| version   | `v2.2.0` | `daml`のバージョン           |
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
@@ -976,17 +976,17 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>gitリポジトリは追加の変数があります。</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+`/path/to/home/git_repo/src/lib`のパスについて考えます。
 
-| 変数                 | 設定例                   | 説明                                      |
-| ------------------ | --------------------- | --------------------------------------- |
-| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
-| repo_root          | `"git_repo"`          | The git root directory name             |
-| path               | `"/src/lib"`          | The remaining path                      |
-| style              | `"black bold dimmed"` | オプション `style` の値をミラーする                  |
-| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+| 変数                 | 設定例                   | 説明                     |
+| ------------------ | --------------------- | ---------------------- |
+| before_root_path | `"/path/to/home/"`    | gitルートディレクトリパスの前のパス    |
+| repo_root          | `"git_repo"`          | gitルートディレクトリの名前        |
+| path               | `"/src/lib"`          | 残りのパス                  |
+| style              | `"black bold dimmed"` | オプション `style` の値をミラーする |
+| repo_root_style  | `"underline white"`   | gitルートディレクトリの名前のスタイル   |
 
 </details>
 
@@ -1002,7 +1002,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+`docker_context`モジュールは、`default`に設定されていない場合、または環境変数`DOCKER_MACHINE_NAME`、`DOCKER_HOST`または`DOCKER_CONTEXT`が設定されている場合 (使用中のコンテキストを上書きするため)、現在アクティブな[Docker context](https://docs.docker.com/engine/context/working-with-contexts/)を表示します。
 
 ### オプション
 
@@ -1114,12 +1114,12 @@ heuristic = false
 
 ### 変数
 
-| 変数          | 設定例     | 説明                          |
-| ----------- | ------- | --------------------------- |
-| version     | `v1.10` | `elixir`のバージョン              |
-| otp_version |         | The otp version of `elixir` |
-| symbol      |         | オプション `記号` の値をミラーする         |
-| style\*   |         | オプション `style` の値をミラーする      |
+| 変数          | 設定例     | 説明                      |
+| ----------- | ------- | ----------------------- |
+| version     | `v1.10` | `elixir`のバージョン          |
+| otp_version |         | `elixir`のotpバージョン       |
+| symbol      |         | オプション `symbol` の値をミラーする |
+| style\*   |         | オプション `style` の値をミラーする  |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
