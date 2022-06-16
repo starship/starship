@@ -206,6 +206,7 @@ $c\
 $cmake\
 $cobol\
 $container\
+$daml\
 $dart\
 $deno\
 $dotnet\
@@ -268,9 +269,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile when credentials, a `credential_process` or a `sso_start_url` have been setup. Alternatively, you can force this module to show the region and profile even when the credentials have not been setup with the `force_display` option. This is based on `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with `~/.aws/config` file. This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if the conditions above are not respected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -537,19 +538,22 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`vicmd_symbol` is only supported in cmd, fish and zsh.
+`vicmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Opzioni
 
-| Opzione          | Default             | Descrizione                                                                      |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------- |
-| `format`         | `"$symbol "`        | The format string used before the text input.                                    |
-| `success_symbol` | `"[❯](bold green)"` | The format string used before the text input if the previous command succeeded.  |
-| `error_symbol`   | `"[❯](bold red)"`   | The format string used before the text input if the previous command failed.     |
-| `vicmd_symbol`   | `"[❮](bold green)"` | The format string used before the text input if the shell is in vim normal mode. |
-| `disabled`       | `false`             | Disables the `character` module.                                                 |
+| Opzione                    | Default              | Descrizione                                                                             |
+| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                   | `"$symbol "`         | The format string used before the text input.                                           |
+| `success_symbol`           | `"[❯](bold green)"`  | The format string used before the text input if the previous command succeeded.         |
+| `error_symbol`             | `"[❯](bold red)"`    | The format string used before the text input if the previous command failed.            |
+| `vicmd_symbol`             | `"[❮](bold green)"`  | The format string used before the text input if the shell is in vim normal mode.        |
+| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                 | `false`              | Disables the `character` module.                                                        |
 
 ### Variables
 
@@ -801,6 +805,44 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 [crystal]
 format = "via [✨ $version](bold blue) "
+```
+
+## Daml
+
+The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `daml.yaml` file
+
+### Opzioni
+
+| Opzione             | Default                            | Descrizione                                                                                  |
+| ------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------- |
+| `format`            | `via [$symbol($version )]($style)` | The format for the module.                                                                   |
+| `version_format`    | `v${raw}`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`            | `"Λ "`                             | A format string representing the symbol of Daml                                              |
+| `style`             | `"bold cyan"`                      | Lo stile per il modulo.                                                                      |
+| `detect_extensions` | `[]`                               | Quali estensioni dovrebbero attivare questo modulo.                                          |
+| `detect_files`      | `["daml.yaml"]`                    | Quali nomi di file dovrebbero attivare questo modulo.                                        |
+| `detect_folders`    | `[]`                               | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `disabled`          | `false`                            | Disables the `daml` module.                                                                  |
+
+### Variables
+
+| Variable  | Esempio  | Descrizione                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `v2.2.0` | The version of `daml`                |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+
+[daml]
+format = "via [D $version](bold bright-green) "
 ```
 
 ## Dart
@@ -1954,6 +1996,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
 | `style`           | `"cyan bold"`                                        | Lo stile per il modulo.                                               |
 | `context_aliases` |                                                      | Table of context aliases to display.                                  |
+| `user_aliases`    |                                                      | Table of user aliases to display.                                     |
 | `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
@@ -1981,11 +2024,14 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
 "gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
+[kubernetes.user_aliases]
+"dev.local.cluster.k8s" = "dev"
+"root/.*" = "root"
 ```
 
 #### Regex Matching
 
-Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
+Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
 
 The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
 
@@ -2388,7 +2434,7 @@ symbol = "☁️ "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2405,6 +2451,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
+- [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
 - [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
 
 > ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.

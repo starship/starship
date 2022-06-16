@@ -2,23 +2,23 @@
 
 这里有一系列社区提供的 Starship 预设。 如果您想分享一套配置，请 [提交 PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) 来更新此文件！ 😊
 
-To get details on how to use a preset, simply click on the image.
+单击图像以获取使用预设的详细方法。
 
 ## [Nerd 字体符号](./nerd-font.md)
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+此预设使用 Nerd 字体的符号显示所有组件。
 
-[![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
+[![Nerd 字体符号预设截图](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+此预设使用括号来分隔所有组件的提示符，不使用 Starship 默认的分隔词（“via”，“on” 等等）。
 
 [![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
 ## [纯文本符号](./plain-text.md)
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+此预设将所有组件的符号改为纯文本。 适合没有 Unicode 的环境。
 
 [![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
 
@@ -36,6 +36,6 @@ This preset changes the symbols for each module into plain text. Great if you do
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+此预设的灵感来自于 [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json)。 它同时也演示了 Starship 的路径替换功能。
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)

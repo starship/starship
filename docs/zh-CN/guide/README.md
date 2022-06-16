@@ -150,7 +150,7 @@
   align="right"
  />
 
-**轻量级、反应迅速，可定制的高颜值终端！**
+**轻量级、反应迅速、可无限定制的高颜值终端！**
 
 - **快：** 很快 —— 真的真的非常快！ 🚀
 - **定制化：** 可定制各种各样的提示符。
@@ -251,6 +251,8 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
+在 [发布页](https://github.com/starship/starship/releases/latest) 下载 MSI 包来安装最新版。
+
 使用下列软件包管理器安装Starship：
 
 | 软件包来源                                                                            | 指令                                      |
@@ -326,20 +328,20 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+将以下内容添加到您 Nushell 环境文件的末尾（使用 `$nu.env-path` 来获取它的路径）：
 
 ```sh
 mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+然后将以下内容添加到您 Nushell 配置文件的末尾（使用 `$nu.config-path` 来获取它的路径）：
 
 ```sh
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+注意：仅支持 Nushell v0.61+
 
 </details>
 
@@ -389,7 +391,7 @@ eval "$(starship init zsh)"
 
 ### 步骤 3. 配置 Starship
 
-打开一个新的 Shell 实例，你应该就能看到漂亮的 Shell 新提示符了。 如果你对默认配置感到满意，那么开始使用吧！
+打开一个新的 Shell 实例，你应该就能看到漂亮的 Shell 新提示符了。 如果你对默认配置感到满意，就可以开始享用了！
 
 如果你想进一步配置 Starship，查阅下列内容：
 
@@ -409,17 +411,17 @@ eval "$(starship init zsh)"
 
 请参考这些曾经为 Starship 提供启发的工程。 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – 为宇航员准备的 ZSH 提示符。
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – 可用于所有 Shell 的 Robbyrussell 主题，使用 JavaScript 编写。
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – 带图标且可定制的类 Powerline 提示符，适用于所有 Shell。
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship 图标">
 </p>
 
-## 📝 License
+## 📝 许可证
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+版权所有 © 2019 - 目前, [Starship 贡献者](https://github.com/starship/starship/graphs/contributors).<br /> 此项目使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 许可.
