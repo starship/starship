@@ -8,7 +8,7 @@
 
 此预设使用 Nerd 字体的符号显示所有组件。
 
-[![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
+[![Nerd 字体符号预设截图](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
