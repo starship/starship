@@ -270,15 +270,15 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
+`aws`モジュールは、一時的な資格情報を使用する場合、現在のAWSリージョンとプロファイル、および有効期限タイマーを表示します。 モジュールの出力は、必要に応じて`AWS_REGION`、`AWS_DEFAULT_REGION`と`AWS_PROFILE`の環境変数と、`~/.aws/config`と`~/.aws/credentials`のファイルが使用されます。
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+モジュールは、資格情報が`~/.aws/credentials`にある場合、または`~/.aws/config`に`credential_process`または`sso_start_url`が定義されている場合にのみプロファイルを表示します。 あるいは、環境変数に`AWS_ACCESS_KEY_ID`、`AWS_SECRET_ACCESS_KEY`または`AWS_SESSION_TOKEN`のいずれかが定義されていれば条件を満たします。 もし`force_display`のオプションを`true`に設定した場合、上記の条件による資格情報が検出されない場合でも、利用可能なすべての情報が表示されます。
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
+[aws-vault](https://github.com/99designs/aws-vault)を使う場合、環境変数`AWS_VAULT`からプロファイルが、環境変数`AWS_SESSION_EXPIRATION`から資格情報の有効期限が読み込まれます。
 
 [awsu](https://github.com/kreuzwerker/awsu) を使う場合、そのプロファイルは環境変数 `AWSU_PROFILE` から読まれます。
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
+[AWSume](https://awsu.me)を使う場合、環境変数`AWSUME_PROFILE`からプロファイルが、環境変数`AWSUME_EXPIRATION`から資格情報の有効期限が読み込まれます。
 
 ### オプション
 
@@ -287,21 +287,21 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | module のフォーマットです。                                                                    |
 | `symbol`            | `"☁️ "`                                                               | 現在のAWSプロファイルを表示する前に表示される記号です。                                                        |
 | `region_aliases`    |                                                                       | AWS名に加えて表示するリージョンのエイリアスです。                                                           |
-| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                     |
+| `profile_aliases`   |                                                                       | AWS名に加えて表示するプロファイルのエイリアスです。                                                          |
 | `style`             | `"bold yellow"`                                                       | モジュールのスタイルです。                                                                        |
-| `expiration_symbol` | `X`                                                                   | The symbol displayed when the temporary credentials have expired.                    |
+| `expiration_symbol` | `X`                                                                   | この記号は一時的な資格情報が有効期限切れの場合に表示されます。                                                      |
 | `disabled`          | `false`                                                               | `aws`モジュールを無効にします。                                                                   |
 | `force_display`     | `false`                                                               | `true`の場合、`credentials`、`credential_process`または`sso_start_url`が設定されていない場合でも情報を表示します。 |
 
 ### 変数
 
-| 変数        | 設定例              | 説明                                          |
-| --------- | ---------------- | ------------------------------------------- |
-| region    | `ap-northeast-1` | 現在のAWSリージョン                                 |
-| profile   | `astronauts`     | 現在のAWSプロファイル                                |
-| duration  | `2h27m20s`       | The temporary credentials validity duration |
-| symbol    |                  | オプション `記号` の値をミラーする                         |
-| style\* |                  | オプション `style` の値をミラーする                      |
+| 変数        | 設定例              | 説明                     |
+| --------- | ---------------- | ---------------------- |
+| region    | `ap-northeast-1` | 現在のAWSリージョン            |
+| profile   | `astronauts`     | 現在のAWSプロファイル           |
+| duration  | `2h27m20s`       | 一時的な資格情報の有効期限          |
+| symbol    |                  | オプション `記号` の値をミラーする    |
+| style\* |                  | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -463,7 +463,7 @@ discharging_symbol = "💦"
 
 | 変数            | 設定例      | 説明                     |
 | ------------- | -------- | ---------------------- |
-| `buf_version` | `v1.0.0` | The version of `buf`   |
+| `buf_version` | `v1.0.0` | `buf`のバージョン            |
 | `symbol`      |          | オプション `記号` の値をミラーする    |
 | `style`*      |          | オプション `style` の値をミラーする |
 
@@ -492,9 +492,9 @@ symbol = "🦬 "
 | `detect_extensions` | `["c", "h"]`                                                                | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                                                        | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                                                        | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                     |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | コンパイラを検出する方法                                           |
 | `style`             | `"bold 149"`                                                                | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                               |
+| `disabled`          | `false`                                                                     | `c`モジュールを無効にします。                                       |
 
 ### 変数
 
@@ -505,15 +505,15 @@ symbol = "🦬 "
 | symbol  |        | オプション `記号` の値をミラーする    |
 | style   |        | オプション `style` の値をミラーする |
 
-NB that `version` is not in the default format.
+`version`はデフォルトのフォーマットではないことに注意してください。
 
 ### Commands
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+`commands`オプションは、コンパイラのバージョンと名前を判別するためのコマンドのリストを受け入れます。
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+各コマンドは、実行可能ファイル名の後に引数を続けるリストとして表されます。通常は`["mycc", "--version"]`のようになります。 StarshipはSTDOUTから結果が得られるまで各コマンドを実行を試みます。
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+もし、Cコンパイラがこのモジュールでサポートされていない場合は、[GitHubで問題を提起する](https://github.com/starship/starship/)ことでリクエストできます。
 
 ### 設定例
 
@@ -537,22 +537,22 @@ format = "via [$name $version]($style)"
 
 ::: warning
 
-`vicmd_symbol` はcmd、fish、zshでのみサポートされています。 `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vicmd_symbol` はcmd、fish、zshでのみサポートされています。 `vimcmd_replace_one_symbol`、`vimcmd_replace_symbol`と`vimcmd_visual_symbol`は、[zshでのモード検出による問題](https://github.com/starship/starship/issues/625#issuecomment-732454148)のため、fishでのみサポートされています。
 
 :::
 
 ### オプション
 
-| オプション                      | デフォルト                | 説明                                                                                      |
-| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                   | `"$symbol"`          | テキスト入力の前に使用される書式文字列。                                                                    |
-| `success_symbol`           | `"[❯](bold green)"`  | 前のコマンドが成功した場合にテキスト入力の前に使用される書式文字列です。                                                    |
-| `error_symbol`             | `"[❯](bold red)"`    | 前のコマンドが失敗した場合にテキスト入力の前に使用される書式文字列です。                                                    |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | シェルが vim ノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列。                                            |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `disabled`                 | `false`              | `character`モジュールを無効にします。                                                                |
+| オプション                      | デフォルト                | 説明                                                     |
+| -------------------------- | -------------------- | ------------------------------------------------------ |
+| `format`                   | `"$symbol"`          | テキスト入力の前に使用されるフォーマット文字列。                               |
+| `success_symbol`           | `"[❯](bold green)"`  | 前のコマンドが成功した場合にテキスト入力の前に使用されるフォーマット文字列です。               |
+| `error_symbol`             | `"[❯](bold red)"`    | 前のコマンドが失敗した場合にテキスト入力の前に使用されるフォーマット文字列です。               |
+| `vicmd_symbol`             | `"[❮](bold green)"`  | シェルがvimノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列です。           |
+| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | シェルがvimの`replace_one`モードの場合にテキスト入力の前に使用されるフォーマット文字列です。 |
+| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | シェルがvimの置換モードの場合にテキスト入力の前に使用されるフォーマット文字列。              |
+| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | シェルがvimの置換モードの場合にテキスト入力の前に使用されるフォーマット文字列。              |
+| `disabled`                 | `false`              | `character`モジュールを無効にします。                               |
 
 ### 変数
 
@@ -665,16 +665,16 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| オプション                  | デフォルト                         | 説明                                                                                                                                                                |
-| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | 実行時間を表示する最短期間（ミリ秒単位）です。                                                                                                                                           |
-| `show_milliseconds`    | `false`                       | 実行時間の秒に加えてミリ秒を表示します。                                                                                                                                              |
-| `format`               | `"took [$duration]($style) "` | module のフォーマットです。                                                                                                                                                 |
-| `style`                | `"bold yellow"`               | モジュールのスタイルです。                                                                                                                                                     |
-| `disabled`             | `false`                       | `cmd_duration`モジュールを無効にします。                                                                                                                                       |
-| `show_notifications`   | `false`                       | コマンドが完了したらデスクトップ通知を表示します。                                                                                                                                         |
-| `min_time_to_notify`   | `45_000`                      | 通知を持続する最短期間(ミリ秒単位)                                                                                                                                                |
-| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| オプション                  | デフォルト                         | 説明                                                                                                                                 |
+| ---------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | 実行時間を表示する最短期間（ミリ秒単位）です。                                                                                                            |
+| `show_milliseconds`    | `false`                       | 実行時間の秒に加えてミリ秒を表示します。                                                                                                               |
+| `format`               | `"took [$duration]($style) "` | module のフォーマットです。                                                                                                                  |
+| `style`                | `"bold yellow"`               | モジュールのスタイルです。                                                                                                                      |
+| `disabled`             | `false`                       | `cmd_duration`モジュールを無効にします。                                                                                                        |
+| `show_notifications`   | `false`                       | コマンドが完了したらデスクトップ通知を表示します。                                                                                                          |
+| `min_time_to_notify`   | `45_000`                      | 通知を持続する最短期間 (ミリ秒単位) です。                                                                                                            |
+| `notification_timeout` |                               | 通知を表示する期間 (ミリ秒単位) です。 If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
 ### 変数
 
