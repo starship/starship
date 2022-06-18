@@ -538,22 +538,22 @@ Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olh
 
 ::: atenção
 
-`vicmd_symbol` só é suportado no cmd, fish e zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Opções
 
-| Opções                     | Padrão               | Descrição                                                                                   |
-| -------------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
-| `format`                   | `"$symbol"`          | O formato da string usado antes da entrada dos textos.                                      |
-| `success_symbol`           | `"[❯](bold green)"`  | O formato da string usado antes da entrada de texto se o comando anterior for bem-sucedido. |
-| `error_symbol`             | `"[❯](bold red)"`    | O formato de string usado antes da entrada de texto se o comando anterior tiver falhado.    |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | O fromato de string usado antes da entrada de texto se o shell esta no vim normal mode.     |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.     |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.           |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.           |
-| `disabled`                 | `false`              | Desabilita o módulo `character`.                                                            |
+| Opções                      | Padrão               | Descrição                                                                                   |
+| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
+| `format`                    | `"$symbol"`          | O formato da string usado antes da entrada dos textos.                                      |
+| `success_symbol`            | `"[❯](bold green)"`  | O formato da string usado antes da entrada de texto se o comando anterior for bem-sucedido. |
+| `error_symbol`              | `"[❯](bold red)"`    | O formato de string usado antes da entrada de texto se o comando anterior tiver falhado.    |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | O fromato de string usado antes da entrada de texto se o shell esta no vim normal mode.     |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.     |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.           |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.           |
+| `disabled`                  | `false`              | Desabilita o módulo `character`.                                                            |
 
 ### Variáveis
 
