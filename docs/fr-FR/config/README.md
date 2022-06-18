@@ -3561,7 +3561,7 @@ Ces modules seront affichés si l'une de ces conditions est remplie:
 - Le dossier courant contient un dossier dont le nom est dans `detect_folders`
 - Le dossier courant contient un fichier dont l’extension est dans `detect_extensions`
 - La commande `when` retourne 0
-- Le système d’exploitation courant (std::env::consts::OS) correspond au champ `os` si défini.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 
