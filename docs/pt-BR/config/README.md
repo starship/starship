@@ -3558,7 +3558,7 @@ Este módulo vai ser exibir se algumas das condições a seguir for atendida:
 - O diretório atual contém um diretório cujo nome está em `detect_folders`
 - O diretório atual contém um arquivo cuja extensão está em `detect_extensions`
 - O comando `when` retorna 0
-- O sistema operacional (std::env::consts::OS) corresponde com o `os` se definido.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 
