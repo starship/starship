@@ -3560,7 +3560,7 @@ Estos módulos se mostrarán si se cumplen alguna de las siguientes condiciones:
 - El directorio actual contiene un directorio cuyo nombre está en `detect_folders`
 - El directorio actual contiene un archivo cuya extensión está en `detect_extensions`
 - El comando `when` devuelve 0
-- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
+- El sistema operativo actual (std::env::consts::OS) coincide con el campo `os` si está definido.
 
 ::: tip
 
