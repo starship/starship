@@ -47,7 +47,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-us.png"
-      alt="English"
+      alt="İngilizce"
  /></a>
   &nbsp;
   <a
@@ -55,7 +55,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-de.png"
-      alt="Deutsch"
+      alt="Almanca"
  /></a>
   &nbsp;
   <a
@@ -424,4 +424,4 @@ Lütfen starship'in oluşmasında ilham kaynağı olan çalışmalara da göz at
 
 ## 📝 Lisans
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Telif Hakkı © 2019-günümüz, [Starship Contributors](https://github.com/starship/starship/graphs/contributors). <br /> Bu proje [ISC](https://github.com/starship/starship/blob/master/LICENSE) lisanslıdır.
