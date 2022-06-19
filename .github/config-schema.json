@@ -956,6 +956,55 @@
         }
       ]
     },
+    "os": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol]($style)",
+        "style": "bold white",
+        "symbols": {
+          "Alpine": " ",
+          "Amazon": " ",
+          "Android": " ",
+          "Arch": " ",
+          "CentOS": " ",
+          "Debian": " ",
+          "DragonFly": " ",
+          "Emscripten": " ",
+          "EndeavourOS": " ",
+          "Fedora": " ",
+          "FreeBSD": " ",
+          "Gentoo": " ",
+          "HardenedBSD": "ﲊ ",
+          "Illumos": " ",
+          "Linux": " ",
+          "Macos": " ",
+          "Manjaro": " ",
+          "Mariner": " ",
+          "MidnightBSD": " ",
+          "Mint": " ",
+          "NetBSD": " ",
+          "NixOS": " ",
+          "OpenBSD": " ",
+          "OracleLinux": " ",
+          "Pop": " ",
+          "Raspbian": " ",
+          "RedHatEnterprise": " ",
+          "Redhat": " ",
+          "Redox": " ",
+          "SUSE": " ",
+          "Solus": "ﴱ ",
+          "Ubuntu": " ",
+          "Unknown": " ",
+          "Windows": " ",
+          "openSUSE": " "
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OSConfig"
+        }
+      ]
+    },
     "package": {
       "default": {
         "disabled": false,
@@ -3642,6 +3691,66 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "OSConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol]($style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "symbols": {
+          "default": {
+            "Alpine": " ",
+            "Amazon": " ",
+            "Android": " ",
+            "Arch": " ",
+            "CentOS": " ",
+            "Debian": " ",
+            "DragonFly": " ",
+            "Emscripten": " ",
+            "EndeavourOS": " ",
+            "Fedora": " ",
+            "FreeBSD": " ",
+            "Gentoo": " ",
+            "HardenedBSD": "ﲊ ",
+            "Illumos": " ",
+            "Linux": " ",
+            "Macos": " ",
+            "Manjaro": " ",
+            "Mariner": " ",
+            "MidnightBSD": " ",
+            "Mint": " ",
+            "NetBSD": " ",
+            "NixOS": " ",
+            "OpenBSD": " ",
+            "OracleLinux": " ",
+            "Pop": " ",
+            "Raspbian": " ",
+            "RedHatEnterprise": " ",
+            "Redhat": " ",
+            "Redox": " ",
+            "SUSE": " ",
+            "Solus": "ﴱ ",
+            "Ubuntu": " ",
+            "Unknown": " ",
+            "Windows": " ",
+            "openSUSE": " "
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "disabled": {
+          "default": true,
           "type": "boolean"
         }
       }
