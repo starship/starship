@@ -11,6 +11,7 @@ homepage = "https://starship.rs"
 include = [
   "src/**/*",
   "/starship.exe.manifest",
+  "media/icon.ico",
   "build.rs",
   "LICENSE",
   "/README.md",
