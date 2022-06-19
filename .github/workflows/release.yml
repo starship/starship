@@ -101,12 +101,21 @@ jobs:
 
       - name: Setup | Install cargo-wix [Windows]
         continue-on-error: true
-        # aarch64 is only supported in wix 4.0 development builds
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        run: cargo install --version 0.3.2 cargo-wix
+        if: matrix.os == 'windows-latest'
+        run: cargo install --version 0.3.3 cargo-wix
         env:
-          # cargo-wix does not require static crt
-          RUSTFLAGS: ''
+          RUSTFLAGS: '-Copt-level=1'
+
+      # TODO: remove this once arm-support is stable
+      - name: Update wix [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest'
+        run: |
+          Invoke-WebRequest https://wixtoolset.org/downloads/v3.14.0.6526/wix314-binaries.zip -OutFile ..\wix314-binaries.zip
+          if ('4C89898DF3BCAB13E12F7CA54399C35AD273475AD2CB6284611D00AE2D063C2C' -ne (Get-FileHash -Path ..\wix314-binaries.zip -Algorithm SHA256).Hash) {
+            throw "Invalid Hash"
+          }
+          Expand-Archive -LiteralPath ..\wix314-binaries.zip ..\wix314-binaries
 
       - name: Build | Build
         uses: actions-rs/cargo@v1.0.3
@@ -117,11 +126,8 @@ jobs:
 
       - name: Build | Installer [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: wix
-          args: -v --no-build --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship-${{ matrix.target }}.msi
+        if: matrix.os == 'windows-latest'
+        run: cargo wix -v --no-build --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --bin-path (Resolve-Path ../wix314-binaries) --output target/wix/starship-${{ matrix.target }}.msi
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -148,7 +154,7 @@ jobs:
 
       - name: Release | Upload installer artifacts [Windows]
         continue-on-error: true
-        if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v3
         with:
           name: starship-${{ matrix.target }}.msi
@@ -320,11 +326,12 @@ jobs:
     env:
       URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc.msi
       URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc.msi
+      URL_A64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-aarch64-pc-windows-msvc.msi
     steps:
       - run: |
           $version = '${{ needs.release_please.outputs.tag_name }}'.replace('v', '')
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GH_PAT }}
+          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 $env:URL_A64 -t ${{ secrets.GH_PAT }}
 
   merge_crowdin_pr:
     name: Merge Crowdin PR

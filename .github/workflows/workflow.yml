@@ -195,10 +195,20 @@ jobs:
       - name: Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo install --version 0.3.2 cargo-wix
+        run: cargo install --version 0.3.3 cargo-wix
         env:
-          # cargo-wix does not require static crt
-          RUSTFLAGS: ''
+          RUSTFLAGS: '-Copt-level=1'
+
+      # TODO: remove this once arm-support is stable
+      - name: Update wix [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: |
+          Invoke-WebRequest https://wixtoolset.org/downloads/v3.14.0.6526/wix314-binaries.zip -OutFile ../wix314-binaries.zip
+          if ('4C89898DF3BCAB13E12F7CA54399C35AD273475AD2CB6284611D00AE2D063C2C' -ne (Get-FileHash -Path ../wix314-binaries.zip -Algorithm SHA256).Hash) {
+            throw "Invalid Hash"
+          }
+          Expand-Archive -LiteralPath ../wix314-binaries.zip ../wix314-binaries
 
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
@@ -220,10 +230,7 @@ jobs:
       - name: Build | Installer [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: wix
-          args: --dbg-build -v --nocapture -I install/windows/main.wxs
+        run: cargo wix --dbg-build -v --nocapture --bin-path (Resolve-Path ../wix314-binaries) -I install/windows/main.wxs
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

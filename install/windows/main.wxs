@@ -62,7 +62,7 @@
   <Product Id='*' Name='starship' UpgradeCode='0E489D6B-0FEA-4B6E-B57F-62DD1E892C46' Manufacturer='Starship Contributors' Language='1033' Codepage='1252' Version='$(var.Version)'>
 
     <Package Id='*' Keywords='Installer' Description='The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
-' Manufacturer='Starship Contributors' InstallerVersion='450' Languages='1033' Compressed='yes' InstallScope='perMachine' SummaryCodepage='1252' />
+' Manufacturer='Starship Contributors' InstallerVersion='500' Languages='1033' Compressed='yes' InstallScope='perMachine' SummaryCodepage='1252' />
 
     <MajorUpgrade Schedule='afterInstallInitialize' DowngradeErrorMessage='A newer version of [ProductName] is already installed. Setup will now exit.' />
 
