@@ -93,6 +93,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "time",
     "status",
     "container",
+    "os",
     "shell",
     "character",
 ];

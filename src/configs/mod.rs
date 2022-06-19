@@ -50,6 +50,7 @@ pub mod nix_shell;
 pub mod nodejs;
 pub mod ocaml;
 pub mod openstack;
+pub mod os;
 pub mod package;
 pub mod perl;
 pub mod php;
@@ -185,6 +186,8 @@ pub struct FullConfig<'a> {
     ocaml: ocaml::OCamlConfig<'a>,
     #[serde(borrow)]
     openstack: openstack::OspConfig<'a>,
+    #[serde(borrow)]
+    os: os::OSConfig<'a>,
     #[serde(borrow)]
     package: package::PackageConfig<'a>,
     #[serde(borrow)]
