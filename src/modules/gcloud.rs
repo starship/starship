@@ -88,6 +88,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let gcloud_context = GcloudContext::new(&config_name, &config_path);
     let account: Lazy<Option<Account<'_>>, _> = Lazy::new(|| gcloud_context.get_account());
 
+    // Disable the Module if gcloud's active config is set to "NONE".
+    // This is a valid gcloud configuration.
+    if gcloud_context.config_name == "NONE" {
+        return None;
+    }
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -446,6 +452,22 @@ project = overridden
         let expected = Some(format!("on {} ", Color::Blue.bold().paint("☁️  overridden")));
 
         assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn active_set_to_none() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("gcloud")
+            .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+            .config(toml::toml! {
+                [gcloud]
+                active = "NONE"
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
         dir.close()
     }
 }
