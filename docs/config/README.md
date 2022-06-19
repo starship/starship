@@ -264,6 +264,7 @@ $jobs\
 $battery\
 $time\
 $status\
+$os\
 $shell\
 $character"""
 ```
