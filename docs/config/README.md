@@ -2952,7 +2952,7 @@ By default the module will be shown if any of the following conditions are met:
 | ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version-$vm_version )]($style)"` | The format string for the module.                                         |
 | `version_format`    | `"v${raw}"`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Perl                     |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                     |
 | `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Which extensions should trigger this module.                              |
 | `detect_files`      | `["META6.json"]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                             | Which folders should trigger this module.                                 |
