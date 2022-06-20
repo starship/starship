@@ -189,7 +189,7 @@ _Catatan:_ Element `character` secara otomatis menambahkan sebuah spasi setelahn
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Sebelumnya, properti `show_sync_count` digunakan untuk mengkonfigurasi prompt untuk menampilkan jumlah commits dari branch yang terdepan atau terbelakang dari remote branch.
+Sebelumnya, properti `show_sync_count` digunakan untuk mengkonfigurasi prompt buat menampilkan jumlah commits dari branch yang terdepan atau terbelakang dari remote branch.
 
 Dengan rilisnya v0.45.0, hal ini kini digantikan dengan tiga properti terpisah, `ahead`, `behind`, dan `diverged`.
 
