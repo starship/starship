@@ -171,7 +171,7 @@
 
 - Czcionka typu [Nerd Font](https://www.nerdfonts.com/) zainstalowana i ustawiona w twoim terminalu (wypróbuj na przykład [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Krok 1. Install Starship
 
 Select your operating system from the list below to view installation instructions:
 
@@ -282,7 +282,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Musisz użyć [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) z Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -335,7 +335,7 @@ mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+Dodaj następujący kod na koniec Twojego pliku konfiguracyjnego Nushell (możesz go znaleźć uruchamiając `$nu.config-path`):
 
 ```sh
 source ~/.cache/starship/init.nu
