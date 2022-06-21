@@ -12,7 +12,7 @@ Konfigurasi pada bagian ini dapat berubah saat Starship terbaru rilis di kemudia
 
 Clink menyediakan APIs yang sangat fleksibel untuk menjalankan perintah pre-prompt dan pre-exec di Cmd shell. Caranya sangat mudah dengan Starship. Ubahlah file `starship.lua` sesuai kebutuhanmu:
 
-- To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
+- Untuk menjalankan custom function sebelum prompt muncul, definisikan function baru dengan nama `starship_preprompt_user_func`. Function ini menerima prompt yang berjalan sebagai string yang mampu kamu gunakan. Sebagai contoh, untuk menampilkan roket sebelum prompt, kamu bisa
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -22,7 +22,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
+- Untuk menjalankan custom function tepat sebelum perintah dieksekusi, definisikan function baru dengan nama `starship_precmd_user_func`. Function ini menerima prompt yang berjalan sebagai string yang mampu kamu gunakan. Sebagai contoh, untuk menampilkan perintah yang akan dieksekusi, kamu bisa
 
 ```lua
 function starship_precmd_user_func(line)
@@ -36,7 +36,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook yang dapat dikustomisasi sepenuhnya di dalam `bash`. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan fungsimu sendiri ke dalam prosedur prompt-rendering:
 
-- Untuk menjalankan fungsi yang dikustomisasi tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan gambar roket sebelum prompt, kamu bisa melakukannya dengan cara
+- Untuk menjalankan custom function tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan roket sebelum prompt, kamu bisa
 
 ```bash
 function blastoff(){
@@ -45,7 +45,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Untuk menjalankan fungsi yang dikustomisasi tepat sebelum commands berjalan, kamu bisa menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, kamu **harus** melakukan proses trap pada DEBUG signal _sebelum_ menjalankan Starship! Starship bisa menyimpan nilai dari DEBUG trap, tapi jika trap diganti setelah starship berjalan, beberapa fungsi akan rusak.
+- Untuk menjalankan custom function tepat sebelum perintah berjalan, kamu bisa menggunakan [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). Akan tetapi, kamu **harus** melakukan proses trap pada DEBUG signal _sebelum_ menjalankan Starship! Starship bisa menyimpan nilai dari DEBUG trap, tapi jika trap diganti setelah starship berjalan, beberapa fungsi akan rusak.
 
 ```bash
 function blastoff(){
