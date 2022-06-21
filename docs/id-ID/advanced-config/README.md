@@ -153,15 +153,15 @@ Menghasilkan prompt seperti berikut:
 starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-## Continuation Prompt
+## Prompt Berkelanjutan
 
-Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+Beberapa shells mendukung continuation prompt bersamaan dengan prompt biasa. Prompt tersebutlah yang akan dirender daripada prompt biasa ketika pengguna memasukkan perintah yang kurang lengkap (seperti tanda kurung atau tanda kutipan tunggal).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+Starship dapat mengatur continuation prompt dengan opsi `continuation_prompt`. Prompt bawaannya adalah `"[∙](bright-black) "`.
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+Catatan: `continuation_prompt` harus diubah menjadi string literal tanpa variabel apapun.
 
-Note: Continuation prompts are only available in the following shells:
+Catatan: Continuation prompts hanya tersedia pada beberapa shells berikut:
 
 - `bash`
 - `zsh`
@@ -172,13 +172,13 @@ Note: Continuation prompts are only available in the following shells:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Continuation prompt yang menampilkan dua panah solid
 continuation_prompt = "▶▶"
 ```
 
-## Menata String
+## Penataan String
 
-Style strings are a list of words, separated by whitespace. Kumpulan katanya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
+Penataan string adalah kumpulan kata-kata, yang dipisahkan oleh ruang kosong. Kumpulannya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
 
 - `bold`
 - `italic`
@@ -196,7 +196,7 @@ yang mana `<color>` merupakan sebuah penentu warna (dibahas di bawah). `fg:<colo
 
 Penentuan warna bisa dilakukan dengan salah satu cara berikut:
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+- Warna terminal pada umumnya terdiri dari: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Secar opsional kamu bisa menambahkannya dengan `bright-` untuk mendapatkan versi yang lebih terang (mis. `bright-white`).
 - Menuliskannya dengan menggunakan `#` dan diikuti oleh enam digit angka hexadesimal. Spesifikasi [kode heksadesimal pada warna RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Menggunakan bilangan antara 0-255. Spesifikasi [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
 
