@@ -264,7 +264,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Krok 2. Setup your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
 
@@ -389,7 +389,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Krok 3. Configure Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
