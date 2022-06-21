@@ -129,7 +129,7 @@ Invoke-Expression (&starship init powershell)
 
 ## 启用右侧提示
 
-一些 Shell 支持右侧提示, 它与输入区渲染在同一行。 Starship 可以设置右侧提示的内容，使用 `right_format` 选项。 Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+一些 Shell 支持右侧提示, 它与输入区渲染在同一行。 使用 `right_format` 选项来设置 Starship 的右侧提示。 所有支持 `format` 的组件也同时支持 `right_format`。 The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
