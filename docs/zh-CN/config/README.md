@@ -66,9 +66,9 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 **组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 例如，如果您当前的目录是 Node.js 项目，“nodejs” 模块会显示当前安装在您电脑上的 Node.js 的版本。
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**字段（Variable）**：更小的子模块，包含由组件提供的信息。 例如，“nodejs”组件里的“version”字段包含了现有 Node.js 的版本。
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+依惯例，大多组件都有一个带有默认终端颜色的前缀（例如“nodejs”的 `via`），以及一个空格作为后缀。
 
 ### 格式字符串
 
@@ -76,13 +76,13 @@ By convention, most modules have a prefix of default terminal color (e.g. `via` 
 
 #### 字段
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
+一个字段由 `$` 和字段名依序组成。 字段名只能包含字母、数字以及 `_`。
 
 例如：
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- 格式字符串 `$version` 由一个变量 `version` 组成。
+- 格式字符串 `$git_branch$git_commit` 由两个变量 `git_branch`、`git_commit` 组成。
+- 格式字符串 `$git_branch $git_commit` 由两个变量和一个空格组成。
 
 #### 文本组
 
@@ -94,9 +94,9 @@ A variable contains a `$` symbol followed by the name of the variable. The name 
 
 例如：
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](red bold)` 会输出一个加粗的红色 `on`。
+- `[⌘ $version](bold green)` 会先输出一个 `⌘`，之后是 `version` 字段的内容，都是绿色加粗的样式。
+- `[a [b](red) c](green)` 会依序输出绿色 `a`、红色 `b`、绿色 `c`。
 
 #### 样式设定
 
