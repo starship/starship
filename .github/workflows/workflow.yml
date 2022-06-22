@@ -194,9 +194,7 @@ jobs:
       # On stable rust & main repo pushes only
       - name: Install cargo-wix [Windows]
         continue-on-error: true
-        if: >
-          matrix.os == 'windows-latest' && matrix.rust == 'stable' &&
-          github.repository == 'starship/starship' && github.event.type == 'push_event'
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
         run: cargo install --version 0.3.2 cargo-wix
         env:
           # cargo-wix does not require static crt
@@ -221,9 +219,7 @@ jobs:
 
       - name: Build | Installer [Windows]
         continue-on-error: true
-        if: >
-          matrix.os == 'windows-latest' && matrix.rust == 'stable' &&
-          github.repository == 'starship/starship' && github.event.type == 'push_event'
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
         uses: actions-rs/cargo@v1.0.3
         with:
           command: wix

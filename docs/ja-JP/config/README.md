@@ -207,6 +207,7 @@ $c\
 $cmake\
 $cobol\
 $container\
+$daml\
 $dart\
 $deno\
 $dotnet\
@@ -269,9 +270,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-`aws`モジュールは、`credential_process`または`sso_start_url`が設定されている場合、現在のAWSリージョンとプロファイルを表示します。 また、認証情報が設定されていない場合でも`force_display`オプションを利用して、このモジュールにリージョンとプロファイルを強制的に表示させることができます。 これは `~/.aws/config` に記述されている `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` 環境変数に基づいています。 This module also shows an expiration timer when using temporary credentials.
+The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or a `credential_process` is defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. 上記の条件を満たさない場合でも、`force_display`を`true`にすると、利用可能なすべての情報が表示されます。
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -349,16 +350,16 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+`azure` モジュールは、現在のAzureサブスクリプションを表示します。 これは、 `~/.azure/azureProfile.json` ファイルで定義されているデフォルトのサブスクリプションの名前の表示に基づいています。
 
 ### オプション
 
-| 変数         | デフォルト                                    | 説明                                         |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `"on [$symbol($subscription)]($style) "` | The format for the Azure module to render. |
-| `symbol`   | `"ﴃ "`                                   | The symbol used in the format.             |
-| `style`    | `"blue bold"`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| 変数         | デフォルト                                    | 説明                      |
+| ---------- | ---------------------------------------- | ----------------------- |
+| `format`   | `"on [$symbol($subscription)]($style) "` | Azure module のフォーマットです。 |
+| `symbol`   | `"ﴃ "`                                   | フォーマットで使用される記号です。       |
+| `style`    | `"blue bold"`                            | フォーマットで使用されるスタイルです。     |
+| `disabled` | `true`                                   | `azure`モジュールを無効にします。    |
 
 ### 設定例
 
@@ -536,19 +537,22 @@ format = "via [$name $version]($style)"
 
 ::: warning
 
-`vicmd_symbol` はcmd、fish、zshでのみサポートされています。
+`vicmd_symbol` はcmd、fish、zshでのみサポートされています。 `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### オプション
 
-| オプション            | デフォルト               | 説明                                           |
-| ---------------- | ------------------- | -------------------------------------------- |
-| `format`         | `"$symbol"`         | テキスト入力の前に使用される書式文字列。                         |
-| `success_symbol` | `"[❯](bold green)"` | 前のコマンドが成功した場合にテキスト入力の前に使用される書式文字列です。         |
-| `error_symbol`   | `"[❯](bold red)"`   | 前のコマンドが失敗した場合にテキスト入力の前に使用される書式文字列です。         |
-| `vicmd_symbol`   | `"[❮](bold green)"` | シェルが vim ノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列。 |
-| `disabled`       | `false`             | `character`モジュールを無効にします。                     |
+| オプション                      | デフォルト                | 説明                                                                                      |
+| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                   | `"$symbol"`          | テキスト入力の前に使用される書式文字列。                                                                    |
+| `success_symbol`           | `"[❯](bold green)"`  | 前のコマンドが成功した場合にテキスト入力の前に使用される書式文字列です。                                                    |
+| `error_symbol`             | `"[❯](bold red)"`    | 前のコマンドが失敗した場合にテキスト入力の前に使用される書式文字列です。                                                    |
+| `vicmd_symbol`             | `"[❮](bold green)"`  | シェルが vim ノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列。                                            |
+| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                 | `false`              | `character`モジュールを無効にします。                                                                |
 
 ### 変数
 
@@ -693,7 +697,7 @@ format = "underwent [$duration](bold yellow)"
 
 ## Conda
 
-The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
+`conda` モジュールは、`$CONDA_DEFAULT_ENV` が設定されている場合、現在の[Conda](https://docs.conda.io/en/latest/) 環境を表示します。
 
 ::: tip
 
@@ -802,13 +806,51 @@ format = "[$symbol \\[$name\\]]($style) "
 format = "via [✨ $version](bold blue) "
 ```
 
+## Daml
+
+The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `daml.yaml` file
+
+### オプション
+
+| オプション               | デフォルト                              | 説明                                                     |
+| ------------------- | ---------------------------------- | ------------------------------------------------------ |
+| `format`            | `via [$symbol($version )]($style)` | module のフォーマットです。                                      |
+| `version_format`    | `v${raw}`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"Λ "`                             | A format string representing the symbol of Daml        |
+| `style`             | `"bold cyan"`                      | モジュールのスタイルです。                                          |
+| `detect_extensions` | `[]`                               | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["daml.yaml"]`                    | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                               | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `disabled`          | `false`                            | Disables the `daml` module.                            |
+
+### 変数
+
+| 変数        | 設定例      | 説明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v2.2.0` | The version of `daml`  |
+| symbol    |          | オプション `記号` の値をミラーする    |
+| style\* |          | オプション `style` の値をミラーする |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[daml]
+format = "via [D $version](bold bright-green) "
+```
+
 ## Dart
 
 `dart`モジュールは、現在インストールされている[Dart](https://dart.dev/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.dart`の拡張子のファイルが含まれている
 - カレントディレクトリに`.dart_tool`ディレクトリが含まれている
-- カレントディレクトリに`pubspec.yaml`, `pubspec.yml`,もしくは`pubspec.lock`が含まれている
+- カレントディレクトリに`pubspec.yaml`、`pubspec.yml`または`pubspec.lock` が含まれている
 
 ### オプション
 
@@ -888,20 +930,20 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 
 ### オプション
 
-| オプション               | デフォルト                                                                                                       | 説明                                                                                  |
-| ------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `truncation_length` | `3`                                                                                                         | 現在のディレクトリを切り捨てる親フォルダーの数です。                                                          |
-| `truncate_to_repo`  | `true`                                                                                                      | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                                                       |
-| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | module のフォーマットです。                                                                   |
-| `style`             | `"bold cyan"`                                                                                               | モジュールのスタイルです。                                                                       |
-| `disabled`          | `false`                                                                                                     | `directory`モジュールを無効にします。                                                            |
-| `read_only`         | `"🔒"`                                                                                                       | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。                                                 |
-| `read_only_style`   | `"red"`                                                                                                     | 読み取り専用シンボルのスタイルです。                                                                  |
-| `truncation_symbol` | `""`                                                                                                        | 切り捨てられたパスの接頭辞として付けるシンボルです。 例: "…/"                                                  |
-| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`. |
-| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                         |
-| `home_symbol`       | `"~"`                                                                                                       | ホームディレクトリを示すシンボルです。                                                                 |
-| `use_os_path_sep`   | `true`                                                                                                      | `/`を使用する代わりに、OS固有のパスの区切り文字を使用します。(例: Windowsの場合`\`)                              |
+| オプション               | デフォルト                                                                                                       | 説明                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `truncation_length` | `3`                                                                                                         | 現在のディレクトリを切り捨てる親フォルダーの数です。                             |
+| `truncate_to_repo`  | `true`                                                                                                      | 現在いるgitリポジトリのルートに切り捨てるかどうかです。                          |
+| `format`            | `"[$path]($style)[$read_only]($read_only_style) "`                                                          | module のフォーマットです。                                      |
+| `style`             | `"bold cyan"`                                                                                               | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                                                     | `directory`モジュールを無効にします。                               |
+| `read_only`         | `"🔒"`                                                                                                       | このシンボルが表示されている時、現在のディレクトリは読み取り専用です。                    |
+| `read_only_style`   | `"red"`                                                                                                     | 読み取り専用シンボルのスタイルです。                                     |
+| `truncation_symbol` | `""`                                                                                                        | 切り捨てられたパスの接頭辞として付けるシンボルです。 例: "…/"                     |
+| `repo_root_style`   | `None`                                                                                                      | gitリポジトリのルートのスタイルです。 デフォルトの値は `style` と同じです。           |
+| `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | `repo_root_style` が定義されている場合の git リポジトリのフォーマットです。      |
+| `home_symbol`       | `"~"`                                                                                                       | ホームディレクトリを示すシンボルです。                                    |
+| `use_os_path_sep`   | `true`                                                                                                      | `/`を使用する代わりに、OS固有のパスの区切り文字を使用します。(例: Windowsの場合`\`) |
 
 <details>
 <summary>このモジュールは、どのようにディレクトリを表示するかについての高度なオプションをいくつか持っています。</summary>
@@ -1013,7 +1055,7 @@ format = "via [🐋 $context](blue bold)"
 
 内部的に、このモジュールは自身のバージョン検知のメカニズムを利用します。 `dotnet --version` を実行するより2倍速く実行できますが、.NET project一般的でないディレクトリlayoutの場合は間違ったバージョンが示されてしまうことがあります。 速度よりも精度が重要な場合は、次の方法でメカニズムを無効にできます。 モジュールオプションで`heuristic = false `を設定します。
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
+このモジュールは、カレントディレクトリに `.csproj` ファイルがある場合、Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) も表示します。
 
 ### オプション
 
@@ -1343,17 +1385,17 @@ very-long-project-name = "vlpn"
 
 ### オプション
 
-| オプション                | デフォルト                                             | 説明                                                                                   |
-| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `always_show_remote` | `false`                                           | Shows the remote tracking branch name, even if it is equal to the local branch name. |
-| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。                                 |
-| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                                            |
-| `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                                        |
-| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                                             |
-| `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.                          |
-| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                       |
-| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main".                  |
-| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                                            |
+| オプション                | デフォルト                                             | 説明                                                                  |
+| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                                |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。                |
+| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                           |
+| `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                       |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                            |
+| `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.         |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.      |
+| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main". |
+| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                           |
 
 ### 変数
 
@@ -1599,7 +1641,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`golang`モジュールは、現在インストールされている[Go](https://golang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`go.mod`ファイルが含まれている
 - カレントディレクトリに`go.sum`ファイルが含まれている
@@ -1650,7 +1692,7 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`stack.yaml`ファイルが含まれている
-- The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
+- カレントディレクトリに`.hs`、`.cabal`または`.hs-boot`のファイルが含まれている
 
 ### オプション
 
@@ -1678,10 +1720,10 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`helm`モジュールは、現在インストールされている[Helm](https://helm.sh/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`helmfile.yaml`ファイルが含まれている
-- The current directory contains a `Chart.yaml` file
+- カレントディレクトリに`Chart.yaml`ファイルが含まれている
 
 ### オプション
 
@@ -1754,10 +1796,10 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`Java`モジュールは、現在インストールされている[Java](https://www.oracle.com/java/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, or `build.boot` file
-- The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
+- カレントディレクトリに`pom.xml`、`build.gradle.kts`、`build.sbt`、`.java-version`、`.deps.edn`、`project.clj`または`build.boot`が含まれている
+- カレントディレクトリに拡張子が`.java`、`.class`、`.gradle`、`.jar`、`.clj`または`.cljc`のファイルが含まれている
 
 ### オプション
 
@@ -1850,7 +1892,7 @@ symbol_threshold = 0
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`julia`モジュールは、現在インストールされている[Julia](https://julialang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Project.toml`ファイルが含まれている
 - カレントディレクトリに`Manifest.toml`ファイルが含まれている
@@ -1947,13 +1989,14 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ### オプション
 
-| オプション             | デフォルト                                                | 説明                              |
-| ----------------- | ---------------------------------------------------- | ------------------------------- |
-| `symbol`          | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。 |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。               |
-| `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                   |
-| `context_aliases` |                                                      | コンテキストの表示エイリアスを定義するテーブル。        |
-| `disabled`        | `true`                                               | `kubernetes` モジュールを無効にする。       |
+| オプション             | デフォルト                                                | 説明                                |
+| ----------------- | ---------------------------------------------------- | --------------------------------- |
+| `symbol`          | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。   |
+| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                 |
+| `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                     |
+| `context_aliases` |                                                      | コンテキストの表示エイリアスを定義するテーブル。          |
+| `user_aliases`    |                                                      | Table of user aliases to display. |
+| `disabled`        | `true`                                               | `kubernetes` モジュールを無効にする。         |
 
 ### 変数
 
@@ -1980,11 +2023,14 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
 "gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
+[kubernetes.user_aliases]
+"dev.local.cluster.k8s" = "dev"
+"root/.*" = "root"
 ```
 
 #### Regex Matching
 
-Additional to simple aliasing, `context_aliases` also supports extended matching and renaming using regular expressions.
+Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
 
 The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
 
@@ -2181,12 +2227,12 @@ truncation_symbol = ""
 
 ## Nim
 
-The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`nim`モジュールは、現在インストールされている[Nim](https://nim-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`nim.cfg`ファイルが含まれている
-- The current directory contains a file with the `.nim` extension
-- The current directory contains a file with the `.nims` extension
-- The current directory contains a file with the `.nimble` extension
+- カレントディレクトリに拡張子が`.nim`のファイルが含まれている
+- カレントディレクトリに拡張子が`.nims`のファイルが含まれている
+- カレントディレクトリに拡張子が`.nimble`のファイルが含まれている
 
 ### オプション
 
@@ -2223,7 +2269,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. このモジュールは、nixシェル環境内にあるときに表示されます。
+`nix_shell`モジュールは[nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html)環境を表示します。 このモジュールは、nixシェル環境内にあるときに表示されます。
 
 ### オプション
 
@@ -2261,14 +2307,14 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`nodejs`モジュールは、現在インストールされている[Node.js](https://nodejs.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`package.json`ファイルが含まれている
-- The current directory contains a `.node-version` file
-- The current directory contains a `.nvmrc` file
+- カレントディレクトリに`.node-version`ファイルが含まれている
+- カレントディレクトリに`.nvmrc`ファイルが含まれている
 - カレントディレクトリに`node_modules`ディレクトリが含まれている
-- The current directory contains a file with the `.js`, `.mjs` or `.cjs` extension
-- The current directory contains a file with the `.ts`, `.mts` or `.cts` extension
+- カレントディレクトリに拡張子が`.js`、`.mjs`または`.cjs`のファイルが含まれている
+- カレントディレクトリに拡張子が`.ts`、`.mts`または`.cts`のファイルが含まれている
 
 ### オプション
 
@@ -2305,14 +2351,14 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`ocaml`モジュールは、現在インストールされている[OCaml](https://ocaml.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a file with `.opam` extension or `_opam` directory
-- The current directory contains a `esy.lock` directory
-- The current directory contains a `dune` or `dune-project` file
-- The current directory contains a `jbuild` or `jbuild-ignore` file
-- The current directory contains a `.merlin` file
-- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+- カレントディレクトリに拡張子`.opam`のファイルまたは`_opam`ディレクトリが含まれている
+- カレントディレクトリに`esy.lock`ディレクトリが含まれている
+- カレントディレクトリに`dune`または`dune-project`ファイルが含まれている
+- カレントディレクトリに`jbuild`または`jbuild-ignore`ファイルが含まれている
+- カレントディレクトリに`.merlin`ファイルが含まれている
+- カレントディレクトリに拡張子が`.ml`、`.mli`、`.re`または`.rei`のファイルが含まれている
 
 ### オプション
 
@@ -2387,7 +2433,7 @@ symbol = "☁️ "
 
 ## パッケージのバージョン
 
-`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2404,6 +2450,7 @@ symbol = "☁️ "
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
 - [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
+- [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
 - [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
 
 > ⚠️ 表示されるバージョンは、パッケージマネージャーではなく、ソースコードが現在のディレクトリにあるパッケージのバージョンです。
@@ -2440,13 +2487,13 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`perl`モジュールは、現在インストールされている[Perl](https://www.perl.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Makefile.PL` or `Build.PL` file
-- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
-- The current directory contains a `META.json` file or `META.yml` file
-- The current directory contains a `.perl-version` file
-- The current directory contains a `.pl`, `.pm` or `.pod`
+- カレントディレクトリに`Makefile.PL`または`Build.PL`ファイルが含まれている
+- カレントディレクトリに`cpanfile`または`cpanfile.snapshot`ファイルが含まれている
+- カレントディレクトリに`META.json`または`META.yml`ファイルが含まれている
+- カレントディレクトリに`.perl-version`ファイルが含まれている
+- カレントディレクトリに拡張子が`.pl`、`.pm`または`.pod`のファイルが含まれている
 
 ### オプション
 
@@ -2480,11 +2527,11 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`php`モジュールは、現在インストールされている[PHP](https://www.php.net/) のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
-- The current directory contains a `.php-version` file
-- The current directory contains a `.php` extension
+- カレントディレクトリに`.php-version`ファイルが含まれている
+- カレントディレクトリに拡張子が`.php`のファイルが含まれている
 
 ### オプション
 
@@ -2530,8 +2577,8 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- カレントディレクトリに`Pulumi.yaml`または`Pulumi.yml`ファイルが含まれている
+- 親ディレクトリに`Pulumi.yaml`または`Pulumi.yml`ファイルが含まれている
 
 ### オプション
 
@@ -2577,10 +2624,10 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`purescript`モジュールは、現在インストールされている[PureScript](https://www.purescript.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`spago.dhall`ファイルが含まれている
-- The current directory contains a file with the `.purs` extension
+- カレントディレクトリに拡張子が`.purs`のファイルが含まれている
 
 ### オプション
 
@@ -2705,15 +2752,15 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+`rlang`モジュールは、現在インストールされている[R](https://www.r-project.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a file with the `.R` extension.
-- The current directory contains a file with the `.Rd` extension.
-- The current directory contains a file with the `.Rmd` extension.
-- The current directory contains a file with the `.Rproj` extension.
-- The current directory contains a file with the `.Rsx` extension.
-- The current directory contains a `.Rprofile` file
-- The current directory contains a `.Rproj.user` folder
+- カレントディレクトリに拡張子が`.R`のファイルが含まれている
+- カレントディレクトリに拡張子が`.Rd`のファイルが含まれている
+- カレントディレクトリに拡張子が`.Rmd`のファイルが含まれている
+- カレントディレクトリに拡張子が`.Rproj`のファイルが含まれている
+- カレントディレクトリに拡張子が`.Rsx`のファイルが含まれている
+- カレントディレクトリに`.Rprofile`ファイルが含まれている
+- カレントディレクトリに`.Rproj.user`フォルダが含まれている
 
 ### オプション
 
@@ -2747,15 +2794,15 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
+デフォルトでは`red`モジュールは、現在インストールされている[Red](https://www.red-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current directory contains a file with `.red` or `.reds` extension
+- カレントディレクトリに拡張子が`.red` or `.reds`のファイルが含まれている
 
 ### オプション
 
 | オプション               | デフォルト                                | 説明                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`            | `"🔺 "`                               | A format string representing the symbol of Red.        |
 | `detect_extensions` | `["red"]`                            | どの拡張子がこのモジュールをアクティブにするか                                |
@@ -2790,7 +2837,7 @@ symbol = "🔴 "
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - カレントディレクトリに `.ruby-version` ファイルが含まれている
 - カレントディレクトリに`.rb`の拡張子のファイルが含まれている
-- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+- 環境変数に`RUBY_VERSION`または`RBENV_VERSION`が設定されている
 
 Starship gets the current Ruby version by running `ruby -v`.
 
@@ -2870,11 +2917,11 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`scala` モジュールは、現在インストールされている[Scala](https://www.scala-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
-- The current directory contains a directory named `.metals`
+- カレントディレクトリに`build.sbt`、`.scalaenv`または`.sbtenv`ファイルが含まれている
+- カレントディレクトリに拡張子が`.scala`または`.sbt`のファイルが含まれている
+- カレントディレクトリに`.metals`ディレクトリが含まれている
 
 ### オプション
 
@@ -3171,10 +3218,10 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
+デフォルトでは`swift` モジュールは、現在インストールされている[Swift](https://swift.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
+- カレントディレクトリに`Package.swift`ファイルが含まれている
+- カレントディレクトリに拡張子が`.swift`のファイルが含まれている
 
 ### オプション
 
@@ -3360,9 +3407,9 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`vagrant`モジュールは、現在インストールされている[Vagrant](https://www.vagrantup.com/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `Vagrantfile` file
+- カレントディレクトリに`Vagrantfile`ファイルが含まれている
 
 ### オプション
 
@@ -3398,10 +3445,10 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`vlang`モジュールは、現在インストールされている[V](https://vlang.io/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a file with `.v` extension
-- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
+- カレントディレクトリに拡張子が`.v`のファイルが含まれている
+- カレントディレクトリに`v.mod`、`vpkg.json`または`.vpkg-lock.json`ファイルが含まれている
 
 ### オプション
 
@@ -3466,9 +3513,9 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
+デフォルトでは`zig`モジュールは、現在インストールされている[Zig](https://ziglang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- The current directory contains a `.zig` file
+- カレントディレクトリに拡張子が`.zig`のファイルが含まれている
 
 ### オプション
 

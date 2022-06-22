@@ -1,0 +1,11 @@
+[advisories]
+ignore = [
+  # Potential segfault in the time crate
+  # chrono dependency, but vulnerable function is never called
+  # Tacked in #3163
+  "RUSTSEC-2020-0071",
+  # chrono: Potential segfault in localtime_r invocations
+  # starship avoids setting any environment variables to avoid this issue
+  # Tracked in #3166
+  "RUSTSEC-2020-0159",
+]
