@@ -328,7 +328,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-将以下内容添加到您 Nushell 环境文件的末尾（使用 `$nu.env-path` 来获取它的路径）：
+在您的 Nushell 环境文件的最后（使用 `$nu.env-path` 来获取它的路径），添加以下内容：
 
 ```sh
 mkdir ~/.cache/starship
@@ -407,7 +407,7 @@ eval "$(starship init zsh)"
 
 如果您有兴趣贡献于 Starship，请查看我们的[贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 另外，你可以自由加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 。 👋
 
-## 💭该项目受以下项目启发
+## 💭 该项目受以下项目启发
 
 请参考这些曾经为 Starship 提供启发的工程。 🙏
 
@@ -424,4 +424,4 @@ eval "$(starship init zsh)"
 
 ## 📝 许可证
 
-版权所有 © 2019 - 目前, [Starship 贡献者](https://github.com/starship/starship/graphs/contributors).<br /> 此项目使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 许可.
+版权所有 © 2019 至今, [Starship 贡献者](https://github.com/starship/starship/graphs/contributors).<br /> 此项目使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 许可.
