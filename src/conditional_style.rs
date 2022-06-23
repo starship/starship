@@ -77,8 +77,22 @@ impl<'a> StarshipConditionalStyle<'a> {
 }
 
 #[derive(Clone, Debug, Default, Serialize, PartialEq)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 pub struct StarshipConditionalStyleConfig<'a>(StarshipConditionalStyle<'a>);
+
+#[cfg(feature = "config-schema")]
+impl<'a> schemars::JsonSchema for StarshipConditionalStyleConfig<'a> {
+    fn schema_name() -> String {
+        Either::<String, StarshipConditionalStyle>::schema_name()
+    }
+
+    fn json_schema(gen: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
+        Either::<String, StarshipConditionalStyle>::json_schema(gen)
+    }
+
+    fn is_referenceable() -> bool {
+        Either::<String, StarshipConditionalStyle>::is_referenceable()
+    }
+}
 
 impl<'de: 'a, 'a> Deserialize<'de> for StarshipConditionalStyleConfig<'a> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>

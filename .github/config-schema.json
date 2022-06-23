@@ -2259,7 +2259,7 @@
           ],
           "allOf": [
             {
-              "$ref": "#/definitions/Either_for_StarshipConditionalStyleConfig_and_Array_of_StarshipConditionalStyleConfig"
+              "$ref": "#/definitions/Either_for_Either_for_String_and_StarshipConditionalStyle_and_Array_of_Either_for_String_and_StarshipConditionalStyle"
             }
           ]
         },
@@ -2296,21 +2296,28 @@
         }
       }
     },
-    "Either_for_StarshipConditionalStyleConfig_and_Array_of_StarshipConditionalStyleConfig": {
+    "Either_for_Either_for_String_and_StarshipConditionalStyle_and_Array_of_Either_for_String_and_StarshipConditionalStyle": {
       "anyOf": [
         {
-          "$ref": "#/definitions/StarshipConditionalStyleConfig"
+          "$ref": "#/definitions/Either_for_String_and_StarshipConditionalStyle"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/StarshipConditionalStyleConfig"
+            "$ref": "#/definitions/Either_for_String_and_StarshipConditionalStyle"
           }
         }
       ]
     },
-    "StarshipConditionalStyleConfig": {
-      "$ref": "#/definitions/StarshipConditionalStyle"
+    "Either_for_String_and_StarshipConditionalStyle": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/StarshipConditionalStyle"
+        }
+      ]
     },
     "StarshipConditionalStyle": {
       "type": "object",
