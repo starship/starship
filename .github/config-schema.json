@@ -1285,6 +1285,7 @@
         "not_found_symbol": "🔍",
         "pipestatus": false,
         "pipestatus_format": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+        "pipestatus_segment_format": "",
         "pipestatus_separator": "|",
         "recognize_signal_code": true,
         "sigint_symbol": "🧱",
@@ -4411,6 +4412,10 @@
         },
         "pipestatus_format": {
           "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+          "type": "string"
+        },
+        "pipestatus_segment_format": {
+          "default": "",
           "type": "string"
         },
         "disabled": {
