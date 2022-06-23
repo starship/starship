@@ -261,6 +261,7 @@ Install Starship using any of the following package managers:
 | [Chocolatey]    | `choco install starship`                |
 | [conda-forge]   | `conda install -c conda-forge starship` |
 | [Scoop]         | `scoop install starship`                |
+| [winget]        | `winget install --id Starship.Starship` |
 
 </details>
 
@@ -447,3 +448,4 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [snapcraft]: https://snapcraft.io/starship
 [termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
 [void linux packages]: https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship
+[winget]: https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship
