@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.7.1"
+version = "1.8.0"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -11,6 +11,7 @@ homepage = "https://starship.rs"
 include = [
   "src/**/*",
   "/starship.exe.manifest",
+  "media/icon.ico",
   "build.rs",
   "LICENSE",
   "/README.md",
@@ -37,13 +38,13 @@ notify = ["notify-rust"]
 [dependencies]
 ansi_term = "0.12.1"
 chrono = "0.4.19"
-clap = { version = "3.1.18", features = ["derive", "cargo", "unicode"] }
-clap_complete = "3.1.4"
+clap = { version = "=3.2.6", features = ["derive", "cargo", "unicode", "unstable-v4"] }
+clap_complete = "3.2.2"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
 gethostname = "0.2.3"
 git2 = { version = "0.14.4", default-features = false }
-indexmap = { version = "1.8.2", features = ["serde"] }
+indexmap = { version = "1.9.1", features = ["serde"] }
 local_ipaddress = "0.1.3"
 log = { version = "0.4.16", features = ["std"] }
 # nofity-rust is optional (on by default) because the crate doesn't currently build for darwin with nix

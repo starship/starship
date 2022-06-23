@@ -183,7 +183,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = "$all"
 
-# Ce qui est équivalent à
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -206,6 +206,7 @@ $c\
 $cmake\
 $cobol\
 $container\
+$daml\
 $dart\
 $deno\
 $dotnet\
@@ -268,9 +269,9 @@ format = "$all$directory$character"
 
 ## AWS
 
-Le module `aws` affiche la région et le profil AWS actuelle quand des identifiants, un `credential_process` ou une `sso_start_url` ont été configurées. Vous pouvez aussi forcer ce module à afficher la région et le profil, même quand les identifiants n’ont pas été configurés, avec l’option `force_display`. Il se base sur les variables d’environnement `AWS_REGION`, `AWS_DEFAULT_REGION` et `AWS_PROFILE` avec un fichier `~/.aws/config`. Ce module montre aussi un minuteur d’expiration lors de l’utilisation d’identifiants temporaires.
+The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-Le module n’affichera un profil que si ses identifiants sont présents dans `~/.aws/credentials` ou si un `credential_process` est définie dans `~/.aws/config`. Sinon, avoir l’une des variables d’environnement `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` ou `AWS_SESSION_TOKEN` définie est suffisant. Si l’option `force_display` est définie à `true`, toutes les informations disponibles seront affichées même si les conditions ne sont pas respectées.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 Lorsque vous utilisez [aws-vault](https://github.com/99designs/aws-vault) le profil est lu à partir de la variable d'environnement `AWS_VAULT` et la date d'expiration des identifiants est lue à partir de la variable d'environnement `AWS_SESSION_EXPIRATION`.
 
@@ -537,19 +538,22 @@ Par défaut, il ne change que la couleur. Si vous désirez également changer sa
 
 ::: warning
 
-`vicmd_symbol` n’est supporté que dans cmd, fish et zsh.
+`vicmd_symbol` n’est supporté que dans cmd, fish et zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Options
 
-| Option           | Défaut              | Description                                                                   |
-| ---------------- | ------------------- | ----------------------------------------------------------------------------- |
-| `format`         | `"$symbol "`        | Le format utilisée avant l'entrée de texte.                                   |
-| `success_symbol` | `"[❯](bold green)"` | Le format utilisé avant l'entrée de texte si la commande précédente a réussi. |
-| `error_symbol`   | `"[❯](bold red)"`   | Le format utilisé avant l'entrée de texte si la commande précédente a échoué. |
-| `vicmd_symbol`   | `"[❮](bold green)"` | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal. |
-| `disabled`       | `false`             | Désactive le module `character`.                                              |
+| Option                     | Défaut               | Description                                                                             |
+| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                   | `"$symbol "`         | Le format utilisée avant l'entrée de texte.                                             |
+| `success_symbol`           | `"[❯](bold green)"`  | Le format utilisé avant l'entrée de texte si la commande précédente a réussi.           |
+| `error_symbol`             | `"[❯](bold red)"`    | Le format utilisé avant l'entrée de texte si la commande précédente a échoué.           |
+| `vicmd_symbol`             | `"[❮](bold green)"`  | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal.           |
+| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                 | `false`              | Désactive le module `character`.                                                        |
 
 ### Variables
 
@@ -803,13 +807,51 @@ Le module `crystal` affiche la version actuellement installée de [Crystal](http
 format = "via [✨ $version](bold blue) "
 ```
 
+## Daml
+
+The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+
+- The current directory contains a `daml.yaml` file
+
+### Options
+
+| Option              | Défaut                             | Description                                                                                |
+| ------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`            | `via [$symbol($version )]($style)` | Format du module.                                                                          |
+| `version_format`    | `v${raw}`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"Λ "`                             | A format string representing the symbol of Daml                                            |
+| `style`             | `"bold cyan"`                      | Le style du module.                                                                        |
+| `detect_extensions` | `[]`                               | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["daml.yaml"]`                    | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                               | Les dossiers qui activent ce module.                                                       |
+| `disabled`          | `false`                            | Disables the `daml` module.                                                                |
+
+### Variables
+
+| Variable  | Exemple  | Description                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `v2.2.0` | The version of `daml`                  |
+| symbol    |          | Reflète la valeur de l'option `symbol` |
+| style\* |          | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[daml]
+format = "via [D $version](bold bright-green) "
+```
+
 ## Dart
 
 Le module `dart` affiche la version actuellement installée de [Dart](https://dart.dev/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier avec l’extension `.dart`
-- Le dossier courant contient un fichier `.dart_tool`
-- Le dossier courant contient un fichier `pubsepc.yaml`, `pubspec.yml` ou `pubspec.lock`
+- Le répertoire courant contient un fichier `.dart`
+- Le répertoire courant contient un répertoire `.dart_tool`
+- Le répertoire courant contient un fichier `pubspec.yaml`, `pubspec.yml` ou `pubspec.lock`
 
 ### Options
 
@@ -847,7 +889,7 @@ format = "via [🔰 $version](bold red) "
 
 Le module `deno` affiche la version actuellement installée de [Deno](https://deno.land/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` ou `deps.js`
+- Le répertoire actuel contient un fichier `deno.json`, `deno.jsonc`, `mod.ts`, `mod.ts`, `mod.js`, `deps.ts`, ou `deps.js`
 
 ### Options
 
@@ -1056,11 +1098,11 @@ heuristic = false
 
 Le module `elixir` montre la version actuellement installée de [Elixir](https://elixir-lang.org/) et [Erlang/OTP](https://erlang.org/doc/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `mix.exs`.
+- Le répertoire courant contient un fichier `mix.exs`.
 
 ### Options
 
-| Option              | Défaut                                                      | Description                                                                                |
+| Option              | Défault                                                     | Description                                                                                |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                                                   |
 | `version_format`    | `"v${raw}"`                                                 | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
@@ -1095,15 +1137,15 @@ symbol = "🔮 "
 
 Le module `elm` montre la version actuellement installée de [Elm](https://elm-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `elm.json`
-- Le dossier courant contient un fichier `elm-package.json`
-- Le dossier courant contient un fichier `elm-version`
-- Le dossier courant contient un dossier `elm-stuff`
+- Le répertoire courant contient un fichier `elm.json`
+- Le répertoire courant contient un fichier `elm-package.json`
+- Le répertoire courant contient un fichier `elm-version`
+- Le répertoire courant contient un dossier `elm-stuff`
 - Le dossier courant contient des fichiers `*.elm`
 
 ### Options
 
-| Option              | Défault                                            | Description                                                                                |
+| Option              | Défaut                                             | Description                                                                                |
 | ------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )]($style)"`               | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                                        | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
@@ -1682,7 +1724,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 Le module `helm` montre la version actuellement installée de [Helm](https://helm.sh/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le dossier courant contient un fichier `helmfile.yaml`
-- Le dossier courant contient un fichier `Chart.yaml`
+- Le répertoire courant contient un fichier `Chart.yml`
 
 ### Options
 
@@ -1757,8 +1799,8 @@ disabled = false
 
 Le module `java` affiche la version actuellement installée de [Java](https://www.oracle.com/java/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`ou `build.boot`
-- Le dossier courant contient un fichier avec l’extension `.java`, `.class`, `.gradle`, `.jar`, `.clj` ou `.cljc`
+- Le répertoire actuel contient un fichier `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `.deps.edn`, `project.clj`, ou `build.boot`
+- Le répertoire actuel contient un fichier avec l'extension `.java`, `.class`, `. gradle`, `.jar`, `.clj`, ou `.cljc`
 
 ### Options
 
@@ -1853,9 +1895,9 @@ symbol_threshold = 0
 
 Le module `julia` affiche la version actuellement installée de [Julia](https://julialang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `Project.toml`
-- Le dossier courant contient un fichier `Manifest.toml`
-- Le dossier courant contient un fichier `.jl`
+- Le répertoire courant contient un fichier `Project.toml`
+- Le répertoire courant contient un fichier `Manifest.toml`
+- Le répertoire actuel contient un fichier avec l'extension `.jl`
 
 ### Options
 
@@ -1893,7 +1935,7 @@ symbol = "∴ "
 
 Le module `kotlin` affiche la version actuellement installée de [Kotlin](https://kotlinlang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `.kt` ou `.kts`
+- Le répertoire courant contient un fichier `.kt` ou `.kts`
 
 ### Options
 
@@ -1938,7 +1980,7 @@ kotlin_binary = "kotlinc"
 
 ## Kubernetes
 
-Afficher le nom du [contexte Kubernetes](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) courant, et, si défini, l’espace de nom, l’utilisateur, et le cluster depuis le fichier kubeconfig. L'espace de noms doit être défini dans le fichier kubeconfig, ce qui peut être fait via `kubectl config set-context starship-cluster --namespace astronaut`. De même, l'utilisateur et l'instance peuvent être définies avec `kubectl config set-context starship-context --user starship-user` et `kubectl config set-context starship-context --cluster starship-cluster`. Si la variable d'environnement `$KUBECONFIG` est définie, le module l'utilisera, sinon il utilisera le fichier `~/.kube/config`.
+Afficher le nom du [contexte Kubernetes](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) courant, et, si défini, l’espace de nom, l’utilisateur, et le cluster depuis le fichier kubeconfig. L'espace de noms doit être défini dans le fichier kubeconfig, ce qui peut être fait via `kubectl config set-context starship-cluster --namespace astronaut`. De même, l'utilisateur et l'instance peuvent être définies avec `kubectl config set-context starship-context --user starship-user` et `kubectl config set-context starship-context --cluster starship-cluster`. Si la variable d'environnement `$KUBECONFIG` est définie, le module l'utilisera sinon il utilisera le fichier `~/.kube/config`.
 
 ::: tip
 
@@ -1954,6 +1996,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                      |
 | `style`           | `"cyan bold"`                                        | Le style du module.                                                    |
 | `context_aliases` |                                                      | Tableau des alias de contexte à afficher.                              |
+| `user_aliases`    |                                                      | Table of user aliases to display.                                      |
 | `disabled`        | `true`                                               | Désactiver le module `kubernetes`.                                     |
 
 ### Variables
@@ -1961,7 +2004,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | Variable  | Exemple              | Description                                      |
 | --------- | -------------------- | ------------------------------------------------ |
 | context   | `starship-context`   | Le nom du contexte de kubernetes actuel          |
-| namespace | `starship-namespace` | Si défini, l'espace de noms de kubernetes actuel |
+| namespace | `starship-namespace` | Si défini, l'espace de noms actuel de kubernetes |
 | user      | `starship-user`      | Si défini, l’utilisateur de kubernetes actuel    |
 | cluster   | `starship-cluster`   | Si défini, le cluster de kubernetes actuel       |
 | symbol    |                      | Reflète la valeur de l'option `symbol`           |
@@ -1981,11 +2024,14 @@ disabled = false
 "dev.local.cluster.k8s" = "dev"
 ".*/openshift-cluster/.*" = "openshift"
 "gke_.*_(?P<var_cluster>[\\w-]+)" = "gke-$var_cluster"
+[kubernetes.user_aliases]
+"dev.local.cluster.k8s" = "dev"
+"root/.*" = "root"
 ```
 
 #### Filtrage par regex
 
-En plus des alias simples, `context_aliases` gère aussi un filtrage avancé et le renommage en utilisant des expressions rationnelles.
+Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
 
 L’expression rationnelle doit correspondre au contexte kube entier, et des groupes de capture peuvent être référencés en utilisant `$name` et `$N` dans la valeur de remplacement. Ceci est expliqué plus en détails dans la documentation de [la crate regex](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace).
 
@@ -2060,9 +2106,9 @@ disabled = false
 
 Le module `lua` affiche la version actuellement installée de [Lua](http://www.lua.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `.lua-version`
-- Le dossier courant contient un dossier `lua`
-- Le dossier courant contient un fichier avec l’extension `.lua`
+- Le répertoire courant contient un fichier `.lua-version`
+- Le répertoire courant contient un répertoire `lua`
+- Le répertoire actuel contient un fichier avec l'extension `.lua`
 
 ### Options
 
@@ -2185,9 +2231,9 @@ truncation_symbol = ""
 Le module `nim` affiche la version actuellement installée de [Nim](https://nim-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le dossier courant contient un fichier `nim.cfg`
-- Le dossier courant contient un fichier avec l’extension `.nim`
-- Le dossier courant contient un fichier avec l’extension `.nims`
-- Le dossier courant contient un fichier avec l’extension `.nimble`
+- Le répertoire actuel contient un fichier avec l'extension `.nim`
+- Le répertoire actuel contient un fichier avec l'extension `.nims`
+- Le répertoire actuel contient un fichier avec l'extension `.nimble`
 
 ### Options
 
@@ -2265,10 +2311,10 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 Le module `nodejs` affiche la version actuellement installée de [Node.js](https://nodejs.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le dossier courant contient un fichier `package.json`
-- Le dossier courant contient un fichier `.node-version`
-- Le dossier courant contient un fichier `.nvmrc`
+- Le répertoire courant contient un fichier `.node-version`
+- Le répertoire courant contient un fichier `.nvmrc`
 - Le répertoire courant contient un répertoire `node_modules`
-- Le dossier courant contient un fichier avec l’extension `.js`, `.mjs` ou `.cjs`
+- Le répertoire actuel contient un fichier avec l'extension `.js`, `.mjs` ou `.cjs`
 - Le dossier courant contient un fichier avec l’extension `.ts`, `.mts` ou `.cts`
 
 ### Options
@@ -2308,12 +2354,12 @@ format = "via [🤖 $version](bold green) "
 
 Le module `ocaml` affiche la version actuellement installée de [OCaml](https://ocaml.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier avec l’extension `.opam` ou un dossier `_opam`
+- Le répertoire courant contient un fichier avec l'extension `.opam` ou le répertoire `_opam`
 - Le répertoire courant contient un répertoire `esy.lock`
-- Le dossier courant contient un fichier `dune` ou `dune-project`
-- Le dossier courant contient un fichier `jbuild` ou `jbuild-ignore`
-- Le dossier courant contient un fichier `.merlin`
-- Le dossier courant contient un fichier avec l’extension `.ml`, `.mli`, `.re` ou `.rei`
+- Le répertoire courant contient un fichier `dune` ou `dune-project`
+- Le répertoire courant contient un fichier `jbuild` ou `jbuild-ignore`
+- Le répertoire courant contient un fichier `.merlin`
+- Le répertoire actuel contient un fichier avec l'extension `.ml`, `.mli`, `.re` ou `.rei`
 
 ### Options
 
@@ -2388,7 +2434,7 @@ symbol = "☁️ "
 
 ## Version du package
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – La version du paquet `npm` est extraite du `package.json` présent dans le répertoire courant
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – La version du paquet `cargo` est extraite du `Cargo.toml` présent dans le répertoire courant
@@ -2405,6 +2451,7 @@ The `package` module is shown when the current directory is the repository for a
 - [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
 - [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
 - [**SBT**](https://scala-sbt.org) - La version du paquet `sbt` est extraite du `build.sbt` présent dans le dossier courant
+- [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
 - [**Dart**](https://pub.dev/) – La version du paquet `dart` est extrait du `pubspec.yaml` présent dans le répertoire courant
 
 > ⚠️ La version montrée est celle du paquet dont le code source est dans votre dossier courant, pas votre gestionnaire de paquet.
@@ -2443,10 +2490,10 @@ format = "via [🎁 $version](208 bold) "
 
 Le module `perl` affiche la version actuellement installée de [Perl](https://www.perl.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `Makefile.PL` ou `Build.PL`
-- Le dossier courant contient un fichier `cpanfile` ou `cpanfile.snapshot`
-- Le dossier courant contient un fichier `META.json` ou `META.yml`
-- Le dossier courant contient un fichier `.perl-version`
+- Le répertoire courant contient un fichier `Makefile.PL` ou `Build.PL`
+- Le répertoire courant contient un fichier `cpanfile` ou `cpanfile.snapshot`
+- Le répertoire courant contient un fichier `META.json` ou `META.yml`
+- Le répertoire courant contient un fichier `.perl-version`
 - Le répertoire courant contient un fichier `.pl`, `.pm` ou `.pod`
 
 ### Options
@@ -2484,7 +2531,7 @@ format = "via [🦪 $version]($style) "
 Le module `php` affiche la version actuellement installée de [PHP](https://www.php.net/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le dossier courant contient un fichier `composer.json`
-- Le dossier courant contient un fichier `.php-version`
+- Le répertoire courant contient un fichier `.php-version`
 - Le répertoire courant contient un fichier avec l'extension `.php`
 
 ### Options
@@ -2580,8 +2627,8 @@ format = "[$symbol$stack]($style) "
 
 Le module `purescript` affiche la version actuellement installée de [PureScript](https://www.purescript.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `spago.dhall`
-- Le dossier courant contient un fichier avec l’extension `.purs`
+- Le répertoire courant contient un fichier `spago.dhall`
+- Le répertoire actuel contient un fichier avec l'extension `.purs`
 
 ### Options
 
@@ -2623,14 +2670,14 @@ Si `pyenv_version_name` est défini à `true`, il affichera le nom de la version
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `.python-version`
-- Le dossier courant contient un fichier `Pipfile`
-- Le dossier courant contient un fichier `__init__.py`
+- Le répertoire courant contient un fichier `.python-version`
+- Le répertoire courant contient un fichier `Pipfile`
+- Le répertoire courant contient un fichier `__init__.py`
 - Le dossier courant contient un fichier `pyproject.toml`
 - Le dossier courant contient un fichier `requirements.txt`
 - Le dossier courant contient un fichier `setup.py`
 - Le dossier courant contient un fichier `tox.ini`
-- Le dossier courant contient un fichier avec l’extension `.py`.
+- Le répertoire actuel contient un fichier avec l'extension `.py`.
 - Un environnement virtuel est actuellement activé
 
 ### Options
@@ -2709,12 +2756,12 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 Le module `rlang` affiche la version de [R](https://www.r-project.org/) actuellement installée. Le module s’affiche si l’une de ces conditions est remplie :
 
-- Le dossier courant contient un fichier avec l’extension `.R`.
-- Le dossier courant contient un fichier avec l’extension `.Rd`.
-- Le dossier courant contient un fichier avec l’extension `.Rmd`.
-- Le dossier courant contient un fichier avec l’extension `.Rproj`.
-- Le dossier courant contient un fichier avec l’extension `.Rsx`.
-- Le dossier courant contient un fichier `.Rprofile`
+- Le répertoire actuel contient un fichier avec l'extension `.R`.
+- Le répertoire actuel contient un fichier avec l'extension `.Rd`.
+- Le répertoire actuel contient un fichier avec l'extension `.Rmd`.
+- Le répertoire actuel contient un fichier avec l'extension `.Rproj`.
+- Le répertoire actuel contient un fichier avec l'extension `.Rsx`.
+- Le répertoire courant contient un fichier `.Rprofile`
 - Le répertoire courant contient un dossier `.Rproj.user`
 
 ### Options
@@ -2749,9 +2796,9 @@ format = "with [📐 $version](blue bold) "
 
 ## Red
 
-Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
+Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier avec l’extension `.red` ou `.reds`
+- Le répertoire actuel contient un fichier avec l'extension `.red` ou `.reds`
 
 ### Options
 
@@ -2789,9 +2836,9 @@ symbol = "🔴 "
 
 Par défaut, le module `ruby` affiche la version actuellement installée de [Ruby](https://www.ruby-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier `Gemfile`
-- Le dossier courant contient un fichier `.ruby-version`
-- Le dossier courant contient un fichier `.rb`
+- Le répertoire courant contient un fichier `Gemfile`
+- Le répertoire courant contient un fichier `.ruby-version`
+- Le répertoire courant contient un fichier `.rb`
 - La variable d’environnement `RUBY_VERSION` ou `RBENV_VERSION` est définie
 
 Starship obtient la version actuelle de Ruby en exécutant `ruby -v`.
@@ -2831,10 +2878,10 @@ symbol = "🔺 "
 
 ## Rust
 
-Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
+Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier `Cargo.toml`
-- Le dossier courant contient un fichier avec l’extension `.rs`
+- Le répertoire courant contient un fichier `Cargo.toml`
+- Le répertoire actuel contient un fichier avec l'extension `.rs`
 
 ### Options
 
@@ -2874,8 +2921,8 @@ format = "via [⚙️ $version](red bold)"
 
 Le module `scala` affiche la version actuellement installée de [Scala](https://www.scala-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `build.sbt`, `.scalaenv` ou `.sbtenv`
-- Le dossier courant contient un fichier avec l’extension `.scala` ou `.sbt`
+- Le répertoire courant contient un fichier `build.sbt`, `.scalaenv` ou `.sbtenv`
+- Le répertoire actuel contient un fichier avec l'extension `.scala` ou `.sbt`
 - Le répertoire courant contient un répertoire nommé `.metals`
 
 ### Options
@@ -2924,13 +2971,13 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 | Option                 | Défaut                    | Description                                                 |
 | ---------------------- | ------------------------- | ----------------------------------------------------------- |
-| `bash_indicator`       | `bsh`                     | Chaine de formatage utilisée pour représenter bash.         |
-| `fish_indicator`       | `fsh`                     | Chaine de formatage utilisée pour représenter fish.         |
-| `zsh_indicator`        | `zsh`                     | Chaine de formatage utilisée pour représenter zsh.          |
-| `powershell_indicator` | `psh`                     | Chaine de formatage utilisée pour représenter powershell.   |
-| `ion_indicator`        | `ion`                     | Chaine de formatage utilisée pour représenter ion.          |
-| `elvish_indicator`     | `esh`                     | Chaine de formatage utilisée pour représenter elvish.       |
-| `tcsh_indicator`       | `tsh`                     | Chaine de formatage utilisée pour représenter tcsh.         |
+| `bash_indicator`       | `bsh`                     | Une chaîne de format utilisée pour représenter bash.        |
+| `fish_indicator`       | `fsh`                     | Une chaîne de format utilisée pour représenter fish.        |
+| `zsh_indicator`        | `zsh`                     | Une chaîne de format utilisée pour représenter zsh.         |
+| `powershell_indicator` | `psh`                     | Une chaîne de format utilisée pour représenter powershell.  |
+| `ion_indicator`        | `ion`                     | Une chaîne de format utilisée pour représenter ion.         |
+| `elvish_indicator`     | `esh`                     | Une chaîne de format utilisée pour représenter elvish.      |
+| `tcsh_indicator`       | `tsh`                     | Une chaîne de format utilisée pour représenter tcsh.        |
 | `xonsh_indicator`      | `xsh`                     | Chaine de formatage utilisée pour représenter xonsh.        |
 | `cmd_indicator`        | `cmd`                     | Chaine de formatage utilisée pour représenter cmd.          |
 | `nu_indicator`         | `nu`                      | Chaine de formatage utilisée pour représenter nu.           |
@@ -3173,10 +3220,10 @@ disabled = false
 
 ## Swift
 
-Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
+Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier `Package.swift`
-- Le dossier courant contient un fichier avec l’extension `.swift`
+- Le répertoire courant contient un fichier `Package.swift`
+- Le répertoire actuel contient un fichier avec l'extension `.swift`
 
 ### Options
 
@@ -3222,8 +3269,8 @@ Par défaut, la version de Terraform n’est pas affichée, car elle est lente p
 
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un dossier `.terraform`
-- Le dossier courant contient un fichier avec l’extension `.tf`, `.tfplan` ou `.tfstate`
+- Le répertoire courant contient un dossier `.terraform`
+- Le répertoire courant contient un fichier avec l’extension `.tf`, `.tfplan` ou `.tfstate`
 
 ### Options
 
@@ -3317,7 +3364,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Nom d'utilisateur
 
-Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une de ces conditions est remplie :
+Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module sera affiché si l'une de ces conditions est remplie:
 
 - L'utilisateur courant est root/admin
 - L'utilisateur courant est différent de celui connecté
@@ -3364,7 +3411,7 @@ show_always = true
 
 Le module `vagrant` affiche la version actuellement installée de [Vagrant](https://www.vagrantup.com/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `Vagrantfile`
+- Le répertoire courant contient un fichier `Vagrantfile`
 
 ### Options
 
@@ -3402,8 +3449,8 @@ format = "via [⍱ $version](bold white) "
 
 Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier avec l’extension `.v`
-- Le dossier courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
+- Le répertoire courant contient un fichier avec l'extension `.v`
+- Le répertoire courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
 
 ### Options
 
@@ -3468,9 +3515,9 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
+Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier `.zip`
+- Le répertoire courant contient un fichier `.zig`
 
 ### Options
 

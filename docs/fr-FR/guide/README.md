@@ -251,6 +251,8 @@ Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 | Dépôt                                                                            | Instructions                            |
@@ -264,7 +266,7 @@ Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 ### Étape 2. Configurer votre shell pour Starship
 
-Configurez votre shell pour initialiser starship. Sélectionnez le vôtre dans la liste ci-dessous:
+Configurez votre shell pour initialiser starship. Sélectionnez le vôtre dans la liste ci-dessous :
 
 <details>
 <summary>Bash</summary>
@@ -280,7 +282,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Créez le fichier `%LocalAppData%\clink\starship.lua` avec le contenu suivant:
+Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Créez un fichier avec le chemin `%LocalAppData%\clink\starship.lua` et le contenu suivant:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
