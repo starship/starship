@@ -8,6 +8,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("os");
     let config: OSConfig = OSConfig::try_load(module.config);
 
+    if config.disabled {
+        return None;
+    }
+
     let os = os_info::get();
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
