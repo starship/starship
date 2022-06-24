@@ -301,7 +301,7 @@ jobs:
     needs: release_please
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v2.0
+      - uses: mislav/bump-homebrew-formula-action@v2.1
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
