@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
-                "symbol" => config.get_symbol(&os.os_type()),
+                "symbol" => get_symbol(&config, &os),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -25,12 +25,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "bitness" => Some(Ok(os.bitness().to_string())),
-                "codename" => os.codename().map(String::from).map(Ok),
-                "edition" => os.edition().map(String::from).map(Ok),
-                "name" => Some(Ok(os.os_type().to_string())),
-                "type" => Some(Ok(format!("{:?}", os.os_type()))),
-                "version" => Some(Ok(os.version().to_string())),
+                "bitness" => get_bitness(&os).map(Ok),
+                "codename" => get_codename(&os).map(Ok),
+                "edition" => get_edition(&os).map(Ok),
+                "name" => get_name(&os).map(Ok),
+                "type" => get_type(&os).map(Ok),
+                "version" => get_version(&os).map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -44,4 +44,45 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn get_symbol<'a>(config: &'a OSConfig, os: &os_info::Info) -> Option<&'a str> {
+    // String from os_info::Type
+    let key = &format!("{:?}", os.os_type());
+    config
+        .symbols
+        .get(key)
+        .cloned()
+        .or_else(|| OSConfig::default().symbols.get(key).cloned())
+}
+
+fn get_bitness(os: &os_info::Info) -> Option<String> {
+    Some(os.bitness())
+        .filter(|&x| x != os_info::Bitness::Unknown)
+        .map(|x| x.to_string())
+}
+
+fn get_codename(os: &os_info::Info) -> Option<String> {
+    os.codename().map(String::from)
+}
+
+fn get_edition(os: &os_info::Info) -> Option<String> {
+    os.edition().map(String::from)
+}
+
+fn get_name(os: &os_info::Info) -> Option<String> {
+    Some(os.os_type())
+        .filter(|&x| x != os_info::Type::Unknown)
+        .map(|x| x.to_string())
+}
+
+fn get_type(os: &os_info::Info) -> Option<String> {
+    // String from os_info::Type
+    Some(format!("{:?}", os.os_type()))
+}
+
+fn get_version(os: &os_info::Info) -> Option<String> {
+    Some(os.version())
+        .filter(|&x| x != &os_info::Version::Unknown)
+        .map(|x| x.to_string())
 }

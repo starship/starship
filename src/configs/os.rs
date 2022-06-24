@@ -1,5 +1,4 @@
 use indexmap::{indexmap, IndexMap};
-use os_info::Type;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -68,16 +67,5 @@ impl<'a> Default for OSConfig<'a> {
             },
             disabled: true,
         }
-    }
-}
-
-impl<'a> OSConfig<'a> {
-    pub fn get_symbol(&self, os_type: &Type) -> Option<&'a str> {
-        // String from os_info::Type
-        let key = &format!("{:?}", os_type);
-        self.symbols
-            .get(key)
-            .cloned()
-            .or_else(|| OSConfig::default().symbols.get(key).cloned())
     }
 }
