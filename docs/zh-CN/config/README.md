@@ -9,17 +9,17 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
 
 ```toml
-# Get editor completions based on the config schema
+# 设置配置范例，开启编辑器的自动补全
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# 在命令之间插入空行
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character] # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# 将提示符的“❯”替换为“➜”
+[character] # “character”是我们正在配置的组件
+success_symbol = "[➜](bold green)" # 设置“success_symbol” 字段为绿色加粗的“➜”
 
-# Disable the package module, hiding it from the prompt completely
+# 禁用 package 组件，完全隐藏它的提示符
 [package]
 disabled = true
 ```
@@ -70,9 +70,9 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 依惯例，大多组件都有一个带有默认终端颜色的前缀（例如“nodejs”的 `via`），以及一个空格作为后缀。
 
-### 格式字符串
+### 格式设定
 
-模块通过格式字符串定义的格式输出它所有的变量。 大多数模块拥有一个名为 `format` 的入口来配置它的显示格式。 你可以在其中使用文本，变量或者文本组。
+组件会根据定义的格式输出它所有的字段。 大多数组件可以通过 `format` 项来配置它的显示格式。 格式设定内可以包含文本、字段以及文本组。
 
 #### 字段
 
@@ -80,9 +80,9 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 例如：
 
-- 格式字符串 `$version` 由一个变量 `version` 组成。
-- 格式字符串 `$git_branch$git_commit` 由两个变量 `git_branch`、`git_commit` 组成。
-- 格式字符串 `$git_branch $git_commit` 由两个变量和一个空格组成。
+- 格式设定 `$version` 由一个变量 `version` 组成。
+- 格式设定 `$git_branch$git_commit` 由两个变量 `git_branch`、`git_commit` 组成。
+- 格式设定 `$git_branch $git_commit` 由两个变量和一个空格组成。
 
 #### 文本组
 
