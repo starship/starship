@@ -75,9 +75,7 @@ fn get_edition(os: &os_info::Info) -> Option<String> {
 }
 
 fn get_name(os: &os_info::Info) -> Option<String> {
-    Some(os.os_type())
-        .filter(|&x| x != os_info::Type::Unknown)
-        .map(|x| x.to_string())
+    Some(os.os_type().to_string())
 }
 
 fn get_type(os: &os_info::Info) -> Option<String> {
@@ -129,7 +127,10 @@ mod tests {
             })
             .collect();
 
-        let expected = Some(format!("{}", Color::White.bold().paint(" Unknown ")));
+        let expected = Some(format!(
+            "{}",
+            Color::White.bold().paint(" Unknown Unknown ")
+        ));
 
         assert_eq!(actual, expected);
     }
