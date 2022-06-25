@@ -1,5 +1,6 @@
 use ansi_term::ANSIStrings;
 use rayon::prelude::*;
+use rust_embed::RustEmbed;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
@@ -450,6 +451,39 @@ pub fn print_schema() {
     println!("{}", serde_json::to_string_pretty(&schema).unwrap());
 }
 
+#[derive(RustEmbed)]
+#[folder = "docs/.vuepress/public/presets/toml/"]
+struct Presets;
+
+pub fn preset_command(name: Option<String>, list: bool) {
+    if list {
+        println!("{}", preset_list());
+    } else if let Some(name) = name {
+        println!("{}", preset(&name));
+    }
+}
+
+fn preset_list() -> String {
+    let mut res = String::new();
+    for file in Presets::iter() {
+        res.push_str(file.trim_end_matches(".toml"));
+        res.push('\n');
+    }
+    res.trim_end().to_string()
+}
+
+const UNEXPECTED_PRESET_MESSAGE: &str = "Unexpected preset name";
+
+fn preset(name: &str) -> String {
+    let path = format!("{}.toml", name);
+    match Presets::get(&path) {
+        Some(file) => std::str::from_utf8(file.data.as_ref())
+            .expect("Failed to decode preset from utf-8")
+            .to_string(),
+        None => String::from(UNEXPECTED_PRESET_MESSAGE),
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -488,6 +522,27 @@ mod test {
         let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn preset_list_not_empty() {
+        assert_ne!("", preset_list().trim());
+    }
+
+    #[test]
+    fn preset_error() {
+        assert_eq!(preset("bad-preset"), UNEXPECTED_PRESET_MESSAGE);
+    }
+
+    #[test]
+    fn preset_no_error() {
+        assert_ne!(preset("pure-preset"), UNEXPECTED_PRESET_MESSAGE);
+    }
+
+    #[test]
+    fn preset_command_does_not_panic() {
+        preset_command(None, true);
+        preset_command(Some(String::from("preset")), false);
     }
 
     #[test]

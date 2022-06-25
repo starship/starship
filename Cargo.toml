@@ -60,6 +60,7 @@ quick-xml = "0.23.0"
 rand = "0.8.5"
 rayon = "1.5.3"
 regex = "1.5.6"
+rust-embed = "6.4.0"
 rust-ini = "0.18.0"
 semver = "1.0.10"
 serde = { version = "1.0.137", features = ["derive"] }
