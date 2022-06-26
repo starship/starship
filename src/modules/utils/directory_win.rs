@@ -48,7 +48,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
 
     // expect ERROR_INSUFFICIENT_BUFFER
     match rc.ok() {
-        Err(e) if e.win32_error() == Some(ERROR_INSUFFICIENT_BUFFER) => (),
+        Err(e) if e.code() == ERROR_INSUFFICIENT_BUFFER.into() => (),
         result => return Err(format!("GetFileSecurityW returned unexpected return value when asked for the security descriptor size: {:?}", result)),
     }
 
