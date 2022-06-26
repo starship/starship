@@ -5,7 +5,7 @@ $jobs\
 $status\
 $shell\
 $line_break\
-$sudo$character"""
+$env_var$username$sudo$character"""
 
 right_format = """$battery$time$git_status"""
 
@@ -15,12 +15,22 @@ add_newline = true
 format = "$symbol "
 success_symbol = "[●](italic bright-green)"
 error_symbol = "[▼](italic red)"
-vicmd_symbol = "[◆](italic bright-yellow)"
+vicmd_symbol = "[◆](italic blue)"
+
+[env_var.VIMSHELL] # vim subshell
+format = "[$env_value]($style)"
+style = 'green italic'
 
 [sudo]
 format = "[$symbol]($style)"
 style = "italic bright-purple"
 symbol = "◇┈"
+disabled = false
+
+[username]
+style_user = "yellow bold"
+style_root = "purple bold"
+format = "[$user]($style) ▻ "
 disabled = false
 
 [directory]
@@ -33,7 +43,7 @@ style = "italic bright-blue"
 
 [cmd_duration]
 min_time = 500
-format = "[ ◕ $duration](bold dimmed yellow)"
+format = "[ ◕ $duration](bold bright-cyan)"
 
 [jobs]
 format = "[$symbol$number]($style) "
@@ -50,7 +60,7 @@ disabled = false
 format = "[ $time [◔](italic white)]($style)"
 time_format = "%R"
 utc_time_offset = "local"
-style = "dimmed white" # not working
+style = "dimmed white"
 # time_range = "00:00:00-07:00:00"
 
 [battery]
@@ -58,7 +68,7 @@ format = "[$percentage $symbol]($style)"
 full_symbol = "[█](italic green)"
 charging_symbol = "[▲](italic green)"
 discharging_symbol = "[▽](italic)"
-unknown_symbol = "[░](italic yellow)"
+unknown_symbol = "[░](italic)"
 empty_symbol = "[▃](italic red)"
 
 [[battery.display]]
@@ -71,21 +81,21 @@ style = "dimmed white"
 
 [git_branch]
 format = "[$symbol $branch(:$remote_branch)]($style) "
-symbol = "[━◯](italic cyan)"
+symbol = "[▽](italic cyan)"
 style = "bold cyan"
 
 [git_status]
 style = "italic cyan"
 format = """ ([⎪$ahead_behind$staged$modified$untracked$renamed$deleted$conflicted$stashed⎥]($style))"""
-conflicted = "[─◪](italic bright-magenta)"
+conflicted = "[◪◦](italic bright-magenta)"
 ahead = "[▲│[${count}](bold white)│](italic green)"
 behind = "[▽│[${count}](bold white)│](italic red)"
-diverged = "[─◇ ▲┤[${ahead_count}](regular white)│▽┤[${behind_count}](regular white)│](italic bright-magenta)"
-untracked = "[◌─](italic bright-yellow)"
-stashed = "[─◫](italic white)"
-modified = "[●─](italic bright-yellow)"
+diverged = "[◇ ▲┤[${ahead_count}](regular white)│▽┤[${behind_count}](regular white)│](italic bright-magenta)"
+untracked = "[◌◦](italic bright-yellow)"
+stashed = "[◦◫◦](italic white)"
+modified = "[●◦](italic yellow)"
 staged = "[■┤[$count](bold white)│](italic bright-cyan)"
-renamed = "[◎─](italic yellow)"
+renamed = "[◎◦](italic bright-blue)"
 deleted = "[✕](italic red)"
 
 [deno]
@@ -112,7 +122,7 @@ version_format = "${major}.${minor}"
 style = "italic red"
 
 [rust]
-format = "rust [$symbol$version]($style) "
+format = "rs [$symbol$version]($style) "
 symbol = "⊃ "
 version_format = "${major}.${minor}"
 style = "italic red"
@@ -153,11 +163,11 @@ format = "dart [$symbol($version )]($style) "
 
 [docker_context]
 symbol = "◧ "
-format = "dock [$symbol$context]($style) "
+format = "docker [$symbol$context]($style) "
 
 [elixir]
 symbol = "△ "
-format = "elixir [$symbol $version OTP $otp_version ]($style) "
+format = "exs [$symbol $version OTP $otp_version ]($style) "
 
 [elm]
 symbol = "◩ "
@@ -177,7 +187,7 @@ format = "java [${symbol}(${version} )]($style) "
 
 [julia]
 symbol = "◎ "
-format = "julia [$symbol($version )]($style) "
+format = "jl [$symbol($version )]($style) "
 
 [memory_usage]
 symbol = "▪▫▪ "
