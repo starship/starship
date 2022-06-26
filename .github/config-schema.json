@@ -1091,6 +1091,31 @@
         }
       ]
     },
+    "raku": {
+      "default": {
+        "detect_extensions": [
+          "p6",
+          "pm6",
+          "pod6",
+          "raku",
+          "rakumod"
+        ],
+        "detect_files": [
+          "META6.json"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version-$vm_version )]($style)",
+        "style": "149 bold",
+        "symbol": "🦋 ",
+        "version_format": "${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/RakuConfig"
+        }
+      ]
+    },
     "red": {
       "default": {
         "detect_extensions": [
@@ -3947,6 +3972,60 @@
           }
         }
       ]
+    },
+    "RakuConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version-$vm_version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🦋 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "149 bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "p6",
+            "pm6",
+            "pod6",
+            "raku",
+            "rakumod"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "META6.json"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "RedConfig": {
       "type": "object",
