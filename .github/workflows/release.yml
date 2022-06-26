@@ -25,6 +25,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: rust
+          draft: true
 
   # Build sources for every OS
   github_build:
@@ -274,6 +275,7 @@ jobs:
         with:
           files: starship-*/starship-*
           tag_name: ${{ needs.release_please.outputs.tag_name }}
+          draft: false
 
   # Publish starship to Crates.io
   cargo_publish:
