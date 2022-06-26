@@ -121,7 +121,7 @@ jobs:
         uses: actions-rs/cargo@v1.0.3
         with:
           command: wix
-          args: -v --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship.msi
+          args: -v --no-build --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship-${{ matrix.target }}.msi
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -152,7 +152,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: starship-${{ matrix.target }}.msi
-          path: target/wix/starship.msi
+          path: target/wix/starship-${{ matrix.target }}.msi
 
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
@@ -259,11 +259,6 @@ jobs:
     needs: [release_please, github_build, notarize_and_pkgbuild]
     runs-on: ubuntu-latest
     steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
 
