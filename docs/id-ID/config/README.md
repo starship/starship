@@ -538,22 +538,22 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 
 ::: warning
 
-`vicmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Opsi
 
-| Opsi                       | Bawaan               | Deskripsi                                                                                         |
-| -------------------------- | -------------------- | ------------------------------------------------------------------------------------------------- |
-| `fromat`                   | `"$symbol "`         | Format string yang digunakan sebelum masukan teks.                                                |
-| `success_symbol`           | `"[❯](bold green)"`  | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya berhasil.              |
-| `error_symbol`             | `"[❯](bold red)"`    | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya gagal.                 |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | Format string yang digunakan sebelum masukan teks jika shell sedang dalam vim dengan mode normal. |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.           |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.                 |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.                 |
-| `disabled`                 | `false`              | Menonaktifkan module `character`.                                                                 |
+| Opsi                        | Bawaan               | Deskripsi                                                                                         |
+| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------------- |
+| `fromat`                    | `"$symbol "`         | Format string yang digunakan sebelum masukan teks.                                                |
+| `success_symbol`            | `"[❯](bold green)"`  | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya berhasil.              |
+| `error_symbol`              | `"[❯](bold red)"`    | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya gagal.                 |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | Format string yang digunakan sebelum masukan teks jika shell sedang dalam vim dengan mode normal. |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.           |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.                 |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.                 |
+| `disabled`                  | `false`              | Menonaktifkan module `character`.                                                                 |
 
 ### Variabel
 
@@ -2793,6 +2793,44 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 format = "with [📐 $version](blue bold) "
 ```
 
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+
+- The current directory contains a `META6.json` file
+- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### Opsi
+
+| Opsi                | Bawaan                                           | Deskripsi                                                                           |
+| ------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `fromat`            | `"via [$symbol($version-$vm_version )]($style)"` | The format string for the module.                                                   |
+| `version_format`    | `"v${raw}"`                                      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                               |
+| `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `["META6.json"]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                             | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `"bold 149"`                                     | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                                         |
+
+### Variabel
+
+| Variabel   | Contoh | Deskripsi                            |
+| ---------- | ------ | ------------------------------------ |
+| version    | `v6.d` | The version of `raku`                |
+| vm_version | `moar` | The version of VM `raku` is built on |
+| symbol     |        | Menyalin nilai dari opsi `symbol`    |
+| style\*  |        | Menyalin nilai dari opsi `style`     |
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = "via [🦪 $version]($style) "
+```
+
 ## Red
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
@@ -2990,7 +3028,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Variabel  | Bawaan | Deskripsi                                                  |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\* |        | Menyalin nilai dari opsi `style`.                          |
+| style\* |        | Mirrors the value of option `style`.                       |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -3509,7 +3547,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 # ~/.config/starship.toml
 
 [vcsh]
-format = "via [✨ $repo](bold blue) "
+format = "[🆅 $repo](bold blue) "
 ```
 
 ## Zig
@@ -3560,7 +3598,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `detect_folders`
 - The current directory contains a file whose extension is in `detect_extensions`
 - The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 
@@ -3595,7 +3633,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `deskripsi`         | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
