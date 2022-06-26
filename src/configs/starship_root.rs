@@ -61,6 +61,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "pulumi",
     "purescript",
     "python",
+    "raku",
     "rlang",
     "red",
     "ruby",
