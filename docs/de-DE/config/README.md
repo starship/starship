@@ -538,22 +538,22 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`vicmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Optionen
 
-| Option                     | Standardwert         | Beschreibung                                                                            |
-| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                   | `"$symbol "`         | The format string used before the text input.                                           |
-| `success_symbol`           | `"[❯](bold green)"`  | The format string used before the text input if the previous command succeeded.         |
-| `error_symbol`             | `"[❯](bold red)"`    | The format string used before the text input if the previous command failed.            |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | The format string used before the text input if the shell is in vim normal mode.        |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `disabled`                 | `false`              | Deaktiviert das `character`-Modul.                                                      |
+| Option                      | Standardwert         | Beschreibung                                                                            |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                    | `"$symbol "`         | The format string used before the text input.                                           |
+| `success_symbol`            | `"[❯](bold green)"`  | The format string used before the text input if the previous command succeeded.         |
+| `error_symbol`              | `"[❯](bold red)"`    | The format string used before the text input if the previous command failed.            |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | The format string used before the text input if the shell is in vim normal mode.        |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                  | `false`              | Deaktiviert das `character`-Modul.                                                      |
 
 ### Variables
 
@@ -2793,9 +2793,47 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 format = "with [📐 $version](blue bold) "
 ```
 
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `META6.json` file
+- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### Optionen
+
+| Option              | Standardwert                                     | Beschreibung                                                              |
+| ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version-$vm_version )]($style)"` | The format string for the module.                                         |
+| `version_format`    | `"v${raw}"`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                     |
+| `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Which extensions should trigger this module.                              |
+| `detect_files`      | `["META6.json"]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                             | Which folders should trigger this module.                                 |
+| `style`             | `"bold 149"`                                     | Stil für dieses Modul.                                                    |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                               |
+
+### Variables
+
+| Variable   | Beispiel | Beschreibung                          |
+| ---------- | -------- | ------------------------------------- |
+| version    | `v6.d`   | The version of `raku`                 |
+| vm_version | `moar`   | The version of VM `raku` is built on  |
+| symbol     |          | Spiegelt den Wert der Option `symbol` |
+| style\*  |          | Spiegelt den Wert der Option `style`  |
+
+### Beispiel
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = "via [🦪 $version]($style) "
+```
+
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2833,11 +2871,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- Das aktuelle Verzeichnis enthält eine `.rb`-Datei
+- The current directory contains a `.rb` file
 - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 
 Starship gets the current Ruby version by running `ruby -v`.
@@ -2854,7 +2892,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                   |
 | `style`             | `"bold red"`                         | Stil für dieses Modul.                                                    |
-| `disabled`          | `false`                              | Deaktiviert das `ruby`-Modul.                                             |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
 ### Variables
 
@@ -2877,10 +2915,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
-- Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### Optionen
 
@@ -2893,7 +2931,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `style`             | `"bold red"`                         | Stil für dieses Modul.                                                    |
-| `disabled`          | `false`                              | Deaktiviert das `rust`-Modul.                                             |
+| `disabled`          | `false`                              | Disables the `rust` module.                                               |
 
 ### Variables
 
@@ -2978,7 +3016,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
 | `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
-| `cmd_indicator`        | `⌘ cmd`                   | A format string used to represent cmd.                       |
+| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
 | `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | Das Format für das Modul.                                    |
@@ -2990,7 +3028,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | Variable  | Standardwert | Beschreibung                                               |
 | --------- | ------------ | ---------------------------------------------------------- |
 | indicator |              | Mirrors the value of `indicator` for currently used shell. |
-| style\* |              | Spiegelt den Wert der Option `style`.                      |
+| style\* |              | Mirrors the value of option `style`.                       |
 
 *: This variable can only be used as a part of a style string
 
@@ -3219,7 +3257,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3268,7 +3306,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
+- The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Optionen
@@ -3282,7 +3320,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
 | `style`             | `"bold 105"`                         | Stil für dieses Modul.                                                    |
-| `disabled`          | `false`                              | Deaktiviert das `terraform` Modul.                                        |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
 
 ### Variables
 
@@ -3317,7 +3355,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Uhrzeit
 
-Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3327,23 +3365,23 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Option            | Standardwert            | Beschreibung                                                                                                                                                |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                                           |
-| `use_12hr`        | `false`                 | Aktiviert die Formatierung der Uhrzeit im 12-Stunden-Format.                                                                                                |
-| `time_format`     | Siehe unten             | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).                               |
-| `style`           | `"bold yellow"`         | Stil für dieses Modul.                                                                                                                                      |
-| `utc_time_offset` | `"local"`               | Legt das UTC-Offset fest, das verwendet werden soll. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                                               |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                       |
+| Option            | Standardwert            | Beschreibung                                                                                                                       |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Ansonsten ist der Standardwert hierfür `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
 | Variable  | Beispiel   | Beschreibung                         |
 | --------- | ---------- | ------------------------------------ |
-| uhrzeit   | `13:08:10` | The current time.                    |
+| time      | `13:08:10` | The current time.                    |
 | style\* |            | Spiegelt den Wert der Option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3361,14 +3399,14 @@ utc_time_offset = "-5"
 time_range = "10:00:00-14:00:00"
 ```
 
-## Benutzername
+## Username
 
-Das Modul `username` zeigt den Benutzernamen des aktiven Benutzers. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root/admin
-- Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
-- Der Benutzer ist über eine SSH-Sitzung verbunden
-- Die Variale `show_always` ist auf `true` gesetzt
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -3381,10 +3419,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | Option        | Standardwert            | Beschreibung                                |
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
-| `style_user`  | `"bold yellow"`         | Stil bei allen anderen Benutzern.           |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.          |
 | `format`      | `"[$user]($style) in "` | Das Format für das Modul.                   |
-| `show_always` | `false`                 | `username`-Modul immer anzeigen.            |
-| `disabled`    | `false`                 | Deaktiviert das `username`-Modul.           |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### Variables
 
@@ -3514,7 +3552,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
@@ -3560,7 +3598,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `detect_folders`
 - The current directory contains a file whose extension is in `detect_extensions`
 - The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 
@@ -3595,7 +3633,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `beschreibung`      | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |

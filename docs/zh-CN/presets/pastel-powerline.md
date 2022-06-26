@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#pastel-powerline)
+[返回全部预设](./README.md#pastel-powerline)
 
 # Pastel Powerline Preset
 
@@ -12,6 +12,6 @@
 
 ### 配置
 
-[Click to download TOML](/presets/toml/pastel-powerline.toml)
+[点击下载 TOML 文件](/presets/toml/pastel-powerline.toml)
 
 <<< @/.vuepress/public/presets/toml/pastel-powerline.toml

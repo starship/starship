@@ -250,7 +250,7 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### 自定义命令
 
 | Removed Property | Replacement |
 | ---------------- | ----------- |

@@ -129,11 +129,11 @@ Invoke-Expression (&starship init powershell)
 
 ## 启用右侧提示
 
-一些 Shell 支持右侧提示, 它与输入区渲染在同一行。 Starship 可以设置右侧提示的内容，使用 `right_format` 选项。 Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+一些 Shell 支持右侧提示, 它与输入区渲染在同一行。 使用 `right_format` 选项来设置 Starship 的右侧提示。 所有支持 `format` 的组件也同时支持 `right_format`。 未显式在 `format` 或 `right_format` 中使用的组件，会保存在变量 `$all` 中。
 
-Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
+注意：右侧提示和输入区显示在同一行。 如果需要在输入区的上方显示右对齐的组件，请查阅 [`fill` 组件](/config/#fill)。
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` 现支持 elvish、fish、zsh、xonsh、cmd。
 
 ### 示例
 
@@ -147,21 +147,21 @@ format = """$character"""
 right_format = """$all"""
 ```
 
-Produces a prompt like the following:
+会显示成如下方案
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-## Continuation Prompt
+## 多行提示符
 
-Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
+一些 Shell 也同时支持多行提示符。 若用户输入了不完整的命令（例如一个左括号或引号），Shell 会渲染多行提示符。
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+使用 `continuation_prompt` 选项来设置 Starship 的多行提示符。 它的默认值为 `[∙](bright-black)`。
 
-Note: `continuation_prompt` should be set to a literal string without any variables.
+注意：`continuation_prompt` 应设置为没有变量的字符串。
 
-Note: Continuation prompts are only available in the following shells:
+注意，仅以下 Shell 支持多行提示符：
 
 - `bash`
 - `zsh`
@@ -190,13 +190,13 @@ continuation_prompt = "▶▶"
 - `<color>`
 - `none`
 
-`<color>` 是颜色说明符（下面解释）。 `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. 字符串中的单词顺序不影响显示结果。
+`<color>` 可以声明颜色，会在下面解释。 `fg:<color>` 和 `<color>` 的功能暂时相同，未来可能会更改。 `inverted` 会反转背景和文字的颜色。 字符串中的单词顺序不影响显示结果。
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 未来可能会将 `none` 与其它标识符一起使用视为一种错误。
+若 `none` 不是 `bg:` 的一部分，则它会覆盖其他的设置：比如 `fg:red none fg:blue` 不会更改任何样式。 `bg:none` 会设置成默认背景色，因此 `fg:red bg:none`、`red`、`fg:red` 的作用相同；类似，`bg:green fg:red bg:none`、`fg:red`、`red` 的作用也相同。 未来可能会将 `none` 与其它单词一起使用视为错误。
 
-颜色说明符可以是以下内容之一：
+颜色可以由以下任一内容定义：
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+- 任一标准的终端颜色：`black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`。 您也可以使用前缀 `bright-` 定义浅色版本（例如 `bright-white`）。
 - 一个 `#` 后跟一个六位十六进制数。 这将指定一个 [十六进制 RGB 颜色代码](https://www.w3schools.com/colors/colors_hexadecimal.asp)。
 - 0-255 之间的数字。 这将指定一个 [8 位 ANSI 颜色码](https://i.stack.imgur.com/KTSQa.png)。
 

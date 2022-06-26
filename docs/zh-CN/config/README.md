@@ -9,17 +9,17 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
 
 ```toml
-# Get editor completions based on the config schema
+# 设置配置范例，开启编辑器的自动补全
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# 在命令之间插入空行
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character] # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
+# 将提示符的“❯”替换为“➜”
+[character] # “character”是我们正在配置的组件
+success_symbol = "[➜](bold green)" # 设置“success_symbol” 字段为绿色加粗的“➜”
 
-# Disable the package module, hiding it from the prompt completely
+# 禁用 package 组件，完全隐藏它的提示符
 [package]
 disabled = true
 ```
@@ -36,7 +36,7 @@ export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+或者在 Cmd (Windows) 中，将下面的代码添加到 `starship.lua`：
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -56,7 +56,7 @@ export STARSHIP_CACHE=~/.starship/cache
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+或者在 Cmd (Windows) 中，将以下内容添加到您的 `starship.lua`：
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -66,23 +66,23 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 **组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 例如，如果您当前的目录是 Node.js 项目，“nodejs” 模块会显示当前安装在您电脑上的 Node.js 的版本。
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**字段（Variable）**：更小的子模块，包含由组件提供的信息。 例如，“nodejs”组件里的“version”字段包含了现有 Node.js 的版本。
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+依惯例，大多组件都有一个带有默认终端颜色的前缀（例如“nodejs”的 `via`），以及一个空格作为后缀。
 
-### 格式字符串
+### 格式设定
 
-模块通过格式字符串定义的格式输出它所有的变量。 大多数模块拥有一个名为 `format` 的入口来配置它的显示格式。 你可以在其中使用文本，变量或者文本组。
+组件会根据定义的格式输出它所有的字段。 大多数组件可以通过 `format` 项来配置它的显示格式。 格式设定内可以包含文本、字段以及文本组。
 
 #### 字段
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
+一个字段由 `$` 和字段名依序组成。 字段名只能包含字母、数字以及 `_`。
 
 例如：
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- 格式设定 `$version` 由一个变量 `version` 组成。
+- 格式设定 `$git_branch$git_commit` 由两个变量 `git_branch`、`git_commit` 组成。
+- 格式设定 `$git_branch $git_commit` 由两个变量和一个空格组成。
 
 #### 文本组
 
@@ -94,9 +94,9 @@ A variable contains a `$` symbol followed by the name of the variable. The name 
 
 例如：
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `[on](red bold)` 会输出一个加粗的红色 `on`。
+- `[⌘ $version](bold green)` 会先输出一个 `⌘`，之后是 `version` 字段的内容，都是绿色加粗的样式。
+- `[a [b](red) c](green)` 会依序输出绿色 `a`、红色 `b`、绿色 `c`。
 
 #### 样式设定
 
@@ -538,22 +538,22 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ::: warning
 
-`vicmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### 配置项
 
-| 选项                         | 默认值                  | 描述                                                                                      |
-| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                   | `"$symbol "`         | The format string used before the text input.                                           |
-| `success_symbol`           | `"[❯](bold green)"`  | The format string used before the text input if the previous command succeeded.         |
-| `error_symbol`             | `"[❯](bold red)"`    | The format string used before the text input if the previous command failed.            |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | The format string used before the text input if the shell is in vim normal mode.        |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `disabled`                 | `false`              | 禁用 `character` 组件。                                                                      |
+| 选项                          | 默认值                  | 描述                                                                                      |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                    | `"$symbol "`         | The format string used before the text input.                                           |
+| `success_symbol`            | `"[❯](bold green)"`  | The format string used before the text input if the previous command succeeded.         |
+| `error_symbol`              | `"[❯](bold red)"`    | The format string used before the text input if the previous command failed.            |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | The format string used before the text input if the shell is in vim normal mode.        |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                  | `false`              | 禁用 `character` 组件。                                                                      |
 
 ### Variables
 
@@ -2793,9 +2793,47 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 format = "with [📐 $version](blue bold) "
 ```
 
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `META6.json` file
+- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### 配置项
+
+| 选项                  | 默认值                                              | 描述                                                                        |
+| ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version-$vm_version )]($style)"` | The format string for the module.                                         |
+| `version_format`    | `"v${raw}"`                                      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                     |
+| `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Which extensions should trigger this module.                              |
+| `detect_files`      | `["META6.json"]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                             | Which folders should trigger this module.                                 |
+| `style`             | `"bold 149"`                                     | 此组件的样式。                                                                   |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                               |
+
+### Variables
+
+| 字段         | 示例     | 描述                                   |
+| ---------- | ------ | ------------------------------------ |
+| version    | `v6.d` | The version of `raku`                |
+| vm_version | `moar` | The version of VM `raku` is built on |
+| symbol     |        | `symbol`对应值                          |
+| style\*  |        | `style`对应值                           |
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = "via [🦪 $version]($style) "
+```
+
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 此组件只有满足以下条件之一时才会被显示：
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -2833,11 +2871,11 @@ symbol = "🔴 "
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). 此组件只有满足以下条件之一时才会被显示：
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `Gemfile` 文件
+- The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
-- 当前目录包含 `.rb` 文件
+- The current directory contains a `.rb` file
 - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 
 Starship gets the current Ruby version by running `ruby -v`.
@@ -2854,7 +2892,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `detect_variables`  | `["RUBY_VERSION", "RBENV_VERSION"]`  | Which environment variables should trigger this module.                   |
 | `style`             | `"bold red"`                         | 此组件的样式。                                                                   |
-| `disabled`          | `false`                              | 禁用 `ruby` 组件。                                                             |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                               |
 
 ### Variables
 
@@ -2877,10 +2915,10 @@ symbol = "🔺 "
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). 此组件只有满足以下条件之一时才会被显示：
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `Cargo.toml` 文件
-- 当前目录包含一个使用 `.rs` 扩展名的文件
+- The current directory contains a `Cargo.toml` file
+- The current directory contains a file with the `.rs` extension
 
 ### 配置项
 
@@ -2893,7 +2931,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `detect_files`      | `["Cargo.toml"]`                     | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `style`             | `"bold red"`                         | 此组件的样式。                                                                   |
-| `disabled`          | `false`                              | 禁用 `rust` 组件。                                                             |
+| `disabled`          | `false`                              | Disables the `rust` module.                                               |
 
 ### Variables
 
@@ -2990,7 +3028,7 @@ The `shell` module shows an indicator for currently used shell.
 | 字段        | 默认值 | 描述                                                         |
 | --------- | --- | ---------------------------------------------------------- |
 | indicator |     | Mirrors the value of `indicator` for currently used shell. |
-| style\* |     | `style`对应值.                                                |
+| style\* |     | Mirrors the value of option `style`.                       |
 
 *: This variable can only be used as a part of a style string
 
@@ -3219,7 +3257,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 此组件只有满足以下条件之一时才会被显示：
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3268,7 +3306,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `.terraform` 目录
+- The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### 配置项
@@ -3282,7 +3320,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[".terraform"]`                     | Which folders should trigger this module.                                 |
 | `style`             | `"bold 105"`                         | 此组件的样式。                                                                   |
-| `disabled`          | `false`                              | 禁用 `terraform` 组件。                                                        |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
 
 ### Variables
 
@@ -3317,7 +3355,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Time
 
-`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3327,17 +3365,17 @@ format = "[🏎💨 $workspace]($style) "
 
 ### 配置项
 
-| 选项                | 默认值                     | 描述                                                                                                    |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                     |
-| `use_12hr`        | `false`                 | 启用 12 小时格式                                                                                            |
-| `time_format`     | 见下文解释                   | 用来格式化时间显示的 [chrono 格式字符串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)             |
-| `style`           | `"bold yellow"`         | 显示时间的样式。                                                                                              |
-| `utc_time_offset` | `"local"`               | 设置所用 UTC 偏移量。 Range from -24 &lt; x &lt; 24. 允许使用浮点数来得到 30/45 分钟的时区偏移。                    |
-| `disabled`        | `true`                  | 禁用 `time` 组件。                                                                                         |
-| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| 选项                | 默认值                     | 描述                                                                                                                                 |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `"at [$time]($style) "` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `"bold yellow"`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `"local"`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 否则，其默认值为 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -3363,12 +3401,12 @@ time_range = "10:00:00-14:00:00"
 
 ## Username
 
-`username` 组件显示当前活跃的用户名。 此组件只有满足以下条件之一时才会被显示：
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root/admin
-- 当前用户与登录用户不相同
-- 用户正通过 SSH 会话连接访问
-- 字段 `show_always` 被设置为 true
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -3381,10 +3419,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | 选项            | 默认值                     | 描述                                          |
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `"bold red"`            | The style used when the user is root/admin. |
-| `style_user`  | `"bold yellow"`         | 非 root 用户使用的样式。                             |
+| `style_user`  | `"bold yellow"`         | The style used for non-root users.          |
 | `format`      | `"[$user]($style) in "` | 组件格式化模板。                                    |
-| `show_always` | `false`                 | 总是显示 `username` 组件。                         |
-| `disabled`    | `false`                 | 禁用 `username` 组件。                           |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### Variables
 
@@ -3514,7 +3552,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 此组件只有满足以下条件之一时才会被显示：
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
@@ -3560,7 +3598,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `detect_folders`
 - The current directory contains a file whose extension is in `detect_extensions`
 - The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 
@@ -3595,7 +3633,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `描述`                | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
