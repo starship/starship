@@ -303,7 +303,10 @@ jobs:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
         env:
+          # Used for creating the formula update PR
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+          # Used for verifying the SHA256 sum of the draft release
+          GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
   winget_update:
     name: Update Winget Manifest
