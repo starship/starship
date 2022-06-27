@@ -2795,10 +2795,10 @@ format = "with [📐 $version](blue bold) "
 
 ## Raku
 
-The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+El módulo `raku` muestra la versión instalada de [Raku](https://www.raku.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
 
-- The current directory contains a `META6.json` file
-- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+- El directorio actual contiene un archivo `META6.json`
+- El directorio actual contiene un `.p6`, `.pm6`, `.raku`, `.rakumod` o `.pod6`
 
 ### Opciones
 
@@ -2806,21 +2806,21 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 | ------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version-$vm_version )]($style)"` | La cadena de formato para el módulo.                                                    |
 | `version_format`    | `"v${raw}"`                                      | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                                   |
+| `symbol`            | `"🦋 "`                                           | El símbolo usado antes de mostrar la versión de Raku                                    |
 | `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `["META6.json"]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                             | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold 149"`                                     | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                          | Disables the `raku` module.                                                             |
+| `disabled`          | `false`                                          | Deshabilita el módulo `raku`.                                                           |
 
 ### Variables
 
-| Variable   | Ejemplo | Descripción                            |
-| ---------- | ------- | -------------------------------------- |
-| version    | `v6.d`  | The version of `raku`                  |
-| vm_version | `moar`  | The version of VM `raku` is built on   |
-| symbol     |         | Refleja el valor de la opción `symbol` |
-| style\*  |         | Refleja el valor de la opción `style`  |
+| Variable   | Ejemplo | Descripción                                                |
+| ---------- | ------- | ---------------------------------------------------------- |
+| version    | `v6.d`  | La versión de `raku`                                       |
+| vm_version | `moar`  | La versión de la máquina virtual `raku` está construida en |
+| symbol     |         | Refleja el valor de la opción `symbol`                     |
+| style\*  |         | Refleja el valor de la opción `style`                      |
 
 ### Ejemplo
 
