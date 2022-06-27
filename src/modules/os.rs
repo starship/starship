@@ -112,7 +112,7 @@ mod tests {
             })
             .collect();
 
-        let expected = Some(format!("{}", Color::White.bold().paint(" ")));
+        let expected = Some(format!("{}", Color::White.bold().paint("❓ ")));
 
         assert_eq!(actual, expected);
     }
@@ -129,7 +129,7 @@ mod tests {
 
         let expected = Some(format!(
             "{}",
-            Color::White.bold().paint(" Unknown Unknown ")
+            Color::White.bold().paint("❓ Unknown Unknown ")
         ));
 
         assert_eq!(actual, expected);
@@ -138,93 +138,6 @@ mod tests {
     #[test]
     fn get_symbol_default() {
         let config = OSConfig::try_load(None);
-
-        let type_expected_pairs = [
-            (Type::Alpine, Some(" ")),
-            (Type::Amazon, Some(" ")),
-            (Type::Android, Some(" ")),
-            (Type::Arch, Some(" ")),
-            (Type::CentOS, Some(" ")),
-            (Type::Debian, Some(" ")),
-            (Type::DragonFly, Some(" ")),
-            (Type::Emscripten, Some(" ")),
-            (Type::EndeavourOS, Some(" ")),
-            (Type::Fedora, Some(" ")),
-            (Type::FreeBSD, Some(" ")),
-            (Type::Gentoo, Some(" ")),
-            (Type::HardenedBSD, Some("ﲊ ")),
-            (Type::Illumos, Some(" ")),
-            (Type::Linux, Some(" ")),
-            (Type::Macos, Some(" ")),
-            (Type::Manjaro, Some(" ")),
-            (Type::Mariner, Some(" ")),
-            (Type::MidnightBSD, Some(" ")),
-            (Type::Mint, Some(" ")),
-            (Type::NetBSD, Some(" ")),
-            (Type::NixOS, Some(" ")),
-            (Type::OpenBSD, Some(" ")),
-            (Type::SUSE, Some(" ")),
-            (Type::OracleLinux, Some(" ")),
-            (Type::Pop, Some(" ")),
-            (Type::Raspbian, Some(" ")),
-            (Type::Redhat, Some(" ")),
-            (Type::RedHatEnterprise, Some(" ")),
-            (Type::Redox, Some(" ")),
-            (Type::Solus, Some("ﴱ ")),
-            (Type::openSUSE, Some(" ")),
-            (Type::Ubuntu, Some(" ")),
-            (Type::Unknown, Some(" ")),
-            (Type::Windows, Some(" ")),
-        ];
-
-        for (t, e) in type_expected_pairs {
-            assert_eq!(get_symbol(&config, &Info::with_type(t)), e);
-        }
-    }
-
-    #[test]
-    fn get_symbol_custom() {
-        let config_toml = toml::toml! {
-            // I don't know why, but [os] seems to be implied
-            [symbols]
-            "Alpine" = "🏔️"
-            "Amazon" = "🙂"
-            "Android" = "🤖"
-            "Arch" = "🎗️"
-            "CentOS" = "💠"
-            "Debian" = "🌀"
-            "DragonFly" = "🐉"
-            "Emscripten" = "🔗"
-            "EndeavourOS" = "🚀"
-            "Fedora" = "🎩"
-            "FreeBSD" = "😈"
-            "Gentoo" = "🗜️"
-            "HardenedBSD" = "🛡️"
-            "Illumos" = "🐦"
-            "Linux" = "🐧"
-            "Macos" = "🍎"
-            "Manjaro" = "🥭"
-            "Mariner" = "🌊"
-            "MidnightBSD" = "🌘"
-            "Mint" = "🌿"
-            "NetBSD" = "🚩"
-            "NixOS" = "❄️"
-            "OpenBSD" = "🐡"
-            "openSUSE" = "🦎"
-            "OracleLinux" = "🦴"
-            "Pop" = "🍭"
-            "Raspbian" = "🍓"
-            "Redhat" = "🎩"
-            "RedHatEnterprise" = "🎩"
-            "Redox" = "🧪"
-            "Solus" = "⛵"
-            "SUSE" = "🦎"
-            "Ubuntu" = "🎯"
-            "Unknown" = "❓"
-            "Windows" = "🪟"
-        };
-
-        let config = OSConfig::load(&config_toml);
 
         let type_expected_pairs = [
             (Type::Alpine, Some("🏔️")),
@@ -270,11 +183,45 @@ mod tests {
     }
 
     #[test]
-    fn get_symbol_fallback() {
+    fn get_symbol_custom() {
         let config_toml = toml::toml! {
+            // I don't know why, but [os] seems to be implied
             [symbols]
-            "Unknown" = ""
-            "Arch" = "Arch is the best!"
+            "Alpine" = " "
+            "Amazon" = " "
+            "Android" = " "
+            "Arch" = " "
+            "CentOS" = " "
+            "Debian" = " "
+            "DragonFly" = " "
+            "Emscripten" = " "
+            "EndeavourOS" = " "
+            "Fedora" = " "
+            "FreeBSD" = " "
+            "Gentoo" = " "
+            "HardenedBSD" = "ﲊ "
+            "Illumos" = " "
+            "Linux" = " "
+            "Macos" = " "
+            "Manjaro" = " "
+            "Mariner" = " "
+            "MidnightBSD" = " "
+            "Mint" = " "
+            "NetBSD" = " "
+            "NixOS" = " "
+            "OpenBSD" = " "
+            "SUSE" = " "
+            "OracleLinux" = " "
+            "Pop" = " "
+            "Raspbian" = " "
+            "Redhat" = " "
+            "RedHatEnterprise" = " "
+            "Redox" = " "
+            "Solus" = "ﴱ "
+            "openSUSE" = " "
+            "Ubuntu" = " "
+            "Unknown" = " "
+            "Windows" = " "
         };
 
         let config = OSConfig::load(&config_toml);
@@ -283,7 +230,7 @@ mod tests {
             (Type::Alpine, Some(" ")),
             (Type::Amazon, Some(" ")),
             (Type::Android, Some(" ")),
-            (Type::Arch, Some("Arch is the best!")),
+            (Type::Arch, Some(" ")),
             (Type::CentOS, Some(" ")),
             (Type::Debian, Some(" ")),
             (Type::DragonFly, Some(" ")),
@@ -313,8 +260,61 @@ mod tests {
             (Type::Solus, Some("ﴱ ")),
             (Type::openSUSE, Some(" ")),
             (Type::Ubuntu, Some(" ")),
-            (Type::Unknown, Some("")),
+            (Type::Unknown, Some(" ")),
             (Type::Windows, Some(" ")),
+        ];
+
+        for (t, e) in type_expected_pairs {
+            assert_eq!(get_symbol(&config, &Info::with_type(t)), e);
+        }
+    }
+
+    #[test]
+    fn get_symbol_fallback() {
+        let config_toml = toml::toml! {
+            [symbols]
+            "Unknown" = ""
+            "Arch" = "Arch is the best!"
+        };
+
+        let config = OSConfig::load(&config_toml);
+
+        let type_expected_pairs = [
+            (Type::Alpine, Some("🏔️")),
+            (Type::Amazon, Some("🙂")),
+            (Type::Android, Some("🤖")),
+            (Type::Arch, Some("Arch is the best!")),
+            (Type::CentOS, Some("💠")),
+            (Type::Debian, Some("🌀")),
+            (Type::DragonFly, Some("🐉")),
+            (Type::Emscripten, Some("🔗")),
+            (Type::EndeavourOS, Some("🚀")),
+            (Type::Fedora, Some("🎩")),
+            (Type::FreeBSD, Some("😈")),
+            (Type::Gentoo, Some("🗜️")),
+            (Type::HardenedBSD, Some("🛡️")),
+            (Type::Illumos, Some("🐦")),
+            (Type::Linux, Some("🐧")),
+            (Type::Macos, Some("🍎")),
+            (Type::Manjaro, Some("🥭")),
+            (Type::Mariner, Some("🌊")),
+            (Type::MidnightBSD, Some("🌘")),
+            (Type::Mint, Some("🌿")),
+            (Type::NetBSD, Some("🚩")),
+            (Type::NixOS, Some("❄️")),
+            (Type::OpenBSD, Some("🐡")),
+            (Type::openSUSE, Some("🦎")),
+            (Type::OracleLinux, Some("🦴")),
+            (Type::Pop, Some("🍭")),
+            (Type::Raspbian, Some("🍓")),
+            (Type::Redhat, Some("🎩")),
+            (Type::RedHatEnterprise, Some("🎩")),
+            (Type::Redox, Some("🧪")),
+            (Type::Solus, Some("⛵")),
+            (Type::SUSE, Some("🦎")),
+            (Type::Ubuntu, Some("🎯")),
+            (Type::Unknown, Some("")),
+            (Type::Windows, Some("🪟")),
         ];
 
         for (t, e) in type_expected_pairs {
