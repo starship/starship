@@ -97,6 +97,9 @@ format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
 [openstack]
 format = '\[[$symbol$cloud(\($project\))]($style)\]'
 
+[os]
+format = '\[[$symbol]($style)\]'
+
 [package]
 format = '\[[$symbol$version]($style)\]'
 
