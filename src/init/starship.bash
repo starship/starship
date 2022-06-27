@@ -38,7 +38,7 @@ starship_precmd() {
     fi
 
     local NUM_JOBS=0
-    # Evaluate the number of jobs before running the preseved prompt command, so that tools
+    # Evaluate the number of jobs before running the preserved prompt command, so that tools
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf.
     for job in $(jobs -p); do [[ $job ]] && ((NUM_JOBS++)); done
