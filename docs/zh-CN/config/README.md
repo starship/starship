@@ -111,9 +111,9 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 
 请注意，最终的显示样式将由您的终端模拟器控制。 例如，有的终端模拟器对于“bold”属性的文本是加亮颜色而不是加粗文字，有的颜色主题对“普通”和“明亮”两种属性的颜色使用相同的颜色值。 此外，要获得意大利体文本（一般设计为斜体），您的终端必须支持意大利体显示。
 
-#### Conditional Format Strings
+#### 条件格式设定
 
-A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
+在格式设定里，由 `(``)` 包裹的内容是条件格式设定：若其包含的字段为空则不会渲染。
 
 例如：
 
