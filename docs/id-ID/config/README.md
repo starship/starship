@@ -897,7 +897,7 @@ Modul `deno` menampilkan versi terkini dari [Deno](https://deno.land/) yang terp
 | ------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `fromat`            | `"via [$symbol($version )]($style)"`                                    | Format dari modul.                                                                  |
 | `version_format`    | `"v${raw}"`                                                             | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                                                  | Sebuah format string yang melambangkan simbol Deno                                  |
+| `symbol`            | `🦕 "`                                                                   | Sebuah format string yang melambangkan simbol Deno                                  |
 | `detect_extensions` | `[]`                                                                    | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                                                    | Folder mana yang sebaiknya memicul modul ini.                                       |
@@ -3028,7 +3028,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Variabel  | Bawaan | Deskripsi                                                  |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\* |        | Mirrors the value of option `style`.                       |
+| style\* |        | Menyalin nilai dari opsi `style`.                          |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -3547,7 +3547,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 # ~/.config/starship.toml
 
 [vcsh]
-format = "[🆅 $repo](bold blue) "
+format = "via [✨ $repo](bold blue) "
 ```
 
 ## Zig
@@ -3633,7 +3633,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `deskripsi`         | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
