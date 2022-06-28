@@ -181,7 +181,7 @@ impl<'a> Context<'a> {
         home_dir()
     }
 
-    // Retrives a environment variable from the os or from a table if in testing mode
+    // Retrieves a environment variable from the os or from a table if in testing mode
     #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
         self.env
@@ -195,7 +195,7 @@ impl<'a> Context<'a> {
         env::var(key.as_ref()).ok()
     }
 
-    // Retrives a environment variable from the os or from a table if in testing mode (os version)
+    // Retrieves a environment variable from the os or from a table if in testing mode (os version)
     #[cfg(test)]
     pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
         self.env.get(key.as_ref()).map(OsString::from)
