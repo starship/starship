@@ -265,12 +265,16 @@ jobs:
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
 
+      - name: Setup | Publish Release
+        run: gh release edit ${{ needs.release_please.outputs.tag_name }} --draft=false --repo=starship/starship
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build | Add Artifacts to Release
         uses: softprops/action-gh-release@v1
         with:
           files: starship-*/starship-*
           tag_name: ${{ needs.release_please.outputs.tag_name }}
-          draft: false
 
   # Publish starship to Crates.io
   cargo_publish:
@@ -303,7 +307,10 @@ jobs:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
         env:
+          # Used for creating the formula update PR
           COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+          # Used for verifying the SHA256 sum of the draft release
+          GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
 
   winget_update:
     name: Update Winget Manifest
