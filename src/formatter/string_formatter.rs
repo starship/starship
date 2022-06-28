@@ -447,7 +447,7 @@ where
 {
     // Handle other interpretable characters
     match shell {
-        // Bash might interepret baskslashes, backticks and $
+        // Bash might interpret backslashes, backticks and $
         // see #658 for more details
         Shell::Bash => text
             .into()

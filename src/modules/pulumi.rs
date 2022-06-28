@@ -92,7 +92,7 @@ fn parse_version(version: &str) -> &str {
     version
 }
 
-/// Find a file describing a Pulumi package in the current directory (or any parrent directory).
+/// Find a file describing a Pulumi package in the current directory (or any parent directory).
 fn find_package_file(path: &Path) -> Option<PathBuf> {
     for path in path.ancestors() {
         log::trace!("Looking for package file in {:?}", path);
