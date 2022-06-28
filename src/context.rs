@@ -6,7 +6,9 @@ use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
 use crate::modules;
 use crate::utils::{self, home_dir};
 use clap::Parser;
-use git_repository::{state as git_state, Repository, ThreadSafeRepository};
+use git_repository::{
+    commit::describe::SelectRef::AllRefs, state as git_state, Repository, ThreadSafeRepository,
+};
 use once_cell::sync::OnceCell;
 #[cfg(test)]
 use std::collections::HashMap;
@@ -17,6 +19,7 @@ use std::fmt::Debug;
 use std::fs;
 use std::marker::PhantomData;
 use std::num::ParseIntError;
+use std::ops::Deref;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::string::String;
@@ -263,7 +266,14 @@ impl<'a> Context<'a> {
 
                 let repository = shared_repo.to_thread_local();
                 let branch = get_current_branch(&repository);
-                let remote = get_remote_repository_info(&repository, branch.as_deref());
+                // Only valid if we have a real branch
+                let remote = match branch {
+                    Some(Branch::HeadName(ref b)) => {
+                        get_remote_repository_info(&repository, b.as_str())
+                    }
+                    _ => None,
+                };
+
                 let path = repository.path().to_path_buf();
                 Ok(Repo {
                     repo: shared_repo,
@@ -501,7 +511,7 @@ pub struct Repo {
 
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the current branch name of that repo.
-    pub branch: Option<String>,
+    pub branch: Option<Branch>,
 
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the path to the root of that repo.
@@ -528,6 +538,24 @@ impl Repo {
 pub struct Remote {
     pub branch: Option<String>,
     pub name: Option<String>,
+}
+
+#[derive(Clone)]
+pub enum Branch {
+    HeadName(String),
+    Ref(String),
+    Head,
+}
+
+impl Deref for Branch {
+    type Target = str;
+    fn deref(&self) -> &str {
+        match self {
+            Branch::HeadName(name) => name.as_str(),
+            Branch::Ref(name) => name.as_str(),
+            Branch::Head => "HEAD",
+        }
+    }
 }
 
 // A struct of Criteria which will be used to verify current PathBuf is
@@ -574,18 +602,31 @@ impl<'a> ScanDir<'a> {
     }
 }
 
-fn get_current_branch(repository: &Repository) -> Option<String> {
+fn get_current_branch(repository: &Repository) -> Option<Branch> {
+    get_current_head_name(repository)
+        .or_else(|| describe_head_ref(repository))
+        .or_else(|| repository.head().is_ok().then(|| Branch::Head))
+}
+
+// Get the conanical name of the current HEAD
+fn get_current_head_name(repository: &Repository) -> Option<Branch> {
     let name = repository.head_name().ok()??;
     let shorthand = name.shorten();
 
-    Some(shorthand.to_string())
+    Some(shorthand.to_string()).map(Branch::HeadName)
 }
 
-fn get_remote_repository_info(
-    repository: &Repository,
-    branch_name: Option<&str>,
-) -> Option<Remote> {
-    let branch_name = branch_name?;
+// Try to get the reference name that the head commit is pointing to. (`origin/main`)
+fn describe_head_ref(repository: &Repository) -> Option<Branch> {
+    let head_commit = repository.head_commit().ok()?;
+
+    let describe_platform = head_commit.describe().names(AllRefs);
+    let formatter = describe_platform.try_format().ok()??;
+
+    Some(formatter.name?.to_string()).map(Branch::Ref)
+}
+
+fn get_remote_repository_info(repository: &Repository, branch_name: &str) -> Option<Remote> {
     let branch = repository
         .remote_ref(branch_name)
         .and_then(|r| r.ok())
