@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.8.0"
+version = "1.9.1"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -38,8 +38,8 @@ notify = ["notify-rust"]
 [dependencies]
 ansi_term = "0.12.1"
 chrono = "0.4.19"
-clap = { version = "=3.2.6", features = ["derive", "cargo", "unicode", "unstable-v4"] }
-clap_complete = "3.2.2"
+clap = { version = "=3.2.7", features = ["derive", "cargo", "unicode", "unstable-v4"] }
+clap_complete = "3.2.3"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
 gethostname = "0.2.3"
@@ -61,9 +61,9 @@ rand = "0.8.5"
 rayon = "1.5.3"
 regex = "1.5.6"
 rust-ini = "0.18.0"
-semver = "1.0.10"
+semver = "1.0.11"
 serde = { version = "1.0.137", features = ["derive"] }
-serde_json = "1.0.81"
+serde_json = "1.0.82"
 sha-1 = "0.10.0"
 shadow-rs = "0.11.0"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
@@ -96,7 +96,7 @@ features = ["preserve_order", "indexmap"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.37.0"
+version = "0.38.0"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",

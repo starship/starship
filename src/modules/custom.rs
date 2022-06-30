@@ -237,7 +237,7 @@ fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<S
 
 /// If the specified shell refers to `PowerShell`, adds the arguments "-Command -" to the
 /// given command.
-/// Retruns `false` if the shell shell expects scripts as arguments, `true` if as `stdin`.
+/// Returns `false` if the shell shell expects scripts as arguments, `true` if as `stdin`.
 fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool {
     let shell_exe = Path::new(shell).file_stem();
     let no_args = shell_args.is_empty();

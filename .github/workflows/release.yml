@@ -25,6 +25,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: rust
+          draft: true
 
   # Build sources for every OS
   github_build:
@@ -120,7 +121,7 @@ jobs:
         uses: actions-rs/cargo@v1.0.3
         with:
           command: wix
-          args: -v --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship.msi
+          args: -v --no-build --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship-${{ matrix.target }}.msi
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
@@ -151,7 +152,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: starship-${{ matrix.target }}.msi
-          path: target/wix/starship.msi
+          path: target/wix/starship-${{ matrix.target }}.msi
 
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
@@ -258,16 +259,16 @@ jobs:
     needs: [release_please, github_build, notarize_and_pkgbuild]
     runs-on: ubuntu-latest
     steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
+
+      - name: Setup | Publish Release
+        run: gh release edit ${{ needs.release_please.outputs.tag_name }} --draft=false --repo=starship/starship
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build | Add Artifacts to Release
         uses: softprops/action-gh-release@v1
@@ -301,12 +302,15 @@ jobs:
     needs: release_please
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v2.0
+      - uses: mislav/bump-homebrew-formula-action@v2.1
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
         env:
-          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+          # Used for creating the formula update PR
+          COMMITTER_TOKEN: ${{ secrets.GH_PAT }}
+          # Used for verifying the SHA256 sum of the draft release
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
   winget_update:
     name: Update Winget Manifest
@@ -320,7 +324,7 @@ jobs:
       - run: |
           $version = '${{ needs.release_please.outputs.tag_name }}'.replace('v', '')
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GITHUB_TOKEN }}
+          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GH_PAT }}
 
   merge_crowdin_pr:
     name: Merge Crowdin PR
