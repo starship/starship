@@ -573,7 +573,7 @@ fn get_remote_repository_info(repository: &Repository) -> Option<Remote> {
     None
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Shell {
     Bash,
     Fish,
@@ -589,7 +589,7 @@ pub enum Shell {
 }
 
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Target {
     Main,
     Right,
