@@ -32,7 +32,7 @@ type VariableMapType<'a> =
 type StyleVariableMapType<'a> =
     BTreeMap<String, Option<Result<Cow<'a, str>, StringFormatterError>>>;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringFormatterError {
     Custom(String),
     Parse(PestError<Rule>),

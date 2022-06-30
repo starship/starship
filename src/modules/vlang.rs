@@ -58,7 +58,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn parse_v_version(v_version: &str) -> Option<String> {
     let version = v_version
-        .trim()
         // split into ["V", "0.2", "30c0659"]
         .split_whitespace()
         // return "0.2"
