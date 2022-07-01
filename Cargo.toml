@@ -38,7 +38,7 @@ notify = ["notify-rust"]
 [dependencies]
 ansi_term = "0.12.1"
 chrono = "0.4.19"
-clap = { version = "=3.2.7", features = ["derive", "cargo", "unicode", "unstable-v4"] }
+clap = { version = "=3.2.8", features = ["derive", "cargo", "unicode", "unstable-v4"] }
 clap_complete = "3.2.3"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
@@ -61,7 +61,7 @@ rand = "0.8.5"
 rayon = "1.5.3"
 regex = "1.5.6"
 rust-ini = "0.18.0"
-semver = "1.0.11"
+semver = "1.0.12"
 serde = { version = "1.0.137", features = ["derive"] }
 serde_json = "1.0.82"
 sha-1 = "0.10.0"

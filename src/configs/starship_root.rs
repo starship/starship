@@ -99,7 +99,7 @@ pub const PROMPT_ORDER: &[&str] = &[
 ];
 
 // On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
-impl<'a> Default for StarshipRootConfig {
+impl Default for StarshipRootConfig {
     fn default() -> Self {
         Self {
             schema: "https://starship.rs/config-schema.json".to_string(),
