@@ -37,6 +37,7 @@ Enable-TransientPrompt
 Clink allows you to replace the previous-printed prompt with custom strings. This
 is useful in cases where all the prompt information is not always needed. To enable
 this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
 - `off`: do not replace the prompt (i.e. turn off transience)
