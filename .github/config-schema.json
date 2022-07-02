@@ -1403,7 +1403,8 @@
         "format": "[$user]($style) in ",
         "show_always": false,
         "style_root": "red bold",
-        "style_user": "yellow bold"
+        "style_user": "yellow bold",
+        "substitutions": {}
       },
       "allOf": [
         {
@@ -4678,6 +4679,13 @@
         "show_always": {
           "default": false,
           "type": "boolean"
+        },
+        "substitutions": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         },
         "disabled": {
           "default": false,
