@@ -3587,7 +3587,6 @@ these variables, one workaround is to set one of them with a dummy value.
 | `style`  | `"red bold"` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
 | `user`   | `"matchai"`  | The currently logged-in user ID.                                                            |
 
-
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
