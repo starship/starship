@@ -4668,10 +4668,6 @@
           "default": "[$user]($style) in ",
           "type": "string"
         },
-        "show_always": {
-          "default": false,
-          "type": "boolean"
-        },
         "style_root": {
           "default": "red bold",
           "type": "string"
@@ -4686,6 +4682,10 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "show_always": {
+          "default": false,
+          "type": "boolean"
         },
         "disabled": {
           "default": false,
