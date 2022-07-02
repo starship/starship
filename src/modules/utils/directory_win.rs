@@ -100,7 +100,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
         GenericAll: FILE_ALL_ACCESS.0,
     };
 
-    let mut priviledges: PRIVILEGE_SET = PRIVILEGE_SET::default();
+    let mut privileges: PRIVILEGE_SET = PRIVILEGE_SET::default();
     let mut priv_size = mem::size_of::<PRIVILEGE_SET>() as _;
     let mut granted_access = 0;
     let mut access_rights = FILE_GENERIC_WRITE;
@@ -112,7 +112,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
             impersonated_token,
             access_rights.0,
             &mapping,
-            &mut priviledges,
+            &mut privileges,
             &mut priv_size,
             &mut granted_access,
             &mut result,
