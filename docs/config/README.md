@@ -3591,9 +3591,9 @@ these variables, one workaround is to set one of them with a dummy value.
 <details>
 <summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
-| Advanced Option             | Default | Description                                                                                                                                                            |
-| --------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |         | A table of substitutions to be made to the path.                                                                                                                       |
+| Advanced Option | Default | Description                                      |
+| --------------- | ------- | ------------------------------------------------ |
+| `substitutions` |         | A table of substitutions to be made to the path. |
 
 `substitutions` allows you to define arbitrary replacements for literal strings that occur in the username, for example your usual username or the root user.
 
