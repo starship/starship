@@ -1,3 +1,5 @@
+use indexmap::IndexMap;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -7,6 +9,7 @@ pub struct UsernameConfig<'a> {
     pub format: &'a str,
     pub style_root: &'a str,
     pub style_user: &'a str,
+    pub substitutions: IndexMap<String, &'a str>,
     pub show_always: bool,
     pub disabled: bool,
 }
@@ -17,6 +20,7 @@ impl<'a> Default for UsernameConfig<'a> {
             format: "[$user]($style) in ",
             style_root: "red bold",
             style_user: "yellow bold",
+            substitutions: IndexMap::new(),
             show_always: false,
             disabled: false,
         }

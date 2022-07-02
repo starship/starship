@@ -1,3 +1,5 @@
+use indexmap::IndexMap;
+
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
@@ -48,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "user" => Some(Ok(&username)),
+                "user" => Some(Ok(substitute_user(username.clone(), &config.substitutions))),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -68,6 +70,18 @@ fn is_login_user(context: &Context, username: &str) -> bool {
     context
         .get_env("LOGNAME")
         .map_or(true, |logname| logname == username)
+}
+
+/// Perform a list of string substitutions on the username
+///
+/// Given a list of (from, to) pairs, this will perform the string
+/// substitutions, in order, on the username. Any non-pair of strings is ignored.
+fn substitute_user(user_string: String, substitutions: &IndexMap<String, &str>) -> String {
+    let mut substituted_user = user_string;
+    for substitution_pair in substitutions {
+        substituted_user = substituted_user.replace(substitution_pair.0, substitution_pair.1);
+    }
+    substituted_user
 }
 
 #[cfg(all(target_os = "windows", not(test)))]
@@ -109,6 +123,7 @@ fn is_ssh_session(context: &Context) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use crate::test::ModuleRenderer;
 
     // TODO: Add tests for if root user (UID == 0)
@@ -238,6 +253,37 @@ mod tests {
             })
             .collect();
         let expected = Some("astronaut in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn substitute_prefix_and_middle() {
+        let username = "starship_apollo_astronaut";
+        let mut substitutions = IndexMap::new();
+        substitutions.insert("starship_".to_string(), "SS");
+        substitutions.insert("apollo".to_string(), "A");
+
+        let output = substitute_user(username.to_string(), &substitutions);
+        assert_eq!(output, "SSA_astronaut");
+    }
+
+    #[test]
+    fn substitution_order() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "company_me")
+            .config(toml::toml! {
+                [username]
+                show_always = true
+                style_root = ""
+                style_user = ""
+
+                [username.substitutions]
+                "company_me" = "correct_order"
+                "_me" = "wrong_order"
+            })
+            .collect();
+        let expected = Some("correct_order in ");
 
         assert_eq!(expected, actual.as_deref());
     }
