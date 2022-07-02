@@ -4668,6 +4668,10 @@
           "default": "[$user]($style) in ",
           "type": "string"
         },
+        "show_always": {
+          "default": false,
+          "type": "boolean"
+        },
         "style_root": {
           "default": "red bold",
           "type": "string"
@@ -4675,10 +4679,6 @@
         "style_user": {
           "default": "yellow bold",
           "type": "string"
-        },
-        "show_always": {
-          "default": false,
-          "type": "boolean"
         },
         "substitutions": {
           "default": {},
