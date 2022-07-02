@@ -10,6 +10,28 @@ The configurations in this section are subject to change in future releases of S
 
 :::
 
+## TransientPrompt in PowerShell
+
+It is possible to replace the previous-printed prompt with a custom string. This
+is useful in cases where all the prompt information is not always needed. To enable
+this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put
+this statement in your `$PROFILE`. Transience can be disabled on-the-fly with
+`Disable-TransientPrompt`.
+
+By default, the left side of input gets replaced with `>`. To customize this,
+define a new function called `Invoke-Starship-TransientFunction`. For example, to
+display Starship's `character` module here, you would do
+
+```powershell
+function Invoke-Starship-TransientFunction {
+  &starship module character
+}
+
+Invoke-Expression (&starship init powershell)
+
+Enable-TransientPrompt
+```
+
 ## Custom pre-prompt and pre-execution Commands in Cmd
 
 Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands
