@@ -4437,7 +4437,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "S",
+          "default": "S ",
           "type": "string"
         },
         "style": {
