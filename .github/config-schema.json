@@ -1297,7 +1297,7 @@
         "disabled": false,
         "format": "via [$symbol($version)]($style)",
         "style": "bold blue",
-        "symbol": "S",
+        "symbol": "S ",
         "version_format": "v${major}.${minor}.${patch}"
       },
       "allOf": [
