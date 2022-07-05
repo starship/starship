@@ -50,7 +50,7 @@ log = { version = "0.4.16", features = ["std"] }
 # nofity-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.5.8", optional = true }
-once_cell = "1.12.0"
+once_cell = "1.13.0"
 open = "3.0.1"
 os_info = "3.4.0"
 path-slash = "0.1.4"
