@@ -71,7 +71,7 @@ shadow-rs = "0.12.0"
 starship-battery = { version = "0.7.9", optional = true }
 strsim = "0.10.0"
 systemstat = "=0.1.11"
-terminal_size = "0.1.17"
+terminal_size = "0.2.1"
 toml = { version = "0.5.9", features = ["preserve_order"] }
 toml_edit = "0.14.4"
 unicode-segmentation = "1.9.0"
