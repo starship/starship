@@ -29,7 +29,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "bitness" => get_bitness(&os).map(Ok),
                 "codename" => get_codename(&os).map(Ok),
                 "edition" => get_edition(&os).map(Ok),
                 "name" => get_name(&os).map(Ok),
@@ -58,12 +57,6 @@ fn get_symbol<'a>(config: &'a OSConfig, os: &os_info::Info) -> Option<&'a str> {
         .get(key)
         .cloned()
         .or_else(|| OSConfig::default().symbols.get(key).cloned())
-}
-
-fn get_bitness(os: &os_info::Info) -> Option<String> {
-    Some(os.bitness())
-        .filter(|&x| x != os_info::Bitness::Unknown)
-        .map(|x| x.to_string())
 }
 
 fn get_codename(os: &os_info::Info) -> Option<String> {
@@ -320,10 +313,5 @@ mod tests {
         for (t, e) in type_expected_pairs {
             assert_eq!(get_symbol(&config, &Info::with_type(t)), e);
         }
-    }
-
-    #[test]
-    fn get_bitness_unknown() {
-        assert_eq!(get_bitness(&Info::unknown()), None);
     }
 }

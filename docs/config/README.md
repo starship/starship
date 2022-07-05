@@ -2630,7 +2630,6 @@ See [os_info::Type](https://docs.rs/os_info/latest/os_info/enum.Type.html) for t
 | codename |              | The current operating system codename, if applicable               |
 | edition  |              | The current operating system edition, if applicable                |
 | version  |              | The current operating system version, if applicable                |
-| bitness  | `64-bit`     | The current operating system bitness                               |
 | style\*  |              | Mirrors the value of option `style`                                |
 
 *: This variable can only be used as a part of a style string
