@@ -2576,7 +2576,8 @@ This module has an advanced configuration option that controls how the operating
 
 `symbols` allows you to define arbitrary symbols to display for each operating system type.
 Operating system types not defined by your configuration use the default symbols table below.
-See [os_info::Type](https://docs.rs/os_info/latest/os_info/enum.Type.html) for the operating system types currently recognized by this module.
+All operating systems currently supported by the module are listed below.
+If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
 
 ```toml
 # This is the default symbols table.
