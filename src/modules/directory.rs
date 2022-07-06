@@ -1023,7 +1023,15 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy().to_string(), "")
+                to_fish_style(
+                    1,
+                    tmp_dir
+                        .path()
+                        .join("above-repo")
+                        .to_slash_lossy()
+                        .to_string(),
+                    ""
+                )
             )))
         ));
 
@@ -1235,7 +1243,15 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy().to_string(), "")
+                to_fish_style(
+                    1,
+                    tmp_dir
+                        .path()
+                        .join("above-repo")
+                        .to_slash_lossy()
+                        .to_string(),
+                    ""
+                )
             )))
         ));
 
