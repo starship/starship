@@ -1,4 +1,5 @@
 use ansi_term::ANSIStrings;
+use clap::ValueEnum;
 use rayon::prelude::*;
 use rust_embed::RustEmbed;
 use std::collections::BTreeSet;
@@ -451,37 +452,55 @@ pub fn print_schema() {
     println!("{}", serde_json::to_string_pretty(&schema).unwrap());
 }
 
+#[derive(clap::ValueEnum, Clone, Debug)]
+pub enum Preset {
+    BracketedSegments,
+    NerdFontSymbols,
+    NoRuntimeVersions,
+    PastelPowerline,
+    PlainTextSymbols,
+    PurePreset,
+}
+
 #[derive(RustEmbed)]
 #[folder = "docs/.vuepress/public/presets/toml/"]
 struct Presets;
 
-pub fn preset_command(name: Option<String>, list: bool) {
+pub fn preset_command(name: Option<Preset>, list: bool) {
     if list {
         println!("{}", preset_list());
-    } else if let Some(name) = name {
-        println!("{}", preset(&name));
+        return;
     }
+    let variant = name.expect("name argument must be specified");
+    println!("{}", get_preset(variant));
+}
+
+fn get_preset(variant: Preset) -> String {
+    let path = format!(
+        "{}.toml",
+        variant
+            .to_possible_value()
+            .expect("Failed to convert to possible value")
+            .get_name()
+    );
+    let file = Presets::get(&path).expect("Failed to get preset file");
+    std::str::from_utf8(file.data.as_ref())
+        .expect("Failed to convert preset from utf-8")
+        .to_string()
 }
 
 fn preset_list() -> String {
-    let mut res = String::new();
-    for file in Presets::iter() {
-        res.push_str(file.trim_end_matches(".toml"));
-        res.push('\n');
-    }
-    res.trim_end().to_string()
-}
-
-const UNEXPECTED_PRESET_MESSAGE: &str = "Unexpected preset name";
-
-fn preset(name: &str) -> String {
-    let path = format!("{}.toml", name);
-    match Presets::get(&path) {
-        Some(file) => std::str::from_utf8(file.data.as_ref())
-            .expect("Failed to decode preset from utf-8")
-            .to_string(),
-        None => String::from(UNEXPECTED_PRESET_MESSAGE),
-    }
+    Preset::value_variants()
+        .iter()
+        .map(|v| {
+            format!(
+                "{}\n",
+                v.to_possible_value()
+                    .expect("Failed to convert to possible value")
+                    .get_name()
+            )
+        })
+        .collect()
 }
 
 #[cfg(test)]
@@ -525,24 +544,21 @@ mod test {
     }
 
     #[test]
-    fn preset_list_not_empty() {
-        assert_ne!("", preset_list().trim());
+    fn preset_list_returns_one_or_more_items() {
+        assert!(preset_list().trim().split('\n').count() > 0);
     }
 
     #[test]
-    fn preset_error() {
-        assert_eq!(preset("bad-preset"), UNEXPECTED_PRESET_MESSAGE);
+    fn get_preset_works_for_all_variants() {
+        Preset::value_variants().iter().for_each(|v| {
+            assert_ne!(get_preset(v.clone()).trim(), "");
+        })
     }
 
     #[test]
-    fn preset_no_error() {
-        assert_ne!(preset("pure-preset"), UNEXPECTED_PRESET_MESSAGE);
-    }
-
-    #[test]
-    fn preset_command_does_not_panic() {
+    fn preset_command_does_not_panic_on_correct_inputs() {
         preset_command(None, true);
-        preset_command(Some(String::from("preset")), false);
+        preset_command(Some(Preset::BracketedSegments), false);
     }
 
     #[test]

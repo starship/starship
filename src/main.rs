@@ -66,8 +66,8 @@ enum Commands {
     /// Prints a preset config
     Preset {
         /// The name of preset to be printed
-        #[clap(required_unless_present("list"))]
-        name: Option<String>,
+        #[clap(required_unless_present("list"), value_enum)]
+        name: Option<print::Preset>,
         /// List out all preset names
         #[clap(short, long)]
         list: bool,
