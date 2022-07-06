@@ -55,8 +55,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let segment_format = match config.pipestatus_segment_format {
-        "" => config.format,
-        _ => config.pipestatus_segment_format,
+        None => config.format,
+        Some(format) => format,
     };
 
     // Create pipestatus string
@@ -695,14 +695,14 @@ mod tests {
         let pipe_exit_code = &[0, 1];
         let main_exit_code = 1;
 
-        let expected = Some("[0]|[1] => [1]".to_string());
+        let expected = Some("[0]|[1] => <1>".to_string());
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
                 [status]
                 format = "\\($status\\)"
                 pipestatus = true
                 pipestatus_separator = "|"
-                pipestatus_format = "$pipestatus => \\[$status\\]"
+                pipestatus_format = "$pipestatus => <$status>"
                 pipestatus_segment_format = "\\[$status\\]"
                 disabled = false
             })
