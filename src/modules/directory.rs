@@ -5,6 +5,7 @@ use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
 use indexmap::IndexMap;
 use path_slash::{PathBufExt, PathExt};
+use std::borrow::Cow;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
@@ -63,8 +64,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut is_truncated = dir_string.is_some();
 
     // the home directory if required.
-    let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol));
+    let dir_string = dir_string
+        .unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol).to_string());
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -89,7 +90,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let contracted_home_dir = contract_path(display_dir, &home_dir, &home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
-                contracted_home_dir,
+                contracted_home_dir.to_string(),
                 &dir_string,
             )
         } else {
@@ -204,13 +205,17 @@ fn is_readonly_dir(path: &Path) -> bool {
 ///
 /// Replaces the `top_level_path` in a given `full_path` with the provided
 /// `top_level_replacement`.
-fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
+fn contract_path<'a>(
+    full_path: &'a Path,
+    top_level_path: &'a Path,
+    top_level_replacement: &'a str,
+) -> Cow<'a, str> {
     if !full_path.normalised_starts_with(top_level_path) {
-        return full_path.to_slash_lossy().to_string();
+        return full_path.to_slash_lossy();
     }
 
     if full_path.normalised_equals(top_level_path) {
-        return top_level_replacement.to_string();
+        return Cow::from(top_level_replacement);
     }
 
     // Because we've done a normalised path comparison above
@@ -221,12 +226,12 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
         .strip_prefix(top_level_path.without_prefix())
         .unwrap_or(full_path);
 
-    format!(
+    Cow::from(format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
         path = sub_path.to_slash_lossy()
-    )
+    ))
 }
 
 /// Contract the root component of a path based on the real path
