@@ -49,14 +49,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
+// Get the operating system symbol from user config, or else default config
+// when user has not defined a symbol for the operating system.
 fn get_symbol<'a>(config: &'a OSConfig, os: &os_info::Info) -> Option<&'a str> {
     // String from os_info::Type
     let key = &format!("{:?}", os.os_type());
     config
-        .symbols
-        .get(key)
-        .cloned()
-        .or_else(|| OSConfig::default().symbols.get(key).cloned())
+        .get_symbol(key)
+        .or_else(|| OSConfig::default().get_symbol(key))
 }
 
 fn get_codename(os: &os_info::Info) -> Option<String> {

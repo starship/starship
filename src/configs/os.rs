@@ -11,6 +11,12 @@ pub struct OSConfig<'a> {
     pub disabled: bool,
 }
 
+impl<'a> OSConfig<'a> {
+    pub fn get_symbol(&self, key: &str) -> Option<&'a str> {
+        self.symbols.get(key).cloned()
+    }
+}
+
 impl<'a> Default for OSConfig<'a> {
     fn default() -> Self {
         OSConfig {
