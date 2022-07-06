@@ -54,10 +54,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let segment_format = match config.pipestatus_segment_format {
-        None => config.format,
-        Some(format) => format,
-    };
+    let segment_format = config.pipestatus_segment_format.unwrap_or(config.format);
 
     // Create pipestatus string
     let pipestatus = match pipestatus_status {
