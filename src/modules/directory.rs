@@ -206,7 +206,7 @@ fn is_readonly_dir(path: &Path) -> bool {
 /// `top_level_replacement`.
 fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
     if !full_path.normalised_starts_with(top_level_path) {
-        return full_path.to_slash_lossy();
+        return full_path.to_slash_lossy().to_string();
     }
 
     if full_path.normalised_equals(top_level_path) {
@@ -789,7 +789,7 @@ mod tests {
             })
             .path(&dir)
             .collect();
-        let dir_str = dir.to_slash_lossy();
+        let dir_str = dir.to_slash_lossy().to_string();
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(
@@ -819,7 +819,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&to_fish_style(
                 100,
-                dir.to_slash_lossy(),
+                dir.to_slash_lossy().to_string(),
                 ""
             )))
         ));
@@ -870,7 +870,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/thrusters/rocket",
-                to_fish_style(1, dir.to_slash_lossy(), "/thrusters/rocket")
+                to_fish_style(1, dir.to_slash_lossy().to_string(), "/thrusters/rocket")
             )))
         ));
 
@@ -992,7 +992,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, tmp_dir.path().to_slash_lossy().to_string(), "")
             )))
         ));
 
@@ -1023,7 +1023,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy().to_string(), "")
             )))
         ));
 
@@ -1198,7 +1198,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, tmp_dir.path().to_slash_lossy().to_string(), "")
             )))
         ));
 
@@ -1235,7 +1235,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy().to_string(), "")
             )))
         ));
 
