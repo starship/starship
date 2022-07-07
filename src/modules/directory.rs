@@ -429,7 +429,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "C:");
+        assert_eq!(output, "C:/");
     }
 
     #[test]
