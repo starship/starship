@@ -6,7 +6,7 @@ Petunjuk berikut memandu kamu ke perubahan besar kami.
 
 ## `prompt_order` kini digantikan dengan sebuah `format` root-level
 
-Sebelum v0.45.0, `prompt_order` dapat menerima sebuah nama modul dengan urutan yang harusya di-render oleh Starship.
+Sebelum v0.45.0, `prompt_order` dapat menerima masukan berupa sebuah nama modul dengan urutan yang harusya di-render oleh Starship.
 
 Starship v0.45.0 kini menerima nilai dari `format`, memungkinkan kustomisasi prompt di luar modul itu sendiri.
 
@@ -54,9 +54,9 @@ format = """\
 
 ## Modul `prefix` dan `suffix` kini digantikan dengan `format`
 
-Sebelum v0.45.0, beberapa modul bisa menerima `prefix` dan/atau `suffix` untuk menata gayanya sesuai yang di-render modul.
+Sebelum v0.45.0, beberapa modul bisa menerima `prefix` dan/atau `suffix` untuk menata gayanya sesuai modul yang di-render.
 
-Starship v0.45.0 menerima nilai `format` sebagai gantinya, memungkinkan bagaimana modul di-render untuk kustomisasi yang lebih jauh. Ketimbang membuat prefix dan suffix untuk varibel berbasis konteks, kini variabel dapat disubtitusikan dari sebuah format string, yang mana merepresantikan keluaran dari sebuah modul.
+Starship v0.45.0 menerima nilai `format` sebagai gantinya, yang memungkinkan bagaimana modul di-render untuk kustomisasi yang lebih jauh. Daripada membuat prefix dan suffix untuk varibel yang berbasis konteks, kini variabel dapat disubtitusikan dari dalam sebuah format string, yang mana mewakili hasil keluaran dari modul.
 
 **Contoh konfigurasi pra-v0.45.0**
 
@@ -74,7 +74,7 @@ prefix = "took "
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Modul yang terpengaruh
 
 #### Karakter
 
@@ -98,9 +98,9 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Sebelumnya, properti `use_symbol_for_status` digunakan untuk mengkonfigurasi prompt untuk menampilkan `error_symbol` saat perintah terakhir berakhir dengan nilai code status yang bukan nol.
+Sebelumnya, properti `use_symbol_for_status` digunakan untuk mengkonfigurasi prompt buat menampilkan `error_symbol` saat perintah terakhir berakhir dengan nilai code status yang bukan nol.
 
-Dengan rilisnya v0.45.0, kini kita selalu menggunakan `error_symbol` setelah nilai code status yang bukan nol, menggabungkan properti `use_symbol_for_status` dan `error_symbol`.
+Dengan rilisnya v0.45.0, kini kita selalu memakai `error_symbol` setelah nilai code status yang bukan nol, untuk menyatukan properti `use_symbol_for_status` dan `error_symbol`.
 
 Untuk mengkonfigurasi prompt agar menggunakan konfigurasi `use_symbol_for_status = true`, tambahkan baris berikut ke dalam file config:
 
@@ -189,7 +189,7 @@ _Catatan:_ Element `character` secara otomatis menambahkan sebuah spasi setelahn
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Sebelumnya, properti `show_sync_count` digunakan untuk mengkonfigurasi prompt untuk menampilkan jumlah commits dari branch yang terdepan atau terbelakang dari remote branch.
+Sebelumnya, properti `show_sync_count` digunakan untuk mengkonfigurasi prompt buat menampilkan jumlah commits dari branch yang terdepan atau terbelakang dari remote branch.
 
 Dengan rilisnya v0.45.0, hal ini kini digantikan dengan tiga properti terpisah, `ahead`, `behind`, dan `diverged`.
 

@@ -246,7 +246,7 @@ pub fn explain(args: Properties) {
                 " ".repeat(max_module_width - (info.value_len))
             );
             for g in info.desc.graphemes(true) {
-                // Handle ANSI escape sequnces
+                // Handle ANSI escape sequences
                 if g == "\x1B" {
                     escaping = true;
                 }

@@ -63,7 +63,7 @@ impl StarshipPath {
                 if e.kind() != io::ErrorKind::NotFound {
                     log::warn!("Failed to convert \"{}\" to unix path:\n{:?}", str_path, e);
                 }
-                // Failed to execute cygpath.exe means there're not inside cygwin evironment,return directly.
+                // Failed to execute cygpath.exe means there're not inside cygwin environment,return directly.
                 return self.sprint();
             }
         };

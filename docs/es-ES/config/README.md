@@ -544,16 +544,16 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ### Opciones
 
-| Opción                     | Por defecto          | Descripción                                                                                             |
-| -------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------- |
-| `format`                   | `"$symbol "`         | La cadena de formato usada antes de la entrada de texto.                                                |
-| `success_symbol`           | `"[❯](bold green)"`  | La cadena de formato usada antes de la entrada de texto si el comando anterior tuvo éxito.              |
-| `error_symbol`             | `"[❯](bold red)"`    | La cadena de formato usada antes de la entrada de texto si el comando anterior falló.                   |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | El cadena de formato antes de la entrada de texto si el intérprete de comandos está en modo vim normal. |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.                 |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.                       |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.                       |
-| `disabled`                 | `false`              | Desactiva el módulo `character`.                                                                        |
+| Opción                      | Por defecto          | Descripción                                                                                             |
+| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------- |
+| `format`                    | `"$symbol "`         | La cadena de formato usada antes de la entrada de texto.                                                |
+| `success_symbol`            | `"[❯](bold green)"`  | La cadena de formato usada antes de la entrada de texto si el comando anterior tuvo éxito.              |
+| `error_symbol`              | `"[❯](bold red)"`    | La cadena de formato usada antes de la entrada de texto si el comando anterior falló.                   |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | El cadena de formato antes de la entrada de texto si el intérprete de comandos está en modo vim normal. |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.                 |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.                       |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.                       |
+| `disabled`                  | `false`              | Desactiva el módulo `character`.                                                                        |
 
 ### Variables
 
@@ -2793,6 +2793,44 @@ El módulo `rlang` muestra la versión instalada de [R](https://www.r-project.or
 format = "with [📐 $version](blue bold) "
 ```
 
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes condiciones:
+
+- The current directory contains a `META6.json` file
+- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### Opciones
+
+| Opción              | Por defecto                                      | Descripción                                                                             |
+| ------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version-$vm_version )]($style)"` | La cadena de formato para el módulo.                                                    |
+| `version_format`    | `"v${raw}"`                                      | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                                   |
+| `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Qué extensiones deberían activar este módulo.                                           |
+| `detect_files`      | `["META6.json"]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
+| `detect_folders`    | `[]`                                             | Qué carpetas deberían activar este módulo.                                              |
+| `style`             | `"bold 149"`                                     | El estilo del módulo.                                                                   |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                                             |
+
+### Variables
+
+| Variable   | Ejemplo | Descripción                            |
+| ---------- | ------- | -------------------------------------- |
+| version    | `v6.d`  | The version of `raku`                  |
+| vm_version | `moar`  | The version of VM `raku` is built on   |
+| symbol     |         | Refleja el valor de la opción `symbol` |
+| style\*  |         | Refleja el valor de la opción `style`  |
+
+### Ejemplo
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = "via [🦪 $version]($style) "
+```
+
 ## Red
 
 Por defecto, el módulo `red` muestra la versión actualmente instalada de [Red](https://www.red-lang.org/). El módulo se muestra si algunas de las siguientes condiciones se cumplen:
@@ -2810,7 +2848,7 @@ Por defecto, el módulo `red` muestra la versión actualmente instalada de [Red]
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"red bold"`                         | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Deshabilita el módulo `red`.                                                            |
+| `disabled`          | `false`                              | Deshabilita el módulo `rojo`.                                                           |
 
 ### Variables
 
@@ -2989,7 +3027,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 | Variable  | Predeterminado | Descripción                                                                          |
 | --------- | -------------- | ------------------------------------------------------------------------------------ |
-| indicador |                | Ordena el valor de `indicator` para el intérprete de comandos actualmente utilizado. |
+| indicator |                | Ordena el valor de `indicator` para el intérprete de comandos actualmente utilizado. |
 | style\* |                | Refleja el valor de la opción `style`.                                               |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -3018,7 +3056,7 @@ El módulo `shlvl` muestra la variable de entorno [`SHLVL`](https://tldp.org/LDP
 | `threshold` | `2`                          | Mostrar umbral.                                                   |
 | `format`    | `"[$symbol$shlvl]($style) "` | El formato del módulo.                                            |
 | `symbol`    | `"↕️  "`                     | El símbolo utilizado para representar el `SHLVL`.                 |
-| `repetir`   | `false`                      | Hace que el `symbol` se repita con la cantidad actual de `SHLVL`. |
+| `repeat`    | `false`                      | Hace que el `symbol` se repita con la cantidad actual de `SHLVL`. |
 | `style`     | `"bold yellow"`              | El estilo del módulo.                                             |
 | `disabled`  | `true`                       | Desactiva el módulo `shlvl`.                                      |
 
@@ -3054,7 +3092,7 @@ El módulo `singularity` muestra la imagen de [singularity](https://sylabs.io/si
 | `format`   | `'[$symbol\[$env\]]($style) '` | El formato del módulo.                                              |
 | `symbol`   | `""`                             | Una cadena de formato que se muestra antes del nombre de la imagen. |
 | `style`    | `"bold dimmed blue"`             | El estilo del módulo.                                               |
-| `disabled` | `false`                          | Deshabilita el módulo `singularity`.                                |
+| `disabled` | `false`                          | Desactiva el módulo `singularity`.                                  |
 
 ### Variables
 
@@ -3108,7 +3146,7 @@ El módulo `spack` muestra el entorno actual [Spack](https://spack.readthedocs.i
 format = "[$symbol$environment](dimmed blue) "
 ```
 
-## Estado
+## Status
 
 El módulo `status` muestra el código de salida del comando anterior. Si $success_symbol está vacío (por defecto), el módulo solo se mostrará si el código de salida no es `0`. El código de estado se convertirá a un entero con signo de 32 bits.
 
@@ -3141,7 +3179,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 | Variable       | Ejemplo | Descripción                                                                                                        |
 | -------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
-| estado         | `127`   | El código de salida del último comando                                                                             |
+| status         | `127`   | El código de salida del último comando                                                                             |
 | hex_status     | `0x7F`  | El código de salida del último comando en hexadecimal                                                              |
 | int            | `127`   | El código de salida del último comando                                                                             |
 | common_meaning | `ERROR` | Comprobación del código si no es una señal                                                                         |
@@ -3183,7 +3221,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | Opción          | Por defecto             | Descripción                                                                                      |
 | --------------- | ----------------------- | ------------------------------------------------------------------------------------------------ |
 | `format`        | `[as $symbol]($style)"` | El formato del módulo                                                                            |
-| `symbol`        | `"🧙 "`                  | El símbolo mostrado cuando las credenciales se almacenan en caché                                |
+| `symbol`        | `"🧙 "`                  | El símbolo mostrado cuando las credenciales están guardadas en caché                             |
 | `style`         | `"bold blue"`           | El estilo del módulo.                                                                            |
 | `allow_windows` | `false`                 | Como Windows no tiene sudo de manera predeterminada, el valor predeterminado está deshabilitado. |
 | `disabled`      | `true`                  | Deshabilita el módulo `sudo`.                                                                    |
@@ -3331,10 +3369,10 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | ----------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | `"at [$time]($style) "` | La cadena de formato para el módulo.                                                                                                                                        |
 | `use_12hr`        | `false`                 | Habilita el formato de 12 horas                                                                                                                                             |
-| `time_format`     | ver abajo               | La [cadena de formato de chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilizada para formatear la hora.                                          |
+| `time_format`     | see below               | La [cadena de formato de chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) utilizada para formatear la hora.                                          |
 | `style`           | `"bold yellow"`         | El estilo para la hora del módulo                                                                                                                                           |
 | `utc_time_offset` | `"local"`               | Establece el desplazamiento UTC a utilizar. Rango de -24 &lt; x &lt; 24. Permite a los flotantes acomodar los desplazamientos de zona horaria de 30/45 minutos. |
-| `disabled`        | `true`                  | Deshabilita el módulo `time`.                                                                                                                                               |
+| `disabled`        | `true`                  | Desactiva el módulo `time`.                                                                                                                                                 |
 | `time_range`      | `"-"`                   | Establece el intervalo de tiempo durante el cual el módulo se mostrará. La hora debe ser especificada en formato de 24 horas                                                |
 
 Si `use_12hr` es `true`, entonces `time_format` por defecto `"%r"`. De lo contrario, el valor por defecto es `"%T"`. Configurar manualmente `time_format` sobrescribirá la configuración `use_12hr`.
@@ -3343,7 +3381,7 @@ Si `use_12hr` es `true`, entonces `time_format` por defecto `"%r"`. De lo contra
 
 | Variable  | Ejemplo    | Descripción                           |
 | --------- | ---------- | ------------------------------------- |
-| hora      | `13:08:10` | La hora actual.                       |
+| time      | `13:08:10` | La hora actual.                       |
 | style\* |            | Refleja el valor de la opción `style` |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
@@ -3378,7 +3416,7 @@ La conexión SSH se detecta comprobando las variables de entorno `SSH_CONNECTION
 
 ### Opciones
 
-| Opción        | Por defecto             | Descripción                                      |
+| Opción        | Predeterminado          | Descripción                                      |
 | ------------- | ----------------------- | ------------------------------------------------ |
 | `style_root`  | `"bold red"`            | El estilo usado cuando el usuario es root/admin. |
 | `style_user`  | `"bold yellow"`         | El estilo usado para usuarios no root.           |
@@ -3526,7 +3564,7 @@ Por defecto, el módulo `zig` muestra la versión instalada de [Zig](https://zig
 | `version_format`    | `"v${raw}"`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"↯ "`                               | El símbolo usado antes de mostrar la versión de Zig.                                    |
 | `style`             | `"bold yellow"`                      | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Deshabilita el módulo `zig`.                                                            |
+| `disabled`          | `false`                              | Desactiva el módulo `zig`.                                                              |
 | `detect_extensions` | `["zig"]`                            | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
@@ -3595,14 +3633,14 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 | `command`           | `""`                            | El comando cuya salida debe ser impresa. El comando se pasará en stdin al shell.                                                                                                                                                                                                                                                 |
 | `when`              | `false`                         | Valor booleano (`true` o `false`, sin comillas) o un comando de shell usado como una condición para mostrar el módulo. En caso de una cadena, el módulo se mostrará si el comando devuelve un código de estado `0`.                                                                                                              |
 | `shell`             |                                 | [Ver abajo](#custom-command-shell)                                                                                                                                                                                                                                                                                               |
-| `descripción`       | `"<custom module>"`       | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                                                                                                                                                                                                                         |
+| `description`       | `"<custom module>"`       | La descripción del módulo que se muestra al ejecutar `starship explain`.                                                                                                                                                                                                                                                         |
 | `detect_files`      | `[]`                            | Los archivos que se buscarán en el directorio de trabajo para obtener una coincidencia.                                                                                                                                                                                                                                          |
 | `detect_folders`    | `[]`                            | Los directorios que se buscarán en el directorio de trabajo para una coincidencia.                                                                                                                                                                                                                                               |
 | `detect_extensions` | `[]`                            | Las extensiones que se buscarán en el directorio de trabajo para obtener una coincidencia.                                                                                                                                                                                                                                       |
 | `symbol`            | `""`                            | El símbolo usado antes de mostrar la salida del comando.                                                                                                                                                                                                                                                                         |
 | `style`             | `"bold green"`                  | El estilo del módulo.                                                                                                                                                                                                                                                                                                            |
 | `format`            | `"[$symbol($output )]($style)"` | El formato del módulo.                                                                                                                                                                                                                                                                                                           |
-| `disabled`          | `false`                         | Deshabilita este módulo `custom`.                                                                                                                                                                                                                                                                                                |
+| `disabled`          | `false`                         | Desactiva este módulo `custom`.                                                                                                                                                                                                                                                                                                  |
 | `os`                |                                 | Nombre del sistema operativo en el que se mostrará el módulo (unix, linux, macos, windows, ... ) [Ver valores posibles](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                                              |
 | `use_stdin`         |                                 | Un valor booleano opcional que anula si los comandos deben ser reenviados al shell a través de la entrada estándar o como argumento. Si la entrada estándar unset es usada de manera predeterminada, a menos que el shell no lo soporte (cmd, nushell). Configurar esto desactiva el manejo de argumentos específicos del shell. |
 | `ignore_timeout`    | `false`                         | Ignorar la configuración global de `command_timeout` y seguir ejecutando comandos externos, sin importar el tiempo que tarden.                                                                                                                                                                                                   |
