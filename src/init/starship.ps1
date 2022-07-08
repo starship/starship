@@ -107,15 +107,16 @@ $null = New-Module starship {
 
         # Invoke Starship
         $promptText = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+        $promptLines = $promptText.Split("`n")
 
         $arguments += "--right"
         $rpromptText = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
         # Calculate offset for printing on right side:
-        # offset = (console width) + (length of ANSI sequences) - (2 as some breathing space)
-        $rpromptOffset = $Host.UI.RawUI.WindowSize.Width + $rpromptText.Length - ($rpromptText -replace '([\u001B\u009B][[\]()#;?]*(?:(?:(?:[a-zA-Z\d]*(?:;[-a-zA-Z\d\/#&.:=?%@~_]*)*)?\u0007)|(?:(?:\d{1,4}(?:;\d{0,4})*)?[\dA-PR-TZcf-ntqry=><~])))').Length - 2
+        # offset = (console width) + (length of ANSI sequences on right_prompt) - (length of just text in last line of left_prompt)
+        $rpromptOffset = $Host.UI.RawUI.WindowSize.Width + ($rpromptText.Length - ($rpromptText -replace $ansiRegex).Length) - ($promptLines[-1] -replace $ansiRegex).Length
 
         # Set the number of extra lines in the prompt for PSReadLine prompt redraw.
-        Set-PSReadLineOption -ExtraPromptLineCount ($promptText.Split("`n").Length - 1)
+        Set-PSReadLineOption -ExtraPromptLineCount ($promptLines.Length - 1)
 
         # Return the prompt
         # After printing the left prompt, the cursor position is saved,
@@ -145,6 +146,10 @@ $null = New-Module starship {
         }
 
     }
+
+    # The following regex is used to strip out ANSI sequences from a string,
+    # giving us just plain text. This is useful for string length calculation.
+    $ansiRegex = '([\u001B\u009B][[\]()#;?]*(?:(?:(?:[a-zA-Z\d]*(?:;[-a-zA-Z\d\/#&.:=?%@~_]*)*)?\u0007)|(?:(?:\d{1,4}(?:;\d{0,4})*)?[\dA-PR-TZcf-ntqry=><~])))'
 
     # Disable virtualenv prompt, it breaks starship
     $ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
