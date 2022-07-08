@@ -1,7 +1,6 @@
 use ansi_term::ANSIStrings;
 use clap::ValueEnum;
 use rayon::prelude::*;
-use rust_embed::RustEmbed;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
 use std::io::{self, Write};
@@ -19,6 +18,9 @@ use crate::modules;
 use crate::segment::Segment;
 
 pub struct Grapheme<'a>(pub &'a str);
+
+shadow!(build);
+pub use build::Preset;
 
 impl<'a> Grapheme<'a> {
     pub fn width(&self) -> usize {
@@ -452,21 +454,7 @@ pub fn print_schema() {
     println!("{}", serde_json::to_string_pretty(&schema).unwrap());
 }
 
-#[derive(clap::ValueEnum, Clone, Debug)]
-pub enum Preset {
-    BracketedSegments,
-    NerdFontSymbols,
-    NoRuntimeVersions,
-    PastelPowerline,
-    PlainTextSymbols,
-    PurePreset,
-}
-
-#[derive(RustEmbed)]
-#[folder = "docs/.vuepress/public/presets/toml/"]
-struct Presets;
-
-pub fn preset_command(name: Option<Preset>, list: bool) {
+pub fn preset_command(name: Option<build::Preset>, list: bool) {
     if list {
         println!("{}", preset_list());
         return;
@@ -475,22 +463,13 @@ pub fn preset_command(name: Option<Preset>, list: bool) {
     println!("{}", get_preset(variant));
 }
 
-fn get_preset(variant: Preset) -> String {
-    let path = format!(
-        "{}.toml",
-        variant
-            .to_possible_value()
-            .expect("Failed to convert to possible value")
-            .get_name()
-    );
-    let file = Presets::get(&path).expect("Failed to get preset file");
-    std::str::from_utf8(file.data.as_ref())
-        .expect("Failed to convert preset from utf-8")
-        .to_string()
+fn get_preset(variant: build::Preset) -> String {
+    let build::Preset(name) = variant;
+    build::get_preset_content(name.to_string()).expect("Failed to get preset content")
 }
 
 fn preset_list() -> String {
-    Preset::value_variants()
+    build::Preset::value_variants()
         .iter()
         .map(|v| {
             format!(
@@ -550,7 +529,7 @@ mod test {
 
     #[test]
     fn get_preset_works_for_all_variants() {
-        Preset::value_variants().iter().for_each(|v| {
+        build::Preset::value_variants().iter().for_each(|v| {
             assert_ne!(get_preset(v.clone()).trim(), "");
         })
     }
@@ -558,7 +537,7 @@ mod test {
     #[test]
     fn preset_command_does_not_panic_on_correct_inputs() {
         preset_command(None, true);
-        preset_command(Some(Preset::BracketedSegments), false);
+        preset_command(Some(build::Preset("bracketed-segments")), false);
     }
 
     #[test]
