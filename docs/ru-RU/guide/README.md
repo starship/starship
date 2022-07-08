@@ -173,12 +173,12 @@
 
 ### Шаг 1. Установите Starship
 
-Select your operating system from the list below to view installation instructions:
+Выберите свою операционную систему из списка нижу чтобы просмотреть инструкции по установке:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Установите Starship любым из предложенных пакетных менеджеров:
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -189,7 +189,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Установите Starship любым из предложенных пакетных менеджеров:
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -202,20 +202,20 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+Установите последнюю версию для вашей системы:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Или установите Starship любым из предложенных пакетных менеджеров:
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| Дистрибутив        | Репозиторий                                                                                      | Инструкции                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
-| _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
-| _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
+| **_Любой_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _Любой_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _Любой_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| _Любой_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -231,13 +231,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+Установите последнюю версию для вашей системы:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Или установите Starship любым из предложенных пакетных менеджеров:
 
 | Repository                                               | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -251,11 +251,11 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Установите последнюю версию для вашей системы с помощью MSI-установщиков из [релизов](https://github.com/starship/starship/releases/latest).
 
-Install Starship using any of the following package managers:
+Или установите Starship любым из предложенных пакетных менеджеров:
 
-| Repository                                                                                   | Instructions                            |
+| Репозиторий                                                                                  | Инструкции                              |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
@@ -265,9 +265,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Шаг 2. Setup your shell to use Starship
+### Шаг 2. Настройте свой shell для использования Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Настройте свой shell для запуска Starship. Выберите из списка:
 
 <details>
 <summary>Bash</summary>
@@ -300,7 +300,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+Примечание: Только Elvish v0.18+ поддерживается
 
 </details>
 
