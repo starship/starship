@@ -20,7 +20,7 @@ impl<'a> Default for PulumiConfig<'a> {
             symbol: " ",
             style: "bold 5",
             disabled: false,
-            search_upwards: false,
+            search_upwards: true,
         }
     }
 }

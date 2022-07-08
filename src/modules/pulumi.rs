@@ -433,6 +433,7 @@ mod tests {
             .config(toml::toml! {
                 [pulumi]
                 format = "in [$symbol($stack)]($style) "
+                search_upwards = false
             })
             .collect();
         let expected = None;
@@ -441,7 +442,7 @@ mod tests {
     }
 
     #[test]
-    fn search_upwards_with_opt() -> io::Result<()> {
+    fn search_upwards_default() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let child_dir = dir.path().join("child");
         std::fs::create_dir(&child_dir)?;
@@ -454,7 +455,6 @@ mod tests {
             .config(toml::toml! {
                 [pulumi]
                 format = "in [$symbol($stack)]($style) "
-                search_upwards = true
             })
             .collect();
         let expected = Some(format!("in {} ", Color::Fixed(5).bold().paint(" ")));
