@@ -17,6 +17,7 @@ pub struct StatusConfig<'a> {
     pub pipestatus: bool,
     pub pipestatus_separator: &'a str,
     pub pipestatus_format: &'a str,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pipestatus_segment_format: Option<&'a str>,
     pub disabled: bool,
 }
