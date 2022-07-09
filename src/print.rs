@@ -1,5 +1,5 @@
 use ansi_term::ANSIStrings;
-use clap::ValueEnum;
+use clap::{PossibleValue, ValueEnum};
 use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
@@ -20,7 +20,6 @@ use crate::segment::Segment;
 pub struct Grapheme<'a>(pub &'a str);
 
 shadow!(build);
-pub use build::Preset;
 
 impl<'a> Grapheme<'a> {
     pub fn width(&self) -> usize {
@@ -454,7 +453,23 @@ pub fn print_schema() {
     println!("{}", serde_json::to_string_pretty(&schema).unwrap());
 }
 
-pub fn preset_command(name: Option<build::Preset>, list: bool) {
+#[derive(Clone, Debug)]
+pub struct Preset(pub &'static str);
+
+impl ValueEnum for Preset {
+    fn value_variants<'a>() -> &'a [Self] {
+        build::get_preset_list()
+    }
+
+    fn to_possible_value<'a>(&self) -> Option<clap::PossibleValue<'a>> {
+        Self::value_variants()
+            .iter()
+            .find(|v| v.0 == self.0)
+            .map(|v| PossibleValue::new(v.0))
+    }
+}
+
+pub fn preset_command(name: Option<Preset>, list: bool) {
     if list {
         println!("{}", preset_list());
         return;
@@ -463,13 +478,13 @@ pub fn preset_command(name: Option<build::Preset>, list: bool) {
     println!("{}", get_preset(variant));
 }
 
-fn get_preset(variant: build::Preset) -> String {
-    let build::Preset(name) = variant;
+fn get_preset(variant: Preset) -> String {
+    let Preset(name) = variant;
     build::get_preset_content(name.to_string()).expect("Failed to get preset content")
 }
 
 fn preset_list() -> String {
-    build::Preset::value_variants()
+    Preset::value_variants()
         .iter()
         .map(|v| {
             format!(
@@ -529,7 +544,7 @@ mod test {
 
     #[test]
     fn get_preset_works_for_all_variants() {
-        build::Preset::value_variants().iter().for_each(|v| {
+        Preset::value_variants().iter().for_each(|v| {
             assert_ne!(get_preset(v.clone()).trim(), "");
         })
     }
@@ -537,7 +552,7 @@ mod test {
     #[test]
     fn preset_command_does_not_panic_on_correct_inputs() {
         preset_command(None, true);
-        preset_command(Some(build::Preset("bracketed-segments")), false);
+        preset_command(Some(Preset("bracketed-segments")), false);
     }
 
     #[test]

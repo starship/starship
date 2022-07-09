@@ -1,3 +1,4 @@
+use std::fmt::Debug;
 use std::fs::{self, File};
 use std::io::Write;
 
@@ -19,30 +20,30 @@ fn main() -> SdResult<()> {
 }
 
 fn gen_presets_hook(mut file: &File) -> SdResult<()> {
-    let paths =
-        fs::read_dir("docs/.vuepress/public/presets/toml").expect("failed to read directory");
+    let paths = fs::read_dir("docs/.vuepress/public/presets/toml")?;
 
     let mut presets = String::new();
     let mut hashmap_assignments = String::new();
     for path in paths {
-        let file_name = path.expect("failed to get path info").file_name();
+        let unwrapped = path?;
+        let file_name = unwrapped.file_name();
+        let full_path = fs::canonicalize(unwrapped.path())?;
+        let full_path = full_path.to_str().expect("failed to convert to string");
         let name = file_name
             .to_str()
-            .expect("Failed to convert to string")
-            .strip_suffix(".toml")
-            .expect("Failed to trim .toml suffix")
-            .clone();
-        presets.push_str(format!("Preset(\"{}\"),\n", name).as_str());
+            .and_then(|v| v.strip_suffix(".toml"))
+            .expect("Failed to process filename");
+        presets.push_str(format!("print::Preset(\"{}\"),\n", name).as_str());
         hashmap_assignments.push_str(
             format!(
                 r#"
     let preset = String::from_utf8_lossy(include_bytes!(
-        "../../../../../docs/.vuepress/public/presets/toml/{0}.toml"
+        "{}"
     ))
     .to_string();
-    preset_map.insert(String::from("{0}"), preset);
+    preset_map.insert(String::from("{}"), preset);
 "#,
-                name
+                full_path, name
             )
             .as_str(),
         );
@@ -50,26 +51,10 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
 
     let content: String = format!(
         r#"
+use crate::print;
 use std::collections::HashMap;
-use clap::{{ValueEnum, PossibleValue}};
 
-#[derive(Clone, Debug)]
-pub struct Preset(pub &'static str);
-
-impl ValueEnum for Preset {{
-    fn value_variants<'a>() -> &'a [Self] {{
-        get_preset_list()
-    }}
-
-    fn to_possible_value<'a>(&self) -> Option<clap::PossibleValue<'a>> {{
-        Self::value_variants()
-            .iter()
-            .find(|v| v.0 == self.0)
-            .map(|v| PossibleValue::new(v.0))
-    }}
-}}
-
-pub fn get_preset_list<'a>() -> &'a [Preset] {{
+pub fn get_preset_list<'a>() -> &'a [print::Preset] {{
     &[
         {}
     ]
