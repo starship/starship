@@ -64,7 +64,7 @@ pub fn get_preset_content(name: String) -> Option<String> {{
 
     {}
 
-    preset_map.get(&name).map(|v| v.clone())
+    preset_map.get(&name).cloned()
 }}
 "#,
         presets, hashmap_assignments,
