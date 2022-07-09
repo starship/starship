@@ -1,4 +1,3 @@
-use dunce;
 use std::fs::{self, File};
 use std::io::Write;
 
@@ -38,7 +37,7 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
             format!(
                 r#"
     let preset = String::from_utf8_lossy(include_bytes!(
-        "{}"
+        r"{}"
     ))
     .to_string();
     preset_map.insert(String::from("{}"), preset);
