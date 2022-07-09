@@ -1,4 +1,4 @@
-use std::fmt::Debug;
+use dunce;
 use std::fs::{self, File};
 use std::io::Write;
 
@@ -27,7 +27,7 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
     for path in paths {
         let unwrapped = path?;
         let file_name = unwrapped.file_name();
-        let full_path = fs::canonicalize(unwrapped.path())?;
+        let full_path = dunce::canonicalize(unwrapped.path())?;
         let full_path = full_path.to_str().expect("failed to convert to string");
         let name = file_name
             .to_str()

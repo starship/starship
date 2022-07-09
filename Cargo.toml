@@ -110,6 +110,7 @@ nix = { version = "0.24.1", default-features = false, features = ["feature", "fs
 
 [build-dependencies]
 shadow-rs = "0.12.0"
+dunce = "1.0.2"
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
