@@ -1985,18 +1985,23 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
+When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been st in which case the module will only be active in directories that match those conditions.
+
 :::
 
 ### オプション
 
-| オプション             | デフォルト                                                | 説明                                |
-| ----------------- | ---------------------------------------------------- | --------------------------------- |
-| `symbol`          | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。   |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                 |
-| `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                     |
-| `context_aliases` |                                                      | コンテキストの表示エイリアスを定義するテーブル。          |
-| `user_aliases`    |                                                      | Table of user aliases to display. |
-| `disabled`        | `true`                                               | `kubernetes` モジュールを無効にする。         |
+| オプション               | デフォルト                                                | 説明                                |
+| ------------------- | ---------------------------------------------------- | --------------------------------- |
+| `symbol`            | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。   |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                 |
+| `style`             | `"cyan bold"`                                        | モジュールのスタイルです。                     |
+| `context_aliases`   |                                                      | コンテキストの表示エイリアスを定義するテーブル。          |
+| `user_aliases`      |                                                      | Table of user aliases to display. |
+| `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか           |
+| `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか         |
+| `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか         |
+| `disabled`          | `true`                                               | Disables the `kubernetes` module. |
 
 ### 変数
 
@@ -2028,6 +2033,16 @@ disabled = false
 "root/.*" = "root"
 ```
 
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
+```
+
 #### Regex Matching
 
 Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
@@ -2051,7 +2066,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Line Break
 
-`line_break`モジュールは、プロンプトを2行に分割します。
+The `line_break` module separates the prompt into two lines.
 
 ### オプション
 
@@ -2070,7 +2085,7 @@ disabled = true
 
 ## ローカルIP
 
-`localip`モジュールは、プライマリネットワークインターフェイスのIPv4アドレスを表示します。
+The `localip` module shows the IPv4 address of the primary network interface.
 
 ### オプション
 
@@ -2103,7 +2118,7 @@ disabled = false
 
 ## Lua
 
-`lua`モジュールは、現在インストールされている[Lua](http://www.lua.org/) のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`.lua-version`ファイルが含まれている
 - カレントディレクトリに`lua`ディレクトリが含まれている
@@ -2144,9 +2159,9 @@ format = "via [🌕 $version](bold blue) "
 
 ## メモリ使用量
 
-`memory_usage` モジュールは、現在のシステムメモリとスワップ使用量を示します。
+The `memory_usage` module shows current system memory and swap usage.
 
-デフォルトでは、システムスワップの合計がゼロ以外の場合、スワップ使用量が表示されます。
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
@@ -2191,7 +2206,7 @@ style = "bold dimmed green"
 
 ## Mercurial Branch
 
-` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
+The `hg_branch` module shows the active branch of the repo in your current directory.
 
 ### オプション
 
@@ -2227,7 +2242,7 @@ truncation_symbol = ""
 
 ## Nim
 
-`nim`モジュールは、現在インストールされている[Nim](https://nim-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`nim.cfg`ファイルが含まれている
 - カレントディレクトリに拡張子が`.nim`のファイルが含まれている
@@ -2269,7 +2284,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-`nix_shell`モジュールは[nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html)環境を表示します。 このモジュールは、nixシェル環境内にあるときに表示されます。
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
 ### オプション
 
@@ -2307,7 +2322,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-`nodejs`モジュールは、現在インストールされている[Node.js](https://nodejs.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`package.json`ファイルが含まれている
 - カレントディレクトリに`.node-version`ファイルが含まれている
@@ -2351,7 +2366,7 @@ format = "via [🤖 $version](bold green) "
 
 ## OCaml
 
-`ocaml`モジュールは、現在インストールされている[OCaml](https://ocaml.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに拡張子`.opam`のファイルまたは`_opam`ディレクトリが含まれている
 - カレントディレクトリに`esy.lock`ディレクトリが含まれている
@@ -2433,7 +2448,7 @@ symbol = "☁️ "
 
 ## パッケージのバージョン
 
-`package`モジュールは、現在のディレクトリがパッケージのリポジトリである場合に表示され、現在のバージョンが表示されます。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2487,7 +2502,7 @@ format = "via [🎁 $version](208 bold) "
 
 ## Perl
 
-`perl`モジュールは、現在インストールされている[Perl](https://www.perl.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Makefile.PL`または`Build.PL`ファイルが含まれている
 - カレントディレクトリに`cpanfile`または`cpanfile.snapshot`ファイルが含まれている
@@ -2527,7 +2542,7 @@ format = "via [🦪 $version]($style) "
 
 ## PHP
 
-`php`モジュールは、現在インストールされている[PHP](https://www.php.net/) のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `php` module shows the currently installed version of [PHP](https://www.php.net/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`composer.json`ファイルが含まれている
 - カレントディレクトリに`.php-version`ファイルが含まれている
@@ -2571,24 +2586,25 @@ The `pulumi` module shows the current username, selected [Pulumi Stack](https://
 
 ::: tip
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). それでも有効にしたい場合は、 [以下の例に従ってください](#with-pulumi-version).
+By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
 
 :::
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Pulumi.yaml`または`Pulumi.yml`ファイルが含まれている
-- 親ディレクトリに`Pulumi.yaml`または`Pulumi.yml`ファイルが含まれている
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### オプション
 
-| オプション            | デフォルト                                        | 説明                                                     |
-| ---------------- | -------------------------------------------- | ------------------------------------------------------ |
-| `format`         | `"via [$symbol($username@)$stack]($style) "` | モジュールのフォーマット文字列。                                       |
-| `version_format` | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.         |
-| `style`          | `"bold 5"`                                   | モジュールのスタイルです。                                          |
-| `disabled`       | `false`                                      | Disables the `pulumi` module.                          |
+| オプション            | デフォルト                                        | 説明                                                             |
+| ---------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | モジュールのフォーマット文字列。                                               |
+| `version_format` | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。         |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                 |
+| `style`          | `"bold 5"`                                   | モジュールのスタイルです。                                                  |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories. |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                  |
 
 ### 変数
 
@@ -2624,7 +2640,7 @@ format = "[$symbol$stack]($style) "
 
 ## PureScript
 
-`purescript`モジュールは、現在インストールされている[PureScript](https://www.purescript.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`spago.dhall`ファイルが含まれている
 - カレントディレクトリに拡張子が`.purs`のファイルが含まれている
@@ -2665,7 +2681,7 @@ format = "via [$symbol$version](bold white)"
 
 The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
 
-`pyenvversionname` が `true` に設定されている場合 、pyenv でのバージョン名が表示されます 。 そうでなければ、`python --version` を元にバージョン番号を表示します。
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
@@ -2752,7 +2768,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 ## R
 
-`rlang`モジュールは、現在インストールされている[R](https://www.r-project.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます。
+The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
 
 - カレントディレクトリに拡張子が`.R`のファイルが含まれている
 - カレントディレクトリに拡張子が`.Rd`のファイルが含まれている
@@ -2832,7 +2848,7 @@ format = "via [🦪 $version]($style) "
 
 ## Red
 
-デフォルトでは`red`モジュールは、現在インストールされている[Red](https://www.red-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - カレントディレクトリに拡張子が`.red` or `.reds`のファイルが含まれている
 
@@ -2870,7 +2886,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-デフォルトでは`ruby`モジュールは現在インストールされている[Ruby](https://www.ruby-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - カレントディレクトリに`Gemfile`ファイルが含まれている
 - カレントディレクトリに `.ruby-version` ファイルが含まれている
@@ -2914,7 +2930,7 @@ symbol = "🔺 "
 
 ## Rust
 
-デフォルトでは`rust`モジュールは現在インストールされている[Rust](https://www.rust-lang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - カレントディレクトリに`Cargo.toml`ファイルが含まれている
 - カレントディレクトリに`.rs`の拡張子のファイルが含まれている
@@ -2955,7 +2971,7 @@ format = "via [⚙️ $version](red bold)"
 
 ## Scala
 
-`scala` モジュールは、現在インストールされている[Scala](https://www.scala-lang.org/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`build.sbt`、`.scalaenv`または`.sbtenv`ファイルが含まれている
 - カレントディレクトリに拡張子が`.scala`または`.sbt`のファイルが含まれている
@@ -3256,7 +3272,7 @@ disabled = false
 
 ## Swift
 
-デフォルトでは`swift` モジュールは、現在インストールされている[Swift](https://swift.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - カレントディレクトリに`Package.swift`ファイルが含まれている
 - カレントディレクトリに拡張子が`.swift`のファイルが含まれている
@@ -3295,11 +3311,11 @@ format = "via [🏎  $version](red bold)"
 
 ## Terraform
 
-`terraform` モジュールは、現在選択されている[Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) とバージョンを表示します。
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
-Terraformのバージョンはデフォルトでは表示されません。多くのプラグインが使用されている場合、現在のTerraformのバージョンでは遅くなるからです。 それでも有効にしたい場合は、 [以下の例に従ってください](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
@@ -3354,7 +3370,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## 時刻
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3374,7 +3390,7 @@ format = "[🏎💨 $workspace]($style) "
 | `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. それ以外の場合、デフォルトは`"%T"`です。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### 変数
 
@@ -3400,7 +3416,7 @@ time_range = "10:00:00-14:00:00"
 
 ## ユーザー名
 
-`username`モジュールには、アクティブなユーザーのユーザー名が表示されます。 次の条件のいずれかが満たされると、モジュールが表示されます:
+The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - The current user is root/admin
 - カレントユーザーが、ログインしているユーザーとは異なる
@@ -3445,7 +3461,7 @@ show_always = true
 
 ## Vagrant
 
-`vagrant`モジュールは、現在インストールされている[Vagrant](https://www.vagrantup.com/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Vagrantfile`ファイルが含まれている
 
@@ -3483,7 +3499,7 @@ format = "via [⍱ $version](bold white) "
 
 ## V
 
-`vlang`モジュールは、現在インストールされている[V](https://vlang.io/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに拡張子が`.v`のファイルが含まれている
 - カレントディレクトリに`v.mod`、`vpkg.json`または`.vpkg-lock.json`ファイルが含まれている
@@ -3551,7 +3567,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-デフォルトでは`zig`モジュールは、現在インストールされている[Zig](https://ziglang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
+By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - カレントディレクトリに拡張子が`.zig`のファイルが含まれている
 
