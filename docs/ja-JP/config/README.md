@@ -1384,17 +1384,17 @@ very-long-project-name = "vlpn"
 
 ### オプション
 
-| オプション                | デフォルト                                             | 説明                                                                  |
-| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
-| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                                |
-| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。                |
-| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                           |
-| `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                       |
-| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                            |
-| `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.         |
-| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.      |
-| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main". |
-| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                           |
+| オプション                | デフォルト                                             | 説明                                                             |
+| -------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                           |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。           |
+| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                      |
+| `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                  |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                       |
+| `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 `""`で記号なしにできます。                    |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state. |
+| `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 "master"や"main"に有用。                               |
+| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                      |
 
 ### 変数
 
