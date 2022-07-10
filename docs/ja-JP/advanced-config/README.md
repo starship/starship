@@ -8,9 +8,9 @@ Starship は汎用性の高いシェルですが、時には特定の処理を�
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Cmd
+## Cmdのカスタムの事前プロンプトおよび事前実行コマンド
 
-Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
+Clinkはプロンプト表示前と実行前にCmd shellコマンドを実行するための非常に柔軟なAPIを提供します。 It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
 
 - To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
 
