@@ -2744,7 +2744,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Solo usa el binario `python3` para obtener la versión.
 python_binary = "python3"
 ```
 
@@ -2760,7 +2760,7 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Muestra la versión de python desde dentro de un entorno virtual local.
 #
 # Note this will only work when the venv is inside the project and it will only
 # work in the directory that contains the venv dir but maybe this is ok?
@@ -2806,7 +2806,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 # ~/.config/starship.toml
 
 [rlang]
-format = "with [📐 $version](blue bold) "
+format = "con [📐 $version](blue bold) "
 ```
 
 ## Raku
@@ -2844,7 +2844,7 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 # ~/.config/starship.toml
 
 [raku]
-format = "via [🦪 $version]($style) "
+format = "vía [🦪 $version]($style) "
 ```
 
 ## Red
@@ -3093,7 +3093,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 [shlvl]
 disabled = false
-format = "$shlvl level(s) down"
+format = "$shlvl nivel(es) abajo"
 threshold = 3
 ```
 
