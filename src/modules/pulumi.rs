@@ -31,6 +31,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("pulumi");
     let config = PulumiConfig::try_load(module.config);
 
+    let project_file_in_cwd = context
+        .try_begin_scan()?
+        .set_files(&["Pulumi.yaml", "Pulumi.yml"])
+        .is_match();
+
+    if !project_file_in_cwd && !config.search_upwards {
+        return None;
+    }
+
     let project_file = find_package_file(&context.logical_dir)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -408,5 +417,48 @@ mod tests {
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())
+    }
+
+    #[test]
+    fn do_not_search_upwards() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let child_dir = dir.path().join("child");
+        std::fs::create_dir(&child_dir)?;
+        let yaml = File::create(dir.path().join("Pulumi.yaml"))?;
+        yaml.sync_all()?;
+
+        let actual = ModuleRenderer::new("pulumi")
+            .path(&child_dir)
+            .logical_path(&child_dir)
+            .config(toml::toml! {
+                [pulumi]
+                format = "in [$symbol($stack)]($style) "
+                search_upwards = false
+            })
+            .collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn search_upwards_default() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let child_dir = dir.path().join("child");
+        std::fs::create_dir(&child_dir)?;
+        let yaml = File::create(dir.path().join("Pulumi.yaml"))?;
+        yaml.sync_all()?;
+
+        let actual = ModuleRenderer::new("pulumi")
+            .path(&child_dir)
+            .logical_path(&child_dir)
+            .config(toml::toml! {
+                [pulumi]
+                format = "in [$symbol($stack)]($style) "
+            })
+            .collect();
+        let expected = Some(format!("in {} ", Color::Fixed(5).bold().paint(" ")));
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }

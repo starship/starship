@@ -1026,6 +1026,7 @@
       "default": {
         "disabled": false,
         "format": "via [$symbol($username@)$stack]($style) ",
+        "search_upwards": true,
         "style": "bold 5",
         "symbol": " ",
         "version_format": "v${raw}"
@@ -3830,6 +3831,10 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        },
+        "search_upwards": {
+          "default": true,
           "type": "boolean"
         }
       }
