@@ -9,17 +9,16 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
 
 ```toml
-# Get editor completions based on the config schema
+# エディターの補完を設定スキーマに合わせて取得
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# シェルのプロンプトの間に空行を挿入する
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character] # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
-
-# Disable the package module, hiding it from the prompt completely
+# 記号"❯"を記号"➜"に置き換える
+[character] # 編集するモジュールの名前は"character"
+success_symbol = "[➜](bold green)" # "success_symbol"を記号"➜"で"bold green"(太字の緑色)にセット
+# パッケージモジュールを無効化することでプロンプトを完全に非表示にする
 [package]
 disabled = true
 ```
@@ -184,7 +183,7 @@ add_newline = false
 ```toml
 format = "$all"
 
-# Which is equivalent to
+# 以下と同等
 format = """
 $username\
 $hostname\
@@ -427,16 +426,16 @@ style = "bold red"
 #### 設定例
 
 ```toml
-[[battery.display]] # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # "bold red"(太字の赤)でdischarging_symbolをバッテーリー残量が0%から10%の間で表示
 threshold = 10
 style = "bold red"
 
-[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # "bold yellow"(太字の黄)で記号💦をバッテリー残量が10%から30%の間で表示
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "💦"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# バッテリー残量が30%を超えると、バッテリーインジケータは表示されません
 ```
 
 ## Buf
@@ -537,7 +536,7 @@ format = "via [$name $version]($style)"
 
 ::: warning
 
-`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`、`vimcmd_replace_symbol`と`vimcmd_visual_symbol`は、[zshでのモード検出による問題](https://github.com/starship/starship/issues/625#issuecomment-732454148)のため、fishでのみサポートされています。
+`vimcmd_symbol`はcmd, fish and zshでのみサポートされています。 `vimcmd_replace_one_symbol`、`vimcmd_replace_symbol`と`vimcmd_visual_symbol`は、[zshでのモード検出による問題](https://github.com/starship/starship/issues/625#issuecomment-732454148)のため、fishでのみサポートされています。
 
 :::
 
@@ -1183,9 +1182,9 @@ format = "via [ $version](cyan bold) "
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+`.`を使うことで複数の環境変数を表示することができます。 (例を確認してみてください) `variable`が設定されていない場合、このモジュールは`.`以降に書かれている環境変数の値を表示します。
 
-Example: following configuration will display value of USER environment variable
+例: 次の設定ではUSER環境変数を表示します。
 
 ```toml
 # ~/.config/starship.toml
@@ -1283,11 +1282,11 @@ format = "via [e $version](bold red) "
 
 ### オプション
 
-| オプション      | デフォルト          | 説明                                |
-| ---------- | -------------- | --------------------------------- |
-| `symbol`   | `"."`          | The symbol used to fill the line. |
-| `style`    | `"bold black"` | モジュールのスタイルです。                     |
-| `disabled` | `false`        | `fill`モジュールを無効にします。               |
+| オプション      | デフォルト          | 説明                  |
+| ---------- | -------------- | ------------------- |
+| `symbol`   | `"."`          | 行を埋めるために使う記号        |
+| `style`    | `"bold black"` | モジュールのスタイルです。       |
+| `disabled` | `false`        | `fill`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -1300,7 +1299,7 @@ symbol = "-"
 style = "bold green"
 ```
 
-Produces a prompt that looks like:
+このような出力になります:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
@@ -1327,7 +1326,7 @@ AA -------------------------------------------- BB -----------------------------
 | --------- | ------------- | ----------------------------------------------- |
 | region    | `us-central1` | 現在のGCPリージョン                                     |
 | account   | `foo`         | 現在のGCPプロファイル                                    |
-| domain    | `example.com` | The current GCP profile domain                  |
+| domain    | `example.com` | 現在のGCPプロファイルのドメイン                               |
 | project   |               | 現在のGCPプロジェクト                                    |
 | active    | `default`     | `~/.config/gcloud/active_config` に書かれたアクティブな設定名 |
 | symbol    |               | オプション `記号` の値をミラーする                             |
@@ -1368,7 +1367,7 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
-#### Display account and aliased project
+#### アカウントとエイリアスされたプロジェクトを表示
 
 ```toml
 # ~/.config/starship.toml
