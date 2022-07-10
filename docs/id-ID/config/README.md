@@ -1986,18 +1986,23 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
+When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been st in which case the module will only be active in directories that match those conditions.
+
 :::
 
 ### Opsi
 
-| Opsi              | Bawaan                                               | Deskripsi                                                             |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `fromat`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format dari modul.                                                    |
-| `style`           | `"cyan bold"`                                        | Gaya penataan untuk modul.                                            |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `user_aliases`    |                                                      | Table of user aliases to display.                                     |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| Opsi                | Bawaan                                               | Deskripsi                                                             |
+| ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `fromat`            | `'[$symbol$context( \($namespace\))]($style) in '` | Format dari modul.                                                    |
+| `style`             | `"cyan bold"`                                        | Gaya penataan untuk modul.                                            |
+| `context_aliases`   |                                                      | Table of context aliases to display.                                  |
+| `user_aliases`      |                                                      | Table of user aliases to display.                                     |
+| `detect_extensions` | `[]`                                                 | Ekstensi mana yang sebaiknya memicu modul ini.                        |
+| `detect_files`      | `[]`                                                 | filenames mana yang sebaiknya memicu modul ini.                       |
+| `detect_folders`    | `[]`                                                 | Folder mana yang sebaiknya memicul modul ini.                         |
+| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variabel
 
@@ -2027,6 +2032,16 @@ disabled = false
 [kubernetes.user_aliases]
 "dev.local.cluster.k8s" = "dev"
 "root/.*" = "root"
+```
+
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
 ```
 
 #### Regex Matching
@@ -2579,7 +2594,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
 - The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### Opsi
 
@@ -2589,6 +2604,7 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 | `version_format` | `"v${raw}"`                                  | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                      |
 | `style`          | `"bold 5"`                                   | Gaya penataan untuk modul.                                                          |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.                      |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                                       |
 
 ### Variabel
@@ -3547,7 +3563,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 # ~/.config/starship.toml
 
 [vcsh]
-format = "via [✨ $repo](bold blue) "
+format = "[🆅 $repo](bold blue) "
 ```
 
 ## Zig
