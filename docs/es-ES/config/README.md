@@ -2002,7 +2002,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `detect_extensions` | `[]`                                                 | Qué extensiones deberían activar este módulo.                               |
 | `detect_files`      | `[]`                                                 | Qué nombres de archivo deberían activar este módulo.                        |
 | `detect_folders`    | `[]`                                                 | Qué carpetas deberían activar estos módulos.                                |
-| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                           |
+| `disabled`          | `true`                                               | Desactiva el módulo `kubernetes`.                                           |
 
 ### Variables
 
@@ -3391,7 +3391,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `disabled`        | `true`                  | Desactiva el módulo `time`.                                                                                                                                                 |
 | `time_range`      | `"-"`                   | Establece el intervalo de tiempo durante el cual el módulo se mostrará. La hora debe ser especificada en formato de 24 horas                                                |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. De lo contrario, el valor por defecto es `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -3531,7 +3531,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 ```toml
 # ~/.config/starship.toml
 [vlang]
-format = "via [V $version](blue bold) "
+format = "vía [V $version](blue bold) "
 ```
 
 ## VCSH
