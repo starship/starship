@@ -1986,18 +1986,23 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
+When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been st in which case the module will only be active in directories that match those conditions.
+
 :::
 
 ### Opzioni
 
-| Opzione           | Default                                              | Descrizione                                                           |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
-| `style`           | `"cyan bold"`                                        | Lo stile per il modulo.                                               |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `user_aliases`    |                                                      | Table of user aliases to display.                                     |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| Opzione             | Default                                              | Descrizione                                                           |
+| ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
+| `style`             | `"cyan bold"`                                        | Lo stile per il modulo.                                               |
+| `context_aliases`   |                                                      | Table of context aliases to display.                                  |
+| `user_aliases`      |                                                      | Table of user aliases to display.                                     |
+| `detect_extensions` | `[]`                                                 | Quali estensioni dovrebbero attivare questo modulo.                   |
+| `detect_files`      | `[]`                                                 | Quali nomi di file dovrebbero attivare questo modulo.                 |
+| `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
+| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -2027,6 +2032,16 @@ disabled = false
 [kubernetes.user_aliases]
 "dev.local.cluster.k8s" = "dev"
 "root/.*" = "root"
+```
+
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
 ```
 
 #### Regex Matching
@@ -2579,7 +2594,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### Opzioni
 
@@ -2589,6 +2604,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format` | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                               |
 | `style`          | `"bold 5"`                                   | Lo stile per il modulo.                                                                      |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.                               |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                                                |
 
 ### Variables
