@@ -1986,18 +1986,23 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 這個模組預設是停用的。 想要啟用它的話，請在設定檔中將 `disabled` 設定為 `false`。
 
+When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been st in which case the module will only be active in directories that match those conditions.
+
 :::
 
 ### 選項
 
-| Option            | 預設                                                   | 說明                                                                    |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
-| `style`           | `"cyan bold"`                                        | 這個模組的風格。                                                              |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `user_aliases`    |                                                      | Table of user aliases to display.                                     |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| Option              | 預設                                                   | 說明                                                                    |
+| ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
+| `style`             | `"cyan bold"`                                        | 這個模組的風格。                                                              |
+| `context_aliases`   |                                                      | Table of context aliases to display.                                  |
+| `user_aliases`      |                                                      | Table of user aliases to display.                                     |
+| `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
+| `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
+| `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
+| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -2029,6 +2034,16 @@ disabled = false
 "root/.*" = "root"
 ```
 
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
+```
+
 #### Regex Matching
 
 Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
@@ -2052,7 +2067,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## 換行
 
-`line_break` 模組將提示字元分成兩行。
+The `line_break` module separates the prompt into two lines.
 
 ### 選項
 
@@ -2145,9 +2160,9 @@ format = "via [🌕 $version](bold blue) "
 
 ## 記憶體使用量
 
-`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
+The `memory_usage` module shows current system memory and swap usage.
 
-預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
@@ -2270,7 +2285,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. 這個模組會在 nix-shell 環境中顯示。
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
 ### 選項
 
@@ -2434,7 +2449,7 @@ symbol = "☁️ "
 
 ## 套件版本
 
-The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2579,7 +2594,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### 選項
 
@@ -2589,6 +2604,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format` | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                            |
 | `style`          | `"bold 5"`                                   | 這個模組的風格。                                                                  |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.            |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
 
 ### Variables
@@ -3355,7 +3371,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## 時間
 
-`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3375,7 +3391,7 @@ format = "[🏎💨 $workspace]($style) "
 | `disabled`        | `true`                  | 停用 `time` 模組。                                                                                         |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 不然的話，它會被預設為 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -3401,7 +3417,7 @@ time_range = "10:00:00-14:00:00"
 
 ## 使用者名稱
 
-`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
+The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
 
 - The current user is root/admin
 - 目前使用者並非登入時的使用者
