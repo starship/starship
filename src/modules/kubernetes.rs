@@ -119,6 +119,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
+    // If we have some config for doing the directory scan then we use it but if we don't then we
+    // assume we should treat it like the module is enabled to preserve backward compatability.
+    let have_scan_config = !(config.detect_files.is_empty()
+        && config.detect_folders.is_empty()
+        && config.detect_extensions.is_empty());
+
+    let is_kube_project = context
+        .try_begin_scan()?
+        .set_files(&config.detect_files)
+        .set_folders(&config.detect_folders)
+        .set_extensions(&config.detect_extensions)
+        .is_match();
+
+    if have_scan_config && !is_kube_project {
+        return None;
+    }
+
     let default_config_file = context.get_home()?.join(".kube").join("config");
 
     let kube_cfg = context
@@ -197,7 +214,7 @@ mod tests {
     use crate::test::ModuleRenderer;
     use ansi_term::Color;
     use std::env;
-    use std::fs::File;
+    use std::fs::{create_dir, File};
     use std::io::{self, Write};
 
     #[test]
@@ -230,6 +247,128 @@ users: []
             .collect();
 
         assert_eq!(None, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_none_when_no_detected_files_or_folders() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: test_cluster
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_files = ["k8s.ext"]
+                detect_extensions = ["k8s"]
+                detect_folders = ["k8s_folder"]
+            })
+            .collect();
+
+        assert_eq!(None, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_with_detected_files_and_folder() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: test_cluster
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let dir_with_file = tempfile::tempdir()?;
+        File::create(dir_with_file.path().join("k8s.ext"))?.sync_all()?;
+
+        let actual_file = ModuleRenderer::new("kubernetes")
+            .path(dir_with_file.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_files = ["k8s.ext"]
+                detect_extensions = ["k8s"]
+                detect_folders = ["k8s_folder"]
+            })
+            .collect();
+
+        let dir_with_ext = tempfile::tempdir()?;
+        File::create(dir_with_ext.path().join("test.k8s"))?.sync_all()?;
+
+        let actual_ext = ModuleRenderer::new("kubernetes")
+            .path(dir_with_ext.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_files = ["k8s.ext"]
+                detect_extensions = ["k8s"]
+                detect_folders = ["k8s_folder"]
+            })
+            .collect();
+
+        let dir_with_dir = tempfile::tempdir()?;
+        create_dir(dir_with_dir.path().join("k8s_folder"))?;
+
+        let actual_dir = ModuleRenderer::new("kubernetes")
+            .path(dir_with_dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                detect_files = ["k8s.ext"]
+                detect_extensions = ["k8s"]
+                detect_folders = ["k8s_folder"]
+            })
+            .collect();
+
+        let expected = Some(format!(
+            "{} in ",
+            Color::Cyan.bold().paint("☸ test_context")
+        ));
+
+        assert_eq!(expected, actual_file);
+        assert_eq!(expected, actual_ext);
+        assert_eq!(expected, actual_dir);
 
         dir.close()
     }
