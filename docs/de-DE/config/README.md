@@ -1986,18 +1986,23 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
 
+When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been st in which case the module will only be active in directories that match those conditions.
+
 :::
 
 ### Optionen
 
-| Option            | Standardwert                                         | Beschreibung                                                          |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Das Format für das Modul.                                             |
-| `style`           | `"cyan bold"`                                        | Stil für dieses Modul.                                                |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `user_aliases`    |                                                      | Table of user aliases to display.                                     |
-| `disabled`        | `true`                                               | Deaktiviert das `kubernetes`-Modul.                                   |
+| Option              | Standardwert                                         | Beschreibung                                                          |
+| ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Das Format für das Modul.                                             |
+| `style`             | `"cyan bold"`                                        | Stil für dieses Modul.                                                |
+| `context_aliases`   |                                                      | Table of context aliases to display.                                  |
+| `user_aliases`      |                                                      | Table of user aliases to display.                                     |
+| `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
+| `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
+| `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
+| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -2029,6 +2034,16 @@ disabled = false
 "root/.*" = "root"
 ```
 
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
+```
+
 #### Regex Matching
 
 Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
@@ -2052,7 +2067,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Zeilenumbruch
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
@@ -2145,9 +2160,9 @@ format = "via [🌕 $version](bold blue) "
 
 ## Speicherauslastung
 
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
+The `memory_usage` module shows current system memory and swap usage.
 
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
@@ -2270,7 +2285,7 @@ symbol = "🎣 "
 
 ## Nix-Shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
@@ -2434,7 +2449,7 @@ symbol = "☁️ "
 
 ## Paketversion
 
-Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -2579,7 +2594,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### Optionen
 
@@ -2589,6 +2604,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format` | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                            |
 | `style`          | `"bold 5"`                                   | Stil für dieses Modul.                                                    |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.            |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
 
 ### Variables
@@ -3355,7 +3371,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Uhrzeit
 
-Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3375,7 +3391,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                                               |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                       |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Ansonsten ist der Standardwert hierfür `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -3401,7 +3417,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Benutzername
 
-Das Modul `username` zeigt den Benutzernamen des aktiven Benutzers. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
+The `username` module shows active user's username. Das Modul wird nur dann angezeigt, wenn eine der folgenden Bedingungen zutrifft:
 
 - The current user is root/admin
 - Der aktuelle Benutzer ist nicht derjenige, der derzeit angemeldet ist
