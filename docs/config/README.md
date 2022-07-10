@@ -2084,18 +2084,25 @@ If the `$KUBECONFIG` env var is set the module will use that if not it will use 
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
 
+When the module is enabled it will always be active, unless any of
+`detect_extensions`, `detect_files` or `detect_folders` have been st in which
+case the module will only be active in directories that match those conditions.
+
 :::
 
 ### Options
 
-| Option            | Default                                            | Description                                                           |
-| ----------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                             | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
-| `style`           | `"cyan bold"`                                      | The style for the module.                                             |
-| `context_aliases` |                                                    | Table of context aliases to display.                                  |
-| `user_aliases`    |                                                    | Table of user aliases to display.                                     |
-| `disabled`        | `true`                                             | Disables the `kubernetes` module.                                     |
+| Option              | Default                                            | Description                                                           |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `"☸ "`                                             | A format string representing the symbol displayed before the Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
+| `style`             | `"cyan bold"`                                      | The style for the module.                                             |
+| `context_aliases`   |                                                    | Table of context aliases to display.                                  |
+| `user_aliases`      |                                                    | Table of user aliases to display.                                     |
+| `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
+| `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
+| `detect_folders`    | `[]`                                               | Which folders should trigger this modules.                            |
+| `disabled`          | `true`                                             | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -2125,6 +2132,16 @@ disabled = false
 [kubernetes.user_aliases]
 "dev.local.cluster.k8s" = "dev"
 "root/.*" = "root"
+```
+
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
 ```
 
 #### Regex Matching

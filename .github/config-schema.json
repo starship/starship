@@ -767,6 +767,9 @@
     "kubernetes": {
       "default": {
         "context_aliases": {},
+        "detect_extensions": [],
+        "detect_files": [],
+        "detect_folders": [],
         "disabled": true,
         "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "style": "cyan bold",
@@ -3321,6 +3324,27 @@
           "default": {},
           "type": "object",
           "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
             "type": "string"
           }
         }
