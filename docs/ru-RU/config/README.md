@@ -2002,7 +2002,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
 | `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
-| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
+| `disabled`          | `true`                                               | Отключает модуль `kubernetes`.                                        |
 
 ### Переменные
 
@@ -2067,7 +2067,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Перевод Строки
 
-The `line_break` module separates the prompt into two lines.
+Модуль `line_break` разделяет командную строку на две строки.
 
 ### Опции
 
@@ -2160,9 +2160,9 @@ format = "via [🌕 $version](bold blue) "
 
 ## Использование памяти
 
-The `memory_usage` module shows current system memory and swap usage.
+Модуль `memory_usage` отображает текущую системную память и использование подкачки.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+По умолчанию использование подкачки отображается, если общая сумма подкачки системы не равна нулю.
 
 ::: tip Подсказка
 
@@ -2207,7 +2207,7 @@ style = "bold dimmed green"
 
 ## Ветка Mercurial
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+Модуль `hg_branch` показывает активную ветку репозитория в вашем текущем каталоге.
 
 ### Опции
 
@@ -2285,7 +2285,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. Модуль будет показываться внутри среды nix-shell.
 
 ### Опции
 
@@ -2449,7 +2449,7 @@ symbol = "☁️ "
 
 ## Версия пакета
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+Модуль `package` отображается, когда текущий каталог является репозиторием для пакета и показывает его текущую версию. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -3371,7 +3371,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## Время
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
 
 ::: tip Подсказка
 
@@ -3391,7 +3391,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `disabled`        | `true`                  | Отключает модуль `time`.                                                                                                                                      |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                         |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Иначе по умолчанию используется `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Переменные
 
@@ -3417,7 +3417,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Имя пользователя
 
-The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `username` показывает имя активного пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current user is root/admin
 - Текущий пользователь отличается от залогиненного
