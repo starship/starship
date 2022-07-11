@@ -2067,7 +2067,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## 換行
 
-The `line_break` module separates the prompt into two lines.
+`line_break` 模組將提示字元分成兩行。
 
 ### 選項
 
@@ -2160,9 +2160,9 @@ format = "via [🌕 $version](bold blue) "
 
 ## 記憶體使用量
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 模組顯示現在系統記憶體與 swap 的使用量。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+預設 swap 使用量會在系統總 swap 使用量不為 0 時顯示出來。
 
 ::: tip
 
@@ -2285,7 +2285,7 @@ symbol = "🎣 "
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. 這個模組會在 nix-shell 環境中顯示。
 
 ### 選項
 
@@ -2449,7 +2449,7 @@ symbol = "☁️ "
 
 ## 套件版本
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+The `package` 模組在現在資料夾是一個套件的儲藏庫時出現，並顯示他的現在版本。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -3371,7 +3371,7 @@ format = "[🏎💨 $workspace]($style) "
 
 ## 時間
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
 
 ::: tip
 
@@ -3391,7 +3391,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `disabled`        | `true`                  | 停用 `time` 模組。                                                                                         |
 | `time_range`      | `"-"`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
 
-If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it defaults to `"%T"`. Manually setting `time_format` will override the `use_12hr` setting.
+If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. 不然的話，它會被預設為 `"%T"`。 Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -3417,7 +3417,7 @@ time_range = "10:00:00-14:00:00"
 
 ## 使用者名稱
 
-The `username` module shows active user's username. 這個模組在下列其中一個條件達成時顯示：
+`username` 模組顯示現在使用中的使用者名稱。 這個模組在下列其中一個條件達成時顯示：
 
 - The current user is root/admin
 - 目前使用者並非登入時的使用者
