@@ -227,9 +227,15 @@ impl<'a> Context<'a> {
     /// Check if `disabled` option of the module is true in configuration file.
     pub fn is_module_disabled_in_config(&self, name: &str) -> bool {
         let config = self.config.get_module_config(name);
+        let all_disable = self.root_config.disable_all;
 
         // If the segment has "disabled" set to "true", don't show it
-        let disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
+        let mut disabled = config.and_then(|table| table.as_table()?.get("disabled")?.as_bool());
+
+        if all_disable && disabled != Some(false) && config.is_none() {
+            disabled = Some(true)
+        }
+        log::trace!("{} disabled:\"{}\"", name, disabled == Some(true));
 
         disabled == Some(true)
     }

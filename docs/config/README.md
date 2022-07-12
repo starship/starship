@@ -15,6 +15,10 @@ All configuration for starship is done in this [TOML](https://github.com/toml-la
 # Inserts a blank line between shell prompts
 add_newline = true
 
+# disables all modules by default unless defined in this file overriden by individual disabled states
+# this would cause only the charater symbol below to be enabled
+disable_all = true
+
 # Replace the "❯" symbol in the prompt with "➜"
 [character] # The name of the module we are configuring is "character"
 success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"

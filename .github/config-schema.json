@@ -1523,6 +1523,10 @@
     "add_newline": {
       "default": true,
       "type": "boolean"
+    },
+    "disable_all": {
+      "default": false,
+      "type": "boolean"
     }
   },
   "definitions": {
