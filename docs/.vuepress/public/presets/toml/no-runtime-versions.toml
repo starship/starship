@@ -1,3 +1,6 @@
+[bun]
+format = "via [$symbol]($style)"
+
 [buf]
 format = "via [$symbol]($style)"
 
