@@ -65,7 +65,7 @@ semver = "1.0.12"
 serde = { version = "1.0.139", features = ["derive"] }
 serde_json = "1.0.82"
 sha-1 = "0.10.0"
-shadow-rs = "0.12.0"
+shadow-rs = "0.13.1"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.7.9", optional = true }
@@ -109,7 +109,7 @@ features = [
 nix = { version = "0.24.2", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = "0.12.0"
+shadow-rs = "0.13.1"
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
