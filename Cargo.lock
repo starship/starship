@@ -270,9 +270,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "3.2.8"
+version = "3.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "190814073e85d238f31ff738fcb0bf6910cedeb73376c87cd69291028966fd83"
+checksum = "ab8b79fe3946ceb4a0b1c080b4018992b8d27e9ff363644c1c9b6387c854614d"
 dependencies = [
  "atty",
  "bitflags",
@@ -335,6 +335,12 @@ checksum = "30ed07550be01594c6026cff2a1d7fe9c8f683caa798e12b68694ac9e88286a3"
 dependencies = [
  "cache-padded",
 ]
+
+[[package]]
+name = "const_fn"
+version = "0.4.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fbdcdcb6d86f71c5e97409ad45898af11cbc995b4ee8112d59095a28d376c935"
 
 [[package]]
 name = "const_format"
@@ -1122,9 +1128,9 @@ dependencies = [
 
 [[package]]
 name = "nix"
-version = "0.24.1"
+version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f17df307904acd05aa8e32e97bb20f2a0df1728bbc2d771ae8f9a90463441e9"
+checksum = "195cdbc1741b8134346d515b3a56a1c94b0912758009cfd53f99ea0f57b065fc"
 dependencies = [
  "bitflags",
  "cfg-if 1.0.0",
@@ -1269,9 +1275,9 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "open"
-version = "3.0.1"
+version = "3.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "360bcc8316bf6363aa3954c3ccc4de8add167b087e0259190a043c9514f910fe"
+checksum = "f23a407004a1033f53e93f9b45580d14de23928faad187384f891507c9b0c045"
 dependencies = [
  "pathdiff",
  "windows-sys",
@@ -1356,9 +1362,9 @@ dependencies = [
 
 [[package]]
 name = "path-slash"
-version = "0.1.4"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3cacbb3c4ff353b534a67fb8d7524d00229da4cb1dc8c79f4db96e375ab5b619"
+checksum = "c54014ba3c1880122928735226f78b6f5bf5bd1fed15e41e92cf7aa20278ce28"
 
 [[package]]
 name = "pathdiff"
@@ -1841,18 +1847,18 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.138"
+version = "1.0.139"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1578c6245786b9d168c5447eeacfb96856573ca56c9d68fdcf394be134882a47"
+checksum = "0171ebb889e45aa68b44aee0859b3eede84c6f5f5c228e6f140c0b2a0a46cad6"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.138"
+version = "1.0.139"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "023e9b1467aef8a10fb88f25611870ada9800ef7e22afce356bb0d2387b6f27c"
+checksum = "dc1d3230c1de7932af58ad8ffbe1d784bd55efd5a9d84ac24f69c72d83543dfb"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1945,14 +1951,15 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.12.0"
+version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed1b83da0a4e48d8dcc13ad177b64f2fc40097974f9bf176c2bcb702cabadff3"
+checksum = "92a04bd30c102e7b97b53a19e5c1a988de2e76a91fdb7a52296a25035f1651cc"
 dependencies = [
- "chrono",
  "const_format",
  "git2",
  "is_debug",
+ "time 0.3.11",
+ "tz-rs",
 ]
 
 [[package]]
@@ -2047,7 +2054,7 @@ dependencies = [
  "local_ipaddress",
  "log",
  "mockall",
- "nix 0.24.1",
+ "nix 0.24.2",
  "notify-rust",
  "once_cell",
  "open",
@@ -2299,6 +2306,7 @@ version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72c91f41dcb2f096c05f0873d667dceec1087ce5bcf984ec8ffb19acddbb3217"
 dependencies = [
+ "itoa",
  "libc",
  "num_threads",
 ]
@@ -2376,6 +2384,15 @@ name = "typenum"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
+
+[[package]]
+name = "tz-rs"
+version = "0.6.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7eb454313e3d79601e2116bb6c7a93ec0eda1dbb52f9204f831f897204182c5f"
+dependencies = [
+ "const_fn",
+]
 
 [[package]]
 name = "ucd-trie"

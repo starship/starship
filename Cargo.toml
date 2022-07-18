@@ -38,7 +38,7 @@ notify = ["notify-rust"]
 [dependencies]
 ansi_term = "0.12.1"
 chrono = "0.4.19"
-clap = { version = "=3.2.8", features = ["derive", "cargo", "unicode", "unstable-v4"] }
+clap = { version = "=3.2.12", features = ["derive", "cargo", "unicode", "unstable-v4"] }
 clap_complete = "3.2.3"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
@@ -51,9 +51,9 @@ log = { version = "0.4.16", features = ["std"] }
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.5.8", optional = true }
 once_cell = "1.13.0"
-open = "3.0.1"
+open = "3.0.2"
 os_info = "3.4.0"
-path-slash = "0.1.4"
+path-slash = "0.2.0"
 pest = "2.1.3"
 pest_derive = "2.1.0"
 quick-xml = "0.23.0"
@@ -62,10 +62,10 @@ rayon = "1.5.3"
 regex = "1.6.0"
 rust-ini = "0.18.0"
 semver = "1.0.12"
-serde = { version = "1.0.138", features = ["derive"] }
+serde = { version = "1.0.139", features = ["derive"] }
 serde_json = "1.0.82"
 sha-1 = "0.10.0"
-shadow-rs = "0.12.0"
+shadow-rs = "0.13.1"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.7.9", optional = true }
@@ -106,10 +106,10 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.24.1", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.24.2", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = "0.12.0"
+shadow-rs = "0.13.1"
 dunce = "1.0.2"
 
 [target.'cfg(windows)'.build-dependencies]
