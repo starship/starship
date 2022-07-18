@@ -16,10 +16,9 @@ use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
+use crate::shadow;
 
 pub struct Grapheme<'a>(pub &'a str);
-
-shadow!(build);
 
 impl<'a> Grapheme<'a> {
     pub fn width(&self) -> usize {
@@ -458,14 +457,11 @@ pub struct Preset(pub &'static str);
 
 impl ValueEnum for Preset {
     fn value_variants<'a>() -> &'a [Self] {
-        build::get_preset_list()
+        shadow::get_preset_list()
     }
 
     fn to_possible_value<'a>(&self) -> Option<clap::PossibleValue<'a>> {
-        Self::value_variants()
-            .iter()
-            .find(|v| v.0 == self.0)
-            .map(|v| PossibleValue::new(v.0))
+        Some(PossibleValue::new(self.0))
     }
 }
 
@@ -475,25 +471,13 @@ pub fn preset_command(name: Option<Preset>, list: bool) {
         return;
     }
     let variant = name.expect("name argument must be specified");
-    println!("{}", get_preset(variant));
-}
-
-fn get_preset(variant: Preset) -> String {
-    let Preset(name) = variant;
-    build::get_preset_content(name.to_string()).expect("Failed to get preset content")
+    shadow::print_preset_content(variant.0);
 }
 
 fn preset_list() -> String {
     Preset::value_variants()
         .iter()
-        .map(|v| {
-            format!(
-                "{}\n",
-                v.to_possible_value()
-                    .expect("Failed to convert to possible value")
-                    .get_name()
-            )
-        })
+        .map(|v| format!("{}\n", v.0))
         .collect()
 }
 
@@ -543,16 +527,11 @@ mod test {
     }
 
     #[test]
-    fn get_preset_works_for_all_variants() {
-        Preset::value_variants().iter().for_each(|v| {
-            assert_ne!(get_preset(v.clone()).trim(), "");
-        })
-    }
-
-    #[test]
     fn preset_command_does_not_panic_on_correct_inputs() {
         preset_command(None, true);
-        preset_command(Some(Preset("bracketed-segments")), false);
+        Preset::value_variants()
+            .iter()
+            .for_each(|v| preset_command(Some(v.clone()), false));
     }
 
     #[test]

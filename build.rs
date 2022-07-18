@@ -19,10 +19,11 @@ fn main() -> SdResult<()> {
 }
 
 fn gen_presets_hook(mut file: &File) -> SdResult<()> {
+    println!("cargo:rerun-if-changed=docs/.vuepress/public/presets/toml");
     let paths = fs::read_dir("docs/.vuepress/public/presets/toml")?;
 
     let mut presets = String::new();
-    let mut hashmap_assignments = String::new();
+    let mut match_arms = String::new();
     for path in paths {
         let unwrapped = path?;
         let file_name = unwrapped.file_name();
@@ -33,42 +34,38 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
             .and_then(|v| v.strip_suffix(".toml"))
             .expect("Failed to process filename");
         presets.push_str(format!("print::Preset(\"{}\"),\n", name).as_str());
-        hashmap_assignments.push_str(
+        match_arms.push_str(
             format!(
                 r#"
-    let preset = String::from_utf8_lossy(include_bytes!(
-        r"{}"
-    ))
-    .to_string();
-    preset_map.insert(String::from("{}"), preset);
-"#,
-                full_path, name
+"{name}" => {{
+        let mut stdout = io::stdout().lock();
+        stdout.write_all(include_bytes!("{full_path}")).expect("Failed to print preset");
+}}
+"#
             )
             .as_str(),
         );
     }
 
-    let content: String = format!(
+    writeln!(
+        file,
         r#"
+use std::io::{{self, Write}};
 use crate::print;
-use std::collections::HashMap;
 
 pub fn get_preset_list<'a>() -> &'a [print::Preset] {{
     &[
-        {}
+        {presets}
     ]
 }}
 
-pub fn get_preset_content(name: String) -> Option<String> {{
-    let mut preset_map: HashMap<String, String> = HashMap::new();
-
-    {}
-
-    preset_map.get(&name).cloned()
+pub fn print_preset_content(name: &str) {{
+    match name {{
+    {match_arms}
+    _ => {{}}
+    }}
 }}
-"#,
-        presets, hashmap_assignments,
-    );
-    writeln!(file, "{}", content)?;
+"#
+    )?;
     Ok(())
 }
