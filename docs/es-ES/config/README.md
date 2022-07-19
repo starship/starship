@@ -3174,22 +3174,23 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                  | Por defecto                                                                          | Descripción                                            |
-| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------ |
-| `format`                | `"[$symbol$status]($style) "`                                                        | El formato del módulo                                  |
-| `symbol`                | `"✖"`                                                                                | El símbolo mostrado en error del programa              |
-| `success_symbol`        | `""`                                                                                 | El símbolo mostrado en el éxito del programa           |
-| `not_executable_symbol` | `"🚫"`                                                                                | El símbolo mostrado cuando el archivo no es ejecutable |
-| `not_found_symbol`      | `"🔍"`                                                                                | El símbolo mostrado cuando no se encuentra el comando  |
-| `sigint_symbol`         | `"🧱"`                                                                                | El símbolo mostrado en SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                                | El símbolo mostrado en cualquier señal                 |
-| `style`                 | `"bold red"`                                                                         | El estilo del módulo.                                  |
-| `recognize_signal_code` | `true`                                                                               | Activar mapeo de señales desde el código de salida     |
-| `map_symbol`            | `false`                                                                              | Activar mapeo de símbolos desde el código de salida    |
-| `pipestatus`            | `false`                                                                              | Habilita el reporte de pipstatus                       |
-| `pipestatus_separator`  | `|`                                                                                  |                                                        |
-| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | El formato del módulo cuando el comando es un pipeline |
-| `disabled`              | `true`                                                                               | Desactiva el módulo `status`.                          |
+| Opción                      | Por defecto                                                                          | Descripción                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `format`                    | `"[$symbol$status]($style) "`                                                        | El formato del módulo                                                 |
+| `symbol`                    | `"✖"`                                                                                | El símbolo mostrado en error del programa                             |
+| `success_symbol`            | `""`                                                                                 | El símbolo mostrado en el éxito del programa                          |
+| `not_executable_symbol`     | `"🚫"`                                                                                | El símbolo mostrado cuando el archivo no es ejecutable                |
+| `not_found_symbol`          | `"🔍"`                                                                                | El símbolo mostrado cuando no se encuentra el comando                 |
+| `sigint_symbol`             | `"🧱"`                                                                                | El símbolo mostrado en SIGINT (Ctrl + c)                              |
+| `signal_symbol`             | `"⚡"`                                                                                | El símbolo mostrado en cualquier señal                                |
+| `style`                     | `"bold red"`                                                                         | El estilo del módulo.                                                 |
+| `recognize_signal_code`     | `true`                                                                               | Activar mapeo de señales desde el código de salida                    |
+| `map_symbol`                | `false`                                                                              | Activar mapeo de símbolos desde el código de salida                   |
+| `pipestatus`                | `false`                                                                              | Habilita el reporte de pipstatus                                      |
+| `pipestatus_separator`      | <code>&vert;</code>                                                            | The symbol used to separate pipestatus segments                       |
+| `pipestatus_format`         | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | El formato del módulo cuando el comando es un pipeline                |
+| `pipestatus_segment_format` |                                                                                      | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                               | Disables the `status` module.                                         |
 
 ### Variables
 
