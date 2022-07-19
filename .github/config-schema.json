@@ -4521,6 +4521,12 @@
           "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
           "type": "string"
         },
+        "pipestatus_segment_format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "disabled": {
           "default": true,
           "type": "boolean"
