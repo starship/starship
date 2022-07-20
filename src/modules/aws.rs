@@ -19,7 +19,7 @@ type AwsCredsFile = OnceCell<Option<Ini>>;
 
 fn get_credentials_file_path(context: &Context) -> Option<PathBuf> {
     context
-        .get_env("AWS_CREDENTIALS_FILE")
+        .get_env("AWS_SHARED_CREDENTIALS_FILE")
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
             let mut home = context.get_home()?;
@@ -830,7 +830,7 @@ aws_secret_access_key=dummy
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
             .env(
-                "AWS_CREDENTIALS_FILE",
+                "AWS_SHARED_CREDENTIALS_FILE",
                 credentials_path.to_string_lossy().as_ref(),
             )
             .collect();
