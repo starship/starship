@@ -38,7 +38,7 @@ notify = ["notify-rust"]
 [dependencies]
 ansi_term = "0.12.1"
 chrono = "0.4.19"
-clap = { version = "=3.2.12", features = ["derive", "cargo", "unicode", "unstable-v4"] }
+clap = { version = "=3.2.13", features = ["derive", "cargo", "unicode", "unstable-v4"] }
 clap_complete = "3.2.3"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
