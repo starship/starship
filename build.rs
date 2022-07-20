@@ -39,7 +39,7 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
                 r#"
 "{name}" => {{
         let mut stdout = io::stdout().lock();
-        stdout.write_all(include_bytes!(r"{full_path}")).expect("Failed to print preset");
+        let _ = stdout.write_all(include_bytes!(r"{full_path}"));
 }}
 "#
             )
