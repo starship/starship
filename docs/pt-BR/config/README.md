@@ -3188,7 +3188,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | `pipestatus_separator`      | <code>&vert;</code>                                                            | The symbol used to separate pipestatus segments                       |
 | `pipestatus_format`         | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | O formato do módulo quando o comando é um pipeline                    |
 | `pipestatus_segment_format` |                                                                                      | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                               | Disables the `status` module.                                         |
+| `disabled`                  | `true`                                                                               | Desabilita o módulo `status`.                                         |
 
 ### Variáveis
 
