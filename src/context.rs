@@ -7,7 +7,8 @@ use crate::modules;
 use crate::utils::{self, home_dir};
 use clap::Parser;
 use git_repository::{
-    commit::describe::SelectRef::AllRefs, state as git_state, Repository, ThreadSafeRepository,
+    self as git, commit::describe::SelectRef::AllRefs, open::Options as GitOpenOptions,
+    sec as git_sec, state as git_state, Repository, ThreadSafeRepository,
 };
 use once_cell::sync::OnceCell;
 #[cfg(test)]
@@ -258,11 +259,36 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, git_repository::discover::Error> {
+    pub fn get_repo(&self) -> Result<&Repo, git::discover::Error> {
         self.repo
-            .get_or_try_init(|| -> Result<Repo, git_repository::discover::Error> {
-                let shared_repo =
-                    ThreadSafeRepository::discover_with_environment_overrides(&self.current_dir)?;
+            .get_or_try_init(|| -> Result<Repo, git::discover::Error> {
+                // custom open options
+                let git_open_opts = GitOpenOptions::default()
+                    // trust the git repo and avoid additional checks
+                    .with(git_sec::Trust::Full)
+                    // don't use the global git config
+                    .permissions(git::Permissions {
+                        config: git::permissions::Config {
+                            system: false,
+                            git: false,
+                            user: false,
+                            env: true,
+                            includes: true,
+                        },
+                        ..git::Permissions::all()
+                    });
+
+                // convert the option options into a trust-based mapping for `discover`
+                let open_opts_mapping = git_sec::trust::Mapping {
+                    full: git_open_opts.clone(),
+                    reduced: git_open_opts,
+                };
+
+                let shared_repo = ThreadSafeRepository::discover_with_environment_overrides_opts(
+                    &self.current_dir,
+                    Default::default(),
+                    open_opts_mapping,
+                )?;
 
                 let repository = shared_repo.to_thread_local();
                 let branch = get_current_branch(&repository);
