@@ -91,6 +91,7 @@ $null = New-Module starship {
 
     function Disable-TransientPrompt {
         Set-PSReadLineKeyHandler -Key Enter -Function AcceptLine
+        $script:TransientPrompt = $false
     }
 
     function global:prompt {
@@ -140,7 +141,7 @@ $null = New-Module starship {
             if (Test-Path function:Invoke-Starship-TransientFunction) {
                 Invoke-Starship-TransientFunction
             } else {
-                "> "
+                "$([char]0x1B)[1;32m❯$([char]0x1B)[0m "
             }
         } else {
             Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
