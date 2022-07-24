@@ -113,10 +113,10 @@ mod tests {
     #[test]
     fn all_segments() {
         let actual = ModuleRenderer::new("os")
-            .config(toml::toml!{
+            .config(toml::toml! {
                 [os]
                 disabled = false
-                format = "[$symbol($bitness )($codename )($edition )($name )($type )($version )]($style)"
+                format = "[$symbol($codename )($edition )($name )($type )($version )]($style)"
             })
             .collect();
 
