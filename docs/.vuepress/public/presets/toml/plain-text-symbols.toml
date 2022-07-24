@@ -146,6 +146,9 @@ symbol = "purs "
 [python]
 symbol = "py "
 
+[raku]
+symbol = "raku "
+
 [ruby]
 symbol = "rb "
 

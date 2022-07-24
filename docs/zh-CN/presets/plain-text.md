@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#plain-text-symbols)
+[返回全部预设](./README.md#plain-text-symbols)
 
 ## Plain Text Symbols Preset
 
@@ -8,6 +8,6 @@
 
 ### 配置
 
-[Click to download TOML](/presets/toml/plain-text-symbols.toml)
+[点击下载 TOML 文件](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml

@@ -538,22 +538,22 @@ Par défaut, il ne change que la couleur. Si vous désirez également changer sa
 
 ::: warning
 
-`vicmd_symbol` n’est supporté que dans cmd, fish et zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Options
 
-| Option                     | Défaut               | Description                                                                             |
-| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                   | `"$symbol "`         | Le format utilisée avant l'entrée de texte.                                             |
-| `success_symbol`           | `"[❯](bold green)"`  | Le format utilisé avant l'entrée de texte si la commande précédente a réussi.           |
-| `error_symbol`             | `"[❯](bold red)"`    | Le format utilisé avant l'entrée de texte si la commande précédente a échoué.           |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal.           |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `disabled`                 | `false`              | Désactive le module `character`.                                                        |
+| Option                      | Défaut               | Description                                                                             |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                    | `"$symbol "`         | Le format utilisée avant l'entrée de texte.                                             |
+| `success_symbol`            | `"[❯](bold green)"`  | Le format utilisé avant l'entrée de texte si la commande précédente a réussi.           |
+| `error_symbol`              | `"[❯](bold red)"`    | Le format utilisé avant l'entrée de texte si la commande précédente a échoué.           |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal.           |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                  | `false`              | Désactive le module `character`.                                                        |
 
 ### Variables
 
@@ -2794,9 +2794,47 @@ Le module `rlang` affiche la version de [R](https://www.r-project.org/) actuelle
 format = "with [📐 $version](blue bold) "
 ```
 
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+
+- The current directory contains a `META6.json` file
+- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### Options
+
+| Option              | Défaut                                           | Description                                                                                |
+| ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version-$vm_version )]($style)"` | La chaîne de format pour le module.                                                        |
+| `version_format`    | `"v${raw}"`                                      | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                                      |
+| `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["META6.json"]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                             | Les dossiers qui activent ce module.                                                       |
+| `style`             | `"bold 149"`                                     | Le style du module.                                                                        |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                                                |
+
+### Variables
+
+| Variable   | Exemple | Description                            |
+| ---------- | ------- | -------------------------------------- |
+| version    | `v6.d`  | The version of `raku`                  |
+| vm_version | `moar`  | The version of VM `raku` is built on   |
+| symbol     |         | Reflète la valeur de l'option `symbol` |
+| style\*  |         | Reflète la valeur de l'option `style`  |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = "via [🦪 $version]($style) "
+```
+
 ## Red
 
-Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire actuel contient un fichier avec l'extension `.red` ou `.reds`
 
@@ -2834,7 +2872,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-Par défaut, le module `ruby` affiche la version actuellement installée de [Ruby](https://www.ruby-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `ruby` affiche la version actuellement installée de [Ruby](https://www.ruby-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `Gemfile`
 - Le répertoire courant contient un fichier `.ruby-version`
@@ -2878,7 +2916,7 @@ symbol = "🔺 "
 
 ## Rust
 
-Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `Cargo.toml`
 - Le répertoire actuel contient un fichier avec l'extension `.rs`
@@ -3220,7 +3258,7 @@ disabled = false
 
 ## Swift
 
-Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `Package.swift`
 - Le répertoire actuel contient un fichier avec l'extension `.swift`
@@ -3364,7 +3402,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Nom d'utilisateur
 
-Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module sera affiché si l'une de ces conditions est remplie:
+Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une de ces conditions est remplie :
 
 - L'utilisateur courant est root/admin
 - L'utilisateur courant est différent de celui connecté
@@ -3515,7 +3553,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `.zig`
 
@@ -3561,7 +3599,7 @@ Ces modules seront affichés si l'une de ces conditions est remplie:
 - Le dossier courant contient un dossier dont le nom est dans `detect_folders`
 - Le dossier courant contient un fichier dont l’extension est dans `detect_extensions`
 - La commande `when` retourne 0
-- Le système d’exploitation courant (std::env::consts::OS) correspond au champ `os` si défini.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 

@@ -538,22 +538,22 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 
 ::: warning
 
-`vicmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Opsi
 
-| Opsi                       | Bawaan               | Deskripsi                                                                                         |
-| -------------------------- | -------------------- | ------------------------------------------------------------------------------------------------- |
-| `fromat`                   | `"$symbol "`         | Format string yang digunakan sebelum masukan teks.                                                |
-| `success_symbol`           | `"[❯](bold green)"`  | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya berhasil.              |
-| `error_symbol`             | `"[❯](bold red)"`    | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya gagal.                 |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | Format string yang digunakan sebelum masukan teks jika shell sedang dalam vim dengan mode normal. |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.           |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.                 |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.                 |
-| `disabled`                 | `false`              | Menonaktifkan module `character`.                                                                 |
+| Opsi                        | Bawaan               | Deskripsi                                                                                         |
+| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------------- |
+| `fromat`                    | `"$symbol "`         | Format string yang digunakan sebelum masukan teks.                                                |
+| `success_symbol`            | `"[❯](bold green)"`  | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya berhasil.              |
+| `error_symbol`              | `"[❯](bold red)"`    | Format string yang digunakan sebelum masukan teks jika perintah sebelumnya gagal.                 |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | Format string yang digunakan sebelum masukan teks jika shell sedang dalam vim dengan mode normal. |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode.           |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.                 |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.                 |
+| `disabled`                  | `false`              | Menonaktifkan module `character`.                                                                 |
 
 ### Variabel
 
@@ -897,7 +897,7 @@ Modul `deno` menampilkan versi terkini dari [Deno](https://deno.land/) yang terp
 | ------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `fromat`            | `"via [$symbol($version )]($style)"`                                    | Format dari modul.                                                                  |
 | `version_format`    | `"v${raw}"`                                                             | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🦕 "`                                                                  | Sebuah format string yang melambangkan simbol Deno                                  |
+| `symbol`            | `🦕 "`                                                                   | Sebuah format string yang melambangkan simbol Deno                                  |
 | `detect_extensions` | `[]`                                                                    | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `["deno.json", "deno.jsonc", "mod.ts", "mod.js", "deps.ts", "deps.js"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                                                    | Folder mana yang sebaiknya memicul modul ini.                                       |
@@ -2793,6 +2793,44 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 format = "with [📐 $version](blue bold) "
 ```
 
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+
+- The current directory contains a `META6.json` file
+- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### Opsi
+
+| Opsi                | Bawaan                                           | Deskripsi                                                                           |
+| ------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `fromat`            | `"via [$symbol($version-$vm_version )]($style)"` | The format string for the module.                                                   |
+| `version_format`    | `"v${raw}"`                                      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                               |
+| `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `["META6.json"]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                             | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `"bold 149"`                                     | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                                         |
+
+### Variabel
+
+| Variabel   | Contoh | Deskripsi                            |
+| ---------- | ------ | ------------------------------------ |
+| version    | `v6.d` | The version of `raku`                |
+| vm_version | `moar` | The version of VM `raku` is built on |
+| symbol     |        | Menyalin nilai dari opsi `symbol`    |
+| style\*  |        | Menyalin nilai dari opsi `style`     |
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = "via [🦪 $version]($style) "
+```
+
 ## Red
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
@@ -3560,7 +3598,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `detect_folders`
 - The current directory contains a file whose extension is in `detect_extensions`
 - The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 

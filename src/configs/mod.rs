@@ -57,6 +57,7 @@ pub mod php;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
+pub mod raku;
 pub mod red;
 pub mod rlang;
 pub mod ruby;
@@ -200,6 +201,8 @@ pub struct FullConfig<'a> {
     purescript: purescript::PureScriptConfig<'a>,
     #[serde(borrow)]
     python: python::PythonConfig<'a>,
+    #[serde(borrow)]
+    raku: raku::RakuConfig<'a>,
     #[serde(borrow)]
     red: red::RedConfig<'a>,
     #[serde(borrow)]
