@@ -2567,6 +2567,12 @@ symbol = "☁️ "
 The `os` module shows the current operating system.
 OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
+::: warning
+
+The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
+
+:::
+
 ::: tip
 
 This module is disabled by default.
