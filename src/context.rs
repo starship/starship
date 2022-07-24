@@ -264,8 +264,6 @@ impl<'a> Context<'a> {
             .get_or_try_init(|| -> Result<Repo, git::discover::Error> {
                 // custom open options
                 let git_open_opts = GitOpenOptions::default()
-                    // trust the git repo and avoid additional checks
-                    .with(git_sec::Trust::Full)
                     // don't use the global git config
                     .permissions(git::Permissions {
                         config: git::permissions::Config {
