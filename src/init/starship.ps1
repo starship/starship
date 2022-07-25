@@ -64,6 +64,36 @@ $null = New-Module starship {
         $process.StandardOutput.ReadToEnd();
     }
 
+    function Enable-TransientPrompt {
+        Set-PSReadLineKeyHandler -Key Enter -ScriptBlock {
+            $previousOutputEncoding = [Console]::OutputEncoding
+            try {
+                $parseErrors = $null
+                [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$null, [ref]$null, [ref]$parseErrors, [ref]$null)
+                if ($parseErrors.Count -eq 0) {
+                    $script:TransientPrompt = $true
+                    [Console]::OutputEncoding = [Text.Encoding]::UTF8
+                    [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+                }
+            } finally {
+                if ($script:DoesUseLists) {
+                    # If PSReadline is set to display suggestion list, this workaround is needed to clear the buffer below
+                    # before accepting the current commandline. The max amount of items in the list is 10, so 12 lines
+                    # are cleared (10 + 1 more for the prompt + 1 more for current commandline).
+                    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("`n" * [math]::Min($Host.UI.RawUI.WindowSize.Height - $Host.UI.RawUI.CursorPosition.Y - 1, 12))
+                    [Microsoft.PowerShell.PSConsoleReadLine]::Undo()
+                }
+                [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+                [Console]::OutputEncoding = $previousOutputEncoding
+            }
+        }
+    }
+
+    function Disable-TransientPrompt {
+        Set-PSReadLineKeyHandler -Key Enter -Function AcceptLine
+        $script:TransientPrompt = $false
+    }
+
     function global:prompt {
         $origDollarQuestion = $global:?
         $origLastExitCode = $global:LASTEXITCODE
@@ -106,7 +136,16 @@ $null = New-Module starship {
         $arguments += "--status=$($lastExitCodeForPrompt)"
 
         # Invoke Starship
-        $promptText = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+        $promptText = if ($script:TransientPrompt) {
+            $script:TransientPrompt = $false
+            if (Test-Path function:Invoke-Starship-TransientFunction) {
+                Invoke-Starship-TransientFunction
+            } else {
+                "$([char]0x1B)[1;32m❯$([char]0x1B)[0m "
+            }
+        } else {
+            Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+        }
 
         # Set the number of extra lines in the prompt for PSReadLine prompt redraw.
         Set-PSReadLineOption -ExtraPromptLineCount ($promptText.Split("`n").Length - 1)
@@ -141,6 +180,9 @@ $null = New-Module starship {
     # Disable virtualenv prompt, it breaks starship
     $ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
 
+    $script:TransientPrompt = $false
+    $script:DoesUseLists = (Get-PSReadLineOption).PredictionViewStyle -eq 'ListView'
+
     if ($PSVersionTable.PSVersion.Major -gt 5) {
         $ENV:STARSHIP_SHELL = "pwsh"
     } else {
@@ -158,5 +200,8 @@ $null = New-Module starship {
         )
     )
 
-    Export-ModuleMember
+    Export-ModuleMember -Function @(
+        "Enable-TransientPrompt"
+        "Disable-TransientPrompt"
+    )
 }
