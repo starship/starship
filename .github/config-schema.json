@@ -767,6 +767,9 @@
     "kubernetes": {
       "default": {
         "context_aliases": {},
+        "detect_extensions": [],
+        "detect_files": [],
+        "detect_folders": [],
         "disabled": true,
         "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "style": "cyan bold",
@@ -1026,6 +1029,7 @@
       "default": {
         "disabled": false,
         "format": "via [$symbol($username@)$stack]($style) ",
+        "search_upwards": true,
         "style": "bold 5",
         "symbol": " ",
         "version_format": "v${raw}"
@@ -3322,6 +3326,27 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -3830,6 +3855,10 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        },
+        "search_upwards": {
+          "default": true,
           "type": "boolean"
         }
       }
@@ -4491,6 +4520,12 @@
         "pipestatus_format": {
           "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
           "type": "string"
+        },
+        "pipestatus_segment_format": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "disabled": {
           "default": true,

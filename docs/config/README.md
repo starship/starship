@@ -2084,18 +2084,25 @@ If the `$KUBECONFIG` env var is set the module will use that if not it will use 
 This module is disabled by default.
 To enable it, set `disabled` to `false` in your configuration file.
 
+When the module is enabled it will always be active, unless any of
+`detect_extensions`, `detect_files` or `detect_folders` have been st in which
+case the module will only be active in directories that match those conditions.
+
 :::
 
 ### Options
 
-| Option            | Default                                            | Description                                                           |
-| ----------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                             | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
-| `style`           | `"cyan bold"`                                      | The style for the module.                                             |
-| `context_aliases` |                                                    | Table of context aliases to display.                                  |
-| `user_aliases`    |                                                    | Table of user aliases to display.                                     |
-| `disabled`        | `true`                                             | Disables the `kubernetes` module.                                     |
+| Option              | Default                                            | Description                                                           |
+| ------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `"☸ "`                                             | A format string representing the symbol displayed before the Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
+| `style`             | `"cyan bold"`                                      | The style for the module.                                             |
+| `context_aliases`   |                                                    | Table of context aliases to display.                                  |
+| `user_aliases`      |                                                    | Table of user aliases to display.                                     |
+| `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
+| `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
+| `detect_folders`    | `[]`                                               | Which folders should trigger this modules.                            |
+| `disabled`          | `true`                                             | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -2125,6 +2132,16 @@ disabled = false
 [kubernetes.user_aliases]
 "dev.local.cluster.k8s" = "dev"
 "root/.*" = "root"
+```
+
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
 ```
 
 #### Regex Matching
@@ -2700,7 +2717,7 @@ If you still want to enable it, [follow the example shown below](#with-pulumi-ve
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### Options
 
@@ -2710,6 +2727,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format` | `"v${raw}"`                                  | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                            |
 | `style`          | `"bold 5"`                                   | The style for the module.                                                 |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.            |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
 
 ### Variables
@@ -3304,22 +3322,23 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option                  | Default                                                                       | Description                                             |
-| ----------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "`                                                 | The format of the module                                |
-| `symbol`                | `"✖"`                                                                         | The symbol displayed on program error                   |
-| `success_symbol`        | `""`                                                                          | The symbol displayed on program success                 |
-| `not_executable_symbol` | `"🚫"`                                                                         | The symbol displayed when file isn't executable         |
-| `not_found_symbol`      | `"🔍"`                                                                         | The symbol displayed when the command can't be found    |
-| `sigint_symbol`         | `"🧱"`                                                                         | The symbol displayed on SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                         | The symbol displayed on any signal                      |
-| `style`                 | `"bold red"`                                                                  | The style for the module.                               |
-| `recognize_signal_code` | `true`                                                                        | Enable signal mapping from exit code                    |
-| `map_symbol`            | `false`                                                                       | Enable symbols mapping from exit code                   |
-| `pipestatus`            | `false`                                                                       | Enable pipestatus reporting                             |
-| `pipestatus_separator`  | `                                                                             | `                                                       |
-| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
-| `disabled`              | `true`                                                                        | Disables the `status` module.                           |
+| Option                      | Default                                                                       | Description                                                           |
+| --------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `format`                    | `"[$symbol$status]($style) "`                                                 | The format of the module                                              |
+| `symbol`                    | `"✖"`                                                                         | The symbol displayed on program error                                 |
+| `success_symbol`            | `""`                                                                          | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `"🚫"`                                                                         | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `"🔍"`                                                                         | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `"🧱"`                                                                         | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `"⚡"`                                                                         | The symbol displayed on any signal                                    |
+| `style`                     | `"bold red"`                                                                  | The style for the module.                                             |
+| `recognize_signal_code`     | `true`                                                                        | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                       | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                       | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                           | The symbol used to separate pipestatus segments                       |
+| `pipestatus_format`         | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                               | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                        | Disables the `status` module.                                         |
 
 ### Variables
 
