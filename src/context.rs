@@ -7,8 +7,10 @@ use crate::modules;
 use crate::utils::{self, home_dir};
 use clap::Parser;
 use git_repository::{
-    self as git, commit::describe::SelectRef::AllRefs, open::Options as GitOpenOptions,
-    sec as git_sec, state as git_state, Repository, ThreadSafeRepository,
+    self as git,
+    commit::describe::SelectRef::AllRefs,
+    sec::{self as git_sec, trust::DefaultForLevel},
+    state as git_state, Repository, ThreadSafeRepository,
 };
 use once_cell::sync::OnceCell;
 #[cfg(test)]
@@ -263,29 +265,32 @@ impl<'a> Context<'a> {
         self.repo
             .get_or_try_init(|| -> Result<Repo, git::discover::Error> {
                 // custom open options
-                let git_open_opts = GitOpenOptions::default()
-                    // don't use the global git config
-                    .permissions(git::Permissions {
-                        config: git::permissions::Config {
-                            system: false,
-                            git: false,
-                            user: false,
-                            env: true,
-                            includes: true,
-                        },
-                        ..git::Permissions::all()
-                    });
+                let mut git_open_opts_map =
+                    git_sec::trust::Mapping::<git::open::Options>::default();
 
-                // convert the option options into a trust-based mapping for `discover`
-                let open_opts_mapping = git_sec::trust::Mapping {
-                    full: git_open_opts.clone(),
-                    reduced: git_open_opts,
+                // don't use the global git configs
+                let config = git::permissions::Config {
+                    system: false,
+                    git: false,
+                    user: false,
+                    env: true,
+                    includes: true,
                 };
+                // change options for config permissions without touching anything else
+                git_open_opts_map.reduced =
+                    git_open_opts_map.reduced.permissions(git::Permissions {
+                        config,
+                        ..git::Permissions::default_for_level(git_sec::Trust::Reduced)
+                    });
+                git_open_opts_map.full = git_open_opts_map.full.permissions(git::Permissions {
+                    config,
+                    ..git::Permissions::default_for_level(git_sec::Trust::Full)
+                });
 
                 let shared_repo = ThreadSafeRepository::discover_with_environment_overrides_opts(
                     &self.current_dir,
                     Default::default(),
-                    open_opts_mapping,
+                    git_open_opts_map,
                 )?;
 
                 let repository = shared_repo.to_thread_local();
