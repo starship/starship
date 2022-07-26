@@ -78,20 +78,19 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Bash'e Özel ön-komut istemi(pre-prompt) ve ön-çalıştırma(pre-execution) Komutları
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+Bash, çoğu diğer kabuklar gibi resmi bir preexec/precmd çerçevesine sahip değildir. Bu yüzden, `Bash'i` tamamen özelleştirmek zordur. Ancak Starship, size istem oluşturma prosedürü sayesinde kendi işlevlerinizi ekleme konusunda sınırlı bir yetenek sağlar:
 
-- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
+- Özel bir işlemi başlatmak için çizimin bitmesinden önce yeni bir işlev oluşturup adlandırmanız gerekmektedir.`starship_precmd_user_func`. Örneğin komut isteminden önce bir roket çizmek isterseniz
 
 ```bash
-function blastoff(){
-    echo "🚀"
+echo "🚀"
 }
-starship_precmd_user_func="blastoff"
+starship_precmd_user_func="fırlatıldı"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal _before_ initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- Özel bir işlemi başlatmadan hemen önce komut istemini çalıştırıp, [`DEBUG`filtreleme mekanizmasını](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/) kullanabilirsiniz. Bununla birlikte, Starship başlatılmadan hemen _önce_, </strong>DEBUG sinyalini filtrelemek<1>**zorundasınız.</0>! Starship, DEBUG filtrelemesinin ardından bazı değerleri içerisinde barındırabilir ancak filtreleme işlemi starship başlatıldıktan sonra yazılırsa bazı fonksiyonlar devre dışı kalabilir.</li> </ul>
 
 ```bash
 function blastoff(){
@@ -105,7 +104,7 @@ set +o functrace
 
 ## Custom pre-prompt and pre-execution Commands in PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Ancak Starship, size istem oluşturma prosedürü sayesinde kendi işlevlerinizi ekleme konusunda sınırlı bir yetenek sağlar:
 
 Create a function named `Invoke-Starship-PreCommand`
 
@@ -115,7 +114,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Change Window Title
+## Pencere Başlığını Değiştirme
 
 Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
