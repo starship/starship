@@ -54,12 +54,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let segment_format = config.pipestatus_segment_format.unwrap_or(config.format);
+
     // Create pipestatus string
     let pipestatus = match pipestatus_status {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
             .iter()
             .map(
-                |ec| match format_exit_code(ec.as_str(), config.format, None, &config, context) {
+                |ec| match format_exit_code(ec.as_str(), segment_format, None, &config, context) {
                     Ok(segments) => segments
                         .into_iter()
                         .map(|s| s.to_string())
@@ -683,5 +685,27 @@ mod tests {
                 .collect();
             assert_eq!(expected, actual);
         }
+    }
+
+    #[test]
+    fn pipestatus_segment_format() {
+        let pipe_exit_code = &[0, 1];
+        let main_exit_code = 1;
+
+        let expected = Some("[0]|[1] => <1>".to_string());
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                format = "\\($status\\)"
+                pipestatus = true
+                pipestatus_separator = "|"
+                pipestatus_format = "$pipestatus => <$status>"
+                pipestatus_segment_format = "\\[$status\\]"
+                disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
     }
 }

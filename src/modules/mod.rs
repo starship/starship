@@ -53,6 +53,7 @@ mod php;
 mod pulumi;
 mod purescript;
 mod python;
+mod raku;
 mod red;
 mod rlang;
 mod ruby;
@@ -145,6 +146,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
+            "raku" => raku::module(context),
             "rlang" => rlang::module(context),
             "red" => red::module(context),
             "ruby" => ruby::module(context),
@@ -248,6 +250,7 @@ pub fn description(module: &str) -> &'static str {
         "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
+        "raku" => "The currently installed version of Raku",
         "red" => "The currently installed version of Red",
         "rlang" => "The currently installed version of R",
         "ruby" => "The currently installed version of Ruby",

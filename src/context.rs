@@ -38,7 +38,7 @@ pub struct Context<'a> {
     /// E.g. when navigating to a PSDrive in PowerShell, or a path without symlinks resolved.
     pub logical_dir: PathBuf,
 
-    /// A struct containing directory contents in a lookup-optimised format.
+    /// A struct containing directory contents in a lookup-optimized format.
     dir_contents: OnceCell<DirContents>,
 
     /// Properties to provide to modules.
@@ -181,7 +181,7 @@ impl<'a> Context<'a> {
         home_dir()
     }
 
-    // Retrives a environment variable from the os or from a table if in testing mode
+    // Retrieves a environment variable from the os or from a table if in testing mode
     #[cfg(test)]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
         self.env
@@ -195,7 +195,7 @@ impl<'a> Context<'a> {
         env::var(key.as_ref()).ok()
     }
 
-    // Retrives a environment variable from the os or from a table if in testing mode (os version)
+    // Retrieves a environment variable from the os or from a table if in testing mode (os version)
     #[cfg(test)]
     pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
         self.env.get(key.as_ref()).map(OsString::from)
@@ -620,7 +620,7 @@ fn get_remote_repository_info(repository: &Repository) -> Option<Remote> {
     None
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Shell {
     Bash,
     Fish,
@@ -636,7 +636,7 @@ pub enum Shell {
 }
 
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Target {
     Main,
     Right,
@@ -653,7 +653,7 @@ pub struct Properties {
     #[clap(long, value_delimiter = ' ')]
     pub pipestatus: Option<Vec<String>>,
     /// The width of the current interactive terminal.
-    #[clap(short = 'w', long, default_value_t=default_width(), parse(try_from_str=parse_width))]
+    #[clap(short = 'w', long, default_value_t=default_width(), value_parser=parse_width)]
     terminal_width: usize,
     /// The path that the prompt should render for.
     #[clap(short, long)]
@@ -669,7 +669,7 @@ pub struct Properties {
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
     /// The number of currently running jobs
-    #[clap(short, long, default_value_t, parse(try_from_str=parse_jobs))]
+    #[clap(short, long, default_value_t, value_parser=parse_jobs)]
     pub jobs: i64,
 }
 

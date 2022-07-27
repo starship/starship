@@ -59,7 +59,7 @@ pub fn get_command_string_output(command: CommandOutput) -> String {
 
 /// Attempt to resolve `binary_name` from and creates a new `Command` pointing at it
 /// This allows executing cmd files on Windows and prevents running executable from cwd on Windows
-/// This function also initialises std{err,out,in} to protect against processes changing the console mode
+/// This function also initializes std{err,out,in} to protect against processes changing the console mode
 pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
     let binary_name = binary_name.as_ref();
     log::trace!("Creating Command for binary {:?}", binary_name);
@@ -318,6 +318,15 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 https://www.gnu.org/licenses/."#
             ),
+        }),
+        "raku --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Welcome to Rakudo™ v2021.12.
+Implementing the Raku® Programming Language v6.d.
+Built on MoarVM version 2021.12.\n",
+            ),
+            stderr: String::default(),
         }),
         "red --version" => Some(CommandOutput {
             stdout: String::from("0.6.4\n"),

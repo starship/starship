@@ -1,4 +1,6 @@
-const sidebar = (lang, override = {}) =>
+import { defineConfig, SidebarConfigArray } from "vuepress/config";
+
+const sidebar = (lang, override = {}): SidebarConfigArray =>
     [
         "", // "Home", which should always have a override
         "guide", // README, which should always have a override
@@ -23,7 +25,7 @@ const sidebar = (lang, override = {}) =>
         return page in override ? [path, override[page]] : path;
     });
 
-module.exports = {
+module.exports = defineConfig({
     locales: {
         "/": {
             lang: "en-US",
@@ -331,11 +333,11 @@ module.exports = {
             },
         ],
         [
-            "sitemap",
+            "vuepress-plugin-sitemap",
             {
                 hostname: "https://starship.rs",
             },
         ],
         ["vuepress-plugin-code-copy", true],
     ],
-};
+});
