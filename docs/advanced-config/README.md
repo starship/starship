@@ -10,6 +10,67 @@ The configurations in this section are subject to change in future releases of S
 
 :::
 
+## TransientPrompt in PowerShell
+
+It is possible to replace the previous-printed prompt with a custom string. This
+is useful in cases where all the prompt information is not always needed. To enable
+this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put
+this statement in your `$PROFILE`. Transience can be disabled on-the-fly with
+`Disable-TransientPrompt`.
+
+By default, the left side of input gets replaced with `>`. To customize this,
+define a new function called `Invoke-Starship-TransientFunction`. For example, to
+display Starship's `character` module here, you would do
+
+```powershell
+function Invoke-Starship-TransientFunction {
+  &starship module character
+}
+
+Invoke-Expression (&starship init powershell)
+
+Enable-TransientPrompt
+```
+
+## TransientPrompt and TransientRightPrompt in Cmd
+
+Clink allows you to replace the previous-printed prompt with custom strings. This
+is useful in cases where all the prompt information is not always needed. To enable
+this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+
+- `always`: always replace the previous prompt
+- `same_dir`: replace the previous prompt only if the working directory is same
+- `off`: do not replace the prompt (i.e. turn off transience)
+
+You need to do this only once. Make the following changes to your `starship.lua`
+to customize what gets displayed on the left and on the right:
+
+- By default, the left side of input gets replaced with `>`. To customize this,
+  define a new function called `starship_transient_prompt_func`. This function
+  receives the current prompt as a string that you can utilize. For example, to
+  display Starship's `character` module here, you would do
+
+```lua
+function starship_transient_prompt_func(prompt)
+  return io.popen("starship module character"
+    .." --keymap="..rl.getvariable('keymap')
+  ):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+- By default, the right side of input is empty. To customize this, define a new
+  function called `starship_transient_rprompt_func`. This function receives the
+  current prompt as a string that you can utilize. For example, to display
+  the time at which the last command was started here, you would do
+
+```lua
+function starship_transient_rprompt_func(prompt)
+  return io.popen("starship module time"):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
 ## Custom pre-prompt and pre-execution Commands in Cmd
 
 Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands
