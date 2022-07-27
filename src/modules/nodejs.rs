@@ -3,9 +3,6 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::nodejs::NodejsConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
 
-// we shouldn't fire if any of Deno's files are present
-use crate::configs::deno::DenoConfig;
-
 use once_cell::sync::Lazy;
 use regex::Regex;
 use semver::Version;
@@ -17,8 +14,6 @@ use std::ops::Deref;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nodejs");
     let config = NodejsConfig::try_load(module.config);
-    let deno_config = DenoConfig::default();
-
     let is_js_project = context
         .try_begin_scan()?
         .set_files(&config.detect_files)
@@ -26,17 +21,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_folders(&config.detect_folders)
         .is_match();
 
-    let is_deno_project = context
-        .try_begin_scan()?
-        .set_files(&deno_config.detect_files)
-        .is_match();
-
     let is_esy_project = context
         .try_begin_scan()?
         .set_folders(&["esy.lock"])
         .is_match();
 
-    if is_deno_project || !is_js_project || is_esy_project {
+    if !is_js_project || is_esy_project {
         return None;
     }
 
@@ -135,17 +125,6 @@ mod tests {
     #[test]
     fn folder_without_node_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
-        let expected = None;
-        assert_eq!(expected, actual);
-        dir.close()
-    }
-
-    #[test]
-    fn folder_with_deno_files() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("deno.json"))?.sync_all()?;
-
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
