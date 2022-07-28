@@ -1016,6 +1016,8 @@ the components of the path that would normally be truncated are instead displaye
 `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with
 a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
+Do note that `fish_style_pwd_dir_length` will not produce any effect when using `substitutions`.
+
 </details>
 
 ### Variables
