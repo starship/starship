@@ -1523,6 +1523,13 @@
     "add_newline": {
       "default": true,
       "type": "boolean"
+    },
+    "palette": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
     }
   },
   "definitions": {
