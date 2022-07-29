@@ -183,7 +183,7 @@ add_newline = false
 ```toml
 format = "$all"
 
-# 以下と同等
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -201,11 +201,9 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
-$buf\
 $c\
 $cmake\
 $cobol\
-$container\
 $daml\
 $dart\
 $deno\
@@ -228,6 +226,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$raku\
 $rlang\
 $red\
 $ruby\
@@ -238,6 +237,7 @@ $terraform\
 $vlang\
 $vagrant\
 $zig\
+$buf\
 $nix_shell\
 $conda\
 $spack\
@@ -256,6 +256,7 @@ $jobs\
 $battery\
 $time\
 $status\
+$container\
 $shell\
 $character"""
 ```
