@@ -245,7 +245,7 @@ impl<'a> StringFormatter<'a> {
             style_variables: &'a StyleVariableMapType<'a>,
             context: Option<&Context>,
         ) -> Result<Vec<Segment>, StringFormatterError> {
-            let style = parse_style(textgroup.style, style_variables);
+            let style = parse_style(textgroup.style, style_variables, context);
             parse_format(
                 textgroup.format,
                 style.transpose()?,
@@ -258,6 +258,7 @@ impl<'a> StringFormatter<'a> {
         fn parse_style<'a>(
             style: Vec<StyleElement>,
             variables: &'a StyleVariableMapType<'a>,
+            context: Option<&Context>,
         ) -> Option<Result<Style, StringFormatterError>> {
             let style_strings = style
                 .into_iter()
@@ -276,7 +277,7 @@ impl<'a> StringFormatter<'a> {
                 .map(|style_strings| {
                     let style_string: String =
                         style_strings.iter().flat_map(|s| s.chars()).collect();
-                    parse_style_string(&style_string)
+                    parse_style_string(&style_string, context)
                 })
                 .transpose()
         }

@@ -14,7 +14,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let style = parse_style_string(config.style);
+    let style = parse_style_string(config.style, Some(context));
 
     module.set_segments(vec![Segment::fill(style, config.symbol)]);
 

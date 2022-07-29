@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
@@ -12,6 +13,7 @@ pub struct StarshipRootConfig {
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
+    pub palette: HashMap<String, String>,
 }
 
 // List of default prompt order
@@ -109,6 +111,7 @@ impl Default for StarshipRootConfig {
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
+            palette: HashMap::default(),
         }
     }
 }
