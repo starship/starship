@@ -812,7 +812,7 @@ format = "via [✨ $version](bold blue) "
 
 The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `daml.yaml` file
+- Direktori terkini yang berisikan sebuah file `daml.yaml`
 
 ### Opsi
 
