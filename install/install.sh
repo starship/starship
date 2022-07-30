@@ -175,7 +175,17 @@ install() {
   fi
   info "$msg"
 
-  archive=$(get_tmpfile "$ext")
+  archive=""
+
+  if [ -e ${STARSHIP_ARCHIVE} ]; then
+    archive=${STARSHIP_ARCHIVE}
+    info "Use local downloaded archive file - ${STARSHIP_ARCHIVE}"
+  else
+    # download to the temp file
+    archive=$(get_tmpfile "$ext")
+    info "Download archive file from ${URL}"
+    download "${archive}" "${URL}"
+  fi
 
   # download to the temp file
   download "${archive}" "${URL}"
@@ -503,7 +513,8 @@ if [ "${PLATFORM}" = "pc-windows-msvc" ]; then
   EXT=zip
 fi
 
-URL="${BASE_URL}/latest/download/starship-${TARGET}.${EXT}"
+STARSHIP_ARCHIVE="starship-${TARGET}.${EXT}"
+URL="${BASE_URL}/latest/download/${STARSHIP_ARCHIVE}"
 info "Tarball URL: ${UNDERLINE}${BLUE}${URL}${NO_COLOR}"
 confirm "Install Starship ${GREEN}latest${NO_COLOR} to ${BOLD}${GREEN}${BIN_DIR}${NO_COLOR}?"
 check_bin_dir "${BIN_DIR}"
