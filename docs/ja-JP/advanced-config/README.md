@@ -231,6 +231,9 @@ continuation_prompt = "▶▶"
 - `underline`
 - `dimmed`
 - `inverted`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
@@ -247,3 +250,9 @@ continuation_prompt = "▶▶"
 - 0-255 までの間の数字。 [8-bit ANSI カラーコード](https://i.stack.imgur.com/KTSQa.png) を表します。
 
 複数の色が文字色/背景色に指定された際には、最後の指定が優先して選ばれます。
+
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+
+- Many terminals disable support for `blink` by default
+- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` is not supported by the default macOS Terminal.app
