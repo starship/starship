@@ -397,10 +397,27 @@ impl DirContents {
                     folders.insert(path);
                 } else {
                     if !path.to_string_lossy().starts_with('.') {
+                        // Extract the file extensions (yes, that's plural) from a filename.
+                        // Why plural? Consider the case of foo.tar.gz. It's a compressed
+                        // tarball (tar.gz), and it's a gzipped file (gz). We should be able
+                        // to match both.
+
+                        // find the minimal extension on a file. ie, the gz in foo.tar.gz
+                        // NB the .to_string_lossy().to_string() here looks weird but is
+                        // required to convert it from a Cow.
                         path.extension()
                             .map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
+
+                        // find the full extension on a file. ie, the tar.gz in foo.tar.gz
+                        path.file_name().map(|file_name| {
+                            file_name
+                                .to_string_lossy()
+                                .split_once('.')
+                                .map(|(_, after)| extensions.insert(after.to_string()))
+                        });
                     }
                     if let Some(file_name) = path.file_name() {
+                        // this .to_string_lossy().to_string() is also required
                         file_names.insert(file_name.to_string_lossy().to_string());
                     }
                     files.insert(path);
@@ -432,24 +449,47 @@ impl DirContents {
         self.file_names.contains(name)
     }
 
-    pub fn has_any_file_name(&self, names: &[&str]) -> bool {
-        names.iter().any(|name| self.has_file_name(name))
-    }
-
     pub fn has_folder(&self, path: &str) -> bool {
         self.folders.contains(Path::new(path))
-    }
-
-    pub fn has_any_folder(&self, paths: &[&str]) -> bool {
-        paths.iter().any(|path| self.has_folder(path))
     }
 
     pub fn has_extension(&self, ext: &str) -> bool {
         self.extensions.contains(ext)
     }
 
-    pub fn has_any_extension(&self, exts: &[&str]) -> bool {
-        exts.iter().any(|ext| self.has_extension(ext))
+    pub fn has_any_positive_file_name(&self, names: &[&str]) -> bool {
+        names
+            .iter()
+            .any(|name| !name.starts_with('!') && self.has_file_name(name))
+    }
+
+    pub fn has_any_positive_folder(&self, paths: &[&str]) -> bool {
+        paths
+            .iter()
+            .any(|path| !path.starts_with('!') && self.has_folder(path))
+    }
+
+    pub fn has_any_positive_extension(&self, exts: &[&str]) -> bool {
+        exts.iter()
+            .any(|ext| !ext.starts_with('!') && self.has_extension(ext))
+    }
+
+    pub fn has_no_negative_file_name(&self, names: &[&str]) -> bool {
+        !names
+            .iter()
+            .any(|name| name.starts_with('!') && self.has_file_name(&name[1..]))
+    }
+
+    pub fn has_no_negative_folder(&self, paths: &[&str]) -> bool {
+        !paths
+            .iter()
+            .any(|path| path.starts_with('!') && self.has_folder(&path[1..]))
+    }
+
+    pub fn has_no_negative_extension(&self, exts: &[&str]) -> bool {
+        !exts
+            .iter()
+            .any(|ext| ext.starts_with('!') && self.has_extension(&ext[1..]))
     }
 }
 
@@ -516,9 +556,16 @@ impl<'a> ScanDir<'a> {
     /// based on the current `PathBuf` check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
-        self.dir_contents.has_any_extension(self.extensions)
-            || self.dir_contents.has_any_folder(self.folders)
-            || self.dir_contents.has_any_file_name(self.files)
+        // if there exists a file with a file/folder/ext we've said we don't want,
+        // fail the match straight away
+        self.dir_contents.has_no_negative_extension(self.extensions)
+            && self.dir_contents.has_no_negative_file_name(self.files)
+            && self.dir_contents.has_no_negative_folder(self.folders)
+            && (self
+                .dir_contents
+                .has_any_positive_extension(self.extensions)
+                || self.dir_contents.has_any_positive_file_name(self.files)
+                || self.dir_contents.has_any_positive_folder(self.folders))
     }
 }
 
@@ -725,6 +772,50 @@ mod tests {
         }
         .is_match());
         node.close()?;
+
+        let tarballs = testdir(&["foo.tgz", "foo.tar.gz"])?;
+        let tarballs_dc = DirContents::from_path(tarballs.path())?;
+        assert!(ScanDir {
+            dir_contents: &tarballs_dc,
+            files: &[],
+            extensions: &["tar.gz"],
+            folders: &[],
+        }
+        .is_match());
+        tarballs.close()?;
+
+        let dont_match_ext = testdir(&["foo.js", "foo.ts"])?;
+        let dont_match_ext_dc = DirContents::from_path(dont_match_ext.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_ext_dc,
+            files: &[],
+            extensions: &["js", "!notfound", "!ts"],
+            folders: &[],
+        }
+        .is_match());
+        dont_match_ext.close()?;
+
+        let dont_match_file = testdir(&["goodfile", "evilfile"])?;
+        let dont_match_file_dc = DirContents::from_path(dont_match_file.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_file_dc,
+            files: &["goodfile", "!notfound", "!evilfile"],
+            extensions: &[],
+            folders: &[],
+        }
+        .is_match());
+        dont_match_file.close()?;
+
+        let dont_match_folder = testdir(&["gooddir/somefile", "evildir/somefile"])?;
+        let dont_match_folder_dc = DirContents::from_path(dont_match_folder.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_folder_dc,
+            files: &[],
+            extensions: &[],
+            folders: &["gooddir", "!notfound", "!evildir"],
+        }
+        .is_match());
+        dont_match_folder.close()?;
 
         Ok(())
     }
