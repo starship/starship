@@ -231,9 +231,12 @@ Les chaînes de style sont une liste de mots, séparés par des espaces blancs. 
 - `underline`
 - `dimmed`
 - `inverted`
-- `bg:<couleur>`
-- `fg:<couleur>`
-- `<couleur>`
+- `blink`
+- `hidden`
+- `strikethrough`
+- `bg:<color>`
+- `fg:<color>`
+- `<color>`
 - `none`
 
 où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose, bien que cela puisse changer dans le futur. `inverted` permute les couleurs de fond et de premier plan. L'ordre des mots dans le string n'a pas d'importance.
@@ -247,3 +250,9 @@ Un spécificateur de couleur peut être l'un des éléments suivants :
 - Un nombre entre 0 et 255. Ceci spécifie un [code de couleur ANSI 8 bits](https://i.stack.imgur.com/KTSQa.png).
 
 Si plusieurs couleurs sont spécifiées pour le premier plan/arrière-plan, la dernière dans le string prendra la priorité.
+
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+
+- Many terminals disable support for `blink` by default
+- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` is not supported by the default macOS Terminal.app
