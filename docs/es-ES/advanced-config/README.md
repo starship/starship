@@ -231,6 +231,9 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
 - `underline`
 - `dimmed`
 - `inverted`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
@@ -247,3 +250,9 @@ Un especificador de color puede ser uno de los siguientes:
 - Un número entre 0-255. Esto especifica un [Código de color ANSI de 8-bits](https://i.stack.imgur.com/KTSQa.png).
 
 Si se especifican varios colores para el primer plano/fondo, el último en la cadena tendrá prioridad.
+
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+
+- Many terminals disable support for `blink` by default
+- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` is not supported by the default macOS Terminal.app
