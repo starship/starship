@@ -268,6 +268,7 @@ where
  - 'bold'
  - 'italic'
  - 'inverted'
+ - 'blink'
  - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
 pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
@@ -293,6 +294,9 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
                     "inverted" => Some(style.reverse()),
+                    "blink" => Some(style.blink()),
+                    "hidden" => Some(style.hidden()),
+                    "strikethrough" => Some(style.strikethrough()),
                     // When the string is supposed to be a color:
                     // Decide if we yield none, reset background or set color.
                     color_string => {
@@ -622,6 +626,69 @@ mod tests {
                 .underline()
                 .dimmed()
                 .reverse()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_blink_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD bLiNk");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_blink);
+        assert_eq!(
+            mystyle,
+            ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .blink()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_hidden_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD hIDDen");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_hidden);
+        assert_eq!(
+            mystyle,
+            ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .hidden()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_strikethrough_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD StRiKEthROUgh");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_strikethrough);
+        assert_eq!(
+            mystyle,
+            ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .strikethrough()
                 .fg(Color::Green)
         );
     }

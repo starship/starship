@@ -278,6 +278,9 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 - `underline`
 - `dimmed`
 - `inverted`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
@@ -297,3 +300,9 @@ A color specifier can be one of the following:
 - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
 If multiple colors are specified for foreground/background, the last one in the string will take priority.
+
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+
+- Many terminals disable support for `blink` by default
+- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` is not supported by the default macOS Terminal.app
