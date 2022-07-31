@@ -231,6 +231,9 @@ Chuỗi kiểu là một danh sách các từ, được phân cách bởi khoả
 - `underline`
 - `dimmed`
 - `đảo ngược`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
@@ -247,3 +250,9 @@ Một quy định màu có thể là một trong các thứ sau:
 - Một số nằm giữa 0-255. Cái này quy định một [mã màu ANSI 8-bit](https://i.stack.imgur.com/KTSQa.png).
 
 Nếu nhiều màu được quy định cho màu chữ/màu nền, cái cuối cùng trong chuỗi sẽ được ưu tiên.
+
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+
+- Many terminals disable support for `blink` by default
+- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` is not supported by the default macOS Terminal.app
