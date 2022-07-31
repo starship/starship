@@ -152,6 +152,24 @@ format = '''
 \$'''
 ```
 
+### Negative matching
+
+Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take
+lists of strings to match or not match. "Negative" options, those which should not be matched, are
+indicated with a leading "!" character. The presence of _any_ negative indicator in the directory
+will result in the module not being matched.
+
+Extensions are matched against both the characters after the last dot in a filename, and the
+characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched
+against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a
+dot are not considered to have extensions at all.
+
+To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+
+```toml
+detect_extensions = ["ts", "!video.ts", "!audio.ts"]
+```
+
 ## Prompt
 
 This is the list of prompt-wide configuration options.
@@ -209,11 +227,9 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
-$buf\
 $c\
 $cmake\
 $cobol\
-$container\
 $daml\
 $dart\
 $deno\
@@ -236,6 +252,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$raku\
 $rlang\
 $red\
 $ruby\
@@ -246,6 +263,7 @@ $terraform\
 $vlang\
 $vagrant\
 $zig\
+$buf\
 $nix_shell\
 $conda\
 $spack\
@@ -264,6 +282,7 @@ $jobs\
 $battery\
 $time\
 $status\
+$container\
 $shell\
 $character"""
 ```
