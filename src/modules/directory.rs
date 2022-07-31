@@ -100,7 +100,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         String::from("")
     };
 
-    let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
+    const BEFORE_ROOT_PATH: usize = 0;
+    const REPO_ROOT: usize = 1;
+    const PATH: usize = 2;
+    const PATH_BASE: usize = 3;
+    const LAST_COMPONENT: usize = 4;
+
+    let mut path_vec = [0; 5].map(|_| String::new());
+
+    match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(repo_root) if config.repo_root_style.is_some() => {
             let contracted_path = contract_repo_path(display_dir, repo_root)?;
             let repo_path_vec: Vec<&str> = contracted_path.split('/').collect();
@@ -112,13 +120,36 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&contracted_path, "");
-                [prefix + &before, root.to_string(), after_repo_root]
+                path_vec[BEFORE_ROOT_PATH] = prefix + &before;
+                path_vec[REPO_ROOT] = root.to_string();
+                path_vec[PATH] = after_repo_root;
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string]
+                path_vec[PATH] = prefix + &dir_string;
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+        _ => {
+            path_vec[PATH] = prefix + &dir_string;
+        }
     };
+
+    (path_vec[PATH_BASE], path_vec[LAST_COMPONENT]) =
+        path_vec[PATH]
+            .rfind('/')
+            .map_or(("".to_string(), path_vec[PATH][..].to_string()), |pos| {
+                (
+                    path_vec[PATH][..pos].to_string(),
+                    path_vec[PATH][pos + 1..].to_string(),
+                )
+            });
+
+    if path_vec[LAST_COMPONENT] != home_symbol
+        && (!path_vec[LAST_COMPONENT].is_empty()
+            || path_vec[BEFORE_ROOT_PATH].is_empty()
+                && path_vec[REPO_ROOT].is_empty()
+                && path_vec[PATH_BASE].is_empty())
+    {
+        path_vec[PATH_BASE] = format!("{}/", path_vec[PATH_BASE]);
+    }
 
     let path_vec = if config.use_os_path_sep {
         path_vec.map(|i| convert_path_sep(&i))
@@ -127,7 +158,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let lock_symbol = String::from(config.read_only);
-    let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {
+    let display_format = if path_vec[BEFORE_ROOT_PATH].is_empty() && path_vec[REPO_ROOT].is_empty()
+    {
         config.format
     } else {
         config.repo_root_format
@@ -143,9 +175,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "path" => Some(Ok(&path_vec[2])),
-                "before_root_path" => Some(Ok(&path_vec[0])),
-                "repo_root" => Some(Ok(&path_vec[1])),
+                "before_root_path" => Some(Ok(&path_vec[BEFORE_ROOT_PATH])),
+                "repo_root" => Some(Ok(&path_vec[REPO_ROOT])),
+                "path" => Some(Ok(&path_vec[PATH])),
+                "path_base" => Some(Ok(&path_vec[PATH_BASE])),
+                "last_component" => Some(Ok(&path_vec[LAST_COMPONENT])),
                 "read_only" => {
                     if is_readonly_dir(physical_dir) {
                         Some(Ok(&lock_symbol))
