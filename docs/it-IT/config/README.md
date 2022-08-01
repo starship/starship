@@ -492,6 +492,45 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 symbol = "🦬 "
 ```
 
+## Bun
+
+The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `bun.lockb` file
+- The current directory contains a `bunfig.toml` file
+
+### Opzioni
+
+| Opzione             | Default                              | Descrizione                                                                                  |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                   |
+| `version_format`    | `"v${raw}"`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`            | `"🍞 "`                               | A format string representing the symbol of Node.js.                                          |
+| `detect_extensions` | `[]`                                 | Quali estensioni dovrebbero attivare questo modulo.                                          |
+| `detect_files`      | `["bun.lockb", "bunfig.toml"]`       | Quali nomi di file dovrebbero attivare questo modulo.                                        |
+| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `style`             | `"bold red"`                         | Lo stile per il modulo.                                                                      |
+| `disabled`          | `false`                              | Disables the `bun` module.                                                                   |
+
+### Variables
+
+| Variable  | Esempio  | Descrizione                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `v0.1.4` | The version of `bun`                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+
+[bun]
+format = "via [🍔 $version](bold green) "
+```
+
 ## C
 
 The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
@@ -619,9 +658,9 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | `format`            | `"via [$symbol($version )]($style)"`   | The format for the module.                                                                   |
 | `version_format`    | `"v${raw}"`                            | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
 | `symbol`            | `"△ "`                                 | The symbol used before the version of cmake.                                                 |
-| `detect_extensions` | `[]`                                   | Quali estensioni dovrebbero attivare questo modulo                                           |
-| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Quali nomi di file dovrebbero attivare questo modulo                                         |
-| `detect_folders`    | `[]`                                   | Quali cartelle dovrebbero attivare questo modulo                                             |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module                                                  |
+| `detect_files`      | `["CMakeLists.txt", "CMakeCache.txt"]` | Which filenames should trigger this module                                                   |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module                                                     |
 | `style`             | `"bold blue"`                          | Lo stile per il modulo.                                                                      |
 | `disabled`          | `false`                                | Disables the `cmake` module.                                                                 |
 
@@ -2492,8 +2531,8 @@ The `package` module is shown when the current directory is the repository for a
 | `symbol`          | `"📦 "`                            | The symbol used before displaying the version the package.                                   |
 | `version_format`  | `"v${raw}"`                       | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
 | `style`           | `"bold 208"`                      | Lo stile per il modulo.                                                                      |
-| `display_private` | `false`                           | Abilita la visualizzazione della versione per i pacchetti contrassegnati come privati.       |
-| `disabled`        | `false`                           | Disabilita il modulo `package`.                                                              |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                                    |
+| `disabled`        | `false`                           | Disables the `package` module.                                                               |
 
 ### Variables
 
@@ -2720,9 +2759,9 @@ By default the module will be shown if any of the following conditions are met:
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                              |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                              |
 | `python_binary`      | `["python", "python3", "python2"]`                                                                           | Configures the python binaries that Starship should executes when getting the version.       |
-| `detect_extensions`  | `["py"]`                                                                                                     | Quali estensioni dovrebbero attivare questo modulo                                           |
-| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Quali nomi di file dovrebbero attivare questo modulo                                         |
-| `detect_folders`     | `[]`                                                                                                         | Quali cartelle dovrebbero attivare questo modulo                                             |
+| `detect_extensions`  | `["py"]`                                                                                                     | Which extensions should trigger this module                                                  |
+| `detect_files`       | `[".python-version", "Pipfile", "__init__.py", "pyproject.toml", "requirements.txt", "setup.py", "tox.ini"]` | Which filenames should trigger this module                                                   |
+| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                                     |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                                |
 
 ::: tip
@@ -2800,9 +2839,9 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | `version_format`    | `"v${raw}"`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
 | `symbol`            | `"📐"`                                | A format string representing the symbol of R.                                                |
 | `style`             | `"blu grassetto"`                    | Lo stile per il modulo.                                                                      |
-| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Quali estensioni dovrebbero attivare questo modulo                                           |
-| `detect_files`      | `[".Rprofile"]`                      | Quali nomi di file dovrebbero attivare questo modulo                                         |
-| `detect_folders`    | `[".Rproj.user"]`                    | Quali cartelle dovrebbero attivare questo modulo                                             |
+| `detect_extensions` | `["R", "Rd", "Rmd", "Rproj", "Rsx"]` | Which extensions should trigger this module                                                  |
+| `detect_files`      | `[".Rprofile"]`                      | Which filenames should trigger this module                                                   |
+| `detect_folders`    | `[".Rproj.user"]`                    | Which folders should trigger this module                                                     |
 | `disabled`          | `false`                              | Disables the `r` module.                                                                     |
 
 ### Variables
@@ -3411,7 +3450,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3525,12 +3564,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"`         | The format for the module.                                                                   |
 | `version_format`    | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `"V "`                                       | Una stringa di formato che rappresenta il simbolo di V                                       |
+| `symbol`            | `"V "`                                       | A format string representing the symbol of V                                                 |
 | `detect_extensions` | `["v"]`                                      | Quali estensioni dovrebbero attivare questo modulo.                                          |
 | `detect_files`      | `["v.mod", "vpkg.json", ".vpkg-lock.json" ]` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                            |
 | `style`             | `"blu grassetto"`                            | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                                |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                 |
 
 ### Variables
 
@@ -3663,7 +3702,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `descrizione`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
