@@ -492,6 +492,45 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 symbol = "🦬 "
 ```
 
+## Bun
+
+The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `bun.lockb` file
+- The current directory contains a `bunfig.toml` file
+
+### Options
+
+| Option              | الافتراضي                            | الوصف                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🍞 "`                               | A format string representing the symbol of Node.js.                       |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `["bun.lockb", "bunfig.toml"]`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold red"`                         | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `bun` module.                                                |
+
+### Variables
+
+| Variable  | مثال     | الوصف                                |
+| --------- | -------- | ------------------------------------ |
+| version   | `v0.1.4` | The version of `bun`                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### مثال
+
+```toml
+# ~/.config/starship.toml
+
+[bun]
+format = "via [🍔 $version](bold green) "
+```
+
 ## C
 
 The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
@@ -1212,13 +1251,13 @@ default = "unknown user"
 
 ### Options
 
-| Option      | الافتراضي                      | الوصف                                                                        |
-| ----------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`    | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable`  |                                | The environment variable to be displayed.                                    |
-| `الافتراضي` |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`    | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `disabled`  | `false`                        | Disables the `env_var` module.                                               |
+| Option     | الافتراضي                      | الوصف                                                                        |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                           | The symbol used before displaying the variable value.                        |
+| `variable` |                                | The environment variable to be displayed.                                    |
+| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
+| `disabled` | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
 
@@ -1343,7 +1382,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | account   | `foo`         | The current GCP profile                                            |
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
-| active    | `الافتراضي`   | The active config name written in `~/.config/gcloud/active_config` |
+| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | Mirrors the value of option `symbol`                               |
 | style\* |               | Mirrors the value of option `style`                                |
 
@@ -3354,12 +3393,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | مثال        | الوصف                                |
-| --------- | ----------- | ------------------------------------ |
-| version   | `v0.12.24`  | The version of `terraform`           |
-| workspace | `الافتراضي` | The current Terraform workspace      |
-| symbol    |             | Mirrors the value of option `symbol` |
-| style\* |             | Mirrors the value of option `style`  |
+| Variable  | مثال       | الوصف                                |
+| --------- | ---------- | ------------------------------------ |
+| version   | `v0.12.24` | The version of `terraform`           |
+| workspace | `default`  | The current Terraform workspace      |
+| symbol    |            | Mirrors the value of option `symbol` |
+| style\* |            | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
@@ -3663,7 +3702,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `الوصف`             | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
