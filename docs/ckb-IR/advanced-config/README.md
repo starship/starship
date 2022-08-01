@@ -237,7 +237,7 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
-- `none`
+- `هیچ`
 
 کە `<color>` دیاریکەری ڕەنگێکە (لە ژێرەوە باسکراوە). `fg:<color>` و `<color>` لە ئێستادا هەمان شت ئەکەن، بەڵام ئەمە ڕەنگە لە داهاتووا بگۆڕێت. `inverted` ڕەنگی پاشبنەما و پێشبنەما ئەگۆڕێتەوە. ڕیزبەندی ووشەکان لە زنجیرەکەدا گرنگ نییە.
 
