@@ -82,6 +82,26 @@
         }
       ]
     },
+    "bun": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "bun.lockb",
+          "bunfig.toml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold red",
+        "symbol": "🍞 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/BunConfig"
+        }
+      ]
+    },
     "c": {
       "default": {
         "commands": [
@@ -1710,6 +1730,55 @@
             "buf.yaml",
             "buf.gen.yaml",
             "buf.work.yaml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "BunConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🍞 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "bun.lockb",
+            "bunfig.toml"
           ],
           "type": "array",
           "items": {
