@@ -135,3 +135,6 @@ symbol = "swift "
 
 [terraform]
 symbol = "terraform "
+
+[zig]
+symbol = "zig "
