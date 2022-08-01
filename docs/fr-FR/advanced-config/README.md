@@ -234,9 +234,9 @@ Les chaînes de style sont une liste de mots, séparés par des espaces blancs. 
 - `blink`
 - `hidden`
 - `strikethrough`
-- `bg:<color>`
-- `fg:<color>`
-- `<color>`
+- `bg:<couleur>`
+- `fg:<couleur>`
+- `<couleur>`
 - `none`
 
 où `<color>` est un spécificateur de couleur (discuté ci-dessous). `fg:<color>` et `<color>` font actuellement la même chose, bien que cela puisse changer dans le futur. `inverted` permute les couleurs de fond et de premier plan. L'ordre des mots dans le string n'a pas d'importance.
