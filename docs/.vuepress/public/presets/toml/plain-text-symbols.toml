@@ -16,6 +16,9 @@ deleted = "x"
 [aws]
 symbol = "aws "
 
+[bun]
+symbol = "bun "
+
 [c]
 symbol = "C "
 
