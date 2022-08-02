@@ -8,6 +8,10 @@ Konfigurasi prasetel berikut mengubah format dari seluruh modul bawaan untuk men
 
 ### Konfigurasi
 
+```sh
+starship preset bracketed-segments > ~/.config/starship.toml
+```
+
 [Click to download TOML](/presets/toml/bracketed-segments.toml)
 
 <<< @/.vuepress/public/presets/toml/bracketed-segments.toml
