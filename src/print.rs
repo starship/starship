@@ -1,4 +1,5 @@
 use ansi_term::ANSIStrings;
+use clap::{PossibleValue, ValueEnum};
 use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
@@ -15,6 +16,7 @@ use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
+use crate::shadow;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -450,6 +452,35 @@ pub fn print_schema() {
     println!("{}", serde_json::to_string_pretty(&schema).unwrap());
 }
 
+#[derive(Clone, Debug)]
+pub struct Preset(pub &'static str);
+
+impl ValueEnum for Preset {
+    fn value_variants<'a>() -> &'a [Self] {
+        shadow::get_preset_list()
+    }
+
+    fn to_possible_value<'a>(&self) -> Option<clap::PossibleValue<'a>> {
+        Some(PossibleValue::new(self.0))
+    }
+}
+
+pub fn preset_command(name: Option<Preset>, list: bool) {
+    if list {
+        println!("{}", preset_list());
+        return;
+    }
+    let variant = name.expect("name argument must be specified");
+    shadow::print_preset_content(variant.0);
+}
+
+fn preset_list() -> String {
+    Preset::value_variants()
+        .iter()
+        .map(|v| format!("{}\n", v.0))
+        .collect()
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -488,6 +519,19 @@ mod test {
         let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn preset_list_returns_one_or_more_items() {
+        assert!(preset_list().trim().split('\n').count() > 0);
+    }
+
+    #[test]
+    fn preset_command_does_not_panic_on_correct_inputs() {
+        preset_command(None, true);
+        Preset::value_variants()
+            .iter()
+            .for_each(|v| preset_command(Some(v.clone()), false));
     }
 
     #[test]

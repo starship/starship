@@ -63,6 +63,15 @@ enum Commands {
         #[clap(flatten)]
         properties: Properties,
     },
+    /// Prints a preset config
+    Preset {
+        /// The name of preset to be printed
+        #[clap(required_unless_present("list"), value_enum)]
+        name: Option<print::Preset>,
+        /// List out all preset names
+        #[clap(short, long)]
+        list: bool,
+    },
     /// Prints the computed starship configuration
     PrintConfig {
         /// Print the default instead of the computed config
@@ -182,6 +191,7 @@ fn main() {
                 print::module(&module_name, properties);
             }
         }
+        Commands::Preset { name, list } => print::preset_command(name, list),
         Commands::Config { name, value } => {
             if let Some(name) = name {
                 if let Some(value) = value {

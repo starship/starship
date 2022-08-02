@@ -9,6 +9,10 @@ don't have access to Unicode.
 
 ### Configuration
 
+```sh
+starship preset plain-text-symbols > ~/.config/starship.toml
+```
+
 [Click to download TOML](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
