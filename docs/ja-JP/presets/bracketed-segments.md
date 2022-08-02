@@ -8,6 +8,10 @@
 
 ### 設定
 
+```sh
+starship preset bracketed-segments > ~/.config/starship.toml
+```
+
 [クリックしてTOMLをダウンロード](/presets/toml/bracketed-segments.toml)
 
 <<< @/.vuepress/public/presets/toml/bracketed-segments.toml
