@@ -12,6 +12,10 @@
 
 ### 設定
 
+```sh
+starship preset pastel-powerline > ~/.config/starship.toml
+```
+
 [クリックしてTOMLをダウンロード](/presets/toml/pastel-powerline.toml)
 
 <<< @/.vuepress/public/presets/toml/pastel-powerline.toml
