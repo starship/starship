@@ -12,6 +12,10 @@
 
 ### 設定
 
+```sh
+starship preset nerd-font-symbols > ~/.config/starship.toml
+```
+
 [クリックしてTOMLをダウンロード](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
