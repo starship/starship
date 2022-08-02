@@ -8,6 +8,10 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 
 ### Konfiguracja
 
+```sh
+starship preset pure-preset > ~/.config/starship.toml
+```
+
 [Click to download TOML](/presets/toml/pure-preset.toml)
 
 <<< @/.vuepress/public/presets/toml/pure-preset.toml
