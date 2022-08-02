@@ -30,13 +30,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let branch_name = repo.branch.as_deref()?;
+    let branch_name = repo.branch.as_ref()?;
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
 
     if config
         .ignore_branches
         .iter()
-        .any(|ignored| ignored.eq(&branch_name))
+        .any(|ignored| branch_name.eq(ignored))
     {
         return None;
     }
@@ -426,29 +426,6 @@ mod tests {
         assert_eq!(expected, actual.as_deref());
         repo_dir.close()?;
         remote_dir.close()
-    }
-
-    #[test]
-    fn test_detached_head() -> io::Result<()> {
-        let repo_dir = fixture_repo(FixtureProvider::Git)?;
-
-        create_command("git")?
-            .args(&["checkout", "--detach", "HEAD"])
-            .current_dir(repo_dir.path())
-            .output()?;
-
-        let actual = ModuleRenderer::new("git_branch")
-            .path(&repo_dir.path())
-            .config(toml::toml! {
-                [git_branch]
-                format = "$branch(:$remote_name/$remote_branch)"
-            })
-            .collect();
-
-        let expected = Some("origin/master");
-
-        assert_eq!(expected, actual.as_deref());
-        repo_dir.close()
     }
 
     // This test is not possible until we switch to `git status --porcelain`

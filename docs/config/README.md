@@ -1530,13 +1530,13 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Variable      | Example  | Description                                                                                                                   |
-| ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| branch        | `master` | The current branch name, or else the name of the checked-out reference (`origin/main`), or `HEAD` (e.g. git detached `HEAD`). |
-| remote_name   | `origin` | The remote name.                                                                                                              |
-| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                                              |
-| symbol        |          | Mirrors the value of option `symbol`                                                                                          |
-| style\*       |          | Mirrors the value of option `style`                                                                                           |
+| Variable      | Example  | Description                                                                                            |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
+| remote_name   | `origin` | The remote name.                                                                                       |
+| remote_branch | `master` | The name of the branch tracked on `remote_name`.                                                       |
+| symbol        |          | Mirrors the value of option `symbol`                                                                   |
+| style\*       |          | Mirrors the value of option `style`                                                                    |
 
 *: This variable can only be used as a part of a style string
 
