@@ -8,6 +8,10 @@
 
 ### 設定
 
+```sh
+starship preset pure-preset > ~/.config/starship.toml
+```
+
 [クリックしてTOMLをダウンロード](/presets/toml/pure-preset.toml)
 
 <<< @/.vuepress/public/presets/toml/pure-preset.toml
