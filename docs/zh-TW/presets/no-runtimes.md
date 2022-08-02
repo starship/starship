@@ -8,6 +8,10 @@
 
 ### 設定
 
+```sh
+starship preset no-runtime-versions > ~/.config/starship.toml
+```
+
 [Click to download TOML](/presets/toml/no-runtime-versions.toml)
 
 <<< @/.vuepress/public/presets/toml/no-runtime-versions.toml
