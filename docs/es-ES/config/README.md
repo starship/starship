@@ -144,7 +144,7 @@ format = '''
 \$'''
 ```
 
-### Negative matching
+### Coincidencia negativa
 
 Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading "!" character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
 
