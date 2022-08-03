@@ -152,6 +152,24 @@ format = '''
 \$'''
 ```
 
+### Negative matching
+
+Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take
+lists of strings to match or not match. "Negative" options, those which should not be matched, are
+indicated with a leading "!" character. The presence of _any_ negative indicator in the directory
+will result in the module not being matched.
+
+Extensions are matched against both the characters after the last dot in a filename, and the
+characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched
+against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a
+dot are not considered to have extensions at all.
+
+To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+
+```toml
+detect_extensions = ["ts", "!video.ts", "!audio.ts"]
+```
+
 ## Prompt
 
 This is the list of prompt-wide configuration options.
@@ -209,11 +227,9 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
-$buf\
 $c\
 $cmake\
 $cobol\
-$container\
 $daml\
 $dart\
 $deno\
@@ -236,6 +252,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$raku\
 $rlang\
 $red\
 $ruby\
@@ -246,6 +263,7 @@ $terraform\
 $vlang\
 $vagrant\
 $zig\
+$buf\
 $nix_shell\
 $conda\
 $spack\
@@ -265,6 +283,7 @@ $battery\
 $time\
 $status\
 $os\
+$container\
 $shell\
 $character"""
 ```
@@ -496,6 +515,46 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 [buf]
 symbol = "🦬 "
+```
+
+## Bun
+
+The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime.
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `bun.lockb` file
+- The current directory contains a `bunfig.toml` file
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🍞 "`                               | A format string representing the symbol of Node.js.                       |
+| `detect_extensions` | `[]`                                 | Which extensions should trigger this module.                              |
+| `detect_files`      | `["bun.lockb", "bunfig.toml"]`       | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold red"`                         | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `bun` module.                                                |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v0.1.4` | The version of `bun`                 |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[bun]
+format = "via [🍔 $version](bold green) "
 ```
 
 ## C

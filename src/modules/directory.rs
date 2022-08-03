@@ -498,6 +498,8 @@ mod tests {
     fn make_known_tempdir(root: &Path) -> io::Result<(TempDir, String)> {
         fs::create_dir_all(root)?;
         let dir = TempDir::new_in(root)?;
+        // the .to_string_lossy().to_string() here looks weird but is required
+        // to convert it from a Cow.
         let path = dir
             .path()
             .file_name()

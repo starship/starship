@@ -38,7 +38,7 @@ notify = ["notify-rust"]
 [dependencies]
 ansi_term = "0.12.1"
 chrono = "0.4.19"
-clap = { version = "=3.2.14", features = ["derive", "cargo", "unicode", "unstable-v4"] }
+clap = { version = "=3.2.16", features = ["derive", "cargo", "unicode", "unstable-v4"] }
 clap_complete = "3.2.3"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
@@ -53,20 +53,20 @@ notify-rust = { version = "4.5.8", optional = true }
 once_cell = "1.13.0"
 open = "3.0.2"
 # update os module config and tests when upgrading os_info
-os_info = "3.4.0"
+os_info = "3.5.0"
 path-slash = "0.2.0"
-pest = "2.1.3"
-pest_derive = "2.1.0"
+pest = "2.2.1"
+pest_derive = "2.2.1"
 quick-xml = "0.23.0"
 rand = "0.8.5"
 rayon = "1.5.3"
 regex = "1.6.0"
 rust-ini = "0.18.0"
-semver = "1.0.12"
-serde = { version = "1.0.140", features = ["derive"] }
+semver = "1.0.13"
+serde = { version = "1.0.141", features = ["derive"] }
 serde_json = "1.0.82"
 sha-1 = "0.10.0"
-shadow-rs = "0.16.0"
+shadow-rs = "0.16.1"
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.7.9", optional = true }
@@ -110,7 +110,8 @@ features = [
 nix = { version = "0.24.2", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = "0.16.0"
+shadow-rs = "0.16.1"
+dunce = "1.0.2"
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
