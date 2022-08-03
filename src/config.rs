@@ -739,21 +739,21 @@ mod tests {
         palette.insert("blue".to_string(), "17".to_string());
 
         assert_eq!(
-            parse_color_string("mustard", &Some(palette.clone())),
+            parse_color_string("mustard", Some(&palette)),
             Some(Color::RGB(175, 135, 0))
         );
         assert_eq!(
-            parse_color_string("sky-blue", &Some(palette.clone())),
+            parse_color_string("sky-blue", Some(&palette)),
             Some(Color::Fixed(51))
         );
 
         // Test overriding predefined colors
         assert_eq!(
-            parse_color_string("red", &Some(palette.clone())),
+            parse_color_string("red", Some(&palette)),
             Some(Color::RGB(215, 0, 0))
         );
         assert_eq!(
-            parse_color_string("blue", &Some(palette.clone())),
+            parse_color_string("blue", Some(&palette)),
             Some(Color::Fixed(17))
         );
     }
