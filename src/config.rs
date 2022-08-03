@@ -1,3 +1,4 @@
+use crate::configs::Palette;
 use crate::context::Context;
 use crate::serde_utils::ValueDeserializer;
 use crate::utils;
@@ -307,7 +308,9 @@ pub fn parse_style_string(
                             // Either bg or valid color or both.
                             let parsed = parse_color_string(
                                 color_string,
-                                context.map(|x| &x.root_config.palette),
+                                context.and_then(|x| {
+                                    get_palette(&x.root_config.palettes, &x.root_config.palette)
+                                }),
                             );
                             // bg + invalid color = reset the background to default.
                             if !col_fg && parsed.is_none() {
@@ -337,10 +340,7 @@ pub fn parse_style_string(
   - u8           (a number from 0-255, representing an ANSI color)
   - colstring    (one of the 16 predefined color strings or a custom user-defined color)
 */
-fn parse_color_string(
-    color_string: &str,
-    palette: Option<&HashMap<String, String>>,
-) -> Option<ansi_term::Color> {
+fn parse_color_string(color_string: &str, palette: Option<&Palette>) -> Option<ansi_term::Color> {
     // Parse RGB hex values
     log::trace!("Parsing color_string: {}", color_string);
     if color_string.starts_with('#') {
@@ -403,6 +403,19 @@ fn parse_color_string(
         log::debug!("Could not parse color in string: {}", color_string);
     }
     predefined_color
+}
+
+fn get_palette<'a>(
+    palettes: &'a HashMap<String, Palette>,
+    palette_name: &str,
+) -> Option<&'a Palette> {
+    let palette = palettes.get(palette_name);
+    if palette.is_some() {
+        log::trace!("Found color palette: {}", palette_name);
+    } else {
+        log::debug!("Could not find color palette: {}", palette_name);
+    }
+    palette
 }
 
 #[cfg(test)]
@@ -732,7 +745,7 @@ mod tests {
     #[test]
     fn table_get_colors_palette() {
         // Test using colors defined in palette
-        let mut palette = HashMap::<String, String>::new();
+        let mut palette = Palette::new();
         palette.insert("mustard".to_string(), "#af8700".to_string());
         palette.insert("sky-blue".to_string(), "51".to_string());
         palette.insert("red".to_string(), "#d70000".to_string());
@@ -755,6 +768,36 @@ mod tests {
         assert_eq!(
             parse_color_string("blue", Some(&palette)),
             Some(Color::Fixed(17))
+        );
+    }
+
+    #[test]
+    fn table_get_palette() {
+        // Test retrieving color palette by name
+        let mut palette1 = Palette::new();
+        palette1.insert("test-color".to_string(), "123".to_string());
+
+        let mut palette2 = Palette::new();
+        palette2.insert("test-color".to_string(), "#ABCDEF".to_string());
+
+        let mut palettes = HashMap::<String, Palette>::new();
+        palettes.insert("palette1".to_string(), palette1);
+        palettes.insert("palette2".to_string(), palette2);
+
+        assert_eq!(
+            get_palette(&palettes, "palette1")
+                .unwrap()
+                .get("test-color")
+                .unwrap(),
+            "123"
+        );
+
+        assert_eq!(
+            get_palette(&palettes, "palette2")
+                .unwrap()
+                .get("test-color")
+                .unwrap(),
+            "#ABCDEF"
         );
     }
 }

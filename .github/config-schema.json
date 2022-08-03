@@ -1525,10 +1525,17 @@
       "type": "boolean"
     },
     "palette": {
+      "default": "",
+      "type": "string"
+    },
+    "palettes": {
       "default": {},
       "type": "object",
       "additionalProperties": {
-        "type": "string"
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
       }
     }
   },
