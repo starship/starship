@@ -159,7 +159,7 @@ This is the list of prompt-wide configuration options.
 ### Options
 
 | Option            | Default                        | Description                                                                                               |
-| ----------------- | ------------------------------ | ------------------------------------------------------------------------                                  |
+| ----------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------- |
 | `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                       |
 | `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                          |
 | `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                     |
