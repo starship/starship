@@ -307,7 +307,7 @@ pub fn parse_style_string(
                             // Either bg or valid color or both.
                             let parsed = parse_color_string(
                                 color_string,
-                                &context.map(|x| x.root_config.palette.clone()),
+                                context.map(|x| &x.root_config.palette),
                             );
                             // bg + invalid color = reset the background to default.
                             if !col_fg && parsed.is_none() {
@@ -339,7 +339,7 @@ pub fn parse_style_string(
 */
 fn parse_color_string(
     color_string: &str,
-    palette: &Option<HashMap<String, String>>,
+    palette: Option<&HashMap<String, String>>,
 ) -> Option<ansi_term::Color> {
     // Parse RGB hex values
     log::trace!("Parsing color_string: {}", color_string);
@@ -372,7 +372,7 @@ fn parse_color_string(
             color_string,
             palette_color
         );
-        return parse_color_string(palette_color, palette);
+        return parse_color_string(palette_color, None);
     }
 
     // Check for any predefined color strings
