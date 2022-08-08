@@ -2158,6 +2158,7 @@ case the module will only be active in directories that match those conditions.
 | `style`             | `"cyan bold"`                                      | The style for the module.                                             |
 | `context_aliases`   |                                                    | Table of context aliases to display.                                  |
 | `user_aliases`      |                                                    | Table of user aliases to display.                                     |
+| `envvar_only`       | `false`                                            | Only use the `$KUBECONFIG` env var                                    |
 | `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
 | `detect_folders`    | `[]`                                               | Which folders should trigger this modules.                            |

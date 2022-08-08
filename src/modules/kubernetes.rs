@@ -119,6 +119,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
+    // KUBECONFIG env needs to be set if envvar_only is true
+    if config.envvar_only && context.get_env("KUBECONFIG").is_none() {
+        return None;
+    }
+
     // If we have some config for doing the directory scan then we use it but if we don't then we
     // assume we should treat it like the module is enabled to preserve backward compatability.
     let have_scan_config = !(config.detect_files.is_empty()
@@ -293,6 +298,28 @@ users: []
     }
 
     #[test]
+    fn test_none_envvar_only() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        // TODO this test assumes that user has already a
+        // config file in $HOME/.kube/config
+        // How to create a "sandbox" with this file during tests?
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                envvar_only = true
+            })
+            .collect();
+
+        assert_eq!(None, actual);
+
+        dir.close()
+    }
+
+    #[test]
     fn test_with_detected_files_and_folder() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
@@ -406,6 +433,22 @@ users: []
         assert_eq!(expected, actual);
 
         dir.close()
+    }
+
+    #[test]
+    fn test_envvar_only_simple() -> io::Result<()> {
+        base_test_ctx_alias(
+            "test_context",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                envvar_only = true
+                [kubernetes.context_aliases]
+                "test_context" = "test_alias"
+                ".*" = "literal match has precedence"
+            },
+            "☸ test_alias",
+        )
     }
 
     #[test]

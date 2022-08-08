@@ -791,6 +791,7 @@
         "detect_files": [],
         "detect_folders": [],
         "disabled": true,
+        "envvar_only": false,
         "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "style": "cyan bold",
         "symbol": "☸ ",
@@ -3380,6 +3381,10 @@
         },
         "disabled": {
           "default": true,
+          "type": "boolean"
+        },
+        "envvar_only": {
+          "default": false,
           "type": "boolean"
         },
         "context_aliases": {
