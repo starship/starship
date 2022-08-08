@@ -750,6 +750,7 @@ mod tests {
         palette.insert("sky-blue".to_string(), "51".to_string());
         palette.insert("red".to_string(), "#d70000".to_string());
         palette.insert("blue".to_string(), "17".to_string());
+        palette.insert("green".to_string(), "green".to_string());
 
         assert_eq!(
             parse_color_string("mustard", Some(&palette)),
@@ -769,6 +770,12 @@ mod tests {
             parse_color_string("blue", Some(&palette)),
             Some(Color::Fixed(17))
         );
+
+        // Test overriding a predefined color with itself
+        assert_eq!(
+            parse_color_string("green", Some(&palette)),
+            Some(Color::Green)
+        )
     }
 
     #[test]
