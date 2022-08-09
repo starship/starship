@@ -8,6 +8,7 @@ pub struct ContainerConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub use_container_name: bool,
 }
 
 impl<'a> Default for ContainerConfig<'a> {
@@ -17,6 +18,7 @@ impl<'a> Default for ContainerConfig<'a> {
             symbol: "⬢",
             style: "red bold dimmed",
             disabled: false,
+            use_container_name: false,
         }
     }
 }

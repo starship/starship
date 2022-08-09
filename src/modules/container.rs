@@ -15,6 +15,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     pub fn container_name(context: &Context) -> Option<String> {
         use crate::utils::context_path;
 
+        let module = context.new_module("container");
+        let config: ContainerConfig = ContainerConfig::try_load(module.config);
+
         if context_path(context, "/proc/vz").exists() && !context_path(context, "/proc/bc").exists()
         {
             // OpenVZ
@@ -145,6 +148,7 @@ mod tests {
             .config(toml::toml! {
                [container]
                disabled = false
+               use_container_name = use_con_name
             });
 
         let root_path = renderer.root_path();
@@ -165,9 +169,11 @@ mod tests {
             display_name = Some(name);
         }
         if let Some(name) = container_name {
-            file.write_all(format!("name=\"{}\"\n", name).as_bytes())?;
-            // Custom container name takes precedence
-            display_name = Some(name);
+            if use_con_name {
+                file.write_all(format!("name=\"{}\"\n", name).as_bytes())?;
+                // Custom container name takes precedence
+                display_name = Some(name);
+            }
         }
 
         // The output of the module
@@ -190,7 +196,7 @@ mod tests {
     #[test]
     #[cfg(target_os = "linux")]
     fn test_containerenv() -> std::io::Result<()> {
-        let (actual, expected) = containerenv(None, None)?;
+        let (actual, expected) = containerenv(None, None, false)?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
@@ -202,7 +208,7 @@ mod tests {
     #[cfg(target_os = "linux")]
     fn test_containerenv_with_name() -> std::io::Result<()> {
         // Display container image name
-        let (actual, expected) = containerenv(None, Some("fedora-toolbox:35"))?;
+        let (actual, expected) = containerenv(None, Some("fedora-toolbox:35"), false)?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
@@ -231,7 +237,7 @@ mod tests {
     #[test]
     #[cfg(not(target_os = "linux"))]
     fn test_containerenv() -> std::io::Result<()> {
-        let (actual, expected) = containerenv(None)?;
+        let (actual, expected) = containerenv(None, None, false)?;
 
         // Assert that the actual and expected values are not the same
         assert_ne!(actual, expected);

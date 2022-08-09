@@ -231,7 +231,8 @@
         "disabled": false,
         "format": "[$symbol \\[$name\\]]($style) ",
         "style": "red bold dimmed",
-        "symbol": "⬢"
+        "symbol": "⬢",
+        "use_container_name": false
       },
       "allOf": [
         {
@@ -2093,6 +2094,10 @@
           "type": "string"
         },
         "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "use_container_name": {
           "default": false,
           "type": "boolean"
         }
