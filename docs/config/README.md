@@ -834,22 +834,25 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Options
 
-| Option     | Default                            | Description                               |
-| ---------- | ---------------------------------- | ----------------------------------------- |
-| `symbol`   | `"⬢"`                              | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                | The style for the module.                 |
-| `format`   | `"[$symbol \\[$name\\]]($style) "` | The format for the module.                |
-| `disabled` | `false`                            | Disables the `container` module.          |
+| Option                 | Default                            | Description                                          |
+| ---------------------- | ---------------------------------- | ---------------------------------------------------- |
+| `symbol`               | `"⬢"`                              | The symbol shown, when inside a container            |
+| `style`                | `"bold red dimmed"`                | The style for the module.                            |
+| `format`               | `"[$symbol \\[$name\\]]($style) "` | The format for the module.                           |
+| `disabled`             | `false`                            | Disables the `container` module.                     |
+| `use_container_name`\* | `false`                            | Display the container name instead of the image name |
 
 ### Variables
 
-| Variable | Example             | Description                          |
-| -------- | ------------------- | ------------------------------------ |
-| name     | `fedora-toolbox:35` | The name of the container            |
-| symbol   |                     | Mirrors the value of option `symbol` |
-| style\*  |                     | Mirrors the value of option `style`  |
+| Variable  | Example                                 | Description                                                                                                  |
+| --------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| name      | `fedora-toolbox:35`, `my-dev-container` | The name of the container image. If `use_container_name` is set, then the name of the container will be used |
+| symbol    |                                         | Mirrors the value of option `symbol`                                                                         |
+| style\*\* |                                         | Mirrors the value of option `style`                                                                          |
 
-*: This variable can only be used as a part of a style string
+*: Only supported with Podman
+
+**: This variable can only be used as a part of a style string
 
 ### Example
 
