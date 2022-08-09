@@ -37,16 +37,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             // podman and others
 
             let image_res = read_file(container_env_path)
-                .map(|s| {
-                    s.lines()
-                        .find_map(|l| {
-                            l.starts_with("image=\"").then(|| {
-                                let r = l.split_at(7).1;
-                                let name = r.rfind('/').map(|n| r.split_at(n + 1).1);
-                                String::from(name.unwrap_or(r).trim_end_matches('"'))
-                            })
+                .map(|buf| {
+                    buf.lines()
+                        .find_map(|line| {
+                            if config.use_container_name && line.starts_with("name") {
+                                let (_, name) = line.split_once('=').unwrap_or(("", "podman"));
+                                Some(String::from(name.trim_matches('"')))
+                            } else {
+                                None
+                            }
                         })
-                        .unwrap_or_else(|| "podman".into())
+                        .unwrap_or_else(|| {
+                            buf.lines()
+                                .find_map(|line| {
+                                    if line.starts_with("image=\"") {
+                                        let (_, val) =
+                                            line.split_once('=').unwrap_or(("", "podman"));
+                                        let (_, name) = val.rsplit_once('/').unwrap_or(("", val));
+                                        Some(String::from(name.trim_matches('"')))
+                                    } else {
+                                        None
+                                    }
+                                })
+                                .unwrap_or_else(|| "podman".into())
+                        })
                 })
                 .unwrap_or_else(|_| "podman".into());
 
@@ -119,7 +133,11 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
-    fn containerenv(name: Option<&str>) -> std::io::Result<(Option<String>, Option<String>)> {
+    fn containerenv(
+        container_name: Option<&str>,
+        image_name: Option<&str>,
+        use_con_name: bool,
+    ) -> std::io::Result<(Option<String>, Option<String>)> {
         use std::io::Write;
 
         let renderer = ModuleRenderer::new("container")
@@ -133,6 +151,8 @@ mod tests {
 
         let mut containerenv = PathBuf::from(root_path);
 
+        let mut display_name: Option<&str> = None;
+
         containerenv.push("run");
         std::fs::DirBuilder::new()
             .recursive(true)
@@ -140,8 +160,14 @@ mod tests {
 
         containerenv.push(".containerenv");
         let mut file = std::fs::File::create(&containerenv)?;
-        if let Some(name) = name {
+        if let Some(name) = image_name {
             file.write_all(format!("image=\"{}\"\n", name).as_bytes())?;
+            display_name = Some(name);
+        }
+        if let Some(name) = container_name {
+            file.write_all(format!("name=\"{}\"\n", name).as_bytes())?;
+            // Custom container name takes precedence
+            display_name = Some(name);
         }
 
         // The output of the module
@@ -155,7 +181,7 @@ mod tests {
             Color::Red
                 .bold()
                 .dimmed()
-                .paint(format!("⬢ [{}]", name.unwrap_or("podman")))
+                .paint(format!("⬢ [{}]", display_name.unwrap_or("podman")))
         ));
 
         Ok((actual, expected))
@@ -164,7 +190,7 @@ mod tests {
     #[test]
     #[cfg(target_os = "linux")]
     fn test_containerenv() -> std::io::Result<()> {
-        let (actual, expected) = containerenv(None)?;
+        let (actual, expected) = containerenv(None, None)?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
@@ -174,12 +200,31 @@ mod tests {
 
     #[test]
     #[cfg(target_os = "linux")]
-    fn test_containerenv_fedora() -> std::io::Result<()> {
-        let (actual, expected) = containerenv(Some("fedora-toolbox:35"))?;
+    fn test_containerenv_with_name() -> std::io::Result<()> {
+        // Display container image name
+        let (actual, expected) = containerenv(None, Some("fedora-toolbox:35"))?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
 
+        // Display custom container name
+        let (actual, expected) =
+            containerenv(Some("container-name"), Some("fedora-toolbox:35"), true)?;
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
+
+        // Display custom container name
+        let (actual, expected) =
+            containerenv(Some("container-name"), Some("fedora-toolbox:35"), false)?;
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
+        // Display custom container name
+        let (actual, expected) = containerenv(Some("container-name"), None, true)?;
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
         Ok(())
     }
 
