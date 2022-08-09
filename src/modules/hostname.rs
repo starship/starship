@@ -150,7 +150,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} in ",
-            style().paint("🌐 ".to_owned() + &hostname)
+            style().paint("🌐 ".to_owned() + hostname.as_str())
         ));
 
         assert_eq!(expected, actual);

@@ -6,7 +6,11 @@ use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
 use crate::modules;
 use crate::utils::{self, home_dir};
 use clap::Parser;
-use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
+use git_repository::{
+    self as git,
+    sec::{self as git_sec, trust::DefaultForLevel},
+    state as git_state, Repository, ThreadSafeRepository,
+};
 use once_cell::sync::OnceCell;
 #[cfg(test)]
 use std::collections::HashMap;
@@ -255,22 +259,51 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, git2::Error> {
-        self.repo.get_or_try_init(|| -> Result<Repo, git2::Error> {
-            let repository = if env::var("GIT_DIR").is_ok() {
-                Repository::open_from_env()
-            } else {
-                let dirs: [PathBuf; 0] = [];
-                Repository::open_ext(&self.current_dir, git2::RepositoryOpenFlags::FROM_ENV, dirs)
-            }?;
-            Ok(Repo {
-                branch: get_current_branch(&repository),
-                workdir: repository.workdir().map(Path::to_path_buf),
-                path: Path::to_path_buf(repository.path()),
-                state: repository.state(),
-                remote: get_remote_repository_info(&repository),
+    pub fn get_repo(&self) -> Result<&Repo, git::discover::Error> {
+        self.repo
+            .get_or_try_init(|| -> Result<Repo, git::discover::Error> {
+                // custom open options
+                let mut git_open_opts_map =
+                    git_sec::trust::Mapping::<git::open::Options>::default();
+
+                // don't use the global git configs
+                let config = git::permissions::Config {
+                    system: false,
+                    git: false,
+                    user: false,
+                    env: true,
+                    includes: true,
+                };
+                // change options for config permissions without touching anything else
+                git_open_opts_map.reduced =
+                    git_open_opts_map.reduced.permissions(git::Permissions {
+                        config,
+                        ..git::Permissions::default_for_level(git_sec::Trust::Reduced)
+                    });
+                git_open_opts_map.full = git_open_opts_map.full.permissions(git::Permissions {
+                    config,
+                    ..git::Permissions::default_for_level(git_sec::Trust::Full)
+                });
+
+                let shared_repo = ThreadSafeRepository::discover_with_environment_overrides_opts(
+                    &self.current_dir,
+                    Default::default(),
+                    git_open_opts_map,
+                )?;
+
+                let repository = shared_repo.to_thread_local();
+                let branch = get_current_branch(&repository);
+                let remote = get_remote_repository_info(&repository, branch.as_deref());
+                let path = repository.path().to_path_buf();
+                Ok(Repo {
+                    repo: shared_repo,
+                    branch,
+                    workdir: repository.work_dir().map(PathBuf::from),
+                    path,
+                    state: repository.state(),
+                    remote,
+                })
             })
-        })
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
@@ -494,6 +527,8 @@ impl DirContents {
 }
 
 pub struct Repo {
+    pub repo: ThreadSafeRepository,
+
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the current branch name of that repo.
     pub branch: Option<String>,
@@ -506,7 +541,7 @@ pub struct Repo {
     pub path: PathBuf,
 
     /// State
-    pub state: RepositoryState,
+    pub state: Option<git_state::InProgress>,
 
     /// Remote repository
     pub remote: Option<Remote>,
@@ -514,8 +549,8 @@ pub struct Repo {
 
 impl Repo {
     /// Opens the associated git repository.
-    pub fn open(&self) -> Result<Repository, git2::Error> {
-        Repository::open(&self.path)
+    pub fn open(&self) -> Repository {
+        self.repo.to_thread_local()
     }
 }
 
@@ -570,54 +605,26 @@ impl<'a> ScanDir<'a> {
 }
 
 fn get_current_branch(repository: &Repository) -> Option<String> {
-    let head = match repository.head() {
-        Ok(reference) => reference,
-        Err(e) => {
-            return if e.code() == UnbornBranch {
-                // HEAD should only be an unborn branch if the repository is fresh,
-                // in that case read directly from `.git/HEAD`
-                let mut head_path = repository.path().to_path_buf();
-                head_path.push("HEAD");
+    let name = repository.head_name().ok()??;
+    let shorthand = name.shorten();
 
-                // get first line, then last path segment
-                fs::read_to_string(&head_path)
-                    .ok()?
-                    .lines()
-                    .next()?
-                    .trim()
-                    .split('/')
-                    .last()
-                    .map(std::borrow::ToOwned::to_owned)
-            } else {
-                None
-            };
-        }
-    };
-
-    let shorthand = head.shorthand();
-
-    shorthand.map(std::string::ToString::to_string)
+    Some(shorthand.to_string())
 }
 
-fn get_remote_repository_info(repository: &Repository) -> Option<Remote> {
-    if let Ok(head) = repository.head() {
-        if let Some(local_branch_ref) = head.name() {
-            let remote_ref = match repository.branch_upstream_name(local_branch_ref) {
-                Ok(remote_ref) => remote_ref.as_str()?.to_owned(),
-                Err(_) => return None,
-            };
+fn get_remote_repository_info(
+    repository: &Repository,
+    branch_name: Option<&str>,
+) -> Option<Remote> {
+    let branch_name = branch_name?;
+    let branch = repository
+        .remote_ref(branch_name)
+        .and_then(|r| r.ok())
+        .map(|r| r.shorten().to_string());
+    let name = repository
+        .branch_remote_name(branch_name)
+        .map(|n| n.to_string());
 
-            let mut v = remote_ref.splitn(4, '/');
-            let remote_name = v.nth(2)?.to_owned();
-            let remote_branch = v.last()?.to_owned();
-
-            return Some(Remote {
-                branch: Some(remote_branch),
-                name: Some(remote_name),
-            });
-        }
-    }
-    None
+    Some(Remote { branch, name })
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
