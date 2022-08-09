@@ -112,12 +112,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&contracted_path, "");
-                [prefix + &before, root.to_string(), after_repo_root]
+                [prefix + before.as_str(), root.to_string(), after_repo_root]
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string]
+                ["".to_string(), "".to_string(), prefix + dir_string.as_str()]
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+        _ => ["".to_string(), "".to_string(), prefix + dir_string.as_str()],
     };
 
     let path_vec = if config.use_os_path_sep {

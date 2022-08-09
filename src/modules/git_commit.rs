@@ -1,8 +1,8 @@
 use super::{Context, Module, ModuleConfig};
-use crate::formatter::string_formatter::StringFormatterError;
-use git2::Time;
+use git_repository::commit::describe::SelectRef::AnnotatedTags;
 
 use crate::configs::git_commit::GitCommitConfig;
+use crate::context::Repo;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the Git commit in the current directory
@@ -13,43 +13,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: GitCommitConfig = GitCommitConfig::try_load(module.config);
 
     let repo = context.get_repo().ok()?;
-    let git_repo = repo.open().ok()?;
+    let git_repo = repo.open();
+    let git_head = git_repo.head().ok()?;
 
-    let is_detached = git_repo.head_detached().ok()?;
+    let is_detached = git_head.is_detached();
     if config.only_detached && !is_detached {
         return None;
-    };
-
-    let git_head = git_repo.head().ok()?;
-    let head_commit = git_head.peel_to_commit().ok()?;
-    let commit_oid = head_commit.id();
-
-    let mut tag_name = String::new();
-    if !config.tag_disabled {
-        // Let's get repo tags names
-        let tag_names = git_repo.tag_names(None).ok()?;
-        let tag_and_refs = tag_names.iter().flatten().flat_map(|name| {
-            let full_tag = format!("refs/tags/{}", name);
-            let tag_obj = git_repo.find_reference(&full_tag)?.peel_to_tag()?;
-            let sig_obj = tag_obj.tagger();
-            git_repo.find_reference(&full_tag).map(|reference| {
-                (
-                    String::from(name),
-                    // fall back to oldest + 1s time if sig_obj is unavailable
-                    sig_obj.map_or(git2::Time::new(1, 0), |s| s.when()),
-                    reference,
-                )
-            })
-        });
-
-        let mut oldest = Time::new(0, 0);
-        // Let's check if HEAD has some tag. If several, gets last created one...
-        for (name, timestamp, reference) in tag_and_refs.rev() {
-            if commit_oid == reference.peel_to_commit().ok()?.id() && timestamp > oldest {
-                tag_name = name;
-                oldest = timestamp;
-            }
-        }
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -59,11 +28,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "hash" => Some(Ok(id_to_hex_abbrev(
-                    commit_oid.as_bytes(),
-                    config.commit_hash_length,
+                "hash" => Some(Ok(git_hash(context.get_repo().ok()?, &config)?)),
+                "tag" => Some(Ok(format!(
+                    "{}{}",
+                    config.tag_symbol,
+                    git_tag(context.get_repo().ok()?)?
                 ))),
-                "tag" => format_tag(config.tag_symbol, &tag_name),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -80,23 +50,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn format_tag(symbol: &str, tag_name: &str) -> Option<Result<String, StringFormatterError>> {
-    if tag_name.is_empty() {
-        None
-    } else {
-        Some(Ok(format!("{}{}", &symbol, &tag_name)))
-    }
+fn git_tag(repo: &Repo) -> Option<String> {
+    let git_repo = repo.open();
+    let head_commit = git_repo.head_commit().ok()?;
+
+    let describe_platform = head_commit.describe().names(AnnotatedTags);
+    let formatter = describe_platform.try_format().ok()??;
+
+    Some(formatter.name?.to_string())
 }
 
-/// len specifies length of hex encoded string
-fn id_to_hex_abbrev(bytes: &[u8], len: usize) -> String {
-    bytes
-        .iter()
-        .map(|b| format!("{:02x}", b))
-        .collect::<String>()
-        .chars()
-        .take(len)
-        .collect()
+fn git_hash(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
+    let git_repo = repo.open();
+    let head_id = git_repo.head_id().ok()?;
+
+    Some(format!(
+        "{}",
+        head_id.to_hex_with_len(config.commit_hash_length)
+    ))
 }
 
 #[cfg(test)]

@@ -26,12 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
 
-    if config.only_attached {
-        if let Ok(git_repo) = repo.open() {
-            if git_repo.head_detached().ok()? {
-                return None;
-            }
-        }
+    if config.only_attached && repo.open().head().ok()?.is_detached() {
+        return None;
     }
 
     let branch_name = repo.branch.as_ref()?;
