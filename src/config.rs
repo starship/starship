@@ -806,5 +806,8 @@ mod tests {
                 .unwrap(),
             "#ABCDEF"
         );
+
+        // Test retrieving nonexistent color palette
+        assert!(get_palette(&palettes, "palette3").is_none());
     }
 }
