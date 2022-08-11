@@ -1525,8 +1525,11 @@
       "type": "boolean"
     },
     "palette": {
-      "default": "",
-      "type": "string"
+      "default": null,
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "palettes": {
       "default": {},
