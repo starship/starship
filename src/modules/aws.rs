@@ -19,7 +19,8 @@ type AwsCredsFile = OnceCell<Option<Ini>>;
 
 fn get_credentials_file_path(context: &Context) -> Option<PathBuf> {
     context
-        .get_env("AWS_CREDENTIALS_FILE")
+        .get_env("AWS_SHARED_CREDENTIALS_FILE")
+        .or_else(|| context.get_env("AWS_CREDENTIALS_FILE"))
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
             let mut home = context.get_home()?;
@@ -428,7 +429,7 @@ mod tests {
 
         assert!(ModuleRenderer::new("aws")
             .env(
-                "AWS_CREDENTIALS_FILE",
+                "AWS_SHARED_CREDENTIALS_FILE",
                 config_path.to_string_lossy().as_ref(),
             )
             .collect()
@@ -670,10 +671,24 @@ expiration={}
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
             .env(
+                "AWS_SHARED_CREDENTIALS_FILE",
+                credentials_path.to_string_lossy().as_ref(),
+            )
+            .collect();
+
+        let actual_variant = ModuleRenderer::new("aws")
+            .env("AWS_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-2")
+            .env(
                 "AWS_CREDENTIALS_FILE",
                 credentials_path.to_string_lossy().as_ref(),
             )
             .collect();
+
+        assert_eq!(
+            actual, actual_variant,
+            "both AWS_SHARED_CREDENTIALS_FILE and AWS_CREDENTIALS_FILE should work"
+        );
 
         // In principle, "30m" should be correct. However, bad luck in scheduling
         // on shared runners may delay it. Allow for up to 2 seconds of delay.
@@ -830,7 +845,7 @@ aws_secret_access_key=dummy
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
             .env(
-                "AWS_CREDENTIALS_FILE",
+                "AWS_SHARED_CREDENTIALS_FILE",
                 credentials_path.to_string_lossy().as_ref(),
             )
             .collect();
