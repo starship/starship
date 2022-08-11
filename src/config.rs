@@ -413,7 +413,7 @@ fn get_palette<'a>(
     if palette.is_some() {
         log::trace!("Found color palette: {}", palette_name);
     } else {
-        log::debug!("Could not find color palette: {}", palette_name);
+        log::warn!("Could not find color palette: {}", palette_name);
     }
     palette
 }
