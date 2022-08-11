@@ -13,7 +13,7 @@ pub struct StarshipRootConfig {
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
-    pub palette: String,
+    pub palette: Option<String>,
     pub palettes: HashMap<String, Palette>,
 }
 
@@ -114,7 +114,7 @@ impl Default for StarshipRootConfig {
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
-            palette: String::default(),
+            palette: None,
             palettes: HashMap::default(),
         }
     }

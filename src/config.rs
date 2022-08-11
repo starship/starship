@@ -309,7 +309,10 @@ pub fn parse_style_string(
                             let parsed = parse_color_string(
                                 color_string,
                                 context.and_then(|x| {
-                                    get_palette(&x.root_config.palettes, &x.root_config.palette)
+                                    get_palette(
+                                        &x.root_config.palettes,
+                                        x.root_config.palette.as_deref(),
+                                    )
                                 }),
                             );
                             // bg + invalid color = reset the background to default.
@@ -407,15 +410,20 @@ fn parse_color_string(color_string: &str, palette: Option<&Palette>) -> Option<a
 
 fn get_palette<'a>(
     palettes: &'a HashMap<String, Palette>,
-    palette_name: &str,
+    palette_name: Option<&str>,
 ) -> Option<&'a Palette> {
-    let palette = palettes.get(palette_name);
-    if palette.is_some() {
-        log::trace!("Found color palette: {}", palette_name);
+    if let Some(palette_name) = palette_name {
+        let palette = palettes.get(palette_name);
+        if palette.is_some() {
+            log::trace!("Found color palette: {}", palette_name);
+        } else {
+            log::debug!("Could not find color palette: {}", palette_name);
+        }
+        palette
     } else {
-        log::warn!("Could not find color palette: {}", palette_name);
+        log::trace!("No color palette specified, using defaults");
+        None
     }
-    palette
 }
 
 #[cfg(test)]
@@ -792,7 +800,7 @@ mod tests {
         palettes.insert("palette2".to_string(), palette2);
 
         assert_eq!(
-            get_palette(&palettes, "palette1")
+            get_palette(&palettes, Some("palette1"))
                 .unwrap()
                 .get("test-color")
                 .unwrap(),
@@ -800,7 +808,7 @@ mod tests {
         );
 
         assert_eq!(
-            get_palette(&palettes, "palette2")
+            get_palette(&palettes, Some("palette2"))
                 .unwrap()
                 .get("test-color")
                 .unwrap(),
@@ -808,6 +816,9 @@ mod tests {
         );
 
         // Test retrieving nonexistent color palette
-        assert!(get_palette(&palettes, "palette3").is_none());
+        assert!(get_palette(&palettes, Some("palette3")).is_none());
+
+        // Test default behavior
+        assert!(get_palette(&palettes, None).is_none());
     }
 }
