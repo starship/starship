@@ -79,6 +79,9 @@ this, run `enable_transience` in the shell session. To make it permanent, put
 this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with
 `disable_transience`.
 
+Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty,
+and syntactically correct.
+
 - By default, the left side of input gets replaced with a bold-green `❯`. To customize this,
   define a new function called `starship_transient_prompt_func`. For example, to
   display Starship's `character` module here, you would do
