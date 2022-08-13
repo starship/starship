@@ -29,6 +29,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "android_system_properties"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d7ed72e1635e121ca3e79420540282af22da58be50de153d36f81ddc6b83aa9e"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "ansi_term"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -237,12 +246,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37ccbd214614c6783386c1af30caf03192f17891059cecc394b4fb119e363de3"
 
 [[package]]
-name = "byte-slice-cast"
-version = "1.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87c5fdd0166095e1d463fc6cc01aa8ce547ad77a4e84d42eb6762b084e28067e"
-
-[[package]]
 name = "byte-unit"
 version = "4.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -443,16 +446,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57d24c7a13c43e870e37c1556b74555437870a04514f7685f5b354e090567171"
 dependencies = [
  "core-foundation-sys 0.7.0",
- "libc",
-]
-
-[[package]]
-name = "core-foundation"
-version = "0.9.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "194a7a9e6de53fa55116934067c844d9d749312f75c6f6d0980e8c252f8c2146"
-dependencies = [
- "core-foundation-sys 0.8.3",
  "libc",
 ]
 
@@ -1414,11 +1407,12 @@ checksum = "86cce260d758a9aa3d7c4b99d55c815a540f8a37514ba6046ab6be402a157cb0"
 
 [[package]]
 name = "iana-time-zone"
-version = "0.1.37"
+version = "0.1.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97d0b780e72fefba5e04a8359137b0a5687a44cc893dbda904fcf8a93f2f07e7"
+checksum = "808cf7d67cf4a22adc5be66e75ebdf769b3f2ea032041437a7061f97a63dad4b"
 dependencies = [
- "core-foundation 0.9.3",
+ "android_system_properties",
+ "core-foundation-sys 0.8.3",
  "js-sys",
  "wasm-bindgen",
  "winapi",
@@ -2035,11 +2029,11 @@ dependencies = [
 
 [[package]]
 name = "phf"
-version = "0.10.1"
+version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fabbf1ead8a5bcbc20f5f8b939ee3f5b0f6f281b6ad3468b84656b658b455259"
+checksum = "928c6535de93548188ef63bb7c4036bd415cd8f36ad25af44b9789b2ee72a48c"
 dependencies = [
- "phf_shared 0.10.0",
+ "phf_shared 0.11.1",
 ]
 
 [[package]]
@@ -2073,9 +2067,9 @@ dependencies = [
 
 [[package]]
 name = "phf_shared"
-version = "0.10.0"
+version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6796ad771acdc0123d2a88dc428b5e38ef24456743ddb1744ed628f9815c096"
+checksum = "e1fb5f6f826b772a8d4c0394209441e7d37cbbb967ae9c7e0e8134365c9ee676"
 dependencies = [
  "siphasher",
 ]
@@ -2587,9 +2581,9 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.16.1"
+version = "0.16.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2d399ad15b5c90d8e6461da75c751c77501598dd915d81a108401b252aaa99f"
+checksum = "1c786b1a738d4c628e9024ca491578a58a7be4594ea4fb67e0cb4c7ad297ae75"
 dependencies = [
  "const_format",
  "is_debug",
@@ -2734,7 +2728,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3336198ad004af4447ae69be4f4e562c26814570f8f0c1e37858405a294e015d"
 dependencies = [
  "cfg-if 1.0.0",
- "core-foundation 0.7.0",
+ "core-foundation",
  "lazycell",
  "libc",
  "mach",
@@ -3022,24 +3016,24 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 
 [[package]]
 name = "tz-rs"
-version = "0.6.11"
+version = "0.6.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7eb454313e3d79601e2116bb6c7a93ec0eda1dbb52f9204f831f897204182c5f"
+checksum = "5b3d23fda22515e0e3f4f903e159ad4fd32e37dc94d63522a091df70a247fbb0"
 dependencies = [
  "const_fn",
 ]
 
 [[package]]
 name = "tzdb"
-version = "0.3.1"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70cb9dbeb3119afb148b2737802ee3c6d5e9652ae92102562fc017f356ab0f68"
+checksum = "fa0c0ce33ad776d606b8109c19bb8b4917185f7b944af9103302f9c4c4fe36ac"
 dependencies = [
- "byte-slice-cast",
  "iana-time-zone",
- "phf 0.10.1",
- "phf_shared 0.10.0",
+ "phf 0.11.1",
+ "phf_shared 0.11.1",
  "tz-rs",
+ "utcnow",
 ]
 
 [[package]]
@@ -3148,6 +3142,22 @@ name = "urlencoding"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68b90931029ab9b034b300b797048cf23723400aa757e8a2bfb9d748102f9821"
+
+[[package]]
+name = "utcnow"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe9835442f055fab72d40eb8e5164f2b98e70ebadedbf4506aac23ca7d623053"
+dependencies = [
+ "const_fn",
+ "errno",
+ "js-sys",
+ "libc",
+ "rustix",
+ "wasi 0.11.0+wasi-snapshot-preview1",
+ "wasm-bindgen",
+ "winapi",
+]
 
 [[package]]
 name = "utf8-width"
