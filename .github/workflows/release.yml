@@ -127,7 +127,6 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          strip starship.exe
           7z a ../../../${{ matrix.name }} starship.exe
           cd -
 
@@ -135,8 +134,6 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          # TODO: investigate better cross platform stripping
-          strip starship || true
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
