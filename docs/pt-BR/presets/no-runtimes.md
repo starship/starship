@@ -8,6 +8,10 @@ Está personalização oculta a versão do runtime da linguagem. Se você trabal
 
 ### Configuração
 
+```sh
+starship preset no-runtime-versions > ~/.config/starship.toml
+```
+
 [Clique para baixar o TOML](/presets/toml/no-runtime-versions.toml)
 
 <<< @/.vuepress/public/presets/toml/no-runtime-versions.toml

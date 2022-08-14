@@ -1,4 +1,4 @@
-# Frequently Asked Questions
+# よくある質問
 
 ## デモGIFで使用される構成は何ですか？
 
@@ -56,7 +56,7 @@ CentOS6や7などで事前にビルドされたバイナリを使用していて
 curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## どうして`Executing command "..." timed out.`という警告が出てくるのでしょうか?
 
 Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
 
@@ -64,7 +64,7 @@ Starship executes different commands to get information to display in the prompt
 
 不明な記号に遭遇した場合、`starship explain` を使用することで、現在表示しているモジュールの説明を見ることができます。
 
-## Starship is doing something unexpected, how can I debug it?
+## Starshipがなにか想定外の挙動をしているとき、どのようにデバッグすればよいですか？
 
 You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
@@ -117,6 +117,6 @@ Starship がパッケージマネージャを使用してインストールさ�
 Starship をインストールスクリプトを使用してインストールした場合、次のコマンドでバイナリが削除されます。
 
 ```sh
-# Locate and delete the starship binary
+# starshipのバイナリを見つけて削除
 sh -c 'rm "$(command -v 'starship')"'
 ```
