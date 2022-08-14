@@ -2666,7 +2666,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "1.9.1"
+version = "1.10.0"
 dependencies = [
  "ansi_term",
  "chrono",
