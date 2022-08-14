@@ -8,6 +8,10 @@
 
 ### 配置
 
+```sh
+starship preset bracketed-segments > ~/.config/starship.toml
+```
+
 [点击下载 TOML 文件](/presets/toml/bracketed-segments.toml)
 
 <<< @/.vuepress/public/presets/toml/bracketed-segments.toml

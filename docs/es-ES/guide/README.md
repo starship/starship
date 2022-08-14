@@ -251,7 +251,7 @@ Alternativamente, instale Starship usando cualquiera de los siguientes gestores 
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Instale la última versión para su sistema con los MSI-Installers de la sección [lanzamientos](https://github.com/starship/starship/releases/latest).
 
 Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 
