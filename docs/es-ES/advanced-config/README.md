@@ -231,9 +231,9 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
 - `underline`
 - `dimmed`
 - `inverted`
-- `parpadear`
-- `oculto`
-- `tachado`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
