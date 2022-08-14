@@ -121,6 +121,7 @@ tempfile = "3.2.0"
 [profile.release]
 codegen-units = 1
 lto = true
+strip = true
 
 [[bin]]
 name = "starship"
