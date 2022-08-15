@@ -1525,7 +1525,6 @@
       "type": "boolean"
     },
     "palette": {
-      "default": null,
       "type": [
         "string",
         "null"
