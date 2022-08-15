@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/starship/starship/compare/v1.10.0...v1.10.1) (2022-08-15)
+
+
+### Bug Fixes
+
+* Disable multithreading in `jwalk` (via `gitoxide`) as workaround for [#4251](https://github.com/starship/starship/issues/4251) ([#4258](https://github.com/starship/starship/issues/4258)) ([37b54f7](https://github.com/starship/starship/commit/37b54f7ac3ba53ea851b478501a96a7c4e188fc4))
+
 ## [1.10.0](https://github.com/starship/starship/compare/v1.9.1...v1.10.0) (2022-08-14)
 
 
