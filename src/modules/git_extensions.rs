@@ -26,7 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 active_exts.push("svn")
             }
             _ => {
-                panic!("I don't know about git extension '{}'", ext_configured)
+                log::error!("Unknown git extension '{ext_configured}'. If this isn't expected, please create a feature request.")
             }
         };
     }
