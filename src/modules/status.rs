@@ -57,6 +57,22 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let segment_format = config.pipestatus_segment_format.unwrap_or(config.format);
 
     // Create pipestatus string
+    let pipestatus_separator =
+        match StringFormatter::new(config.pipestatus_separator).and_then(|formatter| {
+            formatter
+                .map_style(|variable| match variable {
+                    "style" => Some(Ok(config.style)),
+                    _ => None,
+                })
+                .parse(None, Some(context))
+        }) {
+            Ok(segments) => segments
+                .into_iter()
+                .map(|s| s.to_string())
+                .collect::<String>(),
+            Err(_) => "".to_string(),
+        };
+
     let pipestatus = match pipestatus_status {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
             .iter()
@@ -70,7 +86,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 },
             )
             .collect::<Vec<String>>()
-            .join(config.pipestatus_separator),
+            .join(&pipestatus_separator),
         _ => "".to_string(),
     };
 
@@ -225,7 +241,7 @@ fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
 
 #[cfg(test)]
 mod tests {
-    use nu_ansi_term::Color;
+    use nu_ansi_term::{Color, Style};
 
     use crate::test::ModuleRenderer;
 
@@ -701,6 +717,37 @@ mod tests {
                 pipestatus_separator = "|"
                 pipestatus_format = "$pipestatus => <$status>"
                 pipestatus_segment_format = "\\[$status\\]"
+                disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn pipestatus_separator_format() {
+        let pipe_exit_code = &[0, 1];
+        let main_exit_code = 1;
+
+        let expected_style = Style::new().on(Color::Red).fg(Color::White).bold();
+        let expected = Some(format!(
+            "{}{}{}{}{}",
+            expected_style.paint("["),
+            expected_style.paint("0"),
+            expected_style.paint("|"),
+            expected_style.paint("1"),
+            expected_style.paint("] => <1>"),
+        ));
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                format = "\\($status\\)"
+                style = "fg:white bg:red bold"
+                pipestatus = true
+                pipestatus_separator = "[|]($style)"
+                pipestatus_format = "[\\[]($style)$pipestatus[\\] => <$status>]($style)"
+                pipestatus_segment_format = "[$status]($style)"
                 disabled = false
             })
             .status(main_exit_code)
