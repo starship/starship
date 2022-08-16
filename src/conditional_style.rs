@@ -2,7 +2,7 @@ use crate::config::Either;
 use crate::context::Context;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
 pub enum StarshipConditionalStyleOperator {
     Equal,
