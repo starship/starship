@@ -67,8 +67,11 @@ symbol = " "
 [rlang]
 symbol = "ﳒ "
 
-[spack]
-symbol = "🅢 "
+[ruby]
+symbol = " "
 
 [rust]
 symbol = " "
+
+[spack]
+symbol = "🅢 "
