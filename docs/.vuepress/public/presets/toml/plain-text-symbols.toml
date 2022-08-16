@@ -132,3 +132,9 @@ symbol = "sudo "
 
 [swift]
 symbol = "swift "
+
+[terraform]
+symbol = "terraform "
+
+[zig]
+symbol = "zig "
