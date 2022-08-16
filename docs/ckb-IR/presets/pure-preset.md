@@ -8,6 +8,10 @@
 
 ### ڕێکخستن
 
+```sh
+starship preset pure-preset > ~/.config/starship.toml
+```
+
 [Click to download TOML](/presets/toml/pure-preset.toml)
 
 <<< @/.vuepress/public/presets/toml/pure-preset.toml

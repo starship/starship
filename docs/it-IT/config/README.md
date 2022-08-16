@@ -144,6 +144,18 @@ format = '''
 \$'''
 ```
 
+### Negative matching
+
+Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading "!" character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+
+Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
+
+To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+
+```toml
+detect_extensions = ["ts", "!video.ts", "!audio.ts"]
+```
+
 ## Prompt
 
 This is the list of prompt-wide configuration options.
@@ -201,11 +213,9 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
-$buf\
 $c\
 $cmake\
 $cobol\
-$container\
 $daml\
 $dart\
 $deno\
@@ -228,6 +238,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$raku\
 $rlang\
 $red\
 $ruby\
@@ -238,6 +249,7 @@ $terraform\
 $vlang\
 $vagrant\
 $zig\
+$buf\
 $nix_shell\
 $conda\
 $spack\
@@ -256,6 +268,7 @@ $jobs\
 $battery\
 $time\
 $status\
+$container\
 $shell\
 $character"""
 ```
@@ -477,6 +490,45 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 [buf]
 symbol = "🦬 "
+```
+
+## Bun
+
+The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `bun.lockb` file
+- The current directory contains a `bunfig.toml` file
+
+### Opzioni
+
+| Opzione             | Default                              | Descrizione                                                                                  |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                   |
+| `version_format`    | `"v${raw}"`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`            | `"🍞 "`                               | A format string representing the symbol of Node.js.                                          |
+| `detect_extensions` | `[]`                                 | Quali estensioni dovrebbero attivare questo modulo.                                          |
+| `detect_files`      | `["bun.lockb", "bunfig.toml"]`       | Quali nomi di file dovrebbero attivare questo modulo.                                        |
+| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `style`             | `"bold red"`                         | Lo stile per il modulo.                                                                      |
+| `disabled`          | `false`                              | Disables the `bun` module.                                                                   |
+
+### Variables
+
+| Variable  | Esempio  | Descrizione                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `v0.1.4` | The version of `bun`                 |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+
+[bun]
+format = "via [🍔 $version](bold green) "
 ```
 
 ## C
@@ -1986,18 +2038,23 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
+When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been st in which case the module will only be active in directories that match those conditions.
+
 :::
 
 ### Opzioni
 
-| Opzione           | Default                                              | Descrizione                                                           |
-| ----------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
-| `style`           | `"cyan bold"`                                        | Lo stile per il modulo.                                               |
-| `context_aliases` |                                                      | Table of context aliases to display.                                  |
-| `user_aliases`    |                                                      | Table of user aliases to display.                                     |
-| `disabled`        | `true`                                               | Disables the `kubernetes` module.                                     |
+| Opzione             | Default                                              | Descrizione                                                           |
+| ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `symbol`            | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
+| `style`             | `"cyan bold"`                                        | Lo stile per il modulo.                                               |
+| `context_aliases`   |                                                      | Table of context aliases to display.                                  |
+| `user_aliases`      |                                                      | Table of user aliases to display.                                     |
+| `detect_extensions` | `[]`                                                 | Quali estensioni dovrebbero attivare questo modulo.                   |
+| `detect_files`      | `[]`                                                 | Quali nomi di file dovrebbero attivare questo modulo.                 |
+| `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
+| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
 ### Variables
 
@@ -2027,6 +2084,16 @@ disabled = false
 [kubernetes.user_aliases]
 "dev.local.cluster.k8s" = "dev"
 "root/.*" = "root"
+```
+
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
 ```
 
 #### Regex Matching
@@ -2579,7 +2646,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### Opzioni
 
@@ -2589,6 +2656,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format` | `"v${raw}"`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                               |
 | `style`          | `"bold 5"`                                   | Lo stile per il modulo.                                                                      |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.                               |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                                                |
 
 ### Variables
@@ -3158,22 +3226,23 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opzioni
 
-| Opzione                 | Default                                                                              | Descrizione                                             |
-| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
-| `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
-| `success_symbol`        | `""`                                                                                 | The symbol displayed on program success                 |
-| `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
-| `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
-| `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
-| `style`                 | `"bold red"`                                                                         | Lo stile per il modulo.                                 |
-| `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
-| `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
-| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
-| `pipestatus_separator`  | `|`                                                                                  |                                                         |
-| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
-| `disabled`              | `true`                                                                               | Disables the `status` module.                           |
+| Opzione                     | Default                                                                              | Descrizione                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `format`                    | `"[$symbol$status]($style) "`                                                        | The format of the module                                              |
+| `symbol`                    | `"✖"`                                                                                | The symbol displayed on program error                                 |
+| `success_symbol`            | `""`                                                                                 | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `"🚫"`                                                                                | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `"🔍"`                                                                                | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `"⚡"`                                                                                | The symbol displayed on any signal                                    |
+| `style`                     | `"bold red"`                                                                         | Lo stile per il modulo.                                               |
+| `recognize_signal_code`     | `true`                                                                               | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                              | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                              | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                            | The symbol used to separate pipestatus segments                       |
+| `pipestatus_format`         | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                      | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                               | Disables the `status` module.                                         |
 
 ### Variables
 

@@ -8,6 +8,10 @@ Essa personalização simula o comportamento e aparência do [Pure](https://gith
 
 ### Configuração
 
+```sh
+starship preset pure-preset > ~/.config/starship.toml
+```
+
 [Clique para baixar o TOML](/presets/toml/pure-preset.toml)
 
 <<< @/.vuepress/public/presets/toml/pure-preset.toml

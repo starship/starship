@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.9.1"
+version = "1.10.1"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -36,12 +36,14 @@ notify = ["notify-rust"]
 
 [dependencies]
 ansi_term = "0.12.1"
-chrono = { version = "0.4.20", features = ["clock", "std"] }
-clap = { version = "=3.2.16", features = ["derive", "cargo", "unicode", "unstable-v4"] }
-clap_complete = "3.2.3"
+chrono = { version = "0.4.22", features = ["clock", "std"] }
+clap = { version = "=3.2.17", features = ["derive", "cargo", "unicode", "unstable-v4"] }
+clap_complete = "3.2.4"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
 gethostname = "0.2.3"
+# Addresses https://github.com/starship/starship/issues/4251
+git-features = { version = "0.22.1", features = ["fs-walkdir-single-threaded"] }
 git-repository = "0.20.0"
 indexmap = { version = "1.9.1", features = ["serde"] }
 local_ipaddress = "0.1.3"
@@ -64,7 +66,7 @@ semver = "1.0.13"
 serde = { version = "1.0.143", features = ["derive"] }
 serde_json = "1.0.83"
 sha-1 = "0.10.0"
-shadow-rs = { version = "0.16.1", default-features = false }
+shadow-rs = { version = "0.16.2", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.7.9", optional = true }
@@ -105,10 +107,10 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.24.2", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.25.0", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.16.1", default-features = false }
+shadow-rs = { version = "0.16.2", default-features = false }
 dunce = "1.0.2"
 
 [target.'cfg(windows)'.build-dependencies]
@@ -121,6 +123,7 @@ tempfile = "3.2.0"
 [profile.release]
 codegen-units = 1
 lto = true
+strip = true
 
 [[bin]]
 name = "starship"
