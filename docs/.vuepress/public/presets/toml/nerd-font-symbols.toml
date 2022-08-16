@@ -61,6 +61,9 @@ symbol = " "
 [python]
 symbol = " "
 
+[rlang]
+symbol = "ﳒ "
+
 [spack]
 symbol = "🅢 "
 
