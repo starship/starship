@@ -51,7 +51,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn git_tag(repo: &Repo) -> Option<String> {
-    let git_repo = repo.open();
+    // allow environment variables like GITOXIDE_OBJECT_CACHE_MEMORY and GITOXIDE_DISABLE_PACK_CACHE to speed up operation for some repos
+    let mut git_repo = repo.open().apply_environment();
+    git_repo.object_cache_size_if_unset(4 * 1024 * 1024);
     let head_commit = git_repo.head_commit().ok()?;
 
     let describe_platform = head_commit.describe().names(AnnotatedTags);
