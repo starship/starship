@@ -30,7 +30,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
         };
     }
-    active_exts.sort_unstable();
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -156,13 +155,10 @@ mod tests {
         let repo_dir = add_svn_to_repo(add_lfs_to_repo(create_repo()?)?)?;
 
         let actual = ModuleRenderer::new("git_extensions")
-            // NB that the order of extensions in this config is reversed
-            // from what we expect. This proves both that a comma-seperated
-            // list is generated, and that it is sorted.
             .config(toml::toml! {
                 [git_extensions]
                 disabled=false
-                extensions=["svn", "lfs"]
+                extensions=["lfs", "svn"]
             })
             .path(repo_dir.path())
             .collect();
