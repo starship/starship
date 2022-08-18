@@ -52,15 +52,6 @@ pub fn create_repo() -> io::Result<tempfile::TempDir> {
     let path = repo_dir.path();
     let file_in_repo = repo_dir.path().join("some_file");
 
-    // let write_file = |text: &str| {
-    //     let mut file = OpenOptions::new()
-    //         .write(true)
-    //         .create(true)
-    //         .truncate(true)
-    //         .open(&file_in_repo)?;
-    //     writeln!(file, "{}", text)
-    // };
-
     // Initialize a new git repo
     run_git_cmd(
         &[
@@ -83,20 +74,22 @@ pub fn create_repo() -> io::Result<tempfile::TempDir> {
         Some(path),
         true,
     )?;
-            // Prevent intermittent test failures and ensure that the result of git commands
-            // are available during I/O-contentious tests, by having git run `fsync`.
-            // This is especially important on Windows.
-            // Newer, more far-reaching git setting for `fsync`, that's not yet widely supported:
-            create_command("git")?
-                .args(&["config", "--local", "core.fsync", "all"])
-                .current_dir(&path.path())
-                .output()?;
 
-            // Older git setting for `fsync` for compatibility with older git versions:
-            create_command("git")?
-                .args(&["config", "--local", "core.fsyncObjectFiles", "true"])
-                .current_dir(&path.path())
-                .output()?;
+    // Prevent intermittent test failures and ensure that the result of git commands
+    // are available during I/O-contentious tests, by having git run `fsync`.
+    // This is especially important on Windows.
+    // Newer, more far-reaching git setting for `fsync`, that's not yet widely supported:
+    run_git_cmd(
+        &["config", "--local", "core.fsync", "all"],
+        Some(path),
+        true,
+    )?;
+    // Older git setting for `fsync` for compatibility with older git versions:
+    run_git_cmd(
+        &["config", "--local", "core.fsyncObjectFiles", "true"],
+        Some(path),
+        true,
+    )?;
 
     // Ensure on the expected branch.
     // If build environment has `init.defaultBranch` global set
