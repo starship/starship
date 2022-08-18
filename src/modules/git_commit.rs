@@ -32,7 +32,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "tag" => Some(Ok(format!(
                     "{}{}",
                     config.tag_symbol,
-                    git_tag(context.get_repo().ok()?)?
+                    git_tag(context.get_repo().ok()?, &config)?
                 ))),
                 _ => None,
             })
@@ -50,13 +50,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn git_tag(repo: &Repo) -> Option<String> {
+fn git_tag(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
     // allow environment variables like GITOXIDE_OBJECT_CACHE_MEMORY and GITOXIDE_DISABLE_PACK_CACHE to speed up operation for some repos
     let mut git_repo = repo.open().apply_environment();
     git_repo.object_cache_size_if_unset(4 * 1024 * 1024);
     let head_commit = git_repo.head_commit().ok()?;
 
-    let describe_platform = head_commit.describe().names(AnnotatedTags);
+    let describe_platform = head_commit
+        .describe()
+        .names(AnnotatedTags)
+        .max_candidates(config.tag_max_candidates)
+        .traverse_first_parent(true);
     let formatter = describe_platform.try_format().ok()??;
 
     Some(formatter.name?.to_string())
