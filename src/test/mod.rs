@@ -83,6 +83,20 @@ pub fn create_repo() -> io::Result<tempfile::TempDir> {
         Some(path),
         true,
     )?;
+            // Prevent intermittent test failures and ensure that the result of git commands
+            // are available during I/O-contentious tests, by having git run `fsync`.
+            // This is especially important on Windows.
+            // Newer, more far-reaching git setting for `fsync`, that's not yet widely supported:
+            create_command("git")?
+                .args(&["config", "--local", "core.fsync", "all"])
+                .current_dir(&path.path())
+                .output()?;
+
+            // Older git setting for `fsync` for compatibility with older git versions:
+            create_command("git")?
+                .args(&["config", "--local", "core.fsyncObjectFiles", "true"])
+                .current_dir(&path.path())
+                .output()?;
 
     // Ensure on the expected branch.
     // If build environment has `init.defaultBranch` global set
