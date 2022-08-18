@@ -285,13 +285,25 @@ impl<'a> Context<'a> {
                     ..git::Permissions::default_for_level(git_sec::Trust::Full)
                 });
 
-                let shared_repo = ThreadSafeRepository::discover_with_environment_overrides_opts(
-                    &self.current_dir,
-                    Default::default(),
-                    git_open_opts_map,
-                )?;
+                let shared_repo =
+                    match ThreadSafeRepository::discover_with_environment_overrides_opts(
+                        &self.current_dir,
+                        Default::default(),
+                        git_open_opts_map,
+                    ) {
+                        Ok(repo) => repo,
+                        Err(e) => {
+                            log::debug!("Failed to find git repo: {e}");
+                            return Err(e);
+                        }
+                    };
 
                 let repository = shared_repo.to_thread_local();
+                log::trace!(
+                    "Found git repo: {repository:?}, (trust: {:?})",
+                    repository.git_dir_trust()
+                );
+
                 let branch = get_current_branch(&repository);
                 let remote = get_remote_repository_info(&repository, branch.as_deref());
                 let path = repository.path().to_path_buf();
