@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/starship/starship/compare/v1.10.1...v1.10.2) (2022-08-18)
+
+
+### Bug Fixes
+
+* **git:** upgrade `gitoxide` to v0.21 ([#4277](https://github.com/starship/starship/issues/4277)) ([f52ae55](https://github.com/starship/starship/commit/f52ae552d3ef2c0c0c6de6429cee7b8271f14671))
+
 ## [1.10.1](https://github.com/starship/starship/compare/v1.10.0...v1.10.1) (2022-08-15)
 
 
