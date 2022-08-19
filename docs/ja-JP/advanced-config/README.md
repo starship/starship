@@ -8,7 +8,7 @@ Starship は汎用性の高いシェルですが、時には特定の処理を�
 
 :::
 
-## TransientPrompt in PowerShell
+## PowerShell の TransientPrompt
 
 It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
