@@ -1480,16 +1480,16 @@ El módulo `git_commit` muestra el hash de la confirmación actual y también la
 
 ### Opciones
 
-| Opción               | Predeterminado                     | Descripción                                                                            |
-| -------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
-| `commit_hash_length` | `7`                                | La longitud del hash del commit de git mostrado.                                       |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | El formato del módulo.                                                                 |
-| `style`              | `"bold green"`                     | El estilo del módulo.                                                                  |
-| `only_detached`      | `true`                             | Mostrar solo el hash de la confirmación de git cuando esté en estado "detached `HEAD`" |
-| `tag_disabled`       | `true`                             | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.                |
-| `tag_max_candidates` | `0`                                | How many commits to consider for tag display. The default only allows exact matches.   |
-| `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                                                    |
-| `disabled`           | `false`                            | Disables the `git_commit` module.                                                      |
+| Opción               | Predeterminado                     | Descripción                                                                                            |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                                | La longitud del hash del commit de git mostrado.                                                       |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | El formato del módulo.                                                                                 |
+| `style`              | `"bold green"`                     | El estilo del módulo.                                                                                  |
+| `only_detached`      | `true`                             | Mostrar solo el hash de la confirmación de git cuando esté en estado "detached `HEAD`"                 |
+| `tag_disabled`       | `true`                             | Deshabilita mostrar información de etiquetas en el módulo `git_commit`.                                |
+| `tag_max_candidates` | `0`                                | How many commits to consider for tag display. El valor por defecto sólo permite coincidencias exactas. |
+| `tag_symbol`         | `" 🏷 "`                            | Símbolo de etiqueta prefijando la información mostrada                                                 |
+| `disabled`           | `false`                            | Deshabilita el módulo `git_commit`.                                                                    |
 
 ### Variables
 
