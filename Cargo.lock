@@ -921,9 +921,9 @@ dependencies = [
 
 [[package]]
 name = "git-actor"
-version = "0.11.1"
+version = "0.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "48c82fe4f9747e12dba0db1a680720014579c6c25a2859a0e756d9333191fdcd"
+checksum = "9fb53b8b0a098e3db89958c0aa36e1cbaa5e80fdfc98a7535e7078552120cc03"
 dependencies = [
  "bstr",
  "btoi",
@@ -990,9 +990,9 @@ dependencies = [
 
 [[package]]
 name = "git-date"
-version = "0.0.3"
+version = "0.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ebf74e9db8846a62865c16999d737b803ad9672e5ba46cd81901e0196f63344"
+checksum = "9a2c5b328bf9081b27042a274c895758df97309275e618e4fcfede919ce3d282"
 dependencies = [
  "bstr",
  "itoa",
@@ -1202,9 +1202,9 @@ dependencies = [
 
 [[package]]
 name = "git-repository"
-version = "0.21.0"
+version = "0.21.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1cd55007ded60d55237cd899475feca98047b141a6805f63e3c2131e581546f6"
+checksum = "09bc3239f9e983ee0bf87a952644bde5b6344219fab54acba959365852b319ea"
 dependencies = [
  "byte-unit",
  "clru",
@@ -1240,9 +1240,9 @@ dependencies = [
 
 [[package]]
 name = "git-revision"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3228b58f157e44051791992d38fb0c502ebf3bc1a10b119b3c9089ef6d84b10e"
+checksum = "66fc0b04b5160de248d4ef2248d41d38dac53388dade1a547dd954dead01c62b"
 dependencies = [
  "bstr",
  "git-date",
