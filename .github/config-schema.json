@@ -525,6 +525,7 @@
         "only_detached": true,
         "style": "green bold",
         "tag_disabled": true,
+        "tag_max_candidates": 0,
         "tag_symbol": " 🏷  "
       },
       "allOf": [
@@ -2799,6 +2800,12 @@
         "tag_disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "tag_max_candidates": {
+          "default": 0,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
         }
       }
     },
