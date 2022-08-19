@@ -38,7 +38,8 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
             format!(
                 r#"
 "{name}" => {{
-        let mut stdout = io::stdout().lock();
+        let stdout = io::stdout();
+        let mut stdout = stdout.lock();
         let _ = stdout.write_all(include_bytes!(r"{full_path}"));
 }}
 "#
