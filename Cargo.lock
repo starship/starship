@@ -415,12 +415,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "const_fn"
-version = "0.4.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fbdcdcb6d86f71c5e97409ad45898af11cbc995b4ee8112d59095a28d376c935"
-
-[[package]]
 name = "const_format"
 version = "0.2.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2032,16 +2026,7 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3dfb61232e34fcb633f43d12c58f83c1df82962dcdfa565a4e866ffc17dafe12"
 dependencies = [
- "phf_shared 0.8.0",
-]
-
-[[package]]
-name = "phf"
-version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "928c6535de93548188ef63bb7c4036bd415cd8f36ad25af44b9789b2ee72a48c"
-dependencies = [
- "phf_shared 0.11.1",
+ "phf_shared",
 ]
 
 [[package]]
@@ -2051,7 +2036,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cbffee61585b0411840d3ece935cce9cb6321f01c45477d30066498cd5e1a815"
 dependencies = [
  "phf_generator",
- "phf_shared 0.8.0",
+ "phf_shared",
 ]
 
 [[package]]
@@ -2060,7 +2045,7 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "17367f0cc86f2d25802b2c26ee58a7b23faeccf78a396094c13dced0d0182526"
 dependencies = [
- "phf_shared 0.8.0",
+ "phf_shared",
  "rand 0.7.3",
 ]
 
@@ -2069,15 +2054,6 @@ name = "phf_shared"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c00cf8b9eafe68dde5e9eaa2cef8ee84a9336a47d566ec55ca16589633b65af7"
-dependencies = [
- "siphasher",
-]
-
-[[package]]
-name = "phf_shared"
-version = "0.11.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1fb5f6f826b772a8d4c0394209441e7d37cbbb967ae9c7e0e8134365c9ee676"
 dependencies = [
  "siphasher",
 ]
@@ -2599,14 +2575,13 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.16.2"
+version = "0.16.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c786b1a738d4c628e9024ca491578a58a7be4594ea4fb67e0cb4c7ad297ae75"
+checksum = "8c0ea0c68418544f725eba5401a5b965a2263254c92458d04aeae74e9d88ff4e"
 dependencies = [
  "const_format",
  "is_debug",
  "time 0.3.11",
- "tzdb",
 ]
 
 [[package]]
@@ -2857,7 +2832,7 @@ dependencies = [
  "dirs 2.0.2",
  "fnv",
  "nom 5.1.2",
- "phf 0.8.0",
+ "phf",
  "phf_codegen",
 ]
 
@@ -3041,28 +3016,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 
 [[package]]
-name = "tz-rs"
-version = "0.6.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5b3d23fda22515e0e3f4f903e159ad4fd32e37dc94d63522a091df70a247fbb0"
-dependencies = [
- "const_fn",
-]
-
-[[package]]
-name = "tzdb"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa0c0ce33ad776d606b8109c19bb8b4917185f7b944af9103302f9c4c4fe36ac"
-dependencies = [
- "iana-time-zone",
- "phf 0.11.1",
- "phf_shared 0.11.1",
- "tz-rs",
- "utcnow",
-]
-
-[[package]]
 name = "ucd-trie"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3168,22 +3121,6 @@ name = "urlencoding"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68b90931029ab9b034b300b797048cf23723400aa757e8a2bfb9d748102f9821"
-
-[[package]]
-name = "utcnow"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe9835442f055fab72d40eb8e5164f2b98e70ebadedbf4506aac23ca7d623053"
-dependencies = [
- "const_fn",
- "errno",
- "js-sys",
- "libc",
- "rustix",
- "wasi 0.11.0+wasi-snapshot-preview1",
- "wasm-bindgen",
- "winapi",
-]
 
 [[package]]
 name = "utf8-width"
