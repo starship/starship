@@ -1486,8 +1486,8 @@ ignore_branches = ["master", "main"]
 | `only_detached`      | `true`                             | detached `HEAD` 状態のときのみ git コミットハッシュを表示する                                            |
 | `tag_disabled`       | `true`                             | `git_commit` モジュールのタグ情報の表示を無効にする。                                                    |
 | `tag_max_candidates` | `0`                                | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                                                  |
-| `disabled`           | `false`                            | Disables the `git_commit` module.                                                    |
+| `tag_symbol`         | `" 🏷 "`                            | 表示される情報の前に追加されるタグシンボル                                                                |
+| `disabled`           | `false`                            | `git_commit` モジュールを無効にします。                                                           |
 
 ### 変数
 
