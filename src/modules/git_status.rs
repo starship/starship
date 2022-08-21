@@ -264,13 +264,13 @@ struct RepoStatus {
 
 impl RepoStatus {
     fn is_deleted(short_status: &str) -> bool {
-        // is_wt_deleted || is_index_deleted
-        short_status.contains('D')
+        // is_index_deleted
+        short_status.starts_with('D')
     }
 
     fn is_modified(short_status: &str) -> bool {
-        // is_wt_modified || is_wt_added
-        short_status.ends_with('M') || short_status.ends_with('A')
+        // is_wt_modified || is_wt_added || is_wt_deleted
+        short_status.ends_with('M') || short_status.ends_with('A') || short_status.ends_with('D')
     }
 
     fn is_staged(short_status: &str) -> bool {
@@ -975,7 +975,7 @@ mod tests {
         let actual = ModuleRenderer::new("git_status")
             .path(&repo_dir.path())
             .collect();
-        let expected = format_output("✘?");
+        let expected = format_output("!?");
 
         assert_eq!(expected, actual);
         worktree_dir.close()?;
@@ -1176,6 +1176,11 @@ mod tests {
 
     fn create_deleted(repo_dir: &Path) -> io::Result<()> {
         fs::remove_file(repo_dir.join("readme.md"))?;
+
+        create_command("git")?
+            .args(&["add", "-A"])
+            .current_dir(repo_dir)
+            .output()?;
 
         Ok(())
     }
