@@ -2778,15 +2778,15 @@ dependencies = [
 
 [[package]]
 name = "systemstat"
-version = "0.1.11"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f5dc96f7634f46ac7e485b8c051f5b89ec8ee5cc023236dd12fe4ae2fb52f80"
+checksum = "79ef8054a60d76603befaecaf7efe08d32d1a05a1e5df70c547b07507e9e262d"
 dependencies = [
  "bytesize",
- "chrono",
  "lazy_static",
  "libc",
  "nom 7.1.1",
+ "time 0.3.11",
  "winapi",
 ]
 
