@@ -71,7 +71,7 @@ shadow-rs = { version = "0.16.3", default-features = false }
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.7.9", optional = true }
 strsim = "0.10.0"
-systemstat = "=0.1.11"
+systemstat = "=0.2.0"
 terminal_size = "0.2.1"
 toml = { version = "0.5.9", features = ["preserve_order"] }
 toml_edit = "0.14.4"
