@@ -144,3 +144,18 @@ If Starship was installed using the install script, the following command will d
 # Locate and delete the starship binary
 sh -c 'rm "$(command -v 'starship')"'
 ```
+
+## Why am I getting slow response times on PowerShell with Windows Defender real-time protection active?
+When Windows Defender is active, there is a high tendency for the starship prompt on Powershell to have a noticable delay. This is a known issue within other
+custom prompts such as [oh-my-posh](https://github.com/JanDeDobbeleer/oh-my-posh/issues/1904). 
+
+In order to fix this you must add an exclusion for the starship binary within Windows Defender. Within powershell you can find the location of your starship binary
+with the `Get-Command` cmdlet. Assuming that starship has already been installed and is visible on your PATH
+
+```powershell
+# Display the full path of the starship binary
+Get-Command starship
+```
+
+Copy the path displayed under `Source` in the table displayed from the Get-Command cmdlet and [add an exclusion](https://support.microsoft.com/en-us/windows/add-an-exclusion-to-windows-security-811816c0-4dfd-af4a-47e4-c301afe13b26#:~:text=Go%20to%20Start%20%3E%20Settings%20%3E%20Update,%2C%20file%20types%2C%20or%20process.) for this path to Windows Defender
+Upon reloading your shell, the delay should be noticably lessened
