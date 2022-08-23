@@ -146,6 +146,7 @@ sh -c 'rm "$(command -v 'starship')"'
 ```
 
 ## Why am I getting slow response times on PowerShell with Windows Defender real-time protection active?
+
 When Windows Defender is active, there is a high tendency for the starship prompt on Powershell to have a noticable delay. This is a known issue within other
 custom prompts such as [oh-my-posh](https://github.com/JanDeDobbeleer/oh-my-posh/issues/1904). 
 
