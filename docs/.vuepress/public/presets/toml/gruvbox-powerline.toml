@@ -1,0 +1,107 @@
+format = """
+[\ue0c7](#D65D0E)\
+$username\
+[](bg:#98971A fg:#D65D0E)\
+$directory\
+[](fg:#98971A bg:#689D6A)\
+$java\
+$scala\
+[](fg:#689D6A bg:#D79921)\
+$nodejs\
+$python\
+$ruby\
+[](fg:#D79921 bg:#B16286)\
+$git_branch\
+$git_status\
+[](fg:#B16286 bg:#458588)\
+$time\
+[\ue0c6 ](fg:#458588)\
+$line_break\
+$character"""
+
+# Disable the blank line at the start of the prompt
+# add_newline = false
+
+# You can also replace your username with a neat symbol like  to save some space
+[username]
+show_always = true
+style_user = "bg:#D65D0E"
+style_root = "bg:#D65D0E"
+format = '[🏕  $user ]($style)'
+
+[directory]
+style = "bg:#98971A"
+format = "[ $path ]($style)"
+truncation_length = 8
+truncation_symbol = "…/"
+
+# Here is how you can shorten some long paths by text replacement
+# similar to mapped_locations in Oh My Posh:
+[directory.substitutions]
+"Documents" = " "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+# Keep in mind that the order matters. For example:
+# "Important Documents" = "  "
+# will not be replaced, because "Documents" was already substituted before.
+# So either put "Important Documents" before "Documents" or use the substituted version:
+# "Important  " = "  "
+
+[git_branch]
+symbol = "🌱 "
+style = "bg:#B16286"
+truncation_length = 8
+truncation_symbol = "…"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:#B16286"
+conflicted = "🏳"
+ahead = "🏎💨"
+behind = "😰"
+diverged = "😵"
+up_to_date = "✓"
+untracked = "🤷"
+stashed = "📦"
+modified = "📝"
+staged = '[++\($count\)](fg:#282828 bg:#B16286)'
+renamed = "👅"
+deleted = "🗑"
+format = '[$all_status$ahead_behind ]($style)'
+
+[java]
+symbol = " "
+style = "bg:#689D6A"
+format = '[ $symbol ($version) ]($style)'
+
+[ruby]
+symbol = " "
+style = "bg:#D79921"
+format = '[ $symbol ($version) ]($style)'
+
+[scala]
+symbol = " "
+style = "bg:#689D6A"
+format = '[ $symbol ($version) ]($style)'
+
+[python]
+symbol = ""
+style = "bg:#D79921"
+format = '[ $symbol ($version) ]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:#D79921"
+format = '[ $symbol ($version) ]($style)'
+
+[rust]
+symbol = ""
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:#458588"
+format = '[ ♥️  $time ]($style)'
