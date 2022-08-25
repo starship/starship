@@ -277,7 +277,7 @@ jobs:
   cargo_publish:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
-    needs: release_please
+    needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
@@ -296,7 +296,7 @@ jobs:
   update_brew_formula:
     name: Update Brew Formula
     runs-on: ubuntu-latest
-    needs: release_please
+    needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - uses: mislav/bump-homebrew-formula-action@v2.1
