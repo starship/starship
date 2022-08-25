@@ -53,7 +53,7 @@ symbol = " "
 symbol = " "
 
 [nix_shell]
-symbol = " "
+symbol = " "
 
 [nodejs]
 symbol = " "
