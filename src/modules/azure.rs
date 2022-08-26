@@ -10,6 +10,7 @@ use crate::configs::azure::AzureConfig;
 use crate::formatter::StringFormatter;
 
 type SubscriptionName = String;
+type UserName = String;
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("azure");
@@ -25,6 +26,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
+    let user_name: Option<UserName> = get_azure_user_name(context);
+    if user_name.is_none() {
+        log::info!("Could not find Azure user name");
+        return None;
+    };
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -37,6 +44,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "subscription" => Some(Ok(subscription_name.as_ref().unwrap())),
+                _ => None,
+            })
+            .map(|variable| match variable {
+                "username" => Some(Ok(user_name.as_ref().unwrap())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -71,6 +82,28 @@ fn get_azure_subscription_name(context: &Context) -> Option<SubscriptionName> {
         subscription_name
     } else {
         log::info!("Could not find subscription name");
+        None
+    }
+}
+
+fn get_azure_user_name(context: &Context) -> Option<UserName> {
+    let mut config_path = get_config_file_location(context)?;
+    config_path.push("azureProfile.json");
+
+    let parsed_json = parse_json(&config_path)?;
+
+    let subscriptions = parsed_json.get("subscriptions")?.as_array()?;
+    let user_name = subscriptions.iter().find_map(|s| {
+        if s.get("isDefault")? == true {
+            Some(s.get("user")?.get("name")?.as_str()?.to_string())
+        } else {
+            None
+        }
+    });
+    if user_name.is_some() {
+        user_name
+    } else {
+        log::info!("Could not find user name");
         None
     }
 }
@@ -189,6 +222,76 @@ mod tests {
         let expected = Some(format!(
             "on {} ",
             Color::Blue.bold().paint("ﴃ Subscription 1")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn user_name_set_correctly() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "Subscription 2",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "Subscription 3",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "Subscription 1",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+            [azure]
+            format = "on [$symbol($username)]($style)"
+            disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Blue.bold().paint("ﴃ user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()
