@@ -48,28 +48,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     });
 
-    Some(undistract_me(module, &config, elapsed))
+    Some(undistract_me(module, &config, context, elapsed))
 }
 
 #[cfg(not(feature = "notify"))]
-fn undistract_me<'a, 'b>(
+fn undistract_me<'a, 'b, 'c>(
     module: Module<'a>,
     _config: &'b CmdDurationConfig,
+    _context: &'c Context,
     _elapsed: u128,
 ) -> Module<'a> {
     module
 }
 
 #[cfg(feature = "notify")]
-fn undistract_me<'a, 'b>(
+fn undistract_me<'a, 'b, 'c>(
     module: Module<'a>,
     config: &'b CmdDurationConfig,
+    context: &'c Context,
     elapsed: u128,
 ) -> Module<'a> {
     use ansi_term::{unstyle, ANSIStrings};
     use notify_rust::{Notification, Timeout};
 
-    if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
+    if context.properties.redraw_count == 1
+        && config.show_notifications
+        && config.min_time_to_notify as u128 <= elapsed
+    {
         let body = format!(
             "Command execution {}",
             unstyle(&ANSIStrings(&module.ansi_strings()))

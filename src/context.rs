@@ -688,8 +688,11 @@ pub struct Properties {
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
     /// The number of currently running jobs
-    #[clap(short, long, default_value_t, value_parser=parse_jobs)]
+    #[clap(short, long, default_value_t, value_parser=parse_i64)]
     pub jobs: i64,
+    /// The number of redraws after the same command
+    #[clap(long, default_value_t=1, value_parser=parse_i64)]
+    pub redraw_count: i64,
 }
 
 impl Default for Properties {
@@ -703,6 +706,7 @@ impl Default for Properties {
             cmd_duration: None,
             keymap: "viins".to_string(),
             jobs: 0,
+            redraw_count: 1,
         }
     }
 }
@@ -716,8 +720,8 @@ fn parse_trim<F: FromStr>(value: &str) -> Option<Result<F, F::Err>> {
     Some(F::from_str(value))
 }
 
-fn parse_jobs(jobs: &str) -> Result<i64, ParseIntError> {
-    parse_trim(jobs).unwrap_or(Ok(0))
+fn parse_i64(value: &str) -> Result<i64, ParseIntError> {
+    parse_trim(value).unwrap_or(Ok(0))
 }
 
 fn default_width() -> usize {

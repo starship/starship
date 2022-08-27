@@ -45,6 +45,7 @@ prompt_starship_precmd() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
+    STARSHIP_REDRAW_COUNT=0
 }
 
 # Runs after the user submits the command line, but before it is executed.
@@ -89,7 +90,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT='${//$((STARSHIP_REDRAW_COUNT++))}$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT" --redraw-count="$STARSHIP_REDRAW_COUNT")'
+RPROMPT='$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT" --redraw-count="$STARSHIP_REDRAW_COUNT")'
 PROMPT2="$(::STARSHIP:: prompt --continuation)"
 
