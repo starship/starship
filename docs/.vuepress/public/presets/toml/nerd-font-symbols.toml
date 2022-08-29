@@ -43,6 +43,9 @@ symbol = " "
 [julia]
 symbol = " "
 
+[lua]
+symbol = " "
+
 [memory_usage]
 symbol = " "
 
@@ -50,7 +53,7 @@ symbol = " "
 symbol = " "
 
 [nix_shell]
-symbol = " "
+symbol = " "
 
 [nodejs]
 symbol = " "
@@ -61,8 +64,14 @@ symbol = " "
 [python]
 symbol = " "
 
-[spack]
-symbol = "🅢 "
+[rlang]
+symbol = "ﳒ "
+
+[ruby]
+symbol = " "
 
 [rust]
 symbol = " "
+
+[spack]
+symbol = "🅢 "

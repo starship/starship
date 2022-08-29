@@ -629,7 +629,7 @@ fn get_remote_repository_info(
 ) -> Option<Remote> {
     let branch_name = branch_name?;
     let branch = repository
-        .remote_ref(branch_name)
+        .branch_remote_ref(branch_name)
         .and_then(|r| r.ok())
         .map(|r| r.shorten().to_string());
     let name = repository
