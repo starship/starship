@@ -1391,12 +1391,15 @@
           "tfplan",
           "tfstate"
         ],
-        "detect_files": [],
+        "detect_files": [
+          ".tf",
+          ".terraform-version"
+        ],
         "detect_folders": [
           ".terraform"
         ],
         "disabled": false,
-        "format": "via [$symbol$workspace]($style) ",
+        "format": "via [$symbol$tfenvversion$workspace]($style) ",
         "style": "bold 105",
         "symbol": "💠 ",
         "version_format": "v${raw}"
@@ -4688,7 +4691,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "via [$symbol$workspace]($style) ",
+          "default": "via [$symbol$tfenvversion$workspace]($style) ",
           "type": "string"
         },
         "version_format": {
@@ -4719,7 +4722,10 @@
           }
         },
         "detect_files": {
-          "default": [],
+          "default": [
+            ".tf",
+            ".terraform-version"
+          ],
           "type": "array",
           "items": {
             "type": "string"
