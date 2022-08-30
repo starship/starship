@@ -150,9 +150,9 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
     let mut in_ver = false;
     let mut depth = 0;
     loop {
-        match reader.read_event(&mut buf) {
+        match reader.read_event_into(&mut buf) {
             Ok(QXEvent::Start(ref e)) => {
-                in_ver = depth == 1 && e.name() == b"version";
+                in_ver = depth == 1 && e.name().as_ref() == b"version";
                 depth += 1;
             }
             Ok(QXEvent::End(_)) => {
@@ -160,7 +160,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
-                let ver = t.unescape_and_decode(&reader).ok();
+                let ver = t.unescape().ok().map(|s| s.into_owned());
                 return match ver {
                     // Ignore version which is just a property reference
                     Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),

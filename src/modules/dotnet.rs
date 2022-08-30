@@ -105,13 +105,13 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
     let mut buf = Vec::new();
 
     loop {
-        match reader.read_event(&mut buf) {
+        match reader.read_event_into(&mut buf) {
             // for triggering namespaced events, use this instead:
             // match reader.read_namespaced_event(&mut buf) {
             Ok(Event::Start(ref e)) => {
                 // for namespaced:
                 // Ok((ref namespace_value, Event::Start(ref e)))
-                match e.name() {
+                match e.name().as_ref() {
                     b"TargetFrameworks" => in_tfm = true,
                     b"TargetFramework" => in_tfm = true,
                     _ => in_tfm = false,
@@ -120,11 +120,17 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
             // unescape and decode the text event using the reader encoding
             Ok(Event::Text(e)) => {
                 if in_tfm {
-                    return e.unescape_and_decode(&reader).ok();
+                    return e.unescape().ok().map(|s| s.into_owned());
                 }
             }
             Ok(Event::Eof) => break, // exits the loop when reaching end of file
-            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            Err(e) => {
+                log::error!(
+                    "Error parsing project file {path:?} at position {pos}: {e:?}",
+                    pos = reader.buffer_position()
+                );
+                return None;
+            }
             _ => (), // There are several other `Event`s we do not consider here
         }
 
