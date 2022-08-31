@@ -433,6 +433,42 @@ mod tests {
         remote_dir.close()
     }
 
+    #[test]
+    fn test_remote_branch() -> io::Result<()> {
+        let remote_dir = fixture_repo(FixtureProvider::Git)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["checkout", "-b", "master"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(&["remote", "add", "--fetch", "remote_repo"])
+            .arg(remote_dir.path())
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(&["branch", "--set-upstream-to", "remote_repo/master"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .path(&repo_dir.path())
+            .config(toml::toml! {
+                [git_branch]
+                format = "$branch(:$remote_name)(/$remote_branch)"
+            })
+            .collect();
+
+        let expected = Some("test_branch:remote_repo");
+
+        assert_eq!(expected, actual.as_deref());
+        repo_dir.close()?;
+        remote_dir.close()
+    }
+
     // This test is not possible until we switch to `git status --porcelain`
     // where we can mock the env for the specific git process. This is because
     // git2 does not care about our mocking and when we set the real `GIT_DIR`
