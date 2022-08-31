@@ -459,10 +459,12 @@ mod tests {
             .config(toml::toml! {
                 [git_branch]
                 format = "$branch(:$remote_name)(/$remote_branch)"
+                always_show_remote = true
+                always_show_remote_branch = false
             })
             .collect();
 
-        let expected = Some("test_branch:remote_repo");
+        let expected = Some("master:remote_repo");
 
         assert_eq!(expected, actual.as_deref());
         repo_dir.close()?;
