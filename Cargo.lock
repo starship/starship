@@ -995,9 +995,9 @@ dependencies = [
 
 [[package]]
 name = "git-diff"
-version = "0.18.0"
+version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1617c6ef28beeb227b1937e8ba5489cea784bb966e3e18ee35ec35d7d5d93e45"
+checksum = "d92ebd9b84031acd1a71ec260cf6f917554d010a386db3284fbe6f66682795ea"
 dependencies = [
  "git-hash",
  "git-object",
@@ -1006,9 +1006,9 @@ dependencies = [
 
 [[package]]
 name = "git-discover"
-version = "0.4.1"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "74e956f5d946471c9edba2781e081340a2147a3046b1f183727aadca3b3df547"
+checksum = "df5807c4243d232e55d743bc3105526fdbcc721d5f2fec99f83722d126ff1f40"
 dependencies = [
  "bstr",
  "git-hash",
@@ -1210,9 +1210,9 @@ dependencies = [
 
 [[package]]
 name = "git-repository"
-version = "0.23.0"
+version = "0.23.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "637d91d15806bba3a80a92467a8d900d4c925c70bef11d4f4edd5a9d6fb417c9"
+checksum = "7064371f20e047fd14c2650cc2943e83ee42a82e910b1f4114beecd511a048c7"
 dependencies = [
  "byte-unit",
  "clru",
@@ -1291,9 +1291,9 @@ dependencies = [
 
 [[package]]
 name = "git-traverse"
-version = "0.16.3"
+version = "0.16.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aa0bb79b84360462c155fa5bc727a99114c548a8d665235ccd67731ee9694827"
+checksum = "460071dc01c13b4fbf29500b30341212fa6ff5015f2902c6d111c7da534ffc10"
 dependencies = [
  "git-hash",
  "git-object",
