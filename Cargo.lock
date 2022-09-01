@@ -1036,7 +1036,7 @@ dependencies = [
  "parking_lot",
  "prodash",
  "quick-error",
- "sha1 0.10.1",
+ "sha1 0.10.2",
  "sha1_smol",
  "walkdir",
 ]
@@ -2532,9 +2532,9 @@ dependencies = [
 
 [[package]]
 name = "sha1"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c77f4e7f65455545c2153c1253d25056825e77ee2533f0e41deb65a93a34852f"
+checksum = "5cf2781a4ca844dd4f9b608a1791eea19830df0ad3cdd9988cd05f1c66ccb63a"
 dependencies = [
  "cfg-if 1.0.0",
  "cpufeatures",
