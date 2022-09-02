@@ -71,7 +71,7 @@ fn parse_bun_version(bun_version: String) -> String {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

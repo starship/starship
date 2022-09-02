@@ -180,7 +180,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
    use super::*;
    use crate::test::ModuleRenderer;
-   use ansi_term::Color;
+   use nu_ansi_term::Color;
    use std::fs::File;
    use std::io;
 

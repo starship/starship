@@ -208,7 +208,7 @@ mod tests {
     use super::*;
     use crate::context::Target;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn pulumi_version_release() {

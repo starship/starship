@@ -352,7 +352,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
     use tempfile::{self, TempDir};
