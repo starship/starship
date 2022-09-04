@@ -78,7 +78,7 @@ fn git_hash(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::{io, str};
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};

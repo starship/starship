@@ -120,7 +120,7 @@ fn get_first_grapheme(text: &str) -> &str {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::io;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};

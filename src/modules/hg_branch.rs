@@ -98,7 +98,7 @@ fn graphemes_len(text: &str) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
     use std::fs;
     use std::io;
     use std::path::Path;

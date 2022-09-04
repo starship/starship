@@ -66,13 +66,13 @@ fn undistract_me<'a, 'b>(
     config: &'b CmdDurationConfig,
     elapsed: u128,
 ) -> Module<'a> {
-    use ansi_term::{unstyle, ANSIStrings};
     use notify_rust::{Notification, Timeout};
+    use nu_ansi_term::{unstyle, AnsiStrings};
 
     if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
         let body = format!(
             "Command execution {}",
-            unstyle(&ANSIStrings(&module.ansi_strings()))
+            unstyle(&AnsiStrings(&module.ansi_strings()))
         );
 
         let timeout = match config.notification_timeout {
@@ -98,7 +98,7 @@ fn undistract_me<'a, 'b>(
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn config_blank_duration_1s() {

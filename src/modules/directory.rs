@@ -345,7 +345,7 @@ mod tests {
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
     use crate::utils::home_dir;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
     #[cfg(target_os = "windows")]

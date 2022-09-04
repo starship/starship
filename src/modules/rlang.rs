@@ -73,7 +73,7 @@ fn parse_r_version(r_version: &str) -> Option<String> {
 mod tests {
     use super::parse_r_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs;
     use std::fs::File;
     use std::io;

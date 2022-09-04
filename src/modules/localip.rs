@@ -61,7 +61,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
 
     macro_rules! get_localip {
         () => {

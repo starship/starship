@@ -1,6 +1,6 @@
 use crate::utils;
-use ansi_term::Color;
 use log::{Level, LevelFilter, Metadata, Record};
+use nu_ansi_term::Color;
 use once_cell::sync::OnceCell;
 use std::{
     collections::HashSet,

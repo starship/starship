@@ -64,7 +64,7 @@ fn parse_buf_version(buf_version: &str) -> Option<String> {
 mod tests {
     use super::parse_buf_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 
