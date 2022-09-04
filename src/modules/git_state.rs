@@ -157,7 +157,7 @@ struct StateDescription<'a> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::ffi::OsStr;
     use std::fs::OpenOptions;
     use std::io::{self, Error, ErrorKind, Write};

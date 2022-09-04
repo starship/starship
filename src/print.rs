@@ -1,5 +1,5 @@
-use ansi_term::ANSIStrings;
 use clap::{PossibleValue, ValueEnum};
+use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
@@ -119,7 +119,7 @@ pub fn get_prompt(context: Context) -> String {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
+    write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
@@ -163,7 +163,7 @@ pub fn timings(args: Properties) {
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: module.get_name().width_graphemes(),
-            value: ansi_term::ANSIStrings(&module.ansi_strings())
+            value: nu_ansi_term::AnsiStrings(&module.ansi_strings())
                 .to_string()
                 .replace('\n', "\\n"),
             duration: module.duration,
@@ -212,7 +212,7 @@ pub fn explain(args: Properties) {
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
+                value: nu_ansi_term::AnsiStrings(&module.ansi_strings()).to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().clone(),
