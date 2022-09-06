@@ -118,6 +118,12 @@ fn main() {
     logger::init();
     init_global_threadpool();
 
+    // Delete old log files
+    rayon::spawn(|| {
+        let log_dir = logger::get_log_dir();
+        logger::cleanup_log_files(log_dir);
+    });
+
     let args = match Cli::try_parse() {
         Ok(args) => args,
         Err(e) => {

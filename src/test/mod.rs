@@ -9,6 +9,7 @@ use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
 use std::io;
 use std::path::{Path, PathBuf};
+use std::sync::Once;
 use tempfile::TempDir;
 
 static FIXTURE_DIR: Lazy<PathBuf> =
@@ -17,7 +18,9 @@ static FIXTURE_DIR: Lazy<PathBuf> =
 static GIT_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("git-repo.bundle"));
 static HG_FIXTURE: Lazy<PathBuf> = Lazy::new(|| FIXTURE_DIR.join("hg-repo.bundle"));
 
-static LOGGER: Lazy<()> = Lazy::new(|| {
+static LOGGER: Once = Once::new();
+
+fn init_logger() {
     let mut logger = StarshipLogger::default();
 
     // Don't log to files during tests
@@ -30,7 +33,7 @@ static LOGGER: Lazy<()> = Lazy::new(|| {
     logger.set_log_file_path(nul);
 
     log::set_boxed_logger(Box::new(logger)).unwrap();
-});
+}
 
 pub fn default_context() -> Context<'static> {
     let mut context = Context::new_with_shell_and_path(
@@ -54,7 +57,7 @@ impl<'a> ModuleRenderer<'a> {
     /// Creates a new `ModuleRenderer`
     pub fn new(name: &'a str) -> Self {
         // Start logger
-        Lazy::force(&LOGGER);
+        LOGGER.call_once(init_logger);
 
         let context = default_context();
 
