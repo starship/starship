@@ -105,7 +105,7 @@ fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option
 #[cfg(test)]
 mod test {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
 
     const TEST_VAR_VALUE: &str = "astronauts";
 
