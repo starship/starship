@@ -1838,9 +1838,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.14.0"
+version = "1.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2f7254b99e31cad77da24b08ebf628882739a608578bb1bcdfc1f9c21260d7c0"
+checksum = "074864da206b4973b84eb91683020dbefd6a8c3f0f38e054d93954e891935e4e"
 
 [[package]]
 name = "opaque-debug"
@@ -2666,7 +2666,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "1.10.2"
+version = "1.10.3"
 dependencies = [
  "chrono",
  "clap",
