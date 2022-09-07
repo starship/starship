@@ -77,7 +77,7 @@ toml = { version = "0.5.9", features = ["preserve_order"] }
 toml_edit = "0.14.4"
 unicode-segmentation = "1.9.0"
 unicode-width = "0.1.9"
-urlencoding = "2.1.0"
+urlencoding = "2.1.2"
 versions = "4.1.0"
 which = "4.3.0"
 yaml-rust = "0.4.5"
