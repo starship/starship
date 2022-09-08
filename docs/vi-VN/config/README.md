@@ -1480,15 +1480,16 @@ Mô đun `git_commit` hiển thị hash commit hiện tại và tag (nếu có) 
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn             | Mặc định                           | Mô tả                                                     |
-| -------------------- | ---------------------------------- | --------------------------------------------------------- |
-| `commit_hash_length` | `7`                                | Độ dài của git commit hash được hiển thị.                 |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | Định dạng cho module.                                     |
-| `style`              | `"bold green"`                     | Kiểu cho module.                                          |
-| `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state   |
-| `tag_disabled`       | `true`                             | Vô hiệu hiển thị thông tin tag trong mô đun `git_commit`. |
-| `tag_symbol`         | `" 🏷 "`                            | Biểu tượng tag trước thông tin được hiển thị              |
-| `disabled`           | `false`                            | Vô hiệu mô đun `git_commit`.                              |
+| Tuỳ chọn             | Mặc định                           | Mô tả                                                                                |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                                | Độ dài của git commit hash được hiển thị.                                            |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | Định dạng cho module.                                                                |
+| `style`              | `"bold green"`                     | Kiểu cho module.                                                                     |
+| `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state                              |
+| `tag_disabled`       | `true`                             | Vô hiệu hiển thị thông tin tag trong mô đun `git_commit`.                            |
+| `tag_max_candidates` | `0`                                | How many commits to consider for tag display. The default only allows exact matches. |
+| `tag_symbol`         | `" 🏷 "`                            | Biểu tượng tag trước thông tin được hiển thị                                         |
+| `disabled`           | `false`                            | Vô hiệu mô đun `git_commit`.                                                         |
 
 ### Các biến
 
