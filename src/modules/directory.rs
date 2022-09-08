@@ -1808,5 +1808,10 @@ mod tests {
             before_root_dir("~/user/gitrepo-diff/gitrepo", "gitrepo"),
             "~/user/gitrepo-diff/".to_string()
         );
+
+        assert_eq!(
+            before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"),
+            "~/user/gitrepo-diff/gitrepo".to_string()
+        );
     }
 }
