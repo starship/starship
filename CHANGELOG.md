@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.3](https://github.com/starship/starship/compare/v1.10.2...v1.10.3) (2022-09-07)
+
+
+### Performance Improvements
+
+* **git_commit:** only use exact match for tag by default ([#4281](https://github.com/starship/starship/issues/4281)) ([5984f08](https://github.com/starship/starship/commit/5984f0829ef5369e83c28108378fe0065a617b3c))
+
 ## [1.10.2](https://github.com/starship/starship/compare/v1.10.1...v1.10.2) (2022-08-18)
 
 
