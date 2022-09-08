@@ -8,11 +8,11 @@ Starship は汎用性の高いシェルですが、時には特定の処理を�
 
 :::
 
-## TransientPrompt in PowerShell
+## PowerShell の TransientPrompt
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 有効にするには、 `Enable-TransientPrompt` をシェルで実行してください。 `$PROFILE` に追記することによって常時有効にすることが出来ます。 また、 `Disable-TransientPrompt` によっていつでも無効化することが出来ます。
 
-By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
+デフォルトでは、入力の左側が `>` 出置き換えられます。 カスタマイズするには、関数を `Invoke-Starship-TransientFunction` という名前で定義してください。 Starshipの `character` モジュールを表示する場合はこのようにします：
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -26,7 +26,7 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. 全ての情報が必要では無い時に役に立ちます。 To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
@@ -34,7 +34,7 @@ Clink allows you to replace the previous-printed prompt with custom strings. Thi
 
 You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
 
-- By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
+- デフォルトでは、入力の左側が `>` 出置き換えられます。 To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. Starshipの `character` モジュールを表示する場合はこのようにします：
 
 ```lua
 function starship_transient_prompt_func(prompt)

@@ -1480,15 +1480,16 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Opzioni
 
-| Opzione              | Default                            | Descrizione                                             |
-| -------------------- | ---------------------------------- | ------------------------------------------------------- |
-| `commit_hash_length` | `7`                                | The length of the displayed git commit hash.            |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | The format for the module.                              |
-| `style`              | `"bold green"`                     | Lo stile per il modulo.                                 |
-| `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state |
-| `tag_disabled`       | `true`                             | Disables showing tag info in `git_commit` module.       |
-| `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                     |
-| `disabled`           | `false`                            | Disables the `git_commit` module.                       |
+| Opzione              | Default                            | Descrizione                                                                          |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                                | The length of the displayed git commit hash.                                         |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | The format for the module.                                                           |
+| `style`              | `"bold green"`                     | Lo stile per il modulo.                                                              |
+| `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state                              |
+| `tag_disabled`       | `true`                             | Disables showing tag info in `git_commit` module.                                    |
+| `tag_max_candidates` | `0`                                | How many commits to consider for tag display. The default only allows exact matches. |
+| `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                                                  |
+| `disabled`           | `false`                            | Disables the `git_commit` module.                                                    |
 
 ### Variables
 
