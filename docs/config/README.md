@@ -641,9 +641,9 @@ are only supported in fish due to [upstream issues with mode detection in zsh](h
 
 ### Variables
 
-| Variable | Example | Description                                                           |
-| -------- | ------- | --------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Variable | Example | Description                                                                                              |
+| -------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Examples
 
