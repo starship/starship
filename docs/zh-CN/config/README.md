@@ -609,9 +609,9 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Variables
 
-| 字段     | 示例 | 描述                                                                    |
-| ------ | -- | --------------------------------------------------------------------- |
-| symbol |    | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| 字段     | 示例 | 描述                                                                                                       |
+| ------ | -- | -------------------------------------------------------------------------------------------------------- |
+| symbol |    | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Examples
 
