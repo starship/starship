@@ -12,6 +12,10 @@ Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh
 
 ### Configuration
 
+```sh
+starship preset pastel-powerline > ~/.config/starship.toml
+```
+
 [Cliquez pour télécharger le TOML](/presets/toml/pastel-powerline.toml)
 
 <<< @/.vuepress/public/presets/toml/pastel-powerline.toml

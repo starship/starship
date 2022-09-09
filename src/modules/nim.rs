@@ -71,7 +71,7 @@ fn parse_nim_version(version_cmd_output: &str) -> Option<&str> {
 mod tests {
     use super::parse_nim_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

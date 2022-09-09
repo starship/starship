@@ -12,6 +12,10 @@ Essa predefinição altera os símbolos para cada módulo usar símbolos com Ner
 
 ### Configuração
 
+```sh
+starship preset nerd-font-symbols > ~/.config/starship.toml
+```
+
 [Clique para baixar o TOML](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml

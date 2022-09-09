@@ -16,6 +16,9 @@ deleted = "x"
 [aws]
 symbol = "aws "
 
+[bun]
+symbol = "bun "
+
 [c]
 symbol = "C "
 
@@ -129,3 +132,9 @@ symbol = "sudo "
 
 [swift]
 symbol = "swift "
+
+[terraform]
+symbol = "terraform "
+
+[zig]
+symbol = "zig "

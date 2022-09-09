@@ -41,7 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // The truncation symbol should only be added if we truncated
     let truncated_and_symbol = if len < graphemes_len(&branch_name) {
         let truncation_symbol = get_graphemes(config.truncation_symbol, 1);
-        truncated_graphemes + &truncation_symbol
+        truncated_graphemes + truncation_symbol.as_str()
     } else {
         truncated_graphemes
     };
@@ -98,7 +98,7 @@ fn graphemes_len(text: &str) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
     use std::fs;
     use std::io;
     use std::path::Path;

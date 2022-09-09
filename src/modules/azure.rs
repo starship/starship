@@ -108,8 +108,8 @@ fn parse_json(json_file_path: &Path) -> Option<JValue> {
 mod tests {
     use crate::modules::azure::parse_json;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
     use ini::Ini;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io::{self, Write};
     use std::path::PathBuf;

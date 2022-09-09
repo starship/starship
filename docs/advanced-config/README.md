@@ -71,6 +71,41 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
+## TransientPrompt and TransientRightPrompt in Fish
+
+It is possible to replace the previous-printed prompt with a custom string. This
+is useful in cases where all the prompt information is not always needed. To enable
+this, run `enable_transience` in the shell session. To make it permanent, put
+this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with
+`disable_transience`.
+
+Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty,
+and syntactically correct.
+
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this,
+  define a new function called `starship_transient_prompt_func`. For example, to
+  display Starship's `character` module here, you would do
+
+```fish
+function starship_transient_prompt_func
+  starship module character
+end
+starship init fish | source
+enable_transience
+```
+
+- By default, the right side of input is empty. To customize this, define a new
+  function called `starship_transient_rprompt_func`. For example, to display
+  the time at which the last command was started here, you would do
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
+
 ## Custom pre-prompt and pre-execution Commands in Cmd
 
 Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands
@@ -278,6 +313,9 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 - `underline`
 - `dimmed`
 - `inverted`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
@@ -297,3 +335,9 @@ A color specifier can be one of the following:
 - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
 If multiple colors are specified for foreground/background, the last one in the string will take priority.
+
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+
+- Many terminals disable support for `blink` by default
+- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` is not supported by the default macOS Terminal.app
