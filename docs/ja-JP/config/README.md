@@ -607,9 +607,9 @@ format = "via [$name $version]($style)"
 
 ### 変数
 
-| 変数     | 設定例 | 説明                                                          |
-| ------ | --- | ----------------------------------------------------------- |
-| symbol |     | `success_symbol` 、もしくは `error_symbol` 、 `vicmd_symbol` のミラー |
+| 変数     | 設定例 | 説明                                                                                                       |
+| ------ | --- | -------------------------------------------------------------------------------------------------------- |
+| symbol |     | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### 設定例
 
