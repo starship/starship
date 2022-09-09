@@ -609,9 +609,9 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Переменные
 
-| Переменная | Пример | Описание                                                              |
-| ---------- | ------ | --------------------------------------------------------------------- |
-| symbol     |        | A mirror of either `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Переменная | Пример | Описание                                                                                                 |
+| ---------- | ------ | -------------------------------------------------------------------------------------------------------- |
+| symbol     |        | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Примеры
 
