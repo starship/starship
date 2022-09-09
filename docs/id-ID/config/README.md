@@ -609,9 +609,9 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 
 ### Variabel
 
-| Variabel | Contoh | Deskripsi                                                              |
-| -------- | ------ | ---------------------------------------------------------------------- |
-| symbol   |        | Representasi dari `success_symbol`, `error_symbol` atau `vicmd_symbol` |
+| Variabel | Contoh | Deskripsi                                                                                                |
+| -------- | ------ | -------------------------------------------------------------------------------------------------------- |
+| symbol   |        | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Contoh
 
