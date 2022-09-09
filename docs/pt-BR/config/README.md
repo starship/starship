@@ -609,9 +609,9 @@ Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olh
 
 ### Variáveis
 
-| Variável | Exemplo | Descrição                                                        |
-| -------- | ------- | ---------------------------------------------------------------- |
-| symbol   |         | Um espelho de `success_symbol`, `error_symbol` ou `vicmd_symbol` |
+| Variável | Exemplo | Descrição                                                                                                |
+| -------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Exemplos
 
