@@ -54,11 +54,37 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## Comandos pre-prompt y pre-ejecución personalizados en Cmd
+## TransientPrompt and TransientRightPrompt in Fish
 
-Clink proporciona una API extremadamente flexible para ejecutar comandos pre-prompt y pre-ejecución en la shell de Cmd. Es bastante sencillo de usar con Starship. Haz los siguientes cambios a tu archivo `starship.lua` según tus requisitos:
+It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
-- Para ejecutar una función personalizada justo antes de dibujar la shell, defina una nueva función llamada `starship_preprompt_user_func`. Esta función recibe el prompt actual como una cadena que puedes utilizar. Por ejemplo, para dibujar un cohete antes del prompt, podrías hacer lo siguiente
+Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+
+```fish
+function starship_transient_prompt_func
+  starship module character
+end
+starship init fish | source
+enable_transience
+```
+
+- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
+
+## Custom pre-prompt and pre-execution Commands in Cmd
+
+Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
+
+- To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -68,7 +94,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- Para ejecutar una función personalizada justo antes de ejecutar un comando, define una nueva función llamada `starship_precmd_user_func`. Esta función recibe la línea de comandos actual como una cadena que se puede utilizar. Por ejemplo, para imprimir el comando que va a ser ejecutado, escribirías
+- To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
 
 ```lua
 function starship_precmd_user_func(line)
@@ -78,11 +104,11 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## Comandos pre-prompt y pre-ejecucución personalizados en Bash
+## Custom pre-prompt and pre-execution Commands in Bash
 
-Bash no posee un framework oficial de preexec/precmd como la mayoría de los demás intérpretes de comandos. Debido a esto, es difícil proporcionar "hooks" totalmente personalizables en `Bash`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
+Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
-- Para ejecutar una función personalizada previa al renderizado del prompt, define una nueva función y asigna su nombre a `starship_precmd_user_func`. Por ejemplo, para dibujar un cohete antes del prompt, se puede realizar así:
+- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
 ```bash
 function blastoff(){
@@ -91,7 +117,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- Para ejecutar una función personalizada antes de que un comando sea ejecutado, es posible usar el [mecanismo de trampa `DEBUG`](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). No obstante, ¡**debes** atrapar la señal DEBUG _antes_ de inicializar Starship! Starship puede preservar el valor de la trampa DEBUG, pero si la trampa es reemplazada después de que Starship inicie, alguna funcionalidad fallará.
+- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal _before_ initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
 
 ```bash
 function blastoff(){
@@ -103,11 +129,11 @@ eval $(starship init bash)
 set +o functrace
 ```
 
-## Comandos pre-prompt y pre-ejecución personalizados en PowerShell
+## Custom pre-prompt and pre-execution Commands in PowerShell
 
-Powershell no posee un framework oficial de preexec/precmd como la mayoría de los demás intérpretes de comandos. Debido a esto, es difícil proporcionar "hooks" totalmente personalizables en `Powershell`. Sin embargo, Starship te da la posibilidad de insertar de forma limitada tus propias funciones en el proceso de renderizado del prompt:
+PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
-Crea una función llamada `Invoke-Starship-PreCommand`
+Create a function named `Invoke-Starship-PreCommand`
 
 ```powershell
 function Invoke-Starship-PreCommand {
@@ -115,35 +141,35 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Cambiar el Título de la Ventana
+## Change Window Title
 
-Algunos intérpretes de comandos van a cambiar automáticamente el título de la ventana por ti (p. ej., para mostrar tu directorio actual). Fish incluso lo hace por defecto. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash`, `zsh`, `cmd` o `powershell`.
+Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
-Primero, define una función para el cambio de título de la ventana (idéntico en Bash y zsh):
+First, define a window title change function (identical in bash and zsh):
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; TU_TÍTULO_DE_VENTANA_AQUÍ \007"
+    echo -ne "\033]0; YOUR_WINDOW_TITLE_HERE \007"
 }
 ```
 
-Puedes usar variables para personalizar este título (`$USER`, `$HOSTNAME` y `$PWD` son opciones populares).
+You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
 
-En `Bash`, establece que esta función sea la función precmd de Starship:
+In `bash`, set this function to be the precmd starship function:
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-En `zsh`, añade esto al array `precmd_functions`:
+In `zsh`, add this to the `precmd_functions` array:
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-Si te gusta el resultado, añade estas líneas a tu archivo de configuración del intérprete de comandos (`~/.bashrc` o `~/.zsrhc`) para hacerlo permanente.
+If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
 
-Por ejemplo, si quieres mostrar tu directorio actual en el título de la pestaña de la terminal, añade el siguiente fragmento a tu `~/.bashrc` o `~/.zshrc`:
+For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 function set_win_title(){
@@ -152,7 +178,7 @@ function set_win_title(){
 starship_precmd_user_func="set_win_title"
 ```
 
-Para Cmd, puedes cambiar el título de la ventana usando la función `starship_preprompt_user_func`.
+For Cmd, you can change the window title using the `starship_preprompt_user_func` function.
 
 ```lua
 function starship_preprompt_user_func(prompt)
@@ -162,7 +188,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-También puede establecer una salida similar con PowerShell creando una función llamada `Invoke-Starship-PreCommand`.
+You can also set a similar output with PowerShell by creating a function named `Invoke-Starship-PreCommand`.
 
 ```powershell
 # edit $PROFILE
@@ -173,41 +199,41 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Gabilitar Prompt Derecho
+## Enable Right Prompt
 
-Algunos intérpretes de órdenes soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt correcto usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
+Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
 
-Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear los módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo `fill`](/config/#fill).
+Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
 
 ### Ejemplo
 
 ```toml
-# ~/.config/starship. oml
+# ~/.config/starship.toml
 
-# Un prompt izquierdo mínimo
+# A minimal left prompt
 format = """$character"""
 
-# mueve el resto del mensaje a la derecha
+# move the rest of the prompt to the right
 right_format = """$all"""
 ```
 
-Produce un prompt como el siguiente:
+Produces a prompt like the following:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 ```
 
-## Prompt de continuación
+## Continuation Prompt
 
-Algunos intérpretes de comandos admiten un prompt de continuacion junto con el prompt normal. Este prompt es renderizado en lugar del prompt normal cuando el usuario ha introducido una orden incompleta (como solamente un paréntesis izquierdo o comilla).
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship puede establecer el prompt de continuación usando la opción `continuation_prompt`. El prompt por defecto es `"[∙](bright-black) "`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
 
-Nota: `continuation_prompt` debe establecerse en una cadena literal sin ninguna variable.
+Note: `continuation_prompt` should be set to a literal string without any variables.
 
-Nota: Los prompts de continuación solo están disponibles en los siguientes intérpretes de comandos:
+Note: Continuation prompts are only available in the following shells:
 
 - `bash`
 - `zsh`
@@ -218,13 +244,13 @@ Nota: Los prompts de continuación solo están disponibles en los siguientes int
 ```toml
 # ~/.config/starship.toml
 
-# Un prompt de continuación que muestra dos flechas rellenas
+# A continuation prompt that displays two filled in arrows
 continuation_prompt = "▶▶"
 ```
 
 ## Cadenas de Estilo
 
-Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
 - `bold`
 - `italic`
@@ -239,17 +265,17 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
 - `<color>`
 - `none`
 
-donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-El token `none` anula todos los demás tokens en una cadena si no es parte de un especificador `bg:`, de modo que por ejemplo `fg:red none fg:blue` creará una cadena sin ningún estilo. `bg:none` establece el fondo al color por defecto, así que `fg:red bg:none` es equivalente a `red` o `fg:red` y `bg:green fg:red bg:none` también es equivalente a `fg:red` o `red`. Puede convertirse en un error usar `none` junto con otros tokens en el futuro.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Un especificador de color puede ser uno de los siguientes:
+A color specifier can be one of the following:
 
-- Uno de los colores estándar del terminal: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Opcionalmente puede prefijar estos con `bright-` para obtener la versión brillante (por ejemplo, `bright-white`).
-- Un `#` seguido de un número hexadecimal de seis dígitos. Esto especifica un [código hexadecimal de color RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
-- Un número entre 0-255. Esto especifica un [Código de color ANSI de 8-bits](https://i.stack.imgur.com/KTSQa.png).
+- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+- A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+- A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
 
-Si se especifican varios colores para el primer plano/fondo, el último en la cadena tendrá prioridad.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
