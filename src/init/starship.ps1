@@ -164,9 +164,14 @@ $null = New-Module starship {
         Set-PSReadLineOption -ExtraPromptLineCount ($promptLines.Length - 1)
 
         # Return the prompt
-        # After printing the left prompt, the cursor position is saved,
-        # right prompt is printed, and then cursor position is restored.
-        "$promptText$([char]0x1B)[s{0,$rpromptOffset}$([char]0x1B)[u" -f $rpromptText
+        if ($rpromptOffset - $rpromptText.Length -lt 0) {
+            # Avoid printing the right prompt if it doesn't fit
+            $promptText
+        } else {
+            # After printing the left prompt, the cursor position is saved,
+            # right prompt is printed, and then cursor position is restored.
+            "$promptText$([char]0x1B)[s{0,$rpromptOffset}$([char]0x1B)[u" -f $rpromptText
+        }
 
         # Propagate the original $LASTEXITCODE from before the prompt function was invoked.
         $global:LASTEXITCODE = $origLastExitCode

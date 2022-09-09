@@ -241,6 +241,9 @@ Note: The right prompt is a single line following the input location. To right a
 the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
 `right_format` is currently supported for the following shells: pwsh, elvish, fish, zsh, xonsh, cmd.
+For pwsh, it is not implemented natively, and hence can result in two side-effects:
+- the right prompt won't be cleared once the input starts overlapping with the right prompt
+- the right prompt won't be reprinted if the input is cleared from the overlap region
 
 ### Example
 
