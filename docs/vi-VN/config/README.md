@@ -609,9 +609,9 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ### Các biến
 
-| Biến   | Ví dụ | Mô tả                                                                         |
-| ------ | ----- | ----------------------------------------------------------------------------- |
-| symbol |       | Một phản ánh của một trong `success_symbol`, `error_symbol` or `vicmd_symbol` |
+| Biến   | Ví dụ | Mô tả                                                                                                    |
+| ------ | ----- | -------------------------------------------------------------------------------------------------------- |
+| symbol |       | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Các vị dụ
 
