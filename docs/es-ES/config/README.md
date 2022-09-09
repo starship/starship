@@ -609,9 +609,9 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ### Variables
 
-| Variable | Ejemplo | Descripción                                                    |
-| -------- | ------- | -------------------------------------------------------------- |
-| symbol   |         | Un espejo de `success_symbol`, `error_symbol` o `vicmd_symbol` |
+| Variable | Ejemplo | Descripción                                                                                              |
+| -------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Ejemplos
 
