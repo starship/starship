@@ -77,6 +77,7 @@ pub const ALL_MODULES: &[&str] = &[
     "spack",
     "status",
     "sudo",
+    "sway",
     "swift",
     "terraform",
     "time",

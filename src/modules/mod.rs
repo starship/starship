@@ -66,6 +66,7 @@ mod singularity;
 mod spack;
 mod status;
 mod sudo;
+mod sway;
 mod swift;
 mod terraform;
 mod time;
@@ -158,6 +159,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
             "spack" => spack::module(context),
+            "sway" => sway::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
             "sudo" => sudo::module(context),
@@ -265,6 +267,7 @@ pub fn description(module: &str) -> &'static str {
         "spack" => "The current spack environment, if $SPACK_ENV is set",
         "status" => "The status of the last command",
         "sudo" => "The sudo credentials are currently cached",
+        "sway" => "The currently installed version of Sway",
         "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",

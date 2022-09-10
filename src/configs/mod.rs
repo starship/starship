@@ -70,6 +70,7 @@ pub mod spack;
 mod starship_root;
 pub mod status;
 pub mod sudo;
+pub mod sway;
 pub mod swift;
 pub mod terraform;
 pub mod time;
@@ -229,6 +230,8 @@ pub struct FullConfig<'a> {
     status: status::StatusConfig<'a>,
     #[serde(borrow)]
     sudo: sudo::SudoConfig<'a>,
+    #[serde(borrow)]
+    sway: sway::SwayConfig<'a>,
     #[serde(borrow)]
     swift: swift::SwiftConfig<'a>,
     #[serde(borrow)]

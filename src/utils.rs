@@ -340,6 +340,10 @@ Built on MoarVM version 2021.12.\n",
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
         }),
+        "forc --version" => Some(CommandOutput {
+            stdout: String::from("0.24.2\n"),
+            stderr: String::default(),
+        }),
         "swift --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
