@@ -80,9 +80,9 @@ starship init fish | source
 enable_transience
 ```
 
-## Custom pre-prompt and pre-execution Commands in Cmd
+## Cmdのカスタムの事前プロンプトおよび事前実行コマンド
 
-Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
+Clinkはプロンプト表示前と実行前にCmd shellコマンドを実行するための非常に柔軟なAPIを提供します。 It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
 
 - To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
 
@@ -104,11 +104,11 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## Bashのカスタムの事前プロンプトおよび事前実行コマンド
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+Bashには、他のほとんどのシェルとは違い、正式な preexec / precmd フレームワークを持っていません。 そのため、 `bash`で完全にカスタマイズ可能なフックを提供することは困難です。 ただし、Starship はプロンプトを描画する一連の流れに、限定的に独自の関数を挿入することができます。
 
-- To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
+- 関数をプロンプトが描画される直前に実行するためには、新しい関数を定義して `starship_precmd_user_func` に割り当ててください。 例として、ロケットをプロンプトの前に表示させたければ、下記のようにしてください。
 
 ```bash
 function blastoff(){
@@ -117,7 +117,7 @@ function blastoff(){
 starship_precmd_user_func="blastoff"
 ```
 
-- To run a custom function right before a command runs, you can use the [`DEBUG` trap mechanism](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/). However, you **must** trap the DEBUG signal _before_ initializing Starship! Starship can preserve the value of the DEBUG trap, but if the trap is overwritten after starship starts up, some functionality will break.
+- コマンドの直前に関数を実行するために、[`DEBUG` トラップの仕組み](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/)を使うことができます。 However, you **must** trap the DEBUG signal _before_ initializing Starship! Starship は DEBUGトラップの値を保護できますが、 starship の起動後にトラップが上書きされると、いくつかの機能は壊れてしまうでしょう。
 
 ```bash
 function blastoff(){
@@ -131,7 +131,7 @@ set +o functrace
 
 ## Custom pre-prompt and pre-execution Commands in PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+PowerShell does not have a formal preexec/precmd framework like most other shells. そのため、`powershell`で完全にカスタマイズ可能なフックを提供することは困難です。 ただし、Starship はプロンプトを描画する一連の流れに、限定的に独自の関数を挿入することができます。
 
 Create a function named `Invoke-Starship-PreCommand`
 
@@ -141,11 +141,11 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Change Window Title
+## ウィンドウのタイトルの変更
 
-Some shell prompts will automatically change the window title for you (e.g. to reflect your working directory). Fish even does it by default. Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
+いくつかのシェルプロンプトはあなたのためにウィンドウのタイトルを自動的に変更します(例えば、カレントディレクトリを反映するために)。 特に Fish はデフォルトで変更を行います。 Starship does not do this, but it's fairly straightforward to add this functionality to `bash`, `zsh`, `cmd` or `powershell`.
 
-First, define a window title change function (identical in bash and zsh):
+まず、ウィンドウのタイトルを変更する関数を定義してください（ bash も zsh も同様に）
 
 ```bash
 function set_win_title(){
@@ -153,23 +153,23 @@ function set_win_title(){
 }
 ```
 
-You can use variables to customize this title (`$USER`, `$HOSTNAME`, and `$PWD` are popular choices).
+タイトルをカスタマイズするために変数を利用することができます (`$USER` 、 `$HOSTNAME`、 `$PWD` が一般的です)。
 
-In `bash`, set this function to be the precmd starship function:
+`bash` では関数を starship の precmd 関数としてセットしてください。
 
 ```bash
 starship_precmd_user_func="set_win_title"
 ```
 
-In `zsh`, add this to the `precmd_functions` array:
+`zsh`では関数を `precmd_functions` の配列に追加してください。
 
 ```bash
 precmd_functions+=(set_win_title)
 ```
 
-If you like the result, add these lines to your shell configuration file (`~/.bashrc` or `~/.zshrc`) to make it permanent.
+もし結果に満足したら、永続化のためそれぞれの行をシェルの設定ファイル (`~/.bashrc` もしくは `~/.zshrc`) に追加してください。
 
-For example, if you want to display your current directory in your terminal tab title, add the following snippet to your `~/.bashrc` or `~/.zshrc`:
+たとえば、現在のディレクトリをターミナルタブのタイトルに表示したい場合は、 `~/.bashrc`または`~/.zshrc`に以下のスニペットを追加します。
 
 ```bash
 function set_win_title(){
@@ -199,11 +199,11 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Enable Right Prompt
+## 右プロンプトの有効化
 
-Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+シェルによっては、入力と同じ行にレンダリングされる右プロンプトをサポートしています。 Starship では `right_format` オプションを使って右プロンプトの内容を設定できます。 `format`で使用できるモジュールはすべて`right_format`でも使用できます。 変数`$all`には、`format`や`right_format`で明示的に使用されていないモジュールのみが格納されます。
 
-Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
+注意: 右プロンプトは入力の場所に続く単一の行です。 To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
 
@@ -219,7 +219,7 @@ format = """$character"""
 right_format = """$all"""
 ```
 
-Produces a prompt like the following:
+次のようなプロンプトが生成されます:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
@@ -250,7 +250,7 @@ continuation_prompt = "▶▶"
 
 ## スタイルの設定
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+スタイル文字列は空白で区切られた単語のリストです。 大文字小文字を区別しません（例えば、 `bold` と`BoLd` は同じだとみなされます）。 それぞれ以下のいずれか一つが該当します。
 
 - `bold`
 - `italic`
@@ -265,17 +265,17 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 - `<color>`
 - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+ここで、 `<color>` は色を指定します（以下で述べます）。 現在 `fg:<color>` と `<color>` は同様の動作ですが、将来変更される可能性があります。 `inverted` は背景と前景の色を交換します。 文字列中の単語の順序は関係ありません。
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+`none` トークンは、文字列中の`bg:` 指定子の一部でない場合、他のすべてのトークンをオーバーライドします。そのため、たとえば、`fg:red none fg:blue` と指定した場合、スタイルなしの文字列が作られます。 `bg:none` は背景色をデフォルトの色にセットするので、`fg:red bg:none` は `red` や `fg:red` と同じ意味になり、`bg:green fg:red bg:none` も `fg:red` や `red` と同じ意味になります。 将来 `none` を他の単語と一緒に使用することはエラーになるかもしれません。
 
-A color specifier can be one of the following:
+色は以下のいずれか1つを指定できます。
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
-- A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
-- A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+- 標準的なターミナルカラーの `black`、 `red`、 `green`、 `blue`、 `yellow`、 `purple`、 `cyan`、 `white`。 必要に応じて、より明るい色を得るために `bright-` を前につけることができます。（例えば、 `bright-white` ）
+- `#` に続く16進数。 [RGB の16進数カラーコード](https://www.w3schools.com/colors/colors_hexadecimal.asp)を表します。
+- 0-255 までの間の数字。 [8-bit ANSI カラーコード](https://i.stack.imgur.com/KTSQa.png) を表します。
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+複数の色が文字色/背景色に指定された際には、最後の指定が優先して選ばれます。
 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
