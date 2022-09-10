@@ -1694,7 +1694,8 @@
         "signal_symbol": "⚡",
         "style": "bold red",
         "success_symbol": "",
-        "symbol": "❌"
+        "symbol": "❌",
+        "timeout_symbol": "⏲️"
       },
       "allOf": [
         {
@@ -5865,6 +5866,10 @@
           "default": "",
           "type": "string"
         },
+        "timeout_symbol": {
+          "default": "⏲️",
+          "type": "string"
+        },
         "not_executable_symbol": {
           "default": "🚫",
           "type": "string"
@@ -5906,6 +5911,24 @@
           "type": "string"
         },
         "pipestatus_segment_format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "success_format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pipestatus_success_format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pipestatus_success_segment_format": {
           "type": [
             "string",
             "null"
