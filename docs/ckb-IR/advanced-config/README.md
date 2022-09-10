@@ -104,9 +104,9 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## Custom pre-prompt and pre-execution Commands in Bash
+## فرمانە کڕیاڕخوازەکانی pre-prompt و pre-execution لە Bashـدا
 
-Bash does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
+بەپێچەوانەی شێلەکانی دیکە Bash هیچ چوارچێوەیەکی فەرمی preexec/precmdـی نییە. لەبەر ئەوە، دابین کردنی قولابە تەواو کڕیارخوازکراوەکان ئاسان نییە لە `Bash`. However, Starship does give you limited ability to insert your own functions into the prompt-rendering procedure:
 
 - To run a custom function right before the prompt is drawn, define a new function and then assign its name to `starship_precmd_user_func`. For example, to draw a rocket before the prompt, you would do
 
@@ -252,20 +252,20 @@ continuation_prompt = "▶▶"
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
-- `bold`
-- `italic`
-- `underline`
-- `dimmed`
-- `inverted`
+- `تۆخ`
+- `لار`
+- `بنهێڵ`
+- `کاڵ کراو`
+- `پێچەوانە کراو`
 - `blink`
 - `hidden`
 - `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
-- `none`
+- `هیچ`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+کە `<color>` دیاریکەری ڕەنگێکە (لە ژێرەوە باسکراوە). `fg:<color>` و `<color>` لە ئێستادا هەمان شت ئەکەن، بەڵام ئەمە ڕەنگە لە داهاتووا بگۆڕێت. `inverted` ڕەنگی پاشبنەما و پێشبنەما ئەگۆڕێتەوە. ڕیزبەندی ووشەکان لە زنجیرەکەدا گرنگ نییە.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
