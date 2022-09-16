@@ -2366,6 +2366,10 @@
           "default": true,
           "type": "boolean"
         },
+        "truncate_from_repo_root": {
+          "default": false,
+          "type": "boolean"
+        },
         "substitutions": {
           "default": {},
           "type": "object",
