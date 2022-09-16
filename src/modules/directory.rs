@@ -1951,7 +1951,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn truncate_from_repo_root_true_truncated_git_repo_in_home_directory() -> io::Result<()> {
         let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
         let dir = tmp_dir.path().join("src/fuel-gauge/resistor");
@@ -1982,7 +1981,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn truncate_from_repo_root_true_not_truncated_git_repo_in_home_directory() -> io::Result<()> {
         let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
         let dir = tmp_dir.path().join("src/fuel-gauge/resistor");
