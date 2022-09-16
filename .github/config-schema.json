@@ -341,6 +341,7 @@
         "style": "cyan bold",
         "substitutions": {},
         "truncate_to_repo": true,
+        "truncate_from_repo_root": false,
         "truncation_length": 3,
         "truncation_symbol": "",
         "use_logical_path": true,
