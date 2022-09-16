@@ -61,6 +61,11 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    ```powershell
    scoop install starship
    ```
+   Với [Winget](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
+   ```
 
 1. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:
 

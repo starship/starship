@@ -62,6 +62,12 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
    scoop install starship
    ```
 
+   لەگەڵ [Winget](https://github.com/microsoft/winget-cli):
+
+   ```powershell
+   winget install starship
+   ```
+
 1. نوسینی init زیادبکە بۆ فایلی ڕێکخستنی شێڵەکەت:
 
 

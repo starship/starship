@@ -62,6 +62,12 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    scoop install starship
    ```
 
+   Con [Winget](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
+   ```
+
 1. Aggiungi lo script di inizializzazione al file di configurazione della shell:
 
 

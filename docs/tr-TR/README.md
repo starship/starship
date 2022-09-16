@@ -62,6 +62,12 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
    scoop install starship
    ```
 
+   Winget [ile](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
+   ```
+
 1. Add the init script to your shell's config file:
 
 

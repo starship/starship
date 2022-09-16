@@ -62,6 +62,12 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
    scoop install starship
    ```
 
+   使用 [Winget](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
+   ```
+
 1. 将初始化脚本添加到您的 shell 的配置文件：
 
 

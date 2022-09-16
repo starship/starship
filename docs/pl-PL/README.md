@@ -62,6 +62,12 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
    scoop install starship
    ```
 
+   Za pomocą [Winget](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
+   ```
+
 1. Dodaj skrypt inicjalizacyjny do konfiguracji twojej powłoki:
 
 

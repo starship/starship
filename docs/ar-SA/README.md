@@ -62,6 +62,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    scoop install starship
    ```
 
+   بإستخدام [Winget](https://github.com/microsoft/winget-cli):
+
+   ```powershell
+   winget install starship
+   ```
+
 1. أضف ما يلي إلى ملف تكوين موجه الأوامر الخاص بك:
 
 

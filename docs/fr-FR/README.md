@@ -62,6 +62,12 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    scoop install starship
    ```
 
+   Avec [Winget](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
+   ```
+
 1. Ajouter le script d’initialisation au fichier configuration de votre shell:
 
 

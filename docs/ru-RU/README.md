@@ -61,6 +61,11 @@ description: Starship - минимальная, быстрая и бесконе
    ```powershell
    scoop install starship
    ```
+   C [Winget](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
+   ``` 
 
 1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
 

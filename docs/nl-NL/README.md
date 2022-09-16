@@ -39,7 +39,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Installeer de nieuwste versie
 
-   With Shell:
+   Met Shell:
 
    ```sh
    curl -sS https://starship.rs/install.sh | sh
@@ -50,7 +50,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Installeren via pakketbeheerder
 
-   With [Homebrew](https://brew.sh/):
+   Met [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
@@ -60,6 +60,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ```powershell
    scoop install starship
+   ```
+
+   Met [Winget](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
    ```
 
 1. Voeg het initscript toe aan het configuratiebestand van uw shell:

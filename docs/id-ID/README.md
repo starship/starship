@@ -62,6 +62,12 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
    scoop install starship
    ```
 
+   Dengan [Winget](https://github.com/microsoft/winget-cli):
+   
+   ```powershell
+   winget install starship
+   ```
+
 1. Tambahkan skrip init ke dalam file konfigurasi Shell:
 
 

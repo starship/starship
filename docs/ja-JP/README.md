@@ -61,6 +61,11 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```powershell
    scoop install starship
    ```
+   [ Winget ](https://github.com/microsoft/winget-cli)の場合：
+   
+   ```powershell
+   winget install starship
+   ```
 
 1. 初期化のためのスクリプトをシェルの設定ファイルに追加
 
