@@ -106,7 +106,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
         Some(path_to_repo)
-            if config.always_show_repo_root
+            if config.truncate_from_repo_root
                 && !config.truncation_symbol.is_empty()
                 && config.fish_style_pwd_dir_length == 0
                 && config.truncate_to_repo =>
@@ -1773,7 +1773,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_truncated_in_repo() -> io::Result<()> {
+    fn truncate_from_repo_root_truncated_in_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above").join("repo");
         let dir = repo_dir.join("src/sub/path");
@@ -1785,7 +1785,7 @@ mod tests {
                 [directory]
                 truncation_length = 3
                 truncation_symbol = "…/"
-                always_show_repo_root = true
+                truncate_from_repo_root = true
                 truncate_to_repo = true
             })
             .path(dir)
@@ -1801,7 +1801,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_not_truncated_in_repo() -> io::Result<()> {
+    fn truncate_from_repo_root_not_truncated_in_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above").join("repo");
         let dir = repo_dir.join("src/sub/path");
@@ -1813,7 +1813,7 @@ mod tests {
                 [directory]
                 truncation_length = 4
                 truncation_symbol = "…/"
-                always_show_repo_root = true
+                truncate_from_repo_root = true
                 truncate_to_repo = true
             })
             .path(dir)
@@ -1829,7 +1829,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_true_truncated_symlinked_directory_in_git_repo() -> io::Result<()> {
+    fn truncate_from_repo_root_true_truncated_symlinked_directory_in_git_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
         let dir = repo_dir.join("src");
@@ -1843,7 +1843,7 @@ mod tests {
                 truncation_length = 3
                 truncate_to_repo = true
                 truncation_symbol = "…/"
-                always_show_repo_root = true
+                truncate_from_repo_root = true
             })
             .path(repo_dir.join("src/loop/loop"))
             .collect();
@@ -1859,7 +1859,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_true_not_truncated_symlinked_directory_in_git_repo() -> io::Result<()>
+    fn truncate_from_repo_root_true_not_truncated_symlinked_directory_in_git_repo() -> io::Result<()>
     {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("rocket-controls");
@@ -1874,7 +1874,7 @@ mod tests {
                 truncation_length = 5
                 truncate_to_repo = true
                 truncation_symbol = "…/"
-                always_show_repo_root = true
+                truncate_from_repo_root = true
             })
             .path(repo_dir.join("src/loop/loop"))
             .collect();
@@ -1890,7 +1890,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_true_truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
+    fn truncate_from_repo_root_true_truncated_directory_in_symlinked_git_repo() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
         let src_dir = repo_dir.join("src/meters/fuel-gauge");
@@ -1909,7 +1909,7 @@ mod tests {
                 truncation_length = 3
                 truncate_to_repo = true
                 truncation_symbol = "…/"
-                always_show_repo_root = true
+                truncate_from_repo_root = true
 
             })
             .path(symlink_src_dir)
@@ -1926,7 +1926,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_true_not_truncated_directory_in_symlinked_git_repo() -> io::Result<()>
+    fn truncate_from_repo_root_true_not_truncated_directory_in_symlinked_git_repo() -> io::Result<()>
     {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above-repo").join("rocket-controls");
@@ -1946,7 +1946,7 @@ mod tests {
                 truncation_length = 4
                 truncate_to_repo = true
                 truncation_symbol = "…/"
-                always_show_repo_root = true
+                truncate_from_repo_root = true
 
             })
             .path(symlink_src_dir)
@@ -1963,7 +1963,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_true_truncated_git_repo_in_home_directory() -> io::Result<()> {
+    fn truncate_from_repo_root_true_truncated_git_repo_in_home_directory() -> io::Result<()> {
         let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
         let dir = tmp_dir.path().join("src/fuel-gauge/resistor");
         fs::create_dir_all(&dir)?;
@@ -1973,7 +1973,7 @@ mod tests {
             .config(toml::toml! {
                 [directory]
                 truncate_to_repo = true
-                always_show_repo_root = true
+                truncate_from_repo_root = true
                 truncation_symbol = "…/"
                 truncation_length = 3
             })
@@ -1993,7 +1993,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_true_not_truncated_git_repo_in_home_directory() -> io::Result<()> {
+    fn truncate_from_repo_root_true_not_truncated_git_repo_in_home_directory() -> io::Result<()> {
         let (tmp_dir, name) = make_known_tempdir(home_dir().unwrap().as_path())?;
         let dir = tmp_dir.path().join("src/fuel-gauge/resistor");
         fs::create_dir_all(&dir)?;
@@ -2003,7 +2003,7 @@ mod tests {
             .config(toml::toml! {
                 [directory]
                 truncate_to_repo = true
-                always_show_repo_root = true
+                truncate_from_repo_root = true
                 truncation_symbol = "…/"
                 truncation_length = 4
             })
@@ -2023,7 +2023,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_truncated_highlight_git_root_dir() -> io::Result<()> {
+    fn truncate_from_repo_root_truncated_highlight_git_root_dir() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above").join("repo");
         let dir = repo_dir.join("src/sub/path");
@@ -2036,7 +2036,7 @@ mod tests {
                 truncation_length = 3
                 truncate_to_repo = true
                 repo_root_style = "bold red"
-                always_show_repo_root = true
+                truncate_from_repo_root = true
                 truncation_symbol = "…/"
             })
             .path(dir)
@@ -2052,7 +2052,7 @@ mod tests {
     }
 
     #[test]
-    fn always_show_repo_root_not_truncated_highlight_git_root_dir() -> io::Result<()> {
+    fn truncate_from_repo_root_not_truncated_highlight_git_root_dir() -> io::Result<()> {
         let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
         let repo_dir = tmp_dir.path().join("above").join("repo");
         let dir = repo_dir.join("src/sub/path");
@@ -2065,7 +2065,7 @@ mod tests {
                 truncation_length = 5
                 truncate_to_repo = true
                 repo_root_style = "bold red"
-                always_show_repo_root = true
+                truncate_from_repo_root = true
                 truncation_symbol = "…/"
             })
             .path(dir)
