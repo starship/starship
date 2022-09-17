@@ -64,7 +64,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    winget install starship
    ```
 
-
 1. Add the init script to your shell's config file:
 
    #### Bash
