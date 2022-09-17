@@ -62,6 +62,12 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    scoop install starship
    ```
 
+   [Winget](https://github.com/microsoft/winget-cli)을 통한 설치:
+
+   ```powershell
+   winget install starship
+   ```
+
 1. 쉘 설정 파일에 init 스크립트 추가:
 
 
