@@ -5,6 +5,7 @@ use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
 use indexmap::IndexMap;
 use path_slash::{PathBufExt, PathExt};
+use std::borrow::Cow;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
@@ -22,7 +23,7 @@ use crate::formatter::StringFormatter;
 ///
 /// **Contraction**
 /// - Paths beginning with the home directory or with a git repo right inside
-///   the home directory will be contracted to `~`, or the set HOME_SYMBOL
+///   the home directory will be contracted to `~`, or the set `HOME_SYMBOL`
 /// - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Substitution**
@@ -63,8 +64,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut is_truncated = dir_string.is_some();
 
     // the home directory if required.
-    let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol));
+    let dir_string = dir_string
+        .unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol).to_string());
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -89,7 +90,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let contracted_home_dir = contract_path(display_dir, &home_dir, &home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
-                contracted_home_dir,
+                contracted_home_dir.to_string(),
                 &dir_string,
             )
         } else {
@@ -106,15 +107,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let after_repo_root = contracted_path.replacen(repo_path_vec[0], "", 1);
             let num_segments_after_root = after_repo_root.split('/').count();
 
-            if ((num_segments_after_root - 1) as i64) < config.truncation_length {
+            if config.truncation_length == 0
+                || ((num_segments_after_root - 1) as i64) < config.truncation_length
+            {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&contracted_path, "");
-                [prefix + &before, root.to_string(), after_repo_root]
+                [prefix + before.as_str(), root.to_string(), after_repo_root]
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string]
+                ["".to_string(), "".to_string(), prefix + dir_string.as_str()]
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+        _ => ["".to_string(), "".to_string(), prefix + dir_string.as_str()],
     };
 
     let path_vec = if config.use_os_path_sep {
@@ -202,13 +205,17 @@ fn is_readonly_dir(path: &Path) -> bool {
 ///
 /// Replaces the `top_level_path` in a given `full_path` with the provided
 /// `top_level_replacement`.
-fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
+fn contract_path<'a>(
+    full_path: &'a Path,
+    top_level_path: &'a Path,
+    top_level_replacement: &'a str,
+) -> Cow<'a, str> {
     if !full_path.normalised_starts_with(top_level_path) {
         return full_path.to_slash_lossy();
     }
 
     if full_path.normalised_equals(top_level_path) {
-        return top_level_replacement.to_string();
+        return Cow::from(top_level_replacement);
     }
 
     // Because we've done a normalised path comparison above
@@ -219,12 +226,12 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
         .strip_prefix(top_level_path.without_prefix())
         .unwrap_or(full_path);
 
-    format!(
+    Cow::from(format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
         path = sub_path.to_slash_lossy()
-    )
+    ))
 }
 
 /// Contract the root component of a path based on the real path
@@ -338,7 +345,7 @@ mod tests {
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
     use crate::utils::home_dir;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
     #[cfg(target_os = "windows")]
@@ -422,7 +429,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "C:");
+        assert_eq!(output, "C:/");
     }
 
     #[test]
@@ -491,6 +498,8 @@ mod tests {
     fn make_known_tempdir(root: &Path) -> io::Result<(TempDir, String)> {
         fs::create_dir_all(root)?;
         let dir = TempDir::new_in(root)?;
+        // the .to_string_lossy().to_string() here looks weird but is required
+        // to convert it from a Cow.
         let path = dir
             .path()
             .file_name()
@@ -787,7 +796,7 @@ mod tests {
             })
             .path(&dir)
             .collect();
-        let dir_str = dir.to_slash_lossy();
+        let dir_str = dir.to_slash_lossy().to_string();
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(
@@ -817,7 +826,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&to_fish_style(
                 100,
-                dir.to_slash_lossy(),
+                dir.to_slash_lossy().to_string(),
                 ""
             )))
         ));
@@ -868,7 +877,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/thrusters/rocket",
-                to_fish_style(1, dir.to_slash_lossy(), "/thrusters/rocket")
+                to_fish_style(1, dir.to_slash_lossy().to_string(), "/thrusters/rocket")
             )))
         ));
 
@@ -990,7 +999,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, tmp_dir.path().to_slash_lossy().to_string(), "")
             )))
         ));
 
@@ -1021,7 +1030,15 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(
+                    1,
+                    tmp_dir
+                        .path()
+                        .join("above-repo")
+                        .to_slash_lossy()
+                        .to_string(),
+                    ""
+                )
             )))
         ));
 
@@ -1196,7 +1213,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, tmp_dir.path().to_slash_lossy().to_string(), "")
             )))
         ));
 
@@ -1233,7 +1250,15 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(
+                    1,
+                    tmp_dir
+                        .path()
+                        .join("above-repo")
+                        .to_slash_lossy()
+                        .to_string(),
+                    ""
+                )
             )))
         ));
 
@@ -1669,6 +1694,36 @@ mod tests {
         assert_eq!(expected, actual);
         tmp_dir.close()
     }
+
+    #[test]
+    fn highlight_git_root_dir_zero_truncation_length() -> io::Result<()> {
+        let (tmp_dir, _) = make_known_tempdir(Path::new("/tmp"))?;
+        let repo_dir = tmp_dir.path().join("above").join("repo");
+        let dir = repo_dir.join("src/sub/path");
+        fs::create_dir_all(&dir)?;
+        init_repo(&repo_dir).unwrap();
+
+        let actual = ModuleRenderer::new("directory")
+            .config(toml::toml! {
+                [directory]
+                truncation_length = 0
+                truncate_to_repo = false
+                repo_root_style = "green"
+            })
+            .path(dir)
+            .collect();
+        let expected = Some(format!(
+            "{}{}repo{} ",
+            Color::Cyan.bold().paint(convert_path_sep(
+                tmp_dir.path().join("above/").to_str().unwrap()
+            )),
+            Color::Green.prefix(),
+            Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
+        ));
+        assert_eq!(expected, actual);
+        tmp_dir.close()
+    }
+
     // sample for invalid unicode from https://doc.rust-lang.org/std/ffi/struct.OsStr.html#method.to_string_lossy
     #[cfg(any(unix, target_os = "redox"))]
     fn invalid_path() -> PathBuf {

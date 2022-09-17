@@ -1,6 +1,6 @@
 use crate::serde_utils::ValueDeserializer;
 use crate::utils;
-use ansi_term::Color;
+use nu_ansi_term::Color;
 use serde::{
     de::value::Error as ValueError, de::Error as SerdeError, Deserialize, Deserializer, Serialize,
 };
@@ -34,15 +34,15 @@ where
         }
     }
 
-    /// Helper function that will call ModuleConfig::from_config(config) if config is Some,
-    /// or ModuleConfig::default() if config is None.
+    /// Helper function that will call `ModuleConfig::from_config(config)  if config is Some,
+    /// or `ModuleConfig::default()` if config is None.
     fn try_load(config: Option<&'a Value>) -> Self {
         config.map(Self::load).unwrap_or_default()
     }
 }
 
 impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
-    /// Create ValueDeserializer wrapper and use it to call Deserialize::deserialize on it.
+    /// Create `ValueDeserializer` wrapper and use it to call `Deserialize::deserialize` on it.
     fn from_config(config: &'a Value) -> Result<Self, ValueError> {
         let deserializer = ValueDeserializer::new(config);
         T::deserialize(deserializer)
@@ -50,7 +50,11 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
 }
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(untagged)]
 pub enum Either<A, B> {
     First(A),
@@ -72,8 +76,8 @@ where
     {
         let either = Either::<Vec<T>, T>::deserialize(deserializer)?;
         match either {
-            Either::First(v) => Ok(VecOr(v)),
-            Either::Second(s) => Ok(VecOr(vec![s])),
+            Either::First(v) => Ok(Self(v)),
+            Either::Second(s) => Ok(Self(vec![s])),
         }
     }
 }
@@ -244,14 +248,14 @@ impl StarshipConfig {
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["custom"])?.as_table()
     }
-    /// Get the table of all the registered env_var modules, if any
+    /// Get the table of all the registered `env_var` modules, if any
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
     }
 }
 
 /// Deserialize a style string in the starship format with serde
-pub fn deserialize_style<'de, D>(de: D) -> Result<ansi_term::Style, D::Error>
+pub fn deserialize_style<'de, D>(de: D) -> Result<nu_ansi_term::Style, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -268,12 +272,13 @@ where
  - 'bold'
  - 'italic'
  - 'inverted'
- - '<color>'       (see the parse_color_string doc for valid color strings)
+ - 'blink'
+ - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
-pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+pub fn parse_style_string(style_string: &str) -> Option<nu_ansi_term::Style> {
     style_string
         .split_whitespace()
-        .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
+        .fold(Some(nu_ansi_term::Style::new()), |maybe_style, token| {
             maybe_style.and_then(|style| {
                 let token = token.to_lowercase();
 
@@ -293,6 +298,9 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
                     "inverted" => Some(style.reverse()),
+                    "blink" => Some(style.blink()),
+                    "hidden" => Some(style.hidden()),
+                    "strikethrough" => Some(style.strikethrough()),
                     // When the string is supposed to be a color:
                     // Decide if we yield none, reset background or set color.
                     color_string => {
@@ -329,7 +337,7 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
   - u8           (a number from 0-255, representing an ANSI color)
   - colstring    (one of the 16 predefined color strings)
 */
-fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
+fn parse_color_string(color_string: &str) -> Option<nu_ansi_term::Color> {
     // Parse RGB hex values
     log::trace!("Parsing color_string: {}", color_string);
     if color_string.starts_with('#') {
@@ -345,7 +353,7 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
         let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
         let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
         log::trace!("Read RGB color string: {},{},{}", r, g, b);
-        return Some(Color::RGB(r, g, b));
+        return Some(Color::Rgb(r, g, b));
     }
 
     // Parse a u8 (ansi color)
@@ -365,14 +373,14 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
         "purple" => Some(Color::Purple),
         "cyan" => Some(Color::Cyan),
         "white" => Some(Color::White),
-        "bright-black" => Some(Color::Fixed(8)), // "bright-black" is dark grey
-        "bright-red" => Some(Color::Fixed(9)),
-        "bright-green" => Some(Color::Fixed(10)),
-        "bright-yellow" => Some(Color::Fixed(11)),
-        "bright-blue" => Some(Color::Fixed(12)),
-        "bright-purple" => Some(Color::Fixed(13)),
-        "bright-cyan" => Some(Color::Fixed(14)),
-        "bright-white" => Some(Color::Fixed(15)),
+        "bright-black" => Some(Color::DarkGray), // "bright-black" is dark grey
+        "bright-red" => Some(Color::LightRed),
+        "bright-green" => Some(Color::LightGreen),
+        "bright-yellow" => Some(Color::LightYellow),
+        "bright-blue" => Some(Color::LightBlue),
+        "bright-purple" => Some(Color::LightPurple),
+        "bright-cyan" => Some(Color::LightCyan),
+        "bright-white" => Some(Color::LightGray),
         _ => None,
     };
 
@@ -387,7 +395,7 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ansi_term::Style;
+    use nu_ansi_term::Style;
 
     // Small wrapper to allow deserializing Style without a struct with #[serde(deserialize_with=)]
     #[derive(Default, Clone, Debug, PartialEq)]
@@ -506,8 +514,8 @@ mod tests {
             {
                 let s = String::deserialize(deserializer)?;
                 match s.to_ascii_lowercase().as_str() {
-                    "on" => Ok(Switch::On),
-                    _ => Ok(Switch::Off),
+                    "on" => Ok(Self::On),
+                    _ => Ok(Self::Off),
                 }
             }
         }
@@ -570,7 +578,7 @@ mod tests {
         let config = Value::from("#a12BcD");
         assert_eq!(
             <StyleWrapper>::from_config(&config).unwrap().0,
-            Color::RGB(0xA1, 0x2B, 0xCD).into()
+            Color::Rgb(0xA1, 0x2B, 0xCD).into()
         );
     }
 
@@ -596,7 +604,7 @@ mod tests {
         assert!(mystyle.is_dimmed);
         assert_eq!(
             mystyle,
-            ansi_term::Style::new()
+            nu_ansi_term::Style::new()
                 .bold()
                 .italic()
                 .underline()
@@ -616,7 +624,7 @@ mod tests {
         assert!(mystyle.is_reverse);
         assert_eq!(
             mystyle,
-            ansi_term::Style::new()
+            nu_ansi_term::Style::new()
                 .bold()
                 .italic()
                 .underline()
@@ -627,11 +635,74 @@ mod tests {
     }
 
     #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_blink_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD bLiNk");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_blink);
+        assert_eq!(
+            mystyle,
+            nu_ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .blink()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_hidden_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD hIDDen");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_hidden);
+        assert_eq!(
+            mystyle,
+            nu_ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .hidden()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_strikethrough_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD StRiKEthROUgh");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_strikethrough);
+        assert_eq!(
+            mystyle,
+            nu_ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .strikethrough()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
     fn table_get_styles_plain_and_broken_styles() {
         // Test a "plain" style with no formatting
         let config = Value::from("");
         let plain_style = <StyleWrapper>::from_config(&config).unwrap().0;
-        assert_eq!(plain_style, ansi_term::Style::new());
+        assert_eq!(plain_style, nu_ansi_term::Style::new());
 
         // Test a string that's clearly broken
         let config = Value::from("djklgfhjkldhlhk;j");
@@ -696,7 +767,7 @@ mod tests {
             Style::new()
                 .underline()
                 .fg(Color::Fixed(120))
-                .on(Color::RGB(5, 5, 5))
+                .on(Color::Rgb(5, 5, 5))
         );
 
         // Test that the last color style is always the one used

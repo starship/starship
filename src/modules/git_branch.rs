@@ -26,12 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = context.get_repo().ok()?;
 
-    if config.only_attached {
-        if let Ok(git_repo) = repo.open() {
-            if git_repo.head_detached().ok()? {
-                return None;
-            }
-        }
+    if config.only_attached && repo.open().head().ok()?.is_detached() {
+        return None;
     }
 
     let branch_name = repo.branch.as_ref()?;
@@ -124,7 +120,7 @@ fn get_first_grapheme(text: &str) -> &str {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::io;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
@@ -394,6 +390,42 @@ mod tests {
 
         assert_eq!(expected, actual);
         repo_dir.close()
+    }
+
+    #[test]
+    fn test_remote() -> io::Result<()> {
+        let remote_dir = fixture_repo(FixtureProvider::Git)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["checkout", "-b", "test_branch"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(&["remote", "add", "--fetch", "remote_repo"])
+            .arg(remote_dir.path())
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(&["branch", "--set-upstream-to", "remote_repo/master"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .path(&repo_dir.path())
+            .config(toml::toml! {
+                [git_branch]
+                format = "$branch(:$remote_name/$remote_branch)"
+            })
+            .collect();
+
+        let expected = Some("test_branch:remote_repo/master");
+
+        assert_eq!(expected, actual.as_deref());
+        repo_dir.close()?;
+        remote_dir.close()
     }
 
     // This test is not possible until we switch to `git status --porcelain`

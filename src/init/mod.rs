@@ -40,7 +40,7 @@ impl StarshipPath {
         self.str_path().map(|p| shell_words::quote(p).into_owned())
     }
 
-    /// PowerShell specific path escaping
+    /// `PowerShell` specific path escaping
     fn sprint_pwsh(&self) -> io::Result<String> {
         self.str_path()
             .map(|s| s.replace('\'', "''"))
@@ -63,7 +63,7 @@ impl StarshipPath {
                 if e.kind() != io::ErrorKind::NotFound {
                     log::warn!("Failed to convert \"{}\" to unix path:\n{:?}", str_path, e);
                 }
-                // Failed to execute cygpath.exe means there're not inside cygwin evironment,return directly.
+                // Failed to execute cygpath.exe means there're not inside cygwin environment,return directly.
                 return self.sprint();
             }
         };
@@ -171,7 +171,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
-        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint_posix()?),
+        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
         "xonsh" => print!(
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?

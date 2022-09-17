@@ -120,7 +120,11 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning elvish v0.17 이상만 지원. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    `~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
 
@@ -144,7 +148,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: 주의 이는 추후 변경될 예정입니다. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.61+ is supported.
+
+   :::
+
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -153,8 +163,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
@@ -171,7 +179,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   Cmd를 이용하려면 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 를 사용해야 합니다. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Cmd를 이용하려면 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 를 사용해야 합니다. `starship.lua` 파일에 아래의 라인을 추가하고 파일을 Clink scripts 폴더에 저장합니다.
 
    ```lua
    -- starship.lua

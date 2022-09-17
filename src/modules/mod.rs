@@ -2,6 +2,7 @@
 mod aws;
 mod azure;
 mod buf;
+mod bun;
 mod c;
 mod character;
 mod cmake;
@@ -11,6 +12,7 @@ mod conda;
 mod container;
 mod crystal;
 pub(crate) mod custom;
+mod daml;
 mod dart;
 mod deno;
 mod directory;
@@ -52,6 +54,7 @@ mod php;
 mod pulumi;
 mod purescript;
 mod python;
+mod raku;
 mod red;
 mod rlang;
 mod ruby;
@@ -60,6 +63,7 @@ mod scala;
 mod shell;
 mod shlvl;
 mod singularity;
+mod spack;
 mod status;
 mod sudo;
 mod swift;
@@ -94,6 +98,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "buf" => buf::module(context),
+            "bun" => bun::module(context),
             "c" => c::module(context),
             "character" => character::module(context),
             "cmake" => cmake::module(context),
@@ -101,6 +106,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "cobol" => cobol::module(context),
             "conda" => conda::module(context),
             "container" => container::module(context),
+            "daml" => daml::module(context),
             "dart" => dart::module(context),
             "deno" => deno::module(context),
             "directory" => directory::module(context),
@@ -142,6 +148,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
+            "raku" => raku::module(context),
             "rlang" => rlang::module(context),
             "red" => red::module(context),
             "ruby" => ruby::module(context),
@@ -150,6 +157,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "shell" => shell::module(context),
             "shlvl" => shlvl::module(context),
             "singularity" => singularity::module(context),
+            "spack" => spack::module(context),
             "swift" => swift::module(context),
             "status" => status::module(context),
             "sudo" => sudo::module(context),
@@ -161,6 +169,12 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "vagrant" => vagrant::module(context),
             "vcsh" => vcsh::module(context),
             "zig" => zig::module(context),
+            // Added for tests, avoid potential side effects in production code.
+            #[cfg(test)]
+            custom if custom.starts_with("custom.") => {
+                // SAFETY: We just checked that the module starts with "custom."
+                custom::module(custom.strip_prefix("custom.").unwrap(), context)
+            }
             _ => {
                 eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
                 None
@@ -186,6 +200,7 @@ pub fn description(module: &str) -> &'static str {
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
         "buf" => "The currently installed version of the Buf CLI",
+        "bun" => "The currently installed version of the Bun",
         "c" => "Your C compiler type",
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
@@ -196,6 +211,7 @@ pub fn description(module: &str) -> &'static str {
         "conda" => "The current conda environment, if $CONDA_DEFAULT_ENV is set",
         "container" => "The container indicator, if inside a container.",
         "crystal" => "The currently installed version of Crystal",
+        "daml" => "The Daml SDK version of your project",
         "dart" => "The currently installed version of Dart",
         "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
@@ -237,6 +253,7 @@ pub fn description(module: &str) -> &'static str {
         "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
+        "raku" => "The currently installed version of Raku",
         "red" => "The currently installed version of Red",
         "rlang" => "The currently installed version of R",
         "ruby" => "The currently installed version of Ruby",
@@ -245,6 +262,7 @@ pub fn description(module: &str) -> &'static str {
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
+        "spack" => "The current spack environment, if $SPACK_ENV is set",
         "status" => "The status of the last command",
         "sudo" => "The sudo credentials are currently cached",
         "swift" => "The currently installed version of Swift",

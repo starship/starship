@@ -251,6 +251,8 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Install Starship using any of the following package managers:
 
 | Repository      | Instructions                            |
@@ -259,6 +261,7 @@ Install Starship using any of the following package managers:
 | [Chocolatey]    | `choco install starship`                |
 | [conda-forge]   | `conda install -c conda-forge starship` |
 | [Scoop]         | `scoop install starship`                |
+| [winget]        | `winget install --id Starship.Starship` |
 
 </details>
 
@@ -327,7 +330,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Run the following:
+Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -337,11 +340,10 @@ starship init nu | save ~/.cache/starship/init.nu
 And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
 ```sh
-starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.60+ is supported
+Note: Only Nushell v0.61+ is supported
 
 </details>
 
@@ -446,3 +448,4 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [snapcraft]: https://snapcraft.io/starship
 [termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
 [void linux packages]: https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship
+[winget]: https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship

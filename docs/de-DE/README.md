@@ -120,7 +120,11 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Elvish
 
-   ::: warning Nur elvish v0.17 oder höher ist unterstützt. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    Trage folgendes am Ende von `~/.config/fish/rc.elv` ein:
 
@@ -144,7 +148,13 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Nushell
 
-   ::: warning Dies wird sich in der Zukunft ändern. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.61+ is supported.
+
+   :::
+
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -153,8 +163,6 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
@@ -169,7 +177,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    ```
 
 
-   #### Cmd
+   #### ⌘ Cmd
 
    You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 

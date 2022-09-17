@@ -38,7 +38,7 @@ starship_precmd() {
     fi
 
     local NUM_JOBS=0
-    # Evaluate the number of jobs before running the preseved prompt command, so that tools
+    # Evaluate the number of jobs before running the preserved prompt command, so that tools
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf.
     for job in $(jobs -p); do [[ $job ]] && ((NUM_JOBS++)); done
@@ -98,6 +98,9 @@ else
         PROMPT_COMMAND="starship_precmd"
     fi
 fi
+
+# Ensure that $COLUMNS gets set
+shopt -s checkwinsize
 
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
 STARSHIP_START_TIME=$(::STARSHIP:: time)

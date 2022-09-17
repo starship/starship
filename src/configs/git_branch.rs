@@ -1,7 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct GitBranchConfig<'a> {
     pub format: &'a str,
@@ -18,7 +22,7 @@ pub struct GitBranchConfig<'a> {
 impl<'a> Default for GitBranchConfig<'a> {
     fn default() -> Self {
         GitBranchConfig {
-            format: "on [$symbol$branch]($style)(:[$remote]($style)) ",
+            format: "on [$symbol$branch(:$remote_branch)]($style) ",
             symbol: " ",
             style: "bold purple",
             truncation_length: std::i64::MAX,

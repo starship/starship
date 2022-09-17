@@ -133,7 +133,7 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{create_dir_all, File};
     use std::io;
     use std::io::Write;

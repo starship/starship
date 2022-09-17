@@ -115,7 +115,7 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
         visitor.visit_some(self)
     }
 
-    // Handle ignored Values. (Values at unkown keys in TOML)
+    // Handle ignored Values. (Values at unknown keys in TOML)
     fn deserialize_ignored_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
     where
         V: Visitor<'de>,

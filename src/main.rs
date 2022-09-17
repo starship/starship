@@ -55,13 +55,22 @@ enum Commands {
     ///  Prints a specific prompt module
     Module {
         /// The name of the module to be printed
-        #[clap(required = true, required_unless_present = "list")]
+        #[clap(required_unless_present("list"))]
         name: Option<String>,
         /// List out all supported modules
         #[clap(short, long)]
         list: bool,
         #[clap(flatten)]
         properties: Properties,
+    },
+    /// Prints a preset config
+    Preset {
+        /// The name of preset to be printed
+        #[clap(required_unless_present("list"), value_enum)]
+        name: Option<print::Preset>,
+        /// List out all preset names
+        #[clap(short, long)]
+        list: bool,
     },
     /// Prints the computed starship configuration
     PrintConfig {
@@ -105,7 +114,7 @@ enum Commands {
 fn main() {
     // Configure the current terminal on windows to support ANSI escape sequences.
     #[cfg(windows)]
-    let _ = ansi_term::enable_ansi_support();
+    let _ = nu_ansi_term::enable_ansi_support();
     logger::init();
     init_global_threadpool();
 
@@ -182,13 +191,15 @@ fn main() {
                 print::module(&module_name, properties);
             }
         }
+        Commands::Preset { name, list } => print::preset_command(name, list),
         Commands::Config { name, value } => {
             if let Some(name) = name {
                 if let Some(value) = value {
                     configure::update_configuration(&name, &value)
                 }
-            } else {
-                configure::edit_configuration()
+            } else if let Err(reason) = configure::edit_configuration(None) {
+                eprintln!("Could not edit configuration: {}", reason);
+                std::process::exit(1);
             }
         }
         Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),

@@ -120,7 +120,11 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Elvish
 
-   ::: warning 只有 elvish v0.17 或以上版本才有支援 :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    將以下內容放到 `~/.elvish/rc.elv` 的結尾：
 
@@ -144,7 +148,13 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### Nushell
 
-   ::: warning 這項設定可能在未來改變 Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.61+ is supported.
+
+   :::
+
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -153,8 +163,6 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 

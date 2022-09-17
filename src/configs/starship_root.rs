@@ -1,7 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct StarshipRootConfig {
     #[serde(rename = "$schema")]
@@ -36,9 +40,11 @@ pub const PROMPT_ORDER: &[&str] = &[
     "package",
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
+    "bun",
     "c",
     "cmake",
     "cobol",
+    "daml",
     "dart",
     "deno",
     "dotnet",
@@ -60,6 +66,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "pulumi",
     "purescript",
     "python",
+    "raku",
     "rlang",
     "red",
     "ruby",
@@ -74,6 +81,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "buf",
     "nix_shell",
     "conda",
+    "spack",
     "memory_usage",
     "aws",
     "gcloud",
@@ -96,9 +104,9 @@ pub const PROMPT_ORDER: &[&str] = &[
 ];
 
 // On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
-impl<'a> Default for StarshipRootConfig {
+impl Default for StarshipRootConfig {
     fn default() -> Self {
-        StarshipRootConfig {
+        Self {
             schema: "https://starship.rs/config-schema.json".to_string(),
             format: "$all".to_string(),
             right_format: "".to_string(),

@@ -54,17 +54,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let segment_format = config.pipestatus_segment_format.unwrap_or(config.format);
+
     // Create pipestatus string
     let pipestatus = match pipestatus_status {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
             .iter()
             .map(
-                |ec| match format_exit_code(ec.as_str(), config.format, None, &config, context) {
+                |ec| match format_exit_code(ec.as_str(), segment_format, None, &config, context) {
                     Ok(segments) => segments
                         .into_iter()
                         .map(|s| s.to_string())
-                        .collect::<Vec<String>>()
-                        .join(""),
+                        .collect::<String>(),
                     Err(_) => "".to_string(),
                 },
             )
@@ -224,7 +225,7 @@ fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     use crate::test::ModuleRenderer;
 
@@ -330,7 +331,7 @@ mod tests {
 
     #[test]
     fn failure_hex_status() {
-        let exit_values = [1, 2, 130, -2147467260, 2147500036];
+        let exit_values = [1, 2, 130, -2_147_467_260, 2_147_500_036];
         let string_values = ["0x1", "0x2", "0x82", "0x80004004", "0x80004004"];
 
         for (exit_value, string_value) in exit_values.iter().zip(string_values) {
@@ -684,5 +685,27 @@ mod tests {
                 .collect();
             assert_eq!(expected, actual);
         }
+    }
+
+    #[test]
+    fn pipestatus_segment_format() {
+        let pipe_exit_code = &[0, 1];
+        let main_exit_code = 1;
+
+        let expected = Some("[0]|[1] => <1>".to_string());
+        let actual = ModuleRenderer::new("status")
+            .config(toml::toml! {
+                [status]
+                format = "\\($status\\)"
+                pipestatus = true
+                pipestatus_separator = "|"
+                pipestatus_format = "$pipestatus => <$status>"
+                pipestatus_segment_format = "\\[$status\\]"
+                disabled = false
+            })
+            .status(main_exit_code)
+            .pipestatus(pipe_exit_code)
+            .collect();
+        assert_eq!(expected, actual);
     }
 }

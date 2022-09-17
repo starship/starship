@@ -1,4 +1,4 @@
-use ansi_term::Style;
+use nu_ansi_term::Style;
 use pest::error::Error as PestError;
 use rayon::prelude::*;
 use std::borrow::Cow;
@@ -32,7 +32,7 @@ type VariableMapType<'a> =
 type StyleVariableMapType<'a> =
     BTreeMap<String, Option<Result<Cow<'a, str>, StringFormatterError>>>;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringFormatterError {
     Custom(String),
     Parse(PestError<Rule>),
@@ -62,7 +62,7 @@ pub struct StringFormatter<'a> {
 }
 
 impl<'a> StringFormatter<'a> {
-    /// Creates an instance of StringFormatter from a format string
+    /// Creates an instance of `StringFormatter` from a format string
     ///
     /// This method will throw an Error when the given format string fails to parse.
     pub fn new(format: &'a str) -> Result<Self, StringFormatterError> {
@@ -88,7 +88,7 @@ impl<'a> StringFormatter<'a> {
         })
     }
 
-    /// A StringFormatter that does no formatting, parse just returns the raw text
+    /// A `StringFormatter` that does no formatting, parse just returns the raw text
     pub fn raw(text: &'a str) -> Self {
         Self {
             format: vec![FormatElement::Text(text.into())],
@@ -292,7 +292,16 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(Segment::from_text(style, text)),
+                        FormatElement::Text(text) => Ok(Segment::from_text(
+                            style,
+                            shell_prompt_escape(
+                                text,
+                                match context {
+                                    None => Shell::Unknown,
+                                    Some(c) => c.shell,
+                                },
+                            ),
+                        )),
                         FormatElement::TextGroup(textgroup) => {
                             let textgroup = TextGroup {
                                 format: textgroup.format,
@@ -438,7 +447,7 @@ where
 {
     // Handle other interpretable characters
     match shell {
-        // Bash might interepret baskslashes, backticks and $
+        // Bash might interpret backslashes, backticks and $
         // see #658 for more details
         Shell::Bash => text
             .into()
@@ -456,7 +465,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     // match_next(result: IterMut<Segment>, value, style)
     macro_rules! match_next {

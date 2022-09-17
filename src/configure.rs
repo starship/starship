@@ -61,8 +61,7 @@ fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> R
     }
 
     let mut new_value = toml_edit::Value::from_str(value)
-        .map(toml_edit::Item::Value)
-        .unwrap_or_else(|_| toml_edit::value(value));
+        .map_or_else(|_| toml_edit::value(value), toml_edit::Item::Value);
 
     if let Some(value) = current_item.as_value() {
         *new_value.as_value_mut().unwrap().decor_mut() = value.decor().clone();
@@ -147,7 +146,7 @@ fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value 
         for &segment in parents {
             source_cursor = if let Some(child) = source_cursor
                 .get_mut(segment)
-                .and_then(|value| value.as_table_mut())
+                .and_then(toml::Value::as_table_mut)
             {
                 child
             } else {
@@ -266,12 +265,24 @@ pub fn write_configuration(doc: &Document) {
         .expect("Error writing starship config");
 }
 
-pub fn edit_configuration() {
+pub fn edit_configuration(editor_override: Option<&str>) -> Result<(), Box<dyn std::error::Error>> {
+    // Argument currently only used for testing, but could be used to specify
+    // an editor override on the command line.
     let config_path = get_config_path();
-    let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
 
-    let command = utils::create_command(&editor_cmd[0])
-        .expect("Unable to locate editor in $PATH.")
+    let editor_cmd = shell_words::split(&get_editor(editor_override))?;
+    let mut command = match utils::create_command(&editor_cmd[0]) {
+        Ok(cmd) => cmd,
+        Err(e) => {
+            eprintln!(
+                "Unable to find editor {:?}. Are $VISUAL and $EDITOR set correctly?",
+                editor_cmd[0]
+            );
+            return Err(Box::new(e));
+        }
+    };
+
+    let res = command
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
@@ -279,24 +290,20 @@ pub fn edit_configuration() {
         .arg(config_path)
         .status();
 
-    match command {
-        Ok(_) => (),
-        Err(error) => match error.kind() {
-            ErrorKind::NotFound => {
-                eprintln!(
-                    "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
-                    environment variables correctly?",
-                    editor_cmd
-                );
-                std::process::exit(1)
-            }
-            other_error => panic!("failed to open file: {:?}", other_error),
-        },
-    };
+    if let Err(e) = res {
+        eprintln!("Unable to launch editor {:?}", editor_cmd);
+        return Err(Box::new(e));
+    }
+
+    Ok(())
 }
 
-fn get_editor() -> String {
-    get_editor_internal(env::var("VISUAL").ok(), env::var("EDITOR").ok())
+fn get_editor(editor_override: Option<&str>) -> String {
+    if let Some(cmd) = editor_override {
+        cmd.to_string()
+    } else {
+        get_editor_internal(std::env::var("VISUAL").ok(), std::env::var("EDITOR").ok())
+    }
 }
 
 fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String {
@@ -373,6 +380,18 @@ mod tests {
     fn visual_not_set_editor_not_set() {
         let actual = get_editor_internal(None, None);
         assert_eq!(STD_EDITOR, actual);
+    }
+
+    #[test]
+    fn no_panic_when_editor_unparseable() {
+        let outcome = edit_configuration(Some("\"vim"));
+        assert!(outcome.is_err());
+    }
+
+    #[test]
+    fn no_panic_when_editor_not_found() {
+        let outcome = edit_configuration(Some("this_editor_does_not_exist"));
+        assert!(outcome.is_err());
     }
 
     #[test]

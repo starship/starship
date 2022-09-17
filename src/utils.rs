@@ -59,7 +59,7 @@ pub fn get_command_string_output(command: CommandOutput) -> String {
 
 /// Attempt to resolve `binary_name` from and creates a new `Command` pointing at it
 /// This allows executing cmd files on Windows and prevents running executable from cwd on Windows
-/// This function also initialises std{err,out,in} to protect against processes changing the console mode
+/// This function also initializes std{err,out,in} to protect against processes changing the console mode
 pub fn create_command<T: AsRef<OsStr>>(binary_name: T) -> Result<Command> {
     let binary_name = binary_name.as_ref();
     log::trace!("Creating Command for binary {:?}", binary_name);
@@ -102,7 +102,7 @@ pub fn display_command<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
     args: &[U],
 ) -> String {
     std::iter::once(cmd.as_ref())
-        .chain(args.iter().map(|i| i.as_ref()))
+        .chain(args.iter().map(std::convert::AsRef::as_ref))
         .map(|i| i.to_string_lossy().into_owned())
         .collect::<Vec<String>>()
         .join(" ")
@@ -129,6 +129,10 @@ pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 ) -> Option<Option<CommandOutput>> {
     let command = display_command(&cmd, args);
     let out = match command.as_str() {
+        "bun --version"=> Some(CommandOutput {
+            stdout: String::from("0.1.4\n"),
+            stderr: String::default(),
+        }),
         "buf --version" => Some(CommandOutput {
             stdout: String::from("1.0.0"),
             stderr: String::default(),
@@ -318,6 +322,15 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 https://www.gnu.org/licenses/."#
             ),
+        }),
+        "raku --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Welcome to Rakudo™ v2021.12.
+Implementing the Raku® Programming Language v6.d.
+Built on MoarVM version 2021.12.\n",
+            ),
+            stderr: String::default(),
         }),
         "red --version" => Some(CommandOutput {
             stdout: String::from("0.6.4\n"),

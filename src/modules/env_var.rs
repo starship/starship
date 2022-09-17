@@ -5,7 +5,7 @@ use crate::configs::env_var::EnvVarConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 
-/// Creates env_var_module displayer which displays all configured environmental variables
+/// Creates `env_var_module` displayer which displays all configured environmental variables
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config_table = context.config.get_env_var_modules()?;
     let mut env_modules = config_table
@@ -22,7 +22,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(env_var_displayer(env_modules, context))
 }
 
-/// A utility module to display multiple env_variable modules
+/// A utility module to display multiple `env_variable` modules
 fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Module<'a> {
     let mut module = context.new_module("env_var_displayer");
 
@@ -37,9 +37,9 @@ fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Module<'
 /// Creates a module with the value of the chosen environment variable
 ///
 /// Will display the environment variable's value if all of the following criteria are met:
-///     - env_var.disabled is absent or false
-///     - env_var.variable is defined
-///     - a variable named as the value of env_var.variable is defined
+///     - `env_var.disabled` is absent or false
+///     - `env_var.variable` is defined
+///     - a variable named as the value of `env_var.variable` is defined
 fn env_var_module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module(&module_config_path.join("."));
     let config_value = context.config.get_config(&module_config_path);
@@ -105,7 +105,7 @@ fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option
 #[cfg(test)]
 mod test {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
 
     const TEST_VAR_VALUE: &str = "astronauts";
 

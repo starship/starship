@@ -4,7 +4,7 @@ use crate::formatter::VersionFormatter;
 use crate::configs::cmake::CMakeConfig;
 use crate::formatter::StringFormatter;
 
-/// Creates a module with the current CMake version
+/// Creates a module with the current `CMake` version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cmake");
     let config = CMakeConfig::try_load(module.config);
@@ -71,7 +71,7 @@ fn parse_cmake_version(cmake_version: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

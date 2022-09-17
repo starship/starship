@@ -78,7 +78,7 @@ fn parse_go_version(go_stdout: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 
@@ -121,6 +121,18 @@ mod tests {
     fn folder_with_go_sum() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("go.sum"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("golang").path(dir.path()).collect();
+
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🐹 v1.12.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_go_work() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("go.work"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("golang").path(dir.path()).collect();
 

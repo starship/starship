@@ -51,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::{test::ModuleRenderer, utils::CommandOutput};
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn test_sudo_not_cached() {

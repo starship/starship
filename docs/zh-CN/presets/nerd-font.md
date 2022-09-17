@@ -1,10 +1,10 @@
-[Return to Presets](./README.md#nerd-font-symbols)
+[返回全部预设](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Nerd 字体符号预设
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+此预设使用 Nerd 字体的符号显示所有组件。
 
-![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png)
+![Nerd 字体符号预设截图](/presets/img/nerd-font-symbols.png)
 
 ### 前置要求
 
@@ -12,6 +12,10 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 ### 配置
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml)
+```sh
+starship preset nerd-font-symbols > ~/.config/starship.toml
+```
+
+[点击下载 TOML 文件](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml

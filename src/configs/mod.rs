@@ -5,6 +5,7 @@ pub mod aws;
 pub mod azure;
 pub mod battery;
 pub mod buf;
+pub mod bun;
 pub mod c;
 pub mod character;
 pub mod cmake;
@@ -14,6 +15,7 @@ pub mod conda;
 pub mod container;
 pub mod crystal;
 pub mod custom;
+pub mod daml;
 pub mod dart;
 pub mod deno;
 pub mod directory;
@@ -55,6 +57,7 @@ pub mod php;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
+pub mod raku;
 pub mod red;
 pub mod rlang;
 pub mod ruby;
@@ -63,6 +66,7 @@ pub mod scala;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
+pub mod spack;
 mod starship_root;
 pub mod status;
 pub mod sudo;
@@ -78,7 +82,11 @@ pub mod zig;
 pub use starship_root::*;
 
 #[derive(Serialize, Deserialize, Clone, Default)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct FullConfig<'a> {
     // Meta
@@ -97,6 +105,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     buf: buf::BufConfig<'a>,
     #[serde(borrow)]
+    bun: bun::BunConfig<'a>,
+    #[serde(borrow)]
     c: c::CConfig<'a>,
     #[serde(borrow)]
     character: character::CharacterConfig<'a>,
@@ -112,6 +122,8 @@ pub struct FullConfig<'a> {
     container: container::ContainerConfig<'a>,
     #[serde(borrow)]
     crystal: crystal::CrystalConfig<'a>,
+    #[serde(borrow)]
+    daml: daml::DamlConfig<'a>,
     #[serde(borrow)]
     dart: dart::DartConfig<'a>,
     #[serde(borrow)]
@@ -194,6 +206,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     python: python::PythonConfig<'a>,
     #[serde(borrow)]
+    raku: raku::RakuConfig<'a>,
+    #[serde(borrow)]
     red: red::RedConfig<'a>,
     #[serde(borrow)]
     rlang: rlang::RLangConfig<'a>,
@@ -209,6 +223,8 @@ pub struct FullConfig<'a> {
     shlvl: shlvl::ShLvlConfig<'a>,
     #[serde(borrow)]
     singularity: singularity::SingularityConfig<'a>,
+    #[serde(borrow)]
+    spack: spack::SpackConfig<'a>,
     #[serde(borrow)]
     status: status::StatusConfig<'a>,
     #[serde(borrow)]

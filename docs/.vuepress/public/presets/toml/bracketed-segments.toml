@@ -1,6 +1,9 @@
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
+[bun]
+format = '\[[$symbol($version)]($style)\]'
+
 [c]
 format = '\[[$symbol($version(-$name))]($style)\]'
 
@@ -17,6 +20,9 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol$environment]($style)\]'
 
 [crystal]
+format = '\[[$symbol($version)]($style)\]'
+
+[daml]
 format = '\[[$symbol($version)]($style)\]'
 
 [dart]
@@ -112,6 +118,9 @@ format = '\[[$symbol($version)]($style)\]'
 [python]
 format = '\[[${symbol}${pyenv_prefix}(${version})(\($virtualenv\))]($style)\]'
 
+[raku]
+format = '\[[$symbol($version-$vm_version)]($style)\]'
+
 [red]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -123,6 +132,9 @@ format = '\[[$symbol($version)]($style)\]'
 
 [scala]
 format = '\[[$symbol($version)]($style)\]'
+
+[spack]
+format = '\[[$symbol$environment]($style)\]'
 
 [sudo]
 format = '\[[as $symbol]\]'

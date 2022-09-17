@@ -12,7 +12,7 @@ use crate::formatter::StringFormatter;
 ///
 /// Will display the ip if all of the following criteria are met:
 ///     - localip.disabled is false
-///     - localip.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
+///     - `localip.ssh_only` is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("localip");
     let config: LocalipConfig = LocalipConfig::try_load(module.config);
@@ -61,7 +61,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
 
     macro_rules! get_localip {
         () => {
