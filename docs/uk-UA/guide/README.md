@@ -150,28 +150,28 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **Швидкий:** так, швидкий - _реально_ швидкий! 🚀
+- **Адаптивний:** налаштуйте кожен елемент вашого командного запиту.
+- **Універсальний:** працює у всіх командних оболонках, в будь-якій операційній системі.
+- **Інформативний:** одразу показує потрібну інформацію.
+- **Багато функцій:** підтримує всі ваші улюблені інструменти.
+- **Простий:** швидка інсталяція дозволяє почати роботу за лічені хвилини.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Ознайомтесь з документацією Starship &nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 Встановлення
 
-### Prerequisites
+### Передумови
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Встановлений та ввімкнений набір шрифтів та термінальних іконок [Nerd Font](https://www.nerdfonts.com/) (як от [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Крок 1. Встановіть Starship
 
 Select your operating system from the list below to view installation instructions:
 
