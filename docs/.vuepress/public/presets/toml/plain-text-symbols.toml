@@ -1,7 +1,7 @@
 [character]
 success_symbol = "[>](bold green)"
 error_symbol = "[x](bold red)"
-vicmd_symbol = "[<](bold green)"
+vimcmd_symbol = "[<](bold green)"
 
 [git_commit]
 tag_symbol = " tag "
@@ -15,6 +15,9 @@ deleted = "x"
 
 [aws]
 symbol = "aws "
+
+[bun]
+symbol = "bun "
 
 [c]
 symbol = "C "
@@ -129,3 +132,9 @@ symbol = "sudo "
 
 [swift]
 symbol = "swift "
+
+[terraform]
+symbol = "terraform "
+
+[zig]
+symbol = "zig "

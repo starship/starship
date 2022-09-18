@@ -112,12 +112,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             {
                 let root = repo_path_vec[0];
                 let before = dir_string.replace(&contracted_path, "");
-                [prefix + &before, root.to_string(), after_repo_root]
+                [prefix + before.as_str(), root.to_string(), after_repo_root]
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string]
+                ["".to_string(), "".to_string(), prefix + dir_string.as_str()]
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+        _ => ["".to_string(), "".to_string(), prefix + dir_string.as_str()],
     };
 
     let path_vec = if config.use_os_path_sep {
@@ -345,7 +345,7 @@ mod tests {
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
     use crate::utils::home_dir;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
     #[cfg(target_os = "windows")]
@@ -498,6 +498,8 @@ mod tests {
     fn make_known_tempdir(root: &Path) -> io::Result<(TempDir, String)> {
         fs::create_dir_all(root)?;
         let dir = TempDir::new_in(root)?;
+        // the .to_string_lossy().to_string() here looks weird but is required
+        // to convert it from a Cow.
         let path = dir
             .path()
             .file_name()

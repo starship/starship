@@ -8,6 +8,10 @@ Ce préréglage change les symboles de chaque module en texte brut. Idéal si vo
 
 ### Configuration
 
+```sh
+starship preset plain-text-symbols > ~/.config/starship.toml
+```
+
 [Cliquez pour télécharger le TOML](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml

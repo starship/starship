@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-pub struct PerlConfig<'a> {
+pub struct BunConfig<'a> {
     pub format: &'a str,
     pub version_format: &'a str,
     pub symbol: &'a str,
@@ -18,24 +18,16 @@ pub struct PerlConfig<'a> {
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for PerlConfig<'a> {
+impl<'a> Default for BunConfig<'a> {
     fn default() -> Self {
-        PerlConfig {
+        BunConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🐪 ",
-            style: "149 bold",
+            symbol: "🍞 ",
+            style: "bold red",
             disabled: false,
-            detect_extensions: vec!["pl", "pm", "pod"],
-            detect_files: vec![
-                "Makefile.PL",
-                "Build.PL",
-                "cpanfile",
-                "cpanfile.snapshot",
-                "META.json",
-                "META.yml",
-                ".perl-version",
-            ],
+            detect_extensions: vec![],
+            detect_files: vec!["bun.lockb", "bunfig.toml"],
             detect_folders: vec![],
         }
     }

@@ -82,6 +82,26 @@
         }
       ]
     },
+    "bun": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "bun.lockb",
+          "bunfig.toml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold red",
+        "symbol": "🍞 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/BunConfig"
+        }
+      ]
+    },
     "c": {
       "default": {
         "commands": [
@@ -505,6 +525,7 @@
         "only_detached": true,
         "style": "green bold",
         "tag_disabled": true,
+        "tag_max_candidates": 0,
         "tag_symbol": " 🏷  "
       },
       "allOf": [
@@ -1525,6 +1546,7 @@
       "type": "boolean"
     }
   },
+  "additionalProperties": false,
   "definitions": {
     "AwsConfig": {
       "title": "AWS",
@@ -1577,7 +1599,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "AzureConfig": {
       "type": "object",
@@ -1598,7 +1621,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "BatteryConfig": {
       "type": "object",
@@ -1645,7 +1669,8 @@
           "default": "[$symbol$percentage]($style) ",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "BatteryDisplayConfig": {
       "type": "object",
@@ -1673,7 +1698,8 @@
             "null"
           ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "BufConfig": {
       "type": "object",
@@ -1723,7 +1749,58 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "BunConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🍞 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "bun.lockb",
+            "bunfig.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "CConfig": {
       "type": "object",
@@ -1795,7 +1872,8 @@
             }
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CharacterConfig": {
       "type": "object",
@@ -1832,7 +1910,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CMakeConfig": {
       "type": "object",
@@ -1881,7 +1960,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CmdDurationConfig": {
       "type": "object",
@@ -1924,7 +2004,8 @@
           "format": "uint32",
           "minimum": 0.0
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CobolConfig": {
       "type": "object",
@@ -1975,7 +2056,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CondaConfig": {
       "type": "object",
@@ -2006,7 +2088,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ContainerConfig": {
       "type": "object",
@@ -2027,7 +2110,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CrystalConfig": {
       "type": "object",
@@ -2077,7 +2161,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DamlConfig": {
       "type": "object",
@@ -2125,7 +2210,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DartConfig": {
       "type": "object",
@@ -2179,7 +2265,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DenoConfig": {
       "type": "object",
@@ -2232,7 +2319,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DirectoryConfig": {
       "type": "object",
@@ -2305,7 +2393,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DockerContextConfig": {
       "type": "object",
@@ -2355,7 +2444,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DotnetConfig": {
       "type": "object",
@@ -2415,7 +2505,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ElixirConfig": {
       "type": "object",
@@ -2463,7 +2554,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ElmConfig": {
       "type": "object",
@@ -2517,7 +2609,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "EnvVarConfig": {
       "type": "object",
@@ -2550,7 +2643,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ErlangConfig": {
       "type": "object",
@@ -2599,7 +2693,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "FillConfig": {
       "type": "object",
@@ -2616,7 +2711,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GcloudConfig": {
       "type": "object",
@@ -2651,7 +2747,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitBranchConfig": {
       "type": "object",
@@ -2696,7 +2793,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitCommitConfig": {
       "type": "object",
@@ -2730,8 +2828,15 @@
         "tag_disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "tag_max_candidates": {
+          "default": 0,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitMetricsConfig": {
       "type": "object",
@@ -2756,7 +2861,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitStateConfig": {
       "type": "object",
@@ -2801,7 +2907,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitStatusConfig": {
       "type": "object",
@@ -2872,7 +2979,8 @@
             "null"
           ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GoConfig": {
       "type": "object",
@@ -2930,7 +3038,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "HaskellConfig": {
       "type": "object",
@@ -2983,7 +3092,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "HelmConfig": {
       "type": "object",
@@ -3032,7 +3142,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "HgBranchConfig": {
       "type": "object",
@@ -3062,7 +3173,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "HostnameConfig": {
       "type": "object",
@@ -3091,7 +3203,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "JavaConfig": {
       "type": "object",
@@ -3152,7 +3265,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "JobsConfig": {
       "type": "object",
@@ -3188,7 +3302,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "JuliaConfig": {
       "type": "object",
@@ -3239,7 +3354,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "KotlinConfig": {
       "type": "object",
@@ -3292,7 +3408,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "KubernetesConfig": {
       "type": "object",
@@ -3348,7 +3465,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "LineBreakConfig": {
       "type": "object",
@@ -3357,7 +3475,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "LocalipConfig": {
       "type": "object",
@@ -3378,7 +3497,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "LuaConfig": {
       "type": "object",
@@ -3434,7 +3554,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "MemoryConfig": {
       "type": "object",
@@ -3460,7 +3581,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "NimConfig": {
       "type": "object",
@@ -3512,7 +3634,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "NixShellConfig": {
       "type": "object",
@@ -3541,7 +3664,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "NodejsConfig": {
       "type": "object",
@@ -3604,7 +3728,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "OCamlConfig": {
       "type": "object",
@@ -3673,7 +3798,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "OspConfig": {
       "type": "object",
@@ -3694,7 +3820,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PackageConfig": {
       "type": "object",
@@ -3723,7 +3850,8 @@
           "default": "v${raw}",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PerlConfig": {
       "type": "object",
@@ -3781,7 +3909,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PhpConfig": {
       "type": "object",
@@ -3832,7 +3961,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PulumiConfig": {
       "type": "object",
@@ -3861,7 +3991,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PureScriptConfig": {
       "type": "object",
@@ -3911,7 +4042,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PythonConfig": {
       "type": "object",
@@ -3987,7 +4119,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Either_for_String_and_Array_of_String": {
       "anyOf": [
@@ -4054,7 +4187,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RedConfig": {
       "type": "object",
@@ -4103,7 +4237,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RLangConfig": {
       "type": "object",
@@ -4159,7 +4294,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RubyConfig": {
       "type": "object",
@@ -4220,7 +4356,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RustConfig": {
       "type": "object",
@@ -4270,7 +4407,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ScalaConfig": {
       "type": "object",
@@ -4325,7 +4463,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ShellConfig": {
       "type": "object",
@@ -4386,7 +4525,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ShLvlConfig": {
       "type": "object",
@@ -4416,7 +4556,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SingularityConfig": {
       "type": "object",
@@ -4437,7 +4578,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SpackConfig": {
       "type": "object",
@@ -4464,7 +4606,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "StatusConfig": {
       "type": "object",
@@ -4531,7 +4674,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SudoConfig": {
       "type": "object",
@@ -4556,7 +4700,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SwiftConfig": {
       "type": "object",
@@ -4606,7 +4751,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "TerraformConfig": {
       "type": "object",
@@ -4658,7 +4804,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "TimeConfig": {
       "type": "object",
@@ -4693,7 +4840,8 @@
           "default": "-",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "UsernameConfig": {
       "type": "object",
@@ -4718,7 +4866,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "VagrantConfig": {
       "type": "object",
@@ -4766,7 +4915,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "VcshConfig": {
       "type": "object",
@@ -4787,7 +4937,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "VConfig": {
       "type": "object",
@@ -4839,7 +4990,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ZigConfig": {
       "type": "object",
@@ -4887,7 +5039,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CustomConfig": {
       "type": "object",
@@ -4969,7 +5122,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Either_for_Boolean_and_String": {
       "anyOf": [
