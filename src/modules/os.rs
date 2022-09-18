@@ -86,7 +86,7 @@ fn get_version(os: &os_info::Info) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use os_info::{Info, Type};
 
     #[test]
