@@ -32,10 +32,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let sway_version = context.exec_cmd("forc", &["--version"])?.stdout;
+                    let raw_version = context.exec_cmd("forc", &["--version"])?.stdout;
+                    let version = raw_version
+                        .split_whitespace()
+                        .nth(1)
+                        .unwrap_or(&raw_version);
+
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        sway_version.trim(),
+                        version.trim(),
                         config.version_format,
                     )
                     .map(Ok)
