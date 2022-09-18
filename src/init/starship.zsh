@@ -112,11 +112,7 @@ function starship_left_prompt {
 
 function starship_right_prompt {
     if [ "$is_prompt_transient" = true ] ; then
-        if whence -w starship_transient_rprompt_func >/dev/null; then
-            starship_transient_rprompt_func
-        else
-            echo ""
-        fi
+        echo ""
     else
         ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT"
     fi
