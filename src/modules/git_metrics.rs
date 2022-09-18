@@ -116,7 +116,7 @@ mod tests {
     use std::path::{Path, PathBuf};
     use std::process::Stdio;
 
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     use crate::test::ModuleRenderer;
 

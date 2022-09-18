@@ -146,7 +146,7 @@ mod tests {
     use std::fs::{create_dir, File};
     use std::io::{self, Write};
 
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     use crate::test::ModuleRenderer;
 

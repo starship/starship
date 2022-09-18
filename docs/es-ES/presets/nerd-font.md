@@ -12,6 +12,10 @@ Este preajuste cambia los símbolos de cada módulo para usar símbolos Nerd Fon
 
 ### Configuración
 
+```sh
+starship preset nerd-font-symbols > ~/.config/starship.toml
+```
+
 [Clic para descargar TOML](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml

@@ -78,7 +78,7 @@ fn parse_go_version(go_stdout: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 

@@ -82,7 +82,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod test {
     use crate::context::Shell;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn success_status() {
