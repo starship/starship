@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!
 actionText: Get Started →
 actionLink: ./guide/
 features:
