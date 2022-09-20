@@ -52,7 +52,7 @@ log = { version = "0.4.16", features = ["std"] }
 notify-rust = { version = "4.5.8", optional = true }
 nu-ansi-term = "0.46.0"
 once_cell = "1.14.0"
-open = "3.0.2"
+open = "3.0.3"
 os_info = "3.5.1"
 path-slash = "0.2.1"
 pest = "2.3.1"
