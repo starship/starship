@@ -34,6 +34,9 @@ symbol = " "
 [haskell]
 symbol = " "
 
+[haxe]
+symbol = "⌘ "
+
 [hg_branch]
 symbol = " "
 

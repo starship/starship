@@ -34,6 +34,7 @@ pub mod git_state;
 pub mod git_status;
 pub mod go;
 pub mod haskell;
+pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
@@ -160,6 +161,8 @@ pub struct FullConfig<'a> {
     golang: go::GoConfig<'a>,
     #[serde(borrow)]
     haskell: haskell::HaskellConfig<'a>,
+    #[serde(borrow)]
+    haxe: haxe::HaxeConfig<'a>,
     #[serde(borrow)]
     helm: helm::HelmConfig<'a>,
     #[serde(borrow)]

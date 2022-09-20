@@ -31,6 +31,7 @@ mod git_state;
 mod git_status;
 mod golang;
 mod haskell;
+mod haxe;
 mod helm;
 mod hg_branch;
 mod hostname;
@@ -125,6 +126,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_status" => git_status::module(context),
             "golang" => golang::module(context),
             "haskell" => haskell::module(context),
+            "haxe" => haxe::module(context),
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
@@ -230,6 +232,7 @@ pub fn description(module: &str) -> &'static str {
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
         "haskell" => "The selected version of the Haskell toolchain",
+        "haxe" => "The currently installed version of Haxe",
         "helm" => "The currently installed version of Helm",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",
