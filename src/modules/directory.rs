@@ -2012,9 +2012,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan
-                .bold()
-                .paint(convert_path_sep(&format!("{}/src/fuel-gauge/resistor", name)))
+            Color::Cyan.bold().paint(convert_path_sep(&format!(
+                "{}/src/fuel-gauge/resistor",
+                name
+            )))
         ));
 
         assert_eq!(expected, actual);
