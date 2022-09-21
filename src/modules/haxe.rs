@@ -64,7 +64,11 @@ fn get_haxe_version(context: &Context) -> Option<String> {
     let file_contents = context.read_file_from_pwd(".haxerc");
     if file_contents.is_some() 
     {
-        let haxerc_json: json::Value = json::from_str(&file_contents.unwrap()).ok()?;
+        let raw_json = match file_contents {
+            Some(val) => val,
+            None => panic!("failed to read contents of .haxerc!"),
+        };
+        let haxerc_json: json::Value = json::from_str(&raw_json).ok()?;
         let raw_version = haxerc_json.get("version")?.as_str()?;
         parse_haxe_version(&raw_version)
     }
