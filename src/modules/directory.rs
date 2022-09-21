@@ -1972,7 +1972,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(format!("{}/…/fuel-gauge/resistor", name))
+                .paint(convert_path_sep(&format!("{}/…/fuel-gauge/resistor", name)))
         ));
 
         assert_eq!(expected, actual);
@@ -2002,7 +2002,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(format!("{}/src/fuel-gauge/resistor", name))
+                .paint(convert_path_sep(&format!("{}/src/fuel-gauge/resistor", name)))
         ));
 
         assert_eq!(expected, actual);
