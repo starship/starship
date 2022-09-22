@@ -268,6 +268,7 @@ impl<'a> Context<'a> {
 
                 // don't use the global git configs
                 let config = git::permissions::Config {
+                    git_binary: false,
                     system: false,
                     git: false,
                     user: false,
