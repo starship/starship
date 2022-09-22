@@ -3930,7 +3930,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PackageConfig": {
       "type": "object",
