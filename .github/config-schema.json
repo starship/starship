@@ -651,15 +651,15 @@
           "hxml"
         ],
         "detect_files": [
-          "haxelib.json",
-          "hxformat.json",
-          ".haxerc",
           "project.xml",
           "Project.xml",
-          "application.xml"
+          "application.xml",
+          "haxelib.json",
+          "hxformat.json",
+          ".haxerc"
         ],
         "detect_folders": [
-          ".haxelib", 
+          ".haxelib",
           "haxe_libraries"
         ],
         "disabled": false,
@@ -3125,8 +3125,6 @@
       },
       "additionalProperties": false
     },
-
-
     "HaxeConfig": {
       "type": "object",
       "properties": {
@@ -3162,12 +3160,12 @@
         },
         "detect_files": {
           "default": [
-            "haxelib.json",
-            "hxformat.json",
-            ".haxerc",
             "project.xml",
             "Project.xml",
-            "application.xml"
+            "application.xml",
+            "haxelib.json",
+            "hxformat.json",
+            ".haxerc"
           ],
           "type": "array",
           "items": {
@@ -3176,7 +3174,7 @@
         },
         "detect_folders": {
           "default": [
-            ".haxelib", 
+            ".haxelib",
             "haxe_libraries"
           ],
           "type": "array",
@@ -3187,7 +3185,6 @@
       },
       "additionalProperties": false
     },
-
     "HelmConfig": {
       "type": "object",
       "properties": {
