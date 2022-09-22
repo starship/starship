@@ -1900,7 +1900,6 @@ By default the module will be shown if any of the following conditions are met:
 format = "via [⌘ $version](bold fg:202) "
 ```
 
-
 ## Helm
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/).
