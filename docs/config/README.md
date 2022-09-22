@@ -2642,20 +2642,12 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option     | Default               | Description                |
-| ---------- | --------------------- | -------------------------- |
-| `format`   | `"[$symbol]($style)"` | The format for the module. |
-| `style`    | `"bold white"`        | The style for the module.  |
-| `disabled` | `true`                | Disables the `os` module.  |
-
-<details>
-<summary>
-This module has an advanced configuration option that controls how the operating system symbol is displayed.
-</summary>
-
-| Advanced Option | Default | Description                                            |
-| --------------- | ------- | ------------------------------------------------------ |
-| `symbols`       |         | A table that maps each operating system to its symbol. |
+| Option     | Default               | Description                                            |
+| ---------- | --------------------- | ------------------------------------------------------ |
+| `format`   | `"[$symbol]($style)"` | The format for the module.                             |
+| `style`    | `"bold white"`        | The style for the module.                              |
+| `disabled` | `true`                | Disables the `os` module.                              |
+| `symbols`  |                       | A table that maps each operating system to its symbol. |
 
 `symbols` allows you to define arbitrary symbols to display for each operating system type.
 Operating system types not defined by your configuration use the default symbols table below.
@@ -2701,8 +2693,6 @@ If you would like an operating system to be added, feel free to open a [feature 
 "Unknown" = "❓ "
 "Windows" = "🪟 "
 ```
-
-</details>
 
 ### Variables
 
