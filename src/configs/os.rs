@@ -38,6 +38,7 @@ impl<'a> Default for OSConfig<'a> {
                 "EndeavourOS".to_owned() => "🚀 ",
                 "Fedora".to_owned() => "🎩 ",
                 "FreeBSD".to_owned() => "😈 ",
+                "Garuda".to_owned() => "🦅 ",
                 "Gentoo".to_owned() => "🗜️ ",
                 "HardenedBSD".to_owned() => "🛡️ ",
                 "Illumos".to_owned() => "🐦 ",

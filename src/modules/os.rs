@@ -144,6 +144,7 @@ mod tests {
             (Type::EndeavourOS, Some("🚀 ")),
             (Type::Fedora, Some("🎩 ")),
             (Type::FreeBSD, Some("😈 ")),
+            (Type::Garuda, Some("🦅 ")),
             (Type::Gentoo, Some("🗜️ ")),
             (Type::HardenedBSD, Some("🛡️ ")),
             (Type::Illumos, Some("🐦 ")),
@@ -191,6 +192,7 @@ mod tests {
             "EndeavourOS" = " "
             "Fedora" = " "
             "FreeBSD" = " "
+            "Garuda" = "﯑ "
             "Gentoo" = " "
             "HardenedBSD" = "ﲊ "
             "Illumos" = " "
@@ -231,6 +233,7 @@ mod tests {
             (Type::EndeavourOS, Some(" ")),
             (Type::Fedora, Some(" ")),
             (Type::FreeBSD, Some(" ")),
+            (Type::Garuda, Some("﯑ ")),
             (Type::Gentoo, Some(" ")),
             (Type::HardenedBSD, Some("ﲊ ")),
             (Type::Illumos, Some(" ")),
@@ -284,6 +287,7 @@ mod tests {
             (Type::EndeavourOS, Some("🚀 ")),
             (Type::Fedora, Some("🎩 ")),
             (Type::FreeBSD, Some("😈 ")),
+            (Type::Garuda, Some("🦅 ")),
             (Type::Gentoo, Some("🗜️ ")),
             (Type::HardenedBSD, Some("🛡️ ")),
             (Type::Illumos, Some("🐦 ")),
