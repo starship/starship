@@ -27,7 +27,14 @@ impl<'a> Default for HaxeConfig<'a> {
             style: "bold fg:202",
             disabled: false,
             detect_extensions: vec!["hx", "hxml"],
-            detect_files: vec!["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"],
+            detect_files: vec![
+                "project.xml",
+                "Project.xml",
+                "application.xml",
+                "haxelib.json",
+                "hxformat.json",
+                ".haxerc",
+            ],
             detect_folders: vec![".haxelib", "haxe_libraries"],
         }
     }

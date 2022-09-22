@@ -6,7 +6,8 @@ use crate::formatter::VersionFormatter;
 use serde_json as json;
 
 use regex::Regex;
-const HAXE_VERSION_PATTERN: &str = "(?P<version>(?:\\d+\\.\\d+\\.\\d+(?:-(?:alpha|beta|pre|rc)[\\d\\.+]+)?)|[[:xdigit:]]+)";
+const HAXE_VERSION_PATTERN: &str =
+    "(?P<version>(?:\\d+\\.\\d+\\.\\d+(?:-(?:alpha|beta|pre|rc)[\\d\\.+]+)?)|[[:xdigit:]]+)";
 
 /// Creates a module with the current Haxe version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -62,21 +63,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_haxe_version(context: &Context) -> Option<String> {
     let file_contents = context.read_file_from_pwd(".haxerc");
-    if file_contents.is_some() 
-    {
+    if file_contents.is_some() {
         let raw_json = match file_contents {
             Some(val) => val,
             None => panic!("failed to read contents of .haxerc!"),
         };
         let haxerc_json: json::Value = json::from_str(&raw_json).ok()?;
         let raw_version = haxerc_json.get("version")?.as_str()?;
-        parse_haxe_version(&raw_version)
-    }
-    else 
-    {
+        parse_haxe_version(raw_version)
+    } else {
         let cmd_output = context.exec_cmd("haxe", &["--version"])?;
         let raw_version = cmd_output.stdout.as_str();
-        parse_haxe_version(&raw_version)
+        parse_haxe_version(raw_version)
     }
 }
 
@@ -98,7 +96,7 @@ mod tests {
     use std::io;
     use std::io::Write;
     use tempfile::TempDir;
-    
+
     #[test]
     fn haxe_version() {
         let ok_versions = ["4.2.5", "4.3.0-rc.1+", "3.4.7abcdf", "779b005"];
@@ -114,17 +112,26 @@ mod tests {
 
         let sample_haxe_output = "4.3.0-rc.1+\n";
 
-        assert_eq!(Some("4.3.0-rc.1+".to_string()), parse_haxe_version(sample_haxe_output))
+        assert_eq!(
+            Some("4.3.0-rc.1+".to_string()),
+            parse_haxe_version(sample_haxe_output)
+        )
     }
 
     #[test]
     fn folder_without_haxe() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("haxe.txt"))?.sync_all()?;
-        let actual = ModuleRenderer::new("haxe").cmd("haxe --version", Some(CommandOutput {
-            stdout: "4.3.0-rc.1+\n".to_owned(),
-            stderr: "".to_owned()
-        })).path(dir.path()).collect();
+        let actual = ModuleRenderer::new("haxe")
+            .cmd(
+                "haxe --version",
+                Some(CommandOutput {
+                    stdout: "4.3.0-rc.1+\n".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
@@ -134,11 +141,20 @@ mod tests {
     fn folder_with_hxml_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.hxml"))?.sync_all()?;
-        let actual = ModuleRenderer::new("haxe").cmd("haxe --version", Some(CommandOutput {
-            stdout: "4.3.0-rc.1+\n".to_owned(),
-            stderr: "".to_owned()
-        })).path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(202).bold().paint("⌘ v4.3.0-rc.1+ ")));
+        let actual = ModuleRenderer::new("haxe")
+            .cmd(
+                "haxe --version",
+                Some(CommandOutput {
+                    stdout: "4.3.0-rc.1+\n".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("⌘ v4.3.0-rc.1+ ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -147,11 +163,20 @@ mod tests {
     fn folder_with_haxe_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.hx"))?.sync_all()?;
-        let actual = ModuleRenderer::new("haxe").cmd("haxe --version", Some(CommandOutput {
-            stdout: "4.3.0-rc.1+\n".to_owned(),
-            stderr: "".to_owned()
-        })).path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(202).bold().paint("⌘ v4.3.0-rc.1+ ")));
+        let actual = ModuleRenderer::new("haxe")
+            .cmd(
+                "haxe --version",
+                Some(CommandOutput {
+                    stdout: "4.3.0-rc.1+\n".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("⌘ v4.3.0-rc.1+ ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -167,11 +192,20 @@ mod tests {
         })
         .to_string();
         fill_config(&dir, haxerc_name, Some(&haxerc_content))?;
-        let actual = ModuleRenderer::new("haxe").cmd("haxe --version", Some(CommandOutput {
-            stdout: "4.3.0-rc.1+\n".to_owned(),
-            stderr: "".to_owned()
-        })).path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(202).bold().paint("⌘ v4.2.5 ")));
+        let actual = ModuleRenderer::new("haxe")
+            .cmd(
+                "haxe --version",
+                Some(CommandOutput {
+                    stdout: "4.3.0-rc.1+\n".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("⌘ v4.2.5 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -188,11 +222,20 @@ mod tests {
         .to_string();
 
         fill_config(&dir, haxerc_name, Some(&haxerc_content))?;
-        let actual = ModuleRenderer::new("haxe").cmd("haxe --version", Some(CommandOutput {
-            stdout: "4.3.0-rc.1+\n".to_owned(),
-            stderr: "".to_owned()
-        })).path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Fixed(202).bold().paint("⌘ v779b005 ")));
+        let actual = ModuleRenderer::new("haxe")
+            .cmd(
+                "haxe --version",
+                Some(CommandOutput {
+                    stdout: "4.3.0-rc.1+\n".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("⌘ v779b005 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
