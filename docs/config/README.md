@@ -1870,16 +1870,16 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                                               |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["hx", "hxml"]`                                 | Which extensions should trigger this module.                              |
-| `detect_files`      | `["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"]`    | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                 | Which folders should trigger this modules.                                |
-| `symbol`            | `"⌘ "`                               | A format string representing the symbol of Helm.                          |
-| `style`             | `"bold fg:202"`                       | The style for the module.                                                 |
-| `disabled`          | `false`                              | Disables the `haxe` module.                                               |
+| Option              | Default                                                                                         | Description                                                               |
+| ------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                            | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                                                                                     | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `["hx", "hxml"]`                                                                                | Which extensions should trigger this module.                              |
+| `detect_files`      | `["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"]` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | Which folders should trigger this modules.                                |
+| `symbol`            | `"⌘ "`                                                                                          | A format string representing the symbol of Helm.                          |
+| `style`             | `"bold fg:202"`                                                                                 | The style for the module.                                                 |
+| `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
 
 ### Variables
 
