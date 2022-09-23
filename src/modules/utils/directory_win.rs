@@ -112,7 +112,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
             impersonated_token,
             access_rights.0,
             &mapping,
-            &mut privileges,
+            Some(&mut privileges),
             &mut priv_size,
             &mut granted_access,
             &mut result,
