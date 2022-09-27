@@ -1544,6 +1544,22 @@
     "add_newline": {
       "default": true,
       "type": "boolean"
+    },
+    "palette": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "palettes": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
     }
   },
   "additionalProperties": false,

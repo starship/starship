@@ -1,3 +1,5 @@
+use crate::configs::Palette;
+use crate::context::Context;
 use crate::serde_utils::ValueDeserializer;
 use crate::utils;
 use nu_ansi_term::Color;
@@ -7,6 +9,7 @@ use serde::{
 
 use std::borrow::Cow;
 use std::clone::Clone;
+use std::collections::HashMap;
 use std::io::ErrorKind;
 
 use std::env;
@@ -260,7 +263,7 @@ where
     D: Deserializer<'de>,
 {
     Cow::<'_, str>::deserialize(de).and_then(|s| {
-        parse_style_string(s.as_ref()).ok_or_else(|| D::Error::custom("Invalid style string"))
+        parse_style_string(s.as_ref(), None).ok_or_else(|| D::Error::custom("Invalid style string"))
     })
 }
 
@@ -275,7 +278,10 @@ where
  - 'blink'
  - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
-pub fn parse_style_string(style_string: &str) -> Option<nu_ansi_term::Style> {
+pub fn parse_style_string(
+    style_string: &str,
+    context: Option<&Context>,
+) -> Option<nu_ansi_term::Style> {
     style_string
         .split_whitespace()
         .fold(Some(nu_ansi_term::Style::new()), |maybe_style, token| {
@@ -308,7 +314,15 @@ pub fn parse_style_string(style_string: &str) -> Option<nu_ansi_term::Style> {
                             None // fg:none yields no style.
                         } else {
                             // Either bg or valid color or both.
-                            let parsed = parse_color_string(color_string);
+                            let parsed = parse_color_string(
+                                color_string,
+                                context.and_then(|x| {
+                                    get_palette(
+                                        &x.root_config.palettes,
+                                        x.root_config.palette.as_deref(),
+                                    )
+                                }),
+                            );
                             // bg + invalid color = reset the background to default.
                             if !col_fg && parsed.is_none() {
                                 let mut new_style = style;
@@ -335,9 +349,12 @@ pub fn parse_style_string(style_string: &str) -> Option<nu_ansi_term::Style> {
  There are three valid color formats:
   - #RRGGBB      (a hash followed by an RGB hex)
   - u8           (a number from 0-255, representing an ANSI color)
-  - colstring    (one of the 16 predefined color strings)
+  - colstring    (one of the 16 predefined color strings or a custom user-defined color)
 */
-fn parse_color_string(color_string: &str) -> Option<nu_ansi_term::Color> {
+fn parse_color_string(
+    color_string: &str,
+    palette: Option<&Palette>,
+) -> Option<nu_ansi_term::Color> {
     // Parse RGB hex values
     log::trace!("Parsing color_string: {}", color_string);
     if color_string.starts_with('#') {
@@ -360,6 +377,16 @@ fn parse_color_string(color_string: &str) -> Option<nu_ansi_term::Color> {
     if let Result::Ok(ansi_color_num) = color_string.parse::<u8>() {
         log::trace!("Read ANSI color string: {}", ansi_color_num);
         return Some(Color::Fixed(ansi_color_num));
+    }
+
+    // Check palette for a matching user-defined color
+    if let Some(palette_color) = palette.as_ref().and_then(|x| x.get(color_string)) {
+        log::trace!(
+            "Read user-defined color string: {} defined as {}",
+            color_string,
+            palette_color
+        );
+        return parse_color_string(palette_color, None);
     }
 
     // Check for any predefined color strings
@@ -390,6 +417,24 @@ fn parse_color_string(color_string: &str) -> Option<nu_ansi_term::Color> {
         log::debug!("Could not parse color in string: {}", color_string);
     }
     predefined_color
+}
+
+fn get_palette<'a>(
+    palettes: &'a HashMap<String, Palette>,
+    palette_name: Option<&str>,
+) -> Option<&'a Palette> {
+    if let Some(palette_name) = palette_name {
+        let palette = palettes.get(palette_name);
+        if palette.is_some() {
+            log::trace!("Found color palette: {}", palette_name);
+        } else {
+            log::warn!("Could not find color palette: {}", palette_name);
+        }
+        palette
+    } else {
+        log::trace!("No color palette specified, using defaults");
+        None
+    }
 }
 
 #[cfg(test)]
@@ -777,5 +822,77 @@ mod tests {
             multi_style,
             Style::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
         );
+    }
+
+    #[test]
+    fn table_get_colors_palette() {
+        // Test using colors defined in palette
+        let mut palette = Palette::new();
+        palette.insert("mustard".to_string(), "#af8700".to_string());
+        palette.insert("sky-blue".to_string(), "51".to_string());
+        palette.insert("red".to_string(), "#d70000".to_string());
+        palette.insert("blue".to_string(), "17".to_string());
+        palette.insert("green".to_string(), "green".to_string());
+
+        assert_eq!(
+            parse_color_string("mustard", Some(&palette)),
+            Some(Color::Rgb(175, 135, 0))
+        );
+        assert_eq!(
+            parse_color_string("sky-blue", Some(&palette)),
+            Some(Color::Fixed(51))
+        );
+
+        // Test overriding predefined colors
+        assert_eq!(
+            parse_color_string("red", Some(&palette)),
+            Some(Color::Rgb(215, 0, 0))
+        );
+        assert_eq!(
+            parse_color_string("blue", Some(&palette)),
+            Some(Color::Fixed(17))
+        );
+
+        // Test overriding a predefined color with itself
+        assert_eq!(
+            parse_color_string("green", Some(&palette)),
+            Some(Color::Green)
+        )
+    }
+
+    #[test]
+    fn table_get_palette() {
+        // Test retrieving color palette by name
+        let mut palette1 = Palette::new();
+        palette1.insert("test-color".to_string(), "123".to_string());
+
+        let mut palette2 = Palette::new();
+        palette2.insert("test-color".to_string(), "#ABCDEF".to_string());
+
+        let mut palettes = HashMap::<String, Palette>::new();
+        palettes.insert("palette1".to_string(), palette1);
+        palettes.insert("palette2".to_string(), palette2);
+
+        assert_eq!(
+            get_palette(&palettes, Some("palette1"))
+                .unwrap()
+                .get("test-color")
+                .unwrap(),
+            "123"
+        );
+
+        assert_eq!(
+            get_palette(&palettes, Some("palette2"))
+                .unwrap()
+                .get("test-color")
+                .unwrap(),
+            "#ABCDEF"
+        );
+
+        // Test retrieving nonexistent color palette
+        assert!(get_palette(&palettes, Some("palette3")).is_none());
+
+        // Test default behavior
+        assert!(get_palette(&palettes, None).is_none());
     }
 }
