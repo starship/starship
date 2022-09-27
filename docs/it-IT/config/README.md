@@ -162,13 +162,15 @@ This is the list of prompt-wide configuration options.
 
 ### Opzioni
 
-| Opzione           | Default                        | Descrizione                                                      |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configura il formato del prompt.                                 |
-| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
-| `scan_timeout`    | `30`                           | Timeout per starship per scansionare i file (in millisecondi).   |
-| `command_timeout` | `500`                          | Timeout per i comandi eseguiti da starship (in millisecondi).    |
-| `add_newline`     | `true`                         | Inserisce una riga vuota tra i prompt della shell.               |
+| Opzione           | Default                        | Descrizione                                                                                                                                                                      |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configura il formato del prompt.                                                                                                                                                 |
+| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                           | Timeout per starship per scansionare i file (in millisecondi).                                                                                                                   |
+| `command_timeout` | `500`                          | Timeout per i comandi eseguiti da starship (in millisecondi).                                                                                                                    |
+| `add_newline`     | `true`                         | Inserisce una riga vuota tra i prompt della shell.                                                                                                                               |
+| `palette`         | `""`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### Esempio
 
@@ -186,6 +188,16 @@ scan_timeout = 10
 
 # Disable the blank line at the start of the prompt
 add_newline = false
+
+# Set "foo" as custom color palette
+palette = "foo"
+
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = "21"
+# Define new color
+mustard = "#af8700"
 ```
 
 ### Default Prompt Format
