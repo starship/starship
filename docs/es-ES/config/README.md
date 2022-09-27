@@ -162,13 +162,15 @@ Esta es la lista de opciones de configuración.
 
 ### Opciones
 
-| Opción            | Predeterminado                 | Descripción                                                                    |
-| ----------------- | ------------------------------ | ------------------------------------------------------------------------------ |
-| `format`          | [link](#default-prompt-format) | Configura el formato del prompt.                                               |
-| `right_format`    | `""`                           | Ver [Habilitar prompt derecho](/advanced-config/#enable-right-prompt)          |
-| `scan_timeout`    | `30`                           | Tiempo de espera tras el que starship escanea archivos (en milisegundos).      |
-| `command_timeout` | `500`                          | Tiempo de espera para los comandos ejecutados por starship (en milisegundos).  |
-| `add_newline`     | `true`                         | Inserta un línea en blanco entre las instrucciones del intérprete de comandos. |
+| Opción            | Predeterminado                 | Descripción                                                                                                                                                                      |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configura el formato del prompt.                                                                                                                                                 |
+| `right_format`    | `""`                           | Ver [Habilitar prompt derecho](/advanced-config/#enable-right-prompt)                                                                                                            |
+| `scan_timeout`    | `30`                           | Tiempo de espera tras el que starship escanea archivos (en milisegundos).                                                                                                        |
+| `command_timeout` | `500`                          | Tiempo de espera para los comandos ejecutados por starship (en milisegundos).                                                                                                    |
+| `add_newline`     | `true`                         | Inserta un línea en blanco entre las instrucciones del intérprete de comandos.                                                                                                   |
+| `palette`         | `""`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### Ejemplo
 
@@ -184,8 +186,18 @@ format = """
 # Espera 10 milisegundos para que starship revise los archivos del directorio actual.
 scan_timeout = 10
 
-# Deshabilita la línea en blanco al inicio del prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
+
+# Set "foo" as custom color palette
+palette = "foo"
+
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = "21"
+# Define new color
+mustard = "#af8700"
 ```
 
 ### Formato predeterminado del Prompt
