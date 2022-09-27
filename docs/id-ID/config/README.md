@@ -162,13 +162,15 @@ Berikut adalah opsi konfigurasi dari list yang bersifat prompt-wide.
 
 ### Opsi
 
-| Opsi              | Bawaan                         | Deskripsi                                                              |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                    |
-| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)       |
-| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).           |
-| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dijalankan starship (dalam milidetik). |
-| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                           |
+| Opsi              | Bawaan                         | Deskripsi                                                                                                                                                                        |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Mengkonfigurasi format pada prompt.                                                                                                                                              |
+| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                           | Batas waktu starpship untuk memindai file (dalam milidetik).                                                                                                                     |
+| `command_timeout` | `500`                          | Batas waktu untuk perintah yang dijalankan starship (dalam milidetik).                                                                                                           |
+| `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                                                                                                                                     |
+| `palette`         | `""`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### Contoh
 
@@ -184,8 +186,18 @@ format = """
 # Menunggu 10 milidetik untuk starship mencek file pada direktori terkini.
 scan_timeout = 10
 
-# Menonaktifkan baris kosong di awal prompt
+# Disable the blank line at the start of the prompt
 add_newline = false
+
+# Set "foo" as custom color palette
+palette = "foo"
+
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = "21"
+# Define new color
+mustard = "#af8700"
 ```
 
 ### Format Prompt Bawaan
