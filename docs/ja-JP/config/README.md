@@ -161,13 +161,15 @@ detect_extensions = ["ts", "!video.ts", "!audio.ts"]
 
 ### オプション
 
-| オプション             | デフォルト                          | 説明                                                            |
-| ----------------- | ------------------------------ | ------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                               |
-| `right_format`    | `""`                           | [右プロンプトの有効化](/advanced-config/#enable-right-prompt)を参照してください。 |
-| `scan_timeout`    | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。                      |
-| `command_timeout` | `500`                          | Starshipによって実行されたコマンドのタイムアウト時間 (milliseconds) です。             |
-| `add_newline`     | `true`                         | シェルプロンプトの間に空行を挿入します。                                          |
+| オプション             | デフォルト                          | 説明                                                                                                                                                                               |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | プロンプトの形式を設定します。                                                                                                                                                                  |
+| `right_format`    | `""`                           | [右プロンプトの有効化](/advanced-config/#enable-right-prompt)を参照してください。                                                                                                                    |
+| `scan_timeout`    | `30`                           | ファイルをスキャンする際のタイムアウト時間 (milliseconds) です。                                                                                                                                         |
+| `command_timeout` | `500`                          | Starshipによって実行されたコマンドのタイムアウト時間 (milliseconds) です。                                                                                                                                |
+| `add_newline`     | `true`                         | シェルプロンプトの間に空行を挿入します。                                                                                                                                                             |
+| `palette`         | `""`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### 設定例
 
@@ -184,8 +186,18 @@ format = """
 
 scan_timeout = 10
 
-# プロンプトの先頭の空行を無効にします
+# Disable the blank line at the start of the prompt
 add_newline = false
+
+# Set "foo" as custom color palette
+palette = "foo"
+
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = "21"
+# Define new color
+mustard = "#af8700"
 ```
 
 ### デフォルトのプロンプトフォーマット
