@@ -162,13 +162,15 @@ Cái này là danh sách các tuỳ chọn cho cấu hình prompt-wide.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn          | Mặc định                       | Mô tả                                                                    |
-| ----------------- | ------------------------------ | ------------------------------------------------------------------------ |
-| `format`          | [link](#default-prompt-format) | Cấu hình định dạng của prompt.                                           |
-| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)         |
-| `scan_timeout`    | `30`                           | Timeout của starship cho việc quét các tập tin (tính theo milliseconds). |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).             |
-| `add_newline`     | `true`                         | Chèn dòng trắng giữa các dấu nhắc lệnh.                                  |
+| Tuỳ chọn          | Mặc định                       | Mô tả                                                                                                                                                                            |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Cấu hình định dạng của prompt.                                                                                                                                                   |
+| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                           | Timeout của starship cho việc quét các tập tin (tính theo milliseconds).                                                                                                         |
+| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                     |
+| `add_newline`     | `true`                         | Chèn dòng trắng giữa các dấu nhắc lệnh.                                                                                                                                          |
+| `palette`         | `""`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### Ví dụ
 
@@ -184,8 +186,18 @@ format = """
 # Chờ 10 milliseconds để starship kiểm tra các tập tin trong đường dẫn hiện tại.
 scan_timeout = 10
 
-# Vô hiệu hóa dòng trắng tại ví trị bắt đầu của dấu nhắc lệnh
+# Disable the blank line at the start of the prompt
 add_newline = false
+
+# Set "foo" as custom color palette
+palette = "foo"
+
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = "21"
+# Define new color
+mustard = "#af8700"
 ```
 
 ### Định dạng prompt mặc định
