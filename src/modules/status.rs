@@ -55,38 +55,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let segment_format = config.pipestatus_segment_format.unwrap_or(config.format);
-
-    // Create pipestatus string
-    let pipestatus_separator =
-        match StringFormatter::new(config.pipestatus_separator).and_then(|formatter| {
-            formatter
-                .map_style(|variable| match variable {
-                    "style" => Some(Ok(config.style)),
-                    _ => None,
-                })
-                .parse(None, Some(context))
-        }) {
-            Ok(segments) => segments
-                .into_iter()
-                .map(|s| s.to_string())
-                .collect::<String>(),
-            Err(_) => "".to_string(),
-        };
+    let segment_format_with_separator = [segment_format, config.pipestatus_separator].join("");
 
     let pipestatus = match pipestatus_status {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
             .iter()
-            .map(
-                |ec| match format_exit_code(ec.as_str(), segment_format, None, &config, context) {
+            .enumerate()
+            .map(|(i, ec)| {
+                match format_exit_code(
+                    ec.as_str(),
+                    if i == pipestatus.len() - 1 {
+                        segment_format
+                    } else {
+                        &segment_format_with_separator
+                    },
+                    None,
+                    &config,
+                    context,
+                ) {
                     Ok(segments) => segments
                         .into_iter()
                         .map(|s| s.to_string())
                         .collect::<String>(),
                     Err(_) => "".to_string(),
-                },
-            )
+                }
+            })
             .collect::<Vec<String>>()
-            .join(&pipestatus_separator),
+            .join(""),
         _ => "".to_string(),
     };
 
