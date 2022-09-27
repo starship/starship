@@ -162,13 +162,15 @@ detect_extensions = ["ts", "!video.ts", "!audio.ts"]
 
 ### 配置项
 
-| 选项                | 默认值                           | 描述                                                               |
-| ----------------- | ----------------------------- | ---------------------------------------------------------------- |
-| `format`          | [见下文](#default-prompt-format) | 配置提示符的格式。                                                        |
-| `right_format`    | `""`                          | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
-| `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                       |
-| `command_timeout` | `500`                         | Startship 执行命令的超时时间（单位：毫秒）。                                      |
-| `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。                                               |
+| 选项                | 默认值                           | 描述                                                                                                                                                                               |
+| ----------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [见下文](#default-prompt-format) | 配置提示符的格式。                                                                                                                                                                        |
+| `right_format`    | `""`                          | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                          | Starship 扫描文件的超时时间（单位：毫秒）。                                                                                                                                                       |
+| `command_timeout` | `500`                         | Startship 执行命令的超时时间（单位：毫秒）。                                                                                                                                                      |
+| `add_newline`     | `true`                        | 在 shell 提示符之间插入空行。                                                                                                                                                               |
+| `palette`         | `""`                          | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palettes`        | `{}`                          | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### 示例
 
@@ -186,6 +188,16 @@ scan_timeout = 10
 
 # Disable the blank line at the start of the prompt
 add_newline = false
+
+# Set "foo" as custom color palette
+palette = "foo"
+
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = "21"
+# Define new color
+mustard = "#af8700"
 ```
 
 ### 默认提示符格式
