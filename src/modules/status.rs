@@ -722,17 +722,19 @@ mod tests {
 
     #[test]
     fn pipestatus_separator_format() {
-        let pipe_exit_code = &[0, 1];
-        let main_exit_code = 1;
+        let pipe_exit_code = &[0, 1, 2];
+        let main_exit_code = 2;
 
         let expected_style = Style::new().on(Color::Red).fg(Color::White).bold();
         let expected = Some(format!(
-            "{}{}{}{}{}",
+            "{}{}{}{}{}{}{}",
             expected_style.paint("["),
             expected_style.paint("0"),
             expected_style.paint("|"),
             expected_style.paint("1"),
-            expected_style.paint("] => <1>"),
+            expected_style.paint("|"),
+            expected_style.paint("2"),
+            expected_style.paint("] => <2>"),
         ));
         let actual = ModuleRenderer::new("status")
             .config(toml::toml! {
