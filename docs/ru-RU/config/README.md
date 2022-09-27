@@ -162,13 +162,15 @@ detect_extensions = ["ts", "!video.ts", "!audio.ts"]
 
 ### Опции
 
-| Параметр          | По умолчанию                     | Описание                                                         |
-| ----------------- | -------------------------------- | ---------------------------------------------------------------- |
-| `format`          | [ссылка](#default-prompt-format) | Настройка форматирования оболочки.                               |
-| `right_format`    | `""`                             | See [Enable Right Prompt](/advanced-config/#enable-right-prompt) |
-| `scan_timeout`    | `30`                             | Тайм-аут запуска сканирования файлов (в миллисекундах).          |
-| `command_timeout` | `500`                            | Timeout for commands executed by starship (in milliseconds).     |
-| `add_newline`     | `true`                           | Inserts blank line between shell prompts.                        |
+| Параметр          | По умолчанию                     | Описание                                                                                                                                                                         |
+| ----------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [ссылка](#default-prompt-format) | Настройка форматирования оболочки.                                                                                                                                               |
+| `right_format`    | `""`                             | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                             | Тайм-аут запуска сканирования файлов (в миллисекундах).                                                                                                                          |
+| `command_timeout` | `500`                            | Timeout for commands executed by starship (in milliseconds).                                                                                                                     |
+| `add_newline`     | `true`                           | Inserts blank line between shell prompts.                                                                                                                                        |
+| `palette`         | `""`                             | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palettes`        | `{}`                             | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### Пример
 
@@ -186,6 +188,16 @@ scan_timeout = 10
 
 # Disable the blank line at the start of the prompt
 add_newline = false
+
+# Set "foo" as custom color palette
+palette = "foo"
+
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = "21"
+# Define new color
+mustard = "#af8700"
 ```
 
 ### Формат оболочки по умолчанию
