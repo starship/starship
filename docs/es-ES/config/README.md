@@ -162,15 +162,15 @@ Esta es la lista de opciones de configuración.
 
 ### Opciones
 
-| Opción            | Predeterminado                 | Descripción                                                                                                                                                                      |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configura el formato del prompt.                                                                                                                                                 |
-| `right_format`    | `""`                           | Ver [Habilitar prompt derecho](/advanced-config/#enable-right-prompt)                                                                                                            |
-| `scan_timeout`    | `30`                           | Tiempo de espera tras el que starship escanea archivos (en milisegundos).                                                                                                        |
-| `command_timeout` | `500`                          | Tiempo de espera para los comandos ejecutados por starship (en milisegundos).                                                                                                    |
-| `add_newline`     | `true`                         | Inserta un línea en blanco entre las instrucciones del intérprete de comandos.                                                                                                   |
-| `palette`         | `""`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| Opción            | Predeterminado                 | Descripción                                                                                                                                                                                                                           |
+| ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configura el formato del prompt.                                                                                                                                                                                                      |
+| `right_format`    | `""`                           | Ver [Habilitar prompt derecho](/advanced-config/#enable-right-prompt)                                                                                                                                                                 |
+| `scan_timeout`    | `30`                           | Tiempo de espera tras el que starship escanea archivos (en milisegundos).                                                                                                                                                             |
+| `command_timeout` | `500`                          | Tiempo de espera para los comandos ejecutados por starship (en milisegundos).                                                                                                                                                         |
+| `add_newline`     | `true`                         | Inserta un línea en blanco entre las instrucciones del intérprete de comandos.                                                                                                                                                        |
+| `paleta`          | `""`                           | Establece la paleta de color de `paletas` a utilizar.                                                                                                                                                                                 |
+| `paletas`         | `{}`                           | Colección de paletas de colores que asignan [colores](/advanced-config/#style-strings) a nombres definidos por el usuario. Tenga en cuenta que las paletas de colores no pueden hacer referencia a sus propias definiciones de color. |
 
 ### Ejemplo
 
@@ -189,14 +189,15 @@ scan_timeout = 10
 # Disable the blank line at the start of the prompt
 add_newline = false
 
-# Set "foo" as custom color palette
+# Establece "foo" como paleta de color personalizado
+as custom color palette
 palette = "foo"
 
-# Define custom colors
+# Definir colores personalizados
 [palettes.foo]
-# Overwrite existing color
+# Sobreescribir actual color
 blue = "21"
-# Define new color
+# Definir nuevo color
 mustard = "#af8700"
 ```
 
