@@ -1,5 +1,5 @@
 use indexmap::{indexmap, IndexMap};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
@@ -11,13 +11,29 @@ use serde::{Deserialize, Serialize};
 pub struct OSConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
+    #[serde(deserialize_with = "deserialize_symbols")]
+    /// IndexMap from lowercase String to &str.
     pub symbols: IndexMap<String, &'a str>,
     pub disabled: bool,
 }
 
+// Deserializer for OSConfig.symbols.
+// Makes the IndexMap keys lowercase.
+fn deserialize_symbols<'de, D>(deserializer: D) -> Result<IndexMap<String, &'de str>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    IndexMap::deserialize(deserializer).map(|index_map: IndexMap<String, &'de str>| {
+        index_map
+            .iter()
+            .map(|(k, &v)| (k.to_lowercase(), v))
+            .collect::<IndexMap<String, &'de str>>()
+    })
+}
+
 impl<'a> OSConfig<'a> {
     pub fn get_symbol(&self, key: &str) -> Option<&'a str> {
-        self.symbols.get(key).cloned()
+        self.symbols.get(&key.to_lowercase()).cloned()
     }
 }
 
@@ -27,42 +43,44 @@ impl<'a> Default for OSConfig<'a> {
             format: "[$symbol]($style)",
             style: "bold white",
             symbols: indexmap! {
-                "Alpine".to_owned() => "🏔️ ",
-                "Amazon".to_owned() => "🙂 ",
-                "Android".to_owned() => "🤖 ",
-                "Arch".to_owned() => "🎗️ ",
-                "CentOS".to_owned() => "💠 ",
-                "Debian".to_owned() => "🌀 ",
-                "DragonFly".to_owned() => "🐉 ",
-                "Emscripten".to_owned() => "🔗 ",
-                "EndeavourOS".to_owned() => "🚀 ",
-                "Fedora".to_owned() => "🎩 ",
-                "FreeBSD".to_owned() => "😈 ",
-                "Garuda".to_owned() => "🦅 ",
-                "Gentoo".to_owned() => "🗜️ ",
-                "HardenedBSD".to_owned() => "🛡️ ",
-                "Illumos".to_owned() => "🐦 ",
-                "Linux".to_owned() => "🐧 ",
-                "Macos".to_owned() => "🍎 ",
-                "Manjaro".to_owned() => "🥭 ",
-                "Mariner".to_owned() => "🌊 ",
-                "MidnightBSD".to_owned() => "🌘 ",
-                "Mint".to_owned() => "🌿 ",
-                "NetBSD".to_owned() => "🚩 ",
-                "NixOS".to_owned() => "❄️ ",
-                "OpenBSD".to_owned() => "🐡 ",
-                "openSUSE".to_owned() => "🦎 ",
-                "OracleLinux".to_owned() => "🦴 ",
-                "Pop".to_owned() => "🍭 ",
-                "Raspbian".to_owned() => "🍓 ",
-                "Redhat".to_owned() => "🎩 ",
-                "RedHatEnterprise".to_owned() => "🎩 ",
-                "Redox".to_owned() => "🧪 ",
-                "Solus".to_owned() => "⛵ ",
-                "SUSE".to_owned() => "🦎 ",
-                "Ubuntu".to_owned() => "🎯 ",
-                "Unknown".to_owned() => "❓ ",
-                "Windows".to_owned() => "🪟 ",
+                // Capitalization maintained for legibility,
+                // and to_lowercase() for &str -> String.
+                "Alpine".to_lowercase() => "🏔️ ",
+                "Amazon".to_lowercase() => "🙂 ",
+                "Android".to_lowercase() => "🤖 ",
+                "Arch".to_lowercase() => "🎗️ ",
+                "CentOS".to_lowercase() => "💠 ",
+                "Debian".to_lowercase() => "🌀 ",
+                "DragonFly".to_lowercase() => "🐉 ",
+                "Emscripten".to_lowercase() => "🔗 ",
+                "EndeavourOS".to_lowercase() => "🚀 ",
+                "Fedora".to_lowercase() => "🎩 ",
+                "FreeBSD".to_lowercase() => "😈 ",
+                "Garuda".to_lowercase() => "🦅 ",
+                "Gentoo".to_lowercase() => "🗜️ ",
+                "HardenedBSD".to_lowercase() => "🛡️ ",
+                "Illumos".to_lowercase() => "🐦 ",
+                "Linux".to_lowercase() => "🐧 ",
+                "Macos".to_lowercase() => "🍎 ",
+                "Manjaro".to_lowercase() => "🥭 ",
+                "Mariner".to_lowercase() => "🌊 ",
+                "MidnightBSD".to_lowercase() => "🌘 ",
+                "Mint".to_lowercase() => "🌿 ",
+                "NetBSD".to_lowercase() => "🚩 ",
+                "NixOS".to_lowercase() => "❄️ ",
+                "OpenBSD".to_lowercase() => "🐡 ",
+                "openSUSE".to_lowercase() => "🦎 ",
+                "OracleLinux".to_lowercase() => "🦴 ",
+                "Pop".to_lowercase() => "🍭 ",
+                "Raspbian".to_lowercase() => "🍓 ",
+                "Redhat".to_lowercase() => "🎩 ",
+                "RedHatEnterprise".to_lowercase() => "🎩 ",
+                "Redox".to_lowercase() => "🧪 ",
+                "Solus".to_lowercase() => "⛵ ",
+                "SUSE".to_lowercase() => "🦎 ",
+                "Ubuntu".to_lowercase() => "🎯 ",
+                "Unknown".to_lowercase() => "❓ ",
+                "Windows".to_lowercase() => "🪟 ",
                 // Future symbols.
                 //"aosc".to_owned() =>       " ",
                 //"artix".to_owned() =>      " ",

@@ -177,9 +177,34 @@ mod tests {
     }
 
     #[test]
+    fn get_symbol_case_insensitive() {
+        let config_toml = toml::toml! {
+            [symbols]
+            "Alpine" = "alpine"
+            "AMAZON" = "amazon"
+            "android" = "android"
+            "ArCh" = "arch"
+            "cENTos" = "centos"
+        };
+
+        let config = OSConfig::load(&config_toml);
+
+        let type_expected_pairs = [
+            (Type::Alpine, Some("alpine")),
+            (Type::Amazon, Some("amazon")),
+            (Type::Android, Some("android")),
+            (Type::Arch, Some("arch")),
+            (Type::CentOS, Some("centos")),
+        ];
+
+        for (t, e) in type_expected_pairs {
+            assert_eq!(get_symbol(&config, &Info::with_type(t)), e);
+        }
+    }
+
+    #[test]
     fn get_symbol_custom() {
         let config_toml = toml::toml! {
-            // I don't know why, but [os] seems to be implied
             [symbols]
             "Alpine" = " "
             "Amazon" = " "
