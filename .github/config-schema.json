@@ -620,6 +620,29 @@
         }
       ]
     },
+    "gradle": {
+      "default": {
+        "detect_extensions": [
+          "gradle",
+          "gradle.kts"
+        ],
+        "detect_files": [],
+        "detect_folders": [
+          ".gradle"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "strategy": "properties",
+        "style": "bold bright-cyan",
+        "symbol": "🅶 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GradleConfig"
+        }
+      ]
+    },
     "haskell": {
       "default": {
         "detect_extensions": [
@@ -3056,6 +3079,73 @@
         }
       },
       "additionalProperties": false
+    },
+    "GradleConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🅶 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold bright-cyan",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "gradle",
+            "gradle.kts"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".gradle"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "strategy": {
+          "default": "properties",
+          "allOf": [
+            {
+              "$ref": "#/definitions/GradleVersionStrategy"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "GradleVersionStrategy": {
+      "type": "string",
+      "enum": [
+        "properties",
+        "executable"
+      ]
     },
     "HaskellConfig": {
       "type": "object",
