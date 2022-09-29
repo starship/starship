@@ -997,5 +997,4 @@ x_security_token_expires = 2022-09-28T15:12:38+08:00
         assert_eq!(expected, actual);
         dir.close()
     }
-
 }
