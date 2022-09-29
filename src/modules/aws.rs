@@ -973,6 +973,8 @@ sso_role_name = <AWS-ROLE-NAME>
         file.write_all(
             "[default]
 region = ap-northeast-2
+aws_access_key_id=dummy
+aws_secret_access_key=dummy
 x_security_token_expires = 2022-09-28T15:12:38+08:00
 "
             .as_bytes(),
@@ -980,6 +982,7 @@ x_security_token_expires = 2022-09-28T15:12:38+08:00
 
         let actual = ModuleRenderer::new("aws")
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("AWS_PROFILE", "default")
             .config(toml::toml! {
                 [aws]
                 // format = "on [$symbol$region] [$duration] ($style) "
@@ -991,7 +994,7 @@ x_security_token_expires = 2022-09-28T15:12:38+08:00
             .collect();
         let expected = Some(format!(
             "on {} ❌",
-            Color::Yellow.bold().paint("☁️  ap-northeast-2")
+            Color::Yellow.bold().paint("☁️  ")
         ));
 
         assert_eq!(expected, actual);
