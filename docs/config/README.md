@@ -329,7 +329,7 @@ date is read from the `AWSUME_EXPIRATION` env var.
 ### Options
 
 | Option               | Default                                                           | Description                                                                                                 |
-| -------------------  | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| -------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`             | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
 | `symbol`             | `"☁️ "`                                                           | The symbol used before displaying the current AWS profile.                                                  |
 | `region_aliases`     |                                                                   | Table of region aliases to display in addition to the AWS name.                                             |
