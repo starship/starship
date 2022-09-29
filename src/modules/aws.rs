@@ -120,6 +120,7 @@ fn get_credentials_duration(
     context: &Context,
     aws_profile: &Option<String>,
     aws_creds: &AwsCredsFile,
+    expiration_keyname: &str,
 ) -> Option<i64> {
     let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWSUME_EXPIRATION"];
     let expiration_date = if let Some(expiration_date) = expiration_env_vars
@@ -132,7 +133,7 @@ fn get_credentials_duration(
         let section = get_profile_creds(creds, aws_profile)?;
 
         section
-            .get("expiration")
+            .get(expiration_keyname)
             .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
     }?;
 
@@ -202,13 +203,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let duration = {
-        get_credentials_duration(context, &aws_profile, &aws_creds).map(|duration| {
-            if duration > 0 {
-                render_time((duration * 1000) as u128, false)
-            } else {
-                config.expiration_symbol.to_string()
-            }
-        })
+        get_credentials_duration(context, &aws_profile, &aws_creds, config.expiration_keyname).map(
+            |duration| {
+                if duration > 0 {
+                    render_time((duration * 1000) as u128, false)
+                } else {
+                    config.expiration_symbol.to_string()
+                }
+            },
+        )
     };
 
     let mapped_region = alias_name(aws_region, &config.region_aliases);
@@ -960,4 +963,39 @@ sso_role_name = <AWS-ROLE-NAME>
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn customized_expiration_keyword_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut file = File::create(&config_path)?;
+
+        file.write_all(
+            "[default]
+region = ap-northeast-2
+x_security_token_expires = 2022-09-28T15:12:38+08:00
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [aws]
+                // format = "on [$symbol$region] [$duration] ($style) "
+                format = "on [$symbol$region]($style) ($duration)"
+                expiration_symbol = "❌"
+                expiration_keyname = "x_security_token_expires"
+                force_display = true
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {} ❌",
+            Color::Yellow.bold().paint("☁️  ap-northeast-2")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
 }

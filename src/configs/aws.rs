@@ -43,6 +43,8 @@ pub struct AwsConfig<'a> {
     pub expiration_symbol: &'a str,
     /// If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.
     pub force_display: bool,
+    /// Allows customized expiration key name like `x_security_token_expires`
+    pub expiration_keyname: &'a str,
 }
 
 impl<'a> Default for AwsConfig<'a> {
@@ -56,6 +58,7 @@ impl<'a> Default for AwsConfig<'a> {
             profile_aliases: HashMap::new(),
             expiration_symbol: "X",
             force_display: false,
+            expiration_keyname: "expiration",
         }
     }
 }
