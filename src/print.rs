@@ -1,4 +1,4 @@
-use clap::{PossibleValue, ValueEnum};
+use clap::{builder::PossibleValue, ValueEnum};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
@@ -460,7 +460,7 @@ impl ValueEnum for Preset {
         shadow::get_preset_list()
     }
 
-    fn to_possible_value<'a>(&self) -> Option<clap::PossibleValue<'a>> {
+    fn to_possible_value(&self) -> Option<PossibleValue> {
         Some(PossibleValue::new(self.0))
     }
 }
