@@ -992,10 +992,7 @@ x_security_token_expires = 2022-09-28T15:12:38+08:00
                 force_display = true
             })
             .collect();
-        let expected = Some(format!(
-            "on {} ❌",
-            Color::Yellow.bold().paint("☁️  ")
-        ));
+        let expected = Some(format!("on {} ❌", Color::Yellow.bold().paint("☁️  ")));
 
         assert_eq!(expected, actual);
         dir.close()
