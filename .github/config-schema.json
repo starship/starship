@@ -10,6 +10,7 @@
     "aws": {
       "default": {
         "disabled": false,
+        "expiration_keyname": "expiration",
         "expiration_symbol": "X",
         "force_display": false,
         "format": "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",
@@ -1614,6 +1615,11 @@
           "description": "If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.",
           "default": false,
           "type": "boolean"
+        },
+        "expiration_keyname": {
+          "description": "Allows customized expiration key name like `x_security_token_expires`",
+          "default": "expiration",
+          "type": "string"
         }
       },
       "additionalProperties": false
