@@ -173,8 +173,15 @@ mod tests {
     #[test]
     fn folder_with_gradle_wrapper_properties() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let properties = dir.path().join("gradle/wrapper/gradle-wrapper.properties");
+        let properties = dir
+            .path()
+            .join("gradle")
+            .join("wrapper")
+            .join("gradle-wrapper.properties");
+        // create gradle/wrapper/ directories
         fs::create_dir_all(properties.parent().unwrap())?;
+        // create build.gradle file to mark it as a gradle project
+        File::create(dir.path().join("build.gradle"))?.sync_all()?;
         let mut file = File::create(properties)?;
         file.write_all(
             b"\
