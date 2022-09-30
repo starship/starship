@@ -136,7 +136,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use std::fs::File;
-    use std::io;
+    use std::io::{self, Write};
 
     #[test]
     fn folder_without_gradle_files() -> io::Result<()> {
@@ -161,6 +161,32 @@ mod tests {
                 strategy = "executable"
             })
             .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::LightCyan.bold().paint("🅶 v7.5.1 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_gradle_wrapper_properties() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let properties = dir.path().join("gradle/wrapper/gradle-wrapper.properties");
+        fs::create_dir_all(properties.parent().unwrap())?;
+        let mut file = File::create(properties)?;
+        file.write_all(
+            b"\
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\\://services.gradle.org/distributions/gradle-7.5.1-bin.zip
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("gradle").path(dir.path()).collect();
 
         let expected = Some(format!(
             "via {}",
@@ -196,11 +222,11 @@ OS:           Linux 5.4.0-1090-azure amd64
     #[test]
     fn test_format_wrapper_properties() {
         let input = "\
-        distributionBase=GRADLE_USER_HOME
-        distributionPath=wrapper/dists
-        distributionUrl=https\\://services.gradle.org/distributions/gradle-7.5.1-bin.zip
-        zipStoreBase=GRADLE_USER_HOME
-        zipStorePath=wrapper/dists
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\\://services.gradle.org/distributions/gradle-7.5.1-bin.zip
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
         ";
         assert_eq!(
             parse_gradle_version_from_properties(input),
