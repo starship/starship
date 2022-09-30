@@ -111,7 +111,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 || ((num_segments_after_root - 1) as i64) < config.truncation_length
             {
                 let root = repo_path_vec[0];
-                let before = dir_string.replace(&contracted_path, "");
+                let before = before_root_dir(&dir_string, &contracted_path);
                 [prefix + before.as_str(), root.to_string(), after_repo_root]
             } else {
                 ["".to_string(), "".to_string(), prefix + dir_string.as_str()]
@@ -337,6 +337,14 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 /// Convert the path separators in `path` to the OS specific path separators.
 fn convert_path_sep(path: &str) -> String {
     return PathBuf::from_slash(path).to_string_lossy().into_owned();
+}
+
+/// Get the path before the git repo root by trim the most right repo name.
+fn before_root_dir(path: &str, repo: &str) -> String {
+    match path.rsplit_once(repo) {
+        Some((a, _)) => a.to_string(),
+        None => path.to_string(),
+    }
 }
 
 #[cfg(test)]
@@ -1787,5 +1795,23 @@ mod tests {
 
         assert_eq!(expected, actual);
         tmp_dir.close()
+    }
+
+    #[test]
+    fn parent_and_sub_git_repo_are_in_same_name_folder() {
+        assert_eq!(
+            before_root_dir("~/user/gitrepo/gitrepo", "gitrepo"),
+            "~/user/gitrepo/".to_string()
+        );
+
+        assert_eq!(
+            before_root_dir("~/user/gitrepo-diff/gitrepo", "gitrepo"),
+            "~/user/gitrepo-diff/".to_string()
+        );
+
+        assert_eq!(
+            before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"),
+            "~/user/gitrepo-diff/gitrepo".to_string()
+        );
     }
 }
