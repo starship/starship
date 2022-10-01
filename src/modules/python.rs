@@ -55,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .map(Ok)
                 }
                 "virtualenv" => {
-                    let virtual_env = get_python_virtual_env(context);
+                    let virtual_env = get_python_virtual_env(context, &config);
                     virtual_env.as_ref().map(|e| Ok(e.trim().to_string()))
                 }
                 "pyenv_prefix" => Some(Ok(pyenv_prefix.to_string())),
@@ -112,14 +112,28 @@ fn parse_python_version(python_version_string: &str) -> Option<String> {
     Some(version.to_string())
 }
 
-fn get_python_virtual_env(context: &Context) -> Option<String> {
-    context.get_env("VIRTUAL_ENV").and_then(|venv| {
-        get_prompt_from_venv(Path::new(&venv)).or_else(|| {
-            Path::new(&venv)
+fn get_python_virtual_env(context: &Context, config: &PythonConfig) -> Option<String> {
+    let current_dir = &context.current_dir;
+    let current_dir_name = current_dir.file_name()?.to_str().unwrap_or("");
+
+    let is_in_detect_folders = &config.detect_folders.contains(&current_dir_name);
+    let show_detect_venv_prompt = &config.show_detect_venv_prompt;
+
+    if *show_detect_venv_prompt && *is_in_detect_folders {
+        get_prompt_from_venv(Path::new(current_dir)).or_else(|| {
+            current_dir
                 .file_name()
                 .map(|filename| String::from(filename.to_str().unwrap_or("")))
         })
-    })
+    } else {
+        context.get_env("VIRTUAL_ENV").and_then(|venv| {
+            get_prompt_from_venv(Path::new(&venv)).or_else(|| {
+                Path::new(&venv)
+                    .file_name()
+                    .map(|filename| String::from(filename.to_str().unwrap_or("")))
+            })
+        })
+    }
 }
 fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
     Ini::load_from_file(venv_path.join("pyvenv.cfg"))
@@ -421,6 +435,108 @@ prompt = '(foo)'
         ));
 
         assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn enable_show_detect_venv_prompt() -> io::Result<()> {
+        let config = toml::toml! {
+            [python]
+            show_detect_venv_prompt = true
+            detect_folders = ["my_venv"]
+            detect_files = ["pyvenv.cfg"]
+        };
+
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br#"
+home = something
+prompt = 'foo'
+        "#,
+        )?;
+        venv_cfg.sync_all()?;
+
+        let target_dir = dir.path().join("my_venv");
+        let actual = ModuleRenderer::new("python")
+            .path(target_dir.as_path())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐍 v3.8.0 (foo) ")
+        ));
+
+        assert_eq!(actual, expected);
+
+        dir.close()
+    }
+
+    #[test]
+    fn disable_show_detect_venv_prompt() -> io::Result<()> {
+        let config = toml::toml! {
+            [python]
+            show_detect_venv_prompt = false
+            detect_folders = ["my_venv"]
+            detect_files = ["pyvenv.cfg"]
+        };
+
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br#"
+home = something
+prompt = 'foo'
+        "#,
+        )?;
+        venv_cfg.sync_all()?;
+
+        let target_dir = dir.path().join("my_venv");
+        let actual = ModuleRenderer::new("python")
+            .path(target_dir.as_path())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
+
+        assert_eq!(actual, expected);
+
+        dir.close()
+    }
+
+    #[test]
+    fn with_no_detect_folders_venv_prompt() -> io::Result<()> {
+        let config = toml::toml! {
+            [python]
+            show_detect_venv_prompt = true
+            detect_folders = []
+            detect_files = ["pyvenv.cfg"]
+        };
+
+        let dir = tempfile::tempdir()?;
+        create_dir_all(dir.path().join("my_venv"))?;
+        let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
+        venv_cfg.write_all(
+            br#"
+home = something
+prompt = 'foo'
+        "#,
+        )?;
+        venv_cfg.sync_all()?;
+
+        let target_dir = dir.path().join("my_venv");
+        let actual = ModuleRenderer::new("python")
+            .path(target_dir.as_path())
+            .config(config)
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
+
+        assert_eq!(actual, expected);
+
         dir.close()
     }
 
