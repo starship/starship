@@ -125,7 +125,7 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 
 以下符号在格式字符串中具有特殊用途，必须转义： `$ [ ] ( )`。
 
-Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). It is recommended to use a literal string (surrounded by single quotes) in your config. If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). 建议在你的配置中使用字面字符串(由单引号包围)。 如果你想使用一个基本的字符串(由双引号包围)，你必须在双引号前面添加反斜杠符号进行转义（即使用\“abc\"输出"abc"）。
 
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
@@ -144,9 +144,9 @@ format = '''
 \$'''
 ```
 
-### Negative matching
+### 错误匹配
 
-Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading "!" character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+许多模块都有 detect_extensions, detect_files, 和 detect_folders 变量。 These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading "!" character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
 
 Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
 
