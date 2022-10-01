@@ -101,7 +101,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
     let starship = StarshipPath::init()?;
 
     match shell_basename {
-        "bash" => print!(
+        "bash" => println!(
             /*
              * The standard bash bootstrap is:
              *      `source <(starship init bash --print-full-init)`
@@ -134,45 +134,45 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
              * https://github.com/starship/starship/pull/278
              */
             r#"
-            __main() {{
-                local major="${{BASH_VERSINFO[0]}}"
-                local minor="${{BASH_VERSINFO[1]}}"
+__main() {{
+    local major="${{BASH_VERSINFO[0]}}"
+    local minor="${{BASH_VERSINFO[1]}}"
 
-                if ((major > 4)) || {{ ((major == 4)) && ((minor >= 1)); }}; then
-                    source <({0} init bash --print-full-init)
-                else
-                    source /dev/stdin <<<"$({0} init bash --print-full-init)"
-                fi
-            }}
-            __main
-            unset -f __main
+    if ((major > 4)) || {{ ((major == 4)) && ((minor >= 1)); }}; then
+        source <({0} init bash --print-full-init)
+    else
+        source /dev/stdin <<<"$({0} init bash --print-full-init)"
+    fi
+}}
+__main
+unset -f __main
             "#,
             starship.sprint_posix()?
         ),
-        "zsh" => print!(
+        "zsh" => println!(
             r#"source <({} init zsh --print-full-init)"#,
             starship.sprint_posix()?
         ),
-        "fish" => print!(
+        "fish" => println!(
             // Fish does process substitution with pipes and psub instead of bash syntax
             r#"source ({} init fish --print-full-init | psub)"#,
             starship.sprint_posix()?
         ),
-        "powershell" => print!(
+        "powershell" => println!(
             r#"Invoke-Expression (& {} init powershell --print-full-init | Out-String)"#,
             starship.sprint_pwsh()?
         ),
-        "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
+        "ion" => println!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
             r#"eval ({} init elvish --print-full-init | slurp)"#,
             starship.sprint_posix()?
         ),
-        "tcsh" => print!(
+        "tcsh" => println!(
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
         "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
-        "xonsh" => print!(
+        "xonsh" => println!(
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?
         ),
@@ -229,7 +229,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 
 fn print_script(script: &str, path: &str) {
     let script = script.replace("::STARSHIP::", path);
-    print!("{}", script);
+    println!("{}", script);
 }
 
 /* GENERAL INIT SCRIPT NOTES
