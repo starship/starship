@@ -1,6 +1,6 @@
+use serde::{Deserialize, Serialize};
 use std::fs;
-use std::path::{PathBuf};
-use serde::{Serialize, Deserialize};
+use std::path::PathBuf;
 
 use super::{Context, Module, ModuleConfig};
 
@@ -8,28 +8,28 @@ use crate::configs::azure::AzureConfig;
 use crate::formatter::StringFormatter;
 
 #[derive(Serialize, Deserialize, Clone)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 struct AzureProfile {
     installation_id: String,
-    #[serde(default, skip_serializing_if="Vec::is_empty")]
-    subscriptions: Vec<Subscription>
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    subscriptions: Vec<Subscription>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 struct User {
     name: String,
-    #[serde(alias="type")]
+    #[serde(alias = "type")]
     user_type: String,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 struct ManagedByTenant {
     tenant_id: String,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 struct Subscription {
     id: String,
     name: String,
@@ -39,8 +39,8 @@ struct Subscription {
     tenant_id: String,
     environment_name: String,
     home_tenant_id: String,
-    #[serde(default, skip_serializing_if="Vec::is_empty")]
-    managed_by_tenants: Vec<ManagedByTenant>
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    managed_by_tenants: Vec<ManagedByTenant>,
 }
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -50,13 +50,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if config.disabled {
         return None;
     };
-    
+
     let subscription: Option<Subscription> = get_azure_profile_info(context);
 
     if subscription.is_none() {
         log::info!("Could not find Subscriptions in azureProfile.json");
         return None;
-    } 
+    }
 
     let subscription = subscription.unwrap();
 
@@ -111,9 +111,10 @@ fn get_azure_profile_info(context: &Context) -> Option<Subscription> {
 fn load_azure_profile(config_path: &PathBuf) -> AzureProfile {
     let json_data = fs::read_to_string(&config_path).expect("Unable to open azureProfile.json");
     let sanitized_json_data = json_data.strip_prefix('\u{feff}').unwrap_or(&json_data);
-    let azure_profile: AzureProfile = serde_json::from_str(sanitized_json_data).expect("Unable to parse json data.");
-    
-    azure_profile 
+    let azure_profile: AzureProfile =
+        serde_json::from_str(sanitized_json_data).expect("Unable to parse json data.");
+
+    azure_profile
 }
 
 fn get_config_file_location(context: &Context) -> Option<PathBuf> {
@@ -309,7 +310,7 @@ mod tests {
         assert_eq!(actual, expected);
         dir.close()
     }
-    
+
     #[test]
     fn subscription_name_found_username_missing() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
@@ -559,15 +560,19 @@ mod tests {
 
         let bom = vec![239, 187, 191];
         let mut bom_str = String::from_utf8(bom).unwrap();
-        
-        let json_str = r#"{"installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3", "subscriptions": []}"#;
+
+        let json_str =
+            r#"{"installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3", "subscriptions": []}"#;
 
         bom_str.push_str(json_str);
 
         let dir_path_no_bom = save_string_to_file(&dir, bom_str, String::from("bom.json"))?;
         let sanitized_json = load_azure_profile(&dir_path_no_bom);
 
-        assert_eq!(sanitized_json.installation_id, "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3");
+        assert_eq!(
+            sanitized_json.installation_id,
+            "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3"
+        );
         assert!(sanitized_json.subscriptions.is_empty());
         dir.close()
     }
@@ -576,12 +581,17 @@ mod tests {
     fn azure_profile_without_leading_char() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
-        let json_str = r#"{"installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3", "subscriptions": []}"#;
+        let json_str =
+            r#"{"installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3", "subscriptions": []}"#;
 
-        let dir_path_no_bom = save_string_to_file(&dir, json_str.to_string(), String::from("bom.json"))?;
+        let dir_path_no_bom =
+            save_string_to_file(&dir, json_str.to_string(), String::from("bom.json"))?;
         let sanitized_json = load_azure_profile(&dir_path_no_bom);
 
-        assert_eq!(sanitized_json.installation_id, "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3");
+        assert_eq!(
+            sanitized_json.installation_id,
+            "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3"
+        );
         assert!(sanitized_json.subscriptions.is_empty());
         dir.close()
     }
