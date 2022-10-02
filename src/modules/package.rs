@@ -102,9 +102,19 @@ fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<St
 }
 
 fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let file_contents = context.read_file_from_pwd("build.gradle")?;
-    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap();
-    let caps = re.captures(&file_contents)?;
+    //get the content of both files if they exist
+    let build_file_contents = context.read_file_from_pwd("build.gradle")?;
+    let properties_file_contents = context.read_file_from_pwd("gradle.properties")?;
+    //read version of gradle.build file
+    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+    let caps = re.captures(&build_file_contents)?;
+
+    //check version from gradle.properties file
+    if caps["version"].is_empty() {
+        let re = Regex::new(r"/version=.*/gm").unwrap();
+        let caps = re.captures(&properties_file_contents)?;
+        return format_version(&caps["version"], config.version_format);
+    }
 
     format_version(&caps["version"], config.version_format)
 }
@@ -955,6 +965,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }";
 
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+    #[test]
+    fn test_extract_grade_version_from_properties() -> io::Result<()> {
+        let config_name = "gradle.properties";
+        let config_content = "
+            version=1.2.3
+            ";
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, None, None);
