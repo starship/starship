@@ -23,7 +23,7 @@ license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
 # Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
-rust-version = "1.59"
+rust-version = "1.60"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
@@ -36,8 +36,8 @@ notify = ["notify-rust"]
 
 [dependencies]
 chrono = { version = "0.4.22", features = ["clock", "std"] }
-clap = { version = "=3.2.22", features = ["derive", "cargo", "unicode", "unstable-v4"] }
-clap_complete = "3.2.5"
+clap = { version = "4.0.4", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.0.2"
 dirs-next = "2.0.0"
 dunce = "1.0.2"
 gethostname = "0.2.3"
