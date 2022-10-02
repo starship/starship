@@ -112,7 +112,10 @@ fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<Strin
         let properties_file_contents = context.read_file_from_pwd("gradle.properties")?;
         let re = Regex::new(r"/version=.*/gm").unwrap();
         let caps = re.captures(&properties_file_contents)?;
-        return format_version(&caps["version"].strip_prefix("version=").unwrap(), config.version_format);
+        return format_version(
+            &caps["version"].strip_prefix("version=").unwrap(),
+            config.version_format,
+        );
     }
     //read version of gradle.build file
     let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
