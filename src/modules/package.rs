@@ -102,19 +102,21 @@ fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<St
 }
 
 fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    //get the content of both files if they exist
-    let build_file_contents = context.read_file_from_pwd("build.gradle")?;
-    let properties_file_contents = context.read_file_from_pwd("gradle.properties")?;
-    //read version of gradle.build file
-    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
-    let caps = re.captures(&build_file_contents)?;
+    let build_file_contents = match context.read_file_from_pwd("build.gradle") {
+        Some(contents) => contents,
+        None => "none".to_string(),
+    };
 
     //check version from gradle.properties file
-    if caps["version"].is_empty() {
+    if build_file_contents == "none" {
+        let properties_file_contents = context.read_file_from_pwd("gradle.properties")?;
         let re = Regex::new(r"/version=.*/gm").unwrap();
         let caps = re.captures(&properties_file_contents)?;
         return format_version(&caps["version"], config.version_format);
     }
+    //read version of gradle.build file
+    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+    let caps = re.captures(&build_file_contents)?;
 
     format_version(&caps["version"], config.version_format)
 }
