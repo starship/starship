@@ -12,7 +12,7 @@ Starship 功能繁多，有时您必须在编辑 `starship.toml` 之外做更多
 
 可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 若要启用该功能，请在 shell 中运行 `Enable-TransitientPrompt`命令 若要永久启用该功能，请将 上述语句放在您的 `$PROFILE` 中。 通过在shell中运行 `Disable-TransientPrompt`命令来禁用这项功能。
 
-默认情况下，输入的左侧是 `>`符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要 在这里显示Starship的 `字符` 模块，您需要如下操作：
+默认情况下，输入的左侧是 `>`符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 For example, to display Starship's `character` module here, you would do
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -26,7 +26,7 @@ Enable-TransientPrompt
 
 ## 在 Cmd 中的 命令行提示(TransitentPrompt )和 语法高亮(TransentRightPrompt)
 
-可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 要启用该功能，运行命令`clink set prompt.transient <value>`，prompt.transient之后跟以下单词中的一个：
+可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 要启用该功能，运行命令`clink set prompt.transient <value>`，&lt;prompt.transient>之后跟以下单词中的一个：
 
 - `always`: 总是预设的提示
 - `same_dir`: 仅在工作目录相同的情况下替换预设的提示
@@ -34,18 +34,18 @@ Enable-TransientPrompt
 
 你只需要这样做一次。 对您的 `starship.lua` 进行以下更改，以自定义左侧和右侧显示的内容：
 
-- 默认情况下，输入的左侧是 `>`符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 This function receives the current prompt as a string that you can utilize. 例如，要 在这里显示Starship的 `字符` 模块，您需要如下操作：
+- 默认情况下，输入的左侧是 `>`符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 This function receives the current prompt as a string that you can utilize. 例如，要 在这里显示Starship的 `character` 模块，您需要如下操作：
 
 ```lua
-function starship_transient_prompt_func(prompt)
+function starship_transitent_propt_func(empt)
   return io.popen("starship module character"
-    .." --keymap="..rl.getvariable('keymap')
+    ..." --keymap="..rl.getvariable('keymap')
   ):read("*a")
 end
-load(io.popen('starship init cmd'):read("*a"))()
+load(io.popen('starship init cmd'):read("*a"))
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- 默认情况下，输入的右侧为空。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 This function receives the current prompt as a string that you can utilize. 例如，要在这里显示 最后一个命令开始的时间，您需要如下操作：
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -54,26 +54,26 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## TransientPrompt and TransientRightPrompt in Fish
+## 在 Fish 中的 命令行提示(TransitentPrompt)和语法高亮(TransentRightPrompt)
 
-可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 若要启用该功能，请在 shell 中运行 `Enable-TransitientPrompt`命令 若要永久启用该功能，请将 上述语句放在您的 `~/.config/fish/config.fish` 中。 通过在shell中运行 `Disable-TransientPrompt`命令来禁用这项功能。
 
-Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+请注意，对于Fish，命令行提示只在命令行非空 和语法正确的情况下才会显示。
 
-- By default, the left side of input gets replaced with a bold-green `❯`. 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要 在这里显示Starship的 `字符` 模块，您需要如下操作：
+- 默认情况下，输入的左侧是 粗体绿色的❯</code>符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要 在这里显示Starship的 `character` 模块，您需要如下操作：
 
 ```fish
-function starship_transient_prompt_func
-  starship module character
+function starship_transent_rmpt_func
+  starship module time
 end
 starship init fish | source
 enable_transience
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- 默认情况下，输入的右侧为空。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要在这里显示 最后一个命令开始的时间，您需要如下操作：
 
 ```fish
-function starship_transient_rprompt_func
+function starship_transent_rmpt_func
   starship module time
 end
 starship init fish | source
@@ -277,8 +277,8 @@ continuation_prompt = "▶▶"
 
 如果为文本/背景指定了多个颜色，字符串中最后指定的颜色将具有最高优先级。
 
-Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+并非每种类型的字符串都会被每个终端正确显示。 特别地，以下是已知的几种情况：
 
-- Many terminals disable support for `blink` by default
-- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app
+- 许多终端默认禁用对 `blink` 的支持
+- `hidden` 在 iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564) 上不被支持。
+- `strikethrough` 不被默认 macOS Terminal.app 支持
