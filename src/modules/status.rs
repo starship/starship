@@ -57,6 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let segment_format = config.pipestatus_segment_format.unwrap_or(config.format);
     let segment_format_with_separator = [segment_format, config.pipestatus_separator].join("");
 
+    // Create pipestatus string
     let pipestatus = match pipestatus_status {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
             .iter()
