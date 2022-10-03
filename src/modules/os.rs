@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
-                "symbol" => get_symbol(&config, &os),
+                "symbol" => get_symbol(&config, &os.os_type()),
                 _ => None,
             })
             .map_style(|variable| match variable {
@@ -51,12 +51,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 // Get the operating system symbol from user config, or else default config
 // when user has not defined a symbol for the operating system.
-fn get_symbol<'a>(config: &'a OSConfig, os: &os_info::Info) -> Option<&'a str> {
-    // String from os_info::Type
-    let key = &format!("{:?}", os.os_type());
+fn get_symbol<'a>(config: &'a OSConfig, os_type: &os_info::Type) -> Option<&'a str> {
     config
-        .get_symbol(key)
-        .or_else(|| OSConfig::default().get_symbol(key))
+        .get_symbol(os_type)
+        .or_else(|| OSConfig::default().get_symbol(os_type))
 }
 
 fn get_codename(os: &os_info::Info) -> Option<String> {
@@ -87,7 +85,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
-    use os_info::{Info, Type};
+    use os_info::Type;
 
     #[test]
     fn default() {
@@ -172,33 +170,7 @@ mod tests {
         ];
 
         for (t, e) in type_expected_pairs {
-            assert_eq!(get_symbol(&config, &Info::with_type(t)), e);
-        }
-    }
-
-    #[test]
-    fn get_symbol_case_insensitive() {
-        let config_toml = toml::toml! {
-            [symbols]
-            "Alpine" = "alpine"
-            "AMAZON" = "amazon"
-            "android" = "android"
-            "ArCh" = "arch"
-            "cENTos" = "centos"
-        };
-
-        let config = OSConfig::load(&config_toml);
-
-        let type_expected_pairs = [
-            (Type::Alpine, Some("alpine")),
-            (Type::Amazon, Some("amazon")),
-            (Type::Android, Some("android")),
-            (Type::Arch, Some("arch")),
-            (Type::CentOS, Some("centos")),
-        ];
-
-        for (t, e) in type_expected_pairs {
-            assert_eq!(get_symbol(&config, &Info::with_type(t)), e);
+            assert_eq!(get_symbol(&config, &t), e);
         }
     }
 
@@ -206,42 +178,42 @@ mod tests {
     fn get_symbol_custom() {
         let config_toml = toml::toml! {
             [symbols]
-            "Alpine" = " "
-            "Amazon" = " "
-            "Android" = " "
-            "Arch" = " "
-            "CentOS" = " "
-            "Debian" = " "
-            "DragonFly" = " "
-            "Emscripten" = " "
-            "EndeavourOS" = " "
-            "Fedora" = " "
-            "FreeBSD" = " "
-            "Garuda" = "﯑ "
-            "Gentoo" = " "
-            "HardenedBSD" = "ﲊ "
-            "Illumos" = " "
-            "Linux" = " "
-            "Macos" = " "
-            "Manjaro" = " "
-            "Mariner" = " "
-            "MidnightBSD" = " "
-            "Mint" = " "
-            "NetBSD" = " "
-            "NixOS" = " "
-            "OpenBSD" = " "
-            "SUSE" = " "
-            "OracleLinux" = " "
-            "Pop" = " "
-            "Raspbian" = " "
-            "Redhat" = " "
-            "RedHatEnterprise" = " "
-            "Redox" = " "
-            "Solus" = "ﴱ "
-            "openSUSE" = " "
-            "Ubuntu" = " "
-            "Unknown" = " "
-            "Windows" = " "
+            Alpine = " "
+            Amazon = " "
+            Android = " "
+            Arch = " "
+            CentOS = " "
+            Debian = " "
+            DragonFly = " "
+            Emscripten = " "
+            EndeavourOS = " "
+            Fedora = " "
+            FreeBSD = " "
+            Garuda = "﯑ "
+            Gentoo = " "
+            HardenedBSD = "ﲊ "
+            Illumos = " "
+            Linux = " "
+            Macos = " "
+            Manjaro = " "
+            Mariner = " "
+            MidnightBSD = " "
+            Mint = " "
+            NetBSD = " "
+            NixOS = " "
+            OpenBSD = " "
+            SUSE = " "
+            OracleLinux = " "
+            Pop = " "
+            Raspbian = " "
+            Redhat = " "
+            RedHatEnterprise = " "
+            Redox = " "
+            Solus = "ﴱ "
+            openSUSE = " "
+            Ubuntu = " "
+            Unknown = " "
+            Windows = " "
         };
 
         let config = OSConfig::load(&config_toml);
@@ -286,7 +258,7 @@ mod tests {
         ];
 
         for (t, e) in type_expected_pairs {
-            assert_eq!(get_symbol(&config, &Info::with_type(t)), e);
+            assert_eq!(get_symbol(&config, &t), e);
         }
     }
 
@@ -294,8 +266,8 @@ mod tests {
     fn get_symbol_fallback() {
         let config_toml = toml::toml! {
             [symbols]
-            "Unknown" = ""
-            "Arch" = "Arch is the best!"
+            Unknown = ""
+            Arch = "Arch is the best!"
         };
 
         let config = OSConfig::load(&config_toml);
@@ -340,7 +312,7 @@ mod tests {
         ];
 
         for (t, e) in type_expected_pairs {
-            assert_eq!(get_symbol(&config, &Info::with_type(t)), e);
+            assert_eq!(get_symbol(&config, &t), e);
         }
     }
 }
