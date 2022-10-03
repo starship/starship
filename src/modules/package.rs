@@ -102,26 +102,28 @@ fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<St
 }
 
 fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    //the file might not exist
     let build_file_contents = match context.read_file_from_pwd("build.gradle") {
-        Some(contents) => contents,
-        None => "none".to_string(),
+        Some(contents) => Some(contents),
+        None => None,
     };
 
-    //check version from gradle.properties file
-    if build_file_contents == "none" {
-        let properties_file_contents = context.read_file_from_pwd("gradle.properties")?;
-        let re = Regex::new(r"/version=.*/gm").unwrap();
-        let caps = re.captures(&properties_file_contents)?;
-        return format_version(
-            &caps["version"].strip_prefix("version=").unwrap(),
-            config.version_format,
-        );
+    match build_file_contents {
+        None => {
+            //read version from gradle.properties file
+            let properties_file_contents = context.read_file_from_pwd("gradle.properties")?;
+            let re = Regex::new(r"version=(?P<version>.*)").unwrap();
+            let caps = re.captures(&properties_file_contents)?;
+            return format_version(&caps["version"], config.version_format);
+        }
+        Some(contents) => {
+            //read version from gradle.build file
+            let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+            //version "0.1.0"
+            let caps = re.captures(&contents)?;
+            return format_version(&caps["version"], config.version_format);
+        }
     }
-    //read version of gradle.build file
-    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
-    let caps = re.captures(&build_file_contents)?;
-
-    format_version(&caps["version"], config.version_format)
 }
 
 fn get_composer_version(context: &Context, config: &PackageConfig) -> Option<String> {
