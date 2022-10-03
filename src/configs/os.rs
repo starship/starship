@@ -1,6 +1,6 @@
 use indexmap::{indexmap, IndexMap};
-use serde::{Deserialize, Serialize};
 use os_info::Type;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(

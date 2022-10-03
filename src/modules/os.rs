@@ -320,14 +320,14 @@ mod tests {
     fn warn_on_os_info_update() {
         #[warn(clippy::wildcard_enum_match_arm)]
         // This closure is the same as the default config symbols list.
-        // When this clippy test fails, a new default symbol should be added to 
+        // When this clippy test fails, a new default symbol should be added to
         // `config/os.rs` to exhaustively match new possible `os_info::Type` cases.
         // Affects:
         // - crate::configs::os::OSConfig::default()
         // - crate::modules::os::tests
         // - .github/config-schema.json
-        let _ = |t:Type| match t {
-            //Type::Alpine => "🏔️ ",
+        let _ = |t: Type| match t {
+            Type::Alpine => "🏔️ ",
             Type::Amazon => "🙂 ",
             Type::Android => "🤖 ",
             Type::Arch => "🎗️ ",
