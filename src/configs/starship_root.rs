@@ -67,6 +67,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nim",
     "nodejs",
     "ocaml",
+    "opa",
     "perl",
     "php",
     "pulumi",
