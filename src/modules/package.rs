@@ -983,7 +983,7 @@ java {
             ";
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(config_content))?;
-        expect_output(&project_dir, None, None);
+        expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
 
