@@ -61,8 +61,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         PipeStatusStatus::Pipe(pipestatus) => pipestatus
             .iter()
             .enumerate()
-            .map(|(i, ec)| {
-                match format_exit_code(
+            .filter_map(|(i, ec)| {
+                format_exit_code(
                     ec.as_str(),
                     if i == pipestatus.len() - 1 {
                         segment_format
@@ -72,16 +72,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     None,
                     &config,
                     context,
-                ) {
-                    Ok(segments) => segments
-                        .into_iter()
-                        .map(|s| s.to_string())
-                        .collect::<String>(),
-                    Err(_) => "".to_string(),
-                }
+                )
+                .ok()
+                .map(|segments| segments.into_iter().map(|s| s.to_string()))
             })
-            .collect::<Vec<String>>()
-            .join(""),
+            .flatten()
+            .collect::<String>(),
         _ => "".to_string(),
     };
 
