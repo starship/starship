@@ -1683,7 +1683,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 [git_metrics]
 added_style = "bold blue"
-format = "[+$added]($added_style)/[-$deleted]($deleted_style)"
+format = "[+$added]($added_style)/[-$deleted]($deleted_style) "
 ```
 
 ## Git Status
