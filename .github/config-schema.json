@@ -46,6 +46,7 @@
           {
             "charging_symbol": null,
             "discharging_symbol": null,
+            "only_on_discharge": false,
             "style": "red bold",
             "threshold": 10
           }
@@ -1668,6 +1669,7 @@
             {
               "charging_symbol": null,
               "discharging_symbol": null,
+              "only_on_discharge": false,
               "style": "red bold",
               "threshold": 10
             }
@@ -1713,6 +1715,10 @@
             "string",
             "null"
           ]
+        },
+        "only_on_discharge": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
