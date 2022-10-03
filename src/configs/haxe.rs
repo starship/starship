@@ -28,9 +28,6 @@ impl<'a> Default for HaxeConfig<'a> {
             disabled: false,
             detect_extensions: vec!["hx", "hxml"],
             detect_files: vec![
-                "project.xml",
-                "Project.xml",
-                "application.xml",
                 "haxelib.json",
                 "hxformat.json",
                 ".haxerc",
