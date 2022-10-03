@@ -315,4 +315,55 @@ mod tests {
             assert_eq!(get_symbol(&config, &t), e);
         }
     }
+
+    #[test]
+    fn warn_on_os_info_update() {
+        #[warn(clippy::wildcard_enum_match_arm)]
+        // This closure is the same as the default config symbols list.
+        // When this clippy test fails, a new default symbol should be added to 
+        // `config/os.rs` to exhaustively match new possible `os_info::Type` cases.
+        // Affects:
+        // - crate::configs::os::OSConfig::default()
+        // - crate::modules::os::tests
+        // - .github/config-schema.json
+        let _ = |t:Type| match t {
+            //Type::Alpine => "🏔️ ",
+            Type::Amazon => "🙂 ",
+            Type::Android => "🤖 ",
+            Type::Arch => "🎗️ ",
+            Type::CentOS => "💠 ",
+            Type::Debian => "🌀 ",
+            Type::DragonFly => "🐉 ",
+            Type::Emscripten => "🔗 ",
+            Type::EndeavourOS => "🚀 ",
+            Type::Fedora => "🎩 ",
+            Type::FreeBSD => "😈 ",
+            Type::Garuda => "🦅 ",
+            Type::Gentoo => "🗜️ ",
+            Type::HardenedBSD => "🛡️ ",
+            Type::Illumos => "🐦 ",
+            Type::Linux => "🐧 ",
+            Type::Macos => "🍎 ",
+            Type::Manjaro => "🥭 ",
+            Type::Mariner => "🌊 ",
+            Type::MidnightBSD => "🌘 ",
+            Type::Mint => "🌿 ",
+            Type::NetBSD => "🚩 ",
+            Type::NixOS => "❄️ ",
+            Type::OpenBSD => "🐡 ",
+            Type::openSUSE => "🦎 ",
+            Type::OracleLinux => "🦴 ",
+            Type::Pop => "🍭 ",
+            Type::Raspbian => "🍓 ",
+            Type::Redhat => "🎩 ",
+            Type::RedHatEnterprise => "🎩 ",
+            Type::Redox => "🧪 ",
+            Type::Solus => "⛵ ",
+            Type::SUSE => "🦎 ",
+            Type::Ubuntu => "🎯 ",
+            Type::Unknown => "❓ ",
+            Type::Windows => "🪟 ",
+            _ => "",
+        };
+    }
 }
