@@ -969,6 +969,7 @@ sso_role_name = <AWS-ROLE-NAME>
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("config");
         let mut file = File::create(&config_path)?;
+        let symbol = "!!!";
 
         file.write_all(
             "[default]
@@ -987,12 +988,17 @@ x_security_token_expires = 2022-09-28T15:12:38+08:00
                 [aws]
                 // format = "on [$symbol$region] [$duration] ($style) "
                 format = "on [$symbol$region]($style) ($duration)"
-                expiration_symbol = "❌"
+                expiration_symbol = symbol
                 expiration_keyname = "x_security_token_expires"
-                force_display = true
             })
             .collect();
-        let expected = Some(format!("on {} ❌", Color::Yellow.bold().paint("☁️  ")));
+        // let expected = Some(format!("on {} ", Color::Yellow.bold().paint("☁️  ")));
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow
+                .bold()
+                .paint(format!("☁️  default (ap-northeast-2) [{}] ", symbol))
+        ));
 
         assert_eq!(expected, actual);
         dir.close()
