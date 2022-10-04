@@ -85,6 +85,9 @@ format = '\[[$symbol($version)]($style)\]'
 [memory_usage]
 format = '\[$symbol[$ram( | $swap)]($style)\]'
 
+[meson]
+format = '\[[$symbol$project]($style)\]'
+
 [nim]
 format = '\[[$symbol($version)]($style)\]'
 

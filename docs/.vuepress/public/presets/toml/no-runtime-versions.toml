@@ -49,6 +49,9 @@ format = 'via [$symbol]($style)'
 [lua]
 format = 'via [$symbol]($style)'
 
+[meson]
+format = 'via [$symbol]($style)'
+
 [nim]
 format = 'via [$symbol]($style)'
 

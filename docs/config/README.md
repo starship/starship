@@ -278,6 +278,7 @@ $zig\
 $buf\
 $nix_shell\
 $conda\
+$meson\
 $spack\
 $memory_usage\
 $aws\
@@ -295,7 +296,6 @@ $battery\
 $time\
 $status\
 $container\
-$meson\
 $shell\
 $character"""
 ```
