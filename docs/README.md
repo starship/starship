@@ -51,7 +51,6 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    brew install starship
    ```
-   
    With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
