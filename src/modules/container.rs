@@ -26,6 +26,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OCI".into());
         }
 
+        if let Ok(cgroup_content) = crate::utils::read_file(context_path(context, "/proc/1/cgroup"))
+        {
+            if cgroup_content.contains("/docker") {
+                // Docker
+                return Some("Docker".into());
+            }
+        }
+
         if context_path(context, "/run/systemd/container").exists() {
             // systemd
             return Some("Systemd".into());
@@ -51,11 +59,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .unwrap_or_else(|_| "podman".into());
 
             return Some(image_res);
-        }
-
-        if context_path(context, "/.dockerenv").exists() {
-            // docker
-            return Some("Docker".into());
         }
 
         None
@@ -101,7 +104,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use nu_ansi_term::Color;
+    use ansi_term::Color;
     use std::path::PathBuf;
 
     #[test]
