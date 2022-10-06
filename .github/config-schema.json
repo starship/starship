@@ -340,6 +340,7 @@
         "repo_root_style": null,
         "style": "cyan bold",
         "substitutions": {},
+        "truncate_from_repo_root": false,
         "truncate_to_repo": true,
         "truncation_length": 3,
         "truncation_symbol": "",
@@ -2348,6 +2349,10 @@
         },
         "truncate_to_repo": {
           "default": true,
+          "type": "boolean"
+        },
+        "truncate_from_repo_root": {
+          "default": false,
           "type": "boolean"
         },
         "substitutions": {
