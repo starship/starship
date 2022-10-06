@@ -443,12 +443,12 @@ Nilai bawaan untuk opsi `charging_symbol` dan `discharging_symbol` adalah nilai 
 
 Opsi dari `display` merupakan sebuah array dari tabel berikut.
 
-| Opsi                 | Bawaan     | Deskripsi                                                                                                            |
-| -------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`       | The upper bound for the display option.                                                                              |
-| `style`              | `bold red` | The style used if the display option is in use.                                                                      |
-| `charging_symbol`    | `-`        | Simbol opsional ditampilan jika opsi tampilan sedang digunakan, bawaan untuk opsi `charging_symbol` dari baterai.    |
-| `discharging_symbol` | `-`        | Simbol opsional ditampilan jika opsi tampilan sedang digunakan, bawaan untuk opsi `discharging_symbol` dari baterai. |
+| Opsi                 | Bawaan       | Deskripsi                                                                                                            |
+| -------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`         | The upper bound for the display option.                                                                              |
+| `style`              | `"red bold"` | The style used if the display option is in use.                                                                      |
+| `charging_symbol`    |              | Simbol opsional ditampilan jika opsi tampilan sedang digunakan, bawaan untuk opsi `charging_symbol` dari baterai.    |
+| `discharging_symbol` |              | Simbol opsional ditampilan jika opsi tampilan sedang digunakan, bawaan untuk opsi `discharging_symbol` dari baterai. |
 
 #### Contoh
 
@@ -806,12 +806,12 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Opsi
 
-| Opsi       | Bawaan                                 | Deskripsi                                 |
-| ---------- | -------------------------------------- | ----------------------------------------- |
-| `symbol`   | `"⬢"`                                  | The symbol shown, when inside a container |
-| `style`    | `"bold red dimmed"`                    | Gaya penataan untuk modul.                |
-| `fromat`   | `"[$symbol \\[$name\\]]($style) "` | Format dari modul.                        |
-| `disabled` | `false`                                | Disables the `container` module.          |
+| Opsi       | Bawaan                             | Deskripsi                                 |
+| ---------- | ---------------------------------- | ----------------------------------------- |
+| `symbol`   | `"⬢"`                              | The symbol shown, when inside a container |
+| `style`    | `"bold red dimmed"`                | Gaya penataan untuk modul.                |
+| `fromat`   | `'[$symbol \[$name\]]($style) '` | Format dari modul.                        |
+| `disabled` | `false`                            | Disables the `container` module.          |
 
 ### Variabel
 
@@ -829,7 +829,7 @@ The `container` module displays a symbol and container name, if inside a contain
 # ~/.config/starship.toml
 
 [container]
-format = "[$symbol \\[$name\\]]($style) "
+format = '[$symbol \[$name\]]($style) '
 ```
 
 ## Crystal
@@ -879,16 +879,16 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 ### Opsi
 
-| Opsi                | Bawaan                             | Deskripsi                                                                           |
-| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------- |
-| `fromat`            | `via [$symbol($version )]($style)` | Format dari modul.                                                                  |
-| `version_format`    | `v${raw}`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"Λ "`                             | A format string representing the symbol of Daml                                     |
-| `style`             | `"bold cyan"`                      | Gaya penataan untuk modul.                                                          |
-| `detect_extensions` | `[]`                               | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `["daml.yaml"]`                    | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                               | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `disabled`          | `false`                            | Disables the `daml` module.                                                         |
+| Opsi                | Bawaan                               | Deskripsi                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `fromat`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                  |
+| `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"Λ "`                               | A format string representing the symbol of Daml                                     |
+| `style`             | `"bold cyan"`                        | Gaya penataan untuk modul.                                                          |
+| `detect_extensions` | `[]`                                 | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `["daml.yaml"]`                      | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `disabled`          | `false`                              | Disables the `daml` module.                                                         |
 
 ### Variabel
 
@@ -1005,7 +1005,7 @@ Sebagai contoh, untuk `~/Dev/Nix/nixpkgs/pkgs` dimana `nixpkgs` merupakan root r
 | `read_only`         | `"🔒"`                                                                                                       | Simbol yang mengindikasikan direktori saat ini bersifat read only.                      |
 | `read_only_style`   | `"red"`                                                                                                     | Corak gaya untuk simbol read only.                                                      |
 | `truncation_symbol` | `""`                                                                                                        | Simbol untuk awalan jalur yang disingkat. misalnya: ".../"                              |
-| `repo_root_style`   | `None`                                                                                                      | The style for the root of the git repo. The default value is equivalent to `style`.     |
+| `repo_root_style`   |                                                                                                             | The style for the root of the git repo. The default value is equivalent to `style`.     |
 | `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | The format of a git repo when `repo_root_style` is defined.                             |
 | `home_symbol`       | `"~"`                                                                                                       | Simbol yang mengindikasikan direktori home.                                             |
 | `use_os_path_sep`   | `true`                                                                                                      | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows) |
@@ -1492,16 +1492,16 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Opsi
 
-| Opsi                 | Bawaan                             | Deskripsi                                                                            |
-| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
-| `commit_hash_length` | `7`                                | The length of the displayed git commit hash.                                         |
-| `fromat`             | `"[\\($hash$tag\\)]($style) "` | Format dari modul.                                                                   |
-| `style`              | `"bold green"`                     | Gaya penataan untuk modul.                                                           |
-| `only_detached`      | `true`                             | Only show git commit hash when in detached `HEAD` state                              |
-| `tag_disabled`       | `true`                             | Disables showing tag info in `git_commit` module.                                    |
-| `tag_max_candidates` | `0`                                | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `" 🏷 "`                            | Tag symbol prefixing the info shown                                                  |
-| `disabled`           | `false`                            | Disables the `git_commit` module.                                                    |
+| Opsi                 | Bawaan                         | Deskripsi                                                                            |
+| -------------------- | ------------------------------ | ------------------------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                            | The length of the displayed git commit hash.                                         |
+| `fromat`             | `'[\($hash$tag\)]($style) '` | Format dari modul.                                                                   |
+| `style`              | `"bold green"`                 | Gaya penataan untuk modul.                                                           |
+| `only_detached`      | `true`                         | Only show git commit hash when in detached `HEAD` state                              |
+| `tag_disabled`       | `true`                         | Disables showing tag info in `git_commit` module.                                    |
+| `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
+| `tag_symbol`         | `" 🏷 "`                        | Tag symbol prefixing the info shown                                                  |
+| `disabled`           | `false`                        | Disables the `git_commit` module.                                                    |
 
 ### Variabel
 
@@ -1579,7 +1579,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `added_style`        | `"bold green"`                                               | The style for the added count.        |
 | `deleted_style`      | `"bold red"`                                                 | The style for the deleted count.      |
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
-| `fromat`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format dari modul.                    |
+| `fromat`             | `"([+$added]($added_style) )([-$deleted]($deleted_style) )"` | Format dari modul.                    |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 
 ### Variabel
@@ -1600,7 +1600,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 [git_metrics]
 added_style = "bold blue"
-format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+format = "[+$added]($added_style)/[-$deleted]($deleted_style) "
 ```
 
 ## Git Status
@@ -1702,7 +1702,7 @@ Use Windows Starship executable on Windows paths in WSL
 # ~/.config/starship.toml
 
 [git_status]
-windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+windows_starship = "/mnt/c/Users/username/scoop/apps/starship/current/starship.exe"
 ```
 
 ## Go
@@ -2483,12 +2483,12 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Opsi
 
-| Opsi       | Bawaan                                              | Deskripsi                                                      |
-| ---------- | --------------------------------------------------- | -------------------------------------------------------------- |
-| `fromat`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | Format dari modul.                                             |
-| `symbol`   | `"☁️ "`                                             | The symbol used before displaying the current OpenStack cloud. |
-| `style`    | `"bold yellow"`                                     | Gaya penataan untuk modul.                                     |
-| `disabled` | `false`                                             | Disables the `openstack` module.                               |
+| Opsi       | Bawaan                                          | Deskripsi                                                      |
+| ---------- | ----------------------------------------------- | -------------------------------------------------------------- |
+| `fromat`   | `'on [$symbol$cloud(\($project\))]($style) '` | Format dari modul.                                             |
+| `symbol`   | `"☁️ "`                                         | The symbol used before displaying the current OpenStack cloud. |
+| `style`    | `"bold yellow"`                                 | Gaya penataan untuk modul.                                     |
+| `disabled` | `false`                                         | Disables the `openstack` module.                               |
 
 ### Variabel
 
@@ -2507,7 +2507,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 # ~/.config/starship.toml
 
 [openstack]
-format = "on [$symbol$cloud(\\($project\\))]($style) "
+format = 'on [$symbol$cloud(\($project\))]($style) '
 style = "bold yellow"
 symbol = "☁️ "
 ```
@@ -3089,16 +3089,16 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Opsi                   | Bawaan                    | Deskripsi                                                    |
 | ---------------------- | ------------------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `bsh`                     | A format string used to represent bash.                      |
-| `fish_indicator`       | `fsh`                     | A format string used to represent fish.                      |
-| `zsh_indicator`        | `zsh`                     | A format string used to represent zsh.                       |
-| `powershell_indicator` | `psh`                     | A format string used to represent powershell.                |
-| `ion_indicator`        | `ion`                     | A format string used to represent ion.                       |
-| `elvish_indicator`     | `esh`                     | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `tsh`                     | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `xsh`                     | A format string used to represent xonsh.                     |
-| `cmd_indicator`        | `cmd`                     | A format string used to represent cmd.                       |
-| `nu_indicator`         | `nu`                      | A format string used to represent nu.                        |
+| `bash_indicator`       | `"bsh"`                   | A format string used to represent bash.                      |
+| `fish_indicator`       | `"fsh"`                   | A format string used to represent fish.                      |
+| `zsh_indicator`        | `"zsh"`                   | A format string used to represent zsh.                       |
+| `powershell_indicator` | `"psh"`                   | A format string used to represent powershell.                |
+| `ion_indicator`        | `"ion"`                   | A format string used to represent ion.                       |
+| `elvish_indicator`     | `"esh"`                   | A format string used to represent elvish.                    |
+| `tcsh_indicator`       | `"tsh"`                   | A format string used to represent tcsh.                      |
+| `xonsh_indicator`      | `"xsh"`                   | A format string used to represent xonsh.                     |
+| `cmd_indicator`        | `"cmd"`                   | A format string used to represent cmd.                       |
+| `nu_indicator`         | `"nu"`                    | A format string used to represent nu.                        |
 | `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
 | `fromat`               | `"[$indicator]($style) "` | Format dari modul.                                           |
 | `style`                | `"white bold"`            | Gaya penataan untuk modul.                                   |
@@ -3239,23 +3239,23 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opsi
 
-| Opsi                        | Bawaan                                                                               | Deskripsi                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| `fromat`                    | `"[$symbol$status]($style) "`                                                        | The format of the module                                              |
-| `symbol`                    | `"✖"`                                                                                | The symbol displayed on program error                                 |
-| `success_symbol`            | `""`                                                                                 | The symbol displayed on program success                               |
-| `not_executable_symbol`     | `"🚫"`                                                                                | The symbol displayed when file isn't executable                       |
-| `not_found_symbol`          | `"🔍"`                                                                                | The symbol displayed when the command can't be found                  |
-| `sigint_symbol`             | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)                             |
-| `signal_symbol`             | `"⚡"`                                                                                | The symbol displayed on any signal                                    |
-| `style`                     | `"bold red"`                                                                         | Gaya penataan untuk modul.                                            |
-| `recognize_signal_code`     | `true`                                                                               | Enable signal mapping from exit code                                  |
-| `map_symbol`                | `false`                                                                              | Enable symbols mapping from exit code                                 |
-| `pipestatus`                | `false`                                                                              | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                            | The symbol used to separate pipestatus segments                       |
-| `pipestatus_format`         | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline               |
-| `pipestatus_segment_format` |                                                                                      | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                               | Disables the `status` module.                                         |
+| Opsi                        | Bawaan                                                                             | Deskripsi                                                             |
+| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `fromat`                    | `"[$symbol$status]($style) "`                                                      | The format of the module                                              |
+| `symbol`                    | `"✖"`                                                                              | The symbol displayed on program error                                 |
+| `success_symbol`            | `""`                                                                               | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `"🚫"`                                                                              | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `"🔍"`                                                                              | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `"🧱"`                                                                              | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `"⚡"`                                                                              | The symbol displayed on any signal                                    |
+| `style`                     | `"bold red"`                                                                       | Gaya penataan untuk modul.                                            |
+| `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments                       |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
 
 ### Variabel
 
@@ -3300,13 +3300,13 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opsi
 
-| Opsi            | Bawaan                  | Deskripsi                                               |
-| --------------- | ----------------------- | ------------------------------------------------------- |
-| `fromat`        | `[as $symbol]($style)"` | The format of the module                                |
-| `symbol`        | `"🧙 "`                  | The symbol displayed when credentials are cached        |
-| `style`         | `"bold blue"`           | Gaya penataan untuk modul.                              |
-| `allow_windows` | `false`                 | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                  | Disables the `sudo` module.                             |
+| Opsi            | Bawaan                   | Deskripsi                                               |
+| --------------- | ------------------------ | ------------------------------------------------------- |
+| `fromat`        | `"[as $symbol]($style)"` | The format of the module                                |
+| `symbol`        | `"🧙 "`                   | The symbol displayed when credentials are cached        |
+| `style`         | `"bold blue"`            | Gaya penataan untuk modul.                              |
+| `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
+| `disabled`      | `true`                   | Disables the `sudo` module.                             |
 
 ### Variabel
 
