@@ -443,12 +443,12 @@ O valor padrão das opções `charging_symbol` e `discharging_symbol`é respecti
 
 A opção `display` é um array da seguinte tabela.
 
-| Opções               | Padrão     | Descrição                                                                                          |
-| -------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`       | O limite superior para exibição.                                                                   |
-| `style`              | `bold red` | O estilo usado para exibir quando estiver em uso.                                                  |
-| `charging_symbol`    | `-`        | Simbolo opcional, mostrado quando a opção estiver em uso, o simbolo padrão é `charging_symbol`.    |
-| `discharging_symbol` | `-`        | Simbolo opcional, mostrado quando a opção estiver em uso, o simbolo padrão é `discharging_symbol`. |
+| Opções               | Padrão       | Descrição                                                                                          |
+| -------------------- | ------------ | -------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`         | O limite superior para exibição.                                                                   |
+| `style`              | `"red bold"` | O estilo usado para exibir quando estiver em uso.                                                  |
+| `charging_symbol`    |              | Simbolo opcional, mostrado quando a opção estiver em uso, o simbolo padrão é `charging_symbol`.    |
+| `discharging_symbol` |              | Simbolo opcional, mostrado quando a opção estiver em uso, o simbolo padrão é `discharging_symbol`. |
 
 #### Exemplo
 
@@ -806,12 +806,12 @@ O módulo `container` exibe um símbolo e nome do contêiner, se dentro de um co
 
 ### Opções
 
-| Opções     | Padrão                                 | Descrição                                         |
-| ---------- | -------------------------------------- | ------------------------------------------------- |
-| `symbol`   | `"⬢"`                                  | O símbolo mostrado, quando dentro de um contêiner |
-| `style`    | `"bold red dimmed"`                    | O estilo do módulo.                               |
-| `format`   | `"[$symbol \\[$name\\]]($style) "` | O formato do módulo.                              |
-| `disabled` | `false`                                | Desabilita o módulo `container`.                  |
+| Opções     | Padrão                             | Descrição                                         |
+| ---------- | ---------------------------------- | ------------------------------------------------- |
+| `symbol`   | `"⬢"`                              | O símbolo mostrado, quando dentro de um contêiner |
+| `style`    | `"bold red dimmed"`                | O estilo do módulo.                               |
+| `format`   | `'[$symbol \[$name\]]($style) '` | O formato do módulo.                              |
+| `disabled` | `false`                            | Desabilita o módulo `container`.                  |
 
 ### Variáveis
 
@@ -829,7 +829,7 @@ O módulo `container` exibe um símbolo e nome do contêiner, se dentro de um co
 # ~/.config/starship.toml
 
 [container]
-format = "[$symbol \\[$name\\]]($style) "
+format = '[$symbol \[$name\]]($style) '
 ```
 
 ## Crystal
@@ -879,16 +879,16 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 ### Opções
 
-| Opções              | Padrão                             | Descrição                                                                            |
-| ------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
-| `format`            | `via [$symbol($version )]($style)` | O formato do módulo.                                                                 |
-| `version_format`    | `v${raw}`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"Λ "`                             | A format string representing the symbol of Daml                                      |
-| `style`             | `"bold cyan"`                      | O estilo do módulo.                                                                  |
-| `detect_extensions` | `[]`                               | Quais extensões devem ativar este módulo.                                            |
-| `detect_files`      | `["daml.yaml"]`                    | Quais nomes de arquivos devem ativar este módulo.                                    |
-| `detect_folders`    | `[]`                               | Quais pastas devem ativar este módulo.                                               |
-| `disabled`          | `false`                            | Disables the `daml` module.                                                          |
+| Opções              | Padrão                               | Descrição                                                                            |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                 |
+| `version_format`    | `"v${raw}"`                          | O formato da versão. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"Λ "`                               | A format string representing the symbol of Daml                                      |
+| `style`             | `"bold cyan"`                        | O estilo do módulo.                                                                  |
+| `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                            |
+| `detect_files`      | `["daml.yaml"]`                      | Quais nomes de arquivos devem ativar este módulo.                                    |
+| `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                               |
+| `disabled`          | `false`                              | Disables the `daml` module.                                                          |
 
 ### Variáveis
 
@@ -1005,7 +1005,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 | `read_only`         | `"🔒"`                                                                                                       | O simbolo que indica que o diretório atual é somente leitura.                                                          |
 | `read_only_style`   | `"red"`                                                                                                     | O estilo para o simbolo de somente leitura.                                                                            |
 | `truncation_symbol` | `""`                                                                                                        | O simbolo para prefixo de caminhos truncados. ex: "…/"                                                                 |
-| `repo_root_style`   | `None`                                                                                                      | O estilo para a raiz do repositório git. O valor padrão é equivalente a `style`.                                       |
+| `repo_root_style`   |                                                                                                             | O estilo para a raiz do repositório git. O valor padrão é equivalente a `style`.                                       |
 | `repo_root_format`  | `"[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "` | O formato de um repositório git quando `repo_root_style` é definido.                                                   |
 | `home_symbol`       | `"~"`                                                                                                       | O simbolo para indicar o diretório home.                                                                               |
 | `use_os_path_sep`   | `true`                                                                                                      | Use o separador de caminho específico do sistema opracional em vez de sempre usar `/` (por exemplo, `\` no Windows) |
@@ -1490,16 +1490,16 @@ O módulo `git_commit` exibe o hash do comiit atual e também a tag (se existir)
 
 ### Opções
 
-| Opções               | Padrão                             | Descrição                                                                            |
-| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
-| `commit_hash_length` | `7`                                | O tamanho do git commit hash para ser exibido.                                       |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | O formato do módulo.                                                                 |
-| `style`              | `"bold green"`                     | O estilo do módulo.                                                                  |
-| `only_detached`      | `true`                             | Apenas exibe o git commit hash quando o estado for detached `HEAD`                   |
-| `tag_disabled`       | `true`                             | Desabilita a exibição da informação da tag no módulo `git_commit`.                   |
-| `tag_max_candidates` | `0`                                | How many commits to consider for tag display. The default only allows exact matches. |
-| `tag_symbol`         | `" 🏷 "`                            | Simbolo da tag prefixado na informação a ser exibida                                 |
-| `disabled`           | `false`                            | Desabilita o módulo `git_commit`.                                                    |
+| Opções               | Padrão                         | Descrição                                                                            |
+| -------------------- | ------------------------------ | ------------------------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                            | O tamanho do git commit hash para ser exibido.                                       |
+| `format`             | `'[\($hash$tag\)]($style) '` | O formato do módulo.                                                                 |
+| `style`              | `"bold green"`                 | O estilo do módulo.                                                                  |
+| `only_detached`      | `true`                         | Apenas exibe o git commit hash quando o estado for detached `HEAD`                   |
+| `tag_disabled`       | `true`                         | Desabilita a exibição da informação da tag no módulo `git_commit`.                   |
+| `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
+| `tag_symbol`         | `" 🏷 "`                        | Simbolo da tag prefixado na informação a ser exibida                                 |
+| `disabled`           | `false`                        | Desabilita o módulo `git_commit`.                                                    |
 
 ### Variáveis
 
@@ -1577,7 +1577,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | `added_style`        | `"bold green"`                                               | O estilo para a contagem de adições.        |
 | `deleted_style`      | `"bold red"`                                                 | O estilo para a contagem de exclusões.      |
 | `only_nonzero_diffs` | `true`                                                       | Exibe apenas o status para itens alterados. |
-| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | O formato do módulo.                        |
+| `format`             | `"([+$added]($added_style) )([-$deleted]($deleted_style) )"` | O formato do módulo.                        |
 | `disabled`           | `true`                                                       | Desabilita o módulo `git_metrics`.          |
 
 ### Variáveis
@@ -1598,7 +1598,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 [git_metrics]
 added_style = "bold blue"
-format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+format = "[+$added]($added_style)/[-$deleted]($deleted_style) "
 ```
 
 ## Git Status
@@ -1700,7 +1700,7 @@ Use o executável do Windows Starship em caminhos do Windows em WSL
 # ~/.config/starship.toml
 
 [git_status]
-windows_starship = '/mnt/c/Users/nomedousuario/scoop/apps/starship/current/starship.exe'
+windows_starship = "/mnt/c/Users/username/scoop/apps/starship/current/starship.exe"
 ```
 
 ## Go
@@ -2481,12 +2481,12 @@ O módulo `openstack` exibe o OpenStack cloud e projeto atual. O módulo apenas 
 
 ### Opções
 
-| Opções     | Padrão                                              | Descrição                                            |
-| ---------- | --------------------------------------------------- | ---------------------------------------------------- |
-| `format`   | `"on [$symbol$cloud(\\($project\\))]($style) "` | O formato do módulo.                                 |
-| `symbol`   | `"☁️ "`                                             | O simbolo usado para exibir o OpenStack cloud atual. |
-| `style`    | `"bold yellow"`                                     | O estilo do módulo.                                  |
-| `disabled` | `false`                                             | Desabilita o módulo `openstack`.                     |
+| Opções     | Padrão                                          | Descrição                                            |
+| ---------- | ----------------------------------------------- | ---------------------------------------------------- |
+| `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | O formato do módulo.                                 |
+| `symbol`   | `"☁️ "`                                         | O simbolo usado para exibir o OpenStack cloud atual. |
+| `style`    | `"bold yellow"`                                 | O estilo do módulo.                                  |
+| `disabled` | `false`                                         | Desabilita o módulo `openstack`.                     |
 
 ### Variáveis
 
@@ -2505,7 +2505,7 @@ O módulo `openstack` exibe o OpenStack cloud e projeto atual. O módulo apenas 
 # ~/.config/starship.toml
 
 [openstack]
-format = "on [$symbol$cloud(\\($project\\))]($style) "
+format = 'on [$symbol$cloud(\($project\))]($style) '
 style = "bold yellow"
 symbol = "☁️ "
 ```
@@ -3087,16 +3087,16 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 | Opções                 | Padrão                    | Descrição                                               |
 | ---------------------- | ------------------------- | ------------------------------------------------------- |
-| `bash_indicator`       | `bsh`                     | Uma string para representar o bash.                     |
-| `fish_indicator`       | `fsh`                     | Uma string usada para representar o fish.               |
-| `zsh_indicator`        | `zsh`                     | Uma string usada para representar o zsh.                |
-| `powershell_indicator` | `psh`                     | Uma string usada para representar o powershell.         |
-| `ion_indicator`        | `ion`                     | Uma string usada para representar o ion.                |
-| `elvish_indicator`     | `esh`                     | Uma string usada para representar o elvish.             |
-| `tcsh_indicator`       | `tsh`                     | Uma string usada para representar o tcsh.               |
-| `xonsh_indicator`      | `xsh`                     | Uma string usada para representar o xonsh.              |
-| `cmd_indicator`        | `cmd`                     | Uma string usada para representar o cmd.                |
-| `nu_indicator`         | `nu`                      | Uma string usada para representar o nu.                 |
+| `bash_indicator`       | `"bsh"`                   | Uma string para representar o bash.                     |
+| `fish_indicator`       | `"fsh"`                   | Uma string usada para representar o fish.               |
+| `zsh_indicator`        | `"zsh"`                   | Uma string usada para representar o zsh.                |
+| `powershell_indicator` | `"psh"`                   | Uma string usada para representar o powershell.         |
+| `ion_indicator`        | `"ion"`                   | Uma string usada para representar o ion.                |
+| `elvish_indicator`     | `"esh"`                   | Uma string usada para representar o elvish.             |
+| `tcsh_indicator`       | `"tsh"`                   | Uma string usada para representar o tcsh.               |
+| `xonsh_indicator`      | `"xsh"`                   | Uma string usada para representar o xonsh.              |
+| `cmd_indicator`        | `"cmd"`                   | Uma string usada para representar o cmd.                |
+| `nu_indicator`         | `"nu"`                    | Uma string usada para representar o nu.                 |
 | `unknown_indicator`    |                           | Valor padrão para exibir quando o shell é desconhecido. |
 | `format`               | `"[$indicator]($style) "` | O formato do módulo.                                    |
 | `style`                | `"white bold"`            | O estilo do módulo.                                     |
@@ -3237,23 +3237,23 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 ### Opções
 
-| Opções                      | Padrão                                                                               | Descrição                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| `format`                    | `"[$symbol$status]($style) "`                                                        | O formato do módulo                                                   |
-| `symbol`                    | `"✖"`                                                                                | O simbolo exibido no erro de programa                                 |
-| `success_symbol`            | `""`                                                                                 | O simbolo exibido no sucesso de programa                              |
-| `not_executable_symbol`     | `"🚫"`                                                                                | O simbolo exibido quando o arquivo não é executável                   |
-| `not_found_symbol`          | `"🔍"`                                                                                | O simbolo exibido quando o comando não é encontrado                   |
-| `sigint_symbol`             | `"🧱"`                                                                                | O simbolo exibido no SIGINT (Ctrl + c)                                |
-| `signal_symbol`             | `"⚡"`                                                                                | O simbolo exibido em qualquer sinal                                   |
-| `style`                     | `"bold red"`                                                                         | O estilo do módulo.                                                   |
-| `recognize_signal_code`     | `true`                                                                               | Habilita o mapeamento de sinais para códigos de saída                 |
-| `map_symbol`                | `false`                                                                              | Habilita o mapeamento de símbolos para códigos de saída               |
-| `pipestatus`                | `false`                                                                              | Habilita o relatório de pipestatus                                    |
-| `pipestatus_separator`      | <code>&vert;</code>                                                            | The symbol used to separate pipestatus segments                       |
-| `pipestatus_format`         | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | O formato do módulo quando o comando é um pipeline                    |
-| `pipestatus_segment_format` |                                                                                      | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                               | Desabilita o módulo `status`.                                         |
+| Opções                      | Padrão                                                                             | Descrição                                                             |
+| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `format`                    | `"[$symbol$status]($style) "`                                                      | O formato do módulo                                                   |
+| `symbol`                    | `"✖"`                                                                              | O simbolo exibido no erro de programa                                 |
+| `success_symbol`            | `""`                                                                               | O simbolo exibido no sucesso de programa                              |
+| `not_executable_symbol`     | `"🚫"`                                                                              | O simbolo exibido quando o arquivo não é executável                   |
+| `not_found_symbol`          | `"🔍"`                                                                              | O simbolo exibido quando o comando não é encontrado                   |
+| `sigint_symbol`             | `"🧱"`                                                                              | O simbolo exibido no SIGINT (Ctrl + c)                                |
+| `signal_symbol`             | `"⚡"`                                                                              | O simbolo exibido em qualquer sinal                                   |
+| `style`                     | `"bold red"`                                                                       | O estilo do módulo.                                                   |
+| `recognize_signal_code`     | `true`                                                                             | Habilita o mapeamento de sinais para códigos de saída                 |
+| `map_symbol`                | `false`                                                                            | Habilita o mapeamento de símbolos para códigos de saída               |
+| `pipestatus`                | `false`                                                                            | Habilita o relatório de pipestatus                                    |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments                       |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | O formato do módulo quando o comando é um pipeline                    |
+| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                             | Desabilita o módulo `status`.                                         |
 
 ### Variáveis
 
@@ -3298,13 +3298,13 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 ### Opções
 
-| Opções          | Padrão                  | Descrição                                                                  |
-| --------------- | ----------------------- | -------------------------------------------------------------------------- |
-| `format`        | `[as $symbol]($style)"` | O formato do módulo                                                        |
-| `symbol`        | `"🧙 "`                  | O simbolo exibido quando as credenciais estão em cache                     |
-| `style`         | `"bold blue"`           | O estilo do módulo.                                                        |
-| `allow_windows` | `false`                 | Desde que o Windows não tem um padrão sudo, o valor padrão é desabilitado. |
-| `disabled`      | `true`                  | Desabilita o módulo `sudo`.                                                |
+| Opções          | Padrão                   | Descrição                                                                  |
+| --------------- | ------------------------ | -------------------------------------------------------------------------- |
+| `format`        | `"[as $symbol]($style)"` | O formato do módulo                                                        |
+| `symbol`        | `"🧙 "`                   | O simbolo exibido quando as credenciais estão em cache                     |
+| `style`         | `"bold blue"`            | O estilo do módulo.                                                        |
+| `allow_windows` | `false`                  | Desde que o Windows não tem um padrão sudo, o valor padrão é desabilitado. |
+| `disabled`      | `true`                   | Desabilita o módulo `sudo`.                                                |
 
 ### Variáveis
 
