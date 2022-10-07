@@ -3252,7 +3252,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 | `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
 | `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
 | `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments                       |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
 | `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
 | `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
 | `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
