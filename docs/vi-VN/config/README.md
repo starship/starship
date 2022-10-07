@@ -474,24 +474,24 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                                                     | Mô tả                                                 |
-| ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
-| `version_format`    | `"v${raw}"`                                                  | The version format.                                   |
-| `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                                         | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Những tên tệp nào sẽ kích hoạt mô-đun này.            |
-| `detect_folders`    | `[]`                                                         | Những thư mục nào nên kích hoạt các mô đun này.       |
-| `style`             | `"bold blue"`                                                | Kiểu cho module.                                      |
-| `disabled`          | `false`                                                      | Vô hiệu mô đun `elixir`.                              |
+| Tuỳ chọn            | Mặc định                                        | Mô tả                                                 |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------- |
+| `format`            | `"with [$symbol($version )]($style)"`           | The format for the `buf` module.                      |
+| `version_format`    | `"v${raw}"`                                     | The version format.                                   |
+| `symbol`            | `"🦬 "`                                          | The symbol used before displaying the version of Buf. |
+| `detect_extensions` | `[]`                                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.            |
+| `detect_folders`    | `[]`                                            | Những thư mục nào nên kích hoạt các mô đun này.       |
+| `style`             | `"bold blue"`                                   | Kiểu cho module.                                      |
+| `disabled`          | `false`                                         | Vô hiệu mô đun `elixir`.                              |
 
 ### Các biến
 
-| Biến          | Ví dụ    | Mô tả                            |
-| ------------- | -------- | -------------------------------- |
-| `buf_version` | `v1.0.0` | The version of `buf`             |
-| `symbol`      |          | Giá trị ghi đè tuỳ chọn `symbol` |
-| `style`*      |          | Giá trị ghi đè của `style`       |
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| `version` | `v1.0.0` | The version of `buf`             |
+| `symbol`  |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| `style`*  |          | Giá trị ghi đè của `style`       |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -3774,7 +3774,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 [custom.foo]
 command = "echo foo" # shows output of command
 detect_files = ["foo"] # can specify filters but wildcards are not supported
-when = """ test "$HOME" == "$PWD" """
+when = """ test "$HOME" = "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
