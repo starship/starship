@@ -475,24 +475,24 @@ El módulo `buf` muestra la versión instalada de [Buf](https://buf.build). Por 
 
 ### Opciones
 
-| Opción              | Por defecto                                                  | Descripción                                          |
-| ------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | El formato para el módulo `buf`.                     |
-| `version_format`    | `"v${raw}"`                                                  | El formato de versión.                               |
-| `symbol`            | `"🦬 "`                                                       | El símbolo usado antes de mostrar la versión de Buf. |
-| `detect_extensions` | `[]`                                                         | Qué extensiones deberían activar este módulo.        |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Qué nombres de archivo deberían activar este módulo. |
-| `detect_folders`    | `[]`                                                         | Qué carpetas deberían activar estos módulos.         |
-| `style`             | `"bold blue"`                                                | El estilo del módulo.                                |
-| `disabled`          | `false`                                                      | Desactiva el módulo `elixir`.                        |
+| Opción              | Por defecto                                     | Descripción                                          |
+| ------------------- | ----------------------------------------------- | ---------------------------------------------------- |
+| `format`            | `"with [$symbol($version )]($style)"`           | El formato para el módulo `buf`.                     |
+| `version_format`    | `"v${raw}"`                                     | El formato de versión.                               |
+| `symbol`            | `"🦬 "`                                          | El símbolo usado antes de mostrar la versión de Buf. |
+| `detect_extensions` | `[]`                                            | Qué extensiones deberían activar este módulo.        |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]` | Qué nombres de archivo deberían activar este módulo. |
+| `detect_folders`    | `[]`                                            | Qué carpetas deberían activar estos módulos.         |
+| `style`             | `"bold blue"`                                   | El estilo del módulo.                                |
+| `disabled`          | `false`                                         | Desactiva el módulo `elixir`.                        |
 
 ### Variables
 
-| Variable      | Ejemplo  | Descripción                            |
-| ------------- | -------- | -------------------------------------- |
-| `buf_version` | `v1.0.0` | La versión de `buf`                    |
-| `symbol`      |          | Refleja el valor de la opción `symbol` |
-| `style`*      |          | Refleja el valor de la opción `style`  |
+| Variable  | Ejemplo  | Descripción                            |
+| --------- | -------- | -------------------------------------- |
+| `version` | `v1.0.0` | La versión de `buf`                    |
+| `symbol`  |          | Refleja el valor de la opción `symbol` |
+| `style`*  |          | Refleja el valor de la opción `style`  |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -3775,7 +3775,7 @@ La detección automática de shells y la adición adecuada de parámetros están
 [custom.foo]
 command = "echo foo" # shows output of command
 detect_files = ["foo"] # can specify filters but wildcards are not supported
-when = """ test "$HOME" == "$PWD" """
+when = """ test "$HOME" = "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
