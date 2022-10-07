@@ -472,24 +472,24 @@ discharging_symbol = "💦"
 
 ### オプション
 
-| オプション               | デフォルト                                                        | 説明                         |
-| ------------------- | ------------------------------------------------------------ | -------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | `buf`モジュールの形式。             |
-| `version_format`    | `"v${raw}"`                                                  | バージョンのフォーマット。              |
-| `symbol`            | `"🦬 "`                                                       | Bufのバージョンを表示する前に使用される記号です。 |
-| `detect_extensions` | `[]`                                                         | どの拡張子がこのモジュールをアクティブにするか    |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | どのファイル名がこのモジュールをアクティブにするか  |
-| `detect_folders`    | `[]`                                                         | どのフォルダーがこのモジュールをアクティブにするか  |
-| `style`             | `"bold blue"`                                                | モジュールのスタイルです。              |
-| `disabled`          | `false`                                                      | `elixir`モジュールを無効にします。      |
+| オプション               | デフォルト                                           | 説明                         |
+| ------------------- | ----------------------------------------------- | -------------------------- |
+| `format`            | `"with [$symbol($version )]($style)"`           | `buf`モジュールの形式。             |
+| `version_format`    | `"v${raw}"`                                     | バージョンのフォーマット。              |
+| `symbol`            | `"🦬 "`                                          | Bufのバージョンを表示する前に使用される記号です。 |
+| `detect_extensions` | `[]`                                            | どの拡張子がこのモジュールをアクティブにするか    |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]` | どのファイル名がこのモジュールをアクティブにするか  |
+| `detect_folders`    | `[]`                                            | どのフォルダーがこのモジュールをアクティブにするか  |
+| `style`             | `"bold blue"`                                   | モジュールのスタイルです。              |
+| `disabled`          | `false`                                         | `elixir`モジュールを無効にします。      |
 
 ### 変数
 
-| 変数            | 設定例      | 説明                     |
-| ------------- | -------- | ---------------------- |
-| `buf_version` | `v1.0.0` | `buf`のバージョン            |
-| `symbol`      |          | オプション `記号` の値をミラーする    |
-| `style`*      |          | オプション `style` の値をミラーする |
+| 変数        | 設定例      | 説明                     |
+| --------- | -------- | ---------------------- |
+| `version` | `v1.0.0` | `buf`のバージョン            |
+| `symbol`  |          | オプション `記号` の値をミラーする    |
+| `style`*  |          | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -3772,7 +3772,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 [custom.foo]
 command = "echo foo" # shows output of command
 detect_files = ["foo"] # can specify filters but wildcards are not supported
-when = """ test "$HOME" == "$PWD" """
+when = """ test "$HOME" = "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
