@@ -500,7 +500,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 | Option              | Default                                                    | Description                                           |
 | ------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
+| `format`            | `"with [$symbol($version )]($style)"`                      | The format for the `buf` module.                      |
 | `version_format`    | `"v${raw}"`                                                | The version format.                                   |
 | `symbol`            | `"🦬 "`                                                    | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                                       | Which extensions should trigger this module.          |
