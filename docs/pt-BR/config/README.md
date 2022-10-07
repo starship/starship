@@ -3250,7 +3250,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | `recognize_signal_code`     | `true`                                                                             | Habilita o mapeamento de sinais para códigos de saída                 |
 | `map_symbol`                | `false`                                                                            | Habilita o mapeamento de símbolos para códigos de saída               |
 | `pipestatus`                | `false`                                                                            | Habilita o relatório de pipestatus                                    |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments                       |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
 | `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | O formato do módulo quando o comando é um pipeline                    |
 | `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
 | `disabled`                  | `true`                                                                             | Desabilita o módulo `status`.                                         |
