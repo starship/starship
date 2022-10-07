@@ -474,24 +474,24 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 ### 配置项
 
-| 选项                  | 默认值                                                          | 描述                                                    |
-| ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| `format`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
-| `version_format`    | `"v${raw}"`                                                  | The version format.                                   |
-| `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                                         | Which extensions should trigger this module.          |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | Which filenames should trigger this module.           |
-| `detect_folders`    | `[]`                                                         | Which folders should trigger this modules.            |
-| `style`             | `"bold blue"`                                                | 此组件的样式。                                               |
-| `disabled`          | `false`                                                      | Disables the `elixir` module.                         |
+| 选项                  | 默认值                                             | 描述                                                    |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------- |
+| `format`            | `"with [$symbol($version )]($style)"`           | The format for the `buf` module.                      |
+| `version_format`    | `"v${raw}"`                                     | The version format.                                   |
+| `symbol`            | `"🦬 "`                                          | The symbol used before displaying the version of Buf. |
+| `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]` | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
+| `style`             | `"bold blue"`                                   | 此组件的样式。                                               |
+| `disabled`          | `false`                                         | Disables the `elixir` module.                         |
 
 ### Variables
 
-| 字段            | 示例       | 描述                   |
-| ------------- | -------- | -------------------- |
-| `buf_version` | `v1.0.0` | The version of `buf` |
-| `symbol`      |          | `symbol`对应值          |
-| `style`*      |          | `style`对应值           |
+| 字段        | 示例       | 描述                   |
+| --------- | -------- | -------------------- |
+| `version` | `v1.0.0` | The version of `buf` |
+| `symbol`  |          | `symbol`对应值          |
+| `style`*  |          | `style`对应值           |
 
 *: This variable can only be used as a part of a style string
 
@@ -3774,7 +3774,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 [custom.foo]
 command = "echo foo" # shows output of command
 detect_files = ["foo"] # can specify filters but wildcards are not supported
-when = """ test "$HOME" == "$PWD" """
+when = """ test "$HOME" = "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
