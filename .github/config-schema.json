@@ -73,7 +73,7 @@
         "disabled": false,
         "format": "with [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": " ",
+        "symbol": "🦬 ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1729,7 +1729,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": " ",
+          "default": "🦬 ",
           "type": "string"
         },
         "style": {
