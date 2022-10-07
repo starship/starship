@@ -474,24 +474,24 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 ### Opsi
 
-| Opsi                | Bawaan                                                       | Deskripsi                                             |
-| ------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| `fromat`            | `'with [$symbol($version \(Buf $buf_version\) )]($style)'` | The format for the `buf` module.                      |
-| `version_format`    | `"v${raw}"`                                                  | Format dari versi.                                    |
-| `symbol`            | `"🦬 "`                                                       | The symbol used before displaying the version of Buf. |
-| `detect_extensions` | `[]`                                                         | Ekstensi mana yang sebaiknya memicu modul ini.        |
-| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]`              | filenames mana yang sebaiknya memicu modul ini.       |
-| `detect_folders`    | `[]`                                                         | Folder mana yang sebaiknya memicul modul ini.         |
-| `style`             | `"bold blue"`                                                | Gaya penataan untuk modul.                            |
-| `disabled`          | `false`                                                      | Menonaktifkan modul `elixir`.                         |
+| Opsi                | Bawaan                                          | Deskripsi                                             |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------- |
+| `fromat`            | `"with [$symbol($version )]($style)"`           | The format for the `buf` module.                      |
+| `version_format`    | `"v${raw}"`                                     | Format dari versi.                                    |
+| `symbol`            | `"🦬 "`                                          | The symbol used before displaying the version of Buf. |
+| `detect_extensions` | `[]`                                            | Ekstensi mana yang sebaiknya memicu modul ini.        |
+| `detect_files`      | `["buf.yaml", "buf.gen.yaml", "buf.work.yaml"]` | filenames mana yang sebaiknya memicu modul ini.       |
+| `detect_folders`    | `[]`                                            | Folder mana yang sebaiknya memicul modul ini.         |
+| `style`             | `"bold blue"`                                   | Gaya penataan untuk modul.                            |
+| `disabled`          | `false`                                         | Menonaktifkan modul `elixir`.                         |
 
 ### Variabel
 
-| Variabel      | Contoh   | Deskripsi                         |
-| ------------- | -------- | --------------------------------- |
-| `buf_version` | `v1.0.0` | The version of `buf`              |
-| `symbol`      |          | Menyalin nilai dari opsi `symbol` |
-| `style`*      |          | Menyalin nilai dari opsi `style`  |
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| `version` | `v1.0.0` | The version of `buf`              |
+| `symbol`  |          | Menyalin nilai dari opsi `symbol` |
+| `style`*  |          | Menyalin nilai dari opsi `style`  |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -3774,7 +3774,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 [custom.foo]
 command = "echo foo" # shows output of command
 detect_files = ["foo"] # can specify filters but wildcards are not supported
-when = """ test "$HOME" == "$PWD" """
+when = """ test "$HOME" = "$PWD" """
 format = " transcending [$output]($style)"
 
 [custom.time]
