@@ -131,8 +131,10 @@ fn get_credentials_duration(
         let creds = get_creds(context, aws_creds)?;
         let section = get_profile_creds(creds, aws_profile)?;
 
-        section
-            .get("expiration")
+        let expiration_keys = ["expiration", "x_security_token_expires"];
+        expiration_keys
+            .iter()
+            .find_map(|expiration_key| section.get(expiration_key))
             .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
     }?;
 
@@ -655,53 +657,57 @@ credential_process = /opt/bin/awscreds-retriever
 
         let expiration_date = now_plus_half_hour.to_rfc3339_opts(chrono::SecondsFormat::Secs, true);
 
-        file.write_all(
-            format!(
-                "[astronauts]
+        let expiration_keys = ["expiration", "x_security_token_expires"];
+        expiration_keys.iter().for_each(|key| {
+            file.write_all(
+                format!(
+                    "[astronauts]
 aws_access_key_id=dummy
 aws_secret_access_key=dummy
-expiration={}
+{}={}
 ",
-                expiration_date
+                    key, expiration_date
+                )
+                .as_bytes(),
             )
-            .as_bytes(),
-        )?;
+            .unwrap();
 
-        let actual = ModuleRenderer::new("aws")
-            .env("AWS_PROFILE", "astronauts")
-            .env("AWS_REGION", "ap-northeast-2")
-            .env(
-                "AWS_SHARED_CREDENTIALS_FILE",
-                credentials_path.to_string_lossy().as_ref(),
-            )
-            .collect();
+            let actual = ModuleRenderer::new("aws")
+                .env("AWS_PROFILE", "astronauts")
+                .env("AWS_REGION", "ap-northeast-2")
+                .env(
+                    "AWS_SHARED_CREDENTIALS_FILE",
+                    credentials_path.to_string_lossy().as_ref(),
+                )
+                .collect();
 
-        let actual_variant = ModuleRenderer::new("aws")
-            .env("AWS_PROFILE", "astronauts")
-            .env("AWS_REGION", "ap-northeast-2")
-            .env(
-                "AWS_CREDENTIALS_FILE",
-                credentials_path.to_string_lossy().as_ref(),
-            )
-            .collect();
+            let actual_variant = ModuleRenderer::new("aws")
+                .env("AWS_PROFILE", "astronauts")
+                .env("AWS_REGION", "ap-northeast-2")
+                .env(
+                    "AWS_CREDENTIALS_FILE",
+                    credentials_path.to_string_lossy().as_ref(),
+                )
+                .collect();
 
-        assert_eq!(
-            actual, actual_variant,
-            "both AWS_SHARED_CREDENTIALS_FILE and AWS_CREDENTIALS_FILE should work"
-        );
+            assert_eq!(
+                actual, actual_variant,
+                "both AWS_SHARED_CREDENTIALS_FILE and AWS_CREDENTIALS_FILE should work"
+            );
 
-        // In principle, "30m" should be correct. However, bad luck in scheduling
-        // on shared runners may delay it. Allow for up to 2 seconds of delay.
-        let possible_values = ["30m", "29m59s", "29m58s"];
-        let possible_values = possible_values.map(|duration| {
-            let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}] ", duration);
-            Some(format!(
-                "on {}",
-                Color::Yellow.bold().paint(segment_colored)
-            ))
+            // In principle, "30m" should be correct. However, bad luck in scheduling
+            // on shared runners may delay it. Allow for up to 2 seconds of delay.
+            let possible_values = ["30m", "29m59s", "29m58s"];
+            let possible_values = possible_values.map(|duration| {
+                let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}] ", duration);
+                Some(format!(
+                    "on {}",
+                    Color::Yellow.bold().paint(segment_colored)
+                ))
+            });
+
+            assert!(possible_values.contains(&actual));
         });
-
-        assert!(possible_values.contains(&actual));
 
         dir.close()
     }
