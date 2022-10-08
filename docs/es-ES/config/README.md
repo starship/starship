@@ -3253,7 +3253,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `recognize_signal_code`     | `true`                                                                             | Activar mapeo de señales desde el código de salida                             |
 | `map_symbol`                | `false`                                                                            | Activar mapeo de símbolos desde el código de salida                            |
 | `pipestatus`                | `false`                                                                            | Habilita el reporte de pipstatus                                               |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting)          |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | El símbolo usado para separar segmentos de pipestatus (soporta formato)        |
 | `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | El formato del módulo cuando el comando es un pipeline                         |
 | `pipestatus_segment_format` |                                                                                    | Cuando se especifica, reemplaza `formato` al formatear segmentos de pipestatus |
 | `disabled`                  | `true`                                                                             | Desactiva el módulo `status`.                                                  |
