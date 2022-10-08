@@ -53,7 +53,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
-    let repo = context.get_repo().ok();
+    let repo = if config.truncate_to_repo || config.repo_root_style.is_some() {
+        context.get_repo().ok()
+    } else {
+        None
+    };
     let dir_string = if config.truncate_to_repo {
         repo.and_then(|r| r.workdir.as_ref())
             .filter(|&root| root != &home_dir)
