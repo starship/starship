@@ -651,9 +651,6 @@
           "hxml"
         ],
         "detect_files": [
-          "project.xml",
-          "Project.xml",
-          "application.xml",
           "haxelib.json",
           "hxformat.json",
           ".haxerc"
@@ -3160,9 +3157,6 @@
         },
         "detect_files": {
           "default": [
-            "project.xml",
-            "Project.xml",
-            "application.xml",
             "haxelib.json",
             "hxformat.json",
             ".haxerc"
