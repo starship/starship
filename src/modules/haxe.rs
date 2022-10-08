@@ -6,8 +6,8 @@ use crate::formatter::VersionFormatter;
 use serde_json as json;
 
 use regex::Regex;
-const HAXE_VERSION_PATTERN: &str =
-    "(?P<version>(?:\\d+\\.\\d+\\.\\d+(?:-(?:alpha|beta|pre|rc)[\\d\\.+]+)?)|[[:xdigit:]]+)";
+const HAXERC_VERSION_PATTERN: &str =
+    "(?P<version>[-+0-9.a-zA-Z/ ]+)";
 
 /// Creates a module with the current Haxe version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -62,20 +62,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_haxe_version(context: &Context) -> Option<String> {
+    if let Some(version) = get_haxerc_version(context) {
+        Some(version)
+    }
+    else {
+        let cmd_output = context.exec_cmd("haxe", &["--version"])?;
+        parse_haxe_version(cmd_output.stdout.as_str())
+    }
+}
+
+fn get_haxerc_version(context: &Context) -> Option<String> {
     let file_contents = context.read_file_from_pwd(".haxerc");
     if let Some(raw_json) = file_contents {
-        let haxerc_json: json::Value = json::from_str(&raw_json).ok()?;
-        let raw_version = haxerc_json.get("version")?.as_str()?;
-        parse_haxe_version(raw_version)
+        let package_json: json::Value = json::from_str(&raw_json).ok()?;
+
+        let raw_version = package_json.get("version")?.as_str()?;
+        if raw_version == "null" {
+            return None;
+        };
+
+        Some(raw_version.to_string())
     } else {
-        let cmd_output = context.exec_cmd("haxe", &["--version"])?;
-        let raw_version = cmd_output.stdout.as_str();
-        parse_haxe_version(raw_version)
+        None
     }
 }
 
 fn parse_haxe_version(raw_version: &str) -> Option<String> {
-    let re = Regex::new(HAXE_VERSION_PATTERN).ok()?;
+    let re = Regex::new(HAXERC_VERSION_PATTERN).ok()?;
     let captures = re.captures(raw_version)?;
     let version = &captures["version"];
 
@@ -95,16 +108,11 @@ mod tests {
 
     #[test]
     fn haxe_version() {
-        let ok_versions = ["4.2.5", "4.3.0-rc.1+", "3.4.7abcdf", "779b005"];
-        let not_ok_versions = ["abc", " \n.", ". ", "abc."];
+        let ok_versions = ["4.2.5", "4.3.0-rc.1+", "3.4.7abcdf", "779b005", "beta", "alpha", "latest", "/git/779b005/bin/haxe"];
 
         let all_some = ok_versions.iter().all(|&v| parse_haxe_version(v).is_some());
-        let all_none = not_ok_versions
-            .iter()
-            .any(|&v| parse_haxe_version(v).is_some());
 
         assert!(all_some);
-        assert!(all_none);
 
         let sample_haxe_output = "4.3.0-rc.1+\n";
 
@@ -159,6 +167,34 @@ mod tests {
     fn folder_with_haxe_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("Main.hx"))?.sync_all()?;
+        let actual = ModuleRenderer::new("haxe")
+            .cmd(
+                "haxe --version",
+                Some(CommandOutput {
+                    stdout: "4.3.0-rc.1+\n".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("⌘ v4.3.0-rc.1+ ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_invalid_haxerc_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let haxerc_name = ".haxerc";
+        let haxerc_content = json::json!({
+            "resolveLibs": "scoped"
+        })
+        .to_string();
+        fill_config(&dir, haxerc_name, Some(&haxerc_content))?;
         let actual = ModuleRenderer::new("haxe")
             .cmd(
                 "haxe --version",
