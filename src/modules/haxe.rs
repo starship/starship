@@ -6,8 +6,7 @@ use crate::formatter::VersionFormatter;
 use serde_json as json;
 
 use regex::Regex;
-const HAXERC_VERSION_PATTERN: &str =
-    "(?P<version>[-+0-9.a-zA-Z/ ]+)";
+const HAXERC_VERSION_PATTERN: &str = "(?P<version>[-+0-9.a-zA-Z/ ]+)";
 
 /// Creates a module with the current Haxe version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -64,8 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn get_haxe_version(context: &Context) -> Option<String> {
     if let Some(version) = get_haxerc_version(context) {
         Some(version)
-    }
-    else {
+    } else {
         let cmd_output = context.exec_cmd("haxe", &["--version"])?;
         parse_haxe_version(cmd_output.stdout.as_str())
     }
@@ -108,7 +106,17 @@ mod tests {
 
     #[test]
     fn haxe_version() {
-        let ok_versions = ["4.2.5", "4.3.0-rc.1+", "3.4.7abcdf", "779b005", "beta", "alpha", "latest", "/git/779b005/bin/haxe"];
+        let ok_versions = [
+            "4.2.5",
+            "4.3.0-rc.1+",
+            "3.4.7abcdf",
+            "779b005",
+            "beta",
+            "alpha",
+            "latest",
+            "/git/779b005/bin/haxe",
+            "git/779b005/bin/haxe",
+        ];
 
         let all_some = ok_versions.iter().all(|&v| parse_haxe_version(v).is_some());
 
