@@ -1,9 +1,11 @@
 <p align="center">
-  <img
-    width="400"
-    src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt"
-  />
+  <a href="https://starship.rs/" target="_blank">
+    <img
+      width="400"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
+      alt="Starship – Cross-shell prompt"
+    />
+  </a>
 </p>
 
 <p align="center">
