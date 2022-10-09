@@ -304,6 +304,32 @@
         }
       ]
     },
+    "dbt": {
+      "default": {
+        "detect_extensions": [
+          "sql"
+        ],
+        "detect_files": [
+          "dbt_project.yml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )(\\($project\\) )]($style)",
+        "project_dirs": [],
+        "python_binary": [
+          "python",
+          "python3"
+        ],
+        "style": "fg:#FF694A bold",
+        "symbol": "📊 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DbtConfig"
+        }
+      ]
+    },
     "deno": {
       "default": {
         "detect_extensions": [],
@@ -2284,6 +2310,88 @@
       },
       "additionalProperties": false
     },
+    "DbtConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )(\\($project\\) )]($style)",
+          "type": "string"
+        },
+        "python_binary": {
+          "default": [
+            "python",
+            "python3"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "project_dirs": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "📊 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "fg:#FF694A bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "sql"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "dbt_project.yml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Either_for_String_and_Array_of_String": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "DenoConfig": {
       "type": "object",
       "properties": {
@@ -4137,19 +4245,6 @@
         }
       },
       "additionalProperties": false
-    },
-    "Either_for_String_and_Array_of_String": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      ]
     },
     "RakuConfig": {
       "type": "object",

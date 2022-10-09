@@ -190,6 +190,24 @@ Default target: x86_64-apple-macosx\n",
                 "Dart VM version: 2.8.4 (stable) (Wed Jun 3 12:26:04 2020 +0200) on \"macos_x64\"",
             ),
         }),
+        "python -c from importlib.resources import files;print(files('dbt') / '');" => Some(CommandOutput {
+            stdout: if cfg!(target_os = "windows") {
+                String::from("\\site-packages\\dbt\n")
+            }
+            else {
+                String::from("/site-packages/dbt\n")
+            },
+            stderr: String::default(),
+        }),
+        "python3 -c from importlib.resources import files;print(files('dbt') / '');" => Some(CommandOutput {
+            stdout: if cfg!(target_os = "windows") {
+                String::from("\\site-packages\\dbt\n")
+            }
+            else {
+                String::from("/site-packages/dbt\n")
+            },
+            stderr: String::default(),
+        }),
         "deno -V" => Some(CommandOutput {
             stdout: String::from("deno 1.8.3\n"),
             stderr: String::default()

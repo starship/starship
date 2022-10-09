@@ -25,6 +25,7 @@ pub const ALL_MODULES: &[&str] = &[
     "crystal",
     "daml",
     "dart",
+    "dbt",
     "deno",
     "directory",
     "docker_context",

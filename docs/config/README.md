@@ -995,6 +995,87 @@ By default the module will be shown if any of the following conditions are met:
 format = "via [🔰 $version](bold red) "
 ```
 
+## Dbt
+
+The `dbt` module shows the currently installed version of [dbt](https://docs.getdbt.com/) and the working dbt project.
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `dbt_project.yml` file
+- The current directory contains a file with `.sql` extension
+
+### Options
+
+| Option              | Default                                             | Description                                                                                           |
+| ------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )(\($project\) )]($style)"` | The format for the module.                                                                            |
+| `version_format`    | `"v${raw}"`                                         | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                             |
+| `symbol`            | `"📊 "`                                              | A format string representing the symbol of dbt                                                        |
+| `detect_extensions` | `["sql"]`                                           | Which extensions should trigger this module.                                                          |
+| `detect_files`      | `["dbt_project.yml"]`                               | Which filenames should trigger this module.                                                           |
+| `detect_folders`    | `[]`                                                | Which folders should trigger this module.                                                             |
+| `style`             | `"fg:#FF694A bold"`                                 | The style for the module.                                                                             |
+| `disabled`          | `false`                                             | Disables the `dbt` module.                                                                            |
+| `python_binary`     | `["python", "python3"]`                             | Configures the python binaries that Starship should execute when getting the version.                 |
+| `project_dirs`      | `[]`                                                | A list of directories containing a `dbt_project.yml` file where the project name can be fetched from. |
+
+::: tip
+
+The `python_binary` variable works as the equally named variable from the
+[Python][#Python] module. However, we use it here to identify the binary to run
+`importlib.resources.files('dbt')` in an attempt to find where dbt was
+installed.
+
+The `importlib.resources` module was added in Python 3.7, and `dbt` depends
+on Python 3.7 or newer versions, so we shouldn't have conflicts.
+
+:::
+
+### Variables
+
+| Variable | Example             | Description                                                                    |
+| -------- | ------------------- | ------------------------------------------------------------------------------ |
+| project  | `"jaffle_shop"`     | The name of the `dbt` project                                                  |
+| version  | `"v1.2.2"`          | The version of `dbt`                                                           |
+| symbol   | `"📊 "`              | Mirrors the value of option `symbol`                                           |
+| style\*  | `"fg:#FF694A bold"` | Mirrors the value of option `style`. `fg:#FF694A` is the `dbt` "orange" color. |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dbt]
+# Use a different symbol
+symbol = "👩‍🔬 "
+```
+
+```toml
+# ~/.config/starship.toml
+
+[dbt]
+# Don't trigger for files with the sql extension
+detect_extensions = []
+```
+
+::: tip
+
+The project name will only be showed in the prompt if we are currently in a
+directory which contains a `dbt_project.yml` file or if we let Starship know
+where to find a `dbt_project.yml` file by configuring `project_dirs`. Once
+configured, all subdirectories in our project will show the project name.
+
+```toml
+# ~/.config/starship.toml
+
+[dbt]
+# Set my dbt project directory to show the project name on the prompt
+project_dirs = ["~/path/to/my/dbt/project/"]
+```
+
+:::
+
 ## Deno
 
 The `deno` module shows you your currently installed version of [Deno](https://deno.land/).

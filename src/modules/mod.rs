@@ -14,6 +14,7 @@ mod crystal;
 pub(crate) mod custom;
 mod daml;
 mod dart;
+mod dbt;
 mod deno;
 mod directory;
 mod docker_context;
@@ -108,6 +109,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "container" => container::module(context),
             "daml" => daml::module(context),
             "dart" => dart::module(context),
+            "dbt" => dbt::module(context),
             "deno" => deno::module(context),
             "directory" => directory::module(context),
             "docker_context" => docker_context::module(context),
@@ -213,6 +215,7 @@ pub fn description(module: &str) -> &'static str {
         "crystal" => "The currently installed version of Crystal",
         "daml" => "The Daml SDK version of your project",
         "dart" => "The currently installed version of Dart",
+        "dbt" => "The currently installed version of dbt and current dbt project",
         "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
         "docker_context" => "The current docker context",

@@ -17,6 +17,7 @@ pub mod crystal;
 pub mod custom;
 pub mod daml;
 pub mod dart;
+pub mod dbt;
 pub mod deno;
 pub mod directory;
 pub mod docker_context;
@@ -126,6 +127,8 @@ pub struct FullConfig<'a> {
     daml: daml::DamlConfig<'a>,
     #[serde(borrow)]
     dart: dart::DartConfig<'a>,
+    #[serde(borrow)]
+    dbt: dbt::DbtConfig<'a>,
     #[serde(borrow)]
     deno: deno::DenoConfig<'a>,
     #[serde(borrow)]
