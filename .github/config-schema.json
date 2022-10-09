@@ -1341,7 +1341,7 @@
         "signal_symbol": "⚡",
         "style": "bold red",
         "success_symbol": "",
-        "symbol": "✖"
+        "symbol": "❌"
       },
       "allOf": [
         {
@@ -4633,7 +4633,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "✖",
+          "default": "❌",
           "type": "string"
         },
         "success_symbol": {
