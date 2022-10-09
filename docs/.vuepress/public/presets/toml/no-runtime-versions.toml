@@ -58,6 +58,9 @@ format = 'via [$symbol]($style)'
 [ocaml]
 format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
 
+[opa]
+format = 'via [$symbol]($style)'
+
 [perl]
 format = 'via [$symbol]($style)'
 

@@ -94,6 +94,9 @@ symbol = "nix "
 [ocaml]
 symbol = "ml "
 
+[opa]
+symbol = "opa "
+
 [package]
 symbol = "pkg "
 
