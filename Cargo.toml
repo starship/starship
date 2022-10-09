@@ -40,7 +40,7 @@ clap = { version = "4.0.11", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.0.2"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
-gethostname = "0.2.3"
+gethostname = "0.3.0"
 # Addresses https://github.com/starship/starship/issues/4251
 git-features = { version = "0.22.6", features = ["fs-walkdir-single-threaded"] }
 git-repository = "0.24.0"
