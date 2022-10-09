@@ -977,7 +977,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "🪖 ",
+        "symbol": "🪖  ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -3848,7 +3848,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🪖 ",
+          "default": "🪖  ",
           "type": "string"
         },
         "style": {

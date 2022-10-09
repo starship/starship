@@ -23,7 +23,7 @@ impl<'a> Default for OpaConfig<'a> {
         OpaConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🪖 ",
+            symbol: "🪖  ",
             style: "bold blue",
             disabled: false,
             detect_extensions: vec!["rego"],

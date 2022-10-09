@@ -90,7 +90,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("test.rego"))?.sync_all()?;
         let actual = ModuleRenderer::new("opa").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🪖 v0.44.0 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🪖  v0.44.0 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -103,7 +103,7 @@ mod tests {
             .path(dir.path())
             .cmd("opa version", None)
             .collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🪖 ")));
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("🪖  ")));
         assert_eq!(expected, actual);
         dir.close()
     }
