@@ -1,7 +1,12 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct StarshipRootConfig {
     #[serde(rename = "$schema")]
@@ -12,7 +17,12 @@ pub struct StarshipRootConfig {
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub palette: Option<String>,
+    pub palettes: HashMap<String, Palette>,
 }
+
+pub type Palette = HashMap<String, String>;
 
 // List of default prompt order
 // NOTE: If this const value is changed then Default prompt order subheading inside
@@ -36,6 +46,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "package",
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
+    "bun",
     "c",
     "cmake",
     "cobol",
@@ -61,6 +72,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "pulumi",
     "purescript",
     "python",
+    "raku",
     "rlang",
     "red",
     "ruby",
@@ -98,7 +110,7 @@ pub const PROMPT_ORDER: &[&str] = &[
 ];
 
 // On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
-impl<'a> Default for StarshipRootConfig {
+impl Default for StarshipRootConfig {
     fn default() -> Self {
         Self {
             schema: "https://starship.rs/config-schema.json".to_string(),
@@ -108,6 +120,8 @@ impl<'a> Default for StarshipRootConfig {
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
+            palette: None,
+            palettes: HashMap::default(),
         }
     }
 }

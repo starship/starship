@@ -1,5 +1,5 @@
 use crate::print::{Grapheme, UnicodeWidthGraphemes};
-use ansi_term::{ANSIString, Style};
+use nu_ansi_term::{AnsiString, Style};
 use std::fmt;
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -14,11 +14,11 @@ pub struct TextSegment {
 }
 
 impl TextSegment {
-    // Returns the ANSIString of the segment value
-    fn ansi_string(&self) -> ANSIString {
+    // Returns the AnsiString of the segment value
+    fn ansi_string(&self) -> AnsiString {
         match self.style {
             Some(style) => style.paint(&self.value),
-            None => ANSIString::from(&self.value),
+            None => AnsiString::from(&self.value),
         }
     }
 }
@@ -34,8 +34,8 @@ pub struct FillSegment {
 }
 
 impl FillSegment {
-    // Returns the ANSIString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, width: Option<usize>) -> ANSIString {
+    // Returns the AnsiString of the segment value, not including its prefix and suffix
+    pub fn ansi_string(&self, width: Option<usize>) -> AnsiString {
         let s = match width {
             Some(w) => self
                 .value
@@ -54,7 +54,7 @@ impl FillSegment {
         };
         match self.style {
             Some(style) => style.paint(s),
-            None => ANSIString::from(s),
+            None => AnsiString::from(s),
         }
     }
 }
@@ -62,7 +62,7 @@ impl FillSegment {
 #[cfg(test)]
 mod fill_seg_tests {
     use super::FillSegment;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn ansi_string_width() {
@@ -158,12 +158,12 @@ impl Segment {
         }
     }
 
-    // Returns the ANSIString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self) -> ANSIString {
+    // Returns the AnsiString of the segment value, not including its prefix and suffix
+    pub fn ansi_string(&self) -> AnsiString {
         match self {
             Self::Fill(fs) => fs.ansi_string(None),
             Self::Text(ts) => ts.ansi_string(),
-            Self::LineTerm => ANSIString::from(LINE_TERMINATOR_STRING),
+            Self::LineTerm => AnsiString::from(LINE_TERMINATOR_STRING),
         }
     }
 

@@ -15,7 +15,7 @@ use crate::utils;
 ///     - Or a file named `$DOCKER_CONFIG/config.json`
 ///     - The file is JSON and contains a field named `currentContext`
 ///     - The value of `currentContext` is not `default`
-///     - If multiple criterias are met, we use the following order to define the docker context:
+///     - If multiple criteria are met, we use the following order to define the docker context:
 ///     - `DOCKER_HOST`, `DOCKER_CONTEXT`, $HOME/.docker/config.json, $`DOCKER_CONFIG/config.json`
 ///     - (This is the same order docker follows, as `DOCKER_HOST` and `DOCKER_CONTEXT` override the
 ///     config)
@@ -91,7 +91,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io::{self, Write};
 

@@ -72,7 +72,7 @@ fn parse_swift_version(swift_version: &str) -> Option<String> {
 mod tests {
     use super::parse_swift_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

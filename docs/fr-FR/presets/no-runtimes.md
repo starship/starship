@@ -8,6 +8,10 @@ Ce préréglage masque la version des environnements. Si vous travaillez dans de
 
 ### Configuration
 
+```sh
+starship preset no-runtime-versions > ~/.config/starship.toml
+```
+
 [Cliquez pour télécharger le TOML](/presets/toml/no-runtime-versions.toml)
 
 <<< @/.vuepress/public/presets/toml/no-runtime-versions.toml

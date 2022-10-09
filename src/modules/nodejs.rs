@@ -117,7 +117,7 @@ fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) 
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
     use std::io::Write;

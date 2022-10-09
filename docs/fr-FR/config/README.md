@@ -144,6 +144,18 @@ format = '''
 \$'''
 ```
 
+### Negative matching
+
+Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading "!" character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+
+Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
+
+To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+
+```toml
+detect_extensions = ["ts", "!video.ts", "!audio.ts"]
+```
+
 ## Invite
 
 Voici la liste des options de configuration de l'invite en lui-même.
@@ -169,7 +181,7 @@ format = """
 [│](bold green)$directory$rust$package
 [└─>](bold green) """
 
-# Attendez 10 millisecondes pour que starship vérifie les fichiers dans le dossier courant.
+# Attendez 10 millisecondes pour que starship vérifie les fichiers dans le répertoire de travail.
 scan_timeout = 10
 
 # Désactive la nouvelle ligne au début de l'invite
@@ -201,11 +213,9 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
-$buf\
 $c\
 $cmake\
 $cobol\
-$container\
 $daml\
 $dart\
 $deno\
@@ -228,6 +238,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$raku\
 $rlang\
 $red\
 $ruby\
@@ -238,6 +249,7 @@ $terraform\
 $vlang\
 $vagrant\
 $zig\
+$buf\
 $nix_shell\
 $conda\
 $spack\
@@ -256,6 +268,7 @@ $jobs\
 $battery\
 $time\
 $status\
+$container\
 $shell\
 $character"""
 ```
@@ -479,6 +492,45 @@ Le module `buf` affiche la version de [Buf](https://buf.build) installée. Par d
 symbol = "🦬 "
 ```
 
+## Bun
+
+The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+
+- Le répertoire courant contient un fichier `bun.lockb`
+- Le répertoire courant contient un fichier `bunfig.toml`
+
+### Options
+
+| Option              | Défaut                               | Description                                                                                |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`    | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🍞 "`                               | Une chaîne de caractères représentant le symbole de Node.js.                               |
+| `detect_extensions` | `[]`                                 | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["bun.lockb", "bunfig.toml"]`       | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`             | `"bold green"`                       | Le style du module.                                                                        |
+| `disabled`          | `false`                              | Disables the `bun` module.                                                                 |
+
+### Variables
+
+| Variable  | Exemple  | Description                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `v0.1.4` | The version of `bun`                   |
+| symbol    |          | Reflète la valeur de l'option `symbol` |
+| style\* |          | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[bun]
+format = "via [🍔 $version](bold green) "
+```
+
 ## C
 
 Le module `c` affiche des informations à propos de votre compilateur C. Par défaut, ce module sera affiché si le dossier courant contient un fichier `.c` ou `.h`.
@@ -538,22 +590,22 @@ Par défaut, il ne change que la couleur. Si vous désirez également changer sa
 
 ::: warning
 
-`vicmd_symbol` n’est supporté que dans cmd, fish et zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Options
 
-| Option                     | Défaut               | Description                                                                             |
-| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                   | `"$symbol "`         | Le format utilisée avant l'entrée de texte.                                             |
-| `success_symbol`           | `"[❯](bold green)"`  | Le format utilisé avant l'entrée de texte si la commande précédente a réussi.           |
-| `error_symbol`             | `"[❯](bold red)"`    | Le format utilisé avant l'entrée de texte si la commande précédente a échoué.           |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal.           |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `disabled`                 | `false`              | Désactive le module `character`.                                                        |
+| Option                      | Défaut               | Description                                                                             |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `format`                    | `"$symbol "`         | Le format utilisée avant l'entrée de texte.                                             |
+| `success_symbol`            | `"[❯](bold green)"`  | Le format utilisé avant l'entrée de texte si la commande précédente a réussi.           |
+| `error_symbol`              | `"[❯](bold red)"`    | Le format utilisé avant l'entrée de texte si la commande précédente a échoué.           |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal.           |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
+| `disabled`                  | `false`              | Désactive le module `character`.                                                        |
 
 ### Variables
 
@@ -654,7 +706,7 @@ Le module `cobol` affiche la version de COBOL installée. Par défaut, le module
 
 ## Temps d'exécution
 
-Le module `cmd_duration` montre le temps qu'a pris la dernière commande pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
+Le module `cmd_duration` montre le temps qu'a pris la dernière commande a pris pour s'exécuter. Le module ne sera affiché que si la commande a pris plus de deux secondes, ou si la valeur de configuration `min_time` existe.
 
 ::: warning N'interceptez pas le signal DEBUG avec Bash
 
@@ -772,8 +824,8 @@ format = "[$symbol \\[$name\\]]($style) "
 
 Le module `crystal` affiche la version actuellement installée de [Crystal](https://crystal-lang.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- Le dossier courant contient un fichier `shard.yml`
-- Le dossier courant contient un fichier `.cr`
+- Le répertoire courant contient un fichier `shard.yml`
+- Le répertoire courant contient un fichier `.cr`
 
 ### Options
 
@@ -811,7 +863,7 @@ format = "via [✨ $version](bold blue) "
 
 The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
-- The current directory contains a `daml.yaml` file
+- Le répertoire courant contient un fichier `daml.yaml`
 
 ### Options
 
@@ -1060,7 +1112,7 @@ Le module affichera aussi le Moniker de Framework Cible (<https://docs.microsoft
 
 ### Options
 
-| Option              | Défaut                                                                                                  | Description                                                                                |
+| Option              | Défault                                                                                                 | Description                                                                                |
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `format`            | `"via [$symbol($version )(🎯 $tfm )]($style)"`                                                           | Format du module.                                                                          |
 | `version_format`    | `"v${raw}"`                                                                                             | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
@@ -1102,7 +1154,7 @@ Le module `elixir` montre la version actuellement installée de [Elixir](https:/
 
 ### Options
 
-| Option              | Défault                                                     | Description                                                                                |
+| Option              | Défaut                                                      | Description                                                                                |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Format du module elixir.                                                                   |
 | `version_format`    | `"v${raw}"`                                                 | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
@@ -1428,15 +1480,16 @@ Le module `git_commit` affiche le hash du commit actuel ainsi que le tag (le cas
 
 ### Options
 
-| Option               | Défaut                             | Description                                                                |
-| -------------------- | ---------------------------------- | -------------------------------------------------------------------------- |
-| `commit_hash_length` | `7`                                | La longueur du hash affiché du commit git.                                 |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | Format du module.                                                          |
-| `style`              | `"bold green"`                     | Le style du module.                                                        |
-| `only_detached`      | `true`                             | Ne montrer le hash du commit qu'en mode `HEAD` détachée.                   |
-| `tag_disabled`       | `true`                             | Désactive l'affichage des informations du tag dans le module `git_commit`. |
-| `tag_symbol`         | `" 🏷 "`                            | Symbole préfixant les informations affichées concernant le tag             |
-| `disabled`           | `false`                            | Désactive le module `git_commit`.                                          |
+| Option               | Défaut                             | Description                                                                          |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                                | La longueur du hash affiché du commit git.                                           |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | Format du module.                                                                    |
+| `style`              | `"bold green"`                     | Le style du module.                                                                  |
+| `only_detached`      | `true`                             | Ne montrer le hash du commit qu'en mode `HEAD` détachée.                             |
+| `tag_disabled`       | `true`                             | Désactive l'affichage des informations du tag dans le module `git_commit`.           |
+| `tag_max_candidates` | `0`                                | How many commits to consider for tag display. The default only allows exact matches. |
+| `tag_symbol`         | `" 🏷 "`                            | Symbole préfixant les informations affichées concernant le tag                       |
+| `disabled`           | `false`                            | Désactive le module `git_commit`.                                                    |
 
 ### Variables
 
@@ -1986,18 +2039,23 @@ Afficher le nom du [contexte Kubernetes](https://kubernetes.io/docs/concepts/con
 
 Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur `false` dans votre fichier de configuration.
 
+When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been st in which case the module will only be active in directories that match those conditions.
+
 :::
 
 ### Options
 
-| Option            | Défaut                                               | Description                                                            |
-| ----------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
-| `symbol`          | `"☸ "`                                               | Une chaîne de format représentant le symbole affiché avant le Cluster. |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                      |
-| `style`           | `"cyan bold"`                                        | Le style du module.                                                    |
-| `context_aliases` |                                                      | Tableau des alias de contexte à afficher.                              |
-| `user_aliases`    |                                                      | Table of user aliases to display.                                      |
-| `disabled`        | `true`                                               | Désactiver le module `kubernetes`.                                     |
+| Option              | Défaut                                               | Description                                                            |
+| ------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
+| `symbol`            | `"☸ "`                                               | Une chaîne de format représentant le symbole affiché avant le Cluster. |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Format du module.                                                      |
+| `style`             | `"cyan bold"`                                        | Le style du module.                                                    |
+| `context_aliases`   |                                                      | Tableau des alias de contexte à afficher.                              |
+| `user_aliases`      |                                                      | Table of user aliases to display.                                      |
+| `detect_extensions` | `[]`                                                 | Quelles extensions devraient activer ce module.                        |
+| `detect_files`      | `[]`                                                 | Les fichiers qui activent ce module.                                   |
+| `detect_folders`    | `[]`                                                 | Quels dossiers devraient activer ce module.                            |
+| `disabled`          | `true`                                               | Désactiver le module `kubernetes`.                                     |
 
 ### Variables
 
@@ -2027,6 +2085,16 @@ disabled = false
 [kubernetes.user_aliases]
 "dev.local.cluster.k8s" = "dev"
 "root/.*" = "root"
+```
+
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
 ```
 
 #### Filtrage par regex
@@ -2579,7 +2647,7 @@ Par défaut, la version de Pulumi n'est pas affichée, car cela prendre un ordre
 Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
 
 - Le dossier courant contient soit un `Pulumi.yaml`, soit un `Pulumi.yml`
-- Un dossier parent contient soit un `Pulumi.yaml`, soit un `Pulumi.yml`
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### Options
 
@@ -2589,6 +2657,7 @@ Par défaut le module sera activé si au moins l'une des conditions suivantes es
 | `version_format` | `"v${raw}"`                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                                             |
 | `style`          | `"bold 5"`                                   | Le style du module.                                                                        |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.                             |
 | `disabled`       | `false`                                      | Désactive le module `pulumi`.                                                              |
 
 ### Variables
@@ -2794,9 +2863,47 @@ Le module `rlang` affiche la version de [R](https://www.r-project.org/) actuelle
 format = "with [📐 $version](blue bold) "
 ```
 
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Par défaut le module sera activé si au moins l'une des conditions suivantes est remplie:
+
+- The current directory contains a `META6.json` file
+- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### Options
+
+| Option              | Défaut                                           | Description                                                                                |
+| ------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`            | `"via [$symbol($version-$vm_version )]($style)"` | La chaîne de format pour le module.                                                        |
+| `version_format`    | `"v${raw}"`                                      | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku                                      |
+| `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | Quelles extensions devraient activer ce module.                                            |
+| `detect_files`      | `["META6.json"]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`    | `[]`                                             | Les dossiers qui activent ce module.                                                       |
+| `style`             | `"bold 149"`                                     | Le style du module.                                                                        |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                                                |
+
+### Variables
+
+| Variable   | Exemple | Description                            |
+| ---------- | ------- | -------------------------------------- |
+| version    | `v6.d`  | The version of `raku`                  |
+| vm_version | `moar`  | The version of VM `raku` is built on   |
+| symbol     |         | Reflète la valeur de l'option `symbol` |
+| style\*  |         | Reflète la valeur de l'option `style`  |
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = "via [🦪 $version]($style) "
+```
+
 ## Red
 
-Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `red` affiche la version actuellement installée de [Red](https://www.red-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire actuel contient un fichier avec l'extension `.red` ou `.reds`
 
@@ -2834,7 +2941,7 @@ symbol = "🔴 "
 
 ## Ruby
 
-Par défaut, le module `ruby` affiche la version actuellement installée de [Ruby](https://www.ruby-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `ruby` affiche la version actuellement installée de [Ruby](https://www.ruby-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `Gemfile`
 - Le répertoire courant contient un fichier `.ruby-version`
@@ -2878,7 +2985,7 @@ symbol = "🔺 "
 
 ## Rust
 
-Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `rust` affiche la version actuellement installée de [Rust](https://www.rust-lang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `Cargo.toml`
 - Le répertoire actuel contient un fichier avec l'extension `.rs`
@@ -3121,22 +3228,23 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option                  | Défaut                                                                               | Description                                             |
-| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "`                                                        | Le format du module                                     |
-| `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
-| `success_symbol`        | `""`                                                                                 | The symbol displayed on program success                 |
-| `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
-| `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
-| `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
-| `style`                 | `"bold green"`                                                                       | Le style du module.                                     |
-| `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
-| `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
-| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
-| `pipestatus_separator`  | `|`                                                                                  |                                                         |
-| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
-| `disabled`              | `true`                                                                               | Désactiver le module `status`.                          |
+| Option                      | Défaut                                                                               | Description                                                           |
+| --------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `format`                    | `"[$symbol$status]($style) "`                                                        | Le format du module                                                   |
+| `symbol`                    | `"✖"`                                                                                | The symbol displayed on program error                                 |
+| `success_symbol`            | `""`                                                                                 | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `"🚫"`                                                                                | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `"🔍"`                                                                                | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `"⚡"`                                                                                | The symbol displayed on any signal                                    |
+| `style`                     | `"bold green"`                                                                       | Le style du module.                                                   |
+| `recognize_signal_code`     | `true`                                                                               | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                              | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                              | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                            | The symbol used to separate pipestatus segments                       |
+| `pipestatus_format`         | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                      | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                               | Désactiver le module `status`.                                        |
 
 ### Variables
 
@@ -3220,7 +3328,7 @@ disabled = false
 
 ## Swift
 
-Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `swift` affiche la version actuellement installée de [Swift](https://swift.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `Package.swift`
 - Le répertoire actuel contient un fichier avec l'extension `.swift`
@@ -3364,7 +3472,7 @@ time_range = "10:00:00-14:00:00"
 
 ## Nom d'utilisateur
 
-Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module sera affiché si l'une de ces conditions est remplie:
+Le module `username` affiche le nom d'utilisateur de l'utilisateur actif. Le module est affiché si l'une de ces conditions est remplie :
 
 - L'utilisateur courant est root/admin
 - L'utilisateur courant est différent de celui connecté
@@ -3515,7 +3623,7 @@ format = "[🆅 $repo](bold blue) "
 
 ## Zig
 
-Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module sera affiché si l'une de ces conditions est remplie:
+Par défaut, le module `zig` affiche la version actuellement installée de [Zig](https://ziglang.org/). Le module est affiché si l'une de ces conditions est remplie :
 
 - Le répertoire courant contient un fichier `.zig`
 
@@ -3561,7 +3669,7 @@ Ces modules seront affichés si l'une de ces conditions est remplie:
 - Le dossier courant contient un dossier dont le nom est dans `detect_folders`
 - Le dossier courant contient un fichier dont l’extension est dans `detect_extensions`
 - La commande `when` retourne 0
-- Le système d’exploitation courant (std::env::consts::OS) correspond au champ `os` si défini.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 

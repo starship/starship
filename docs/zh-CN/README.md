@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: 轻量级、反应迅速、可无限定制的高颜值终端！
+tagline: 轻量、迅速、可无限定制的高颜值终端！
 actionText: 快速上手 →
 actionLink: ./guide/
 features:

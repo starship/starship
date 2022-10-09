@@ -1,4 +1,5 @@
-use ansi_term::ANSIStrings;
+use clap::{builder::PossibleValue, ValueEnum};
+use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
@@ -15,6 +16,7 @@ use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
+use crate::shadow;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -117,7 +119,7 @@ pub fn get_prompt(context: Context) -> String {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
+    write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
@@ -161,7 +163,7 @@ pub fn timings(args: Properties) {
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: module.get_name().width_graphemes(),
-            value: ansi_term::ANSIStrings(&module.ansi_strings())
+            value: nu_ansi_term::AnsiStrings(&module.ansi_strings())
                 .to_string()
                 .replace('\n', "\\n"),
             duration: module.duration,
@@ -210,7 +212,7 @@ pub fn explain(args: Properties) {
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
+                value: nu_ansi_term::AnsiStrings(&module.ansi_strings()).to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().clone(),
@@ -244,7 +246,7 @@ pub fn explain(args: Properties) {
                 " ".repeat(max_module_width - (info.value_len))
             );
             for g in info.desc.graphemes(true) {
-                // Handle ANSI escape sequnces
+                // Handle ANSI escape sequences
                 if g == "\x1B" {
                     escaping = true;
                 }
@@ -450,6 +452,35 @@ pub fn print_schema() {
     println!("{}", serde_json::to_string_pretty(&schema).unwrap());
 }
 
+#[derive(Clone, Debug)]
+pub struct Preset(pub &'static str);
+
+impl ValueEnum for Preset {
+    fn value_variants<'a>() -> &'a [Self] {
+        shadow::get_preset_list()
+    }
+
+    fn to_possible_value(&self) -> Option<PossibleValue> {
+        Some(PossibleValue::new(self.0))
+    }
+}
+
+pub fn preset_command(name: Option<Preset>, list: bool) {
+    if list {
+        println!("{}", preset_list());
+        return;
+    }
+    let variant = name.expect("name argument must be specified");
+    shadow::print_preset_content(variant.0);
+}
+
+fn preset_list() -> String {
+    Preset::value_variants()
+        .iter()
+        .map(|v| format!("{}\n", v.0))
+        .collect()
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -488,6 +519,19 @@ mod test {
         let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn preset_list_returns_one_or_more_items() {
+        assert!(preset_list().trim().split('\n').count() > 0);
+    }
+
+    #[test]
+    fn preset_command_does_not_panic_on_correct_inputs() {
+        preset_command(None, true);
+        Preset::value_variants()
+            .iter()
+            .for_each(|v| preset_command(Some(v.clone()), false));
     }
 
     #[test]

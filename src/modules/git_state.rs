@@ -1,4 +1,4 @@
-use git2::RepositoryState;
+use git_repository::state::InProgress;
 use std::path::PathBuf;
 
 use super::{Context, Module, ModuleConfig};
@@ -54,54 +54,53 @@ fn get_state_description<'a>(
     repo: &'a Repo,
     config: &GitStateConfig<'a>,
 ) -> Option<StateDescription<'a>> {
-    match repo.state {
-        RepositoryState::Clean => None,
-        RepositoryState::Merge => Some(StateDescription {
+    match repo.state.as_ref()? {
+        InProgress::Merge => Some(StateDescription {
             label: config.merge,
             current: None,
             total: None,
         }),
-        RepositoryState::Revert => Some(StateDescription {
+        InProgress::Revert => Some(StateDescription {
             label: config.revert,
             current: None,
             total: None,
         }),
-        RepositoryState::RevertSequence => Some(StateDescription {
+        InProgress::RevertSequence => Some(StateDescription {
             label: config.revert,
             current: None,
             total: None,
         }),
-        RepositoryState::CherryPick => Some(StateDescription {
+        InProgress::CherryPick => Some(StateDescription {
             label: config.cherry_pick,
             current: None,
             total: None,
         }),
-        RepositoryState::CherryPickSequence => Some(StateDescription {
+        InProgress::CherryPickSequence => Some(StateDescription {
             label: config.cherry_pick,
             current: None,
             total: None,
         }),
-        RepositoryState::Bisect => Some(StateDescription {
+        InProgress::Bisect => Some(StateDescription {
             label: config.bisect,
             current: None,
             total: None,
         }),
-        RepositoryState::ApplyMailbox => Some(StateDescription {
+        InProgress::ApplyMailbox => Some(StateDescription {
             label: config.am,
             current: None,
             total: None,
         }),
-        RepositoryState::ApplyMailboxOrRebase => Some(StateDescription {
+        InProgress::ApplyMailboxRebase => Some(StateDescription {
             label: config.am_or_rebase,
             current: None,
             total: None,
         }),
-        RepositoryState::Rebase => Some(describe_rebase(repo, config.rebase)),
-        RepositoryState::RebaseInteractive => Some(describe_rebase(repo, config.rebase)),
-        RepositoryState::RebaseMerge => Some(describe_rebase(repo, config.rebase)),
+        InProgress::Rebase => Some(describe_rebase(repo, config.rebase)),
+        InProgress::RebaseInteractive => Some(describe_rebase(repo, config.rebase)),
     }
 }
 
+// TODO: Use future gitoxide API to get the state of the rebase
 fn describe_rebase<'a>(repo: &'a Repo, rebase_config: &'a str) -> StateDescription<'a> {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
@@ -158,7 +157,7 @@ struct StateDescription<'a> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::ffi::OsStr;
     use std::fs::OpenOptions;
     use std::io::{self, Error, ErrorKind, Write};

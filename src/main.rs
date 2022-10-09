@@ -5,7 +5,7 @@ use std::io;
 use std::thread::available_parallelism;
 use std::time::SystemTime;
 
-use clap::{IntoApp, Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
@@ -33,7 +33,7 @@ enum Commands {
     BugReport,
     /// Generate starship shell completions for your shell to stdout
     Completions {
-        #[clap(arg_enum)]
+        #[clap(value_enum)]
         shell: CompletionShell,
     },
     /// Edit the starship configuration
@@ -62,6 +62,15 @@ enum Commands {
         list: bool,
         #[clap(flatten)]
         properties: Properties,
+    },
+    /// Prints a preset config
+    Preset {
+        /// The name of preset to be printed
+        #[clap(required_unless_present("list"), value_enum)]
+        name: Option<print::Preset>,
+        /// List out all preset names
+        #[clap(short, long)]
+        list: bool,
     },
     /// Prints the computed starship configuration
     PrintConfig {
@@ -105,7 +114,7 @@ enum Commands {
 fn main() {
     // Configure the current terminal on windows to support ANSI escape sequences.
     #[cfg(windows)]
-    let _ = ansi_term::enable_ansi_support();
+    let _ = nu_ansi_term::enable_ansi_support();
     logger::init();
     init_global_threadpool();
 
@@ -182,6 +191,7 @@ fn main() {
                 print::module(&module_name, properties);
             }
         }
+        Commands::Preset { name, list } => print::preset_command(name, list),
         Commands::Config { name, value } => {
             if let Some(name) = name {
                 if let Some(value) = value {

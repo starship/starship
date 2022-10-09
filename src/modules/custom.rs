@@ -34,6 +34,8 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
+    let mut module = Module::new(name, config.description, Some(toml_config));
+
     let mut is_match = context
         .try_begin_scan()?
         .set_extensions(&config.detect_extensions)
@@ -46,46 +48,42 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             Either::First(b) => b,
             Either::Second(s) => exec_when(s, &config, context),
         };
-
-        if !is_match {
-            return None;
-        }
     }
 
-    let mut module = Module::new(name, config.description, Some(toml_config));
+    if is_match {
+        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            formatter
+                .map_meta(|var, _| match var {
+                    "symbol" => Some(config.symbol),
+                    _ => None,
+                })
+                .map_style(|variable| match variable {
+                    "style" => Some(Ok(config.style)),
+                    _ => None,
+                })
+                .map_no_escaping(|variable| match variable {
+                    "output" => {
+                        let output = exec_command(config.command, context, &config)?;
+                        let trimmed = output.trim();
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-        formatter
-            .map_meta(|var, _| match var {
-                "symbol" => Some(config.symbol),
-                _ => None,
-            })
-            .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
-                _ => None,
-            })
-            .map_no_escaping(|variable| match variable {
-                "output" => {
-                    let output = exec_command(config.command, context, &config)?;
-                    let trimmed = output.trim();
-
-                    if trimmed.is_empty() {
-                        None
-                    } else {
-                        Some(Ok(trimmed.to_string()))
+                        if trimmed.is_empty() {
+                            None
+                        } else {
+                            Some(Ok(trimmed.to_string()))
+                        }
                     }
-                }
-                _ => None,
-            })
-            .parse(None, Some(context))
-    });
+                    _ => None,
+                })
+                .parse(None, Some(context))
+        });
 
-    match parsed {
-        Ok(segments) => module.set_segments(segments),
-        Err(error) => {
-            log::warn!("Error in module `custom.{}`:\n{}", name, error);
-        }
-    };
+        match parsed {
+            Ok(segments) => module.set_segments(segments),
+            Err(error) => {
+                log::warn!("Error in module `custom.{}`:\n{}", name, error);
+            }
+        };
+    }
     let elapsed = start.elapsed();
     log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
     module.duration = elapsed;
@@ -237,7 +235,7 @@ fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<S
 
 /// If the specified shell refers to `PowerShell`, adds the arguments "-Command -" to the
 /// given command.
-/// Retruns `false` if the shell shell expects scripts as arguments, `true` if as `stdin`.
+/// Returns `false` if the shell shell expects scripts as arguments, `true` if as `stdin`.
 fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool {
     let shell_exe = Path::new(shell).file_stem();
     let no_args = shell_args.is_empty();
@@ -270,7 +268,7 @@ mod tests {
     use super::*;
 
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

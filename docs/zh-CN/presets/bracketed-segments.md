@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#bracketed-segments)
+[返回全部预设](./README.md#bracketed-segments)
 
 # Bracketed Segments Preset
 
@@ -8,6 +8,10 @@
 
 ### 配置
 
-[Click to download TOML](/presets/toml/bracketed-segments.toml)
+```sh
+starship preset bracketed-segments > ~/.config/starship.toml
+```
+
+[点击下载 TOML 文件](/presets/toml/bracketed-segments.toml)
 
 <<< @/.vuepress/public/presets/toml/bracketed-segments.toml

@@ -34,6 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     //Return None if not in git repository
     context.get_repo().ok()?;
+
     if let Some(git_status) = git_status_wsl(context, &config) {
         if git_status.is_empty() {
             return None;
@@ -469,7 +470,7 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{ANSIStrings, Color};
+    use nu_ansi_term::{AnsiStrings, Color};
     use std::ffi::OsStr;
     use std::fs::{self, File};
     use std::io::{self, prelude::*};
@@ -831,7 +832,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            ANSIStrings(&[
+            AnsiStrings(&[
                 Color::Red.bold().paint("[+"),
                 Color::Green.paint("1"),
                 Color::Red.bold().paint("]"),

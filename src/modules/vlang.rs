@@ -58,7 +58,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn parse_v_version(v_version: &str) -> Option<String> {
     let version = v_version
-        .trim()
         // split into ["V", "0.2", "30c0659"]
         .split_whitespace()
         // return "0.2"
@@ -71,7 +70,7 @@ fn parse_v_version(v_version: &str) -> Option<String> {
 mod tests {
     use super::parse_v_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

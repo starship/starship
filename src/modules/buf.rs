@@ -64,7 +64,7 @@ fn parse_buf_version(buf_version: &str) -> Option<String> {
 mod tests {
     use super::parse_buf_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 
@@ -103,7 +103,7 @@ mod tests {
                 .sync_all()
                 .unwrap();
             let actual = ModuleRenderer::new("buf").path(dir.path()).collect();
-            let expected = Some(format!("with {}", Color::Blue.bold().paint(" v1.0.0")));
+            let expected = Some(format!("with {}", Color::Blue.bold().paint("🦬 v1.0.0 ")));
             assert_eq!(expected, actual);
             dir.close().unwrap();
         }

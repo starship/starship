@@ -9,17 +9,16 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starshipのすべての設定は、この[TOML](https://github.com/toml-lang/toml)ファイルで行われます。
 
 ```toml
-# Get editor completions based on the config schema
+# エディターの補完を設定スキーマに合わせて取得
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# シェルのプロンプトの間に空行を挿入する
 add_newline = true
 
-# Replace the "❯" symbol in the prompt with "➜"
-[character] # The name of the module we are configuring is "character"
-success_symbol = "[➜](bold green)" # The "success_symbol" segment is being set to "➜" with the color "bold green"
-
-# Disable the package module, hiding it from the prompt completely
+# 記号"❯"を記号"➜"に置き換える
+[character] # 編集するモジュールの名前は"character"
+success_symbol = "[➜](bold green)" # "success_symbol"を記号"➜"で"bold green"(太字の緑色)にセット
+# パッケージモジュールを無効化することでプロンプトを完全に非表示にする
 [package]
 disabled = true
 ```
@@ -144,6 +143,18 @@ format = '''
 \$'''
 ```
 
+### Negative matching
+
+Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading "!" character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+
+Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
+
+To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+
+```toml
+detect_extensions = ["ts", "!video.ts", "!audio.ts"]
+```
+
 ## プロンプト
 
 これは、プロンプト全体のオプションのリストです。
@@ -202,11 +213,9 @@ $git_status\
 $hg_branch\
 $docker_context\
 $package\
-$buf\
 $c\
 $cmake\
 $cobol\
-$container\
 $daml\
 $dart\
 $deno\
@@ -229,6 +238,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$raku\
 $rlang\
 $red\
 $ruby\
@@ -239,6 +249,7 @@ $terraform\
 $vlang\
 $vagrant\
 $zig\
+$buf\
 $nix_shell\
 $conda\
 $spack\
@@ -257,11 +268,12 @@ $jobs\
 $battery\
 $time\
 $status\
+$container\
 $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. 例:
+デフォルトのフォーマットを拡張したいだけなら、`$all`を使用できます。 フォーマットに明示的に追加したモジュールは重複しません。 例:
 
 ```toml
 # ディレクトリを2行目に移動
@@ -270,15 +282,15 @@ format = "$all$directory$character"
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
+`aws`モジュールは、一時的な資格情報を使用する場合、現在のAWSリージョンとプロファイル、および有効期限タイマーを表示します。 モジュールの出力は、必要に応じて`AWS_REGION`、`AWS_DEFAULT_REGION`と`AWS_PROFILE`の環境変数と、`~/.aws/config`と`~/.aws/credentials`のファイルが使用されます。
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+モジュールは、資格情報が`~/.aws/credentials`にある場合、または`~/.aws/config`に`credential_process`または`sso_start_url`が定義されている場合にのみプロファイルを表示します。 あるいは、環境変数に`AWS_ACCESS_KEY_ID`、`AWS_SECRET_ACCESS_KEY`または`AWS_SESSION_TOKEN`のいずれかが定義されていれば条件を満たします。 もし`force_display`のオプションを`true`に設定した場合、上記の条件による資格情報が検出されない場合でも、利用可能なすべての情報が表示されます。
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
+[aws-vault](https://github.com/99designs/aws-vault)を使う場合、環境変数`AWS_VAULT`からプロファイルが、環境変数`AWS_SESSION_EXPIRATION`から資格情報の有効期限が読み込まれます。
 
 [awsu](https://github.com/kreuzwerker/awsu) を使う場合、そのプロファイルは環境変数 `AWSU_PROFILE` から読まれます。
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
+[AWSume](https://awsu.me)を使う場合、環境変数`AWSUME_PROFILE`からプロファイルが、環境変数`AWSUME_EXPIRATION`から資格情報の有効期限が読み込まれます。
 
 ### オプション
 
@@ -287,21 +299,21 @@ When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFIL
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | module のフォーマットです。                                                                    |
 | `symbol`            | `"☁️ "`                                                               | 現在のAWSプロファイルを表示する前に表示される記号です。                                                        |
 | `region_aliases`    |                                                                       | AWS名に加えて表示するリージョンのエイリアスです。                                                           |
-| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                     |
+| `profile_aliases`   |                                                                       | AWS名に加えて表示するプロファイルのエイリアスです。                                                          |
 | `style`             | `"bold yellow"`                                                       | モジュールのスタイルです。                                                                        |
-| `expiration_symbol` | `X`                                                                   | The symbol displayed when the temporary credentials have expired.                    |
+| `expiration_symbol` | `X`                                                                   | この記号は一時的な資格情報が有効期限切れの場合に表示されます。                                                      |
 | `disabled`          | `false`                                                               | `aws`モジュールを無効にします。                                                                   |
 | `force_display`     | `false`                                                               | `true`の場合、`credentials`、`credential_process`または`sso_start_url`が設定されていない場合でも情報を表示します。 |
 
 ### 変数
 
-| 変数        | 設定例              | 説明                                          |
-| --------- | ---------------- | ------------------------------------------- |
-| region    | `ap-northeast-1` | 現在のAWSリージョン                                 |
-| profile   | `astronauts`     | 現在のAWSプロファイル                                |
-| duration  | `2h27m20s`       | The temporary credentials validity duration |
-| symbol    |                  | オプション `記号` の値をミラーする                         |
-| style\* |                  | オプション `style` の値をミラーする                      |
+| 変数        | 設定例              | 説明                     |
+| --------- | ---------------- | ---------------------- |
+| region    | `ap-northeast-1` | 現在のAWSリージョン            |
+| profile   | `astronauts`     | 現在のAWSプロファイル           |
+| duration  | `2h27m20s`       | 一時的な資格情報の有効期限          |
+| symbol    |                  | オプション `記号` の値をミラーする    |
+| style\* |                  | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -427,16 +439,16 @@ style = "bold red"
 #### 設定例
 
 ```toml
-[[battery.display]] # "bold red" style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # "bold red"(太字の赤)でdischarging_symbolをバッテーリー残量が0%から10%の間で表示
 threshold = 10
 style = "bold red"
 
-[[battery.display]] # "bold yellow" style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # "bold yellow"(太字の黄)で記号💦をバッテリー残量が10%から30%の間で表示
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "💦"
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# バッテリー残量が30%を超えると、バッテリーインジケータは表示されません
 ```
 
 ## Buf
@@ -463,7 +475,7 @@ discharging_symbol = "💦"
 
 | 変数            | 設定例      | 説明                     |
 | ------------- | -------- | ---------------------- |
-| `buf_version` | `v1.0.0` | The version of `buf`   |
+| `buf_version` | `v1.0.0` | `buf`のバージョン            |
 | `symbol`      |          | オプション `記号` の値をミラーする    |
 | `style`*      |          | オプション `style` の値をミラーする |
 
@@ -476,6 +488,45 @@ discharging_symbol = "💦"
 
 [buf]
 symbol = "🦬 "
+```
+
+## Bun
+
+The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- カレントディレクトリに`bun.lockb`ファイルが含まれている
+- カレントディレクトリに`bunfig.toml`ファイルが含まれている
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
+| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"🍞 "`                               | A format string representing the symbol of Node.js.    |
+| `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["bun.lockb", "bunfig.toml"]`       | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold red"`                         | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                              | Disables the `bun` module.                             |
+
+### 変数
+
+| 変数        | 設定例      | 説明                     |
+| --------- | -------- | ---------------------- |
+| version   | `v0.1.4` | The version of `bun`   |
+| symbol    |          | オプション `記号` の値をミラーする    |
+| style\* |          | オプション `style` の値をミラーする |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[bun]
+format = "via [🍔 $version](bold green) "
 ```
 
 ## C
@@ -492,9 +543,9 @@ symbol = "🦬 "
 | `detect_extensions` | `["c", "h"]`                                                                | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                                                        | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                                                        | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | How to detect what the compiler is                     |
+| `commands`          | [ [ "cc", "--version" ], [ "gcc", "--version" ], [ "clang", "--version" ] ] | コンパイラを検出する方法                                           |
 | `style`             | `"bold 149"`                                                                | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                               |
+| `disabled`          | `false`                                                                     | `c`モジュールを無効にします。                                       |
 
 ### 変数
 
@@ -505,15 +556,15 @@ symbol = "🦬 "
 | symbol  |        | オプション `記号` の値をミラーする    |
 | style   |        | オプション `style` の値をミラーする |
 
-NB that `version` is not in the default format.
+`version`はデフォルトのフォーマットではないことに注意してください。
 
 ### Commands
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+`commands`オプションは、コンパイラのバージョンと名前を判別するためのコマンドのリストを受け入れます。
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `["mycc", "--version"]`. Starship will try executing each command until it gets a result on STDOUT.
+各コマンドは、実行可能ファイル名の後に引数を続けるリストとして表されます。通常は`["mycc", "--version"]`のようになります。 StarshipはSTDOUTから結果が得られるまで各コマンドを実行を試みます。
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+もし、Cコンパイラがこのモジュールでサポートされていない場合は、[GitHubで問題を提起する](https://github.com/starship/starship/)ことでリクエストできます。
 
 ### 設定例
 
@@ -537,22 +588,22 @@ format = "via [$name $version]($style)"
 
 ::: warning
 
-`vicmd_symbol` はcmd、fish、zshでのみサポートされています。 `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol`はcmd, fish and zshでのみサポートされています。 `vimcmd_replace_one_symbol`、`vimcmd_replace_symbol`と`vimcmd_visual_symbol`は、[zshでのモード検出による問題](https://github.com/starship/starship/issues/625#issuecomment-732454148)のため、fishでのみサポートされています。
 
 :::
 
 ### オプション
 
-| オプション                      | デフォルト                | 説明                                                                                      |
-| -------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                   | `"$symbol"`          | テキスト入力の前に使用される書式文字列。                                                                    |
-| `success_symbol`           | `"[❯](bold green)"`  | 前のコマンドが成功した場合にテキスト入力の前に使用される書式文字列です。                                                    |
-| `error_symbol`             | `"[❯](bold red)"`    | 前のコマンドが失敗した場合にテキスト入力の前に使用される書式文字列です。                                                    |
-| `vicmd_symbol`             | `"[❮](bold green)"`  | シェルが vim ノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列。                                            |
-| `vicmd_replace_one_symbol` | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`    | `"[❮](bold purple)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`     | `"[❮](bold yellow)"` | The format string used before the text input if the shell is in vim replace mode.       |
-| `disabled`                 | `false`              | `character`モジュールを無効にします。                                                                |
+| オプション                       | デフォルト                | 説明                                                     |
+| --------------------------- | -------------------- | ------------------------------------------------------ |
+| `format`                    | `"$symbol"`          | テキスト入力の前に使用される書式文字列。                                   |
+| `success_symbol`            | `"[❯](bold green)"`  | 前のコマンドが成功した場合にテキスト入力の前に使用される書式文字列です。                   |
+| `error_symbol`              | `"[❯](bold red)"`    | 前のコマンドが失敗した場合にテキスト入力の前に使用される書式文字列です。                   |
+| `vimcmd_symbol`             | `"[❮](bold green)"`  | シェルが vim ノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列。           |
+| `vimcmd_replace_one_symbol` | `"[❮](bold purple)"` | シェルがvimの`replace_one`モードの場合にテキスト入力の前に使用されるフォーマット文字列です。 |
+| `vimcmd_replace_symbol`     | `"[❮](bold purple)"` | シェルがvimの置換モードの場合にテキスト入力の前に使用されるフォーマット文字列。              |
+| `vimcmd_visual_symbol`      | `"[❮](bold yellow)"` | シェルがvimの置換モードの場合にテキスト入力の前に使用されるフォーマット文字列。              |
+| `disabled`                  | `false`              | `character`モジュールを無効にします。                               |
 
 ### 変数
 
@@ -665,16 +716,16 @@ preexecのような機能を必要とするBashユーザーは、 [rcalorasのba
 
 ### オプション
 
-| オプション                  | デフォルト                         | 説明                                                                                                                                                                |
-| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | 実行時間を表示する最短期間（ミリ秒単位）です。                                                                                                                                           |
-| `show_milliseconds`    | `false`                       | 実行時間の秒に加えてミリ秒を表示します。                                                                                                                                              |
-| `format`               | `"took [$duration]($style) "` | module のフォーマットです。                                                                                                                                                 |
-| `style`                | `"bold yellow"`               | モジュールのスタイルです。                                                                                                                                                     |
-| `disabled`             | `false`                       | `cmd_duration`モジュールを無効にします。                                                                                                                                       |
-| `show_notifications`   | `false`                       | コマンドが完了したらデスクトップ通知を表示します。                                                                                                                                         |
-| `min_time_to_notify`   | `45_000`                      | 通知を持続する最短期間(ミリ秒単位)                                                                                                                                                |
-| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| オプション                  | デフォルト                         | 説明                                                                                              |
+| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | 実行時間を表示する最短期間（ミリ秒単位）です。                                                                         |
+| `show_milliseconds`    | `false`                       | 実行時間の秒に加えてミリ秒を表示します。                                                                            |
+| `format`               | `"took [$duration]($style) "` | module のフォーマットです。                                                                               |
+| `style`                | `"bold yellow"`               | モジュールのスタイルです。                                                                                   |
+| `disabled`             | `false`                       | `cmd_duration`モジュールを無効にします。                                                                     |
+| `show_notifications`   | `false`                       | コマンドが完了したらデスクトップ通知を表示します。                                                                       |
+| `min_time_to_notify`   | `45_000`                      | 通知を持続する最短期間(ミリ秒単位)                                                                              |
+| `notification_timeout` |                               | 通知を表示する期間 (ミリ秒単位) です。 もし設定されていない場合、通知のタイムアウトはデーモンによって決定されます。 すべての通知デーモンがこのオプションを受け入れるわけではありません。 |
 
 ### 変数
 
@@ -808,9 +859,9 @@ format = "via [✨ $version](bold blue) "
 
 ## Daml
 
-The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+`daml`モジュールは、Damlプロジェクトのルートディレクトリにいるときに、使用している[Daml](https://www.digitalasset.com/developers) SDKバージョンを表示します。 環境変数`DAML_SDK_VERSION`を上書きしない限り、`daml.yaml`ファイルの`sdk-version`が使用されます。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `daml.yaml` file
+- カレントディレクトリに`daml.yaml`ファイルが含まれている
 
 ### オプション
 
@@ -818,18 +869,18 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | ------------------- | ---------------------------------- | ------------------------------------------------------ |
 | `format`            | `via [$symbol($version )]($style)` | module のフォーマットです。                                      |
 | `version_format`    | `v${raw}`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"Λ "`                             | A format string representing the symbol of Daml        |
+| `symbol`            | `"Λ "`                             | Damlの記号を表すフォーマット文字列です。                                 |
 | `style`             | `"bold cyan"`                      | モジュールのスタイルです。                                          |
 | `detect_extensions` | `[]`                               | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `["daml.yaml"]`                    | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                               | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `disabled`          | `false`                            | Disables the `daml` module.                            |
+| `disabled`          | `false`                            | `daml`モジュールを無効にします。                                    |
 
 ### 変数
 
 | 変数        | 設定例      | 説明                     |
 | --------- | -------- | ---------------------- |
-| version   | `v2.2.0` | The version of `daml`  |
+| version   | `v2.2.0` | `daml`のバージョン           |
 | symbol    |          | オプション `記号` の値をミラーする    |
 | style\* |          | オプション `style` の値をミラーする |
 
@@ -976,17 +1027,17 @@ fishスタイルのpwdオプションを使用すると、切り捨てられた�
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>gitリポジトリは追加の変数があります。</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+`/path/to/home/git_repo/src/lib`のパスについて考えます。
 
-| 変数                 | 設定例                   | 説明                                      |
-| ------------------ | --------------------- | --------------------------------------- |
-| before_root_path | `"/path/to/home/"`    | The path before git root directory path |
-| repo_root          | `"git_repo"`          | The git root directory name             |
-| path               | `"/src/lib"`          | The remaining path                      |
-| style              | `"black bold dimmed"` | オプション `style` の値をミラーする                  |
-| repo_root_style  | `"underline white"`   | Style for git root directory name       |
+| 変数                 | 設定例                   | 説明                     |
+| ------------------ | --------------------- | ---------------------- |
+| before_root_path | `"/path/to/home/"`    | gitルートディレクトリパスの前のパス    |
+| repo_root          | `"git_repo"`          | gitルートディレクトリの名前        |
+| path               | `"/src/lib"`          | 残りのパス                  |
+| style              | `"black bold dimmed"` | オプション `style` の値をミラーする |
+| repo_root_style  | `"underline white"`   | gitルートディレクトリの名前のスタイル   |
 
 </details>
 
@@ -1002,7 +1053,7 @@ truncation_symbol = "…/"
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+`docker_context`モジュールは、`default`に設定されていない場合、または環境変数`DOCKER_MACHINE_NAME`、`DOCKER_HOST`または`DOCKER_CONTEXT`が設定されている場合 (使用中のコンテキストを上書きするため)、現在アクティブな[Docker context](https://docs.docker.com/engine/context/working-with-contexts/)を表示します。
 
 ### オプション
 
@@ -1077,7 +1128,7 @@ format = "via [🐋 $context](blue bold)"
 | --------- | ---------------- | ----------------------------------- |
 | version   | `v3.1.201`       | `dotnet sdk` のバージョンです               |
 | tfm       | `netstandard2.0` | 現在のプロジェクトが対象としているターゲット フレームワーク モニカー |
-| symbol    |                  | オプション `記号` の値をミラーする                 |
+| symbol    |                  | オプション `symbol` の値をミラーする             |
 | style\* |                  | オプション `style` の値をミラーする              |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
@@ -1114,12 +1165,12 @@ heuristic = false
 
 ### 変数
 
-| 変数          | 設定例     | 説明                          |
-| ----------- | ------- | --------------------------- |
-| version     | `v1.10` | `elixir`のバージョン              |
-| otp_version |         | The otp version of `elixir` |
-| symbol      |         | オプション `記号` の値をミラーする         |
-| style\*   |         | オプション `style` の値をミラーする      |
+| 変数          | 設定例     | 説明                     |
+| ----------- | ------- | ---------------------- |
+| version     | `v1.10` | `elixir`のバージョン         |
+| otp_version |         | `elixir`のotpバージョン      |
+| symbol      |         | オプション `記号` の値をミラーする    |
+| style\*   |         | オプション `style` の値をミラーする |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1183,9 +1234,9 @@ format = "via [ $version](cyan bold) "
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+`.`を使うことで複数の環境変数を表示することができます。 (例を確認してみてください) `variable`が設定されていない場合、このモジュールは`.`以降に書かれている環境変数の値を表示します。
 
-Example: following configuration will display value of USER environment variable
+例: 次の設定ではUSER環境変数を表示します。
 
 ```toml
 # ~/.config/starship.toml
@@ -1283,11 +1334,11 @@ format = "via [e $version](bold red) "
 
 ### オプション
 
-| オプション      | デフォルト          | 説明                                |
-| ---------- | -------------- | --------------------------------- |
-| `symbol`   | `"."`          | The symbol used to fill the line. |
-| `style`    | `"bold black"` | モジュールのスタイルです。                     |
-| `disabled` | `false`        | `fill`モジュールを無効にします。               |
+| オプション      | デフォルト          | 説明                  |
+| ---------- | -------------- | ------------------- |
+| `symbol`   | `"."`          | 行を埋めるために使う記号        |
+| `style`    | `"bold black"` | モジュールのスタイルです。       |
+| `disabled` | `false`        | `fill`モジュールを無効にします。 |
 
 ### 設定例
 
@@ -1300,7 +1351,7 @@ symbol = "-"
 style = "bold green"
 ```
 
-Produces a prompt that looks like:
+このような出力になります:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
@@ -1327,7 +1378,7 @@ AA -------------------------------------------- BB -----------------------------
 | --------- | ------------- | ----------------------------------------------- |
 | region    | `us-central1` | 現在のGCPリージョン                                     |
 | account   | `foo`         | 現在のGCPプロファイル                                    |
-| domain    | `example.com` | The current GCP profile domain                  |
+| domain    | `example.com` | 現在のGCPプロファイルのドメイン                               |
 | project   |               | 現在のGCPプロジェクト                                    |
 | active    | `default`     | `~/.config/gcloud/active_config` に書かれたアクティブな設定名 |
 | symbol    |               | オプション `記号` の値をミラーする                             |
@@ -1368,7 +1419,7 @@ us-central1 = "uc1"
 asia-northeast1 = "an1"
 ```
 
-#### Display account and aliased project
+#### アカウントとエイリアスされたプロジェクトを表示
 
 ```toml
 # ~/.config/starship.toml
@@ -1385,17 +1436,17 @@ very-long-project-name = "vlpn"
 
 ### オプション
 
-| オプション                | デフォルト                                             | 説明                                                                  |
-| -------------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
-| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                                |
-| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。                |
-| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                           |
-| `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                       |
-| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                            |
-| `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 You can use `""` for no symbol.         |
-| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.      |
-| `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for "master" or "main". |
-| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                           |
+| オプション                | デフォルト                                             | 説明                                                             |
+| -------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
+| `always_show_remote` | `false`                                           | ローカルブランチ名と等しい場合でも、リモート追跡ブランチ名を表示します。                           |
+| `format`             | `"on [$symbol$branch(:$remote_branch)]($style) "` | module のフォーマットです。 現在のブランチ名を参照するには、`"$branch"`を使用します。           |
+| `symbol`             | `" "`                                            | gitブランチのシンボルを表すフォーマット文字列。                                      |
+| `style`              | `"bold purple"`                                   | モジュールのスタイルです。                                                  |
+| `truncation_length`  | `2^63 - 1`                                        | Truncates a git branch to `N` graphemes.                       |
+| `truncation_symbol`  | `"…"`                                             | ブランチ名切り捨てられていることを示すための記号です。 `""`で記号なしにできます。                    |
+| `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state. |
+| `ignore_branches`    | `[]`                                              | 表示しない名前のリスト。 "master"や"main"に有用。                               |
+| `disabled`           | `false`                                           | `git_branch`モジュールを無効にします。                                      |
 
 ### 変数
 
@@ -1427,15 +1478,16 @@ ignore_branches = ["master", "main"]
 
 ### オプション
 
-| オプション                | デフォルト                              | 説明                                        |
-| -------------------- | ---------------------------------- | ----------------------------------------- |
-| `commit_hash_length` | `7`                                | 表示されるgitコミットハッシュの長さです。                    |
-| `format`             | `"[\\($hash$tag\\)]($style) "` | module のフォーマットです。                         |
-| `style`              | `"bold green"`                     | モジュールのスタイルです。                             |
-| `only_detached`      | `true`                             | detached `HEAD` 状態のときのみ git コミットハッシュを表示する |
-| `tag_disabled`       | `true`                             | `git_commit` モジュールのタグ情報の表示を無効にする。         |
-| `tag_symbol`         | `" 🏷 "`                            | 表示される情報の前に追加されるタグシンボル                     |
-| `disabled`           | `false`                            | `git_commit`モジュールを無効にします。                 |
+| オプション                | デフォルト                              | 説明                                                                                   |
+| -------------------- | ---------------------------------- | ------------------------------------------------------------------------------------ |
+| `commit_hash_length` | `7`                                | 表示されるgitコミットハッシュの長さです。                                                               |
+| `format`             | `"[\\($hash$tag\\)]($style) "` | module のフォーマットです。                                                                    |
+| `style`              | `"bold green"`                     | モジュールのスタイルです。                                                                        |
+| `only_detached`      | `true`                             | detached `HEAD` 状態のときのみ git コミットハッシュを表示する                                            |
+| `tag_disabled`       | `true`                             | `git_commit` モジュールのタグ情報の表示を無効にする。                                                    |
+| `tag_max_candidates` | `0`                                | How many commits to consider for tag display. The default only allows exact matches. |
+| `tag_symbol`         | `" 🏷 "`                            | 表示される情報の前に追加されるタグシンボル                                                                |
+| `disabled`           | `false`                            | `git_commit` モジュールを無効にします。                                                           |
 
 ### 変数
 
@@ -1985,18 +2037,23 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 このモジュールはデフォルトで無効になっています。 有効にするには、設定ファイルで`disabled`を`false`に設定します。
 
+When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been st in which case the module will only be active in directories that match those conditions.
+
 :::
 
 ### オプション
 
-| オプション             | デフォルト                                                | 説明                                |
-| ----------------- | ---------------------------------------------------- | --------------------------------- |
-| `symbol`          | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。   |
-| `format`          | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                 |
-| `style`           | `"cyan bold"`                                        | モジュールのスタイルです。                     |
-| `context_aliases` |                                                      | コンテキストの表示エイリアスを定義するテーブル。          |
-| `user_aliases`    |                                                      | Table of user aliases to display. |
-| `disabled`        | `true`                                               | `kubernetes` モジュールを無効にする。         |
+| オプション               | デフォルト                                                | 説明                                |
+| ------------------- | ---------------------------------------------------- | --------------------------------- |
+| `symbol`            | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。   |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                 |
+| `style`             | `"cyan bold"`                                        | モジュールのスタイルです。                     |
+| `context_aliases`   |                                                      | コンテキストの表示エイリアスを定義するテーブル。          |
+| `user_aliases`      |                                                      | Table of user aliases to display. |
+| `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか           |
+| `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか         |
+| `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか         |
+| `disabled`          | `true`                                               | `kubernetes` モジュールを無効にする。         |
 
 ### 変数
 
@@ -2026,6 +2083,16 @@ disabled = false
 [kubernetes.user_aliases]
 "dev.local.cluster.k8s" = "dev"
 "root/.*" = "root"
+```
+
+Only show the module in directories that contain a `k8s` file.
+
+```toml
+# ~/.config/starship.toml
+
+[kubernetes]
+disabled = false
+detect_files = ['k8s']
 ```
 
 #### Regex Matching
@@ -2578,17 +2645,18 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
 - カレントディレクトリに`Pulumi.yaml`または`Pulumi.yml`ファイルが含まれている
-- 親ディレクトリに`Pulumi.yaml`または`Pulumi.yml`ファイルが含まれている
+- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
 
 ### オプション
 
-| オプション            | デフォルト                                        | 説明                                                     |
-| ---------------- | -------------------------------------------- | ------------------------------------------------------ |
-| `format`         | `"via [$symbol($username@)$stack]($style) "` | モジュールのフォーマット文字列。                                       |
-| `version_format` | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.         |
-| `style`          | `"bold 5"`                                   | モジュールのスタイルです。                                          |
-| `disabled`       | `false`                                      | Disables the `pulumi` module.                          |
+| オプション            | デフォルト                                        | 説明                                                             |
+| ---------------- | -------------------------------------------- | -------------------------------------------------------------- |
+| `format`         | `"via [$symbol($username@)$stack]($style) "` | モジュールのフォーマット文字列。                                               |
+| `version_format` | `"v${raw}"`                                  | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。         |
+| `symbol`         | `" "`                                       | A format string shown before the Pulumi stack.                 |
+| `style`          | `"bold 5"`                                   | モジュールのスタイルです。                                                  |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories. |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                  |
 
 ### 変数
 
@@ -2766,7 +2834,7 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 | オプション               | デフォルト                                | 説明                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | moduleのフォーマットです。                                       |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
 | `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
 | `symbol`            | `"📐"`                                | A format string representing the symbol of R.          |
 | `style`             | `"blue bold"`                        | モジュールのスタイルです。                                          |
@@ -2790,6 +2858,44 @@ python_binary = ["./venv/bin/python", "python", "python3", "python2"]
 
 [rlang]
 format = "with [📐 $version](blue bold) "
+```
+
+## Raku
+
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `META6.json` file
+- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+
+### オプション
+
+| オプション               | デフォルト                                            | 説明                                                     |
+| ------------------- | ------------------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version-$vm_version )]($style)"` | モジュールのフォーマット文字列。                                       |
+| `version_format`    | `"v${raw}"`                                      | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"🦋 "`                                           | The symbol used before displaying the version of Raku  |
+| `detect_extensions` | `["p6", "pm6", "pod6", "raku", "rakumod"]`       | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `["META6.json"]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                             | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold 149"`                                     | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                          | Disables the `raku` module.                            |
+
+### 変数
+
+| 変数         | 設定例    | 説明                                   |
+| ---------- | ------ | ------------------------------------ |
+| version    | `v6.d` | The version of `raku`                |
+| vm_version | `moar` | The version of VM `raku` is built on |
+| symbol     |        | オプション `記号` の値をミラーする                  |
+| style\*  |        | オプション `style` の値をミラーする               |
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[raku]
+format = "via [🦪 $version]($style) "
 ```
 
 ## Red
@@ -3119,22 +3225,23 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ### オプション
 
-| オプション                   | デフォルト                                                                                | 説明                                                      |
-| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
-| `format`                | `"[$symbol$status]($style) "`                                                        | The format of the module                                |
-| `symbol`                | `"✖"`                                                                                | The symbol displayed on program error                   |
-| `success_symbol`        | `""`                                                                                 | The symbol displayed on program success                 |
-| `not_executable_symbol` | `"🚫"`                                                                                | The symbol displayed when file isn't executable         |
-| `not_found_symbol`      | `"🔍"`                                                                                | The symbol displayed when the command can't be found    |
-| `sigint_symbol`         | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)               |
-| `signal_symbol`         | `"⚡"`                                                                                | The symbol displayed on any signal                      |
-| `style`                 | `"bold red"`                                                                         | モジュールのスタイルです。                                           |
-| `recognize_signal_code` | `true`                                                                               | Enable signal mapping from exit code                    |
-| `map_symbol`            | `false`                                                                              | Enable symbols mapping from exit code                   |
-| `pipestatus`            | `false`                                                                              | Enable pipestatus reporting                             |
-| `pipestatus_separator`  | `|`                                                                                  |                                                         |
-| `pipestatus_format`     | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline |
-| `disabled`              | `true`                                                                               | Disables the `status` module.                           |
+| オプション                       | デフォルト                                                                                | 説明                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `format`                    | `"[$symbol$status]($style) "`                                                        | The format of the module                                              |
+| `symbol`                    | `"✖"`                                                                                | The symbol displayed on program error                                 |
+| `success_symbol`            | `""`                                                                                 | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `"🚫"`                                                                                | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `"🔍"`                                                                                | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `"🧱"`                                                                                | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `"⚡"`                                                                                | The symbol displayed on any signal                                    |
+| `style`                     | `"bold red"`                                                                         | モジュールのスタイルです。                                                         |
+| `recognize_signal_code`     | `true`                                                                               | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                              | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                              | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                            | The symbol used to separate pipestatus segments                       |
+| `pipestatus_format`         | `\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                      | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                               | Disables the `status` module.                                         |
 
 ### 変数
 
@@ -3559,7 +3666,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a directory whose name is in `detect_folders`
 - The current directory contains a file whose extension is in `detect_extensions`
 - The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matchs with `os` field if defined.
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 

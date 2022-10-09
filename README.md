@@ -220,7 +220,6 @@ Alternatively, install Starship using any of the following package managers:
 | Arch Linux         | [Arch Linux Community]  | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Fedora 31+         | [Fedora Packages]       | `dnf install starship`                                        |
-| NixOS              | [nixpkgs]               | `nix-env -iA nixos.starship`                                  |
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
 | NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
@@ -261,6 +260,7 @@ Install Starship using any of the following package managers:
 | [Chocolatey]    | `choco install starship`                |
 | [conda-forge]   | `conda install -c conda-forge starship` |
 | [Scoop]         | `scoop install starship`                |
+| [winget]        | `winget install --id Starship.Starship` |
 
 </details>
 
@@ -447,3 +447,4 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [snapcraft]: https://snapcraft.io/starship
 [termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
 [void linux packages]: https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship
+[winget]: https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship

@@ -25,6 +25,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: rust
+          draft: true
 
   # Build sources for every OS
   github_build:
@@ -102,7 +103,7 @@ jobs:
         continue-on-error: true
         # aarch64 is only supported in wix 4.0 development builds
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        run: cargo install --version 0.3.2 cargo-wix
+        run: cargo install --version 0.3.3 cargo-wix
         env:
           # cargo-wix does not require static crt
           RUSTFLAGS: ''
@@ -120,13 +121,12 @@ jobs:
         uses: actions-rs/cargo@v1.0.3
         with:
           command: wix
-          args: -v --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship.msi
+          args: -v --no-build --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship-${{ matrix.target }}.msi
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          strip starship.exe
           7z a ../../../${{ matrix.name }} starship.exe
           cd -
 
@@ -134,8 +134,6 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          # TODO: investigate better cross platform stripping
-          strip starship || true
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
@@ -151,7 +149,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: starship-${{ matrix.target }}.msi
-          path: target/wix/starship.msi
+          path: target/wix/starship-${{ matrix.target }}.msi
 
   # Notarize starship binaries for MacOS and build notarized pkg installers
   notarize_and_pkgbuild:
@@ -258,16 +256,16 @@ jobs:
     needs: [release_please, github_build, notarize_and_pkgbuild]
     runs-on: ubuntu-latest
     steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
+
+      - name: Setup | Publish Release
+        run: gh release edit ${{ needs.release_please.outputs.tag_name }} --draft=false --repo=starship/starship
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build | Add Artifacts to Release
         uses: softprops/action-gh-release@v1
@@ -279,7 +277,7 @@ jobs:
   cargo_publish:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
-    needs: release_please
+    needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
@@ -298,15 +296,32 @@ jobs:
   update_brew_formula:
     name: Update Brew Formula
     runs-on: ubuntu-latest
-    needs: release_please
+    needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v2.0
+      - uses: mislav/bump-homebrew-formula-action@v2.1
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
         env:
-          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_GITHUB_API_TOKEN }}
+          # Used for creating the formula update PR
+          COMMITTER_TOKEN: ${{ secrets.GH_PAT }}
+          # Used for verifying the SHA256 sum of the draft release
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+  winget_update:
+    name: Update Winget Manifest
+    runs-on: windows-latest
+    needs: [release_please, github_build, upload_artifacts]
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    env:
+      URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc.msi
+      URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc.msi
+    steps:
+      - run: |
+          $version = '${{ needs.release_please.outputs.tag_name }}'.replace('v', '')
+          iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GH_PAT }}
 
   merge_crowdin_pr:
     name: Merge Crowdin PR

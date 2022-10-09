@@ -129,6 +129,10 @@ pub fn mock_cmd<T: AsRef<OsStr> + Debug, U: AsRef<OsStr> + Debug>(
 ) -> Option<Option<CommandOutput>> {
     let command = display_command(&cmd, args);
     let out = match command.as_str() {
+        "bun --version"=> Some(CommandOutput {
+            stdout: String::from("0.1.4\n"),
+            stderr: String::default(),
+        }),
         "buf --version" => Some(CommandOutput {
             stdout: String::from("1.0.0"),
             stderr: String::default(),
@@ -318,6 +322,15 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 https://www.gnu.org/licenses/."#
             ),
+        }),
+        "raku --version" => Some(CommandOutput {
+            stdout: String::from(
+                "\
+Welcome to Rakudo™ v2021.12.
+Implementing the Raku® Programming Language v6.d.
+Built on MoarVM version 2021.12.\n",
+            ),
+            stderr: String::default(),
         }),
         "red --version" => Some(CommandOutput {
             stdout: String::from("0.6.4\n"),

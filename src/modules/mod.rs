@@ -2,6 +2,7 @@
 mod aws;
 mod azure;
 mod buf;
+mod bun;
 mod c;
 mod character;
 mod cmake;
@@ -53,6 +54,7 @@ mod php;
 mod pulumi;
 mod purescript;
 mod python;
+mod raku;
 mod red;
 mod rlang;
 mod ruby;
@@ -96,6 +98,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             #[cfg(feature = "battery")]
             "battery" => battery::module(context),
             "buf" => buf::module(context),
+            "bun" => bun::module(context),
             "c" => c::module(context),
             "character" => character::module(context),
             "cmake" => cmake::module(context),
@@ -145,6 +148,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
+            "raku" => raku::module(context),
             "rlang" => rlang::module(context),
             "red" => red::module(context),
             "ruby" => ruby::module(context),
@@ -196,6 +200,7 @@ pub fn description(module: &str) -> &'static str {
         "azure" => "The current Azure subscription",
         "battery" => "The current charge of the device's battery and its current charging status",
         "buf" => "The currently installed version of the Buf CLI",
+        "bun" => "The currently installed version of the Bun",
         "c" => "Your C compiler type",
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
@@ -248,6 +253,7 @@ pub fn description(module: &str) -> &'static str {
         "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
+        "raku" => "The currently installed version of Raku",
         "red" => "The currently installed version of Red",
         "rlang" => "The currently installed version of R",
         "ruby" => "The currently installed version of Ruby",

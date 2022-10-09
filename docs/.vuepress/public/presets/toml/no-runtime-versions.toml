@@ -1,3 +1,6 @@
+[bun]
+format = "via [$symbol]($style)"
+
 [buf]
 format = "via [$symbol]($style)"
 
@@ -68,6 +71,9 @@ format = 'via [$symbol$stack]($style)'
 format = 'via [$symbol]($style)'
 
 [python]
+format = 'via [$symbol]($style)'
+
+[raku]
 format = 'via [$symbol]($style)'
 
 [red]

@@ -5,6 +5,7 @@ pub mod aws;
 pub mod azure;
 pub mod battery;
 pub mod buf;
+pub mod bun;
 pub mod c;
 pub mod character;
 pub mod cmake;
@@ -56,6 +57,7 @@ pub mod php;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
+pub mod raku;
 pub mod red;
 pub mod rlang;
 pub mod ruby;
@@ -80,7 +82,11 @@ pub mod zig;
 pub use starship_root::*;
 
 #[derive(Serialize, Deserialize, Clone, Default)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct FullConfig<'a> {
     // Meta
@@ -98,6 +104,8 @@ pub struct FullConfig<'a> {
     battery: battery::BatteryConfig<'a>,
     #[serde(borrow)]
     buf: buf::BufConfig<'a>,
+    #[serde(borrow)]
+    bun: bun::BunConfig<'a>,
     #[serde(borrow)]
     c: c::CConfig<'a>,
     #[serde(borrow)]
@@ -197,6 +205,8 @@ pub struct FullConfig<'a> {
     purescript: purescript::PureScriptConfig<'a>,
     #[serde(borrow)]
     python: python::PythonConfig<'a>,
+    #[serde(borrow)]
+    raku: raku::RakuConfig<'a>,
     #[serde(borrow)]
     red: red::RedConfig<'a>,
     #[serde(borrow)]
