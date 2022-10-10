@@ -696,8 +696,10 @@ aws_secret_access_key=dummy
             );
 
             // In principle, "30m" should be correct. However, bad luck in scheduling
-            // on shared runners may delay it. Allow for up to 2 seconds of delay.
-            let possible_values = ["30m", "29m59s", "29m58s"];
+            // on shared runners may delay it.
+            let possible_values = [
+                "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+            ];
             let possible_values = possible_values.map(|duration| {
                 let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}] ", duration);
                 Some(format!(
@@ -706,7 +708,10 @@ aws_secret_access_key=dummy
                 ))
             });
 
-            assert!(possible_values.contains(&actual));
+            assert!(
+                possible_values.contains(&actual),
+                "time is not in range: {actual:?}"
+            );
         });
 
         dir.close()
