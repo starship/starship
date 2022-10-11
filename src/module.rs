@@ -54,6 +54,7 @@ pub const ALL_MODULES: &[&str] = &[
     "localip",
     "lua",
     "memory_usage",
+    "meson",
     "nim",
     "nix_shell",
     "nodejs",
