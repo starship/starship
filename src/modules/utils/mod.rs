@@ -7,3 +7,5 @@ pub mod directory_win;
 pub mod directory_nix;
 
 pub mod path;
+
+pub mod truncate;

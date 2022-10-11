@@ -85,6 +85,9 @@ symbol = "nodejs "
 [memory_usage]
 symbol = "memory "
 
+[meson]
+symbol = "meson "
+
 [nim]
 symbol = "nim "
 
