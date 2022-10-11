@@ -264,6 +264,7 @@ $zig\
 $buf\
 $nix_shell\
 $conda\
+$meson\
 $spack\
 $memory_usage\
 $aws\
@@ -2270,6 +2271,45 @@ symbol = " "
 style = "bold dimmed green"
 ```
 
+## Meson
+
+The `meson` module shows the current Meson developer environment status.
+
+By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                           | Mô tả                                                                                               |
+| ------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `2^32 - 1`                         | Truncates a project name to `N` graphemes.                                                          |
+| `truncation_symbol` | `"…"`                              | The symbol used to indicate a project name was truncated. Bạn có thể sử dụng `""` để ẩn biểu tượng. |
+| `format`            | `"via [$symbol$project]($style) "` | Định dạng cho module.                                                                               |
+| `symbol`            | `"⬢ "`                             | The symbol used before displaying the project name.                                                 |
+| `style`             | `"blue bold"`                      | Kiểu cho module.                                                                                    |
+| `disabled`          | `false`                            | Disables the `meson` module.                                                                        |
+
+### Các biến
+
+| Biến      | Ví dụ      | Mô tả                            |
+| --------- | ---------- | -------------------------------- |
+| project   | `starship` | The current Meson project name   |
+| symbol    | `🐏`        | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |            | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[meson]
+disabled = false
+truncation_symbol = "--"
+symbol = " "
+style = "bold dimmed green"
+```
+
 ## Mercurial Branch
 
 The `hg_branch` module shows the active branch of the repo in your current directory.
@@ -2319,7 +2359,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module                                                      |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                 |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                     |
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
@@ -3109,7 +3149,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 | Biến      | Mặc định | Mô tả                                                      |
 | --------- | -------- | ---------------------------------------------------------- |
 | indicator |          | Mirrors the value of `indicator` for currently used shell. |
-| style\* |          | Giá trị ghi đè của `style`.                                |
+| style\* |          | Mirrors the value of option `style`.                       |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -3463,7 +3503,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Biến      | Ví dụ      | Mô tả                      |
 | --------- | ---------- | -------------------------- |
-| thời gian | `13:08:10` | The current time.          |
+| time      | `13:08:10` | The current time.          |
 | style\* |            | Giá trị ghi đè của `style` |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
@@ -3715,7 +3755,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `mô tả`             | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
