@@ -36,11 +36,11 @@ notify = ["notify-rust"]
 
 [dependencies]
 chrono = { version = "0.4.22", features = ["clock", "std"] }
-clap = { version = "4.0.10", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.0.12", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.0.2"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
-gethostname = "0.2.3"
+gethostname = "0.3.0"
 # Addresses https://github.com/starship/starship/issues/4251
 git-features = { version = "0.22.6", features = ["fs-walkdir-single-threaded"] }
 git-repository = "0.24.0"
@@ -64,7 +64,7 @@ regex = "1.6.0"
 rust-ini = "0.18.0"
 semver = "1.0.14"
 serde = { version = "1.0.145", features = ["derive"] }
-serde_json = "1.0.85"
+serde_json = "1.0.86"
 sha-1 = "0.10.0"
 shadow-rs = { version = "0.16.3", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
