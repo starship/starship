@@ -2293,7 +2293,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 | Variable  | Ejemplo    | Descripción                            |
 | --------- | ---------- | -------------------------------------- |
-| project   | `starship` | The current Meson project name         |
+| project   | `starship` | El nombre actual del proyecto Meson    |
 | symbol    | `🐏`        | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
