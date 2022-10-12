@@ -2405,12 +2405,12 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| گۆڕاو     | نموونە  | Description                          |
-| --------- | ------- | ------------------------------------ |
-| state     | `pure`  | The state of the nix-shell           |
-| name      | `lorri` | The name of the nix-shell            |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| گۆڕاو     | نموونە   | Description                          |
+| --------- | -------- | ------------------------------------ |
+| state     | `بێخەوش` | The state of the nix-shell           |
+| name      | `lorri`  | The name of the nix-shell            |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
