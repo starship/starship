@@ -21,7 +21,7 @@ $nodejs $rust $php
 add_newline = true
 
 [username]
-style_user = "bg:#dd0b78 fg:#ffffff" 
+style_user = "bg:#dd0b78 fg:#ffffff"
 show_always = true
 format = '[$user@]($style)'
 
