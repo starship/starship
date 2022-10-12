@@ -43,3 +43,9 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+
+## [Bubble Tea](./bubble-tea.md)
+
+This preset was inspired by a delicious beverage. How do you like your bubble tea?
+
+[![Screenshot of Pastel Powerline preset](/presets/img/bubble-tea.png "Click to view Bubble Tea preset")](./bubble-tea)

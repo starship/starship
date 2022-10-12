@@ -1,0 +1,69 @@
+format = """
+[\ue0b6](#dd0b78)\
+$username\
+$hostname\
+[\ue0b4 ](#dd0b78)\
+[\ue0b6](#00ccff)\
+$directory\
+[\ue0b4 ](#00ccff)\
+[\ue0b6](#778ae3)\
+$memory_usage\
+[\ue0b4 ](#778ae3)\
+$git_branch\
+$git_status\
+$nodejs $rust $php
+
+
+[$time $shell🫧  ](bold yellow)\
+"""
+
+# Disable the blank line at the start of the prompt
+add_newline = true
+
+[username]
+style_user = "bg:#dd0b78 fg:#ffffff" 
+show_always = true
+format = '[$user@]($style)'
+
+[hostname]
+style = "bg:#dd0b78 fg:#ffffff"
+ssh_only = false
+disabled = false
+format = '[$hostname]($style)'
+
+[directory]
+format = "[$path]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+style = "bg:#00ccff fg:#ffffff"
+
+[memory_usage]
+disabled = false
+threshold = -1
+symbol = " "
+style = "bg:#778ae3 fg:#ffffff"
+format = "[RAM:${ram}]($style)"
+
+[git_branch]
+symbol = ""
+style = "bg:#FCA17D fg:#ffffff"
+format = "[\ue0b6](#FCA17D)[$symbol $branch ]($style)"
+
+[git_status]
+style = "bg:#FCA17D fg:#ffffff"
+format = "[$all_status$ahead_behind]($style)[\ue0b4 ](#FCA17D)"
+
+[nodejs]
+format = "[\ue0b6](#5cffa9)[$symbol@$version](bg:#5cffa9)[\ue0b4 ](#5cffa9)"
+
+[rust]
+format = "[\ue0b6](#5cffa9)[$symbol@$version](bg:#5cffa9)[\ue0b4 ](#5cffa9)"
+
+[time]
+style = "bold yellow"
+disabled = false
+format = "$time"
+time_format = "%r"
+
+[shell]
+disabled = false
