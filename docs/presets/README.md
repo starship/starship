@@ -48,4 +48,4 @@ It also shows how path substitution works in starship.
 
 This preset was inspired by a delicious beverage. How do you like your bubble tea?
 
-[![Screenshot of Pastel Powerline preset](/presets/img/bubble-tea.png "Click to view Bubble Tea preset")](./bubble-tea)
+[![Screenshot of Bubble Tea preset](/presets/img/bubble-tea.png "Click to view Bubble Tea preset")](./bubble-tea)
