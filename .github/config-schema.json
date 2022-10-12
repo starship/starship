@@ -871,6 +871,21 @@
         }
       ]
     },
+    "meson": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$project]($style) ",
+        "style": "blue bold",
+        "symbol": "⬢ ",
+        "truncation_length": 4294967295,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MesonConfig"
+        }
+      ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
@@ -3677,6 +3692,38 @@
         },
         "disabled": {
           "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MesonConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 4294967295,
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0.0
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "format": {
+          "default": "via [$symbol$project]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⬢ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
           "type": "boolean"
         }
       },
