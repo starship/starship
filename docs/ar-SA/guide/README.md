@@ -266,12 +266,12 @@ curl -sS https://starship.rs/install.sh | sh
 
 ### الخطوة الثانية. قم بإعداد ال shell الخاص بك
 
-Configure your shell to initialize starship. Select yours from the list below:
+لإعداد ال starship قم بإعداد ال shell الخاص بك. اختر ما يناسبك من هذه القائمة:
 
 <details>
 <summary>Bash</summary>
 
-أضف ما يلي إلى نهاية `~/.bashrc`:
+أضف ما يلي إلى نهاية ملف `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
@@ -282,7 +282,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+عليك بإستخدام [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) مع Cmd. قم بإنشاء ملف في المسار `%LocalAppData%\clink\starship.lua` و ضع فيه المحتوى التالي:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -293,20 +293,20 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
+أضف ما يلي إلى نهاية الملف `~/.elvish/rc.elv`:
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+ملاحظة: فقط +Elvish v0.18 مدعوم
 
 </details>
 
 <details>
 <summary>Fish</summary>
 
-أضف ما يلي إلى نهاية `~/.config/fish/config.fish`:
+أضف ما يلي إلى نهاية الملف `~/.fish/config.fish`:
 
 ```fish
 starship init fish | source
@@ -317,7 +317,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-أضف ما يلي إلى نهاية `~/.config/ion/initrc`:
+أضف ما يلي إلى نهاية الملف `config/ion/initrc`:
 
 ```sh
 eval $(starship init ion)
@@ -389,7 +389,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### الخطوة الثالثة. تهيئة starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
