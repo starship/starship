@@ -153,7 +153,7 @@
 **التخصيص البسيط و السريع و الغير محدود ل "shell"!**
 
 - **سريعة:** إنها _في غاية_ السرعة! 🚀
-- **Customizable:** configure every aspect of your prompt.
+- **قابلة للتهيئه:** قم بتهيئة ال"prompt" من كل النواحي.
 - **Universal:** works on any shell, on any operating system.
 - **Intelligent:** shows relevant information at a glance.
 - **كثيرة المزايا:** دعم لجميع الأدوات المفضلة لديك.
