@@ -150,9 +150,9 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**التخصيص البسيط و السريع و الغير محدود ل "shell"!**
 
-- **سريع:** إنها سريعة – _سريعة_ حقاً! 🚀
+- **سريعة:** إنها _في غاية_ السرعة! 🚀
 - **Customizable:** configure every aspect of your prompt.
 - **Universal:** works on any shell, on any operating system.
 - **Intelligent:** shows relevant information at a glance.
