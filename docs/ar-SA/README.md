@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: التخصيص البسيط و السريع و الغير محدود لي ال"shell"!
 actionText: البدء مع Starship ←
 actionLink: ./guide/
 features:
@@ -178,7 +178,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   عليك بإستخدام [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) مع Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
