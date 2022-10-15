@@ -55,11 +55,10 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    ```sh
    brew install starship
    ```
-
-   使用 [Scoop](https://scoop.sh)：
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. 將初始化腳本 (script) 加入你的 shell 的設定檔：

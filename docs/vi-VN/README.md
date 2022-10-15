@@ -55,11 +55,10 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    ```sh
    brew install starship
    ```
-
-   Với [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:

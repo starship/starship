@@ -54,6 +54,32 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
+## TransientPrompt and TransientRightPrompt in Fish
+
+It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+
+Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+
+```fish
+function starship_transient_prompt_func
+  starship module character
+end
+starship init fish | source
+enable_transience
+```
+
+- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
+
 ## Custom pre-prompt and pre-execution Commands in Cmd
 
 Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
@@ -224,12 +250,12 @@ continuation_prompt = "▶▶"
 
 ## Style-Strings
 
-Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben keine Groß- und Kleinschreibung (z.B. `bold` und `BoLd` werden als dieselbe Zeichenkette betrachtet). Jedes Wort kann eines der folgenden sein:
+Stil-Zeichenketten sind eine Liste von Wörtern, getrennt durch Leerzeichen. Die Wörter haben keine Groß- und Kleinschreibung (z.B. `bold` und `BoLd` werden als dieselbe Zeichenkette betrachtet). Jedes Wort kann eines der folgenden sein:
 
-- `bold`
-- `italic`
-- `underline`
-- `dimmed`
+- `fett`
+- `kursiv`
+- `unterstrichen`
+- `gedimmt`
 - `invertiert`
 - `blink`
 - `hidden`
@@ -237,7 +263,7 @@ Style-String sind Wortlisten, getrennt durch Leerzeichen. Die Wörter haben kein
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
-- `none`
+- `keins`
 
 wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe, das kann sich in Zukunft aber ändern. `inverted` tauscht Hinter- und Vordergrundfarben. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
 
