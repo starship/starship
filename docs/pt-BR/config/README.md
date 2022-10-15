@@ -3280,7 +3280,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | Opções                      | Padrão                                                                             | Descrição                                                             |
 | --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `format`                    | `"[$symbol$status]($style) "`                                                      | O formato do módulo                                                   |
-| `symbol`                    | `"✖"`                                                                              | O simbolo exibido no erro de programa                                 |
+| `symbol`                    | `"❌"`                                                                              | O simbolo exibido no erro de programa                                 |
 | `success_symbol`            | `""`                                                                               | O simbolo exibido no sucesso de programa                              |
 | `not_executable_symbol`     | `"🚫"`                                                                              | O simbolo exibido quando o arquivo não é executável                   |
 | `not_found_symbol`          | `"🔍"`                                                                              | O simbolo exibido quando o comando não é encontrado                   |
