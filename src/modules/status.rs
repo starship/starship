@@ -323,12 +323,12 @@ mod tests {
         for status in &exit_values {
             let expected = Some(format!(
                 "{} ",
-                Color::Red.bold().paint(format!("✖{}", status))
+                Color::Red.bold().paint(format!("❌{}", status))
             ));
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
-                    symbol = "✖"
+                    symbol = "❌"
                     disabled = false
                 })
                 .status(*status)
@@ -345,12 +345,12 @@ mod tests {
         for (exit_value, string_value) in exit_values.iter().zip(string_values) {
             let expected = Some(format!(
                 "{} ",
-                Color::Red.bold().paint(format!("✖{}", string_value))
+                Color::Red.bold().paint(format!("❌{}", string_value))
             ));
             let actual = ModuleRenderer::new("status")
                 .config(toml::toml! {
                     [status]
-                    symbol = "✖"
+                    symbol = "❌"
                     disabled = false
                     format = "[${symbol}${hex_status}]($style) "
                 })
