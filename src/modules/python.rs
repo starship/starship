@@ -19,9 +19,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .set_folders(&config.detect_folders)
         .is_match();
 
-    let is_venv = context.get_env("VIRTUAL_ENV").is_some();
+    let has_env_vars =
+        !config.detect_env_vars.is_empty() && context.detect_env_vars(&config.detect_env_vars);
 
-    if !is_py_project && !is_venv {
+    if !is_py_project && !has_env_vars {
         return None;
     };
 
@@ -368,6 +369,42 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
         ));
 
         assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_different_env_var() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("MY_ENV_VAR", "my_env_var")
+            .config(toml::toml! {
+                [python]
+                detect_env_vars = ["MY_ENV_VAR"]
+            })
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Yellow.bold().paint("🐍 v3.8.0 ")));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_no_env_var() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .env("VIRTUAL_ENV", "env_var")
+            .config(toml::toml! {
+                [python]
+                detect_env_vars = []
+            })
+            .collect();
+
+        assert_eq!(actual, None);
         dir.close()
     }
 
