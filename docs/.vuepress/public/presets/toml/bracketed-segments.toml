@@ -100,6 +100,9 @@ format = '\[[$symbol($version)]($style)\]'
 [ocaml]
 format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
 
+[opa]
+format = '\[[$symbol($version)]($style)\]'
+
 [openstack]
 format = '\[[$symbol$cloud(\($project\))]($style)\]'
 
