@@ -328,6 +328,9 @@ When using [AWSume](https://awsu.me) the profile
 is read from the `AWSUME_PROFILE` env var and the credentials expiration
 date is read from the `AWSUME_EXPIRATION` env var.
 
+When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials`
+falls back to the `x_security_token_expires` key.
+
 ### Options
 
 | Option              | Default                                                           | Description                                                                                                 |
