@@ -55,11 +55,10 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
    ```sh
    brew install starship
    ```
-
-   Scoop [ile](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Add the init script to your shell's config file:
