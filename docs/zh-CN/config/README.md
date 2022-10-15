@@ -3282,7 +3282,7 @@ The `status` module displays the exit code of the previous command. If $success_
 | 选项                          | 默认值                                                                                | 描述                                                                    |
 | --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `format`                    | `"[$symbol$status]($style) "`                                                      | The format of the module                                              |
-| `symbol`                    | `"✖"`                                                                              | The symbol displayed on program error                                 |
+| `symbol`                    | `"❌"`                                                                              | The symbol displayed on program error                                 |
 | `success_symbol`            | `""`                                                                               | The symbol displayed on program success                               |
 | `not_executable_symbol`     | `"🚫"`                                                                              | The symbol displayed when file isn't executable                       |
 | `not_found_symbol`          | `"🔍"`                                                                              | The symbol displayed when the command can't be found                  |
