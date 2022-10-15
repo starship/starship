@@ -3283,7 +3283,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | Option                      | Défaut                                                                             | Description                                                           |
 | --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `format`                    | `"[$symbol$status]($style) "`                                                      | Le format du module                                                   |
-| `symbol`                    | `"✖"`                                                                              | The symbol displayed on program error                                 |
+| `symbol`                    | `"❌"`                                                                              | The symbol displayed on program error                                 |
 | `success_symbol`            | `""`                                                                               | The symbol displayed on program success                               |
 | `not_executable_symbol`     | `"🚫"`                                                                              | The symbol displayed when file isn't executable                       |
 | `not_found_symbol`          | `"🔍"`                                                                              | The symbol displayed when the command can't be found                  |
