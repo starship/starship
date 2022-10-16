@@ -6,7 +6,7 @@ use crate::formatter::VersionFormatter;
 use serde_json as json;
 
 use regex::Regex;
-const HAXERC_VERSION_PATTERN: &str = "(?P<version>[-+0-9.a-zA-Z/ ]+)";
+const HAXERC_VERSION_PATTERN: &str = "(?P<version>[0-9a-zA-Z][-+0-9.a-zA-Z]+)";
 
 /// Creates a module with the current Haxe version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -78,6 +78,9 @@ fn get_haxerc_version(context: &Context) -> Option<String> {
         if raw_version == "null" {
             return None;
         };
+        if raw_version.contains("/") {
+            return None;
+        }
 
         Some(raw_version.to_string())
     } else {
@@ -275,6 +278,36 @@ mod tests {
         let expected = Some(format!(
             "via {}",
             Color::Fixed(202).bold().paint("⌘ v779b005 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_haxerc_with_path() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let haxerc_name = ".haxerc";
+        let haxerc_content = json::json!({
+            "version": "/home/git/haxe/haxe.executable",
+            "resolveLibs": "scoped"
+        })
+        .to_string();
+
+        fill_config(&dir, haxerc_name, Some(&haxerc_content))?;
+        let actual = ModuleRenderer::new("haxe")
+            .cmd(
+                "haxe --version",
+                Some(CommandOutput {
+                    stdout: "4.3.0-rc.1+\n".to_owned(),
+                    stderr: "".to_owned(),
+                }),
+            )
+            .path(dir.path())
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(202).bold().paint("⌘ v4.3.0-rc.1+ ")
         ));
         assert_eq!(expected, actual);
         dir.close()
