@@ -64,6 +64,9 @@ symbol = "git "
 [golang]
 symbol = "go "
 
+[guix_shell]
+symbol = "guix "
+
 [hg_branch]
 symbol = "hg "
 
