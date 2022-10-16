@@ -2462,7 +2462,7 @@ The module will be shown when inside a guix-shell environment.
 | Option     | Default                    | Description                                            |
 | ---------- | -------------------------- | ------------------------------------------------------ |
 | `format`   | `'via [$symbol]($style) '` | The format for the module.                             |
-| `symbol`   | `" "`                     | A format string representing the symbol of guix-shell. |
+| `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
 | `style`    | `"yellow bold"`            | The style for the module.                              |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
@@ -2482,7 +2482,7 @@ The module will be shown when inside a guix-shell environment.
 
 [guix_shell]
 disabled = true
-format = 'via [☃️ ](yellow bold) '
+format = 'via [🐂](yellow bold) '
 ```
 
 ## Nix-shell

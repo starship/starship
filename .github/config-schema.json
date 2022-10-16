@@ -625,7 +625,7 @@
         "disabled": false,
         "format": "via [$symbol]($style) ",
         "style": "yellow bold",
-        "symbol": " "
+        "symbol": "🐃 "
       },
       "allOf": [
         {
@@ -3062,7 +3062,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": " ",
+          "default": "🐃 ",
           "type": "string"
         },
         "style": {

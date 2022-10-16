@@ -62,7 +62,7 @@ mod tests {
                 "/gnu/store/7vmfs4khf4fllsh83kqkxssbw3437qsh-profile",
             )
             .collect();
-        let expected = Some(format!("via {} ", Color::Yellow.bold().paint(" ")));
+        let expected = Some(format!("via {} ", Color::Yellow.bold().paint("🐃 ")));
 
         assert_eq!(expected, actual);
     }
