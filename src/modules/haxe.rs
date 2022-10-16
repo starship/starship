@@ -78,7 +78,7 @@ fn get_haxerc_version(context: &Context) -> Option<String> {
         if raw_version == "null" {
             return None;
         };
-        if raw_version.contains('/') {
+        if raw_version.contains('/') || raw_version.contains('\\') {
             return None;
         }
 
