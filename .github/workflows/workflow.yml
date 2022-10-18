@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -76,7 +76,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -98,7 +98,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -120,7 +120,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -142,7 +142,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -178,7 +178,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
