@@ -989,6 +989,25 @@
         }
       ]
     },
+    "opa": {
+      "default": {
+        "detect_extensions": [
+          "rego"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "🪖  ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OpaConfig"
+        }
+      ]
+    },
     "openstack": {
       "default": {
         "disabled": false,
@@ -1363,7 +1382,7 @@
         "signal_symbol": "⚡",
         "style": "bold red",
         "success_symbol": "",
-        "symbol": "✖"
+        "symbol": "❌"
       },
       "allOf": [
         {
@@ -3946,6 +3965,55 @@
       },
       "additionalProperties": false
     },
+    "OpaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🪖  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "rego"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "OspConfig": {
       "type": "object",
       "properties": {
@@ -4762,7 +4830,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "✖",
+          "default": "❌",
           "type": "string"
         },
         "success_symbol": {

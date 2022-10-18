@@ -55,11 +55,10 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    ```sh
    brew install starship
    ```
-
-   Mit [scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Führe den init Befehl zum Start der Shell aus:

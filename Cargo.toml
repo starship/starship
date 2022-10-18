@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.10.3"
+version = "1.11.0"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -29,21 +29,28 @@ The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄
 """
 
 [features]
-default = ["battery", "notify"]
+default = ["battery", "notify", "git-repository-max-perf"]
 battery = ["starship-battery"]
 config-schema = ["schemars"]
 notify = ["notify-rust"]
 
+# Enables most of the `max-performace` features of the `git_repository` module for better performance.
+# This can be more difficult to build in some conditions and requires cmake.
+git-repository-max-perf = ["git-features/zlib-ng", "git-repository/fast-sha1"]
+# Slower than `git-repository-max-perf`, but better than the default.
+# Unlike `git-repository-max-perf` this does not require cmake and allows dynamic zlib linking.
+git-repository-faster = ["git-features/zlib-stock", "git-repository/fast-sha1"]
+
 [dependencies]
 chrono = { version = "0.4.22", features = ["clock", "std"] }
-clap = { version = "4.0.15", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.0.17", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.0.2"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.3.0"
-# Addresses https://github.com/starship/starship/issues/4251
-git-features = { version = "0.22.6", features = ["fs-walkdir-single-threaded"] }
-git-repository = "0.24.0"
+git-features = { version = "0.23.0", optional = true }
+# default feature restriction addresses https://github.com/starship/starship/issues/4251
+git-repository = { version = "0.25.0", default-features = false, features = ["max-performance-safe"] }
 indexmap = { version = "1.9.1", features = ["serde"] }
 local_ipaddress = "0.1.3"
 log = { version = "0.4.17", features = ["std"] }
@@ -66,7 +73,7 @@ semver = "1.0.14"
 serde = { version = "1.0.145", features = ["derive"] }
 serde_json = "1.0.86"
 sha-1 = "0.10.0"
-shadow-rs = { version = "0.16.3", default-features = false }
+shadow-rs = { version = "0.17.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.7.9", optional = true }
@@ -110,7 +117,7 @@ features = [
 nix = { version = "0.25.0", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.16.3", default-features = false }
+shadow-rs = { version = "0.17.0", default-features = false }
 dunce = "1.0.3"
 
 [target.'cfg(windows)'.build-dependencies]
