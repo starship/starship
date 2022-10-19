@@ -5,7 +5,7 @@ use std::io;
 use std::thread::available_parallelism;
 use std::time::SystemTime;
 
-use clap::{IntoApp, Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
@@ -33,7 +33,7 @@ enum Commands {
     BugReport,
     /// Generate starship shell completions for your shell to stdout
     Completions {
-        #[clap(arg_enum)]
+        #[clap(value_enum)]
         shell: CompletionShell,
     },
     /// Edit the starship configuration

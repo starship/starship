@@ -49,6 +49,9 @@ symbol = " "
 [memory_usage]
 symbol = " "
 
+[meson]
+symbol = "喝 "
+
 [nim]
 symbol = " "
 
@@ -110,6 +113,9 @@ symbol = " "
 
 [rust]
 symbol = " "
+
+[scala]
+symbol = " "
 
 [spack]
 symbol = "🅢 "

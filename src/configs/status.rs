@@ -30,7 +30,7 @@ impl<'a> Default for StatusConfig<'a> {
     fn default() -> Self {
         StatusConfig {
             format: "[$symbol$status]($style) ",
-            symbol: "✖",
+            symbol: "❌",
             success_symbol: "",
             not_executable_symbol: "🚫",
             not_found_symbol: "🔍",

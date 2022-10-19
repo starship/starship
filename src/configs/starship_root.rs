@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[cfg_attr(
@@ -16,7 +17,12 @@ pub struct StarshipRootConfig {
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub palette: Option<String>,
+    pub palettes: HashMap<String, Palette>,
 }
+
+pub type Palette = HashMap<String, String>;
 
 // List of default prompt order
 // NOTE: If this const value is changed then Default prompt order subheading inside
@@ -61,6 +67,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nim",
     "nodejs",
     "ocaml",
+    "opa",
     "perl",
     "php",
     "pulumi",
@@ -81,6 +88,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "buf",
     "nix_shell",
     "conda",
+    "meson",
     "spack",
     "memory_usage",
     "aws",
@@ -115,6 +123,8 @@ impl Default for StarshipRootConfig {
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
+            palette: None,
+            palettes: HashMap::default(),
         }
     }
 }

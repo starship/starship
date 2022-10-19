@@ -85,6 +85,9 @@ symbol = "nodejs "
 [memory_usage]
 symbol = "memory "
 
+[meson]
+symbol = "meson "
+
 [nim]
 symbol = "nim "
 
@@ -93,6 +96,9 @@ symbol = "nix "
 
 [ocaml]
 symbol = "ml "
+
+[opa]
+symbol = "opa "
 
 [os.symbols]
 Alpine = "alp "
