@@ -792,6 +792,7 @@
         "detect_files": [],
         "detect_folders": [],
         "disabled": true,
+        "filter_contexts": [],
         "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "style": "cyan bold",
         "symbol": "☸ ",
@@ -3509,6 +3510,13 @@
           }
         },
         "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filter_contexts": {
           "default": [],
           "type": "array",
           "items": {
