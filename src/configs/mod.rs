@@ -47,6 +47,7 @@ pub mod localip;
 pub mod lua;
 pub mod memory_usage;
 pub mod meson;
+pub mod nextflow;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
@@ -183,6 +184,8 @@ pub struct FullConfig<'a> {
     localip: localip::LocalipConfig<'a>,
     #[serde(borrow)]
     lua: lua::LuaConfig<'a>,
+    #[serde(borrow)]
+    nextflow: nextflow::NextflowConfig<'a>,
     #[serde(borrow)]
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]
