@@ -24,6 +24,8 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 disabled = true
 ```
 
+### Config File Location
+
 You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
 ```sh
@@ -70,6 +72,50 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 **Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
 By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+
+### Strings
+
+In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+
+The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+
+| Symbol | Type                      | Notes         |
+| ------ | ------------------------- | ------------- |
+| `'`    | literal string            | recommended   |
+| `"`    | string                    | more escaping |
+| `'''`  | multi-line literal string |               |
+| `"""`  | multi-line string         |               |
+
+For example:
+
+```toml
+# literal string (recommended)
+format = '☺\☻ '
+
+# regular string
+format = "☺\\☻ "
+
+# escaping Starship symbols
+format = '\[\$\] '
+```
+
+When using line breaks, multi-line declarations can be used.
+For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+
+```toml
+# with literal string (recommended)
+format = '''
+
+\$'''
+
+# with multiline basic string
+format = """
+
+\\$"""
+
+# with basic string
+format = "\n\\$"
+```
 
 ### Format Strings
 
@@ -126,42 +172,6 @@ For example:
 - `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
 - When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`.
   This works the same as `'(\[$a$b\] )'`.
-
-#### Special characters
-
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ \ [ ] ( )`.
-
-Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string).
-It is recommended to use a literal string (surrounded by single quotes `'`) in your config.
-
-For example:
-
-```toml
-format = '☺\☻ '
-```
-
-If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`). For example:
-
-```toml
-format = "☺\\☻ "
-```
-
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
-
-```toml
-# with literal string
-format = '''
-
-\$'''
-
-# with multiline basic string
-format = """
-
-\\$"""
-
-# with basic string
-format = "\n\\$"
-```
 
 ### Negative matching
 
