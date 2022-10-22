@@ -337,8 +337,8 @@ falls back to the `x_security_token_expires` key.
 | ------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
 | `symbol`            | `"☁️ "`                                                           | The symbol used before displaying the current AWS profile.                                                  |
-| `region_aliases`    |                                                                   | Table of region aliases to display in addition to the AWS name.                                             |
-| `profile_aliases`   |                                                                   | Table of profile aliases to display in addition to the AWS name.                                            |
+| `region_aliases`    | `{}`                                                              | Table of region aliases to display in addition to the AWS name.                                             |
+| `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `"bold yellow"`                                                   | The style for the module.                                                                                   |
 | `expiration_symbol` | `X`                                                               | The symbol displayed when the temporary credentials have expired.                                           |
 | `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
@@ -1464,8 +1464,8 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 | ----------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | The format for the module.                                       |
 | `symbol`          | `"☁️  "`                                                 | The symbol used before displaying the current GCP profile.       |
-| `region_aliases`  |                                                          | Table of region aliases to display in addition to the GCP name.  |
-| `project_aliases` |                                                          | Table of project aliases to display in addition to the GCP name. |
+| `region_aliases`  | `{}`                                                     | Table of region aliases to display in addition to the GCP name.  |
+| `project_aliases` | `{}`                                                     | Table of project aliases to display in addition to the GCP name. |
 | `style`           | `"bold blue"`                                            | The style for the module.                                        |
 | `disabled`        | `false`                                                  | Disables the `gcloud` module.                                    |
 
@@ -2174,8 +2174,8 @@ case the module will only be active in directories that match those conditions.
 | `symbol`            | `"☸ "`                                             | A format string representing the symbol displayed before the Cluster. |
 | `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
 | `style`             | `"cyan bold"`                                      | The style for the module.                                             |
-| `context_aliases`   |                                                    | Table of context aliases to display.                                  |
-| `user_aliases`      |                                                    | Table of user aliases to display.                                     |
+| `context_aliases`   | `{}`                                               | Table of context aliases to display.                                  |
+| `user_aliases`      | `{}`                                               | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
 | `detect_folders`    | `[]`                                               | Which folders should trigger this modules.                            |
