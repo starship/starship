@@ -314,8 +314,8 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | ------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | module のフォーマットです。                                                                    |
 | `symbol`            | `"☁️ "`                                                               | 現在のAWSプロファイルを表示する前に表示される記号です。                                                        |
-| `region_aliases`    |                                                                       | AWS名に加えて表示するリージョンのエイリアスです。                                                           |
-| `profile_aliases`   |                                                                       | AWS名に加えて表示するプロファイルのエイリアスです。                                                          |
+| `region_aliases`    | `{}`                                                                  | AWS名に加えて表示するリージョンのエイリアスです。                                                           |
+| `profile_aliases`   | `{}`                                                                  | AWS名に加えて表示するプロファイルのエイリアスです。                                                          |
 | `style`             | `"bold yellow"`                                                       | モジュールのスタイルです。                                                                        |
 | `expiration_symbol` | `X`                                                                   | この記号は一時的な資格情報が有効期限切れの場合に表示されます。                                                      |
 | `disabled`          | `false`                                                               | `aws`モジュールを無効にします。                                                                   |
@@ -1383,8 +1383,8 @@ AA -------------------------------------------- BB -----------------------------
 | ----------------- | ---------------------------------------------------------- | ----------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | module のフォーマットです。             |
 | `symbol`          | `"☁️ "`                                                    | 現在のGCPプロファイルを表示する前に表示される記号です。 |
-| `region_aliases`  |                                                            | GCP名に加えて表示するリージョンのエイリアスです。    |
-| `project_aliases` |                                                            | GCP名に加えて表示するプロジェクトのエイリアスです。   |
+| `region_aliases`  | `{}`                                                       | GCP名に加えて表示するリージョンのエイリアスです。    |
+| `project_aliases` | `{}`                                                       | GCP名に加えて表示するプロジェクトのエイリアスです。   |
 | `style`           | `"bold blue"`                                              | モジュールのスタイルです。                 |
 | `disabled`        | `false`                                                    | `gcloud`モジュールを無効にします。         |
 
@@ -2064,8 +2064,8 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `symbol`            | `"☸ "`                                               | クラスター名の前に表示されるシンボルを表すフォーマット文字列。   |
 | `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | module のフォーマットです。                 |
 | `style`             | `"cyan bold"`                                        | モジュールのスタイルです。                     |
-| `context_aliases`   |                                                      | コンテキストの表示エイリアスを定義するテーブル。          |
-| `user_aliases`      |                                                      | Table of user aliases to display. |
+| `context_aliases`   | `{}`                                                 | コンテキストの表示エイリアスを定義するテーブル。          |
+| `user_aliases`      | `{}`                                                 | Table of user aliases to display. |
 | `detect_extensions` | `[]`                                                 | どの拡張子がこのモジュールをアクティブにするか           |
 | `detect_files`      | `[]`                                                 | どのファイル名がこのモジュールをアクティブにするか         |
 | `detect_folders`    | `[]`                                                 | どのフォルダーがこのモジュールをアクティブにするか         |
@@ -3176,7 +3176,7 @@ The `shell` module shows an indicator for currently used shell.
 | `xonsh_indicator`      | `"xsh"`                   | A format string used to represent xonsh.                     |
 | `cmd_indicator`        | `"cmd"`                   | A format string used to represent cmd.                       |
 | `nu_indicator`         | `"nu"`                    | A format string used to represent nu.                        |
-| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `unknown_indicator`    | `""`                      | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | module のフォーマットです。                                            |
 | `style`                | `"white bold"`            | モジュールのスタイルです。                                                |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
@@ -3685,7 +3685,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 | オプション      | デフォルト                            | 説明                                                     |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   |                                  | The symbol used before displaying the repository name. |
+| `symbol`   | `""`                             | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | モジュールのスタイルです。                                          |
 | `format`   | `"vcsh [$symbol$repo]($style) "` | module のフォーマットです。                                      |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
