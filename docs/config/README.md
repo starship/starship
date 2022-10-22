@@ -129,27 +129,38 @@ For example:
 
 #### Special characters
 
-The following symbols have special usage in a format string and must be escaped: `$ \ [ ] ( )`.
+The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ \ [ ] ( )`.
 
 Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string).
-It is recommended to use a literal string (surrounded by single quotes) in your config.
-If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`).
+It is recommended to use a literal string (surrounded by single quotes `'`) in your config.
 
-For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
+For example:
 
 ```toml
-# with basic string
-format = "\n\\$"
+format = '☺\☻ '
+```
+
+If you want to use a basic string (surrounded by double quotes), you must escape the backslash itself (i.e. use `\\`). For example:
+
+```toml
+format = "☺\\☻ "
+```
+
+When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+
+```toml
+# with literal string
+format = '''
+
+\$'''
 
 # with multiline basic string
 format = """
 
 \\$"""
 
-# with literal string
-format = '''
-
-\$'''
+# with basic string
+format = "\n\\$"
 ```
 
 ### Negative matching
