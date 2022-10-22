@@ -3330,7 +3330,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `xonsh_indicator`      | `"xsh"`                   | A format string used to represent xonsh.                     |
 | `cmd_indicator`        | `"cmd"`                   | A format string used to represent cmd.                       |
 | `nu_indicator`         | `"nu"`                    | A format string used to represent nu.                        |
-| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `unknown_indicator`    | `""`                      | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | The format for the module.                                   |
 | `style`                | `"white bold"`            | The style for the module.                                    |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
@@ -3857,7 +3857,7 @@ The module will be shown only if a repository is currently in use.
 
 | Option     | Default                          | Description                                            |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   |                                  | The symbol used before displaying the repository name. |
+| `symbol`   | `""`                             | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | The style for the module.                              |
 | `format`   | `"vcsh [$symbol$repo]($style) "` | The format for the module.                             |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
