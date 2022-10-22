@@ -84,9 +84,9 @@ The name of a variable can only contain letters, numbers and `_`.
 
 For example:
 
-- `$version` is a format string with a variable named `version`.
-- `$git_branch$git_commit` is a format string with two variables named `git_branch` and `git_commit`.
-- `$git_branch $git_commit` has the two variables separated with a space.
+- `'$version'` is a format string with a variable named `version`.
+- `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
+- `'$git_branch $git_commit'` has the two variables separated with a space.
 
 #### Text Group
 
@@ -99,9 +99,9 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 
 For example:
 
-- `[on](red bold)` will print a string `on` with bold text colored red.
-- `[⌘ $version](bold green)` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `[a [b](red) c](green)` will print `a b c` with `b` red, and `a` and `c` green.
+- `'[on](red bold)'` will print a string `on` with bold text colored red.
+- `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
+- `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
 
 #### Style Strings
 
@@ -122,10 +122,10 @@ A conditional format string wrapped in `(` and `)` will not render if all variab
 
 For example:
 
-- `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `(some text)` will always show nothing since there are no variables wrapped in the braces.
-- When `$combined` is a shortcut for `\[$a$b\]`, `($combined)` will show nothing only if `$a` and `$b` are both `None`.
-  This works the same as `(\[$a$b\] )`.
+- `'(@$region)'` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
+- `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
+- When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`.
+  This works the same as `'(\[$a$b\] )'`.
 
 #### Special characters
 
