@@ -11,6 +11,12 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 [![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
+## [Powerline Only Symbols](./powerline-only-symbols.md)
+
+This preset changes the symbols for a few modules to not use Nerd Font symbols.
+
+[![Screenshot of Powerline Only Symbols preset](/presets/img/powerline-only-symbols.png "Click to view Powerline Only Symbols preset")](./powerline-only-symbols)
+
 ## [Bracketed Segments](./bracketed-segments.md)
 
 This preset changes the format of all the built-in modules to show their segment
