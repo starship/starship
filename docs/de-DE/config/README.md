@@ -314,8 +314,8 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Das Format für das Modul.                                                                                   |
 | `symbol`            | `"☁️ "`                                                               | Symbol das vor dem aktuellen AWS-Profil angezeigt wird.                                                     |
-| `region_aliases`    |                                                                       | Tabelle der Regionaliasen, die zusätzlich zum AWS-Namen angezeigt werden sollen.                            |
-| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
+| `region_aliases`    | `{}`                                                                  | Tabelle der Regionaliasen, die zusätzlich zum AWS-Namen angezeigt werden sollen.                            |
+| `profile_aliases`   | `{}`                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `"bold yellow"`                                                       | Stil für dieses Modul.                                                                                      |
 | `expiration_symbol` | `X`                                                                   | Das Symbol, das angezeigt wird, wenn die temporären Anmeldeinformationen abgelaufen sind.                   |
 | `disabled`          | `false`                                                               | Deaktiviert das `aws`-Modul.                                                                                |
@@ -1385,8 +1385,8 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Das Format für das Modul.                                        |
 | `symbol`          | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.       |
-| `region_aliases`  |                                                            | Table of region aliases to display in addition to the GCP name.  |
-| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
+| `region_aliases`  | `{}`                                                       | Table of region aliases to display in addition to the GCP name.  |
+| `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name. |
 | `style`           | `"bold blue"`                                              | Stil für dieses Modul.                                           |
 | `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
@@ -2066,8 +2066,8 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `symbol`            | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Das Format für das Modul.                                             |
 | `style`             | `"cyan bold"`                                        | Stil für dieses Modul.                                                |
-| `context_aliases`   |                                                      | Table of context aliases to display.                                  |
-| `user_aliases`      |                                                      | Table of user aliases to display.                                     |
+| `context_aliases`   | `{}`                                                 | Table of context aliases to display.                                  |
+| `user_aliases`      | `{}`                                                 | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                                 | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                                 | Which filenames should trigger this module.                           |
 | `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
@@ -3178,7 +3178,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 | `xonsh_indicator`      | `"xsh"`                   | A format string used to represent xonsh.                     |
 | `cmd_indicator`        | `"cmd"`                   | A format string used to represent cmd.                       |
 | `nu_indicator`         | `"nu"`                    | A format string used to represent nu.                        |
-| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `unknown_indicator`    | `""`                      | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | Das Format für das Modul.                                    |
 | `style`                | `"white bold"`            | Stil für dieses Modul.                                       |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
@@ -3687,7 +3687,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 | Option     | Standardwert                     | Beschreibung                                           |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   |                                  | The symbol used before displaying the repository name. |
+| `symbol`   | `""`                             | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | Stil für dieses Modul.                                 |
 | `format`   | `"vcsh [$symbol$repo]($style) "` | Das Format für das Modul.                              |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
