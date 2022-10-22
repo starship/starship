@@ -314,8 +314,8 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Định dạng cho module.                                                                                       |
 | `symbol`            | `"☁️ "`                                                               | Kí hiệu sử dụng hiển thị trước profile AWS hiện tại.                                                        |
-| `region_aliases`    |                                                                       | Bảng của các region alias để hiển thị ngoài tên AWS.                                                        |
-| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
+| `region_aliases`    | `{}`                                                                  | Bảng của các region alias để hiển thị ngoài tên AWS.                                                        |
+| `profile_aliases`   | `{}`                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `"bold yellow"`                                                       | Kiểu cho module.                                                                                            |
 | `expiration_symbol` | `X`                                                                   | The symbol displayed when the temporary credentials have expired.                                           |
 | `disabled`          | `false`                                                               | Vô hiệu `AWS` module.                                                                                       |
@@ -1385,8 +1385,8 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 | ----------------- | ---------------------------------------------------------- | ----------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Định dạng cho module.                                             |
 | `symbol`          | `"☁️  "`                                                   | Kí hiệu sử dụng hiển thị trước profile GCP hiện tại.              |
-| `region_aliases`  |                                                            | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
-| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name.  |
+| `region_aliases`  | `{}`                                                       | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
+| `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name.  |
 | `style`           | `"bold blue"`                                              | Kiểu cho module.                                                  |
 | `disabled`        | `false`                                                    | Vô hiệu mô đun `gcloud`.                                          |
 
@@ -2066,8 +2066,8 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `symbol`            | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Định dạng cho module.                                                 |
 | `style`             | `"cyan bold"`                                        | Kiểu cho module.                                                      |
-| `context_aliases`   |                                                      | Table of context aliases to display.                                  |
-| `user_aliases`      |                                                      | Table of user aliases to display.                                     |
+| `context_aliases`   | `{}`                                                 | Table of context aliases to display.                                  |
+| `user_aliases`      | `{}`                                                 | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                   |
 | `detect_files`      | `[]`                                                 | Những tên tệp nào sẽ kích hoạt mô-đun này.                            |
 | `detect_folders`    | `[]`                                                 | Những thư mục nào nên kích hoạt các mô đun này.                       |
@@ -3178,7 +3178,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 | `xonsh_indicator`      | `"xsh"`                   | A format string used to represent xonsh.                     |
 | `cmd_indicator`        | `"cmd"`                   | A format string used to represent cmd.                       |
 | `nu_indicator`         | `"nu"`                    | A format string used to represent nu.                        |
-| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `unknown_indicator`    | `""`                      | The default value to be displayed when the shell is unknown. |
 | `format`               | `"[$indicator]($style) "` | Định dạng cho module.                                        |
 | `style`                | `"white bold"`            | Kiểu cho module.                                             |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
@@ -3687,7 +3687,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 | Tuỳ chọn   | Mặc định                         | Mô tả                                                  |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   |                                  | The symbol used before displaying the repository name. |
+| `symbol`   | `""`                             | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | Kiểu cho module.                                       |
 | `format`   | `"vcsh [$symbol$repo]($style) "` | Định dạng cho module.                                  |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
