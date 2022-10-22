@@ -338,11 +338,7 @@ format = '$directory$git_branch$git_commit$git_state$git_status$line_break$chara
 To show the directory and git state information, followed by conditional information about the last command (command duration, status), and shell and prompt character:
 
 ```toml
-format = '$directory$git_branch$git_commit$git_state$git_status(- $status$cmd_duration)$line_break$shell$character'
-
-[status]
-# enable status, which is disabled by default
-disabled = false
+format = '$directory$git_branch$git_commit$git_state$git_status(- $cmd_duration)$line_break$shell$character'
 
 [shell]
 # enable shell, which is disabled by default
