@@ -314,8 +314,8 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | O formato do módulo.                                                                                                          |
 | `symbol`            | `"☁️ "`                                                               | O símbolo usado antes de exibir o perfil atual da AWS.                                                                        |
-| `region_aliases`    |                                                                       | Tabela de aleases de regiões a serem exibidas, além do nome da AWS.                                                           |
-| `profile_aliases`   |                                                                       | Tabela de apelidos de perfil a serem exibidos além do nome da AWS.                                                            |
+| `region_aliases`    | `{}`                                                                  | Tabela de aleases de regiões a serem exibidas, além do nome da AWS.                                                           |
+| `profile_aliases`   | `{}`                                                                  | Tabela de apelidos de perfil a serem exibidos além do nome da AWS.                                                            |
 | `style`             | `"bold yellow"`                                                       | O estilo do módulo.                                                                                                           |
 | `expiration_symbol` | `X`                                                                   | O simbolo exibido quando as credenciais temporárias estão expiradas.                                                          |
 | `disabled`          | `false`                                                               | Desabilita o módulo `AWS`.                                                                                                    |
@@ -1383,8 +1383,8 @@ O módulo `gcloud` exibe a configuração atual para a CLI do [`gcloud`](https:/
 | ----------------- | ---------------------------------------------------------- | ------------------------------------------------------------------- |
 | `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | O formato do módulo.                                                |
 | `symbol`          | `"☁️  "`                                                   | O simbolo usado antes de exibir o perfil atual do GCP.              |
-| `region_aliases`  |                                                            | Tabela de aliases de região para exibir além do nome do GCP.        |
-| `project_aliases` |                                                            | Tabela de apelidos do projeto a serem exibidos além do nome do GCP. |
+| `region_aliases`  | `{}`                                                       | Tabela de aliases de região para exibir além do nome do GCP.        |
+| `project_aliases` | `{}`                                                       | Tabela de apelidos do projeto a serem exibidos além do nome do GCP. |
 | `style`           | `"bold blue"`                                              | O estilo do módulo.                                                 |
 | `disabled`        | `false`                                                    | Desabilita o módulo `gcloud`.                                       |
 
@@ -2064,8 +2064,8 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `symbol`            | `"☸ "`                                               | Uma string que representa o simbolo exibido antes do Cluster. |
 | `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | O formato do módulo.                                          |
 | `style`             | `"cyan bold"`                                        | O estilo do módulo.                                           |
-| `context_aliases`   |                                                      | Tabela de aliases de contexto para exibir.                    |
-| `user_aliases`      |                                                      | Table of user aliases to display.                             |
+| `context_aliases`   | `{}`                                                 | Tabela de aliases de contexto para exibir.                    |
+| `user_aliases`      | `{}`                                                 | Table of user aliases to display.                             |
 | `detect_extensions` | `[]`                                                 | Quais extensões devem ativar este módulo.                     |
 | `detect_files`      | `[]`                                                 | Quais nomes de arquivos devem ativar este módulo.             |
 | `detect_folders`    | `[]`                                                 | Quais pastas devem ativar este módulo.                        |
@@ -3176,7 +3176,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | `xonsh_indicator`      | `"xsh"`                   | Uma string usada para representar o xonsh.              |
 | `cmd_indicator`        | `"cmd"`                   | Uma string usada para representar o cmd.                |
 | `nu_indicator`         | `"nu"`                    | Uma string usada para representar o nu.                 |
-| `unknown_indicator`    |                           | Valor padrão para exibir quando o shell é desconhecido. |
+| `unknown_indicator`    | `""`                      | Valor padrão para exibir quando o shell é desconhecido. |
 | `format`               | `"[$indicator]($style) "` | O formato do módulo.                                    |
 | `style`                | `"white bold"`            | O estilo do módulo.                                     |
 | `disabled`             | `true`                    | Desabilita o módulo `shell`.                            |
@@ -3685,7 +3685,7 @@ O módulo `vcsh` exibe o repositório [VCSH](https://github.com/RichiH/vcsh) atu
 
 | Opções     | Padrão                           | Descrição                                              |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   |                                  | O simbolo usado antes de exibir o nome do repositório. |
+| `symbol`   | `""`                             | O simbolo usado antes de exibir o nome do repositório. |
 | `style`    | `"bold yellow"`                  | O estilo do módulo.                                    |
 | `format`   | `"vcsh [$symbol$repo]($style) "` | O formato do módulo.                                   |
 | `disabled` | `false`                          | Desabilita o módulo `vcsh`.                            |
