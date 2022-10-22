@@ -314,8 +314,8 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `fromat`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | Format dari modul.                                                                                          |
 | `symbol`            | `"☁️ "`                                                               | Simbol yang digunakan sebelum menampilkan profil AWS terkini.                                               |
-| `region_aliases`    |                                                                       | Tabel alias dari region yang ditampilan selain nama AWS.                                                    |
-| `profile_aliases`   |                                                                       | Table of profile aliases to display in addition to the AWS name.                                            |
+| `region_aliases`    | `{}`                                                                  | Tabel alias dari region yang ditampilan selain nama AWS.                                                    |
+| `profile_aliases`   | `{}`                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `"bold yellow"`                                                       | Gaya penataan untuk modul.                                                                                  |
 | `expiration_symbol` | `X`                                                                   | Simbol ditampilkan ketika temporer kredensial telah kedaluwarsa.                                            |
 | `disabled`          | `false`                                                               | Menonaktifkan modul `AWS`.                                                                                  |
@@ -1385,8 +1385,8 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | ----------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
 | `fromat`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | Format dari modul.                                               |
 | `symbol`          | `"☁️  "`                                                   | The symbol used before displaying the current GCP profile.       |
-| `region_aliases`  |                                                            | Table of region aliases to display in addition to the GCP name.  |
-| `project_aliases` |                                                            | Table of project aliases to display in addition to the GCP name. |
+| `region_aliases`  | `{}`                                                       | Table of region aliases to display in addition to the GCP name.  |
+| `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name. |
 | `style`           | `"bold blue"`                                              | Gaya penataan untuk modul.                                       |
 | `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
@@ -2066,8 +2066,8 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `symbol`            | `"☸ "`                                               | A format string representing the symbol displayed before the Cluster. |
 | `fromat`            | `'[$symbol$context( \($namespace\))]($style) in '` | Format dari modul.                                                    |
 | `style`             | `"cyan bold"`                                        | Gaya penataan untuk modul.                                            |
-| `context_aliases`   |                                                      | Table of context aliases to display.                                  |
-| `user_aliases`      |                                                      | Table of user aliases to display.                                     |
+| `context_aliases`   | `{}`                                                 | Table of context aliases to display.                                  |
+| `user_aliases`      | `{}`                                                 | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                                 | Ekstensi mana yang sebaiknya memicu modul ini.                        |
 | `detect_files`      | `[]`                                                 | filenames mana yang sebaiknya memicu modul ini.                       |
 | `detect_folders`    | `[]`                                                 | Folder mana yang sebaiknya memicul modul ini.                         |
@@ -3178,7 +3178,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `xonsh_indicator`      | `"xsh"`                   | A format string used to represent xonsh.                     |
 | `cmd_indicator`        | `"cmd"`                   | A format string used to represent cmd.                       |
 | `nu_indicator`         | `"nu"`                    | A format string used to represent nu.                        |
-| `unknown_indicator`    |                           | The default value to be displayed when the shell is unknown. |
+| `unknown_indicator`    | `""`                      | The default value to be displayed when the shell is unknown. |
 | `fromat`               | `"[$indicator]($style) "` | Format dari modul.                                           |
 | `style`                | `"white bold"`            | Gaya penataan untuk modul.                                   |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
@@ -3687,7 +3687,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 | Opsi       | Bawaan                           | Deskripsi                                              |
 | ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   |                                  | The symbol used before displaying the repository name. |
+| `symbol`   | `""`                             | The symbol used before displaying the repository name. |
 | `style`    | `"bold yellow"`                  | Gaya penataan untuk modul.                             |
 | `fromat`   | `"vcsh [$symbol$repo]($style) "` | Format dari modul.                                     |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
