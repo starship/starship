@@ -6,10 +6,10 @@ unknown_symbol = "❓ "
 empty_symbol = "❗ "
 
 [erlang]
-symbol = "erl "
+symbol = "ⓔ "
 
 [nodejs]
 symbol = "[⬢](bold green) "
 
 [pulumi]
-symbol = "pulumi "
+symbol = "🧊 "
