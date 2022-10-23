@@ -1,8 +1,11 @@
 [Return to Presets](./README.md#powerline-only-symbols)
 
-This preset changes the symbols for a few modules to not use Nerd Font symbols. For when you want to use atsrhip with only a Powerline font.
+This preset restricts the use of symbols to those from emoji and powerline sets.
 
-![Screenshot of Powerline Only Symbols preset](/presets/img/powerline-only.png)
+This means that even without a Nerd Font installed, you should be able to view
+all module symbols.
+
+This preset will become the default preset in a future release of starship.
 
 ### Configuration
 

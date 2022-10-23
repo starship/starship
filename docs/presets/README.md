@@ -15,6 +15,10 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 This preset changes the symbols for a few modules to not use Nerd Font symbols.
 
+::: tip
+This preset will become the default preset in a future release of starship.
+:::
+
 [![Screenshot of Powerline Only Symbols preset](/presets/img/powerline-only-symbols.png "Click to view Powerline Only Symbols preset")](./powerline-only-symbols)
 
 ## [Bracketed Segments](./bracketed-segments.md)
