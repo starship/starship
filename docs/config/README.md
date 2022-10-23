@@ -1845,26 +1845,24 @@ currently used in the project directory.
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a file with the `.gradle` extension
-- The current directory contains a file with the `.gradle.kts` extension
+- The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
+- The current directory contains a file ending with `.gradle` or `.gradle.kts`.
 
-The `gradle` module provides 2 different strategies to determine the version.
-The default one is `properties` which parses the version set in the gradle-wrapper.properties configuration file.
-The alternative is `executable` which executes gradle to determine the version. This is not the default one because starting up gradle is usually to slow unless a gradle daemon is running.
+The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
 
 ### Options
 
-| Option              | Default                              | Description                                                                                                 |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                                  |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                   |
-| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                                                          |
-| `detect_extensions` | `["gradle", "gradle.kts"]`           | Which extensions should trigger this module.                                                                |
-| `detect_files`      | `[""]`                               | Which filenames should trigger this module.                                                                 |
-| `detect_folders`    | `[".gradle"]`                        | Which folders should trigger this module.                                                                   |
-| `style`             | `"bold bright-cyan"`                 | The style for the module.                                                                                   |
-| `disabled`          | `false`                              | Disables the `gradle` module.                                                                               |
-| `strategy`          | `properties`                         | Which strategy should be used for determining the version. Available values are `properties` & `executable` |
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                        |
+| `detect_extensions` | `["gradle", "gradle.kts"]`           | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["gradle"]`                         | Which folders should trigger this module.                                 |
+| `style`             | `"bold bright-cyan"`                 | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `gradle` module.                                             |
+| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                     |
 
 ### Variables
 
@@ -1872,9 +1870,9 @@ The alternative is `executable` which executes gradle to determine the version. 
 | -------- | -------- | ------------------------------------ |
 | version  | `v7.5.1` | The version of `gradle`              |
 | symbol   |          | Mirrors the value of option `symbol` |
-| style\*  |          | Mirrors the value of option `style`  |
+| style*   |          | Mirrors the value of option `style`  |
 
-\*: This variable can only be used as a part of a style string
+*: This variable can only be used as a part of a style string
 
 ## Haskell
 

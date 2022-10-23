@@ -215,24 +215,6 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
         }),
-        "gradle --version" => Some(CommandOutput {
-            stdout: String::from("\
-\
-------------------------------------------------------------
-Gradle 7.5.1
-------------------------------------------------------------
-
-Build time:   2022-08-05 21:17:56 UTC
-Revision:     d1daa0cbf1a0103000b71484e1dbfe096e095918
-
-Kotlin:       1.6.21
-Groovy:       3.0.10
-Ant:          Apache Ant(TM) version 1.10.11 compiled on July 10 2021
-JVM:          17.0.4.1 (Microsoft 17.0.4.1+1-LTS)
-OS:           Linux 5.4.0-1090-azure amd64
-\n"),
-stderr: String::default(),
-        }),
         "ghc --numeric-version" => Some(CommandOutput {
             stdout: String::from("9.2.1\n"),
             stderr: String::default(),

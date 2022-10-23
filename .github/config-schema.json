@@ -628,11 +628,11 @@
         ],
         "detect_files": [],
         "detect_folders": [
-          ".gradle"
+          "gradle"
         ],
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
-        "strategy": "properties",
+        "recursive": false,
         "style": "bold bright-cyan",
         "symbol": "🅶 ",
         "version_format": "v${raw}"
@@ -3103,6 +3103,10 @@
           "default": false,
           "type": "boolean"
         },
+        "recursive": {
+          "default": false,
+          "type": "boolean"
+        },
         "detect_extensions": {
           "default": [
             "gradle",
@@ -3122,30 +3126,15 @@
         },
         "detect_folders": {
           "default": [
-            ".gradle"
+            "gradle"
           ],
           "type": "array",
           "items": {
             "type": "string"
           }
-        },
-        "strategy": {
-          "default": "properties",
-          "allOf": [
-            {
-              "$ref": "#/definitions/GradleVersionStrategy"
-            }
-          ]
         }
       },
       "additionalProperties": false
-    },
-    "GradleVersionStrategy": {
-      "type": "string",
-      "enum": [
-        "properties",
-        "executable"
-      ]
     },
     "HaskellConfig": {
       "type": "object",

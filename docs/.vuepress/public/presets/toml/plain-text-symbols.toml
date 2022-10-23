@@ -64,6 +64,9 @@ symbol = "git "
 [golang]
 symbol = "go "
 
+[gradle]
+symbol = "gradle "
+
 [hg_branch]
 symbol = "hg "
 
