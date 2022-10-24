@@ -144,7 +144,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let kube_ctx = env::split_paths(&kube_cfg).find_map(get_kube_context)?;
 
-    if config.filter_contexts.contains(&kube_ctx.as_str()) {
+    if config.ignore_contexts.contains(&kube_ctx.as_str()) {
         return None;
     }
 
@@ -961,7 +961,7 @@ users: []
     }
 
     #[test]
-    fn test_ctx_filter_simple() -> io::Result<()> {
+    fn test_ctx_ignore_simple() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
         let filename = dir.path().join("config");
@@ -990,7 +990,7 @@ users: []
             .config(toml::toml! {
                 [kubernetes]
                 disabled = false
-                filter_contexts = ["test_context"]
+                ignore_contexts = ["test_context"]
             })
             .collect();
 
