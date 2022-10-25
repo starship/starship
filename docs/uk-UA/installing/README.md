@@ -1,6 +1,6 @@
-# Розширена установка
+# Розширене встановлення
 
-Щоб встановити starship, Ви мусите зробити дві речі:
+Щоб установити starship, Ви мусите зробити дві речі:
 
 1. Завантажити бінарний файл **starship** на Ваш комп'ютер
 1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
@@ -15,7 +15,7 @@
 
 Перейдіть на [сторінку встановлення Chocolatey](https://chocolatey.org/install) та дотримуйтесь інструкцій, щоб установити Chocolatey.
 
-### Установка
+### Установлення
 
 ```powershell
 choco install starship
@@ -29,7 +29,7 @@ choco install starship
 pkg install getconf
 ```
 
-### Установка
+### Установлення
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
@@ -37,7 +37,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.term
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)
 
-### Установка
+### Установлення
 
 У Funtoo Linux starship можна встановити з [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) через Portage:
 
