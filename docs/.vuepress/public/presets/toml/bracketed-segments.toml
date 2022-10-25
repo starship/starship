@@ -58,6 +58,9 @@ format = '([\[$all_status$ahead_behind\]]($style))'
 [golang]
 format = '\[[$symbol($version)]($style)\]'
 
+[guix_shell]
+format = '\[[$symbol]($style)\]'
+
 [haskell]
 format = '\[[$symbol($version)]($style)\]'
 
