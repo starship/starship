@@ -1765,7 +1765,7 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 
 | Opción     | Por defecto                | Descripción                                            |
 | ---------- | -------------------------- | ------------------------------------------------------ |
-| `format`   | `'via [$symbol]($style) '` | El formato del módulo.                                 |
+| `format`   | `'vía [$symbol]($style) '` | El formato del módulo.                                 |
 | `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
 | `style`    | `"yellow bold"`            | El estilo del módulo.                                  |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
