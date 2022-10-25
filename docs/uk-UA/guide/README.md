@@ -165,13 +165,13 @@
 
 <a name="🚀-installation"></a>
 
-## 🚀 Встановлення
+## 🚀 Установлення
 
 ### Передумови
 
-- Встановлений та ввімкнений набір шрифтів та термінальних іконок [Nerd Font](https://www.nerdfonts.com/) (як от [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Установлений та ввімкнений у Вашому терміналі набір шрифтів [Nerd Font](https://www.nerdfonts.com/) (для прикладу, спробуйте [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Крок 1. Встановіть Starship
+### Крок 1. Установіть starship
 
 Виберіть Вашу операційну систему зі списку нижче, щоб переглянути інструкцію з установки:
 
@@ -264,14 +264,14 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Крок 2. Налаштуйте Вашу оболонку для використання Starship
+### Крок 2. Налаштуйте Вашу оболонку для використання starship
 
 Налаштуйте свою оболонку, щоб ініціалізувати starship. Виберіть ваш варіант зі списку:
 
 <details>
 <summary>Bash</summary>
 
-Add the following to the end of `~/.bashrc`:
+Додайте наступний рядок наприкінці `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
@@ -282,7 +282,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Вам потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) разом з Cmd. Створіть файл за шляхом `%LocalAppData%\clink\starship.lua` із наступним вмістом:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -293,20 +293,20 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.elvish/rc.elv`:
+Додайте наступний рядок наприкінці `~/.elvish/rc.elv`:
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+Примітка: Підтримується лише Elvish v0.18+
 
 </details>
 
 <details>
 <summary>Fish</summary>
 
-Add the following to the end of `~/.config/fish/config.fish`:
+Додайте наступний рядок наприкінці `~/.config/fish/config.fish`:
 
 ```fish
 starship init fish | source
@@ -317,7 +317,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-Add the following to the end of `~/.config/ion/initrc`:
+Додайте наступний рядок наприкінці `~/.config/ion/initrc`:
 
 ```sh
 eval $(starship init ion)
@@ -335,20 +335,20 @@ mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+Додайте наступний рядок наприкінці Вашої конфігурації Nushell (знайдіть її виконавши `$nu.config-path`):
 
 ```sh
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+Примітка: Підтримується лише Nushell v0.61+
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Додайте наступний рядок наприкінці Вашої конфігурації PowerShell (знайдіть її виконавши `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -359,7 +359,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-Add the following to the end of `~/.tcshrc`:
+Додайте наступний рядок наприкінці `~/.tcshrc`:
 
 ```sh
 eval `starship init tcsh`
@@ -370,7 +370,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-Add the following to the end of `~/.xonshrc`:
+Додайте наступний рядок наприкінці `~/.xonshrc`:
 
 ```python
 execx($(starship init xonsh))
@@ -381,7 +381,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-Add the following to the end of `~/.zshrc`:
+Додайте наступний рядок наприкінці `~/.zshrc`:
 
 ```sh
 eval "$(starship init zsh)"
@@ -389,7 +389,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Крок 3. Налаштуйте Starship
+### Крок 3. Налаштуйте starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
