@@ -1,11 +1,11 @@
-# Advanced Installation
+# Розширена установка
 
-To install starship, you need to do two things:
+Щоб встановити starship, Ви мусите зробити дві речі:
 
-1. Get the **starship** binary onto your computer
+1. Завантажити бінарний файл **starship** на Ваш комп'ютер
 1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+Для більшості користувачів чудово підійдуть інструкції на [головній сторінці](/guide/#🚀-installation). Однак, для деяких більш спеціалізованих платформ потрібні інші інструкції.
 
 There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
 
