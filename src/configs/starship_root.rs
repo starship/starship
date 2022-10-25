@@ -86,6 +86,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "zig",
     // ↑ Toolchain version modules ↑
     "buf",
+    "guix_shell",
     "nix_shell",
     "conda",
     "meson",
