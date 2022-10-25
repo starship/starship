@@ -627,6 +627,19 @@
         }
       ]
     },
+    "guix_shell": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol]($style) ",
+        "style": "yellow bold",
+        "symbol": "🐃 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GuixShellConfig"
+        }
+      ]
+    },
     "haskell": {
       "default": {
         "detect_extensions": [
@@ -3169,6 +3182,28 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GuixShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐃 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false

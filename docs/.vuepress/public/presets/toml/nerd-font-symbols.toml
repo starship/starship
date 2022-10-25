@@ -31,6 +31,9 @@ symbol = " "
 [golang]
 symbol = " "
 
+[guix_shell]
+symbol = " "
+
 [haskell]
 symbol = " "
 
