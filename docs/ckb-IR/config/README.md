@@ -236,6 +236,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$guix_shell\
 $haskell\
 $helm\
 $java\
@@ -1755,6 +1756,38 @@ The `golang` module shows the currently installed version of [Go](https://golang
 format = "via [🏎💨 $version](bold cyan) "
 ```
 
+## Guix-shell
+
+The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) environment. The module will be shown when inside a guix-shell environment.
+
+### Options
+
+| Option     | Default                    | Description                                            |
+| ---------- | -------------------------- | ------------------------------------------------------ |
+| `format`   | `'via [$symbol]($style) '` | The format for the module.                             |
+| `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
+| `style`    | `"yellow bold"`            | The style for the module.                              |
+| `disabled` | `false`                    | Disables the `guix_shell` module.                      |
+
+### Variables
+
+| گۆڕاو     | نموونە | Description                          |
+| --------- | ------ | ------------------------------------ |
+| symbol    |        | Mirrors the value of option `symbol` |
+| style\* |        | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### نموونە
+
+```toml
+# ~/.config/starship.toml
+
+[guix_shell]
+disabled = true
+format = 'via [🐂](yellow bold) '
+```
+
 ## Haskell
 
 The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
@@ -2408,12 +2441,12 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| گۆڕاو     | نموونە   | Description                          |
-| --------- | -------- | ------------------------------------ |
-| state     | `بێخەوش` | The state of the nix-shell           |
-| name      | `lorri`  | The name of the nix-shell            |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| گۆڕاو     | نموونە  | Description                          |
+| --------- | ------- | ------------------------------------ |
+| state     | `pure`  | The state of the nix-shell           |
+| name      | `lorri` | The name of the nix-shell            |
+| symbol    |         | Mirrors the value of option `symbol` |
+| style\* |         | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
