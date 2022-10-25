@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "hash" => Some(Ok(git_hash(context.get_repo().ok()?, &config)?)),
-                "tag" => Some(Ok(format!(
+                "tag" if !config.tag_disabled => Some(Ok(format!(
                     "{}{}",
                     config.tag_symbol,
                     git_tag(context.get_repo().ok()?, &config)?
@@ -51,9 +51,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn git_tag(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
-    if config.tag_disabled {
-        return None;
-    }
     // allow environment variables like GITOXIDE_OBJECT_CACHE_MEMORY and GITOXIDE_DISABLE_PACK_CACHE to speed up operation for some repos
     let mut git_repo = repo.open().apply_environment();
     git_repo.object_cache_size_if_unset(4 * 1024 * 1024);
@@ -208,6 +205,11 @@ mod tests {
     fn test_render_commit_hash_with_tag_disabled() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
+        create_command("git")?
+            .args(&["tag", "v1", "-m", "Testing tags"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
         let mut git_commit = create_command("git")?
             .args(&["rev-parse", "HEAD"])
             .current_dir(&repo_dir.path())
@@ -216,15 +218,10 @@ mod tests {
         git_commit.truncate(7);
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
-        create_command("git")?
-            .args(&["describe", "--tags", "--exact-match", "HEAD"])
-            .current_dir(&repo_dir.path());
-
         let actual = ModuleRenderer::new("git_commit")
             .config(toml::toml! {
                 [git_commit]
                     only_detached = false
-                    tag_symbol = ""
             })
             .path(&repo_dir.path())
             .collect();
@@ -243,6 +240,11 @@ mod tests {
     #[test]
     fn test_render_commit_hash_with_tag_enabled() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["tag", "v1", "-m", "Testing tags"])
+            .current_dir(&repo_dir.path())
+            .output()?;
 
         let mut git_commit = create_command("git")?
             .args(&["rev-parse", "HEAD"])
@@ -266,7 +268,7 @@ mod tests {
                 [git_commit]
                     only_detached = false
                     tag_disabled = false
-                    tag_symbol = ""
+                    tag_symbol = " "
             })
             .path(&repo_dir.path())
             .collect();
