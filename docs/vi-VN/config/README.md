@@ -236,6 +236,7 @@ $elixir\
 $elm\
 $erlang\
 $golang\
+$guix_shell\
 $haskell\
 $helm\
 $java\
@@ -1755,6 +1756,38 @@ The `golang` module shows the currently installed version of [Go](https://golang
 format = "via [🏎💨 $version](bold cyan) "
 ```
 
+## Guix-shell
+
+The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) environment. The module will be shown when inside a guix-shell environment.
+
+### Các tuỳ chọn
+
+| Tuỳ chọn   | Mặc định                   | Mô tả                                                  |
+| ---------- | -------------------------- | ------------------------------------------------------ |
+| `format`   | `'via [$symbol]($style) '` | Định dạng cho module.                                  |
+| `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
+| `style`    | `"yellow bold"`            | Kiểu cho module.                                       |
+| `disabled` | `false`                    | Disables the `guix_shell` module.                      |
+
+### Các biến
+
+| Biến      | Ví dụ | Mô tả                            |
+| --------- | ----- | -------------------------------- |
+| symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |       | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[guix_shell]
+disabled = true
+format = 'via [🐂](yellow bold) '
+```
+
 ## Haskell
 
 The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
@@ -1804,15 +1837,15 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["helmfile.yaml", "Chart.yaml"]`    | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
-| `symbol`            | `"⎈ "`                               | Một format string đại diện cho biểu tượng của Helm.                       |
+| `symbol`            | `"⎈ "`                               | A format string representing the symbol of Helm.                          |
 | `style`             | `"bold white"`                       | Kiểu cho module.                                                          |
-| `disabled`          | `false`                              | Vô hiệu `helm` module.                                                    |
+| `disabled`          | `false`                              | Disables the `helm` module.                                               |
 
 ### Các biến
 
 | Biến      | Ví dụ    | Mô tả                            |
 | --------- | -------- | -------------------------------- |
-| version   | `v3.1.1` | Phiên bản của `helm`             |
+| version   | `v3.1.1` | The version of `helm`            |
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
@@ -1829,18 +1862,18 @@ format = "via [⎈ $version](bold white) "
 
 ## Hostname
 
-Mô đun `hostname` hiển thị hostnam hệ thống.
+The `hostname` module shows the system hostname.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn     | Mặc định                               | Mô tả                                                                                                                            |
-| ------------ | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only`   | `true`                                 | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                        |
-| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                           |
-| `trim_at`    | `"."`                                  | Chuỗi mà hostname được cắt ngắn, sau khi khớp lần đầu tiên. `"."` sẽ dừng sau dấu chấm đầu tiên. `""` sẽ vô hiệu mọi sự cắt ngắn |
-| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Định dạng cho module.                                                                                                            |
-| `style`      | `"bold dimmed green"`                  | Kiểu cho module.                                                                                                                 |
-| `disabled`   | `false`                                | Vô hiệu `hastname` module.                                                                                                       |
+| Tuỳ chọn     | Mặc định                               | Mô tả                                                                                                                                |
+| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`   | `true`                                 | Only show hostname when connected to an SSH session.                                                                                 |
+| `ssh_symbol` | `"🌐 "`                                 | A format string representing the symbol when connected to SSH session.                                                               |
+| `trim_at`    | `"."`                                  | String that the hostname is cut off at, after the first match. `"."` will stop after the first dot. `""` will disable any truncation |
+| `format`     | `"[$ssh_symbol$hostname]($style) in "` | Định dạng cho module.                                                                                                                |
+| `style`      | `"bold dimmed green"`                  | Kiểu cho module.                                                                                                                     |
+| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
 ### Các biến
 
@@ -1880,15 +1913,15 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `detect_extensions` | `["java", "class", "gradle", "jar", "cljs", "cljc"]`                                                     | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["pom.xml", "build.gradle.kts", "build.sbt", ".java-version", "deps.edn", "project.clj", "build.boot"]` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `[]`                                                                                                     | Những thư mục nào nên kích hoạt các mô đun này.                           |
-| `symbol`            | `"☕ "`                                                                                                   | Một format string đại diện cho biểu tượng Java                            |
+| `symbol`            | `"☕ "`                                                                                                   | A format string representing the symbol of Java                           |
 | `style`             | `"red dimmed"`                                                                                           | Kiểu cho module.                                                          |
-| `disabled`          | `false`                                                                                                  | Vô hiệu `java` module.                                                    |
+| `disabled`          | `false`                                                                                                  | Disables the `java` module.                                               |
 
 ### Các biến
 
 | Biến      | Ví dụ | Mô tả                            |
 | --------- | ----- | -------------------------------- |
-| version   | `v14` | Phiên bản của `java`             |
+| version   | `v14` | The version of `java`            |
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
@@ -1905,7 +1938,7 @@ symbol = "🌟 "
 
 ## Jobs
 
-`jobs` module cho biết số lượng các jobs đang chạy. Mô đun sẽ được hiển thị chỉ khi có background jobs đang chạy. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -1929,13 +1962,13 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Tuỳ chọn           | Mặc định                      | Mô tả                                                                    |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*       | `1`                           | Cho biết số lượng jobs nếu nó vượt quá.                                  |
+| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
 | `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
 | `format`           | `"[$symbol$number]($style) "` | Định dạng cho module.                                                    |
 | `symbol`           | `"✦"`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `"bold blue"`                 | Kiểu cho module.                                                         |
-| `disabled`         | `false`                       | Vô hiệu `jobs` module.                                                   |
+| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
 
 *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
@@ -1943,7 +1976,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Biến      | Ví dụ | Mô tả                            |
 | --------- | ----- | -------------------------------- |
-| number    | `1`   | Số lượng job                     |
+| number    | `1`   | The number of jobs               |
 | symbol    |       | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |       | Giá trị ghi đè của `style`       |
 
@@ -1977,15 +2010,15 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `detect_extensions` | `["jl"]`                             | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `["Project.toml", "Manifest.toml"]`  | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
-| `symbol`            | `"ஃ "`                               | Một format string đại diện cho biếu tượng của Julia.                      |
+| `symbol`            | `"ஃ "`                               | A format string representing the symbol of Julia.                         |
 | `style`             | `"bold purple"`                      | Kiểu cho module.                                                          |
-| `disabled`          | `false`                              | Vô hiệu `julia` module.                                                   |
+| `disabled`          | `false`                              | Disables the `julia` module.                                              |
 
 ### Các biến
 
 | Biến      | Ví dụ    | Mô tả                            |
 | --------- | -------- | -------------------------------- |
-| version   | `v1.4.0` | Phiên bản của `julia`            |
+| version   | `v1.4.0` | The version of `julia`           |
 | symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |          | Giá trị ghi đè của `style`       |
 
@@ -2008,23 +2041,23 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
-| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
-| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["kt", "kts"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
-| `detect_files`      | `[]`                                 | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                           |
-| `symbol`            | `"🅺 "`                               | Một format string đại diện cho biết tượng của Kotllin.                    |
-| `style`             | `"bold blue"`                        | Kiểu cho module.                                                          |
-| `kotlin_binary`     | `"kotlin"`                           | Cấu hình kotlin nhị phân mà Starship thực thi khi lấy phiên bản.          |
-| `disabled`          | `false`                              | Vô hiệu `kotlin` module.                                                  |
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                         |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                         |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`     |
+| `detect_extensions` | `["kt", "kts"]`                      | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                           |
+| `detect_files`      | `[]`                                 | Những tên tệp nào sẽ kích hoạt mô-đun này.                                    |
+| `detect_folders`    | `[]`                                 | Những thư mục nào nên kích hoạt các mô đun này.                               |
+| `symbol`            | `"🅺 "`                               | A format string representing the symbol of Kotlin.                            |
+| `style`             | `"bold blue"`                        | Kiểu cho module.                                                              |
+| `kotlin_binary`     | `"kotlin"`                           | Configures the kotlin binary that Starship executes when getting the version. |
+| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
 ### Các biến
 
 | Biến      | Ví dụ     | Mô tả                            |
 | --------- | --------- | -------------------------------- |
-| version   | `v1.4.21` | Phiên bản của `kotlin`           |
+| version   | `v1.4.21` | The version of `kotlin`          |
 | symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
 | style\* |           | Giá trị ghi đè của `style`       |
 
@@ -2043,13 +2076,13 @@ symbol = "🅺 "
 # ~/.config/starship.toml
 
 [kotlin]
-# Sử dụng Kitlin Compiler nhị phân để lấy phiên bản được cài đặt
+# Uses the Kotlin Compiler binary to get the installed version
 kotlin_binary = "kotlinc"
 ```
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Nếu biến môi trường `$KUBECONFIG` được thiết lập, mô đun sẽ sử dụng cái đó nếu nó không sử dụng `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -2362,7 +2395,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module                                                      |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module                                                 |
 | `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `"👑 "`                               | The symbol used before displaying the version of Nim.                     |
 | `detect_extensions` | `["nim", "nims", "nimble"]`          | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
@@ -3188,7 +3221,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 | Biến      | Mặc định | Mô tả                                                      |
 | --------- | -------- | ---------------------------------------------------------- |
 | indicator |          | Mirrors the value of `indicator` for currently used shell. |
-| style\* |          | Giá trị ghi đè của `style`.                                |
+| style\* |          | Mirrors the value of option `style`.                       |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -3542,7 +3575,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `"%r"`. Otherwise, it de
 
 | Biến      | Ví dụ      | Mô tả                      |
 | --------- | ---------- | -------------------------- |
-| thời gian | `13:08:10` | The current time.          |
+| time      | `13:08:10` | The current time.          |
 | style\* |            | Giá trị ghi đè của `style` |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
@@ -3794,7 +3827,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `""`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `mô tả`             | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `"<custom module>"`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
