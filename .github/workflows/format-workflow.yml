@@ -24,7 +24,7 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
       - name: Install | Taplo
-        run: cargo install --debug --locked --version 0.7.0 taplo-cli
+        run: cargo install --debug --locked --version 0.7.2 taplo-cli
       - name: Presets | Validate with schema
         run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/.vuepress/public/presets/toml/*.toml
 
