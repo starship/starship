@@ -1878,11 +1878,11 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable   | Ejemplo    | Descripción                                           |
-| ---------- | ---------- | ----------------------------------------------------- |
-| hostname   | `computer` | The hostname of the computer                          |
-| style\*  |            | Refleja el valor de la opción `style`                 |
-| ssh_symbol | `"🌏 "`     | The symbol to represent when connected to SSH session |
+| Variable   | Ejemplo       | Descripción                                           |
+| ---------- | ------------- | ----------------------------------------------------- |
+| hostname   | `computadora` | The hostname of the computer                          |
+| style\*  |               | Refleja el valor de la opción `style`                 |
+| ssh_symbol | `"🌏 "`        | The symbol to represent when connected to SSH session |
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
@@ -1963,7 +1963,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Opción             | Predeterminado                | Descripción                                                              |
 | ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
+| `threshold`*       | `1`                           | Muestra el número de tareas si se exceden.                               |
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
 | `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
 | `format`           | `"[$symbol$number]($style) "` | El formato del módulo.                                                   |
@@ -1977,7 +1977,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
-| number    | `1`     | The number of jobs                     |
+| número    | `1`     | El número de tareas                    |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
@@ -2058,7 +2058,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`                |
+| version   | `v1.4.21` | La versión de `kotlin`                 |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -2246,7 +2246,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v5.4.0` | The version of `lua`                   |
+| version   | `v5.4.0` | La versión de `lua`                    |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
