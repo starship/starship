@@ -173,7 +173,7 @@
 
 ### Крок 1. Встановіть Starship
 
-Виберіть вашу операційну систему зі списку нижче, щоб переглянути інструкцію з установки:
+Виберіть Вашу операційну систему зі списку нижче, щоб переглянути інструкцію з установки:
 
 <details>
 <summary>Android</summary>
@@ -264,7 +264,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Крок 2. Налаштування вашої оболонки для використання Starship
+### Крок 2. Налаштуйте Вашу оболонку для використання Starship
 
 Налаштуйте свою оболонку, щоб ініціалізувати starship. Виберіть ваш варіант зі списку:
 
@@ -389,7 +389,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Крок 3. Configure Starship
+### Крок 3. Налаштуйте Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
@@ -409,9 +409,9 @@ If you are interested in helping contribute to starship, please take a look at o
 
 ## 💭 Inspired By
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Будь ласка, перегляньте ці попередні роботи, які надихнули на створення starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Командний рядок ZSH для астронавтів.
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
@@ -422,6 +422,6 @@ Please check out these previous works that helped inspire the creation of starsh
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Ліцензія
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
