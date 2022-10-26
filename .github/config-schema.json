@@ -181,7 +181,8 @@
         "min_time_to_notify": 45000,
         "show_milliseconds": false,
         "show_notifications": false,
-        "style": "yellow bold"
+        "style": "yellow bold",
+        "tty_disabled": true
       },
       "allOf": [
         {
@@ -2098,6 +2099,10 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        },
+        "tty_disabled": {
+          "default": true,
           "type": "boolean"
         },
         "show_notifications": {
