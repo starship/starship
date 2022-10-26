@@ -15,7 +15,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     if cfg!(target_os = "linux") && config.tty_disabled {
         let in_graphical_session = ["DISPLAY", "WAYLAND_DISPLAY", "MIR_SOCKET"]
             .iter()
-            .map(|&var| context.get_env(var))
+            .map(|&var| context.get_env(var).filter(|val| val.len() > 0))
             .any(|o| o.is_some());
 
         if !in_graphical_session {
