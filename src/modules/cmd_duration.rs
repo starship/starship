@@ -12,6 +12,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cmd_duration");
     let config: CmdDurationConfig = CmdDurationConfig::try_load(module.config);
 
+    if cfg!(target_os = "linux") && config.tty_disabled {
+        let in_graphical_session = ["DISPLAY", "WAYLAND_DISPLAY", "MIR_SOCKET"]
+            .iter()
+            .map(|&var| context.get_env(var))
+            .any(|o| o.is_some());
+
+        if !in_graphical_session {
+            return None;
+        };
+    }
+
     if config.min_time < 0 {
         log::warn!(
             "min_time in [cmd_duration] ({}) was less than zero",
@@ -117,6 +128,7 @@ mod tests {
     fn config_blank_duration_1s() {
         let actual = ModuleRenderer::new("cmd_duration")
             .cmd_duration(1000)
+            .env("WAYLAND_DISPLAY", "wayland-0")
             .collect();
 
         let expected = None;
@@ -127,6 +139,7 @@ mod tests {
     fn config_blank_duration_5s() {
         let actual = ModuleRenderer::new("cmd_duration")
             .cmd_duration(5000)
+            .env("WAYLAND_DISPLAY", "wayland-0")
             .collect();
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("5s")));
@@ -141,6 +154,7 @@ mod tests {
                 min_time = 5000
             })
             .cmd_duration(3000)
+            .env("WAYLAND_DISPLAY", "wayland-0")
             .collect();
 
         let expected = None;
@@ -155,6 +169,7 @@ mod tests {
                 min_time = 5000
             })
             .cmd_duration(10000)
+            .env("WAYLAND_DISPLAY", "wayland-0")
             .collect();
 
         let expected = Some(format!("took {} ", Color::Yellow.bold().paint("10s")));
@@ -169,6 +184,7 @@ mod tests {
                 format = "underwent [$duration]($style) "
             })
             .cmd_duration(1000)
+            .env("WAYLAND_DISPLAY", "wayland-0")
             .collect();
 
         let expected = None;
@@ -183,9 +199,32 @@ mod tests {
                 format = "underwent [$duration]($style) "
             })
             .cmd_duration(5000)
+            .env("WAYLAND_DISPLAY", "wayland-0")
             .collect();
 
         let expected = Some(format!("underwent {} ", Color::Yellow.bold().paint("5s")));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_disabled_on_tty() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .cmd_duration(3000)
+            .collect();
+
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn duration_disabled_on_tty_works_on_multiplexers() {
+        let actual = ModuleRenderer::new("cmd_duration")
+            .env("WAYLAND_DISPLAY", "wayland-0")
+            .cmd_duration(3000)
+            .collect();
+
+        let expected = Some(format!("took {} ", Color::Yellow.bold().paint("3s")));
         assert_eq!(expected, actual);
     }
 }
