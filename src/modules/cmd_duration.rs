@@ -206,6 +206,7 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
+    #[cfg(target_os = "linux")]
     #[test]
     fn duration_disabled_on_tty() {
         let actual = ModuleRenderer::new("cmd_duration")
@@ -217,6 +218,7 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
+    #[cfg(target_os = "linux")]
     #[test]
     fn duration_disabled_on_tty_works_on_multiplexers() {
         let actual = ModuleRenderer::new("cmd_duration")
