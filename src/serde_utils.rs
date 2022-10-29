@@ -136,7 +136,7 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
                 .iter()
                 .filter_map(|field| {
                     let score = strsim::jaro_winkler(key, field);
-                    (score > 0.8).then(|| (score, field))
+                    (score > 0.8).then_some((score, field))
                 })
                 .max_by(|(score_a, _field_a), (score_b, _field_b)| {
                     score_a.partial_cmp(score_b).unwrap_or(Ordering::Equal)
