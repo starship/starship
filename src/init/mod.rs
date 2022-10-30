@@ -95,17 +95,15 @@ impl StarshipPath {
 init code. The stub produces the main init script, then evaluates it with
 `source` and process substitution */
 pub fn init_stub(shell_name: &str) -> io::Result<()> {
-    let starship = path_to_starship();
-
-    log::debug!("Starship: {}", starship);
-    log::debug!("Shell name: {}", shell_name);
+    let starship = StarshipPath::init()?;
 
     let shell_basename = Path::new(shell_name)
         .file_stem()
         .and_then(OsStr::to_str)
         .unwrap_or(shell_name);
 
-    let starship = StarshipPath::init()?;
+    log::debug!("Starship path: {:?}", starship.str_path());
+    log::debug!("Shell name: {}", shell_name);
 
     match shell_basename {
         "bash" => print!(
