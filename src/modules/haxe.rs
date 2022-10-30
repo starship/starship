@@ -61,12 +61,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_haxe_version(context: &Context) -> Option<String> {
-    if let Some(version) = get_haxerc_version(context) {
-        Some(version)
-    } else {
-        let cmd_output = context.exec_cmd("haxe", &["--version"])?;
+    get_haxerc_version(context).or_else(|| {
+        context.exec_cmd("haxe", &["--version"])?;
         parse_haxe_version(cmd_output.stdout.as_str())
-    }
+    })
 }
 
 fn get_haxerc_version(context: &Context) -> Option<String> {
