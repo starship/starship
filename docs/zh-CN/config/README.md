@@ -119,7 +119,7 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 
 - 如果变量 `region` 是 `None` 或者为空，`(@$region)` 将不会显示，否则 `@` 之后会显示 region 的值。
 - `(some text)` 将永远不会显示因为在括号里并没有变量。
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. This works the same as `(\[$a$b\] )`.
+- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. 此操作与 `(\[$a$b\])` 相同。
 
 #### 特殊字符
 
