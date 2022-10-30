@@ -119,13 +119,13 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 
 - 如果变量 `region` 是 `None` 或者为空，`(@$region)` 将不会显示，否则 `@` 之后会显示 region 的值。
 - `(some text)` 将永远不会显示因为在括号里并没有变量。
-- When `$all` is a shortcut for `\[$a$b\]`, `($all)` will show nothing only if `$a` and `$b` are both `None`. 此操作与 `(\[$a$b\])` 相同。
+- 当 `$all` 是 `\[$a$b\]`的简略写法，`($all)` 只在 `$a` 和 `$b` 两者均不为 `None` 时才会显示内容。 此这与`(\[$a$b\])` 作用相同。
 
 #### 特殊字符
 
 以下符号在格式字符串中具有特殊用途，必须转义： `$ [ ] ( )`。
 
-Note that TOML has [both basic strings and literal strings](https://toml.io/en/v1.0.0#string). 建议在你的配置中使用字面字符串(由单引号包围)。 如果你想使用一个基本的字符串(由双引号包围)，你必须在双引号前面添加反斜杠符号进行转义（即使用\“abc\"输出"abc"）。
+需要注意TOML文件同时有[基本字符串和字符串字面量](https://toml.io/en/v1.0.0#string). 建议在你的配置中使用字符串字面量(由单引号包围)。 如果你想使用一个基本字符串(由双引号包围)，你必须在双引号前面添加反斜杠符号进行转义(即使用\“abc\"输出"abc")
 
 For example, when you want to print a `$` symbol on a new line, the following configs for `format` are equivalent:
 
