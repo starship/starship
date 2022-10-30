@@ -6,7 +6,7 @@ use crate::formatter::VersionFormatter;
 use serde_json as json;
 
 use regex::Regex;
-const HAXERC_VERSION_PATTERN: &str = "(?P<version>[0-9a-zA-Z][-+0-9.a-zA-Z]+)";
+const HAXERC_VERSION_PATTERN: &str = "(?:[0-9a-zA-Z][-+0-9.a-zA-Z]+)";
 
 /// Creates a module with the current Haxe version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -62,35 +62,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_haxe_version(context: &Context) -> Option<String> {
     get_haxerc_version(context).or_else(|| {
-        context.exec_cmd("haxe", &["--version"])?;
+        let cmd_output = context.exec_cmd("haxe", &["--version"])?;
         parse_haxe_version(cmd_output.stdout.as_str())
     })
 }
 
 fn get_haxerc_version(context: &Context) -> Option<String> {
     let raw_json = context.read_file_from_pwd(".haxerc")?;
-        let package_json: json::Value = json::from_str(&raw_json).ok()?;
+    let package_json: json::Value = json::from_str(&raw_json).ok()?;
 
-        let raw_version = package_json.get("version")?.as_str()?;
-        if raw_version == "null" {
-            return None;
-        };
-        if raw_version.contains('/') || raw_version.contains('\\') {
-            return None;
-        }
-
-        Some(raw_version.to_string())
-    } else {
-        None
+    let raw_version = package_json.get("version")?.as_str()?;
+    if raw_version.contains('/') || raw_version.contains('\\') {
+        return None;
     }
+    Some(raw_version.to_string())
 }
 
 fn parse_haxe_version(raw_version: &str) -> Option<String> {
     let re = Regex::new(HAXERC_VERSION_PATTERN).ok()?;
-    let captures = re.captures(raw_version)?;
-    let version = &captures["version"];
-
-    Some(version.to_string())
+    if !re.is_match(raw_version)  {
+        return None;
+    }
+    Some(raw_version.trim().to_string())
 }
 
 #[cfg(test)]
