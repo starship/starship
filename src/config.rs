@@ -48,7 +48,17 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
     /// Create `ValueDeserializer` wrapper and use it to call `Deserialize::deserialize` on it.
     fn from_config(config: &'a Value) -> Result<Self, ValueError> {
         let deserializer = ValueDeserializer::new(config);
-        T::deserialize(deserializer)
+        T::deserialize(deserializer).or_else(|err| {
+            // If the error is an unrecognized key, print a warning and run
+            // deserialize ignoring that error. Otherwise, just return the error
+            if err.to_string().contains("Unknown key") {
+                log::warn!("{}", err);
+                let deserializer2 = ValueDeserializer::new(config).with_no_ignored_error();
+                T::deserialize(deserializer2)
+            } else {
+                Err(err)
+            }
+        })
     }
 }
 
