@@ -80,7 +80,7 @@ fn get_haxerc_version(context: &Context) -> Option<String> {
 
 fn parse_haxe_version(raw_version: &str) -> Option<String> {
     let re = Regex::new(HAXERC_VERSION_PATTERN).ok()?;
-    if !re.is_match(raw_version)  {
+    if !re.is_match(raw_version) {
         return None;
     }
     Some(raw_version.trim().to_string())
