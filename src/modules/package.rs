@@ -103,17 +103,17 @@ fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<St
 
 fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<String> {
     context
-        .read_file_from_pwd("build.gradle")
+        .read_file_from_pwd("gradle.properties")
         .and_then(|contents| {
-            let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+            let re = Regex::new(r"version=(?P<version>.*)").unwrap();
             let caps = re.captures(&contents)?;
             format_version(&caps["version"], config.version_format)
-        })
-        .or_else(|| {
-            let properties_file_contents = context.read_file_from_pwd("gradle.properties")?;
-            let re = Regex::new(r"version=(?P<version>.*)").unwrap();
-            let caps = re.captures(&properties_file_contents)?;
+        }).or_else(|| {
+            let build_file_contents = context.read_file_from_pwd("build.gradle")?;
+            let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+            let caps = re.captures(&build_file_contents)?;
             format_version(&caps["version"], config.version_format)
+
         })
 }
 
