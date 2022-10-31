@@ -119,7 +119,7 @@ Por exemplo:
 
 - `(@$region)` não vai exibir nada caso a variável `region` seja `None` ou vazia, caso contrario vai exibir `@` seguido pelo valor da variável region.
 - `(texto qualquer)` não vai exibir nada sempre, pois não existe variável entre os parenteses.
-- Quando usar `$all` é um atalho para `\[$a$b\]`, `($all)` vai exibir nada somente quando `$a` e `$b` são `None`. Isto funciona da mesma forma que `(\[$a$b\] )`.
+- When `$combined` is a shortcut for `\[$a$b\]`, `($combined)` will show nothing only if `$a` and `$b` are both `None`. Isto funciona da mesma forma que `(\[$a$b\] )`.
 
 #### Caracteres Especiais
 
