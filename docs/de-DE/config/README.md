@@ -119,7 +119,7 @@ Hier sind ein paar Beispiele:
 
 - `(@$region)` ist die Variable `region` undefiniert (`None`) oder eine leere Zeichenkette (`""`) dann wird nichts angezeigt, ansonsten <0>@</0> gefolgt von dem Inhalt der Variablen.
 - `(some text)` zeigt nichts an, weil der Text in Klammern keine Variablen enthält.
-- Wenn `$all` eine Abkürzung für `\[$a$b\]` ist, dann zeigt `($all)` nur nichts an wenn `$a` and `$b` beide undefiniert (`None`) sind. Dasselbe passiert mit `(\[$a$b\] )`.
+- When `$combined` is a shortcut for `\[$a$b\]`, `($combined)` will show nothing only if `$a` and `$b` are both `None`. Dasselbe passiert mit `(\[$a$b\] )`.
 
 #### Spezielle Zeichen
 
