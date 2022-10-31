@@ -118,7 +118,7 @@ Starshipのほとんどのモジュールでは、表示スタイルを設定で
 
 - `(@$region)` は`region`が`None`または空だった場合表示されませんが、値がある場合は`@` に続いてregionの値が表示されます。
 - `(some text)` は括弧の中に変数がないので、常に何も表示しません。
-- `$all` が `\[$a$b\]` のショートカットである時、 `$a` と `$b` が両方とも `None` である場合に限り、`($all)` は何も表示しません。 これは `(\[$a$b\] )` と同じ動作をします。
+- When `$combined` is a shortcut for `\[$a$b\]`, `($combined)` will show nothing only if `$a` and `$b` are both `None`. これは `(\[$a$b\] )` と同じ動作をします。
 
 #### 特殊文字
 
