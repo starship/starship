@@ -119,7 +119,7 @@ Ví dụ:
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(một vài văn bản)` sẽ không hiển thị thứ gì khi không có những biến bọc trong các dấu ngoặc.
-- Khi `$all` là một shortcut cho `\[$a$b\]`, `($all)` sẽ không hiển thị chỉ khi `$a` và `$b` đều là `None`. Cái này làm việc giống như `(\[$a$b\] )`.
+- When `$combined` is a shortcut for `\[$a$b\]`, `($combined)` will show nothing only if `$a` and `$b` are both `None`. Cái này làm việc giống như `(\[$a$b\] )`.
 
 #### Special characters
 
