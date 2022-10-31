@@ -1,5 +1,5 @@
 [buf]
-format = '(with [$symbol($version )]($style))'
+format = '(with [$symbol$version ]($style))'
 
 [bun]
 format = '(via [$symbol($version )]($style))'
