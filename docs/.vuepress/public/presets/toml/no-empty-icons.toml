@@ -44,7 +44,6 @@ format = '(via [$symbol($version )]($style))'
 format = '(on [$symbol$branch(:$remote_branch)]($style) )'
 
 [git_commit]
-commit_hash_length = 7
 format = '([\($hash$tag\)]($style) )'
 
 [git_state]
