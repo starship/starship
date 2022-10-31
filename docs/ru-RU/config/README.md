@@ -119,7 +119,7 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 - `(@$region)` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `(некоторый текст)` всегда не показывает ничего, поскольку в скобках нет переменных.
-- Когда `$all` является ярлыком для `\[$a$b\]`, `($all)` будет показываться только если `$a` и `$b` не являются `None`. Это работает так же, как `(\[$a$b\] )`.
+- When `$combined` is a shortcut for `\[$a$b\]`, `($combined)` will show nothing only if `$a` and `$b` are both `None`. Это работает так же, как `(\[$a$b\] )`.
 
 #### Special characters
 
