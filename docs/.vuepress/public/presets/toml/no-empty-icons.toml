@@ -89,9 +89,6 @@ format = '(via [$symbol($version )]($style))'
 [ocaml]
 format = '(via [$symbol($version )(\($switch_indicator$switch_name\) )]($style))'
 
-[openstack]
-format = '(on [$symbol$cloud(\($project\))]($style) )'
-
 [package]
 format = '(is [$symbol$version]($style) )'
 
@@ -100,9 +97,6 @@ format = '(via [$symbol($version )]($style))'
 
 [php]
 format = '(via [$symbol($version )]($style))'
-
-[pulumi]
-format = '(via [$symbol($username@)$stack]($style) )'
 
 [purescript]
 format = '(via [$symbol($version )]($style))'
@@ -128,14 +122,8 @@ format = '(via [$symbol($version )]($style))'
 [scala]
 format = '(via [$symbol($version )]($style))'
 
-[spack]
-format = '(via [$symbol$environment]($style) )'
-
 [swift]
 format = '(via [$symbol($version )]($style))'
-
-[terraform]
-format = '(via [$symbol$workspace]($style) )'
 
 [vagrant]
 format = '(via [$symbol($version )]($style))'
