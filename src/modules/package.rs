@@ -102,11 +102,19 @@ fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<St
 }
 
 fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let file_contents = context.read_file_from_pwd("build.gradle")?;
-    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap();
-    let caps = re.captures(&file_contents)?;
+    context
+        .read_file_from_pwd("gradle.properties")
+        .and_then(|contents| {
+            let re = Regex::new(r"version=(?P<version>.*)").unwrap();
+            let caps = re.captures(&contents)?;
+            format_version(&caps["version"], config.version_format)
+        }).or_else(|| {
+            let build_file_contents = context.read_file_from_pwd("build.gradle")?;
+            let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+            let caps = re.captures(&build_file_contents)?;
+            format_version(&caps["version"], config.version_format)
 
-    format_version(&caps["version"], config.version_format)
+        })
 }
 
 fn get_composer_version(context: &Context, config: &PackageConfig) -> Option<String> {
@@ -958,6 +966,17 @@ java {
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(config_content))?;
         expect_output(&project_dir, None, None);
+        project_dir.close()
+    }
+    #[test]
+    fn test_extract_grade_version_from_properties() -> io::Result<()> {
+        let config_name = "gradle.properties";
+        let config_content = "
+            version=1.2.3
+            ";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
 
