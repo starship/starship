@@ -35,7 +35,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Prevent File Change
-        uses: xalvarez/prevent-file-change-action@v1.3.0
+        uses: xalvarez/prevent-file-change-action@v1.3.1
         if: ${{ github.event.pull_request.head.ref != 'i18n_master' }}
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
