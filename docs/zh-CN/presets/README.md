@@ -10,13 +10,21 @@
 
 [![Nerd 字体符号预设截图](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
+## [No Nerd Fonts](./no-nerd-font.md)
+
+This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+
+::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
+
+[Click to view No Nerd Font preset](./no-nerd-font)
+
 ## [Bracketed Segments](./bracketed-segments.md)
 
 此预设使用括号来分隔所有组件的提示符，不使用 Starship 默认的分隔词（“via”，“on” 等等）。
 
 [![Bracketed Segments preset预设屏幕截图](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [纯文本符号](./plain-text.md)
+## [Plain Text Symbols](./plain-text.md)
 
 此预设将所有组件的符号改为纯文本。 适合没有 Unicode 的环境。
 
