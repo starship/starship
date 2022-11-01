@@ -10,13 +10,21 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 [![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
-## [Moduły w nawiasach kwadratowych](./bracketed-segments.md)
+## [No Nerd Fonts](./no-nerd-font.md)
+
+This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+
+::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
+
+[Click to view No Nerd Font preset](./no-nerd-font)
+
+## [Bracketed Segments](./bracketed-segments.md)
 
 Ta konfiguracja zmienia format wyświetlania wbudowanych modułów - zamiast domyślnych wyrazów ("via", "on", itp.) są wypisywane w nawiasach kwadratowych.
 
 [![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Symbole "plain text"](./plain-text.md)
+## [Plain Text Symbols](./plain-text.md)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
