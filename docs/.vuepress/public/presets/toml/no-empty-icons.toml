@@ -25,9 +25,6 @@ format = '(via [$symbol($version )]($style))'
 [deno]
 format = '(via [$symbol($version )]($style))'
 
-[docker_context]
-format = '(via [$symbol$context]($style) )'
-
 [dotnet]
 format = '(via [$symbol($version )(🎯 $tfm )]($style))'
 
@@ -40,15 +37,6 @@ format = '(via [$symbol($version )]($style))'
 [erlang]
 format = '(via [$symbol($version )]($style))'
 
-[git_branch]
-format = '(on [$symbol$branch(:$remote_branch)]($style) )'
-
-[git_commit]
-format = '([\($hash$tag\)]($style) )'
-
-[git_state]
-format = '(\([$state( $progress_current/$progress_total)]($style)\) )'
-
 [golang]
 format = '(via [$symbol($version )]($style))'
 
@@ -57,9 +45,6 @@ format = '(via [$symbol($version )]($style))'
 
 [helm]
 format = '(via [$symbol($version )]($style))'
-
-[hg_branch]
-format = '(on [$symbol$branch]($style) )'
 
 [java]
 format = '(via [$symbol($version )]($style))'
@@ -73,14 +58,8 @@ format = '(via [$symbol($version )]($style))'
 [lua]
 format = '(via [$symbol($version )]($style))'
 
-[meson]
-format = '(via [$symbol$project]($style) )'
-
 [nim]
 format = '(via [$symbol($version )]($style))'
-
-[nix_shell]
-format = '(via [$symbol$state( \($name\))]($style) )'
 
 [nodejs]
 format = '(via [$symbol($version )]($style))'
@@ -128,9 +107,6 @@ format = '(via [$symbol($version )]($style))'
 
 [vagrant]
 format = '(via [$symbol($version )]($style))'
-
-[vcsh]
-format = '(vcsh [$symbol$repo]($style) )'
 
 [vlang]
 format = '(via [$symbol($version )]($style))'
