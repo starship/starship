@@ -10,13 +10,21 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 [![Nerd Font 預設樣式的截圖](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
-## [括號片段](./bracketed-segments.md)
+## [No Nerd Fonts](./no-nerd-font.md)
+
+This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+
+::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
+
+[Click to view No Nerd Font preset](./no-nerd-font)
+
+## [Bracketed Segments](./bracketed-segments.md)
 
 這個預設樣式使所有模組使用括號片段內的格式顯示，而非使用 Starship 預設（"via", "on", etc.）。
 
 [![括號片段預設樣式的截圖](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [純文字符號](./plain-text.md)
+## [Plain Text Symbols](./plain-text.md)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
