@@ -79,17 +79,17 @@ In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared wit
 
 The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes         |
-| ------ | ------------------------- | ------------- |
-| `'`    | literal string            | recommended   |
-| `"`    | string                    | more escaping |
-| `'''`  | multi-line literal string |               |
-| `"""`  | multi-line string         |               |
+| Symbol | Type                      | Notes                                                  |
+| ------ | ------------------------- | ------------------------------------------------------ |
+| `'`    | literal string            | less escaping                                          |
+| `"`    | string                    | more escaping                                          |
+| `'''`  | multi-line literal string | less escaping                                          |
+| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
 
 For example:
 
 ```toml
-# literal string (recommended)
+# literal string
 format = '☺\☻ '
 
 # regular string
@@ -103,7 +103,7 @@ When using line breaks, multi-line declarations can be used.
 For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
 
 ```toml
-# with literal string (recommended)
+# with literal string
 format = '''
 
 \$'''
@@ -115,6 +115,19 @@ format = """
 
 # with basic string
 format = "\n\\$"
+```
+
+In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+
+```toml
+format = """
+line1\
+line1\
+line1
+line2\
+line2\
+line2
+"""
 ```
 
 ### Format Strings
