@@ -18,13 +18,13 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 [Click to view No Nerd Font preset](./no-nerd-font)
 
-## [Bracketed Segments](./bracketed-segments.md)
+## [پارچە کەوانەکراوەکان](./bracketed-segments.md)
 
 This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
 
 [![ڕوونماوێنەی پێشڕێکخستنی Bracketed Segments](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text.md)
+## [هێما نووسینەکییە ئاساییەکان](./plain-text.md)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
