@@ -4,7 +4,7 @@
 
 This preset restricts the use of symbols to those from emoji and powerline sets.
 
-This means that even without a Nerd Font installed, you should be able to view all module symbols.
+Esto significa que incluso sin una fuente Nerd instalada, debería ser capaz de ver todos los símbolos del módulo.
 
 This preset will become the default preset in a future release of starship.
 
