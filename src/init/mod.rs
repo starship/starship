@@ -27,7 +27,7 @@ impl StarshipPath {
     fn init() -> io::Result<Self> {
         let exe_name = option_env!("CARGO_PKG_NAME").unwrap_or("starship");
 
-        let native_path = match which(exe_name) {
+        let invocation_path = match which(exe_name) {
             Ok(path) => {
                 let current_exe = path
                     .to_str()
@@ -35,7 +35,7 @@ impl StarshipPath {
                     .to_string();
                 current_exe
             }
-            Err(error) => {
+            Err(_error) => {
                 let current_exe = env::current_exe()?
                     .to_str()
                     .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "can't convert to str"))?
@@ -43,7 +43,9 @@ impl StarshipPath {
                 current_exe
             }
         };
-        Ok(Self { native_path })
+        Ok(Self {
+            native_path: invocation_path.into(),
+        })
     }
     fn str_path(&self) -> io::Result<&str> {
         let current_exe = self
