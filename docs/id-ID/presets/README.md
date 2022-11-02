@@ -18,13 +18,13 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 [Click to view No Nerd Font preset](./no-nerd-font)
 
-## [Bracketed Segments](./bracketed-segments.md)
+## [Segmen Berkurung](./bracketed-segments.md)
 
 Konfigurasi prasetel berikut mengubah format dari seluruh modul bawaan untuk menampilkan segmennya di dalam tanda kurung daripada menggunakan susunan kata bawaan Starship ("via", "on", dll.).
 
 [![Tangkapan Layar dari Segmen Berkurung](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text.md)
+## [Simbol Teks Sederhana](./plain-text.md)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
