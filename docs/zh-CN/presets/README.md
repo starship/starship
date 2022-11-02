@@ -24,7 +24,7 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 [![Bracketed Segments preset预设屏幕截图](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text.md)
+## [纯文本符号](./plain-text.md)
 
 此预设将所有组件的符号改为纯文本。 适合没有 Unicode 的环境。
 
