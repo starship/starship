@@ -18,13 +18,13 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 [Click to view No Nerd Font preset](./no-nerd-font)
 
-## [Bracketed Segments](./bracketed-segments.md)
+## [Moduły w nawiasach kwadratowych](./bracketed-segments.md)
 
 Ta konfiguracja zmienia format wyświetlania wbudowanych modułów - zamiast domyślnych wyrazów ("via", "on", itp.) są wypisywane w nawiasach kwadratowych.
 
 [![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Plain Text Symbols](./plain-text.md)
+## [Symbole "plain text"](./plain-text.md)
 
 This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
 
