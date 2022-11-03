@@ -208,17 +208,15 @@ fn get_config_path(shell: &str) -> Option<PathBuf> {
 }
 
 fn get_starship_config() -> String {
-    std::env::var("STARSHIP_CONFIG")
-        .map(PathBuf::from)
-        .ok()
-        .or_else(|| {
-            utils::home_dir().map(|mut home_dir| {
-                home_dir.push(".config/starship.toml");
-                home_dir
-            })
-        })
-        .and_then(|config_path| fs::read_to_string(config_path).ok())
-        .unwrap_or_else(|| UNKNOWN_CONFIG.to_string())
+    let configs = crate::config::get_config_path()
+        .map(crate::config::read_configs)
+        .unwrap_or_else(Vec::new);
+
+    if configs.is_empty() {
+        UNKNOWN_CONFIG.to_string()
+    } else {
+        configs.join("\n---\n")
+    }
 }
 
 fn get_shell_version(shell: &str) -> String {

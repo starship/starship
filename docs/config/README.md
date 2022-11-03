@@ -42,6 +42,9 @@ Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
+The `STARSHIP_CONFIG` environment variable may point towards multiple files separated by the OS's PATH-like separator; `:` on MacOS and Linux and `;` on Windows.
+The first mention of a value wins; the first file has precedence over the following files. Typically the default, or catch-all, config should be last.
+
 ### Logging
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to a instance of your terminal.
