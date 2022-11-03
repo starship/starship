@@ -89,7 +89,7 @@ fn get_config_file_location(context: &Context) -> Option<PathBuf> {
 fn parse_json(json_file_path: &Path) -> Option<JValue> {
     let mut buffer: Vec<u8> = Vec::new();
 
-    let json_file = File::open(&json_file_path).ok()?;
+    let json_file = File::open(json_file_path).ok()?;
     let mut reader = BufReader::new(json_file);
     reader.read_to_end(&mut buffer).ok()?;
 

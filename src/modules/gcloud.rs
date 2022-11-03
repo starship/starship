@@ -56,7 +56,7 @@ fn get_current_config(context: &Context) -> Option<(String, PathBuf)> {
     let name = get_active_config(context, &config_dir)?;
     let path = config_dir
         .join("configurations")
-        .join(format!("config_{}", name));
+        .join(format!("config_{name}"));
     Some((name, path))
 }
 
@@ -154,12 +154,12 @@ mod tests {
     fn account_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
         let config_default_path = dir.path().join("configurations").join("config_default");
-        let mut config_default_file = File::create(&config_default_path)?;
+        let mut config_default_file = File::create(config_default_path)?;
         config_default_file.write_all(
             b"\
 [core]
@@ -183,12 +183,12 @@ account = foo@example.com
     fn account_with_custom_format_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
         let config_default_path = dir.path().join("configurations").join("config_default");
-        let mut config_default_file = File::create(&config_default_path)?;
+        let mut config_default_file = File::create(config_default_path)?;
         config_default_file.write_all(
             b"\
 [core]
@@ -213,12 +213,12 @@ account = foo@example.com
     fn account_and_region_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
         let config_default_path = dir.path().join("configurations").join("config_default");
-        let mut config_default_file = File::create(&config_default_path)?;
+        let mut config_default_file = File::create(config_default_path)?;
         config_default_file.write_all(
             b"\
 [core]
@@ -245,12 +245,12 @@ region = us-central1
     fn account_and_region_set_with_alias() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
         let config_default_path = dir.path().join("configurations").join("config_default");
-        let mut config_default_file = File::create(&config_default_path)?;
+        let mut config_default_file = File::create(config_default_path)?;
         config_default_file.write_all(
             b"\
 [core]
@@ -281,7 +281,7 @@ region = us-central1
     fn active_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default1")?;
 
         let actual = ModuleRenderer::new("gcloud")
@@ -301,12 +301,12 @@ region = us-central1
     fn project_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
         let config_default_path = dir.path().join("configurations").join("config_default");
-        let mut config_default_file = File::create(&config_default_path)?;
+        let mut config_default_file = File::create(config_default_path)?;
         config_default_file.write_all(
             b"\
 [core]
@@ -331,12 +331,12 @@ project = abc
     fn project_set_in_env() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
         let config_default_path = dir.path().join("configurations").join("config_default");
-        let mut config_default_file = File::create(&config_default_path)?;
+        let mut config_default_file = File::create(config_default_path)?;
         config_default_file.write_all(
             b"\
 [core]
@@ -365,12 +365,12 @@ project = abc
     fn project_set_with_alias() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
         let config_default_path = dir.path().join("configurations").join("config_default");
-        let mut config_default_file = File::create(&config_default_path)?;
+        let mut config_default_file = File::create(config_default_path)?;
         config_default_file.write_all(
             b"\
 [core]
@@ -413,12 +413,12 @@ project = very-long-project-name
     fn active_config_manually_overridden() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let active_config_path = dir.path().join("active_config");
-        let mut active_config_file = File::create(&active_config_path)?;
+        let mut active_config_file = File::create(active_config_path)?;
         active_config_file.write_all(b"default")?;
 
         create_dir(dir.path().join("configurations"))?;
         let config_default_path = dir.path().join("configurations").join("config_default");
-        let mut config_default_file = File::create(&config_default_path)?;
+        let mut config_default_file = File::create(config_default_path)?;
         config_default_file.write_all(
             b"\
 [core]
@@ -427,7 +427,7 @@ project = default
         )?;
 
         let config_overridden_path = dir.path().join("configurations").join("config_overridden");
-        let mut config_overridden_file = File::create(&config_overridden_path)?;
+        let mut config_overridden_file = File::create(config_overridden_path)?;
         config_overridden_file.write_all(
             b"\
 [core]

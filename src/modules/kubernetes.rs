@@ -100,7 +100,7 @@ fn get_alias<'a>(
     }
 
     return aliases.iter().find_map(|(k, v)| {
-        let re = regex::Regex::new(&format!("^{}$", k)).ok()?;
+        let re = regex::Regex::new(&format!("^{k}$")).ok()?;
         let replaced = re.replace(alias_candidate, *v);
         match replaced {
             Cow::Owned(replaced) => Some(Cow::Owned(replaced)),

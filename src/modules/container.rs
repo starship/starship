@@ -141,7 +141,7 @@ mod tests {
         containerenv.push(".containerenv");
         let mut file = std::fs::File::create(&containerenv)?;
         if let Some(name) = name {
-            file.write_all(format!("image=\"{}\"\n", name).as_bytes())?;
+            file.write_all(format!("image=\"{name}\"\n").as_bytes())?;
         }
 
         // The output of the module

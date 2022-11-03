@@ -102,6 +102,6 @@ mod tests {
     ) {
         let actual = truncate_text(text, truncate_length as usize, truncation_symbol);
 
-        assert_eq!(format!("{}{}", expected, truncation_symbol), actual);
+        assert_eq!(format!("{expected}{truncation_symbol}"), actual);
     }
 }

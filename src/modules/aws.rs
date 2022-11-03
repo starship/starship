@@ -66,7 +66,7 @@ fn get_profile_config<'a>(
     profile: &Option<Profile>,
 ) -> Option<&'a ini::Properties> {
     match profile {
-        Some(profile) => config.section(Some(format!("profile {}", profile))),
+        Some(profile) => config.section(Some(format!("profile {profile}"))),
         None => config.section(Some("default")),
     }
 }
@@ -701,7 +701,7 @@ aws_secret_access_key=dummy
                 "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
             ];
             let possible_values = possible_values.map(|duration| {
-                let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}] ", duration);
+                let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
                 Some(format!(
                     "on {}",
                     Color::Yellow.bold().paint(segment_colored)
@@ -762,7 +762,7 @@ aws_secret_access_key=dummy
             "on {}",
             Color::Yellow
                 .bold()
-                .paint(format!("☁️  astronauts (ap-northeast-2) [{}] ", symbol))
+                .paint(format!("☁️  astronauts (ap-northeast-2) [{symbol}] "))
         ));
 
         assert_eq!(expected, actual);
