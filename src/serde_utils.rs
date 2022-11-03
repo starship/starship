@@ -49,10 +49,8 @@ impl<'de> ValueDeserializer<'de> {
 
     pub fn with_no_ignored_error(self) -> Self {
         ValueDeserializer {
-            value: self.value,
-            info: self.info,
-            current_key: self.current_key,
             error_on_ignored: false,
+            ..self
         }
     }
 }
