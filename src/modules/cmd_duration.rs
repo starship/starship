@@ -75,8 +75,8 @@ fn undistract_me<'a, 'b>(
         if cfg!(target_os = "linux") {
             let in_graphical_session = ["DISPLAY", "WAYLAND_DISPLAY", "MIR_SOCKET"]
                 .iter()
-                .map(|&var| context.get_env(var).filter(|val| !val.is_empty()))
-                .any(|o| o.is_some());
+                .find_map(|&var| context.get_env(var).filter(|val| !val.is_empty()))
+                .is_some();
 
             if !in_graphical_session {
                 return module;
