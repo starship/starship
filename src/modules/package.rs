@@ -168,7 +168,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
-                let ver = t.unescape().ok().map(|s| s.into_owned());
+                let ver = t.unescape().ok().map(std::borrow::Cow::into_owned);
                 return match ver {
                     // Ignore version which is just a property reference
                     Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
@@ -227,12 +227,12 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
 
     let mut cargo_toml: toml::Value = toml::from_str(&file_contents).ok()?;
     let cargo_version = cargo_toml.get("package").and_then(|p| p.get("version"));
-    let raw_version = if let Some(v) = cargo_version.and_then(|v| v.as_str()) {
+    let raw_version = if let Some(v) = cargo_version.and_then(toml::Value::as_str) {
         // regular version string
         v
     } else if cargo_version
         .and_then(|v| v.get("workspace"))
-        .and_then(|w| w.as_bool())
+        .and_then(toml::Value::as_bool)
         .unwrap_or_default()
     {
         // workspace version string (`package.version.worspace = true`)
@@ -526,7 +526,7 @@ license = "MIT"
 }
 "##
                     .to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(project_dir.path())
@@ -1417,7 +1417,7 @@ environment:
         let text = String::from(contains.unwrap_or(""));
         let expected = Some(format!(
             "is {} ",
-            Color::Fixed(208).bold().paint(format!("📦 {}", text))
+            Color::Fixed(208).bold().paint(format!("📦 {text}"))
         ));
 
         if contains.is_some() {

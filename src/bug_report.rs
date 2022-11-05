@@ -26,7 +26,7 @@ pub fn create() {
         println!("Click this link to create a GitHub issue populated with your configuration:\n");
     }
 
-    println!("{}", link);
+    println!("{link}");
 }
 
 const UNKNOWN_SHELL: &str = "<unknown shell>";
@@ -225,11 +225,11 @@ fn get_shell_version(shell: &str) -> String {
     let time_limit = Duration::from_millis(500);
     match shell {
         "powershell" => exec_cmd(
-            &shell,
+            shell,
             &["(Get-Host | Select Version | Format-Table -HideTableHeaders | Out-String).trim()"],
             time_limit,
         ),
-        _ => exec_cmd(&shell, &["--version"], time_limit),
+        _ => exec_cmd(shell, &["--version"], time_limit),
     }
     .map_or_else(
         || UNKNOWN_VERSION.to_string(),

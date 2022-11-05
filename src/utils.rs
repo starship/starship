@@ -433,17 +433,17 @@ pub fn wrap_seq_for_shell(
             if x == escape_begin && !escaped {
                 escaped = true;
                 match shell {
-                    Shell::Bash => format!("{}{}", BASH_BEG, escape_begin),
-                    Shell::Zsh => format!("{}{}", ZSH_BEG, escape_begin),
-                    Shell::Tcsh => format!("{}{}", TCSH_BEG, escape_begin),
+                    Shell::Bash => format!("{BASH_BEG}{escape_begin}"),
+                    Shell::Zsh => format!("{ZSH_BEG}{escape_begin}"),
+                    Shell::Tcsh => format!("{TCSH_BEG}{escape_begin}"),
                     _ => x.to_string(),
                 }
             } else if x == escape_end && escaped {
                 escaped = false;
                 match shell {
-                    Shell::Bash => format!("{}{}", escape_end, BASH_END),
-                    Shell::Zsh => format!("{}{}", escape_end, ZSH_END),
-                    Shell::Tcsh => format!("{}{}", escape_end, TCSH_END),
+                    Shell::Bash => format!("{escape_end}{BASH_END}"),
+                    Shell::Zsh => format!("{escape_end}{ZSH_END}"),
+                    Shell::Tcsh => format!("{escape_end}{TCSH_END}"),
                     _ => x.to_string(),
                 }
             } else {
@@ -559,7 +559,7 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
 fn render_time_component((component, suffix): (&u128, &&str)) -> String {
     match component {
         0 => String::new(),
-        n => format!("{}{}", n, suffix),
+        n => format!("{n}{suffix}"),
     }
 }
 
@@ -750,7 +750,7 @@ mod tests {
         };
         assert_eq!(get_command_string_output(case1), "stdout");
         let case2 = CommandOutput {
-            stdout: String::from(""),
+            stdout: String::new(),
             stderr: String::from("stderr"),
         };
         assert_eq!(get_command_string_output(case2), "stderr");

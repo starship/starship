@@ -33,7 +33,7 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
             .to_str()
             .and_then(|v| v.strip_suffix(".toml"))
             .expect("Failed to process filename");
-        presets.push_str(format!("print::Preset(\"{}\"),\n", name).as_str());
+        presets.push_str(format!("print::Preset(\"{name}\"),\n").as_str());
         match_arms.push_str(
             format!(
                 r#"

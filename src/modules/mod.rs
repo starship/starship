@@ -182,7 +182,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
                 custom::module(custom.strip_prefix("custom.").unwrap(), context)
             }
             _ => {
-                eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
+                eprintln!("Error: Unknown module {module}. Use starship module --list to list out all supported modules.");
                 None
             }
         }
@@ -296,7 +296,7 @@ mod test {
     #[test]
     fn all_modules_have_description() {
         for module in ALL_MODULES {
-            println!("Checking if {:?} has a description", module);
+            println!("Checking if {module:?} has a description");
             assert_ne!(description(module), "<no description>");
         }
     }

@@ -144,7 +144,7 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
             _ => None,
         };
         let did_you_mean = did_you_mean
-            .map(|(_score, field)| format!(" (Did you mean '{}'?)", field))
+            .map(|(_score, field)| format!(" (Did you mean '{field}'?)"))
             .unwrap_or_default();
 
         Err(self.error(format!("Unknown key{did_you_mean}")))
@@ -312,7 +312,7 @@ mod test {
 
         let result = Sample::deserialize(deserializer).unwrap_err();
         assert_eq!(
-            format!("{}", result),
+            format!("{result}"),
             "Error in 'Sample' at 'unknown_key': Unknown key"
         );
     }
@@ -326,7 +326,7 @@ mod test {
 
         let result = StarshipRootConfig::deserialize(deserializer).unwrap_err();
         assert_eq!(
-            format!("{}", result),
+            format!("{result}"),
             "Error in 'StarshipRoot' at 'unknown_key': Unknown key"
         );
     }
@@ -358,7 +358,7 @@ mod test {
 
         let result = Sample::deserialize(deserializer).unwrap_err();
         assert_eq!(
-            format!("{}", result),
+            format!("{result}"),
             "Error in 'Sample' at 'food': Unknown key (Did you mean 'foo'?)"
         );
     }
@@ -378,7 +378,7 @@ mod test {
 
         let result = Sample::deserialize(deserializer).unwrap_err();
         assert_eq!(
-            format!("{}", result),
+            format!("{result}"),
             "Error in 'Sample' at 'foo': invalid type: integer `1`, expected a string"
         );
     }

@@ -72,7 +72,7 @@ fn get_java_version(context: &Context) -> Option<String> {
         })
         .unwrap_or_else(|| String::from("java"));
 
-    let output = context.exec_cmd(&java_command, &["-Xinternalversion"])?;
+    let output = context.exec_cmd(java_command, &["-Xinternalversion"])?;
     let java_version_string = get_command_string_output(output);
 
     parse_java_version(&java_version_string)
@@ -183,7 +183,7 @@ mod tests {
         File::create(dir.path().join("Main.java"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").cmd("java -Xinternalversion", Some(CommandOutput {
             stdout: "OpenJDK 64-Bit Server VM (16+14) for bsd-aarch64 JRE (16+14), built on Jan 17 2021 07:19:47 by \"brew\" with clang Apple LLVM 12.0.0 (clang-1200.0.32.28)\n".to_owned(),
-            stderr: "".to_owned()
+            stderr: String::new()
         })).path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v16 ")));
         assert_eq!(expected, actual);
