@@ -35,14 +35,14 @@ type StyleVariableMapType<'a> =
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringFormatterError {
     Custom(String),
-    Parse(PestError<Rule>),
+    Parse(Box<PestError<Rule>>),
 }
 
 impl fmt::Display for StringFormatterError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Custom(error) => write!(f, "{}", error),
-            Self::Parse(error) => write!(f, "{}", error),
+            Self::Custom(error) => write!(f, "{error}"),
+            Self::Parse(error) => write!(f, "{error}"),
         }
     }
 }
@@ -538,7 +538,7 @@ mod tests {
 
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
-            .map(|variable| Some(Ok(format!("${{{}}}", variable))));
+            .map(|variable| Some(Ok(format!("${{{variable}}}"))));
         let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "${env:PWD}", None);

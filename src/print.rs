@@ -139,7 +139,7 @@ pub fn get_prompt(context: Context) -> String {
 pub fn module(module_name: &str, args: Properties) {
     let context = Context::new(args, Target::Main);
     let module = get_module(module_name, context).unwrap_or_default();
-    print!("{}", module);
+    print!("{module}");
 }
 
 pub fn get_module(module_name: &str, context: Context) -> Option<String> {
@@ -251,7 +251,7 @@ pub fn explain(args: Properties) {
                     escaping = true;
                 }
                 if escaping {
-                    print!("{}", g);
+                    print!("{g}");
                     escaping = !(("a"..="z").contains(&g) || ("A"..="Z").contains(&g));
                     continue;
                 }
@@ -273,7 +273,7 @@ pub fn explain(args: Properties) {
 
                     current_pos = 1;
                 }
-                print!("{}", g);
+                print!("{g}");
             }
             println!();
         } else {
@@ -373,7 +373,7 @@ fn should_add_implicit_custom_module(
     config: &toml::Value,
     module_list: &BTreeSet<String>,
 ) -> bool {
-    let explicit_module_name = format!("custom.{}", custom_module);
+    let explicit_module_name = format!("custom.{custom_module}");
     let is_explicitly_specified = module_list.contains(&explicit_module_name);
 
     if is_explicitly_specified {

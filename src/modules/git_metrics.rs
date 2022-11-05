@@ -139,7 +139,7 @@ mod tests {
         let path = repo_dir.path();
 
         let the_file = path.join("the_file");
-        let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
+        let mut the_file = OpenOptions::new().append(true).open(the_file)?;
         writeln!(the_file, "Added line")?;
         the_file.sync_all()?;
 
@@ -205,7 +205,7 @@ mod tests {
         let path = repo_dir.path();
 
         let the_file = path.join("the_file");
-        let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
+        let mut the_file = OpenOptions::new().append(true).open(the_file)?;
         writeln!(the_file, "Added line")?;
         the_file.sync_all()?;
 
@@ -268,8 +268,8 @@ mod tests {
             .write(true)
             .create(true)
             .truncate(true)
-            .open(&file)?;
-        writeln!(file, "{}", text)?;
+            .open(file)?;
+        writeln!(file, "{text}")?;
         file.sync_all()
     }
 
@@ -280,7 +280,7 @@ mod tests {
 
         // Initialize a new git repo
         run_git_cmd(
-            &[
+            [
                 "init",
                 "--quiet",
                 path.to_str().expect("Path was not UTF-8"),
@@ -291,12 +291,12 @@ mod tests {
 
         // Set local author info
         run_git_cmd(
-            &["config", "--local", "user.email", "starship@example.com"],
+            ["config", "--local", "user.email", "starship@example.com"],
             Some(path),
             true,
         )?;
         run_git_cmd(
-            &["config", "--local", "user.name", "starship"],
+            ["config", "--local", "user.name", "starship"],
             Some(path),
             true,
         )?;
@@ -305,7 +305,7 @@ mod tests {
         // If build environment has `init.defaultBranch` global set
         // it will default to an unknown branch, so need to make & change branch
         run_git_cmd(
-            &["checkout", "-b", "master"],
+            ["checkout", "-b", "master"],
             Some(path),
             // command expected to fail if already on the expected branch
             false,
@@ -313,9 +313,9 @@ mod tests {
 
         // Write a file on master and commit it
         write_file(file, "First Line\nSecond Line\nThird Line")?;
-        run_git_cmd(&["add", "the_file"], Some(path), true)?;
+        run_git_cmd(["add", "the_file"], Some(path), true)?;
         run_git_cmd(
-            &["commit", "--message", "Commit A", "--no-gpg-sign"],
+            ["commit", "--message", "Commit A", "--no-gpg-sign"],
             Some(path),
             true,
         )?;

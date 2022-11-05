@@ -125,7 +125,7 @@ mod tests {
             let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
             let expected = Some(format!(
                 "via {}",
-                Color::Purple.bold().paint(format!("λ {} ", resolver))
+                Color::Purple.bold().paint(format!("λ {resolver} "))
             ));
             assert_eq!(expected, actual);
             dir.close()?;
