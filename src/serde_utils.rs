@@ -47,7 +47,7 @@ impl<'de> ValueDeserializer<'de> {
         }
     }
 
-    pub fn with_no_ignored_error(self) -> Self {
+    pub fn with_allow_unknown_keys(self) -> Self {
         ValueDeserializer {
             error_on_ignored: false,
             ..self
@@ -354,7 +354,7 @@ mod test {
             "Error in 'StarshipRoot' at 'unknown_key': Unknown key"
         );
 
-        let deserializer2 = ValueDeserializer::new(&value).with_no_ignored_error();
+        let deserializer2 = ValueDeserializer::new(&value).with_allow_unknown_keys();
         let result = StarshipRootConfig::deserialize(deserializer2);
         assert!(result.is_ok());
     }

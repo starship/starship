@@ -53,7 +53,7 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
             // deserialize ignoring that error. Otherwise, just return the error
             if err.to_string().contains("Unknown key") {
                 log::warn!("{}", err);
-                let deserializer2 = ValueDeserializer::new(config).with_no_ignored_error();
+                let deserializer2 = ValueDeserializer::new(config).with_allow_unknown_keys();
                 T::deserialize(deserializer2)
             } else {
                 Err(err)
