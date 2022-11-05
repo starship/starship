@@ -33,9 +33,11 @@ starship_preexec() {
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
-    if [[ "${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
-        STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
-    fi
+	if [[! -z "${#BP_PIPESTATUS[@]}"]]; then
+		if [["${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
+			STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
+		fi
+	fi
 
     local NUM_JOBS=0
     # Evaluate the number of jobs before running the preserved prompt command, so that tools
