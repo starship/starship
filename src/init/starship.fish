@@ -1,12 +1,15 @@
 function fish_prompt
+    set STARSHIP_CMD_PIPESTATUS $pipestatus
+    set STARSHIP_CMD_STATUS $status
     switch "$fish_key_bindings"
         case fish_hybrid_key_bindings fish_vi_key_bindings
             set STARSHIP_KEYMAP "$fish_bind_mode"
+            if test $STARSHIP_KEYMAP = "insert"
+                set STARSHIP_KEYMAP "vi_insert"
+            end
         case '*'
             set STARSHIP_KEYMAP insert
     end
-    set STARSHIP_CMD_PIPESTATUS $pipestatus
-    set STARSHIP_CMD_STATUS $status
     # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
     set STARSHIP_JOBS (count (jobs -p))
@@ -25,14 +28,17 @@ function fish_prompt
 end
 
 function fish_right_prompt
+    set STARSHIP_CMD_PIPESTATUS $pipestatus
+    set STARSHIP_CMD_STATUS $status
     switch "$fish_key_bindings"
         case fish_hybrid_key_bindings fish_vi_key_bindings
             set STARSHIP_KEYMAP "$fish_bind_mode"
+            if test $STARSHIP_KEYMAP = "insert"
+                set STARSHIP_KEYMAP "vi_insert"
+            end
         case '*'
             set STARSHIP_KEYMAP insert
     end
-    set STARSHIP_CMD_PIPESTATUS $pipestatus
-    set STARSHIP_CMD_STATUS $status
     # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
     set STARSHIP_JOBS (count (jobs -p))

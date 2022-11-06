@@ -142,6 +142,8 @@
         "error_symbol": "[❯](bold red)",
         "format": "$symbol ",
         "success_symbol": "[❯](bold green)",
+        "vimcmd_insert_error_symbol": null,
+        "vimcmd_insert_success_symbol": null,
         "vimcmd_replace_one_symbol": "[❮](bold purple)",
         "vimcmd_replace_symbol": "[❮](bold purple)",
         "vimcmd_symbol": "[❮](bold green)",
@@ -1968,6 +1970,20 @@
         "vimcmd_replace_one_symbol": {
           "default": "[❮](bold purple)",
           "type": "string"
+        },
+        "vimcmd_insert_success_symbol": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "vimcmd_insert_error_symbol": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "disabled": {
           "default": false,

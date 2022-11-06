@@ -16,6 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         Visual,
         Replace,
         ReplaceOne,
+        ViInsert,
         Insert,
     }
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
@@ -41,6 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         (Shell::Fish, "visual") => ShellEditMode::Visual,
         (Shell::Fish, "replace") => ShellEditMode::Replace,
         (Shell::Fish, "replace_one") => ShellEditMode::ReplaceOne,
+        (Shell::Fish, "vi_insert") => ShellEditMode::ViInsert,
         _ => ASSUMED_MODE,
     };
 
@@ -49,6 +51,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         ShellEditMode::Visual => config.vimcmd_visual_symbol,
         ShellEditMode::Replace => config.vimcmd_replace_symbol,
         ShellEditMode::ReplaceOne => config.vimcmd_replace_one_symbol,
+        ShellEditMode::ViInsert => {
+            if exit_success {
+                match config.vimcmd_insert_success_symbol {
+                    Some(symbol) => symbol,
+                    None => config.success_symbol,
+                }
+            } else {
+                match config.vimcmd_insert_error_symbol {
+                    Some(symbol) => symbol,
+                    None => config.error_symbol,
+                }
+            }
+        }
         ShellEditMode::Insert => {
             if exit_success {
                 config.success_symbol
@@ -179,8 +194,11 @@ mod test {
         let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
         let expected_visual = Some(format!("{} ", Color::Yellow.bold().paint("❮")));
         let expected_replace = Some(format!("{} ", Color::Purple.bold().paint("❮")));
+        let expected_vi_insert_success = Some(format!("{} ", Color::Green.bold().paint("I")));
+        let expected_vi_insert_error = Some(format!("{} ", Color::Red.bold().paint("I")));
         let expected_replace_one = expected_replace.clone();
-        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_other_success = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_other_error = Some(format!("{} ", Color::Red.bold().paint("❯")));
 
         // fish keymap is default
         let actual = ModuleRenderer::new("character")
@@ -221,12 +239,50 @@ mod test {
             .collect();
         assert_eq!(expected_replace_one, actual);
 
+        // fish keymap is vi_insert, should use vimcmd_insert_success_symbol
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("vi_insert")
+            .config(toml::toml! {
+                [character]
+                vimcmd_insert_success_symbol = "[I](bold green)"
+            })
+            .collect();
+        assert_eq!(expected_vi_insert_success, actual);
+
+        // fish keymap is vi_insert, should use success_symbol
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("vi_insert")
+            .collect();
+        assert_eq!(expected_other_success, actual);
+
+        // fish keymap is vi_insert, should use vimcmd_insert_error_symbol
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("vi_insert")
+            .config(toml::toml! {
+                [character]
+                vimcmd_insert_error_symbol = "[I](bold red)"
+            })
+            .status(1)
+            .collect();
+        assert_eq!(expected_vi_insert_error, actual);
+
+        // fish keymap is vi_insert, should use error_symbol
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("vi_insert")
+            .status(1)
+            .collect();
+        assert_eq!(expected_other_error, actual);
+
         // fish keymap is other
         let actual = ModuleRenderer::new("character")
             .shell(Shell::Fish)
             .keymap("other")
             .collect();
-        assert_eq!(expected_other, actual);
+        assert_eq!(expected_other_success, actual);
     }
 
     #[test]
