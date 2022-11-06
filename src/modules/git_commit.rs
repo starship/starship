@@ -29,7 +29,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "hash" => Some(Ok(git_hash(context.get_repo().ok()?, &config)?)),
-                "tag" => Some(Ok(format!(
+                "tag" if !config.tag_disabled => Some(Ok(format!(
                     "{}{}",
                     config.tag_symbol,
                     git_tag(context.get_repo().ok()?, &config)?
@@ -202,8 +202,49 @@ mod tests {
     }
 
     #[test]
+    fn test_render_commit_hash_with_tag_disabled() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["tag", "v1", "-m", "Testing tags"])
+            .current_dir(&repo_dir.path())
+            .output()?;
+
+        let mut git_commit = create_command("git")?
+            .args(&["rev-parse", "HEAD"])
+            .current_dir(&repo_dir.path())
+            .output()?
+            .stdout;
+        git_commit.truncate(7);
+        let commit_output = str::from_utf8(&git_commit).unwrap().trim();
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    only_detached = false
+            })
+            .path(&repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("({})", commit_output.trim()))
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
     fn test_render_commit_hash_with_tag_enabled() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["tag", "v1", "-m", "Testing tags"])
+            .current_dir(&repo_dir.path())
+            .output()?;
 
         let mut git_commit = create_command("git")?
             .args(["rev-parse", "HEAD"])
@@ -227,7 +268,7 @@ mod tests {
                 [git_commit]
                     only_detached = false
                     tag_disabled = false
-                    tag_symbol = ""
+                    tag_symbol = " "
             })
             .path(repo_dir.path())
             .collect();
