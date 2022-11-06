@@ -36,6 +36,12 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 [![Hide Runtime Versionsプリセットのスクリーンショット](/presets/img/no-runtime-versions.png "No Runtime Versionsプリセットを表示するにはクリックしてください")](./no-runtimes)
 
+## [No Empty Icons](./no-empty-icons.md)
+
+This preset does not show icons if the toolset is not found.
+
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "No Runtime Versionsプリセットを表示するにはクリックしてください")](./no-empty-icons.md)
+
 ## [Pure Prompt](./pure-preset.md)
 
 このプリセットは、[Pure](https://github.com/sindresorhus/pure)の外観と振る舞いをエミュレートします。
