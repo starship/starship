@@ -36,6 +36,12 @@ This preset changes the symbols for each module into plain text. Great if you do
 
 [![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
 
+## [No Empty Icons](./no-empty-icons.md)
+
+This preset does not show icons if the toolset is not found.
+
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+
 ## [Pure Prompt](./pure-preset.md)
 
 ئەم پێش ڕێکخستنە لاسایی شێواز و ڕەفتاری [Pure](https://github.com/sindresorhus/pure) دەکاتەوە.
