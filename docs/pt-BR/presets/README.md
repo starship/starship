@@ -36,7 +36,13 @@ Está personalização oculta a versão do runtime da linguagem. Se você trabal
 
 [![Captura de tela de ajustes de ocultar versão de runtime](/presets/img/no-runtime-versions.png "Clique para ver as personalizações para remover a versão do runtime")](./no-runtimes)
 
-## [Prompt do Terminal com Pure](./pure-preset.md)
+## [No Empty Icons](./no-empty-icons.md)
+
+This preset does not show icons if the toolset is not found.
+
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Clique para ver as personalizações para remover a versão do runtime")](./no-empty-icons.md)
+
+## [Pure Prompt](./pure-preset.md)
 
 Essa personalização simula o comportamento e aparência do [Pure](https://github.com/sindresorhus/pure).
 
