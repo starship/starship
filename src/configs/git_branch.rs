@@ -15,6 +15,7 @@ pub struct GitBranchConfig<'a> {
     pub truncation_symbol: &'a str,
     pub only_attached: bool,
     pub always_show_remote: bool,
+    pub always_show_remote_branch: bool,
     pub ignore_branches: Vec<&'a str>,
     pub disabled: bool,
 }
@@ -29,6 +30,7 @@ impl<'a> Default for GitBranchConfig<'a> {
             truncation_symbol: "…",
             only_attached: false,
             always_show_remote: false,
+            always_show_remote_branch: true,
             ignore_branches: vec![],
             disabled: false,
         }

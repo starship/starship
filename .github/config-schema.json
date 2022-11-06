@@ -502,6 +502,7 @@
     "git_branch": {
       "default": {
         "always_show_remote": false,
+        "always_show_remote_branch": true,
         "disabled": false,
         "format": "on [$symbol$branch(:$remote_branch)]($style) ",
         "ignore_branches": [],
@@ -2843,6 +2844,10 @@
         },
         "always_show_remote": {
           "default": false,
+          "type": "boolean"
+        },
+        "always_show_remote_branch": {
+          "default": true,
           "type": "boolean"
         },
         "ignore_branches": {

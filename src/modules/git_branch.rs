@@ -41,10 +41,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let mut branches_are_same_name = false;
+
     let mut remote_branch_graphemes: Vec<&str> = Vec::new();
     let mut remote_name_graphemes: Vec<&str> = Vec::new();
     if let Some(remote) = repo.remote.as_ref() {
         if let Some(branch) = &remote.branch {
+            branches_are_same_name = branch.eq(branch_name);
             remote_branch_graphemes = branch.graphemes(true).collect()
         };
         if let Some(name) = &remote.name {
@@ -70,6 +73,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let show_remote = config.always_show_remote
         || (!graphemes.eq(&remote_branch_graphemes) && !remote_branch_graphemes.is_empty());
 
+    let show_branch = show_remote && (config.always_show_remote_branch || !branches_are_same_name);
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -83,7 +88,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "branch" => Some(Ok(graphemes.concat())),
                 "remote_branch" => {
-                    if show_remote && !remote_branch_graphemes.is_empty() {
+                    if show_remote && !remote_branch_graphemes.is_empty() && show_branch {
                         Some(Ok(remote_branch_graphemes.concat()))
                     } else {
                         None
@@ -422,6 +427,44 @@ mod tests {
             .collect();
 
         let expected = Some("test_branch:remote_repo/master");
+
+        assert_eq!(expected, actual.as_deref());
+        repo_dir.close()?;
+        remote_dir.close()
+    }
+
+    #[test]
+    fn test_remote_branch() -> io::Result<()> {
+        let remote_dir = fixture_repo(FixtureProvider::Git)?;
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(&["checkout", "-b", "master"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(&["remote", "add", "--fetch", "remote_repo"])
+            .arg(remote_dir.path())
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(&["branch", "--set-upstream-to", "remote_repo/master"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .path(&repo_dir.path())
+            .config(toml::toml! {
+                [git_branch]
+                format = "$branch(:$remote_name)(/$remote_branch)"
+                always_show_remote = true
+                always_show_remote_branch = false
+            })
+            .collect();
+
+        let expected = Some("master:remote_repo");
 
         assert_eq!(expected, actual.as_deref());
         repo_dir.close()?;
