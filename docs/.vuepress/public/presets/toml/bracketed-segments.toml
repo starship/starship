@@ -109,6 +109,9 @@ format = '\[[$symbol($version)]($style)\]'
 [openstack]
 format = '\[[$symbol$cloud(\($project\))]($style)\]'
 
+[os]
+format = '\[[$symbol]($style)\]'
+
 [package]
 format = '\[[$symbol$version]($style)\]'
 

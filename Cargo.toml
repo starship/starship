@@ -60,6 +60,7 @@ notify-rust = { version = "4.5.10", optional = true }
 nu-ansi-term = "0.46.0"
 once_cell = "1.16.0"
 open = "3.0.3"
+# update os module config and tests when upgrading os_info
 os_info = "3.5.1"
 path-slash = "0.2.1"
 pest = "2.4.1"
