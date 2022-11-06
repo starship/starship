@@ -36,7 +36,13 @@ Este preajuste oculta la versión de los tiempos de ejecución del idioma. Si tr
 
 [![Captura de pantalla del preajuste de Ocultar de versiones de tiempo de ejecución](/presets/img/no-runtime-versions.png "Haga clic para ver el preajuste de Ocultar Versiones en Tiempo de Ejecución")](./no-runtimes)
 
-## [Prompt de Pure](./pure-preset.md)
+## [No Empty Icons](./no-empty-icons.md)
+
+This preset does not show icons if the toolset is not found.
+
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Haga clic para ver el preajuste de Ocultar Versiones en Tiempo de Ejecución")](./no-empty-icons.md)
+
+## [Pure Prompt](./pure-preset.md)
 
 Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.com/sindresorhus/pure).
 
