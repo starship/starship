@@ -137,7 +137,7 @@ fn describe_rebase<'a>(repo: &'a Repo, rebase_config: &'a str) -> StateDescripti
     };
 
     let (current, total) = if let Some((c, t)) = progress {
-        (Some(format!("{}", c)), Some(format!("{}", t)))
+        (Some(format!("{c}")), Some(format!("{t}")))
     } else {
         (None, None)
     };
@@ -186,7 +186,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["rebase", "other-branch"], Some(path), false)?;
+        run_git_cmd(["rebase", "other-branch"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -201,7 +201,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["merge", "other-branch"], Some(path), false)?;
+        run_git_cmd(["merge", "other-branch"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -216,7 +216,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["cherry-pick", "other-branch"], Some(path), false)?;
+        run_git_cmd(["cherry-pick", "other-branch"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -234,7 +234,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["bisect", "start"], Some(path), false)?;
+        run_git_cmd(["bisect", "start"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -249,7 +249,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["revert", "--no-commit", "HEAD~1"], Some(path), false)?;
+        run_git_cmd(["revert", "--no-commit", "HEAD~1"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -295,12 +295,12 @@ mod tests {
                 .create(true)
                 .truncate(true)
                 .open(&conflicted_file)?;
-            write!(file, "{}", text)
+            write!(file, "{text}")
         };
 
         // Initialize a new git repo
         run_git_cmd(
-            &[
+            [
                 "init",
                 "--quiet",
                 path.to_str().expect("Path was not UTF-8"),
@@ -311,12 +311,12 @@ mod tests {
 
         // Set local author info
         run_git_cmd(
-            &["config", "--local", "user.email", "starship@example.com"],
+            ["config", "--local", "user.email", "starship@example.com"],
             Some(path),
             true,
         )?;
         run_git_cmd(
-            &["config", "--local", "user.name", "starship"],
+            ["config", "--local", "user.name", "starship"],
             Some(path),
             true,
         )?;
@@ -325,7 +325,7 @@ mod tests {
         // If build environment has `init.defaultBranch` global set
         // it will default to an unknown branch, so need to make & change branch
         run_git_cmd(
-            &["checkout", "-b", "master"],
+            ["checkout", "-b", "master"],
             Some(path),
             // command expected to fail if already on the expected branch
             false,
@@ -333,27 +333,27 @@ mod tests {
 
         // Write a file on master and commit it
         write_file("Version A")?;
-        run_git_cmd(&["add", "the_file"], Some(path), true)?;
+        run_git_cmd(["add", "the_file"], Some(path), true)?;
         run_git_cmd(
-            &["commit", "--message", "Commit A", "--no-gpg-sign"],
+            ["commit", "--message", "Commit A", "--no-gpg-sign"],
             Some(path),
             true,
         )?;
 
         // Switch to another branch, and commit a change to the file
-        run_git_cmd(&["checkout", "-b", "other-branch"], Some(path), true)?;
+        run_git_cmd(["checkout", "-b", "other-branch"], Some(path), true)?;
         write_file("Version B")?;
         run_git_cmd(
-            &["commit", "--all", "--message", "Commit B", "--no-gpg-sign"],
+            ["commit", "--all", "--message", "Commit B", "--no-gpg-sign"],
             Some(path),
             true,
         )?;
 
         // Switch back to master, and commit a third change to the file
-        run_git_cmd(&["checkout", "master"], Some(path), true)?;
+        run_git_cmd(["checkout", "master"], Some(path), true)?;
         write_file("Version C")?;
         run_git_cmd(
-            &["commit", "--all", "--message", "Commit C", "--no-gpg-sign"],
+            ["commit", "--all", "--message", "Commit C", "--no-gpg-sign"],
             Some(path),
             true,
         )?;

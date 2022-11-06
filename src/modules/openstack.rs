@@ -94,7 +94,7 @@ mod tests {
     fn parse_valid_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("clouds.yaml");
-        let mut file = File::create(&config_path)?;
+        let mut file = File::create(config_path)?;
         file.write_all(
             b"---
 clouds:
@@ -126,7 +126,7 @@ clouds:
     fn parse_broken_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("clouds.yaml");
-        let mut file = File::create(&config_path)?;
+        let mut file = File::create(config_path)?;
         file.write_all(
             b"---
 dummy_yaml
@@ -149,7 +149,7 @@ dummy_yaml
     fn dont_crash_on_empty_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("clouds.yaml");
-        let mut file = File::create(&config_path)?;
+        let mut file = File::create(config_path)?;
         file.write_all(b"")?;
         drop(file);
         let actual = ModuleRenderer::new("openstack")

@@ -89,7 +89,7 @@ mod tests {
         let repo_dir = tempfile::tempdir()?;
 
         let actual = ModuleRenderer::new("git_commit")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = None;
@@ -103,8 +103,8 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_output = create_command("git")?
-            .args(&["rev-parse", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["rev-parse", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         git_output.truncate(7);
@@ -115,12 +115,12 @@ mod tests {
                 [git_commit]
                     only_detached = false
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(
             "{} ",
-            Color::Green.bold().paint(format!("({})", expected_hash))
+            Color::Green.bold().paint(format!("({expected_hash})"))
         ));
 
         assert_eq!(expected, actual);
@@ -132,8 +132,8 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_output = create_command("git")?
-            .args(&["rev-parse", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["rev-parse", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         git_output.truncate(14);
@@ -145,12 +145,12 @@ mod tests {
                     only_detached = false
                     commit_hash_length = 14
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(
             "{} ",
-            Color::Green.bold().paint(format!("({})", expected_hash))
+            Color::Green.bold().paint(format!("({expected_hash})"))
         ));
 
         assert_eq!(expected, actual);
@@ -162,7 +162,7 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let actual = ModuleRenderer::new("git_commit")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = None;
@@ -176,25 +176,25 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_command("git")?
-            .args(&["checkout", "@~1"])
-            .current_dir(&repo_dir.path())
+            .args(["checkout", "@~1"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         let mut git_output = create_command("git")?
-            .args(&["rev-parse", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["rev-parse", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         git_output.truncate(7);
         let expected_hash = str::from_utf8(&git_output).unwrap();
 
         let actual = ModuleRenderer::new("git_commit")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(
             "{} ",
-            Color::Green.bold().paint(format!("({})", expected_hash))
+            Color::Green.bold().paint(format!("({expected_hash})"))
         ));
 
         assert_eq!(expected, actual);
@@ -206,21 +206,21 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_commit = create_command("git")?
-            .args(&["rev-parse", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["rev-parse", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         git_commit.truncate(7);
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
         let git_tag = create_command("git")?
-            .args(&["describe", "--tags", "--exact-match", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["describe", "--tags", "--exact-match", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         let tag_output = str::from_utf8(&git_tag).unwrap().trim();
 
-        let expected_output = format!("{} {}", commit_output, tag_output);
+        let expected_output = format!("{commit_output} {tag_output}");
 
         let actual = ModuleRenderer::new("git_commit")
             .config(toml::toml! {
@@ -229,7 +229,7 @@ mod tests {
                     tag_disabled = false
                     tag_symbol = ""
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(
@@ -248,31 +248,31 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_command("git")?
-            .args(&["checkout", "@~1"])
-            .current_dir(&repo_dir.path())
+            .args(["checkout", "@~1"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         create_command("git")?
-            .args(&["tag", "tagOnDetached", "-m", "Testing tags on detached"])
-            .current_dir(&repo_dir.path())
+            .args(["tag", "tagOnDetached", "-m", "Testing tags on detached"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         let mut git_commit = create_command("git")?
-            .args(&["rev-parse", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["rev-parse", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         git_commit.truncate(7);
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
         let git_tag = create_command("git")?
-            .args(&["describe", "--tags", "--exact-match", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["describe", "--tags", "--exact-match", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         let tag_output = str::from_utf8(&git_tag).unwrap().trim();
 
-        let expected_output = format!("{} {}", commit_output, tag_output);
+        let expected_output = format!("{commit_output} {tag_output}");
 
         let actual = ModuleRenderer::new("git_commit")
             .config(toml::toml! {
@@ -280,7 +280,7 @@ mod tests {
                     tag_disabled = false
                     tag_symbol = " "
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(
@@ -301,33 +301,33 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let mut git_commit = create_command("git")?
-            .args(&["rev-parse", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["rev-parse", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         git_commit.truncate(7);
         let commit_output = str::from_utf8(&git_commit).unwrap().trim();
 
         create_command("git")?
-            .args(&["tag", "v2", "-m", "Testing tags v2"])
-            .current_dir(&repo_dir.path())
+            .args(["tag", "v2", "-m", "Testing tags v2"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         // Wait one second between tags
         thread::sleep(time::Duration::from_millis(1000));
 
         create_command("git")?
-            .args(&["tag", "v0", "-m", "Testing tags v0", "HEAD~1"])
-            .current_dir(&repo_dir.path())
+            .args(["tag", "v0", "-m", "Testing tags v0", "HEAD~1"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         create_command("git")?
-            .args(&["tag", "v1", "-m", "Testing tags v1"])
-            .current_dir(&repo_dir.path())
+            .args(["tag", "v1", "-m", "Testing tags v1"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         let git_tag = create_command("git")?
-            .args(&[
+            .args([
                 "for-each-ref",
                 "--contains",
                 "HEAD",
@@ -337,12 +337,12 @@ mod tests {
                 "%(refname:short)",
                 "refs/tags",
             ])
-            .current_dir(&repo_dir.path())
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         let tag_output = str::from_utf8(&git_tag).unwrap().trim();
 
-        let expected_output = format!("{} {}", commit_output, tag_output);
+        let expected_output = format!("{commit_output} {tag_output}");
 
         let actual = ModuleRenderer::new("git_commit")
             .config(toml::toml! {
@@ -351,7 +351,7 @@ mod tests {
                     tag_disabled = false
                     tag_symbol = " "
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(

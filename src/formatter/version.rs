@@ -71,7 +71,7 @@ impl<'a> VersionFormatter<'a> {
             Ok(formatted) => Some(formatted),
             Err(error) => {
                 log::warn!("Error formatting `{}` version:\n{}", module_name, error);
-                Some(format!("v{}", version))
+                Some(format!("v{version}"))
             }
         }
     }

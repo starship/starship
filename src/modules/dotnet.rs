@@ -120,7 +120,7 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
             // unescape and decode the text event using the reader encoding
             Ok(Event::Text(e)) => {
                 if in_tfm {
-                    return e.unescape().ok().map(|s| s.into_owned());
+                    return e.unescape().ok().map(std::borrow::Cow::into_owned);
                 }
             }
             Ok(Event::Eof) => break, // exits the loop when reaching end of file
@@ -558,7 +558,7 @@ mod tests {
 
         if is_repo {
             create_command("git")?
-                .args(&["init", "--quiet"])
+                .args(["init", "--quiet"])
                 .current_dir(repo_dir.path())
                 .output()?;
         }

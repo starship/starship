@@ -44,11 +44,11 @@ impl StarshipPath {
     fn sprint_pwsh(&self) -> io::Result<String> {
         self.str_path()
             .map(|s| s.replace('\'', "''"))
-            .map(|s| format!("'{}'", s))
+            .map(|s| format!("'{s}'"))
     }
     /// Command Shell specific path escaping
     fn sprint_cmdexe(&self) -> io::Result<String> {
-        self.str_path().map(|s| format!("\"{}\"", s))
+        self.str_path().map(|s| format!("\"{s}\""))
     }
     fn sprint_posix(&self) -> io::Result<String> {
         // On non-Windows platform, return directly.
@@ -229,7 +229,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 
 fn print_script(script: &str, path: &str) {
     let script = script.replace("::STARSHIP::", path);
-    print!("{}", script);
+    print!("{script}");
 }
 
 /* GENERAL INIT SCRIPT NOTES
