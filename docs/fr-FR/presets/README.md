@@ -36,7 +36,13 @@ Ce préréglage masque la version des environnements. Si vous travaillez dans de
 
 [![Capture d'écran du préréglage Cacher les versions des environnements](/presets/img/no-runtime-versions.png "Cliquez pour voir le préréglage Pas de version des environnements")](./no-runtimes)
 
-## [Invite de commande Pure](./pure-preset.md)
+## [No Empty Icons](./no-empty-icons.md)
+
+This preset does not show icons if the toolset is not found.
+
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Cliquez pour voir le préréglage Pas de version des environnements")](./no-empty-icons.md)
+
+## [Pure Prompt](./pure-preset.md)
 
 Ce préréglage émule l'apparence et le comportement de [Pure](https://github.com/sindresorhus/pure).
 
