@@ -94,6 +94,9 @@ format = 'via [$symbol]($style)'
 [rust]
 format = 'via [$symbol]($style)'
 
+[solidity]
+format = 'via [$symbol]($style)'
+
 [swift]
 format = 'via [$symbol]($style)'
 

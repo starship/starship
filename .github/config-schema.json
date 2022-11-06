@@ -1359,6 +1359,25 @@
         }
       ]
     },
+    "solidity": {
+      "default": {
+        "detect_extensions": [
+          "sol"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version)]($style)",
+        "style": "bold blue",
+        "symbol": "S ",
+        "version_format": "v${major}.${minor}.${patch}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SolidityConfig"
+        }
+      ]
+    },
     "spack": {
       "default": {
         "disabled": false,
@@ -4746,6 +4765,54 @@
         }
       },
       "additionalProperties": false
+    },
+    "SolidityConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version)]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "S ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "version_format": {
+          "default": "v${major}.${minor}.${patch}",
+          "type": "string"
+        },
+        "detect_extensions": {
+          "default": [
+            "sol"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "SpackConfig": {
       "type": "object",
