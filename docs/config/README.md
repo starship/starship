@@ -176,15 +176,15 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option            | Default                        | Description                                                                                                                                                                      |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                              |
-| `right_format`    | `""`                           | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                            |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                     |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                        |
-| `palette`         | `""`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| Option            | Default                     | Description                                                                                                                                                                      |
+| ----------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [see below](#prompt-format) | Configure the format of the prompt.                                                                                                                                              |
+| `right_format`    | `""`                        | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                        | Timeout for starship to scan files (in milliseconds).                                                                                                                            |
+| `command_timeout` | `500`                       | Timeout for commands executed by starship (in milliseconds).                                                                                                                     |
+| `add_newline`     | `true`                      | Inserts blank line between shell prompts.                                                                                                                                        |
+| `palette`         | `""`                        | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palettes`        | `{}`                        | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### Example
 
@@ -214,9 +214,11 @@ blue = "21"
 mustard = "#af8700"
 ```
 
-### Default Prompt Format
+### Prompt Format
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+The prompt format defines which modules are displayed in what way.
+
+By default, `format` is set to `$all`, which is equivalent to all modules in a predefined order. You will not see output from all of these because some modules are disabled by default, and because most modules only show something if they have state to report.
 
 ```toml
 format = "$all"
@@ -302,12 +304,57 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`;
-modules you explicitly add to the format will not be duplicated. Eg.
+If you want to extend the default format, you can use `$all`;
+modules you explicitly add to the format will not be duplicated, but replace earlier declarations.
+
+For example, to move the directory to the end of the prompt (also moving it past `$line_break` onto the second line):
 
 ```toml
-# Move the directory to the second line
+# Move the directory to the end of the second line
 format = "$all$directory$character"
+```
+
+If you use only a subset of the modules you may prefer to use a much shorter format setting.
+
+Modules that are not referred in `format` will not query for status information. Reducing the number of modules in `format` (removing unused ones) leads to a performance improvement.
+
+Setting `format` to an empty string will lead to a completely empty prompt.
+
+```toml
+format = ''
+```
+
+To show only the directory and prompt character:
+
+```toml
+format = '$directory$character'
+```
+
+To show the directory and (some) git state information - on a separate line:
+
+```toml
+format = '$directory$git_branch$git_commit$git_state$git_status$line_break$character'
+```
+
+To show the directory and git state information, followed by conditional information about the last command (command duration, status), and shell and prompt character:
+
+```toml
+format = '$directory$git_branch$git_commit$git_state$git_status(- $cmd_duration)$line_break$shell$character'
+
+[shell]
+# enable shell, which is disabled by default
+disabled = false
+
+[cmd_duration]
+# reduce minimum reported command duration
+min_time = 200
+
+# opinionated directory settings
+[directory]
+truncate_to_repo = false
+truncation_symbol = "…/"
+# increased truncation length - we have directory info on a separate line from input
+truncation_length = 5
 ```
 
 ## AWS
