@@ -1304,13 +1304,13 @@ default = 'unknown user'
 
 ### Options
 
-| Option     | الافتراضي                      | الوصف                                                                        |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `''`                           | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `'with [$env_value]($style) '` | The format for the module.                                                   |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Option      | الافتراضي                      | الوصف                                                                        |
+| ----------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`    | `''`                           | The symbol used before displaying the variable value.                        |
+| `variable`  |                                | The environment variable to be displayed.                                    |
+| `الافتراضي` |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`    | `'with [$env_value]($style) '` | The format for the module.                                                   |
+| `disabled`  | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
 
@@ -1435,7 +1435,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | account   | `foo`         | The current GCP profile                                            |
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| active    | `الافتراضي`   | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | Mirrors the value of option `symbol`                               |
 | style\* |               | Mirrors the value of option `style`                                |
 
@@ -3651,12 +3651,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | مثال       | الوصف                                |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current Terraform workspace      |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Variable  | مثال        | الوصف                                |
+| --------- | ----------- | ------------------------------------ |
+| version   | `v0.12.24`  | The version of `terraform`           |
+| workspace | `الافتراضي` | The current Terraform workspace      |
+| symbol    |             | Mirrors the value of option `symbol` |
+| style\* |             | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
@@ -3960,7 +3960,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `الوصف`             | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
