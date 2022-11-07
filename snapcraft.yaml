@@ -57,6 +57,7 @@ parts:
     source: https://github.com/starship/starship.git
     #source-tag: v$SNAPCRAFT_PROJECT_VERSION
     build-packages:
+      - cmake
       - libssl-dev
       - pkg-config
     override-build: |
