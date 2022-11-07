@@ -1,0 +1,21 @@
+This patch fixes broken shell prompt after the Starship snap being
+refreshed as the original init script hardcodes executable paths
+with the snap revision.
+
+Fixes #4576.
+
+Refer-to: Bash prompt breaks after the Starship snap is refreshed · Issue #4576 · starship/starship <https://github.com/starship/starship/issues/4576>
+Signed-off-by: 林博仁(Buo-ren, Lin) <Buo.Ren.Lin@gmail.com>
+diff -ur starship/src/init/mod.rs starship.patched/src/init/mod.rs
+--- "Starship - The minimal, blazing-fast, and infinitely customizable prompt for any shell!/src/init/mod.rs"	2022-11-07 20:18:33.609229620 +0800
++++ starship.patched/src/init/mod.rs	2022-11-07 21:37:24.529387895 +0800
+@@ -228,7 +228,7 @@
+ }
+ 
+-fn print_script(script: &str, path: &str) {
++fn print_script(script: &str, _path: &str) {
+-    let script = script.replace("::STARSHIP::", path);
++    let script = script.replace("::STARSHIP::", "snap run starship");
+     print!("{script}");
+ }
+ 

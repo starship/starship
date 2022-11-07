@@ -71,6 +71,10 @@ parts:
         cd ../src
         git checkout "${last_committed_tag}"
       fi
+
+      # Fix shell prompt broken after snap refresh
+      patch -p1 < install/snap/fix-snap-broken-after-refresh.patch
+
       snapcraftctl build
       snapcraftctl set-version $(git -C ../src describe --tags  | sed 's/v//')
 
