@@ -42,7 +42,7 @@ This preset does not show icons if the toolset is not found.
 
 [![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Haga clic para ver el preajuste de Ocultar Versiones en Tiempo de Ejecución")](./no-empty-icons.md)
 
-## [Pure Prompt](./pure-preset.md)
+## [Prompt de Pure](./pure-preset.md)
 
 Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.com/sindresorhus/pure).
 
