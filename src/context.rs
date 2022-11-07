@@ -635,8 +635,7 @@ fn get_remote_repository_info(
         .map(|r| r.shorten().to_string());
     let name = repository
         .branch_remote_name(branch_name)
-        .map(|n| n.to_string());
-
+        .and_then(|n| n.as_symbol().map(str::to_string));
     Some(Remote { branch, name })
 }
 
