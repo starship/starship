@@ -42,7 +42,7 @@ This preset does not show icons if the toolset is not found.
 
 [![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Clique para ver as personalizações para remover a versão do runtime")](./no-empty-icons.md)
 
-## [Pure Prompt](./pure-preset.md)
+## [Prompt do Terminal com Pure](./pure-preset.md)
 
 Essa personalização simula o comportamento e aparência do [Pure](https://github.com/sindresorhus/pure).
 
