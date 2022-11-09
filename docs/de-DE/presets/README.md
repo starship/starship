@@ -44,9 +44,9 @@ This preset does not show icons if the toolset is not found.
 
 ## [Pure Prompt](./pure-preset.md)
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Diese Voreinstellung emuliert das Aussehen und das Verhalten von [Pure](https://github.com/sindresorhus/pure).
 
-[![Screenshot of Pure preset](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
+[![Screenshot der Pure Voreinstellung](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
