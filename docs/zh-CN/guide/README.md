@@ -271,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Bash</summary>
 
-在 `~/.bashhrc` 的最后，添加以下内容：
+在 `~/.bashrc` 的最后，添加以下内容：
 
 ```sh
 eval "$(starship init bash)"
@@ -359,7 +359,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-在 `~/.bashhrc` 的最后，添加以下内容：
+在 `~/.bashrc` 的最后，添加以下内容：
 
 ```sh
 eval `starship init tcsh`
@@ -370,7 +370,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-在 `~/.bashhrc` 的最后，添加以下内容：
+在 `~/.bashrc` 的最后，添加以下内容：
 
 ```python
 execx($(starship init xonsh))
