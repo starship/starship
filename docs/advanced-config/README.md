@@ -304,6 +304,23 @@ Note: Continuation prompts are only available in the following shells:
 continuation_prompt = "▶▶"
 ```
 
+## Palettes
+
+A palette is a set of colors that can be used to customize the colors of your prompt.
+The defined colors can then be used in the `style` string. This allows you to have multiple color palettes which you can switch between.
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+# Defines a color palette named "default" with the colors "red", "green", and "blue"
+palettes = {default={red="#FF0000", blue="#0000FF", green="#00FF00"}}
+
+# Sets the current active palette to the previous created "default"
+palette = "default"
+```
+
 ## Style Strings
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
@@ -333,6 +350,7 @@ A color specifier can be one of the following:
 - A `#` followed by a six-digit hexadecimal number. This specifies an
   [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+- A color from the current palette.
 
 If multiple colors are specified for foreground/background, the last one in the string will take priority.
 
