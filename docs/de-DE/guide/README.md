@@ -271,7 +271,7 @@ Konfigurieren deine Shell um Starship zu initialisieren. Wähle dafür deine She
 <details>
 <summary>Bash</summary>
 
-Füge dies ans Ende von `~/.bashrc`:
+Trage folgendes am Ende der `~/.bashrc` ein:
 
 ```sh
 eval "$(starship init bash)"
@@ -282,7 +282,7 @@ eval "$(starship init bash)"
 <details>
 <summary>⌘ Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Du musst [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) mit Cmd verwenden. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -335,7 +335,7 @@ mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+Und füge folgendes am Ende deiner Nushell-Konfiguration hinzu (du findest diese, indem du folgenden Befehl in Nushell ausführst `$nu.config-path`):
 
 ```sh
 source ~/.cache/starship/init.nu
@@ -381,7 +381,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-Füge dies ans Ende von `~/.zshrc`:
+Trage folgendes am Ende der `~/.zshrc` ein:
 
 ```sh
 eval "$(starship init zsh)"
