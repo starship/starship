@@ -315,7 +315,7 @@ The defined colors can then be used in the `style` string. This allows you to ha
 # ~/.config/starship.toml
 
 # Defines a color palette named "default" with the colors "red", "green", and "blue"
-palettes = {default={red="#FF0000", blue="#0000FF", green="#00FF00"}}
+palettes = { default = { red = "#FF0000", blue = "#0000FF", green = "#00FF00" } }
 
 # Sets the current active palette to the previous created "default"
 palette = "default"
