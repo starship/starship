@@ -2,7 +2,7 @@
 
 Um Starship zu installieren, musst du zwei Dinge tun:
 
-1. Holen Sie sich das **starship** Binary auf Ihren Computer
+1. Lade die **starship** Datei auf den Computer herunter
 1. Weise deine Shell an die Starship Datei als Eingabeaufforderung zu nutzen, indem du eines der Initialisierungs-Skripte benutzt
 
 Die Anleitung auf [der Hauptseite](/guide/#🚀-installation) wird für die meisten Benutzer ausreichend sein. Für einige speziellere Plattformen wird jedoch eine speziellere Anleitung benötigt.
@@ -57,7 +57,7 @@ nix-env -iA nixos.starship
 
 #### Deklarativ, Einzel-Benutzer, über [home-manager](https://github.com/nix-community/home-manager)
 
-Aktivieren Sie das Modul `programs.starship` in Ihrer `home.nix`-Datei und fügen Sie Ihre Einstellungen hinzu
+Aktiviere das Modul `programs.starship` in deiner `home.nix`-Datei und füge deine Einstellungen hinzu
 
 ```nix
 {
