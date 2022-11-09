@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#no-empty-icons)
+[Zurück zu den Voreinstellungen](./README.md#no-empty-icons)
 
 # No Empty Icons Preset
 
@@ -12,6 +12,6 @@ If toolset files are identified the toolset icon is displayed. If the toolset is
 starship preset no-empty-icons > ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-empty-icons.toml)
+[Zum Herunterladen der TOML Datei klicken](/presets/toml/no-empty-icons.toml)
 
 <<< @/.vuepress/public/presets/toml/no-empty-icons.toml
