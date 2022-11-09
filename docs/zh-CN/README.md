@@ -66,7 +66,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    #### Bash
 
-   在 `~/.bashhrc` 的最后，添加以下内容：
+   在 `~/.bashrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.bashrc
@@ -136,7 +136,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    #### Tcsh
 
-   在 `~/.bashhrc` 的最后，添加以下内容：
+   在 `~/.bashrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.tcshrc
@@ -167,7 +167,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    #### Xonsh
 
-   在 `~/.bashhrc` 的最后，添加以下内容：
+   在 `~/.bashrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.xonshrc
