@@ -280,5 +280,5 @@ Nếu nhiều màu được quy định cho màu chữ/màu nền, cái cuối c
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
 - Many terminals disable support for `blink` by default
-- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app
