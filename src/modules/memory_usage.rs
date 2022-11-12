@@ -95,7 +95,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "ram" => Some(Ok(format_usage_total(memory.total, memory.free))),
-                "ram_pct" => Some(Ok(format!("{:.0}%", used_pct))),
+                "ram_pct" => Some(Ok(format!("{used_pct:.0}%"))),
                 "swap" => Some(Ok(format_usage_total(
                     swap.as_ref()?.total,
                     swap.as_ref()?.free,

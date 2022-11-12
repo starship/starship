@@ -71,9 +71,9 @@
         ],
         "detect_folders": [],
         "disabled": false,
-        "format": "with [$symbol ($version)]($style)",
+        "format": "with [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "",
+        "symbol": "🦬 ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -620,6 +620,19 @@
         }
       ]
     },
+    "guix_shell": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol]($style) ",
+        "style": "yellow bold",
+        "symbol": "🐃 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GuixShellConfig"
+        }
+      ]
+    },
     "haskell": {
       "default": {
         "detect_extensions": [
@@ -864,6 +877,21 @@
         }
       ]
     },
+    "meson": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$project]($style) ",
+        "style": "blue bold",
+        "symbol": "⬢ ",
+        "truncation_length": 4294967295,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MesonConfig"
+        }
+      ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
@@ -967,6 +995,25 @@
         }
       ]
     },
+    "opa": {
+      "default": {
+        "detect_extensions": [
+          "rego"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "🪖  ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OpaConfig"
+        }
+      ]
+    },
     "openstack": {
       "default": {
         "disabled": false,
@@ -977,6 +1024,56 @@
       "allOf": [
         {
           "$ref": "#/definitions/OspConfig"
+        }
+      ]
+    },
+    "os": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol]($style)",
+        "style": "bold white",
+        "symbols": {
+          "Alpine": "🏔️ ",
+          "Amazon": "🙂 ",
+          "Android": "🤖 ",
+          "Arch": "🎗️ ",
+          "CentOS": "💠 ",
+          "Debian": "🌀 ",
+          "DragonFly": "🐉 ",
+          "Emscripten": "🔗 ",
+          "EndeavourOS": "🚀 ",
+          "Fedora": "🎩 ",
+          "FreeBSD": "😈 ",
+          "Garuda": "🦅 ",
+          "Gentoo": "🗜️ ",
+          "HardenedBSD": "🛡️ ",
+          "Illumos": "🐦 ",
+          "Linux": "🐧 ",
+          "Macos": "🍎 ",
+          "Manjaro": "🥭 ",
+          "Mariner": "🌊 ",
+          "MidnightBSD": "🌘 ",
+          "Mint": "🌿 ",
+          "NetBSD": "🚩 ",
+          "NixOS": "❄️ ",
+          "OpenBSD": "🐡 ",
+          "OracleLinux": "🦴 ",
+          "Pop": "🍭 ",
+          "Raspbian": "🍓 ",
+          "RedHatEnterprise": "🎩 ",
+          "Redhat": "🎩 ",
+          "Redox": "🧪 ",
+          "SUSE": "🦎 ",
+          "Solus": "⛵ ",
+          "Ubuntu": "🎯 ",
+          "Unknown": "❓ ",
+          "Windows": "🪟 ",
+          "openSUSE": "🦎 "
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OSConfig"
         }
       ]
     },
@@ -1341,7 +1438,7 @@
         "signal_symbol": "⚡",
         "style": "bold red",
         "success_symbol": "",
-        "symbol": "✖"
+        "symbol": "❌"
       },
       "allOf": [
         {
@@ -1566,7 +1663,7 @@
   "definitions": {
     "AwsConfig": {
       "title": "AWS",
-      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
       "type": "object",
       "properties": {
         "format": {
@@ -1721,7 +1818,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "with [$symbol ($version)]($style)",
+          "default": "with [$symbol($version )]($style)",
           "type": "string"
         },
         "version_format": {
@@ -1729,7 +1826,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "",
+          "default": "🦬 ",
           "type": "string"
         },
         "style": {
@@ -3057,6 +3154,28 @@
       },
       "additionalProperties": false
     },
+    "GuixShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐃 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "HaskellConfig": {
       "type": "object",
       "properties": {
@@ -3600,6 +3719,38 @@
       },
       "additionalProperties": false
     },
+    "MesonConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 4294967295,
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0.0
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "format": {
+          "default": "via [$symbol$project]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⬢ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "NimConfig": {
       "type": "object",
       "properties": {
@@ -3817,6 +3968,55 @@
       },
       "additionalProperties": false
     },
+    "OpaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🪖  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "rego"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "OspConfig": {
       "type": "object",
       "properties": {
@@ -3834,6 +4034,68 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "OSConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol]($style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "symbols": {
+          "default": {
+            "Alpine": "🏔️ ",
+            "Amazon": "🙂 ",
+            "Android": "🤖 ",
+            "Arch": "🎗️ ",
+            "CentOS": "💠 ",
+            "Debian": "🌀 ",
+            "DragonFly": "🐉 ",
+            "Emscripten": "🔗 ",
+            "EndeavourOS": "🚀 ",
+            "Fedora": "🎩 ",
+            "FreeBSD": "😈 ",
+            "Garuda": "🦅 ",
+            "Gentoo": "🗜️ ",
+            "HardenedBSD": "🛡️ ",
+            "Illumos": "🐦 ",
+            "Linux": "🐧 ",
+            "Macos": "🍎 ",
+            "Manjaro": "🥭 ",
+            "Mariner": "🌊 ",
+            "MidnightBSD": "🌘 ",
+            "Mint": "🌿 ",
+            "NetBSD": "🚩 ",
+            "NixOS": "❄️ ",
+            "OpenBSD": "🐡 ",
+            "OracleLinux": "🦴 ",
+            "Pop": "🍭 ",
+            "Raspbian": "🍓 ",
+            "RedHatEnterprise": "🎩 ",
+            "Redhat": "🎩 ",
+            "Redox": "🧪 ",
+            "SUSE": "🦎 ",
+            "Solus": "⛵ ",
+            "Ubuntu": "🎯 ",
+            "Unknown": "❓ ",
+            "Windows": "🪟 ",
+            "openSUSE": "🦎 "
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "disabled": {
+          "default": true,
           "type": "boolean"
         }
       },
@@ -4633,7 +4895,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "✖",
+          "default": "❌",
           "type": "string"
         },
         "success_symbol": {

@@ -14,7 +14,7 @@
 
 此预设使用括号来分隔所有组件的提示符，不使用 Starship 默认的分隔词（“via”，“on” 等等）。
 
-[![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
+[![Bracketed Segments preset预设屏幕截图](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
 ## [纯文本符号](./plain-text.md)
 
@@ -32,7 +32,7 @@
 
 此预设模拟 [Pure](https://github.com/sindresorhus/pure) 的外观和行为。
 
-[![Screenshot of Pure preset](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
+[![Pure 预设屏幕截图](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
 
 ## [Pastel Powerline](./pastel-powerline.md)
 

@@ -54,6 +54,32 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
+## TransientPrompt and TransientRightPrompt in Fish
+
+過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+
+Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. Starshipの `character` モジュールを表示する場合はこのようにします：
+
+```fish
+function starship_transient_prompt_func
+  starship module character
+end
+starship init fish | source
+enable_transience
+```
+
+- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
+
 ## Cmdのカスタムの事前プロンプトおよび事前実行コマンド
 
 Clinkはプロンプト表示前と実行前にCmd shellコマンドを実行するための非常に柔軟なAPIを提供します。 It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:

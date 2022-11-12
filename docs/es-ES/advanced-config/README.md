@@ -8,7 +8,7 @@ Las configuraciones de esta sección están sujetos a cambios en futuras version
 
 :::
 
-## TransientPrompt in PowerShell
+## TransientPrompt en PowerShell
 
 It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
@@ -24,7 +24,7 @@ Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
 ```
 
-## TransientPrompt and TransientRightPrompt in Cmd
+## TransientPrompt y TransientRight Prompt en Cmd
 
 Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
@@ -45,13 +45,39 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- Por defecto, el lado derecho de la entrada está vacío. Para personalizar esto, defina una nueva función llamada `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
 
 ```lua
 function starship_transient_rprompt_func(prompt)
   return io.popen("starship module time"):read("*a")
 end
 load(io.popen('starship init cmd'):read("*a"))()
+```
+
+## TransientPrompt and TransientRightPrompt in Fish
+
+It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+
+Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+
+```fish
+function starship_transient_prompt_func
+  starship module character
+end
+starship init fish | source
+enable_transience
+```
+
+- Por defecto, el lado derecho de la entrada está vacío. Para personalizar esto, defina una nueva función llamada `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
 ```
 
 ## Comandos pre-prompt y pre-ejecución personalizados en Cmd
@@ -115,7 +141,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Cambiar el Título de la Ventana
+## Cambiar título de la ventana
 
 Algunos intérpretes de comandos van a cambiar automáticamente el título de la ventana por ti (p. ej., para mostrar tu directorio actual). Fish incluso lo hace por defecto. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash`, `zsh`, `cmd` o `powershell`.
 
@@ -123,7 +149,7 @@ Primero, define una función para el cambio de título de la ventana (idéntico 
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; TU_TÍTULO_DE_VENTANA_AQUÍ \007"
+    echo -ne "\033]0; TU_TITULO_DE_VENTANA_AQUI \007"
 }
 ```
 
@@ -173,9 +199,9 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Gabilitar Prompt Derecho
+## Habilitar Prompt a la Derecha
 
-Algunos intérpretes de órdenes soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt correcto usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
+Algunos intérpretes de comandos soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt derecho usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
 
 Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear los módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo `fill`](/config/#fill).
 
@@ -224,13 +250,13 @@ continuation_prompt = "▶▶"
 
 ## Cadenas de Estilo
 
-Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
+Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `bold` y `BoLd` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
 
-- `bold`
-- `italic`
-- `underline`
-- `dimmed`
-- `inverted`
+- `negrita`
+- `cursiva`
+- `subrayado`
+- `atenuado`
+- `invertido`
 - `blink`
 - `hidden`
 - `strikethrough`
@@ -241,7 +267,7 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
 
 donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
 
-El token `none` anula todos los demás tokens en una cadena si no es parte de un especificador `bg:`, de modo que por ejemplo `fg:red none fg:blue` creará una cadena sin ningún estilo. `bg:none` establece el fondo al color por defecto, así que `fg:red bg:none` es equivalente a `red` o `fg:red` y `bg:green fg:red bg:none` también es equivalente a `fg:red` o `red`. Puede convertirse en un error usar `none` junto con otros tokens en el futuro.
+El token `none` anula todos los demás tokens en una cadena si no es parte de un especificador `bg:`, de modo que por ejemplo `fg:red none fg:blue` creará una cadena sin ningún estilo. `bg:none` establece el fondo al color por defecto, así que `fg:red bg:none` es equivalente a `red` o `fg:red` y `bg:green fg:red bg:none` también es equivalente a `fg:red` o `red`. Puede convertirse en un error usar `none` junto con otros estilos en el futuro.
 
 Un especificador de color puede ser uno de los siguientes:
 

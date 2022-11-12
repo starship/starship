@@ -67,6 +67,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nim",
     "nodejs",
     "ocaml",
+    "opa",
     "perl",
     "php",
     "pulumi",
@@ -85,8 +86,10 @@ pub const PROMPT_ORDER: &[&str] = &[
     "zig",
     // ↑ Toolchain version modules ↑
     "buf",
+    "guix_shell",
     "nix_shell",
     "conda",
+    "meson",
     "spack",
     "memory_usage",
     "aws",
@@ -105,6 +108,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "time",
     "status",
     "container",
+    "os",
     "shell",
     "character",
 ];
@@ -115,7 +119,7 @@ impl Default for StarshipRootConfig {
         Self {
             schema: "https://starship.rs/config-schema.json".to_string(),
             format: "$all".to_string(),
-            right_format: "".to_string(),
+            right_format: String::new(),
             continuation_prompt: "[∙](bright-black) ".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
