@@ -58,7 +58,6 @@ parts:
     #source-tag: v$SNAPCRAFT_PROJECT_VERSION
     build-packages:
       - cmake
-      - libssl-dev
       - pkg-config
     override-build: |
       last_committed_tag="$(git describe --tags --abbrev=0)"
