@@ -912,6 +912,27 @@
         }
       ]
     },
+    "loadavg": {
+      "default": {
+        "disabled": true,
+        "display": [
+          {
+            "style": "white bold",
+            "symbol": null,
+            "threshold_fifteen": null,
+            "threshold_five": null,
+            "threshold_one": null
+          }
+        ],
+        "format": "[$symbol $one $five $fifteen]($style) ",
+        "symbol": "⌛"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/LoadavgConfig"
+        }
+      ]
+    },
     "localip": {
       "default": {
         "disabled": true,
@@ -3926,6 +3947,71 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "LoadavgConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol $one $five $fifteen]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⌛",
+          "type": "string"
+        },
+        "display": {
+          "default": [
+            {
+              "style": "white bold",
+              "symbol": null,
+              "threshold_fifteen": null,
+              "threshold_five": null,
+              "threshold_one": null
+            }
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LoadavgDisplayConfig"
+          }
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "LoadavgDisplayConfig": {
+      "type": "object",
+      "properties": {
+        "threshold_one": {
+          "default": null,
+          "type": "number",
+          "format": "float"
+        },
+        "threshold_five": {
+          "default": null,
+          "type": "number",
+          "format": "float"
+        },
+        "threshold_fifteen": {
+          "default": null,
+          "type": "number",
+          "format": "float"
+        },
+        "style": {
+          "default": "white bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false

@@ -321,6 +321,7 @@ $nix_shell\
 $conda\
 $meson\
 $spack\
+$loadavg\
 $memory_usage\
 $aws\
 $gcloud\
@@ -2514,6 +2515,88 @@ The `line_break` module separates the prompt into two lines.
 
 [line_break]
 disabled = true
+```
+
+## Load Average
+
+The `loadavg` module shows current system load average.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` and define at least one `Load Average Display` in your configuration file.
+
+:::
+
+### Options
+
+| Option     | Default                                    | Description                                         |
+| ---------- | ------------------------------------------ | --------------------------------------------------- |
+| `format`   | `'[$symbol $one $five $fifteen]($style) '` | The format for the module.                          |
+| `symbol`   | `"⌛"`                                     | The symbol used before displaying the load average. |
+| `disabled` | `true`                                     | Disables the `loadavg` module.                      |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| one      | `1.42`  | The one minute load average.         |
+| five     | `2.01`  | The five minute load average.        |
+| fifteen  | `10.98` | The fifteen minute load average.     |
+| symbol   | `⌛`    | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[loadavg]
+disabled = false
+```
+
+### Load Average Display
+
+The `display` configuration option is used to define when the `Load Average` should be shown (threshold-*), which symbol would be used (symbol).
+If no `display` is provided.
+
+By default, the thresholds are set to an invalid value.
+
+The default value for the `symbol` option is the value of `loadavg`'s `symbol` option.
+
+#### Options
+
+The `display` option is an array of the following table.
+
+| Option              | Default        | Description                                                                                   |
+| ------------------- | -------------- | --------------------------------------------------------------------------------------------- |
+| `threshold-one`     | `NAN`          | The lower bound for the one minute average.                                                   |
+| `threshold-five`    | `NAN`          | The lower bound for the five minute average.                                                  |
+| `threshold-fifteen` | `NAN`          | The lower bound for the fifteen minute average.                                               |
+| `style`             | `'white bold'` | The style used if the display option is in use.                                               |
+| `symbol`            |                | Optional symbol displayed if display option is in use, defaults to loadavg's `symbol` option. |
+
+#### Example
+
+```toml
+[[loadavg.display]]
+threshold_one = 8.0
+style = "bold red"
+
+[[loadavg.display]]
+threshold_one = 4.0
+style = "bold yellow"
+
+[[loadavg.display]]
+threshold_one = 2.0
+style = "bold white"
+
+[[loadavg.display]]
+threshold_one = 0.0
+style = "dimmed white"
+symbol = "⏲"
 ```
 
 ## Local IP
