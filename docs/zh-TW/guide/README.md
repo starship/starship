@@ -152,12 +152,12 @@
 
 **適合任何 shell 的最小、極速、無限客製化的提示字元！**
 
-- **快：**很快 —— 非常非常快！ 🚀
-- **可客製化：**全方面定制你的提示字元。
-- **通用：**適用於任何 Shell 以及作業系統。
-- **智能：**一目了然地顯示相關信息。
-- **豐富的功能：**支援所以有你喜歡的工具。
-- **易用：**安裝快速 —— 幾分鐘內就可以開始使用。
+- **效率：**很快 – _非常非常_快！ 🚀
+- **客製化：**全方面設定你的提示字元。
+- **通用性：**適用於任何 Shell 以及作業系統。
+- **智慧：**一目了然地顯示相關資訊。
+- **豐富的功能：**支援所有你喜歡的工具。
+- **易用：**安裝快速 – 幾分鐘內即可開始使用。
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
@@ -171,7 +171,7 @@
 
 - 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用（例如，你可以試試 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)）。
 
-### Step 1. Install Starship
+### 第一步 安裝 Starship
 
 Select your operating system from the list below to view installation instructions:
 
