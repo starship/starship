@@ -23,6 +23,7 @@ mod elm;
 mod env_var;
 mod erlang;
 mod fill;
+mod flutter;
 mod gcloud;
 mod git_branch;
 mod git_commit;
@@ -121,6 +122,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "erlang" => erlang::module(context),
             "env_var" => env_var::module(context),
             "fill" => fill::module(context),
+            "flutter" => flutter::module(context),
             "gcloud" => gcloud::module(context),
             "git_branch" => git_branch::module(context),
             "git_commit" => git_commit::module(context),
@@ -230,6 +232,7 @@ pub fn description(module: &str) -> &'static str {
         "env_var" => "Displays the current value of a selected environment variable",
         "erlang" => "Current OTP version",
         "fill" => "Fills the remaining space on the line with a pad string",
+        "flutter" => "Displays the current flutter version",
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit (and tag if any) of the repo in your current directory",

@@ -25,6 +25,9 @@ symbol = " "
 [elm]
 symbol = " "
 
+[dart]
+symbol = "F "
+
 [git_branch]
 symbol = " "
 

@@ -514,7 +514,13 @@ impl DirContents {
             .iter()
             .any(|path| !path.starts_with('!') && self.has_folder(path))
     }
-
+    
+    pub fn has_all_positive_folder(&self, paths: &[&str]) -> bool {
+        paths
+            .iter()
+            .all(|path| !path.starts_with('!') && self.has_folder(path))
+    }
+    
     pub fn has_any_positive_extension(&self, exts: &[&str]) -> bool {
         exts.iter()
             .any(|ext| !ext.starts_with('!') && self.has_extension(ext))

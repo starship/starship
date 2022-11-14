@@ -484,6 +484,31 @@
         }
       ]
     },
+    "flutter": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "pubspec.yaml",
+          "pubspec.yml",
+          "pubspec.lock"
+        ],
+        "detect_folders": [
+          ".dart_tool",
+          "android",
+          "ios"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "🇫 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FlutterConfig"
+        }
+      ]
+    },
     "gcloud": {
       "default": {
         "disabled": false,
@@ -2823,6 +2848,61 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FlutterConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🇫 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "pubspec.yaml",
+            "pubspec.yml",
+            "pubspec.lock"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".dart_tool",
+            "android",
+            "ios"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

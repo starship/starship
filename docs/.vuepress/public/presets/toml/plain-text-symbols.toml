@@ -58,6 +58,9 @@ symbol = "exs "
 [elm]
 symbol = "elm "
 
+[flutter]
+symbol = "flutter "
+
 [git_branch]
 symbol = "git "
 

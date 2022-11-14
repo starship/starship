@@ -57,6 +57,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "elixir",
     "elm",
     "erlang",
+    "flutter",
     "golang",
     "haskell",
     "helm",

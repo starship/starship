@@ -34,6 +34,7 @@ pub const ALL_MODULES: &[&str] = &[
     "env_var",
     "erlang",
     "fill",
+    "flutter",
     "gcloud",
     "git_branch",
     "git_commit",
