@@ -206,13 +206,13 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_command("git")?
-            .args(&["tag", "v1", "-m", "Testing tags"])
-            .current_dir(&repo_dir.path())
+            .args(["tag", "v1", "-m", "Testing tags"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         let mut git_commit = create_command("git")?
-            .args(&["rev-parse", "HEAD"])
-            .current_dir(&repo_dir.path())
+            .args(["rev-parse", "HEAD"])
+            .current_dir(repo_dir.path())
             .output()?
             .stdout;
         git_commit.truncate(7);
@@ -223,7 +223,7 @@ mod tests {
                 [git_commit]
                     only_detached = false
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
 
         let expected = Some(format!(
@@ -242,8 +242,8 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_command("git")?
-            .args(&["tag", "v1", "-m", "Testing tags"])
-            .current_dir(&repo_dir.path())
+            .args(["tag", "v1", "-m", "Testing tags"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         let mut git_commit = create_command("git")?
