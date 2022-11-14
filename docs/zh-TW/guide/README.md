@@ -173,7 +173,7 @@
 
 ### 第一步 安裝 Starship
 
-Select your operating system from the list below to view installation instructions:
+瀏覽各系統的安裝指示
 
 <details>
 <summary>Android</summary>
@@ -264,9 +264,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### 第二步 為您的 shell 安裝 Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+設定您的 shell 以啟用 Starship。 請從下列選單選取您的 shell：
 
 <details>
 <summary>Bash</summary>
@@ -280,7 +280,7 @@ eval "$(starship init bash)"
 </details>
 
 <details>
-<summary>Cmd</summary>
+<summary>命令提示字元</summary>
 
 You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
@@ -389,15 +389,15 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### 第三步 設定 Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+開啟一個新的 shell，您應該可以看到新的美麗 shell 提示字元。 若您對預設值感到滿意，盡情享受！
 
-If you're looking to further customize Starship:
+如果您想要更加客製化 Startship ：
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[設定](https://starship.rs/config/)**：學習如何設定 Starship 來微調提示字元的外觀
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[其他預設組態](https://starship.rs/presets/)**：從別人的設定當中獲得啟發
 
 ## 🤝 貢獻
 
