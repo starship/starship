@@ -7,7 +7,7 @@ actionText: 馬上開始 →
 actionLink: ./guide/
 features:
   - 
-    title: 兼容性優先
+    title: 相容性優先
     details: 能夠在最常見的作業系統之中最常見的 shell 上運作。 在各處使用它吧！
   - 
     title: 以 Rust 開發
