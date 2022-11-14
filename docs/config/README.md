@@ -1506,7 +1506,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format` | `'v${raw}'`                                       | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `'🇫 '`                                           | A format string representing the symbol of Dart                           |
 | `detect_files`   | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Which filenames should trigger this module.                               |
-| `detect_folders` | `['.dart_tool']`                                  | Which folders should trigger this module (all must exist).                |
+| `detect_folders` | `['.dart_tool', 'ios', 'android']`                | Which folders should trigger this module (all must exist).                |
 | `style`          | `'bold blue'`                                     | The style for the module.                                                 |
 | `disabled`       | `false`                                           | Disables the `dart` module.                                               |
 
