@@ -9,7 +9,7 @@ use crate::utils::get_command_string_output;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("flutter");
     let config: FlutterConfig = FlutterConfig::try_load(module.config);
-    
+
     let dir_contents = context.dir_contents().ok()?;
     let is_flutter_project = dir_contents.has_any_positive_file_name(&config.detect_files)
         && dir_contents.has_all_positive_folder(&config.detect_folders);
@@ -34,10 +34,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     let flutter_version = &get_command_string_output(command);
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &flutter_version,
+                        flutter_version,
                         config.version_format,
                     )
-                        .map(Ok)
+                    .map(Ok)
                 }
                 _ => None,
             })
@@ -76,27 +76,27 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
-    
+
     #[test]
     fn folder_without_android_directory() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         fs::create_dir_all(dir.path().join(".dart_tool"))?;
         fs::create_dir_all(dir.path().join("ios"))?;
         File::create(dir.path().join("pubspec.yaml"))?.sync_all()?;
-        
+
         let actual = ModuleRenderer::new("flutter").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
         dir.close()
     }
-    
+
     #[test]
     fn folder_without_dart_tool_directory() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         fs::create_dir_all(dir.path().join("android"))?;
         fs::create_dir_all(dir.path().join("ios"))?;
         File::create(dir.path().join("pubspec.yaml"))?.sync_all()?;
-        
+
         let actual = ModuleRenderer::new("flutter").path(dir.path()).collect();
         let expected = None;
         assert_eq!(expected, actual);
@@ -126,7 +126,7 @@ mod tests {
         fs::create_dir_all(dir.path().join("ios"))?;
         File::create(dir.path().join("pubspec.yml"))?.sync_all()?;
         File::create(dir.path().join(".dart_tool/version"))?.write_all(b"3.3.8")?;
-    
+
         let actual = ModuleRenderer::new("flutter").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🇫 v3.3.8 ")));
         assert_eq!(expected, actual);
@@ -141,7 +141,7 @@ mod tests {
         fs::create_dir_all(dir.path().join("ios"))?;
         File::create(dir.path().join("pubspec.lock"))?.sync_all()?;
         File::create(dir.path().join(".dart_tool/version"))?.write_all(b"3.3.8")?;
-    
+
         let actual = ModuleRenderer::new("flutter").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🇫 v3.3.8 ")));
         assert_eq!(expected, actual);
@@ -155,7 +155,7 @@ mod tests {
         fs::create_dir_all(dir.path().join("android"))?;
         fs::create_dir_all(dir.path().join("ios"))?;
         File::create(dir.path().join("pubspec.yaml"))?.sync_all()?;
-    
+
         let actual = ModuleRenderer::new("flutter")
             .cmd(
                 "cat .dart_tool/version",
