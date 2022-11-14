@@ -619,7 +619,7 @@ credential_process = /opt/bin/awscreds-retriever
         use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 
         let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
-            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0),
+            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0).unwrap(),
             Utc,
         );
 
@@ -651,7 +651,7 @@ credential_process = /opt/bin/awscreds-retriever
         use chrono::{DateTime, NaiveDateTime, Utc};
 
         let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
-            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0),
+            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0).unwrap(),
             Utc,
         );
 
@@ -739,7 +739,7 @@ aws_secret_access_key=dummy
         use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 
         let now: DateTime<Utc> = chrono::DateTime::from_utc(
-            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() - 1800, 0),
+            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() - 1800, 0).unwrap(),
             Utc,
         );
 
