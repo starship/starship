@@ -359,7 +359,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-在 `~/.bashrc` 的最后，添加以下内容：
+在 `~/.tcshrc` 的最后，添加以下内容：
 
 ```sh
 eval `starship init tcsh`
@@ -370,7 +370,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-在 `~/.bashrc` 的最后，添加以下内容：
+在 `~/.xonshrc` 的最后，添加以下内容：
 
 ```python
 execx($(starship init xonsh))
@@ -417,11 +417,11 @@ eval "$(starship init zsh)"
 
 - **[reujab/silver](https://github.com/reujab/silver)** – 带图标且可定制的类 Powerline 提示符，适用于所有 Shell。
 
-## ❤️ Sponsors
+## ❤️ 赞助商
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+通过 [成为赞助商 ](https://github.com/sponsors/starship)来支持这个项目。 您的名字或 LOGO 将在此处显示，并链接到您的网站。
 
-**Supporter Tier**
+**支持者级别**
 
 - [Dimension](https://dimension.dev/)
 
