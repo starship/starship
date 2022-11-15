@@ -427,9 +427,9 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship roket simgesi">
 </p>
 
-## 📝 License
+## 📝 Lisans
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Telif Hakkı © 2019-günümüz, [Starship Contributors](https://github.com/starship/starship/graphs/contributors). <br /> Bu proje [ISC](https://github.com/starship/starship/blob/master/LICENSE) lisanslıdır.
