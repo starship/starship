@@ -136,7 +136,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    #### Tcsh
 
-   在 `~/.bashrc` 的最后，添加以下内容：
+   在 `~/.tcshrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.tcshrc
