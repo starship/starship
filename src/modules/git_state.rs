@@ -159,13 +159,12 @@ struct StateDescription<'a> {
 mod tests {
     use nu_ansi_term::Color;
     use std::ffi::OsStr;
-    use std::fs::OpenOptions;
-    use std::io::{self, Error, ErrorKind, Write};
+    use std::io::{self, Error, ErrorKind};
     use std::path::Path;
     use std::process::Stdio;
 
     use crate::test::ModuleRenderer;
-    use crate::utils::create_command;
+    use crate::utils::{create_command, write_file};
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -289,15 +288,6 @@ mod tests {
         let path = repo_dir.path();
         let conflicted_file = repo_dir.path().join("the_file");
 
-        let write_file = |text: &str| {
-            let mut file = OpenOptions::new()
-                .write(true)
-                .create(true)
-                .truncate(true)
-                .open(&conflicted_file)?;
-            write!(file, "{text}")
-        };
-
         // Initialize a new git repo
         run_git_cmd(
             [
@@ -332,7 +322,7 @@ mod tests {
         )?;
 
         // Write a file on master and commit it
-        write_file("Version A")?;
+        write_file(&conflicted_file, "Version A")?;
         run_git_cmd(["add", "the_file"], Some(path), true)?;
         run_git_cmd(
             ["commit", "--message", "Commit A", "--no-gpg-sign"],
@@ -342,7 +332,7 @@ mod tests {
 
         // Switch to another branch, and commit a change to the file
         run_git_cmd(["checkout", "-b", "other-branch"], Some(path), true)?;
-        write_file("Version B")?;
+        write_file(&conflicted_file, "Version B")?;
         run_git_cmd(
             ["commit", "--all", "--message", "Commit B", "--no-gpg-sign"],
             Some(path),
@@ -351,7 +341,7 @@ mod tests {
 
         // Switch back to master, and commit a third change to the file
         run_git_cmd(["checkout", "master"], Some(path), true)?;
-        write_file("Version C")?;
+        write_file(conflicted_file, "Version C")?;
         run_git_cmd(
             ["commit", "--all", "--message", "Commit C", "--no-gpg-sign"],
             Some(path),
