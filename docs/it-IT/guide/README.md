@@ -430,6 +430,6 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Licenza
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-presente, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Questo progetto è sotto licenza [ISC](https://github.com/starship/starship/blob/master/LICENSE).
