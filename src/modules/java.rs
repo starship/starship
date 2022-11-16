@@ -5,7 +5,7 @@ use crate::utils::get_command_string_output;
 use std::path::PathBuf;
 
 use regex::Regex;
-const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|from)";
+const JAVA_VERSION_PATTERN: &str = "(?:JRE.*\\()(?P<version>[\\d\\.]+)";
 
 /// Creates a module with the current Java version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
