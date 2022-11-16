@@ -593,6 +593,24 @@ mod tests {
     }
 
     #[test]
+    fn test_load_unknown_key_config() {
+        #[derive(Clone, Default, Deserialize)]
+        #[serde(default)]
+        struct TestConfig<'a> {
+            pub foo: &'a str,
+        }
+
+        let config = toml::toml! {
+            foo = "test"
+            bar = "ignore me"
+        };
+        let rust_config = TestConfig::from_config(&config);
+
+        assert!(rust_config.is_ok());
+        assert_eq!(rust_config.unwrap().foo, "test");
+    }
+
+    #[test]
     fn test_from_string() {
         let config = Value::String(String::from("S"));
         assert_eq!(<&str>::from_config(&config).unwrap(), "S");
