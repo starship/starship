@@ -6,9 +6,8 @@ use crate::formatter::StringFormatter;
 
 /// Creates a module with the ipv4 address of the local machine.
 ///
-/// The `local_ipaddress` crate is used to determine the local IP address of your machine.
-/// An accurate and fast way, especially if there are multiple IP addresses available,
-/// is to connect a UDP socket and then reading its local endpoint.
+/// The `local-ip-address` crate is used to determine the local IP address of your machine.
+/// Avoid any external network connections to not compromise privacy.
 ///
 /// Will display the ip if all of the following criteria are met:
 ///     - localip.disabled is false
@@ -28,11 +27,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let localip = local_ipaddress::get().unwrap_or_default();
-    if localip.is_empty() {
-        log::warn!("unable to determine local ipv4 address");
-        return None;
-    }
+    let localip = match local_ip_address::local_ip() {
+        Ok(ip) => ip,
+        Err(err) => {
+            log::warn!("unable to determine local ipv4 address: {}", err);
+            return None;
+        }
+    };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -41,7 +42,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "localipv4" => Some(Ok(&localip)),
+                "localipv4" => Some(Ok(localip.to_string())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -65,15 +66,7 @@ mod tests {
 
     macro_rules! get_localip {
         () => {
-            if let Some(localip) = local_ipaddress::get() {
-                localip
-            } else {
-                println!(
-                    "localip was not tested because socket connection failed! \
-                     This could be caused by an unconventional network setup."
-                );
-                return;
-            }
+            local_ip_address::local_ip().unwrap().to_string()
         };
     }
 
