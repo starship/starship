@@ -1387,7 +1387,7 @@
         "format": "[$symbol$shlvl]($style) ",
         "repeat": false,
         "style": "bold yellow",
-        "symbol": "↕️  ",
+        "symbol": "↕️ ",
         "threshold": 2
       },
       "allOf": [

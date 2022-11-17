@@ -96,7 +96,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "2")
             .collect();
-        let expected = Some(format!("{} ", style().paint("↕️  2")));
+        let expected = Some(format!("{} ", style().paint("↕️ 2")));
 
         assert_eq!(expected, actual);
     }
@@ -138,7 +138,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "1")
             .collect();
-        let expected = Some(format!("{} ", style().paint("↕️  1")));
+        let expected = Some(format!("{} ", style().paint("↕️ 1")));
 
         assert_eq!(expected, actual);
     }
@@ -168,7 +168,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "2")
             .collect();
-        let expected = Some(format!("{} ", Color::Red.underline().paint("↕️  2")));
+        let expected = Some(format!("{} ", Color::Red.underline().paint("↕️ 2")));
 
         assert_eq!(expected, actual);
     }
@@ -198,7 +198,7 @@ mod tests {
             })
             .env(SHLVL_ENV_VAR, "2")
             .collect();
-        let expected = Some(format!("↕️   going down {} GOING UP ", style().paint("2")));
+        let expected = Some(format!("↕️  going down {} GOING UP ", style().paint("2")));
 
         assert_eq!(expected, actual);
     }
