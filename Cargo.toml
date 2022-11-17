@@ -51,7 +51,7 @@ gethostname = "0.4.0"
 git-features = { version = "0.23.1", optional = true }
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
 git-repository = { version = "0.28.0", default-features = false, features = ["max-performance-safe"] }
-indexmap = { version = "1.9.1", features = ["serde"] }
+indexmap = { version = "1.9.2", features = ["serde"] }
 local_ipaddress = "0.1.3"
 log = { version = "0.4.17", features = ["std"] }
 # nofity-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
