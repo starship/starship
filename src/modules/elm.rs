@@ -106,7 +106,7 @@ mod tests {
     fn folder_with_elm_stuff_directory() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let elmstuff = dir.path().join("elm-stuff");
-        fs::create_dir_all(&elmstuff)?;
+        fs::create_dir_all(elmstuff)?;
         let actual = ModuleRenderer::new("elm").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Cyan.bold().paint("🌳 v0.19.1 ")));
         assert_eq!(expected, actual);

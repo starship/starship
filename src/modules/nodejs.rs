@@ -147,7 +147,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("package.json"))?.sync_all()?;
         let esy_lock = dir.path().join("esy.lock");
-        fs::create_dir_all(&esy_lock)?;
+        fs::create_dir_all(esy_lock)?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
         let expected = None;
@@ -225,7 +225,7 @@ mod tests {
     fn folder_with_node_modules() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let node_modules = dir.path().join("node_modules");
-        fs::create_dir_all(&node_modules)?;
+        fs::create_dir_all(node_modules)?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));

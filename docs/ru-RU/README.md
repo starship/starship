@@ -55,11 +55,10 @@ description: Starship - минимальная, быстрая и бесконе
    ```sh
    brew install starship
    ```
-
-   С [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:

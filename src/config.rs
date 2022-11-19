@@ -141,7 +141,7 @@ impl StarshipConfig {
     fn config_from_file() -> Option<Value> {
         let file_path = get_config_path()?;
 
-        let toml_content = match utils::read_file(&file_path) {
+        let toml_content = match utils::read_file(file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)

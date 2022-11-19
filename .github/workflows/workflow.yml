@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -76,7 +76,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -98,7 +98,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -120,7 +120,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -142,7 +142,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -178,7 +178,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
+        uses: Swatinem/rust-cache@v2
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
@@ -197,7 +197,7 @@ jobs:
       - name: Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo install --version 0.3.2 cargo-wix
+        run: cargo install --version 0.3.4 cargo-wix
         env:
           # cargo-wix does not require static crt
           RUSTFLAGS: ''

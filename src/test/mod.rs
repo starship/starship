@@ -174,19 +174,19 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
 
             create_command("git")?
                 .current_dir(path.path())
-                .args(&["clone", "-b", "master"])
+                .args(["clone", "-b", "master"])
                 .arg(GIT_FIXTURE.as_os_str())
-                .arg(&path.path())
+                .arg(path.path())
                 .output()?;
 
             create_command("git")?
-                .args(&["config", "--local", "user.email", "starship@example.com"])
-                .current_dir(&path.path())
+                .args(["config", "--local", "user.email", "starship@example.com"])
+                .current_dir(path.path())
                 .output()?;
 
             create_command("git")?
-                .args(&["config", "--local", "user.name", "starship"])
-                .current_dir(&path.path())
+                .args(["config", "--local", "user.name", "starship"])
+                .current_dir(path.path())
                 .output()?;
 
             // Prevent intermittent test failures and ensure that the result of git commands
@@ -194,19 +194,19 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
             // This is especially important on Windows.
             // Newer, more far-reaching git setting for `fsync`, that's not yet widely supported:
             create_command("git")?
-                .args(&["config", "--local", "core.fsync", "all"])
-                .current_dir(&path.path())
+                .args(["config", "--local", "core.fsync", "all"])
+                .current_dir(path.path())
                 .output()?;
 
             // Older git setting for `fsync` for compatibility with older git versions:
             create_command("git")?
-                .args(&["config", "--local", "core.fsyncObjectFiles", "true"])
-                .current_dir(&path.path())
+                .args(["config", "--local", "core.fsyncObjectFiles", "true"])
+                .current_dir(path.path())
                 .output()?;
 
             create_command("git")?
-                .args(&["reset", "--hard", "HEAD"])
-                .current_dir(&path.path())
+                .args(["reset", "--hard", "HEAD"])
+                .current_dir(path.path())
                 .output()?;
 
             Ok(path)
@@ -218,7 +218,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .current_dir(path.path())
                 .arg("clone")
                 .arg(HG_FIXTURE.as_os_str())
-                .arg(&path.path())
+                .arg(path.path())
                 .output()?;
 
             Ok(path)
