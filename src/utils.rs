@@ -48,6 +48,40 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     result
 }
 
+/// Write a string to a file
+#[cfg(test)]
+pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Result<()> {
+    use std::io::Write;
+
+    let file_name = file_name.as_ref();
+    let text = text.as_ref();
+
+    log::trace!("Trying to write {text:?} to {file_name:?}");
+    let mut file = match std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(file_name)
+    {
+        Ok(file) => file,
+        Err(err) => {
+            log::warn!("Error creating file: {:?}", err);
+            return Err(err);
+        }
+    };
+
+    match file.write_all(text.as_bytes()) {
+        Ok(_) => {
+            log::trace!("File {file_name:?} written successfully");
+        }
+        Err(err) => {
+            log::warn!("Error writing to file: {err:?}");
+            return Err(err);
+        }
+    }
+    file.sync_all()
+}
+
 /// Reads command output from stderr or stdout depending on to which stream program streamed it's output
 pub fn get_command_string_output(command: CommandOutput) -> String {
     if command.stdout.is_empty() {
