@@ -13,6 +13,7 @@ pub struct ValueDeserializer<'de> {
     value: &'de Value,
     info: Option<StructInfo>,
     current_key: Option<&'de str>,
+    error_on_ignored: bool,
 }
 
 /// When deserializing a struct, this struct stores information about the struct.
@@ -28,14 +29,28 @@ impl<'de> ValueDeserializer<'de> {
             value,
             info: None,
             current_key: None,
+            error_on_ignored: true,
         }
     }
 
-    fn with_info(value: &'de Value, info: Option<StructInfo>, current_key: &'de str) -> Self {
+    fn with_info(
+        value: &'de Value,
+        info: Option<StructInfo>,
+        current_key: &'de str,
+        ignored: bool,
+    ) -> Self {
         ValueDeserializer {
             value,
             info,
             current_key: Some(current_key),
+            error_on_ignored: ignored,
+        }
+    }
+
+    pub fn with_allow_unknown_keys(self) -> Self {
+        ValueDeserializer {
+            error_on_ignored: false,
+            ..self
         }
     }
 }
@@ -83,7 +98,12 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
                 let map = MapDeserializer::new(t.iter().map(|(k, v)| {
                     (
                         k.as_str(),
-                        ValueDeserializer::with_info(v, self.info, k.as_str()),
+                        ValueDeserializer::with_info(
+                            v,
+                            self.info,
+                            k.as_str(),
+                            self.error_on_ignored,
+                        ),
                     )
                 }));
                 map.deserialize_map(visitor)
@@ -128,6 +148,10 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
                 ALL_MODULES.contains(&key) || key == "custom" || key == "env_var"
             })
         {
+            return visitor.visit_none();
+        }
+
+        if !self.error_on_ignored {
             return visitor.visit_none();
         }
 
@@ -322,13 +346,17 @@ mod test {
         let value = toml::toml! {
             unknown_key = "foo"
         };
-        let deserializer = ValueDeserializer::new(&value);
 
+        let deserializer = ValueDeserializer::new(&value);
         let result = StarshipRootConfig::deserialize(deserializer).unwrap_err();
         assert_eq!(
             format!("{result}"),
             "Error in 'StarshipRoot' at 'unknown_key': Unknown key"
         );
+
+        let deserializer2 = ValueDeserializer::new(&value).with_allow_unknown_keys();
+        let result = StarshipRootConfig::deserialize(deserializer2);
+        assert!(result.is_ok());
     }
 
     #[test]
