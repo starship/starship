@@ -149,36 +149,36 @@ unset -f __main
             "#,
             starship.sprint_posix()?
         ),
-        "zsh" => println!(
+        "zsh" => print!(
             r#"source <({} init zsh --print-full-init)"#,
             starship.sprint_posix()?
         ),
-        "fish" => println!(
+        "fish" => print!(
             // Fish does process substitution with pipes and psub instead of bash syntax
             r#"source ({} init fish --print-full-init | psub)"#,
             starship.sprint_posix()?
         ),
-        "powershell" => println!(
+        "powershell" => print!(
             r#"Invoke-Expression (& {} init powershell --print-full-init | Out-String)"#,
             starship.sprint_pwsh()?
         ),
-        "ion" => println!("eval $({} init ion --print-full-init)", starship.sprint()?),
+        "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
             r#"eval ({} init elvish --print-full-init | slurp)"#,
             starship.sprint_posix()?
         ),
-        "tcsh" => println!(
+        "tcsh" => print!(
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
         "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
-        "xonsh" => println!(
+        "xonsh" => print!(
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?
         ),
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
         _ => {
-            eprintln!(
+            eprint!(
                 "{0} is not yet supported by starship.\n\
                  For the time being, we support the following shells:\n\
                  * bash\n\
