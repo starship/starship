@@ -229,7 +229,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 
 fn print_script(script: &str, path: &str) {
     let script = script.replace("::STARSHIP::", path);
-    println!("{}", script);
+    print!("{}", script);
 }
 
 /* GENERAL INIT SCRIPT NOTES
