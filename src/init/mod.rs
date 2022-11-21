@@ -178,7 +178,7 @@ unset -f __main
         ),
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
         _ => {
-            eprint!(
+            eprintln!(
                 "{0} is not yet supported by starship.\n\
                  For the time being, we support the following shells:\n\
                  * bash\n\
