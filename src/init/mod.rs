@@ -101,7 +101,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
     let starship = StarshipPath::init()?;
 
     match shell_basename {
-        "bash" => println!(
+        "bash" => print!(
             /*
              * The standard bash bootstrap is:
              *      `source <(starship init bash --print-full-init)`
