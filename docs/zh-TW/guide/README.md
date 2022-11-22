@@ -219,7 +219,6 @@ Alternatively, install Starship using any of the following package managers:
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
