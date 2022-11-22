@@ -158,14 +158,9 @@ struct StateDescription<'a> {
 #[cfg(test)]
 mod tests {
     use nu_ansi_term::Color;
-    use std::ffi::OsStr;
-    use std::fs::OpenOptions;
-    use std::io::{self, Error, ErrorKind, Write};
-    use std::path::Path;
-    use std::process::Stdio;
+    use std::io;
 
-    use crate::test::ModuleRenderer;
-    use crate::utils::{create_command, write_file};
+    use crate::utils::write_file;
     use crate::test::{create_repo, run_git_cmd, ModuleRenderer};
 
     #[test]
@@ -262,6 +257,7 @@ mod tests {
 
     fn make_conflict_on_repo(repo_dir: tempfile::TempDir) -> io::Result<tempfile::TempDir> {
         let path = repo_dir.path();
+        let conflicted_file = repo_dir.path().join("the_file");
 
         // Initialize a new git repo
         run_git_cmd(

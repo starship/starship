@@ -7,7 +7,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("git_extensions");
     let config: GitExtensionsConfig = GitExtensionsConfig::try_load(module.config);
 
-    let git_config = context.get_repo().ok()?.open().ok()?.config().ok()?;
+    let git_config_binding = context.get_repo().ok()?.open();
+    let git_config = git_config_binding.config_snapshot();
 
     let exts = config.extensions;
     let mut active_exts: Vec<&'a str> = vec![];
@@ -18,11 +19,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         match *ext_configured {
             "lfs" => {
                 // we don't care what the value is, merely that it exists.
-                git_config.get_entry("lfs.repositoryformatversion").ok()?;
+                git_config.string("lfs.repositoryformatversion")?;
                 active_exts.push("lfs")
             }
             "svn" => {
-                git_config.get_entry("svn-remote.svn.url").ok()?;
+                git_config.string("svn-remote.svn.url")?;
                 active_exts.push("svn")
             }
             _ => {
@@ -67,7 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::io;
 
     use crate::test::{create_repo, run_git_cmd, ModuleRenderer};
