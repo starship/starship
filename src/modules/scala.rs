@@ -77,7 +77,7 @@ fn parse_scala_version(scala_version_string: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 

@@ -8,6 +8,10 @@
 
 ### 配置
 
+```sh
+starship preset plain-text-symbols > ~/.config/starship.toml
+```
+
 [点击下载 TOML 文件](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml

@@ -102,7 +102,7 @@ jobs:
       - name: Setup | Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest'
-        run: cargo install --version 0.3.3 cargo-wix
+        run: cargo install --version 0.3.4 cargo-wix
         env:
           RUSTFLAGS: '-Copt-level=1'
 
@@ -133,7 +133,6 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          strip starship.exe
           7z a ../../../${{ matrix.name }} starship.exe
           cd -
 
@@ -141,8 +140,6 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          # TODO: investigate better cross platform stripping
-          strip starship || true
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
@@ -286,7 +283,7 @@ jobs:
   cargo_publish:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
-    needs: release_please
+    needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
@@ -305,7 +302,7 @@ jobs:
   update_brew_formula:
     name: Update Brew Formula
     runs-on: ubuntu-latest
-    needs: release_please
+    needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - uses: mislav/bump-homebrew-formula-action@v2.1

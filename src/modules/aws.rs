@@ -19,7 +19,8 @@ type AwsCredsFile = OnceCell<Option<Ini>>;
 
 fn get_credentials_file_path(context: &Context) -> Option<PathBuf> {
     context
-        .get_env("AWS_CREDENTIALS_FILE")
+        .get_env("AWS_SHARED_CREDENTIALS_FILE")
+        .or_else(|| context.get_env("AWS_CREDENTIALS_FILE"))
         .and_then(|path| PathBuf::from_str(&path).ok())
         .or_else(|| {
             let mut home = context.get_home()?;
@@ -65,7 +66,7 @@ fn get_profile_config<'a>(
     profile: &Option<Profile>,
 ) -> Option<&'a ini::Properties> {
     match profile {
-        Some(profile) => config.section(Some(format!("profile {}", profile))),
+        Some(profile) => config.section(Some(format!("profile {profile}"))),
         None => config.section(Some("default")),
     }
 }
@@ -130,8 +131,10 @@ fn get_credentials_duration(
         let creds = get_creds(context, aws_creds)?;
         let section = get_profile_creds(creds, aws_profile)?;
 
-        section
-            .get("expiration")
+        let expiration_keys = ["expiration", "x_security_token_expires"];
+        expiration_keys
+            .iter()
+            .find_map(|expiration_key| section.get(expiration_key))
             .and_then(|expiration| DateTime::parse_from_rfc3339(expiration).ok())
     }?;
 
@@ -247,7 +250,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{create_dir, File};
     use std::io::{self, Write};
 
@@ -428,7 +431,7 @@ mod tests {
 
         assert!(ModuleRenderer::new("aws")
             .env(
-                "AWS_CREDENTIALS_FILE",
+                "AWS_SHARED_CREDENTIALS_FILE",
                 config_path.to_string_lossy().as_ref(),
             )
             .collect()
@@ -616,7 +619,7 @@ credential_process = /opt/bin/awscreds-retriever
         use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 
         let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
-            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0),
+            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0).unwrap(),
             Utc,
         );
 
@@ -648,45 +651,68 @@ credential_process = /opt/bin/awscreds-retriever
         use chrono::{DateTime, NaiveDateTime, Utc};
 
         let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
-            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() + 1800, 0),
+            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0).unwrap(),
             Utc,
         );
 
         let expiration_date = now_plus_half_hour.to_rfc3339_opts(chrono::SecondsFormat::Secs, true);
 
-        file.write_all(
-            format!(
-                "[astronauts]
+        let expiration_keys = ["expiration", "x_security_token_expires"];
+        expiration_keys.iter().for_each(|key| {
+            file.write_all(
+                format!(
+                    "[astronauts]
 aws_access_key_id=dummy
 aws_secret_access_key=dummy
-expiration={}
+{}={}
 ",
-                expiration_date
+                    key, expiration_date
+                )
+                .as_bytes(),
             )
-            .as_bytes(),
-        )?;
+            .unwrap();
 
-        let actual = ModuleRenderer::new("aws")
-            .env("AWS_PROFILE", "astronauts")
-            .env("AWS_REGION", "ap-northeast-2")
-            .env(
-                "AWS_CREDENTIALS_FILE",
-                credentials_path.to_string_lossy().as_ref(),
-            )
-            .collect();
+            let actual = ModuleRenderer::new("aws")
+                .env("AWS_PROFILE", "astronauts")
+                .env("AWS_REGION", "ap-northeast-2")
+                .env(
+                    "AWS_SHARED_CREDENTIALS_FILE",
+                    credentials_path.to_string_lossy().as_ref(),
+                )
+                .collect();
 
-        // In principle, "30m" should be correct. However, bad luck in scheduling
-        // on shared runners may delay it. Allow for up to 2 seconds of delay.
-        let possible_values = ["30m", "29m59s", "29m58s"];
-        let possible_values = possible_values.map(|duration| {
-            let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{}] ", duration);
-            Some(format!(
-                "on {}",
-                Color::Yellow.bold().paint(segment_colored)
-            ))
+            let actual_variant = ModuleRenderer::new("aws")
+                .env("AWS_PROFILE", "astronauts")
+                .env("AWS_REGION", "ap-northeast-2")
+                .env(
+                    "AWS_CREDENTIALS_FILE",
+                    credentials_path.to_string_lossy().as_ref(),
+                )
+                .collect();
+
+            assert_eq!(
+                actual, actual_variant,
+                "both AWS_SHARED_CREDENTIALS_FILE and AWS_CREDENTIALS_FILE should work"
+            );
+
+            // In principle, "30m" should be correct. However, bad luck in scheduling
+            // on shared runners may delay it.
+            let possible_values = [
+                "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+            ];
+            let possible_values = possible_values.map(|duration| {
+                let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
+                Some(format!(
+                    "on {}",
+                    Color::Yellow.bold().paint(segment_colored)
+                ))
+            });
+
+            assert!(
+                possible_values.contains(&actual),
+                "time is not in range: {actual:?}"
+            );
         });
-
-        assert!(possible_values.contains(&actual));
 
         dir.close()
     }
@@ -713,7 +739,7 @@ expiration={}
         use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 
         let now: DateTime<Utc> = chrono::DateTime::from_utc(
-            NaiveDateTime::from_timestamp(chrono::Local::now().timestamp() - 1800, 0),
+            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() - 1800, 0).unwrap(),
             Utc,
         );
 
@@ -736,7 +762,7 @@ expiration={}
             "on {}",
             Color::Yellow
                 .bold()
-                .paint(format!("☁️  astronauts (ap-northeast-2) [{}] ", symbol))
+                .paint(format!("☁️  astronauts (ap-northeast-2) [{symbol}] "))
         ));
 
         assert_eq!(expected, actual);
@@ -830,7 +856,7 @@ aws_secret_access_key=dummy
             .env("AWS_PROFILE", "astronauts")
             .env("AWS_REGION", "ap-northeast-2")
             .env(
-                "AWS_CREDENTIALS_FILE",
+                "AWS_SHARED_CREDENTIALS_FILE",
                 credentials_path.to_string_lossy().as_ref(),
             )
             .collect();

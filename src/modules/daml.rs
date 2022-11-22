@@ -75,7 +75,7 @@ fn read_sdk_version_from_daml_yaml(context: &Context) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io::{Result, Write};
 

@@ -71,14 +71,34 @@
         ],
         "detect_folders": [],
         "disabled": false,
-        "format": "with [$symbol ($version)]($style)",
+        "format": "with [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "",
+        "symbol": "🦬 ",
         "version_format": "v${raw}"
       },
       "allOf": [
         {
           "$ref": "#/definitions/BufConfig"
+        }
+      ]
+    },
+    "bun": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "bun.lockb",
+          "bunfig.toml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold red",
+        "symbol": "🍞 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/BunConfig"
         }
       ]
     },
@@ -505,6 +525,7 @@
         "only_detached": true,
         "style": "green bold",
         "tag_disabled": true,
+        "tag_max_candidates": 0,
         "tag_symbol": " 🏷  "
       },
       "allOf": [
@@ -596,6 +617,19 @@
       "allOf": [
         {
           "$ref": "#/definitions/GoConfig"
+        }
+      ]
+    },
+    "guix_shell": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol]($style) ",
+        "style": "yellow bold",
+        "symbol": "🐃 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GuixShellConfig"
         }
       ]
     },
@@ -843,6 +877,21 @@
         }
       ]
     },
+    "meson": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$project]($style) ",
+        "style": "blue bold",
+        "symbol": "⬢ ",
+        "truncation_length": 4294967295,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MesonConfig"
+        }
+      ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
@@ -946,6 +995,25 @@
         }
       ]
     },
+    "opa": {
+      "default": {
+        "detect_extensions": [
+          "rego"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "🪖  ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OpaConfig"
+        }
+      ]
+    },
     "openstack": {
       "default": {
         "disabled": false,
@@ -956,6 +1024,56 @@
       "allOf": [
         {
           "$ref": "#/definitions/OspConfig"
+        }
+      ]
+    },
+    "os": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol]($style)",
+        "style": "bold white",
+        "symbols": {
+          "Alpine": "🏔️ ",
+          "Amazon": "🙂 ",
+          "Android": "🤖 ",
+          "Arch": "🎗️ ",
+          "CentOS": "💠 ",
+          "Debian": "🌀 ",
+          "DragonFly": "🐉 ",
+          "Emscripten": "🔗 ",
+          "EndeavourOS": "🚀 ",
+          "Fedora": "🎩 ",
+          "FreeBSD": "😈 ",
+          "Garuda": "🦅 ",
+          "Gentoo": "🗜️ ",
+          "HardenedBSD": "🛡️ ",
+          "Illumos": "🐦 ",
+          "Linux": "🐧 ",
+          "Macos": "🍎 ",
+          "Manjaro": "🥭 ",
+          "Mariner": "🌊 ",
+          "MidnightBSD": "🌘 ",
+          "Mint": "🌿 ",
+          "NetBSD": "🚩 ",
+          "NixOS": "❄️ ",
+          "OpenBSD": "🐡 ",
+          "OracleLinux": "🦴 ",
+          "Pop": "🍭 ",
+          "Raspbian": "🍓 ",
+          "RedHatEnterprise": "🎩 ",
+          "Redhat": "🎩 ",
+          "Redox": "🧪 ",
+          "SUSE": "🦎 ",
+          "Solus": "⛵ ",
+          "Ubuntu": "🎯 ",
+          "Unknown": "❓ ",
+          "Windows": "🪟 ",
+          "openSUSE": "🦎 "
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OSConfig"
         }
       ]
     },
@@ -1320,7 +1438,7 @@
         "signal_symbol": "⚡",
         "style": "bold red",
         "success_symbol": "",
-        "symbol": "✖"
+        "symbol": "❌"
       },
       "allOf": [
         {
@@ -1523,12 +1641,29 @@
     "add_newline": {
       "default": true,
       "type": "boolean"
+    },
+    "palette": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "palettes": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
     }
   },
+  "additionalProperties": false,
   "definitions": {
     "AwsConfig": {
       "title": "AWS",
-      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
       "type": "object",
       "properties": {
         "format": {
@@ -1577,7 +1712,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "AzureConfig": {
       "type": "object",
@@ -1598,7 +1734,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "BatteryConfig": {
       "type": "object",
@@ -1645,7 +1782,8 @@
           "default": "[$symbol$percentage]($style) ",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "BatteryDisplayConfig": {
       "type": "object",
@@ -1673,13 +1811,14 @@
             "null"
           ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "BufConfig": {
       "type": "object",
       "properties": {
         "format": {
-          "default": "with [$symbol ($version)]($style)",
+          "default": "with [$symbol($version )]($style)",
           "type": "string"
         },
         "version_format": {
@@ -1687,7 +1826,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "",
+          "default": "🦬 ",
           "type": "string"
         },
         "style": {
@@ -1723,7 +1862,58 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "BunConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🍞 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "bun.lockb",
+            "bunfig.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "CConfig": {
       "type": "object",
@@ -1795,7 +1985,8 @@
             }
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CharacterConfig": {
       "type": "object",
@@ -1832,7 +2023,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CMakeConfig": {
       "type": "object",
@@ -1881,7 +2073,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CmdDurationConfig": {
       "type": "object",
@@ -1924,7 +2117,8 @@
           "format": "uint32",
           "minimum": 0.0
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CobolConfig": {
       "type": "object",
@@ -1975,7 +2169,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CondaConfig": {
       "type": "object",
@@ -2006,7 +2201,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ContainerConfig": {
       "type": "object",
@@ -2027,7 +2223,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CrystalConfig": {
       "type": "object",
@@ -2077,7 +2274,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DamlConfig": {
       "type": "object",
@@ -2125,7 +2323,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DartConfig": {
       "type": "object",
@@ -2179,7 +2378,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DenoConfig": {
       "type": "object",
@@ -2232,7 +2432,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DirectoryConfig": {
       "type": "object",
@@ -2305,7 +2506,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DockerContextConfig": {
       "type": "object",
@@ -2355,7 +2557,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DotnetConfig": {
       "type": "object",
@@ -2415,7 +2618,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ElixirConfig": {
       "type": "object",
@@ -2463,7 +2667,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ElmConfig": {
       "type": "object",
@@ -2517,7 +2722,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "EnvVarConfig": {
       "type": "object",
@@ -2550,7 +2756,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ErlangConfig": {
       "type": "object",
@@ -2599,7 +2806,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "FillConfig": {
       "type": "object",
@@ -2616,7 +2824,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GcloudConfig": {
       "type": "object",
@@ -2651,7 +2860,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitBranchConfig": {
       "type": "object",
@@ -2696,7 +2906,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitCommitConfig": {
       "type": "object",
@@ -2730,8 +2941,15 @@
         "tag_disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "tag_max_candidates": {
+          "default": 0,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitMetricsConfig": {
       "type": "object",
@@ -2756,7 +2974,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitStateConfig": {
       "type": "object",
@@ -2801,7 +3020,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GitStatusConfig": {
       "type": "object",
@@ -2872,7 +3092,8 @@
             "null"
           ]
         }
-      }
+      },
+      "additionalProperties": false
     },
     "GoConfig": {
       "type": "object",
@@ -2930,7 +3151,30 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "GuixShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐃 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
     },
     "HaskellConfig": {
       "type": "object",
@@ -2983,7 +3227,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "HelmConfig": {
       "type": "object",
@@ -3032,7 +3277,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "HgBranchConfig": {
       "type": "object",
@@ -3062,7 +3308,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "HostnameConfig": {
       "type": "object",
@@ -3091,7 +3338,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "JavaConfig": {
       "type": "object",
@@ -3152,7 +3400,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "JobsConfig": {
       "type": "object",
@@ -3188,7 +3437,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "JuliaConfig": {
       "type": "object",
@@ -3239,7 +3489,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "KotlinConfig": {
       "type": "object",
@@ -3292,7 +3543,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "KubernetesConfig": {
       "type": "object",
@@ -3348,7 +3600,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "LineBreakConfig": {
       "type": "object",
@@ -3357,7 +3610,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "LocalipConfig": {
       "type": "object",
@@ -3378,7 +3632,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "LuaConfig": {
       "type": "object",
@@ -3434,7 +3689,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "MemoryConfig": {
       "type": "object",
@@ -3460,7 +3716,40 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "MesonConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 4294967295,
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0.0
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "format": {
+          "default": "via [$symbol$project]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⬢ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
     },
     "NimConfig": {
       "type": "object",
@@ -3512,7 +3801,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "NixShellConfig": {
       "type": "object",
@@ -3541,7 +3831,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "NodejsConfig": {
       "type": "object",
@@ -3604,7 +3895,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "OCamlConfig": {
       "type": "object",
@@ -3673,7 +3965,57 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "OpaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🪖  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "rego"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "OspConfig": {
       "type": "object",
@@ -3694,7 +4036,70 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
+    },
+    "OSConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol]($style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "symbols": {
+          "default": {
+            "Alpine": "🏔️ ",
+            "Amazon": "🙂 ",
+            "Android": "🤖 ",
+            "Arch": "🎗️ ",
+            "CentOS": "💠 ",
+            "Debian": "🌀 ",
+            "DragonFly": "🐉 ",
+            "Emscripten": "🔗 ",
+            "EndeavourOS": "🚀 ",
+            "Fedora": "🎩 ",
+            "FreeBSD": "😈 ",
+            "Garuda": "🦅 ",
+            "Gentoo": "🗜️ ",
+            "HardenedBSD": "🛡️ ",
+            "Illumos": "🐦 ",
+            "Linux": "🐧 ",
+            "Macos": "🍎 ",
+            "Manjaro": "🥭 ",
+            "Mariner": "🌊 ",
+            "MidnightBSD": "🌘 ",
+            "Mint": "🌿 ",
+            "NetBSD": "🚩 ",
+            "NixOS": "❄️ ",
+            "OpenBSD": "🐡 ",
+            "OracleLinux": "🦴 ",
+            "Pop": "🍭 ",
+            "Raspbian": "🍓 ",
+            "RedHatEnterprise": "🎩 ",
+            "Redhat": "🎩 ",
+            "Redox": "🧪 ",
+            "SUSE": "🦎 ",
+            "Solus": "⛵ ",
+            "Ubuntu": "🎯 ",
+            "Unknown": "❓ ",
+            "Windows": "🪟 ",
+            "openSUSE": "🦎 "
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
     },
     "PackageConfig": {
       "type": "object",
@@ -3723,7 +4128,8 @@
           "default": "v${raw}",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PerlConfig": {
       "type": "object",
@@ -3781,7 +4187,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PhpConfig": {
       "type": "object",
@@ -3832,7 +4239,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PulumiConfig": {
       "type": "object",
@@ -3861,7 +4269,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PureScriptConfig": {
       "type": "object",
@@ -3911,7 +4320,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "PythonConfig": {
       "type": "object",
@@ -3987,7 +4397,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Either_for_String_and_Array_of_String": {
       "anyOf": [
@@ -4054,7 +4465,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RedConfig": {
       "type": "object",
@@ -4103,7 +4515,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RLangConfig": {
       "type": "object",
@@ -4159,7 +4572,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RubyConfig": {
       "type": "object",
@@ -4220,7 +4634,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RustConfig": {
       "type": "object",
@@ -4270,7 +4685,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ScalaConfig": {
       "type": "object",
@@ -4325,7 +4741,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ShellConfig": {
       "type": "object",
@@ -4386,7 +4803,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ShLvlConfig": {
       "type": "object",
@@ -4416,7 +4834,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SingularityConfig": {
       "type": "object",
@@ -4437,7 +4856,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SpackConfig": {
       "type": "object",
@@ -4464,7 +4884,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "StatusConfig": {
       "type": "object",
@@ -4474,7 +4895,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "✖",
+          "default": "❌",
           "type": "string"
         },
         "success_symbol": {
@@ -4521,11 +4942,18 @@
           "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
           "type": "string"
         },
+        "pipestatus_segment_format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "disabled": {
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SudoConfig": {
       "type": "object",
@@ -4550,7 +4978,8 @@
           "default": true,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "SwiftConfig": {
       "type": "object",
@@ -4600,7 +5029,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "TerraformConfig": {
       "type": "object",
@@ -4652,7 +5082,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "TimeConfig": {
       "type": "object",
@@ -4687,7 +5118,8 @@
           "default": "-",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "UsernameConfig": {
       "type": "object",
@@ -4712,7 +5144,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "VagrantConfig": {
       "type": "object",
@@ -4760,7 +5193,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "VcshConfig": {
       "type": "object",
@@ -4781,7 +5215,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "VConfig": {
       "type": "object",
@@ -4833,7 +5268,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ZigConfig": {
       "type": "object",
@@ -4881,7 +5317,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "CustomConfig": {
       "type": "object",
@@ -4963,7 +5400,8 @@
           "default": false,
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Either_for_Boolean_and_String": {
       "anyOf": [

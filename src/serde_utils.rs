@@ -13,6 +13,7 @@ pub struct ValueDeserializer<'de> {
     value: &'de Value,
     info: Option<StructInfo>,
     current_key: Option<&'de str>,
+    error_on_ignored: bool,
 }
 
 /// When deserializing a struct, this struct stores information about the struct.
@@ -28,14 +29,28 @@ impl<'de> ValueDeserializer<'de> {
             value,
             info: None,
             current_key: None,
+            error_on_ignored: true,
         }
     }
 
-    fn with_info(value: &'de Value, info: Option<StructInfo>, current_key: &'de str) -> Self {
+    fn with_info(
+        value: &'de Value,
+        info: Option<StructInfo>,
+        current_key: &'de str,
+        ignored: bool,
+    ) -> Self {
         ValueDeserializer {
             value,
             info,
             current_key: Some(current_key),
+            error_on_ignored: ignored,
+        }
+    }
+
+    pub fn with_allow_unknown_keys(self) -> Self {
+        ValueDeserializer {
+            error_on_ignored: false,
+            ..self
         }
     }
 }
@@ -83,7 +98,12 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
                 let map = MapDeserializer::new(t.iter().map(|(k, v)| {
                     (
                         k.as_str(),
-                        ValueDeserializer::with_info(v, self.info, k.as_str()),
+                        ValueDeserializer::with_info(
+                            v,
+                            self.info,
+                            k.as_str(),
+                            self.error_on_ignored,
+                        ),
                     )
                 }));
                 map.deserialize_map(visitor)
@@ -131,12 +151,16 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
             return visitor.visit_none();
         }
 
+        if !self.error_on_ignored {
+            return visitor.visit_none();
+        }
+
         let did_you_mean = match (self.current_key, self.info) {
             (Some(key), Some(StructInfo { fields, .. })) => fields
                 .iter()
                 .filter_map(|field| {
                     let score = strsim::jaro_winkler(key, field);
-                    (score > 0.8).then(|| (score, field))
+                    (score > 0.8).then_some((score, field))
                 })
                 .max_by(|(score_a, _field_a), (score_b, _field_b)| {
                     score_a.partial_cmp(score_b).unwrap_or(Ordering::Equal)
@@ -144,7 +168,7 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
             _ => None,
         };
         let did_you_mean = did_you_mean
-            .map(|(_score, field)| format!(" (Did you mean '{}'?)", field))
+            .map(|(_score, field)| format!(" (Did you mean '{field}'?)"))
             .unwrap_or_default();
 
         Err(self.error(format!("Unknown key{did_you_mean}")))
@@ -312,7 +336,7 @@ mod test {
 
         let result = Sample::deserialize(deserializer).unwrap_err();
         assert_eq!(
-            format!("{}", result),
+            format!("{result}"),
             "Error in 'Sample' at 'unknown_key': Unknown key"
         );
     }
@@ -322,13 +346,17 @@ mod test {
         let value = toml::toml! {
             unknown_key = "foo"
         };
-        let deserializer = ValueDeserializer::new(&value);
 
+        let deserializer = ValueDeserializer::new(&value);
         let result = StarshipRootConfig::deserialize(deserializer).unwrap_err();
         assert_eq!(
-            format!("{}", result),
+            format!("{result}"),
             "Error in 'StarshipRoot' at 'unknown_key': Unknown key"
         );
+
+        let deserializer2 = ValueDeserializer::new(&value).with_allow_unknown_keys();
+        let result = StarshipRootConfig::deserialize(deserializer2);
+        assert!(result.is_ok());
     }
 
     #[test]
@@ -358,7 +386,7 @@ mod test {
 
         let result = Sample::deserialize(deserializer).unwrap_err();
         assert_eq!(
-            format!("{}", result),
+            format!("{result}"),
             "Error in 'Sample' at 'food': Unknown key (Did you mean 'foo'?)"
         );
     }
@@ -378,7 +406,7 @@ mod test {
 
         let result = Sample::deserialize(deserializer).unwrap_err();
         assert_eq!(
-            format!("{}", result),
+            format!("{result}"),
             "Error in 'Sample' at 'foo': invalid type: integer `1`, expected a string"
         );
     }

@@ -55,11 +55,10 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
    ```sh
    brew install starship
    ```
-
-   لەگەڵ [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. نوسینی init زیادبکە بۆ فایلی ڕێکخستنی شێڵەکەت:

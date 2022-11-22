@@ -24,7 +24,7 @@ pub fn update_configuration(name: &str, value: &str) {
 
     match handle_update_configuration(&mut doc, name, value) {
         Err(e) => {
-            eprintln!("{}", e);
+            eprintln!("{e}");
             process::exit(1);
         }
         _ => write_configuration(&doc),
@@ -99,7 +99,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
             "# $all is shorthand for {}",
             PROMPT_ORDER
                 .iter()
-                .map(|module_name| format!("${}", module_name))
+                .map(|module_name| format!("${module_name}"))
                 .collect::<String>()
         );
 
@@ -110,7 +110,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
                 "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
                 custom_modules
                     .keys()
-                    .map(|module_name| format!("${{custom.{}}}", module_name))
+                    .map(|module_name| format!("${{custom.{module_name}}}"))
                     .collect::<String>()
             );
         }
@@ -124,7 +124,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
 
     let string_config = toml::to_string_pretty(&print_config).unwrap();
 
-    println!("{}", string_config);
+    println!("{string_config}");
 }
 
 fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value {
@@ -186,7 +186,7 @@ pub fn toggle_configuration(name: &str, key: &str) {
 
     match handle_toggle_configuration(&mut doc, name, key) {
         Err(e) => {
-            eprintln!("{}", e);
+            eprintln!("{e}");
             process::exit(1);
         }
         _ => write_configuration(&doc),
@@ -202,17 +202,17 @@ fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Res
 
     let values = table
         .get_mut(name)
-        .ok_or_else(|| format!("Given module '{}' not found in config file", name))?
+        .ok_or_else(|| format!("Given module '{name}' not found in config file"))?
         .as_table_like_mut()
-        .ok_or_else(|| format!("Given config entry '{}' is not a module", key))?;
+        .ok_or_else(|| format!("Given config entry '{key}' is not a module"))?;
 
     let old_value = values
         .get(key)
-        .ok_or_else(|| format!("Given config key '{}' must exist in config file", key))?;
+        .ok_or_else(|| format!("Given config key '{key}' must exist in config file"))?;
 
     let old = old_value
         .as_bool()
-        .ok_or_else(|| format!("Given config key '{}' must be in 'boolean' format", key))?;
+        .ok_or_else(|| format!("Given config key '{key}' must be in 'boolean' format"))?;
 
     let mut new_value = toml_edit::value(!old);
     // Above code already checks if it is a value (bool)
@@ -232,7 +232,7 @@ pub fn get_configuration() -> Value {
 
 pub fn get_configuration_edit() -> Document {
     let file_path = get_config_path();
-    let toml_content = match utils::read_file(&file_path) {
+    let toml_content = match utils::read_file(file_path) {
         Ok(content) => {
             log::trace!("Config file content: \"\n{}\"", &content);
             Some(content)
@@ -260,7 +260,7 @@ pub fn write_configuration(doc: &Document) {
 
     let config_str = doc.to_string();
 
-    File::create(&config_path)
+    File::create(config_path)
         .and_then(|mut file| file.write_all(config_str.as_ref()))
         .expect("Error writing starship config");
 }
@@ -291,7 +291,7 @@ pub fn edit_configuration(editor_override: Option<&str>) -> Result<(), Box<dyn s
         .status();
 
     if let Err(e) = res {
-        eprintln!("Unable to launch editor {:?}", editor_cmd);
+        eprintln!("Unable to launch editor {editor_cmd:?}");
         return Err(Box::new(e));
     }
 
@@ -352,17 +352,17 @@ mod tests {
 
     #[test]
     fn visual_empty_editor_set() {
-        let actual = get_editor_internal(Some("".into()), Some("bar".into()));
+        let actual = get_editor_internal(Some(String::new()), Some("bar".into()));
         assert_eq!("bar", actual);
     }
     #[test]
     fn visual_empty_editor_empty() {
-        let actual = get_editor_internal(Some("".into()), Some("".into()));
+        let actual = get_editor_internal(Some(String::new()), Some(String::new()));
         assert_eq!(STD_EDITOR, actual);
     }
     #[test]
     fn visual_empty_editor_not_set() {
-        let actual = get_editor_internal(Some("".into()), None);
+        let actual = get_editor_internal(Some(String::new()), None);
         assert_eq!(STD_EDITOR, actual);
     }
 
@@ -373,7 +373,7 @@ mod tests {
     }
     #[test]
     fn visual_not_set_editor_empty() {
-        let actual = get_editor_internal(None, Some("".into()));
+        let actual = get_editor_internal(None, Some(String::new()));
         assert_eq!(STD_EDITOR, actual);
     }
     #[test]

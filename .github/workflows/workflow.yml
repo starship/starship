@@ -1,6 +1,8 @@
 name: Main workflow
 on:
   push:
+    branches:
+      - master
     paths-ignore:
       - "docs/**"
       - "**.md"
@@ -48,9 +50,6 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
@@ -58,6 +57,9 @@ jobs:
           override: true
           profile: minimal
           components: clippy
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Lint
         uses: actions-rs/cargo@v1.0.3
@@ -73,15 +75,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked
@@ -95,15 +97,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --no-default-features
@@ -117,15 +119,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --all-features
@@ -139,15 +141,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Run | Generate Schema
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
@@ -175,9 +177,6 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       # Install all the required dependencies for testing
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -187,6 +186,9 @@ jobs:
           profile: minimal
           override: true
 
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
+
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
 
@@ -195,7 +197,7 @@ jobs:
       - name: Install cargo-wix [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        run: cargo install --version 0.3.3 cargo-wix
+        run: cargo install --version 0.3.4 cargo-wix
         env:
           RUSTFLAGS: '-Copt-level=1'
 

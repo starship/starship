@@ -78,7 +78,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
     use unicode_segmentation::UnicodeSegmentation;
 
     macro_rules! get_hostname {
@@ -150,7 +150,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} in ",
-            style().paint("🌐 ".to_owned() + &hostname)
+            style().paint("🌐 ".to_owned() + hostname.as_str())
         ));
 
         assert_eq!(expected, actual);

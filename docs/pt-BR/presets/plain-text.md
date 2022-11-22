@@ -8,6 +8,10 @@ Essa personalização converte os símbolos para cada módulo em texto simples. 
 
 ### Configuração
 
+```sh
+starship preset plain-text-symbols > ~/.config/starship.toml
+```
+
 [Clique para baixar o TOML](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml

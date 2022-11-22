@@ -220,8 +220,7 @@ Alternativamente, instale Starship usando cualquiera de los siguientes gestores 
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
-| Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
+| Gentoo             | [Paquetes Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
@@ -251,7 +250,7 @@ Alternativamente, instale Starship usando cualquiera de los siguientes gestores 
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Instale la última versión para su sistema con los MSI-Installers de la sección [lanzamientos](https://github.com/starship/starship/releases/latest).
 
 Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 

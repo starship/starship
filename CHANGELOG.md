@@ -1,5 +1,81 @@
 # Changelog
 
+## [1.11.0](https://github.com/starship/starship/compare/v1.10.3...v1.11.0) (2022-10-14)
+
+
+### Features
+
+* add user-defined color palette ([#4209](https://github.com/starship/starship/issues/4209)) ([d93074d](https://github.com/starship/starship/commit/d93074d0569db4bafb1788aa3f39136b734b5370))
+* **fish:** Enable left and right transience ([#4204](https://github.com/starship/starship/issues/4204)) ([06281c2](https://github.com/starship/starship/commit/06281c268d74a85d5b28e953bea251a2115f5568))
+* **module:** Add a meson devenv indicator ([#4389](https://github.com/starship/starship/issues/4389)) ([355800f](https://github.com/starship/starship/commit/355800f8147b1755a5289dc679e2147abd662daf))
+* **schema:** deny unknown keys ([#4270](https://github.com/starship/starship/issues/4270)) ([b5d3d8f](https://github.com/starship/starship/commit/b5d3d8fcf331cdff6d0e687dcdbac77351731475))
+* **status:** Support formatting of pipestatus separator ([#4264](https://github.com/starship/starship/issues/4264)) ([6e35dfa](https://github.com/starship/starship/commit/6e35dfa85aeebb3f714389a9286623dc0f60d799))
+
+
+### Bug Fixes
+
+* **buf:** fix spacing & harmonize docs with actual configuration ([#4450](https://github.com/starship/starship/issues/4450)) ([3d45236](https://github.com/starship/starship/commit/3d452367bdde22a2554cc74bee4d1adfee7e8e04))
+* **directory:** don't strip duplicate directory names twice ([#4295](https://github.com/starship/starship/issues/4295)) ([801fbab](https://github.com/starship/starship/commit/801fbab720e1bb94c32bb1aa10966a0637a10e63))
+* **pwsh:** avoid potential deadlock in init ([#4335](https://github.com/starship/starship/issues/4335)) ([fd55397](https://github.com/starship/starship/commit/fd5539796f7a2b3750d1889b55a563d84b628bee))
+
+
+### Performance Improvements
+
+* **directory:** Skip repo resolution if unused by directory config ([#4401](https://github.com/starship/starship/issues/4401)) ([227ec32](https://github.com/starship/starship/commit/227ec32d9d7e9d673360d487062fd4bef184e844))
+
+## [1.10.3](https://github.com/starship/starship/compare/v1.10.2...v1.10.3) (2022-09-07)
+
+
+### Performance Improvements
+
+* **git_commit:** only use exact match for tag by default ([#4281](https://github.com/starship/starship/issues/4281)) ([5984f08](https://github.com/starship/starship/commit/5984f0829ef5369e83c28108378fe0065a617b3c))
+
+## [1.10.2](https://github.com/starship/starship/compare/v1.10.1...v1.10.2) (2022-08-18)
+
+
+### Bug Fixes
+
+* **git:** upgrade `gitoxide` to v0.21 ([#4277](https://github.com/starship/starship/issues/4277)) ([f52ae55](https://github.com/starship/starship/commit/f52ae552d3ef2c0c0c6de6429cee7b8271f14671))
+
+## [1.10.1](https://github.com/starship/starship/compare/v1.10.0...v1.10.1) (2022-08-15)
+
+
+### Bug Fixes
+
+* Disable multithreading in `jwalk` (via `gitoxide`) as workaround for [#4251](https://github.com/starship/starship/issues/4251) ([#4258](https://github.com/starship/starship/issues/4258)) ([37b54f7](https://github.com/starship/starship/commit/37b54f7ac3ba53ea851b478501a96a7c4e188fc4))
+
+## [1.10.0](https://github.com/starship/starship/compare/v1.9.1...v1.10.0) (2022-08-14)
+
+
+### Features
+
+* add bun module ([#4187](https://github.com/starship/starship/issues/4187)) ([85692d1](https://github.com/starship/starship/commit/85692d1bf6a8477b6879adaf8b51007389df4328))
+* Add starship preset command ([#4112](https://github.com/starship/starship/issues/4112)) ([c8a5adb](https://github.com/starship/starship/commit/c8a5adb412e98b07017ffa0edea5554b0a23b840))
+* Add support for blink, hidden, and strikethrough styles. ([#4138](https://github.com/starship/starship/issues/4138)) ([aaab920](https://github.com/starship/starship/commit/aaab920f88015eb0a44e6514bf19b1db2b14829f))
+* Add the ability to have some file extensions *prevent* a module from triggering ([#4043](https://github.com/starship/starship/issues/4043)) ([dd73447](https://github.com/starship/starship/commit/dd73447329e637ee207b1103ecb6a4bdbdc89324))
+* Enable transience for Cmd and PowerShell ([#4143](https://github.com/starship/starship/issues/4143)) ([6e9c013](https://github.com/starship/starship/commit/6e9c013e60e59660cb7ae6289af5ed129ca85996))
+* **git:** replace `git2` with `git-repository` ([#3883](https://github.com/starship/starship/issues/3883)) ([ac55a01](https://github.com/starship/starship/commit/ac55a01d0ffe907ef7af48c9597c0bca4dbd8c69))
+* **k8s:** Add folder detection to the k8s module. ([#4157](https://github.com/starship/starship/issues/4157)) ([5c5969c](https://github.com/starship/starship/commit/5c5969c50b2490309b7ae9f7e6f5f75ea04a512d))
+* **package:** support cargo workspace versions ([#4161](https://github.com/starship/starship/issues/4161)) ([0a1235e](https://github.com/starship/starship/commit/0a1235e27944f152ca195c32e7eef8985d475989))
+* **status:** Add pipestatus_segment_format option to status module ([#4103](https://github.com/starship/starship/issues/4103)) ([6143848](https://github.com/starship/starship/commit/61438484bdc76601a185298f14337cfb4d5b4e0b))
+
+
+### Bug Fixes
+
+* **aws:** support official `AWS_SHARED_CREDENTIALS_FILE` variable ([#4242](https://github.com/starship/starship/issues/4242)) ([1390036](https://github.com/starship/starship/commit/13900368826cf1aca160fd650f19cecc1a047372))
+* **timings:** count time spent on custom on 'when' command failure ([#4121](https://github.com/starship/starship/issues/4121)) ([aae1ed0](https://github.com/starship/starship/commit/aae1ed04babf4c7d8baaad670c076947d7200675))
+
+
+### Performance Improvements
+
+* **pulumi:** allow disabling upwards discovery ([#4159](https://github.com/starship/starship/issues/4159)) ([af15de9](https://github.com/starship/starship/commit/af15de93c4494bb08d8c2cb3dbf54951f6bc9239))
+* **rust:** avoid calling `rustup` in more conditions ([#4174](https://github.com/starship/starship/issues/4174)) ([d8ac940](https://github.com/starship/starship/commit/d8ac940098eb16417742723c627d0de864597410))
+
+
+### Miscellaneous Chores
+
+* **master:** release 1.10.0 ([b974610](https://github.com/starship/starship/commit/b9746100e2ee3746ea418e26ebc50494710a9d03))
+
 ## [1.9.1](https://github.com/starship/starship/compare/v1.9.0...v1.9.1) (2022-06-27)
 
 

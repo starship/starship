@@ -8,6 +8,78 @@ Konfigurasi pada bagian ini dapat berubah saat Starship terbaru rilis di kemudia
 
 :::
 
+## TransientPrompt in PowerShell
+
+It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+
+By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
+
+```powershell
+function Invoke-Starship-TransientFunction {
+  &starship module character
+}
+
+Invoke-Expression (&starship init powershell)
+
+Enable-TransientPrompt
+```
+
+## TransientPrompt and TransientRightPrompt in Cmd
+
+Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+
+- `always`: always replace the previous prompt
+- `same_dir`: replace the previous prompt only if the working directory is same
+- `off`: do not replace the prompt (i.e. turn off transience)
+
+You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+
+- By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
+
+```lua
+function starship_transient_prompt_func(prompt)
+  return io.popen("starship module character"
+    .." --keymap="..rl.getvariable('keymap')
+  ):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+
+```lua
+function starship_transient_rprompt_func(prompt)
+  return io.popen("starship module time"):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+## TransientPrompt and TransientRightPrompt in Fish
+
+It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+
+Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+
+```fish
+function starship_transient_prompt_func
+  starship module character
+end
+starship init fish | source
+enable_transience
+```
+
+- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
+
 ## Kustomisasi Perintah pre-prompt dan pre-execution Pada Cmd
 
 Clink menyediakan APIs yang sangat fleksibel untuk menjalankan perintah pre-prompt dan pre-exec di Cmd shell. Caranya sangat mudah dengan Starship. Ubahlah file `starship.lua` sesuai kebutuhanmu:
@@ -34,7 +106,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## Kustomisasi Perintah pre-prompt dan pre-execution Pada Bash
 
-Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook yang dapat dikustomisasi sepenuhnya di dalam `bash`. Namun, Starship memberikan beberapa cara supaya kamu bisa memasukkan fungsimu sendiri ke dalam prosedur prompt-rendering:
+Bash tidak memiliki framework preexec/precmd yang tetap seperti kebanyakan shell pada umumnya. Oleh karena itu, sulit halnya untuk membuat hook yang dapat dikustomisasi sepenuhnya di dalam `bash`. Namun, Starship memberimu sedikit kemampuan untuk bisa menambahkan function milikmu ke dalam prosedur prompt-rendering:
 
 - Untuk menjalankan custom function tepat sebelum prompt, buatlah sebuah fungsi baru lalu berikan nama `starship_precmd_user_func` ke fungsi tersebut. Sebagai contoh, untuk menampilkan roket sebelum prompt, kamu bisa
 
@@ -176,7 +248,7 @@ Catatan: Continuation prompts hanya tersedia pada beberapa shells berikut:
 continuation_prompt = "▶▶"
 ```
 
-## Penataan String
+## Menata String
 
 Penataan string adalah kumpulan kata-kata, yang dipisahkan oleh ruang kosong. Kumpulannya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
 
@@ -185,6 +257,9 @@ Penataan string adalah kumpulan kata-kata, yang dipisahkan oleh ruang kosong. Ku
 - `underline`
 - `dimmed`
 - `inverted`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
@@ -201,3 +276,9 @@ Penentuan warna bisa dilakukan dengan salah satu cara berikut:
 - Menggunakan bilangan antara 0-255. Spesifikasi [8-bit Kode Warna ANSI](https://i.stack.imgur.com/KTSQa.png).
 
 Jika warna yang dipakai pada latar depan/latar belakang banyak, maka warna yang terbaru pada string yang akan diprioritaskan.
+
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+
+- Many terminals disable support for `blink` by default
+- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` is not supported by the default macOS Terminal.app

@@ -220,7 +220,6 @@ Alternatively, install Starship using any of the following package managers:
 | Arch Linux         | [Arch Linux Community]  | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Fedora 31+         | [Fedora Packages]       | `dnf install starship`                                        |
-| NixOS              | [nixpkgs]               | `nix-env -iA nixos.starship`                                  |
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
 | NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
@@ -419,6 +418,14 @@ Please check out these previous works that helped inspire the creation of starsh
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Dimension](https://dimension.dev/)
 
 <p align="center">
     <br>

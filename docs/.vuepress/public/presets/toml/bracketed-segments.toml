@@ -1,6 +1,9 @@
 [aws]
 format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
+[bun]
+format = '\[[$symbol($version)]($style)\]'
+
 [c]
 format = '\[[$symbol($version(-$name))]($style)\]'
 
@@ -55,6 +58,9 @@ format = '([\[$all_status$ahead_behind\]]($style))'
 [golang]
 format = '\[[$symbol($version)]($style)\]'
 
+[guix_shell]
+format = '\[[$symbol]($style)\]'
+
 [haskell]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -82,6 +88,9 @@ format = '\[[$symbol($version)]($style)\]'
 [memory_usage]
 format = '\[$symbol[$ram( | $swap)]($style)\]'
 
+[meson]
+format = '\[[$symbol$project]($style)\]'
+
 [nim]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -94,8 +103,14 @@ format = '\[[$symbol($version)]($style)\]'
 [ocaml]
 format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
 
+[opa]
+format = '\[[$symbol($version)]($style)\]'
+
 [openstack]
 format = '\[[$symbol$cloud(\($project\))]($style)\]'
+
+[os]
+format = '\[[$symbol]($style)\]'
 
 [package]
 format = '\[[$symbol$version]($style)\]'
