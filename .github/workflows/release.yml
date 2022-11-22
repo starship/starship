@@ -334,9 +334,9 @@ jobs:
     - name: Setup | Artifacts
       uses: actions/download-artifact@v3
     - run: pwsh ./install/windows/choco/update.ps1
-      with:
-        version: ${{ needs.release_please.outputs.tag_name }}
-        push_token:  ${{ secrets.CHOCO_TOKEN }}
+      env:
+        STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
+        PUSH_TOKEN:  ${{ secrets.CHOCO_TOKEN }}
 
   merge_crowdin_pr:
     name: Merge Crowdin PR

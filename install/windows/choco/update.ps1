@@ -3,12 +3,12 @@
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version 3.0
 
-if ($null -eq $ENV:INPUT_VERSION) {
+if ($null -eq $ENV:STARSHIP_VERSION) {
     Write-Host "Version is required"
     exit 1
 }
 
-$version = "$ENV:INPUT_VERSION"
+$version = "$ENV:STARSHIP_VERSION"
 $versionNumber = $version.TrimStart("v")
 
 [xml]$nuspec_file = Get-Content -Path ./install/windows/choco/starship.nuspec
@@ -49,8 +49,8 @@ Get-Content ./install/windows/choco/chocolateyInstall.ps1 | ForEach-Object {
 
 choco pack ./starship.nuspec
 
-if ($null -ne $Env:INPUT_PUSH_TOKEN) {
-    choco push starship.$versionNumber.nupkg --key $ENV:INPUT_PUSH_TOKEN 
+if ($null -ne $Env:PUSH_TOKEN) {
+    choco push starship.$versionNumber.nupkg --key $ENV:PUSH_TOKEN 
 }
 else {
     Write-Host "No API key provided, skipping push"

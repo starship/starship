@@ -238,8 +238,8 @@ jobs:
           New-Item -ItemType File -Path ./starship-i686-pc-windows-msvc/starship-i686-pc-windows-msvc.zip
           # Build package
           pwsh ./install/windows/choco/update.ps1
-        with:
-          version: v1.2.3
+        env:
+          STARSHIP_VERSION: v1.2.3
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
