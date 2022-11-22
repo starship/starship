@@ -227,6 +227,20 @@ jobs:
           command: wix
           args: --dbg-build -v --nocapture -I install/windows/main.wxs
 
+      - name: Build | Chocolatey Package [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: |
+          # Setup dummy release artifacts
+          New-Item -ItemType Directory -Path ./starship-x86_64-pc-windows-msvc
+          New-Item -ItemType Directory -Path ./starship-i686-pc-windows-msvc
+          New-Item -ItemType File -Path ./starship-x86_64-pc-windows-msvc/starship-x86_64-pc-windows-msvc.zip
+          New-Item -ItemType File -Path ./starship-i686-pc-windows-msvc/starship-i686-pc-windows-msvc.zip
+          # Build package
+          pwsh ./install/windows/choco/update.ps1
+        with:
+          version: v1.2.3
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         if: github.repository == 'starship/starship'
