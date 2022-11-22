@@ -72,7 +72,7 @@ regex = "1.7.0"
 rust-ini = "0.18.0"
 semver = "1.0.14"
 serde = { version = "1.0.147", features = ["derive"] }
-serde_json = "1.0.88"
+serde_json = "1.0.89"
 sha-1 = "0.10.0"
 shadow-rs = { version = "0.17.1", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
