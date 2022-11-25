@@ -27,7 +27,7 @@ pub fn create() {
     println!("Forward the pre-filled report above to GitHub in your browser?");
     println!("{} To avoid any sensitive data from being exposed, please review the included information before proceeding. Data forwarded to GitHub is subject to GitHub's privacy policy.", Style::new().bold().paint("Warning:"));
     println!(
-        "Enter `{}`, or anything else to decline, and `{}` to confirm your choice:\n",
+        "Enter `{}` to accept, or anything else to decline, and `{}` to confirm your choice:\n",
         Style::new().bold().paint("y"),
         Style::new().bold().paint("Enter key")
     );
@@ -35,7 +35,7 @@ pub fn create() {
     let mut input = String::new();
     let _ = std::io::stdin().read_line(&mut input);
 
-    if input.trim() == "y" {
+    if input.trim().to_lowercase() == "y" {
         let link = make_github_issue_link(&issue_body);
         if let Err(e) = open::that(&link) {
             println!("Failed to open issue report in your browser: {}", e);
