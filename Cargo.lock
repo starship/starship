@@ -1631,12 +1631,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f9f08d8963a6c613f4b1a78f4f4a4dbfadf8e6545b2d72861731e4858b8b47f"
 
 [[package]]
-name = "local_ipaddress"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6a104730949fbc4c78e4fa98ed769ca0faa02e9818936b61032d2d77526afa9"
-
-[[package]]
 name = "lock_api"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2758,7 +2752,6 @@ dependencies = [
  "guess_host_triple",
  "home",
  "indexmap",
- "local_ipaddress",
  "log",
  "mockall",
  "nix 0.25.0",
