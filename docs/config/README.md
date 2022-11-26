@@ -3435,6 +3435,38 @@ The module will be shown if any of the following conditions are met:
 format = 'via [⚙️ $version](red bold)'
 ```
 
+## Salesforce
+
+The `saleforce` module shows the currently selected username.
+Username can be retrieved in two ways:
+- using sfdx (slower)
+- by extracting username from files in `.sf` or `.sfdx` folders in root folder of repository.
+
+By default, second strategy will be used as it is faster.
+In case user prefers first strategy, it is recommended to increase command timeout to 3 seconds.
+
+### Options
+
+| Option       | Default                               | Description                                                                                                |
+|--------------|---------------------------------------|------------------------------------------------------------------------------------------------------------|
+| `format`     | `'org [$symbol($org_name) ]($style)'` | The format for the module.                                                                                 |
+| `symbol`     | `'☁ '`                                | A format string representing the symbol of Scala.                                                          |
+| `style`      | `'bold blue'`                         | The style for the module.                                                                                  |
+| `disabled`   | `true`                                | Disables the `salesforce` module.                                                                          |
+| `show_alias` | `true`                                | Show alias instead of username where possible. Applies only when `use_sfdx` is set to `true`               |
+| `use_sfdx`   | `false`                               | Use sfdx to get username (or alias). Turning this option on might cause timeouts due to sfdx startup speed |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+command_timeout = 3000
+
+[salesforce]
+disabled = false
+use_sfdx = true
+```
 ## Scala
 
 The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/).
