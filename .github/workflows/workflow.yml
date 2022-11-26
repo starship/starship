@@ -230,10 +230,12 @@ jobs:
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
         run: |
           # Setup dummy release artifacts
-          New-Item -ItemType Directory -Path ./starship-x86_64-pc-windows-msvc
-          New-Item -ItemType Directory -Path ./starship-i686-pc-windows-msvc
-          New-Item -ItemType File -Path ./starship-x86_64-pc-windows-msvc/starship-x86_64-pc-windows-msvc.zip
-          New-Item -ItemType File -Path ./starship-i686-pc-windows-msvc/starship-i686-pc-windows-msvc.zip
+          foreach ($arch in @("aarch64", "i686", "x86_64")) {
+            New-Item -ItemType Directory -Path ./starship-$arch-pc-windows-msvc
+            New-Item -ItemType Directory -Path ./starship-$arch-pc-windows-msvc.msi
+            New-Item -ItemType File -Path ./starship-$arch-pc-windows-msvc/starship-$arch-pc-windows-msvc.zip
+            New-Item -ItemType File -Path ./starship-$arch-pc-windows-msvc.msi/starship-$arch-pc-windows-msvc.msi
+          }
           # Build package
           pwsh ./install/windows/choco/update.ps1
         env:
