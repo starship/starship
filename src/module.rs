@@ -74,6 +74,7 @@ pub const ALL_MODULES: &[&str] = &[
     "rlang",
     "ruby",
     "rust",
+    "salesforce",
     "scala",
     "shell",
     "shlvl",

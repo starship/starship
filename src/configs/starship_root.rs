@@ -78,6 +78,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "red",
     "ruby",
     "rust",
+    "salesforce",
     "scala",
     "swift",
     "terraform",
