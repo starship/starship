@@ -68,6 +68,7 @@ mod shell;
 mod shlvl;
 mod singularity;
 mod spack;
+mod ssh_agent;
 mod status;
 mod sudo;
 mod swift;
@@ -167,6 +168,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "singularity" => singularity::module(context),
             "spack" => spack::module(context),
             "swift" => swift::module(context),
+            "ssh_agent" => ssh_agent::module(context),
             "status" => status::module(context),
             "sudo" => sudo::module(context),
             "terraform" => terraform::module(context),
@@ -277,6 +279,9 @@ pub fn description(module: &str) -> &'static str {
         "shlvl" => "The current value of SHLVL",
         "singularity" => "The currently used Singularity image",
         "spack" => "The current spack environment, if $SPACK_ENV is set",
+        "ssh_agent" => {
+            "One or more private key identities are added to the OpenSSH authentication agent"
+        }
         "status" => "The status of the last command",
         "sudo" => "The sudo credentials are currently cached",
         "swift" => "The currently installed version of Swift",

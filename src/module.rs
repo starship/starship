@@ -79,6 +79,7 @@ pub const ALL_MODULES: &[&str] = &[
     "shlvl",
     "singularity",
     "spack",
+    "ssh_agent",
     "status",
     "sudo",
     "swift",
