@@ -20,6 +20,9 @@
         <licenseUrl>https://github.com/starship/starship/blob/master/LICENSE</licenseUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <releaseNotes></releaseNotes>
+        <dependencies>
+            <dependency id="chocolatey" version="0.9.9" />
+        </dependencies>
     </metadata>
     <files>
         <file src="tools\**" target="tools" />
