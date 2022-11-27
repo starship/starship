@@ -417,7 +417,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
 ### Opzioni
 
@@ -428,7 +428,9 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | `style`    | `'blu grassetto'`                        | The style used in the format.              |
 | `disabled` | `true`                                   | Disables the `azure` module.               |
 
-### Esempio
+### Examples
+
+#### Display Subscription Name
 
 ```toml
 # ~/.config/starship.toml
@@ -438,6 +440,18 @@ disabled = false
 format = 'on [$symbol($subscription)]($style) '
 symbol = 'ﴃ '
 style = 'blue bold'
+```
+
+#### Display Username
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Battery
@@ -558,7 +572,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Node.js.                                         |
+| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.                                             |
 | `detect_extensions` | `[]`                                 | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                           |
