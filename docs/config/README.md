@@ -439,7 +439,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
 ### Options
 
@@ -450,7 +450,9 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | `style`    | `'blue bold'`                            | The style used in the format.              |
 | `disabled` | `true`                                   | Disables the `azure` module.               |
 
-### Example
+### Examples
+
+#### Display Subscription Name
 
 ```toml
 # ~/.config/starship.toml
@@ -460,6 +462,18 @@ disabled = false
 format = 'on [$symbol($subscription)]($style) '
 symbol = 'ﴃ '
 style = 'blue bold'
+```
+
+#### Display Username
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Battery
