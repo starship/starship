@@ -416,9 +416,9 @@ Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação
 
 - **[reujab/silver](https://github.com/reujab/silver)** – Um prompt personalizável com ícones do tipo powerline.
 
-## ❤️ Sponsors
+## ❤️ Patrocinadores
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+Apoie este projeto [tornando-se um patrocinador](https://github.com/sponsors/starship). O seu nome ou logotipo aparecerá aqui com um link para o seu site.
 
 **Supporter Tier**
 
