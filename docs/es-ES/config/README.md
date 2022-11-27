@@ -417,7 +417,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-El módulo `azure` muestra la suscripción Azure actual. Esto consiste en mostrar el nombre de la suscripción predeterminada, como se define en el archivo `~/.azure/azureProfile.json`.
+El módulo `azure` muestra la suscripción Azure actual. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
 ### Opciones
 
@@ -428,7 +428,9 @@ El módulo `azure` muestra la suscripción Azure actual. Esto consiste en mostra
 | `style`    | `'blue bold'`                            | El estilo utilizado en el formato.          |
 | `disabled` | `true`                                   | Deshabilita el módulo `azure`.              |
 
-### Ejemplo
+### Ejemplos
+
+#### Display Subscription Name
 
 ```toml
 # ~/.config/starship.toml
@@ -438,6 +440,18 @@ disabled = false
 format = 'on [$symbol($subscription)]($style) '
 symbol = 'ﴃ '
 style = 'blue bold'
+```
+
+#### Display Username
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Battery
@@ -558,7 +572,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | El formato del módulo.                                                                  |
 | `version_format`    | `'v${raw}'`                          | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🍞 '`                               | Una cadena de formato que representa el símbolo de Node.js.                             |
+| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.                                         |
 | `detect_extensions` | `[]`                                 | Qué extensiones deberían activar este módulo.                                           |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
@@ -668,7 +682,7 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ### Ejemplos
 
-#### Con formato de error personalizado
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -678,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Sin formato de error personalizado
+#### Without custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -688,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### Con formato de vim personalizado
+#### With custom vim shape
 
 ```toml
 # ~/.config/starship.toml
@@ -1443,7 +1457,7 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 
 ### Ejemplos
 
-#### Mostrar cuenta y proyecto
+#### Display account and project
 
 ```toml
 # ~/.config/starship.toml
@@ -1452,7 +1466,7 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Mostrar solo el nombre de la configuración activa
+#### Display active config name only
 
 ```toml
 # ~/.config/starship.toml
@@ -1462,7 +1476,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Mostrar los alias de cuenta y región
+#### Display account and aliased region
 
 ```toml
 # ~/.config/starship.toml
@@ -1474,7 +1488,7 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### Mostrar cuenta y proyecto con alias
+#### Display account and aliased project
 
 ```toml
 # ~/.config/starship.toml
@@ -2182,7 +2196,7 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Busqueda por Regex
+#### Regex Matching
 
 Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
 
@@ -2931,7 +2945,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Ejemplo
 
-#### Con la versión de Pulumi
+#### With Pulumi Version
 
 ```toml
 # ~/.config/starship.toml
@@ -2940,7 +2954,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Sin versión de Pulumi
+#### Without Pulumi version
 
 ```toml
 # ~/.config/starship.toml
@@ -3054,7 +3068,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Solo usa el binario `python3` para obtener la versión.
+# Only use the `python3` binary to get the version.
 python_binary = 'python3'
 ```
 
@@ -3062,7 +3076,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# No se dispara con archivos con extensión py
+# Don't trigger for files with the py extension
 detect_extensions = []
 ```
 
@@ -3070,10 +3084,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Muestra la versión de python desde dentro de un entorno virtual local.
+# Display the version of python from inside a local venv.
 #
-# Ten en cuenta que esto solo funcionará cuando el venv esté dentro del proyecto y sólo
-# funcionará en el directorio que contiene el directorio venv dir pero ¿tal vez esté bien?
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3574,7 +3588,7 @@ disabled = false
 ```
 
 ```toml
-# En Windows
+# On windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3662,7 +3676,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Ejemplo
 
-#### Con la versión de Terraform
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3671,7 +3685,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Sin la versión de Terraform
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
@@ -3982,7 +3996,7 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-#### Comando personalizado del intérprete de comandos
+#### Custom command shell
 
 `shell` acepta una lista no vacía de cadenas, donde:
 
