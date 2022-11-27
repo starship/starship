@@ -417,7 +417,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
 ### Các tuỳ chọn
 
@@ -428,7 +428,9 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | `style`    | `'blue bold'`                            | The style used in the format.              |
 | `disabled` | `true`                                   | Disables the `azure` module.               |
 
-### Ví dụ
+### Các ví dụ
+
+#### Display Subscription Name
 
 ```toml
 # ~/.config/starship.toml
@@ -438,6 +440,18 @@ disabled = false
 format = 'on [$symbol($subscription)]($style) '
 symbol = 'ﴃ '
 style = 'blue bold'
+```
+
+#### Display Username
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Battery
@@ -558,7 +572,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Định dạng cho module.                                                     |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Node.js.                       |
+| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.                           |
 | `detect_extensions` | `[]`                                 | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
 | `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
@@ -668,7 +682,7 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ### Các ví dụ
 
-#### Có tuỳ chỉnh hình dạng lỗi
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -678,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Không có tuỳ chỉnh hình dạng lỗi
+#### Without custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -688,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### Có tuỳ chỉnh hình dạng vim
+#### With custom vim shape
 
 ```toml
 # ~/.config/starship.toml
@@ -1443,7 +1457,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 
 ### Các ví dụ
 
-#### Hiển thị tài khoản và dự án
+#### Display account and project
 
 ```toml
 # ~/.config/starship.toml
@@ -1452,7 +1466,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Chỉ hiển thị tên cấu hình hiệu lực
+#### Display active config name only
 
 ```toml
 # ~/.config/starship.toml
@@ -1462,7 +1476,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Hiển thị tài khoản và bí danh khu vực
+#### Display account and aliased region
 
 ```toml
 # ~/.config/starship.toml
