@@ -417,7 +417,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription, as defined in the `~/.azure/azureProfile.json` file.
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
 ### Opsi
 
@@ -430,6 +430,8 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Contoh
 
+#### Display Subscription Name
+
 ```toml
 # ~/.config/starship.toml
 
@@ -438,6 +440,18 @@ disabled = false
 format = 'on [$symbol($subscription)]($style) '
 symbol = 'ﴃ '
 style = 'blue bold'
+```
+
+#### Display Username
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## Baterai
@@ -558,7 +572,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Node.js.                                 |
+| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.                                     |
 | `detect_extensions` | `[]`                                 | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
@@ -668,7 +682,7 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 
 ### Contoh
 
-#### Dengan menggunakan corak eror yang dikustomisasi
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -678,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Tanpa menggunakan corak eror yang dikustomisasi
+#### Without custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -688,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### Dengan menggunakan corak vim yang dikustomisasi
+#### With custom vim shape
 
 ```toml
 # ~/.config/starship.toml
