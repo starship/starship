@@ -50,38 +50,39 @@ New-Item -ItemType Directory -Path "./tools"
 # Pack the metapackage as-is without install script
 choco pack ./starship.nuspec
 
-Get-Content ./install/windows/choco/chocolateyInstall.ps1 | ForEach-Object {
-    if ($_ -match '^\$url_x86_64_zip = (.*)') {
-        "`$url_x86_64_zip = '$url_x86_64_zip'"
-    }
-    elseif ($_ -match '^\$url_i686_zip = (.*)') {
-        "`$url_i686_zip = '$url_i686_zip'"
-    }
-    elseif ($_ -match '^\$url_x86_64_msi = (.*)') {
-        "`$url_x86_64_msi = '$url_x86_64_msi'"
-    }
-    elseif ($_ -match '^\$url_i686_msi = (.*)') {
-        "`$url_i686_msi = '$url_i686_msi'"
-    }
-    elseif ($_ -match '^\$checksum_x86_64_zip = (.*)') {
-        "`$checksum_x86_64_zip = '$checksum_x86_64_zip'"
-    }
-    elseif ($_ -match '^\$checksum_i686_zip = (.*)') {
-        "`$checksum_i686_zip = '$checksum_i686_zip'"
-    }
-    elseif ($_ -match '^\$checksum_x86_64_msi = (.*)') {
-        "`$checksum_x86_64_msi = '$checksum_x86_64_msi'"
-    }
-    elseif ($_ -match '^\$checksum_i686_msi = (.*)') {
-        "`$checksum_i686_msi = '$checksum_i686_msi'"
-    }
-    else {
-        $_
-    }
-} | Set-Content ./tools/chocolateyInstall.ps1
-
-choco pack ./starship.install.nuspec
-choco pack ./starship.portable.nuspec
+foreach ($install_type in @('portable', 'install')) {
+    Get-Content ./install/windows/choco/chocolateyInstall.$install_type.ps1 | ForEach-Object {
+        if ($_ -match '^\$url_x86_64_zip = (.*)') {
+            "`$url_x86_64_zip = '$url_x86_64_zip'"
+        }
+        elseif ($_ -match '^\$url_i686_zip = (.*)') {
+            "`$url_i686_zip = '$url_i686_zip'"
+        }
+        elseif ($_ -match '^\$url_x86_64_msi = (.*)') {
+            "`$url_x86_64_msi = '$url_x86_64_msi'"
+        }
+        elseif ($_ -match '^\$url_i686_msi = (.*)') {
+            "`$url_i686_msi = '$url_i686_msi'"
+        }
+        elseif ($_ -match '^\$checksum_x86_64_zip = (.*)') {
+            "`$checksum_x86_64_zip = '$checksum_x86_64_zip'"
+        }
+        elseif ($_ -match '^\$checksum_i686_zip = (.*)') {
+            "`$checksum_i686_zip = '$checksum_i686_zip'"
+        }
+        elseif ($_ -match '^\$checksum_x86_64_msi = (.*)') {
+            "`$checksum_x86_64_msi = '$checksum_x86_64_msi'"
+        }
+        elseif ($_ -match '^\$checksum_i686_msi = (.*)') {
+            "`$checksum_i686_msi = '$checksum_i686_msi'"
+        }
+        else {
+            $_
+        }
+    } | Set-Content ./tools/chocolateyInstall.ps1
+    
+    choco pack ./starship.$install_type.nuspec
+}
 
 if ($null -ne $ENV:PUSH_TOKEN) {
     choco push starship.portable.$versionNumber.nupkg --key $ENV:PUSH_TOKEN
