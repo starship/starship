@@ -8,7 +8,7 @@ As configurações nesta seção estão sujeitas a alterações em futuras vers�
 
 :::
 
-## TransientPrompt in PowerShell
+## TransientPrompt no PowerShell
 
 It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
