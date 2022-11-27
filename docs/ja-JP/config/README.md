@@ -417,7 +417,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-`azure` モジュールは、現在のAzureサブスクリプションを表示します。 これは、 `~/.azure/azureProfile.json` ファイルで定義されているデフォルトのサブスクリプションの名前の表示に基づいています。
+`azure` モジュールは、現在のAzureサブスクリプションを表示します。 This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
 ### オプション
 
@@ -430,6 +430,8 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ### 設定例
 
+#### Display Subscription Name
+
 ```toml
 # ~/.config/starship.toml
 
@@ -438,6 +440,18 @@ disabled = false
 format = 'on [$symbol($subscription)]($style) '
 symbol = 'ﴃ '
 style = 'blue bold'
+```
+
+#### Display Username
+
+```toml
+# ~/.config/starship.toml
+
+[azure]
+disabled = false
+format = "on [$symbol($username)]($style) "
+symbol = "ﴃ "
+style = "blue bold"
 ```
 
 ## バッテリー
@@ -558,7 +572,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Node.js.    |
+| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.        |
 | `detect_extensions` | `[]`                                 | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
@@ -668,7 +682,7 @@ characterは、最後のコマンドが成功したかどうかを示します�
 
 ### 設定例
 
-#### エラーの形状をカスタムする
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -678,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### エラーの形状をカスタムしない
+#### Without custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -688,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### vimの形状をカスタムする
+#### With custom vim shape
 
 ```toml
 # ~/.config/starship.toml
@@ -1443,7 +1457,7 @@ AA -------------------------------------------- BB -----------------------------
 
 ### 設定例
 
-#### アカウントとプロジェクトを表示
+#### Display account and project
 
 ```toml
 # ~/.config/starship.toml
@@ -1452,7 +1466,7 @@ AA -------------------------------------------- BB -----------------------------
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### アクティブな設定名のみ表示
+#### Display active config name only
 
 ```toml
 # ~/.config/starship.toml
@@ -1462,7 +1476,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### アカウントとエイリアスされたリージョンを表示する
+#### Display account and aliased region
 
 ```toml
 # ~/.config/starship.toml
@@ -1474,7 +1488,7 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### アカウントとエイリアスされたプロジェクトを表示
+#### Display account and aliased project
 
 ```toml
 # ~/.config/starship.toml
@@ -3662,7 +3676,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 
 ### 設定例
 
-#### Terraform バージョン表示あり
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3671,7 +3685,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Terraform バージョン表示なし
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
