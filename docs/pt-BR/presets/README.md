@@ -32,9 +32,9 @@ Essa personalização converte os símbolos para cada módulo em texto simples. 
 
 ## [Runtime Ausente](./no-runtimes.md)
 
-Está personalização oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, este é para você!
+Esta predefinição oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, esta aqui é para você!
 
-[![Captura de tela de ajustes de ocultar versão de runtime](/presets/img/no-runtime-versions.png "Clique para ver as personalizações para remover a versão do runtime")](./no-runtimes)
+[![Captura da tela de predefinição Ocultar Versões de Runtime](/presets/img/no-runtime-versions.png "Clique para ver as personalizações para remover a versão do runtime")](./no-runtimes)
 
 ## [No Empty Icons](./no-empty-icons.md)
 
