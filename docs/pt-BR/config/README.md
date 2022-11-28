@@ -449,7 +449,7 @@ style = 'blue bold'
 
 [azure]
 disabled = false
-format = "on [$symbol($username)]($style) "
+format = "em [$symbol($username)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
 ```
@@ -682,7 +682,7 @@ Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olh
 
 ### Exemplos
 
-#### With custom error shape
+#### Com formas customizadas de erro
 
 ```toml
 # ~/.config/starship.toml
@@ -692,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### Sem formas customizadas de erro
 
 ```toml
 # ~/.config/starship.toml
@@ -702,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### Com formas customizadas no vim
 
 ```toml
 # ~/.config/starship.toml
@@ -1457,16 +1457,16 @@ O módulo `gcloud` exibe a configuração atual para a CLI do [`gcloud`](https:/
 
 ### Exemplos
 
-#### Display account and project
+#### Exibe conta e projeto
 
 ```toml
 # ~/.config/starship.toml
 
 [gcloud]
-format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+format = 'em [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### Exibe apenas o nome da configuração ativa
 
 ```toml
 # ~/.config/starship.toml
@@ -1476,7 +1476,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Display account and aliased region
+#### Exibir conta e região
 
 ```toml
 # ~/.config/starship.toml
@@ -1488,7 +1488,7 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### Display account and aliased project
+#### Exibir conta e projeto apelidado
 
 ```toml
 # ~/.config/starship.toml
@@ -1757,7 +1757,7 @@ Use o executável do Windows Starship em caminhos do Windows em WSL
 # ~/.config/starship.toml
 
 [git_status]
-windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.exe'
+windows_starship = '/mnt/c/Users/nomedousuario/scoop/apps/starship/current/starship.exe'
 ```
 
 ## Go
@@ -2196,7 +2196,7 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Regex Matching
+#### Correspondência Regex
 
 Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
 
@@ -2945,7 +2945,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### With Pulumi Version
+#### Com a versão do Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -2954,7 +2954,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Without Pulumi version
+#### Sem a versão do Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3068,7 +3068,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Use apenas o binário `python3` para obter a versão.
 python_binary = 'python3'
 ```
 
@@ -3076,7 +3076,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Não acione para arquivos com a extensão py
 detect_extensions = []
 ```
 
@@ -3084,10 +3084,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Exibe a versão do python de dentro de um venv local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Note que isso só funcionará quando o venv estiver dentro do projeto e só
+# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3588,7 +3588,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# No windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3676,7 +3676,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### With Terraform Version
+#### Com a versão do Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -3685,7 +3685,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Sem a versão do Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -3996,7 +3996,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
-#### Custom command shell
+#### Comandos personalizados de shell
 
 `shell` aceita uma lista não vazia de string, onde:
 
