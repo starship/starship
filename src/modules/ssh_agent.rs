@@ -65,7 +65,7 @@ mod tests {
                 disabled = false
             })
             .collect();
-        let expected = Some(format!("{}", Color::Red.bold().paint("ssh  ")));
+        let expected = Some(format!("{}", Color::Red.bold().paint("ssh ❌ ")));
 
         assert_eq!(expected, actual);
     }
@@ -87,7 +87,7 @@ mod tests {
                 disabled = false
             })
             .collect();
-        let expected = Some(format!("{}", Color::Green.bold().paint("ssh  ")));
+        let expected = Some(format!("{}", Color::Green.bold().paint("ssh 🔑 ")));
 
         assert_eq!(expected, actual);
     }
@@ -109,7 +109,7 @@ mod tests {
                 disabled = false
             })
             .collect();
-        let expected = Some(format!("{}", Color::Green.bold().paint("ssh  ")));
+        let expected = Some(format!("{}", Color::Green.bold().paint("ssh 🔑➕ ")));
 
         assert_eq!(expected, actual);
     }
