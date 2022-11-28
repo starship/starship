@@ -682,7 +682,7 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 
 ### Contoh
 
-#### With custom error shape
+#### Dengan menggunakan corak eror yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
@@ -692,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### Tanpa menggunakan corak eror yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
@@ -702,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### Dengan menggunakan corak vim yang dikustomisasi
 
 ```toml
 # ~/.config/starship.toml
