@@ -682,7 +682,7 @@ Par défaut, il ne change que de couleur. Si vous désirez également changer sa
 
 ### Exemples
 
-#### With custom error shape
+#### Avec un caractère d'erreur personnalisé
 
 ```toml
 # ~/.config/starship.toml
@@ -692,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### Sans caractère d'erreur personnalisé
 
 ```toml
 # ~/.config/starship.toml
@@ -702,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### Avec une forme vim personnalisée
 
 ```toml
 # ~/.config/starship.toml
@@ -1457,7 +1457,7 @@ Le module `gcloud` affiche la version de la commande [`gcloud`](https://cloud.go
 
 ### Exemples
 
-#### Display account and project
+#### Afficher le compte et le projet
 
 ```toml
 # ~/.config/starship.toml
@@ -1466,7 +1466,7 @@ Le module `gcloud` affiche la version de la commande [`gcloud`](https://cloud.go
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### Afficher uniquement le nom de la configuration active
 
 ```toml
 # ~/.config/starship.toml
@@ -1476,7 +1476,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Display account and aliased region
+#### Afficher le compte et la région aliasée
 
 ```toml
 # ~/.config/starship.toml
@@ -1488,7 +1488,7 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### Display account and aliased project
+#### Afficher le compte et le projet aliasée
 
 ```toml
 # ~/.config/starship.toml
@@ -2196,7 +2196,7 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Regex Matching
+#### Filtrage par regex
 
 Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
 
@@ -2945,7 +2945,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Exemple
 
-#### With Pulumi Version
+#### Avec la version de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -2954,7 +2954,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Without Pulumi version
+#### Sans la version de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3068,7 +3068,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# N'utilisez que le binaire `python3` pour obtenir la version.
 python_binary = 'python3'
 ```
 
@@ -3076,7 +3076,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Ne pas déclencher pour les fichiers avec l'extension py
 detect_extensions = []
 ```
 
@@ -3084,10 +3084,11 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Affiche la version de python depuis l'intérieur d'un venv local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Notez que cela ne fonctionnera que lorsque le venv est à l'intérieur du projet,
+# et uniquement lorsque vous vous situez dans le répertoire contenant le dossier du venv
+# mais peut-être que c'est suffisant?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3588,7 +3589,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# Sous windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3676,7 +3677,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Exemple
 
-#### With Terraform Version
+#### Avec la version de Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -3685,7 +3686,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Sans la version de Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -3996,7 +3997,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
-#### Custom command shell
+#### Commandes shell personnalisées
 
 `shell` accepte une liste de chaînes non vide, où:
 
