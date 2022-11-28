@@ -682,7 +682,7 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ### Các ví dụ
 
-#### With custom error shape
+#### Có tuỳ chỉnh hình dạng lỗi
 
 ```toml
 # ~/.config/starship.toml
@@ -692,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### Không có tuỳ chỉnh hình dạng lỗi
 
 ```toml
 # ~/.config/starship.toml
@@ -702,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### Có tuỳ chỉnh hình dạng vim
 
 ```toml
 # ~/.config/starship.toml
@@ -1457,7 +1457,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 
 ### Các ví dụ
 
-#### Display account and project
+#### Hiển thị tài khoản và dự án
 
 ```toml
 # ~/.config/starship.toml
@@ -1466,7 +1466,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### Chỉ hiển thị tên cấu hình hiệu lực
 
 ```toml
 # ~/.config/starship.toml
@@ -1476,7 +1476,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Display account and aliased region
+#### Hiển thị tài khoản và bí danh khu vực
 
 ```toml
 # ~/.config/starship.toml
