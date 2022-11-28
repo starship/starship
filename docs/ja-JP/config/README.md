@@ -682,7 +682,7 @@ characterは、最後のコマンドが成功したかどうかを示します�
 
 ### 設定例
 
-#### With custom error shape
+#### エラーの形状をカスタムする
 
 ```toml
 # ~/.config/starship.toml
@@ -692,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### エラーの形状をカスタムしない
 
 ```toml
 # ~/.config/starship.toml
@@ -702,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### vimの形状をカスタムする
 
 ```toml
 # ~/.config/starship.toml
@@ -1457,7 +1457,7 @@ AA -------------------------------------------- BB -----------------------------
 
 ### 設定例
 
-#### Display account and project
+#### アカウントとプロジェクトを表示
 
 ```toml
 # ~/.config/starship.toml
@@ -1466,7 +1466,7 @@ AA -------------------------------------------- BB -----------------------------
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### アクティブな設定名のみ表示
 
 ```toml
 # ~/.config/starship.toml
@@ -1476,7 +1476,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Display account and aliased region
+#### アカウントとエイリアスされたリージョンを表示する
 
 ```toml
 # ~/.config/starship.toml
@@ -1488,7 +1488,7 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### Display account and aliased project
+#### アカウントとエイリアスされたプロジェクトを表示
 
 ```toml
 # ~/.config/starship.toml
@@ -3676,7 +3676,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 
 ### 設定例
 
-#### With Terraform Version
+#### Terraform バージョン表示あり
 
 ```toml
 # ~/.config/starship.toml
@@ -3685,7 +3685,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Terraform バージョン表示なし
 
 ```toml
 # ~/.config/starship.toml
