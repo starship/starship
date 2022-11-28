@@ -682,7 +682,7 @@ Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [
 
 ### Ejemplos
 
-#### With custom error shape
+#### Con formato de error personalizado
 
 ```toml
 # ~/.config/starship.toml
@@ -692,7 +692,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### Sin formato de error personalizado
 
 ```toml
 # ~/.config/starship.toml
@@ -702,7 +702,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### Con formato de vim personalizado
 
 ```toml
 # ~/.config/starship.toml
@@ -1457,7 +1457,7 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 
 ### Ejemplos
 
-#### Display account and project
+#### Mostrar cuenta y proyecto
 
 ```toml
 # ~/.config/starship.toml
@@ -1466,7 +1466,7 @@ El módulo `gcloud` muestra la configuración actual para el CLI de [`gcloud`](h
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### Mostrar solo el nombre de la configuración activa
 
 ```toml
 # ~/.config/starship.toml
@@ -1476,7 +1476,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Display account and aliased region
+#### Mostrar los alias de cuenta y región
 
 ```toml
 # ~/.config/starship.toml
@@ -1488,7 +1488,7 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### Display account and aliased project
+#### Mostrar cuenta y proyecto con alias
 
 ```toml
 # ~/.config/starship.toml
@@ -2196,7 +2196,7 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Regex Matching
+#### Busqueda por Regex
 
 Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
 
@@ -2945,7 +2945,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Ejemplo
 
-#### With Pulumi Version
+#### Con la versión de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -2954,7 +2954,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Without Pulumi version
+#### Sin versión de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3068,7 +3068,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Solo usa el binario `python3` para obtener la versión.
 python_binary = 'python3'
 ```
 
@@ -3076,7 +3076,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# No se dispara con archivos con extensión py
 detect_extensions = []
 ```
 
@@ -3084,10 +3084,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Muestra la versión de python desde dentro de un entorno virtual local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Ten en cuenta que esto solo funcionará cuando el venv esté dentro del proyecto y sólo
+# funcionará en el directorio que contiene el directorio venv dir pero ¿tal vez esté bien?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3588,7 +3588,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# En Windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3676,7 +3676,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Ejemplo
 
-#### With Terraform Version
+#### Con la versión de Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -3685,7 +3685,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Sin la versión de Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -3996,7 +3996,7 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 
 *: Esta variable sólo puede ser usada como parte de una cadena de estilo
 
-#### Custom command shell
+#### Comando personalizado del intérprete de comandos
 
 `shell` acepta una lista no vacía de cadenas, donde:
 
