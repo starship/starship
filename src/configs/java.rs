@@ -24,8 +24,8 @@ impl<'a> Default for JavaConfig<'a> {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
             disabled: false,
-            style: "red dimmed",
-            symbol: "☕ ",
+            style: "bold green",
+            symbol: " ",
             detect_extensions: vec!["java", "class", "jar", "gradle", "clj", "cljc"],
             detect_files: vec![
                 "pom.xml",
