@@ -417,7 +417,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-`azure` モジュールは、現在のAzureサブスクリプションを表示します。 This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
+`azure` モジュールは、現在のAzureサブスクリプションを表示します。 これは、 `~/.azure/azureProfile.json` ファイルで定義されているデフォルトのサブスクリプション名またはユーザー名の表示に基づいています。
 
 ### オプション
 
@@ -430,7 +430,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ### 設定例
 
-#### Display Subscription Name
+#### サブスクリプション名を表示
 
 ```toml
 # ~/.config/starship.toml
@@ -442,7 +442,7 @@ symbol = 'ﴃ '
 style = 'blue bold'
 ```
 
-#### Display Username
+#### ユーザー名を表示
 
 ```toml
 # ~/.config/starship.toml
