@@ -43,7 +43,7 @@ git-repository-faster = ["git-features/zlib-stock", "git-repository/fast-sha1"]
 
 [dependencies]
 chrono = { version = "0.4.23", features = ["clock", "std"] }
-clap = { version = "4.0.28", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.0.29", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.0.6"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
