@@ -1790,6 +1790,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "nix"
+version = "0.26.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46a58d1d356c6597d08cde02c2f09d785b09e28711837b1ed667dc652c08a694"
+dependencies = [
+ "bitflags",
+ "cfg-if 1.0.0",
+ "libc",
+ "static_assertions",
+]
+
+[[package]]
 name = "nom"
 version = "5.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2761,7 +2773,7 @@ dependencies = [
  "local_ipaddress",
  "log",
  "mockall",
- "nix 0.25.0",
+ "nix 0.26.1",
  "notify-rust",
  "nu-ansi-term",
  "once_cell",

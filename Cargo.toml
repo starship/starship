@@ -115,7 +115,7 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.25.0", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.26.1", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
 shadow-rs = { version = "0.18.0", default-features = false }
