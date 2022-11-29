@@ -1529,12 +1529,6 @@ dependencies = [
 
 [[package]]
 name = "io-lifetimes"
-version = "0.7.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ea37f355c05dde75b84bba2d767906ad522e97cd9e2eef2be7a4ab7fb442c06"
-
-[[package]]
-name = "io-lifetimes"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a7d367024b3f3414d8e01f437f704f41a9f64ab36f9067fa73e526ad4c763c87"
@@ -1550,8 +1544,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "927609f78c2913a6f6ac3c27a4fe87f43e2a35367c0c4b0f8265e8f49a104330"
 dependencies = [
  "hermit-abi 0.2.6",
- "io-lifetimes 1.0.1",
- "rustix 0.36.4",
+ "io-lifetimes",
+ "rustix",
  "windows-sys 0.42.0",
 ]
 
@@ -1629,12 +1623,6 @@ name = "linked-hash-map"
 version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0717cef1bc8b636c6e1c1bbdefc09e6322da8a9321966e8928ef80d20f7f770f"
-
-[[package]]
-name = "linux-raw-sys"
-version = "0.0.46"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4d2456c373231a208ad294c33dc5bff30051eafd954cd4caae83a712b12854d"
 
 [[package]]
 name = "linux-raw-sys"
@@ -2477,29 +2465,15 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.35.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72c825b8aa8010eb9ee99b75f05e10180b9278d161583034d7574c9d617aeada"
-dependencies = [
- "bitflags",
- "errno",
- "io-lifetimes 0.7.3",
- "libc",
- "linux-raw-sys 0.0.46",
- "windows-sys 0.36.1",
-]
-
-[[package]]
-name = "rustix"
 version = "0.36.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cb93e85278e08bb5788653183213d3a60fc242b10cb9be96586f5a73dcb67c23"
 dependencies = [
  "bitflags",
  "errno",
- "io-lifetimes 1.0.1",
+ "io-lifetimes",
  "libc",
- "linux-raw-sys 0.1.3",
+ "linux-raw-sys",
  "windows-sys 0.42.0",
 ]
 
@@ -2937,11 +2911,11 @@ dependencies = [
 
 [[package]]
 name = "terminal_size"
-version = "0.2.2"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40ca90c434fd12083d1a6bdcbe9f92a14f96c8a1ba600ba451734ac334521f7a"
+checksum = "cb20089a8ba2b69debd491f8d2d023761cbf196e999218c591fa1e7e15a21907"
 dependencies = [
- "rustix 0.35.9",
+ "rustix",
  "windows-sys 0.42.0",
 ]
 
