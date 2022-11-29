@@ -60,3 +60,9 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+
+## [Gruvbox Powerline](./gruvbox-powerline.md)
+
+This preset is inspired by [Pastel Powerline](./pastel-powerline.md), change color and style to using [gruvbox color](https://github.com/morhetz/gruvbox)
+
+[![Screenshot of Gruvbox Powerline preset](/presets/img/gruvbox-powerline.png "Click to view Gruvbox powerline preset")](./gruvbox-powerline)
