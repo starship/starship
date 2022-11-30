@@ -60,3 +60,9 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+
+## [Tokyo Night](./tokyo-night.md)
+
+This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+
+[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
