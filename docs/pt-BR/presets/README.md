@@ -53,3 +53,9 @@ Essa personalização simula o comportamento e aparência do [Pure](https://gith
 Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Mostra também como a substituição de segmentos do caminho completo do diretório funciona no starship.
 
 [![Screenshot do preset Pastel Powerline](/presets/img/pastel-powerline.png "Clique para ver as personalização para usar no prompt do terminal com Pure")](./pastel-powerline)
+
+## [Tokyo Night](./tokyo-night.md)
+
+This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+
+[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
