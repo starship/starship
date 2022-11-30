@@ -53,3 +53,9 @@ This preset does not show icons if the toolset is not found.
 このプリセットは[M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json)にインスパイアされています。 また、starshipでパス置換がどのように機能するかを示しています。
 
 [![Pastel Powerlineプリセットのスクリーンショット](/presets/img/pastel-powerline.png "Pure Promptプリセットを表示するにはクリックしてください")](./pastel-powerline)
+
+## [Tokyo Night](./tokyo-night.md)
+
+This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+
+[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
