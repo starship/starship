@@ -53,3 +53,9 @@ Ce préréglage émule l'apparence et le comportement de [Pure](https://github.c
 Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Il montre également comment fonctionne la substitution de chemin dans starship.
 
 [![Capture d'écran du préréglage Pastel Powerline](/presets/img/pastel-powerline.png "Cliquez pour voir le préréglage Pure")](./pastel-powerline)
+
+## [Tokyo Night](./tokyo-night.md)
+
+This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+
+[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
