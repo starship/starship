@@ -8,7 +8,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 ### پێشمەرجەکان
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- [فۆنتێکی Nerd](https://www.nerdfonts.com/) دامەزراوە و چالاککراوە لە تێرمیناڵەکەتا
 
 ### ڕێکخستن
 
