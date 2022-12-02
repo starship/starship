@@ -205,7 +205,9 @@ Certains shells peuvent gérer une invite de commande à droite, sur la même li
 
 Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. Pour aligner à droite les modules au-dessus de la ligne d’entrée d’une invite multiligne, voir le [module `fill`](/config/#fill).
 
-`right_format` est actuellement géré pour les shells suivants: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### Exemple
 
@@ -219,7 +221,7 @@ format = """$character"""
 right_format = """$all"""
 ```
 
-Génère l’invite suivante:
+Produces a prompt like the following:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
@@ -227,13 +229,13 @@ Génère l’invite suivante:
 
 ## Invite de continuation
 
-Certains shells gèrent une invite de continuation en plus de l’invite normale. Cette invite est affichée à la place de l’invite normale quand l’utilisateur a entré une expression incomplète (par exemple, une parenthèse gauche ou une apostrophe seule).
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship peut définir l’invite de continuation en utilisant l’option `continuation_prompt`. L’invite par défaut est `"[∙](bright-black) "`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
 
-Note: la valeur de `continuation_prompt` doit être une chaine littérale, sans variable.
+Note: `continuation_prompt` should be set to a literal string without any variables.
 
-Note: les invites de confirmation sont uniquement disponibles pour les shells suivants:
+Note: Continuation prompts are only available in the following shells:
 
 - `bash`
 - `zsh`
@@ -250,7 +252,7 @@ continuation_prompt = "▶▶"
 
 ## Chaînes de style
 
-Les chaines de style sont une liste de mots séparés par des espaces. Les mots ne sont pas sensibles à la casse (`bold` et `boLd` sont considérés comme la même chaine). Les mots peuvent être :
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
 - `bold (gras)`
 - `italic (italique)`
@@ -265,17 +267,17 @@ Les chaines de style sont une liste de mots séparés par des espaces. Les mots 
 - `<color>`
 - `none (aucun)`
 
-où `<color>` spécifie une couleur (voir ci-dessous). `fg:<color>` and `<color>` font la même chose actuellement, mais cela pourrait changer dans le futur. `inverted` inverse les couleurs d’arrière-plan et d’avant-plan. L’ordre des mots dans la chaine n’a pas d’importance.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-La valeur `none` écrase toutes les autres dans une chaine si elle ne fait pas partie d’une déclaration `bg:`, donc par exemple `fg:red none fg:blue` va créer une chaine sans style. `bg:none` définit comme arrière-plan la couleur par défaut donc `fg:red bg:none` équivaut à `red` ou `fg:red` et `bg:green fg:red bg:none` équivaut aussi à `fg:red` or `red`. Cela pourrait devenir une erreur d’utiliser `none` avec d’autres mots dans le futur.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Une spécification de couleur peut être :
+A color specifier can be one of the following:
 
 - Une des couleurs de terminal standard: `black` (noir), `red` (rouge), `green` (vert), `blue` (bleu), `yellow` (jaune), `purple` (violet), `cyan` (cyan), `white` (blanc). Vous pouvez éventuellement les préfixer avec `bright-` pour obtenir la version claire (par exemple `bright-white`).
 - Un `#` suivi d’un nombre hexadécimal de 6 chiffres. Cela spécifie un [code de couleur RGB hexadécimal](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Un nombre entre 0 et 255. Cela spécifie un [code couleur ANSI 8-bit](https://i.stack.imgur.com/KTSQa.png).
 
-Si plusieurs couleurs sont définies pour l’avant-plan/arrière-plan, la dernière dans le chaine sera prioritaire.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
