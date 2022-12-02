@@ -1063,7 +1063,7 @@ Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và 
 | `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`. |
 | `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                        |
 | `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | The format of a git repo when `before_repo_root_style` and `repo_root_style` is defined.                   |
-| `home_symbol`            | `'~'`                                                                                                                        | The symbol indicating home directory.                                                                      |
+| `home_symbol`            | `'~'`                                                                                                                        | Biểu tượng nhận biết thư mục home.                                                                         |
 | `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                    |
 
 <details>
