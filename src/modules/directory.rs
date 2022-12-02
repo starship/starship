@@ -138,7 +138,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.repo_root_format
     };
     let default_style = get_conditional_style(context, &config.style.0);
+
     let repo_root_style = config.repo_root_style.unwrap_or(default_style);
+    let before_repo_root_style = config.before_repo_root_style.unwrap_or(default_style);
 
     let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
@@ -146,6 +148,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(default_style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
                 "repo_root_style" => Some(Ok(repo_root_style)),
+                "before_repo_root_style" => Some(Ok(before_repo_root_style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -1696,12 +1699,14 @@ mod tests {
                 truncation_symbol = "…/"
                 truncate_to_repo = false
                 repo_root_style = "green"
+                before_repo_root_style = "blue"
             })
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{}{}repo{} ",
-            Color::Cyan.bold().paint(convert_path_sep("…/above/")),
+            "{}{}{}repo{} ",
+            Color::Blue.prefix(),
+            convert_path_sep("…/above/"),
             Color::Green.prefix(),
             Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
         ));
