@@ -205,7 +205,9 @@ Some shells support a right prompt which renders on the same line as the input. 
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### Beispiel
 
@@ -227,13 +229,13 @@ Produces a prompt like the following:
 
 ## Fortsetzungsprompt
 
-Einige Shells unterstützen einen speziellen Fortsetzungsprompt zusätzlich zum normalen Prompt. Dieser Prompt wird anstelle des normalen Prompts ausgegeben, wenn der Benutzer ein unvollständiges Kommando eingegeben hat (etwa wie eine einzelne linke Klammer oder ein einzelnes Anführungszeichen).
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. The default prompt is `"[∙](bright-black) "`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
 
-Hinweis: Die `continuation_prompt` Anweisung sollte auf einen literalen String ohne Variablen gesetzt werden.
+Note: `continuation_prompt` should be set to a literal string without any variables.
 
-Hinweis: Fortsetzungs-Prompts sind nur für folgende Shells verfügbar:
+Note: Continuation prompts are only available in the following shells:
 
 - `bash`
 - `zsh`
@@ -250,7 +252,7 @@ continuation_prompt = "▶▶"
 
 ## Style-Strings
 
-Stil-Zeichenketten sind eine Liste von Wörtern, getrennt durch Leerzeichen. Die Wörter haben keine Groß- und Kleinschreibung (z.B. `bold` und `BoLd` werden als dieselbe Zeichenkette betrachtet). Jedes Wort kann eines der folgenden sein:
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
 - `fett`
 - `kursiv`
@@ -265,17 +267,17 @@ Stil-Zeichenketten sind eine Liste von Wörtern, getrennt durch Leerzeichen. Die
 - `<color>`
 - `keins`
 
-wobei `<color>` eine Farbspezifikation ist (siehe unten). `fg:<color>` und `<color>` tun derzeit dasselbe, das kann sich in Zukunft aber ändern. `inverted` tauscht Hinter- und Vordergrundfarben. Die Reihenfolge der Wörter in der Liste spielt keine Rolle.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-`none` überschreibt alle anderen Tokens in einem String wenn es nicht ein Teil einer `bg:` Zeichenkette ist, so dass z.B. über die Zeichenkette `fg:red none fg:blue` kein Styling mehr anzeigt wird. `bg:none` setzt den Hintergrund auf die Standardfarbe, so `fg:red bg:none` entspricht `rot` oder `fg:red` und `bg:green fg:red bg:none` entspricht auch `fg:red` oder `rot`. In der Zukunft könnte die Unterstützung von `none` in Verbindung mit anderen Tokens fallen gelassen werden.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-Eine Farbspezifikation kann wie folgt aussehen:
+A color specifier can be one of the following:
 
 - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
 - Eine `#` gefolgt von einer sechsstelligen Hexadezimalnummer. Dies ergibt einen [RGB hex Farbcode](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Eine Zahl zwischen 0-255. Dies ergibt einen [8-bit ANSI-Farbcode](https://i.stack.imgur.com/KTSQa.png).
 
-Wenn mehrere Farben für Vordergrund oder Hintergrund angegeben werden, hat die letzte Farbe der Zeichenkette Priorität.
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
