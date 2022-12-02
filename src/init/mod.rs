@@ -138,18 +138,18 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
              * https://github.com/starship/starship/pull/278
              */
             r#"
-            __main() {{
-                local major="${{BASH_VERSINFO[0]}}"
-                local minor="${{BASH_VERSINFO[1]}}"
+__main() {{
+    local major="${{BASH_VERSINFO[0]}}"
+    local minor="${{BASH_VERSINFO[1]}}"
 
-                if ((major > 4)) || {{ ((major == 4)) && ((minor >= 1)); }}; then
-                    source <({0} init bash --print-full-init)
-                else
-                    source /dev/stdin <<<"$({0} init bash --print-full-init)"
-                fi
-            }}
-            __main
-            unset -f __main
+    if ((major > 4)) || {{ ((major == 4)) && ((minor >= 1)); }}; then
+        source <({0} init bash --print-full-init)
+    else
+        source /dev/stdin <<<"$({0} init bash --print-full-init)"
+    fi
+}}
+__main
+unset -f __main
             "#,
             starship.sprint_posix()?
         ),
