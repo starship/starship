@@ -261,7 +261,9 @@ not explicitly used in either `format` or `right_format`.
 Note: The right prompt is a single line following the input location. To right align modules above
 the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### Example
 
