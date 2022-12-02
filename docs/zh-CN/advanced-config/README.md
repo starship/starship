@@ -205,7 +205,9 @@ Invoke-Expression (&starship init powershell)
 
 注意：右侧提示和输入区显示在同一行。 如果需要在输入区的上方显示右对齐的组件，请查阅 [`fill` 组件](/config/#fill)。
 
-`right_format` 现支持 elvish、fish、zsh、xonsh、cmd。
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### 示例
 
@@ -219,7 +221,7 @@ format = """$character"""
 right_format = """$all"""
 ```
 
-会显示成如下方案
+Produces a prompt like the following:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
@@ -227,13 +229,13 @@ right_format = """$all"""
 
 ## 多行提示符
 
-一些 Shell 也同时支持多行提示符。 若用户输入了不完整的命令（例如一个左括号或引号），Shell 会渲染多行提示符。
+Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-使用 `continuation_prompt` 选项来设置 Starship 的多行提示符。 它的默认值为 `[∙](bright-black)`。
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
 
-注意：`continuation_prompt` 应设置为没有变量的字符串。
+Note: `continuation_prompt` should be set to a literal string without any variables.
 
-注意，仅以下 Shell 支持多行提示符：
+Note: Continuation prompts are only available in the following shells:
 
 - `bash`
 - `zsh`
@@ -250,7 +252,7 @@ continuation_prompt = "▶▶"
 
 ## 样式设定
 
-样式字符串是用空格分隔的单词列表。 其中单词不是大小写敏感的（例如 `bold` 和 `BoLd` 被视为同一字符串）。 每个单词可以是以下之一：
+Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
 - `bold`
 - `italic`
@@ -265,19 +267,19 @@ continuation_prompt = "▶▶"
 - `<color>`
 - `none`
 
-`<color>` 可以声明颜色，会在下面解释。 `fg:<color>` 和 `<color>` 的功能暂时相同，未来可能会更改。 `inverted` 会反转背景和文字的颜色。 字符串中的单词顺序不影响显示结果。
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
-若 `none` 不是 `bg:` 的一部分，则它会覆盖其他的设置：比如 `fg:red none fg:blue` 不会更改任何样式。 `bg:none` 会设置成默认背景色，因此 `fg:red bg:none`、`red`、`fg:red` 的作用相同；类似，`bg:green fg:red bg:none`、`fg:red`、`red` 的作用也相同。 未来可能会将 `none` 与其它单词一起使用视为错误。
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
-颜色可以由以下任一内容定义：
+A color specifier can be one of the following:
 
 - 任一标准的终端颜色：`black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`。 您也可以使用前缀 `bright-` 定义浅色版本（例如 `bright-white`）。
 - 一个 `#` 后跟一个六位十六进制数。 这将指定一个 [十六进制 RGB 颜色代码](https://www.w3schools.com/colors/colors_hexadecimal.asp)。
 - 0-255 之间的数字。 这将指定一个 [8 位 ANSI 颜色码](https://i.stack.imgur.com/KTSQa.png)。
 
-如果为文本/背景指定了多个颜色，字符串中最后指定的颜色将具有最高优先级。
+If multiple colors are specified for foreground/background, the last one in the string will take priority.
 
-并非每种类型的字符串都会被每个终端正确显示。 特别地，以下是已知的几种情况：
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
 - 许多终端默认禁用对 `blink` 的支持
 - `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
