@@ -658,6 +658,33 @@
         }
       ]
     },
+    "haxe": {
+      "default": {
+        "detect_extensions": [
+          "hx",
+          "hxml"
+        ],
+        "detect_files": [
+          "haxelib.json",
+          "hxformat.json",
+          ".haxerc"
+        ],
+        "detect_folders": [
+          ".haxelib",
+          "haxe_libraries"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold fg:202",
+        "symbol": "⌘ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HaxeConfig"
+        }
+      ]
+    },
     "helm": {
       "default": {
         "detect_extensions": [],
@@ -3230,6 +3257,63 @@
         },
         "detect_folders": {
           "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "HaxeConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⌘ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold fg:202",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "hx",
+            "hxml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "haxelib.json",
+            "hxformat.json",
+            ".haxerc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".haxelib",
+            "haxe_libraries"
+          ],
           "type": "array",
           "items": {
             "type": "string"
