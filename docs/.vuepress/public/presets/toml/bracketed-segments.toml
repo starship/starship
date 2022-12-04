@@ -64,6 +64,9 @@ format = '\[[$symbol]($style)\]'
 [haskell]
 format = '\[[$symbol($version)]($style)\]'
 
+[haxe]
+format = '\[[$symbol($version)]($style)\]'
+
 [helm]
 format = '\[[$symbol($version)]($style)\]'
 
