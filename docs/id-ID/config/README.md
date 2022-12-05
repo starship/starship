@@ -672,7 +672,7 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 | `vimcmd_symbol`             | `'[❮](bold green)'`  | Format string yang digunakan sebelum masukan teks jika shell sedang dalam vim dengan mode normal. |
 | `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode.           |
 | `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.                 |
-| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim replace mode.                 |
+| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.                  |
 | `disabled`                  | `false`              | Menonaktifkan module `character`.                                                                 |
 
 ### Variabel
