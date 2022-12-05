@@ -341,6 +341,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "clap_complete_command"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4160b4a4f72ef58bd766bad27c09e6ef1cc9d82a22f6a0f55d152985a4a48e31"
+dependencies = [
+ "clap",
+ "clap_complete",
+ "clap_complete_fig",
+]
+
+[[package]]
+name = "clap_complete_fig"
+version = "4.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46b30e010e669cd021e5004f3be26cff6b7c08d2a8a0d65b48d43a8cc0efd6c3"
+dependencies = [
+ "clap",
+ "clap_complete",
+]
+
+[[package]]
 name = "clap_derive"
 version = "4.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2748,7 +2769,7 @@ version = "1.11.0"
 dependencies = [
  "chrono",
  "clap",
- "clap_complete",
+ "clap_complete_command",
  "deelevate",
  "dirs-next",
  "dunce",

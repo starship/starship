@@ -6,7 +6,7 @@ use std::thread::available_parallelism;
 use std::time::SystemTime;
 
 use clap::{CommandFactory, Parser, Subcommand};
-use clap_complete::{generate, Shell as CompletionShell};
+use clap_complete_command::Shell as CompletionShell;
 use rand::distributions::Alphanumeric;
 use rand::Rng;
 use starship::context::{Properties, Target};
@@ -216,12 +216,9 @@ fn main() {
         }
         Commands::Explain(props) => print::explain(props),
         Commands::Timings(props) => print::timings(props),
-        Commands::Completions { shell } => generate(
-            shell,
-            &mut Cli::command(),
-            "starship",
-            &mut io::stdout().lock(),
-        ),
+        Commands::Completions { shell } => {
+            shell.generate(&mut Cli::command(), &mut io::stdout().lock())
+        }
         Commands::Session => println!(
             "{}",
             rand::thread_rng()
