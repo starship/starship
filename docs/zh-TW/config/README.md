@@ -24,7 +24,7 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 disabled = true
 ```
 
-### Config File Location
+### 配置文件路徑
 
 你可以透過更改環境變數 `STARSHIP_CONFIG` 來變更設定檔存放的位置：
 
@@ -32,13 +32,13 @@ disabled = true
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
-等同於在 PowersShell（Windows）的 `$PROFILE` 中添加下列文字：
+等同於在 PowerShell（Windows）的 `$PROFILE` 中添加下列文字：
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+或用命令提示字元 (cmd) (Windows) 的話，加下面這行至 `starship.lua`
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -58,7 +58,7 @@ export STARSHIP_CACHE=~/.starship/cache
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+或用命令提示字元 (cmd) (Windows) 的話，加下面這行至 `starship.lua`
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
