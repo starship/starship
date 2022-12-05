@@ -10,6 +10,14 @@ Este preajuste cambia los símbolos de cada módulo para usar símbolos Nerd Fon
 
 [![Captura de pantalla del preajuste de los Símbolos de Nerd Font](/presets/img/nerd-font-symbols.png "Haga clic para ver el preajuste de Símbolos de Nerd Font")](./nerd-font)
 
+## [Sin fuentes Nerd](./no-nerd-font.md)
+
+This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+
+::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
+
+[Click to view No Nerd Font preset](./no-nerd-font)
+
 ## [Segmentos entre Corchetes](./bracketed-segments.md)
 
 Este preajuste cambia el formato de todos los módulos incorporados para mostrar su segmento entre corchetes en lugar de usar la redacción por defecto de Starship ("via", "on", etc.).
@@ -28,6 +36,12 @@ Este preajuste oculta la versión de los tiempos de ejecución del idioma. Si tr
 
 [![Captura de pantalla del preajuste de Ocultar de versiones de tiempo de ejecución](/presets/img/no-runtime-versions.png "Haga clic para ver el preajuste de Ocultar Versiones en Tiempo de Ejecución")](./no-runtimes)
 
+## [No Empty Icons](./no-empty-icons.md)
+
+This preset does not show icons if the toolset is not found.
+
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Haga clic para ver el preajuste de Ocultar Versiones en Tiempo de Ejecución")](./no-empty-icons.md)
+
 ## [Prompt de Pure](./pure-preset.md)
 
 Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.com/sindresorhus/pure).
@@ -38,4 +52,10 @@ Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.
 
 Este preajuste está inspirado en [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). También muestra cómo funciona la sustitución de rutas en Starship.
 
-[![Captura de pantalla del preajuste de Pastel Powerline](/presets/img/pastel-powerline.png "Haga clic para ver el preajuste del Prompt de Pure")](./pastel-powerline)
+[![Captura de pantalla del preajuste Pastel Powerline](/presets/img/pastel-powerline.png "Haga clic para ver el preajuste del Prompt de Pure")](./pastel-powerline)
+
+## [Tokyo Night](./tokyo-night.md)
+
+This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+
+[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
