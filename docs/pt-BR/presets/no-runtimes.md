@@ -2,9 +2,9 @@
 
 # Remover versão do runtime
 
-Está personalização oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, este é para você!
+Esta predefinição oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, esta aqui é para você!
 
-![Captura de tela de ajustes de ocultar versão de runtime](/presets/img/no-runtime-versions.png)
+![Captura da tela de predefinição Ocultar Versões de Runtime](/presets/img/no-runtime-versions.png)
 
 ### Configuração
 
