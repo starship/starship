@@ -664,16 +664,16 @@ characterは、最後のコマンドが成功したかどうかを示します�
 
 ### オプション
 
-| オプション                       | デフォルト                | 説明                                                     |
-| --------------------------- | -------------------- | ------------------------------------------------------ |
-| `format`                    | `'$symbol '`         | テキスト入力の前に使用されるフォーマット文字列。                               |
-| `success_symbol`            | `'[❯](bold green)'`  | 前のコマンドが成功した場合にテキスト入力の前に使用されるフォーマット文字列です。               |
-| `error_symbol`              | `'[❯](bold red)'`    | 前のコマンドが失敗した場合にテキスト入力の前に使用されるフォーマット文字列です。               |
-| `vimcmd_symbol`             | `'[❮](bold green)'`  | シェルがvimノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列です。           |
-| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | シェルがvimの`replace_one`モードの場合にテキスト入力の前に使用されるフォーマット文字列です。 |
-| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | シェルがvimの置換モードの場合にテキスト入力の前に使用されるフォーマット文字列。              |
-| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | シェルがvimの置換モードの場合にテキスト入力の前に使用されるフォーマット文字列。              |
-| `disabled`                  | `false`              | `character`モジュールを無効にします。                               |
+| オプション                       | デフォルト                | 説明                                                                               |
+| --------------------------- | -------------------- | -------------------------------------------------------------------------------- |
+| `format`                    | `'$symbol '`         | テキスト入力の前に使用されるフォーマット文字列。                                                         |
+| `success_symbol`            | `'[❯](bold green)'`  | 前のコマンドが成功した場合にテキスト入力の前に使用されるフォーマット文字列です。                                         |
+| `error_symbol`              | `'[❯](bold red)'`    | 前のコマンドが失敗した場合にテキスト入力の前に使用されるフォーマット文字列です。                                         |
+| `vimcmd_symbol`             | `'[❮](bold green)'`  | シェルがvimノーマルモードの場合にテキスト入力の前に使用されるフォーマット文字列です。                                     |
+| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | シェルがvimの`replace_one`モードの場合にテキスト入力の前に使用されるフォーマット文字列です。                           |
+| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | シェルがvimの置換モードの場合にテキスト入力の前に使用されるフォーマット文字列。                                        |
+| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode. |
+| `disabled`                  | `false`              | `character`モジュールを無効にします。                                                         |
 
 ### 変数
 
