@@ -1917,7 +1917,7 @@ format = "via [⌘ $version](bold fg:202) "
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `helmfile.yaml` file
+- Direktori ini memiliki berkas `helmfile.yaml`
 - The current directory contains a `Chart.yaml` file
 
 ### Opsi
@@ -2478,7 +2478,7 @@ truncation_symbol = ''
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `nim.cfg` file
+- Direktori ini memiliki berkas `nim.cfg`
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -2487,7 +2487,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `fromat`            | `'via [$symbol($version )]($style)'` | The format for the module                                                           |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul                                                                   |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'👑 '`                               | The symbol used before displaying the version of Nim.                               |
 | `detect_extensions` | `['nim', 'nims', 'nimble']`          | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -2558,7 +2558,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `package.json` file
+- Direktori ini memiliki berkas `package.json`
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
@@ -3009,7 +3009,7 @@ format = '[$symbol$stack]($style) '
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `spago.dhall` file
+- Direktori ini memiliki berkas `spago.dhall`
 - The current directory contains a file with the `.purs` extension
 
 ### Opsi
@@ -3055,10 +3055,10 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- The current directory contains a `pyproject.toml` file
-- The current directory contains a `requirements.txt` file
-- The current directory contains a `setup.py` file
-- The current directory contains a `tox.ini` file
+- Direktori ini memiliki berkas `pyproject.toml`
+- Direktori ini memiliki berkas `requirements.txt`
+- Direktori ini memiliki berkas `setup.py`
+- Direktori ini memiliki berkas `tox.ini`
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -3410,7 +3410,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Variabel  | Bawaan | Deskripsi                                                  |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\* |        | Mirrors the value of option `style`.                       |
+| style\* |        | Menyalin nilai dari opsi `style`.                          |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -4016,7 +4016,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `deskripsi`         | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
