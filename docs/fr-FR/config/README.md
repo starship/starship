@@ -672,7 +672,7 @@ Par défaut, il ne change que de couleur. Si vous désirez également changer sa
 | `vimcmd_symbol`             | `'[❮](bold green)'`  | Le format utilisé avant l'entrée de texte si le shell est en mode vim normal.           |
 | `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode. |
 | `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim replace mode.       |
+| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.        |
 | `disabled`                  | `false`              | Désactive le module `character`.                                                        |
 
 ### Variables
