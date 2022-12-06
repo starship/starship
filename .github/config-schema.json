@@ -1552,9 +1552,9 @@
         "disabled": false,
         "format": "[$user]($style) in ",
         "show_always": false,
+        "ssh_only": false,
         "style_root": "red bold",
-        "style_user": "yellow bold",
-        "ssh_only": false
+        "style_user": "yellow bold"
       },
       "allOf": [
         {
@@ -5217,6 +5217,10 @@
     "UsernameConfig": {
       "type": "object",
       "properties": {
+        "ssh_only": {
+          "default": false,
+          "type": "boolean"
+        },
         "format": {
           "default": "[$user]($style) in ",
           "type": "string"
@@ -5228,10 +5232,6 @@
         "style_user": {
           "default": "yellow bold",
           "type": "string"
-        },
-        "ssh_only": {
-          "default": false,
-          "type": "boolean"
         },
         "show_always": {
           "default": false,
