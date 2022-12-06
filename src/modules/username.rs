@@ -30,6 +30,40 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         || !is_login_user(context, &username) // [2]
         || is_ssh_session(context); // [3]
 
+    let ssh_connection = context.get_env("SSH_CONNECTION");
+    if config.ssh_only && ssh_connection.is_none() {
+        return None;
+    } else if config.ssh_only && ssh_connection.is_some() {
+        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+            formatter
+                .map_style(|variable| match variable {
+                    "style" => {
+                        let module_style = if is_root {
+                            config.style_root
+                        } else {
+                            config.style_user
+                        };
+                        Some(Ok(module_style))
+                    }
+                    _ => None,
+                })
+                .map(|variable| match variable {
+                    "user" => Some(Ok(&username)),
+                    _ => None,
+                })
+                .parse(None, Some(context))
+        });
+        module.set_segments(match parsed {
+            Ok(segments) => segments,
+            Err(error) => {
+                log::warn!("Error in module `username`:\n{}", error);
+                return None;
+            }
+        });
+
+        return Some(module);
+    }
+
     if !show_username {
         return None;
     }
