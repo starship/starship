@@ -15,7 +15,7 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 ///     - The current user is root (UID = 0) [1]
 ///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
-/// 
+///
 /// If the user is using ssh_only then:
 ///     the shell will only show the username if the user is in a ssh session
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -32,15 +32,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         || is_root // [1]
         || !is_login_user(context, &username) // [2]
         || is_ssh_session(context); // [3]
-    
+
     if config.ssh_only {
-        if !is_ssh_session(context){ //if there is no ssh session and it is ssh_only return nothing
+        if !is_ssh_session(context) {
+            //if there is no ssh session and it is ssh_only return nothing
             return None;
         }
-
     } else if !show_username {
         return None;
-
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
