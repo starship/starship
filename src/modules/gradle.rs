@@ -1,14 +1,10 @@
-use std::{
-    fs,
-    path::{Path, PathBuf},
-};
-
 use crate::{
     config::ModuleConfig,
     configs::gradle::GradleConfig,
     context::Context,
     formatter::{StringFormatter, VersionFormatter},
     module::Module,
+    utils,
 };
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -38,9 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "version" => {
                     let gradle_version = {
-                        let properties_file =
-                            find_wrapper_properties_file(&context.current_dir, config.recursive)?;
-                        let properties = fs::read_to_string(properties_file).ok()?;
+                        let properties = get_wrapper_properties_file(context, config.recursive)?;
                         parse_gradle_version_from_properties(&properties)?
                     };
                     VersionFormatter::format_module_version(
@@ -76,27 +70,41 @@ fn parse_gradle_version_from_properties(wrapper_properties: &str) -> Option<Stri
         zipStorePath=wrapper/dists
     */
     let version = wrapper_properties
-        .split_once("distributionUrl=")?
+        .lines()
+        .find(|line| line.starts_with("distributionUrl="))?
+        .rsplit_once('/')?
         .1
-        .split_once("gradle-")?
-        .1
+        .strip_prefix("gradle-")?
         .split_once('-')?
         .0;
     Some(version.to_string())
 }
 
 /// Tries to find the gradle-wrapper.properties file.
-fn find_wrapper_properties_file(directory: &Path, recursive: bool) -> Option<PathBuf> {
-    let properties_path = directory.join("gradle/wrapper/gradle-wrapper.properties");
-    if properties_path.exists() {
-        return Some(properties_path);
+fn get_wrapper_properties_file(context: &Context, recursive: bool) -> Option<String> {
+    let mut properties = None;
+    if context
+        .try_begin_scan()?
+        .set_folders(&["gradle"])
+        .is_match()
+    {
+        properties = utils::read_file(
+            &context
+                .current_dir
+                .join("gradle/wrapper/gradle-wrapper.properties"),
+        )
+        .ok();
+    };
+    if recursive && properties.is_none() {
+        for dir in context.current_dir.ancestors().skip(1) {
+            properties =
+                utils::read_file(&dir.join("gradle/wrapper/gradle-wrapper.properties")).ok();
+            if properties.is_some() {
+                break;
+            }
+        }
     }
-
-    if recursive {
-        find_wrapper_properties_file(directory.parent()?, recursive)
-    } else {
-        None
-    }
+    properties
 }
 
 #[cfg(test)]
@@ -105,7 +113,7 @@ mod tests {
 
     use super::*;
     use crate::test::ModuleRenderer;
-    use std::fs::File;
+    use std::fs::{self, File};
     use std::io::{self, Write};
 
     #[test]
