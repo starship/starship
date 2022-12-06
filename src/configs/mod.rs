@@ -47,10 +47,12 @@ pub mod line_break;
 pub mod localip;
 pub mod lua;
 pub mod memory_usage;
+pub mod meson;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
 pub mod ocaml;
+pub mod opa;
 pub mod openstack;
 pub mod package;
 pub mod perl;
@@ -187,6 +189,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]
+    meson: meson::MesonConfig<'a>,
+    #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]
     nix_shell: nix_shell::NixShellConfig<'a>,
@@ -194,6 +198,8 @@ pub struct FullConfig<'a> {
     nodejs: nodejs::NodejsConfig<'a>,
     #[serde(borrow)]
     ocaml: ocaml::OCamlConfig<'a>,
+    #[serde(borrow)]
+    opa: opa::OpaConfig<'a>,
     #[serde(borrow)]
     openstack: openstack::OspConfig<'a>,
     #[serde(borrow)]

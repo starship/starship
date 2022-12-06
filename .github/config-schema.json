@@ -71,9 +71,9 @@
         ],
         "detect_folders": [],
         "disabled": false,
-        "format": "with [$symbol ($version)]($style)",
+        "format": "with [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "",
+        "symbol": "🦬 ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -887,6 +887,21 @@
         }
       ]
     },
+    "meson": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$project]($style) ",
+        "style": "blue bold",
+        "symbol": "⬢ ",
+        "truncation_length": 4294967295,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MesonConfig"
+        }
+      ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
@@ -987,6 +1002,25 @@
       "allOf": [
         {
           "$ref": "#/definitions/OCamlConfig"
+        }
+      ]
+    },
+    "opa": {
+      "default": {
+        "detect_extensions": [
+          "rego"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "🪖  ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OpaConfig"
         }
       ]
     },
@@ -1364,7 +1398,7 @@
         "signal_symbol": "⚡",
         "style": "bold red",
         "success_symbol": "",
-        "symbol": "✖"
+        "symbol": "❌"
       },
       "allOf": [
         {
@@ -1744,7 +1778,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "with [$symbol ($version)]($style)",
+          "default": "with [$symbol($version )]($style)",
           "type": "string"
         },
         "version_format": {
@@ -1752,7 +1786,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "",
+          "default": "🦬 ",
           "type": "string"
         },
         "style": {
@@ -3679,6 +3713,38 @@
       },
       "additionalProperties": false
     },
+    "MesonConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 4294967295,
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0.0
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "format": {
+          "default": "via [$symbol$project]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⬢ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "NimConfig": {
       "type": "object",
       "properties": {
@@ -3888,6 +3954,55 @@
             "_opam",
             "esy.lock"
           ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "OpaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🪖  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "rego"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
           "type": "array",
           "items": {
             "type": "string"
@@ -4712,7 +4827,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "✖",
+          "default": "❌",
           "type": "string"
         },
         "success_symbol": {

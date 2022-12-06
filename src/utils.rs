@@ -270,6 +270,17 @@ active boot switches: -d:release\n",
             stdout: String::from("4.10.0\n"),
             stderr: String::default(),
         }),
+        "opa version" => Some(CommandOutput {
+            stdout: String::from("Version: 0.44.0
+Build Commit: e8d488f
+Build Timestamp: 2022-09-07T23:50:25Z
+Build Hostname: 119428673f4c
+Go Version: go1.19.1
+Platform: linux/amd64
+WebAssembly: unavailable
+"),
+            stderr: String::default(),
+        }),
         "opam switch show --safe" => Some(CommandOutput {
             stdout: String::from("default\n"),
             stderr: String::default(),

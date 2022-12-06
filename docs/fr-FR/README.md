@@ -55,11 +55,10 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    ```sh
    brew install starship
    ```
-
-   Avec [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Ajouter le script d’initialisation au fichier configuration de votre shell:
