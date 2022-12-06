@@ -19,12 +19,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let display_symbol = match num_keys {
         Some(1) => config.symbol,
         Some(n) if n != 0 => config.symbol_multi,
-        _ => config.none_symbol,
+        _ => config.symbol_none,
     };
 
     let display_style = match num_keys {
         Some(n) if n > 0 => config.style,
-        _ => config.none_style,
+        _ => config.style_none,
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {

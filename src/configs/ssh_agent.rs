@@ -7,9 +7,9 @@ pub struct SshAgentConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub symbol_multi: &'a str,
-    pub none_symbol: &'a str,
+    pub symbol_none: &'a str,
     pub style: &'a str,
-    pub none_style: &'a str,
+    pub style_none: &'a str,
     pub disabled: bool,
 }
 
@@ -19,9 +19,9 @@ impl<'a> Default for SshAgentConfig<'a> {
             format: "[ssh $symbol]($style)",
             symbol: "🔑 ",
             symbol_multi: "🔑➕ ",
-            none_symbol: "❌ ",
+            symbol_none: "❌ ",
             style: "bold green",
-            none_style: "bold red",
+            style_none: "bold red",
             disabled: true,
         }
     }

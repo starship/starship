@@ -3656,9 +3656,9 @@ The `ssh_agent` module shows if one or more private key identities are added to 
 | -------------- | ------------------------- | --------------------------------------------- |
 | `symbol`       | `'🔑 '`                    | The symbol used when one key is added.        |
 | `symbol_multi` | `'🔑➕ '`                   | The symbol used when multiple keys are added. |
-| `none_symbol`  | `'❌ '`                    | The symbol used when no keys are added.       |
+| `symbol_none`  | `'❌ '`                    | The symbol used when no keys are added.       |
 | `style`        | `'bold green'`            | The style when keys are added.                |
-| `none_style`   | `'bold red'`              | The style when no keys are added.             |
+| `style_none`   | `'bold red'`              | The style when no keys are added.             |
 | `format`       | `'[ssh $symbol]($style)'` | The format for the module.                    |
 | `disabled`     | `false`                   | Disables the `ssh_agent` module.              |
 
@@ -3690,7 +3690,7 @@ disabled = false
 [ssh_agent]
 symbol = ' '
 symbol_multi = ' '
-none_symbol = ' '
+symbol_none = ' '
 disabled = false
 ```
 
