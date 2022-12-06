@@ -1,4 +1,3 @@
-use os_info;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
