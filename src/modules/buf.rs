@@ -1,5 +1,4 @@
 use super::{Context, Module, ModuleConfig};
-use os_info;
 use crate::configs::buf::BufConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
@@ -67,6 +66,7 @@ mod tests {
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
+    use os_info;
 
     #[test]
     fn buf_version() {
@@ -93,6 +93,7 @@ mod tests {
 
     #[test]
     fn folder_with_buf_config() {
+
         let ok_files = ["buf.yaml", "buf.gen.yaml", "buf.work.yaml"];
         let not_ok_files = ["buf.json"];
 
