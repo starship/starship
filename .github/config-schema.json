@@ -3408,7 +3408,7 @@
       "type": "object",
       "properties": {
         "ssh_only": {
-          "default": false,
+          "default": true,
           "type": "boolean"
         },
         "ssh_symbol": {
@@ -5217,10 +5217,6 @@
     "UsernameConfig": {
       "type": "object",
       "properties": {
-        "ssh_only": {
-          "default": false,
-          "type": "boolean"
-        },
         "format": {
           "default": "[$user]($style) in ",
           "type": "string"
@@ -5232,6 +5228,10 @@
         "style_user": {
           "default": "yellow bold",
           "type": "string"
+        },
+        "ssh_only": {
+          "default": false,
+          "type": "boolean"
         },
         "show_always": {
           "default": false,
