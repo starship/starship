@@ -36,6 +36,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 1. Install the **starship** binary:
 
+
    #### Install Latest Version
 
    With Shell:
@@ -45,6 +46,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```
 
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+
 
    #### Install via Package Manager
 
@@ -61,9 +63,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 1. Add the init script to your shell's config file:
 
+
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Додайте наступний рядок наприкінці `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -71,9 +74,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval "$(starship init bash)"
    ```
 
+
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Додайте наступний рядок наприкінці `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -81,15 +85,17 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    starship init fish | source
    ```
 
+
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   Додайте наступний рядок наприкінці `~/.zshrc`:
 
    ```sh
    # ~/.zshrc
 
    eval "$(starship init zsh)"
    ```
+
 
    #### Powershell
 
@@ -99,15 +105,17 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    Invoke-Expression (&starship init powershell)
    ```
 
+
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Додайте наступний рядок наприкінці `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
 
    eval $(starship init ion)
    ```
+
 
    #### Elvish
 
@@ -117,7 +125,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Додайте наступний рядок наприкінці `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -125,15 +133,17 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval (starship init elvish)
    ```
 
+
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Додайте наступний рядок наприкінці `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
 
    eval `starship init tcsh`
    ```
+
 
    #### Nushell
 
@@ -149,7 +159,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   Додайте наступний рядок наприкінці Вашої конфігурації Nushell (знайдіть її виконавши `$nu.config-path`):
 
    ```sh
    source ~/.cache/starship/init.nu
@@ -157,7 +167,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   Додайте наступний рядок наприкінці `~/.xonshrc`:
 
    ```sh
    # ~/.xonshrc
@@ -165,9 +175,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    execx($(starship init xonsh))
    ```
 
+
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Вам потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) разом з Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
