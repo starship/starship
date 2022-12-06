@@ -1554,7 +1554,7 @@
         "show_always": false,
         "style_root": "red bold",
         "style_user": "yellow bold",
-        "ssh_only": true
+        "ssh_only": false
       },
       "allOf": [
         {

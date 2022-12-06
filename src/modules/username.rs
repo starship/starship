@@ -15,6 +15,9 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 ///     - The current user is root (UID = 0) [1]
 ///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
+/// 
+/// If the user is using ssh_only then:
+///     the shell will only show the username if the user is in a ssh session
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut username = context.get_env(USERNAME_ENV_VAR)?;
 
@@ -29,43 +32,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         || is_root // [1]
         || !is_login_user(context, &username) // [2]
         || is_ssh_session(context); // [3]
+    
+    if config.ssh_only {
+        if !is_ssh_session(context){ //if there is no ssh session and it is ssh_only return nothing
+            return None;
+        }
 
-    let ssh_connection = context.get_env("SSH_CONNECTION");
-    if config.ssh_only && ssh_connection.is_none() {
+    } else if !show_username {
         return None;
-    } else if config.ssh_only && ssh_connection.is_some() {
-        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-            formatter
-                .map_style(|variable| match variable {
-                    "style" => {
-                        let module_style = if is_root {
-                            config.style_root
-                        } else {
-                            config.style_user
-                        };
-                        Some(Ok(module_style))
-                    }
-                    _ => None,
-                })
-                .map(|variable| match variable {
-                    "user" => Some(Ok(&username)),
-                    _ => None,
-                })
-                .parse(None, Some(context))
-        });
-        module.set_segments(match parsed {
-            Ok(segments) => segments,
-            Err(error) => {
-                log::warn!("Error in module `username`:\n{}", error);
-                return None;
-            }
-        });
 
-        return Some(module);
-    }
-
-    if !show_username {
-        return None;
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -254,6 +229,45 @@ mod tests {
             })
             .collect();
         let expected = Some("astronaut in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn ssh_only_connection_client() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            .env("SSH_CLIENT", "192.168.0.101 39323 22")
+            // Test output should not change when run by root/non-root user
+            .config(toml::toml! {
+                [username]
+                ssh_only = true
+                show_always = false
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+
+        let expected = Some("astronaut in ");
+
+        assert_eq!(expected, actual.as_deref());
+    }
+
+    #[test]
+    fn no_ssh_only_connection_client() {
+        let actual = ModuleRenderer::new("username")
+            .env(super::USERNAME_ENV_VAR, "astronaut")
+            // Test output should not change when run by root/non-root user
+            .config(toml::toml! {
+                [username]
+                ssh_only = true
+                show_always = false
+                style_root = ""
+                style_user = ""
+            })
+            .collect();
+
+        let expected = None;
 
         assert_eq!(expected, actual.as_deref());
     }
