@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use os_info;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
@@ -21,16 +21,14 @@ pub struct BufConfig<'a> {
 
 impl<'a> Default for BufConfig<'a> {
     fn default() -> Self {
-
         if cfg!(windows) {
             let version_str = os_info::get().version().to_string();
-            let mut nums_of_version = version_str.split(".");
-            
+            let mut nums_of_version = version_str.split('.');
+
             // Gets either version 11 or not
             let version = nums_of_version.next().unwrap().parse::<i32>().unwrap();
 
             if version != 11 {
-
                 return BufConfig {
                     format: "with [$symbol($version )]($style)",
                     version_format: "v${raw}",
@@ -41,9 +39,7 @@ impl<'a> Default for BufConfig<'a> {
                     detect_files: vec!["buf.yaml", "buf.gen.yaml", "buf.work.yaml"],
                     detect_folders: vec![],
                 };
-
             }
-
         }
 
         BufConfig {
@@ -56,6 +52,5 @@ impl<'a> Default for BufConfig<'a> {
             detect_files: vec!["buf.yaml", "buf.gen.yaml", "buf.work.yaml"],
             detect_folders: vec![],
         }
-
     }
 }

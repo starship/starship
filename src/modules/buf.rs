@@ -66,7 +66,6 @@ mod tests {
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
-    use os_info;
 
     #[test]
     fn buf_version() {
@@ -93,7 +92,6 @@ mod tests {
 
     #[test]
     fn folder_with_buf_config() {
-
         let ok_files = ["buf.yaml", "buf.gen.yaml", "buf.work.yaml"];
         let not_ok_files = ["buf.json"];
 
@@ -106,9 +104,8 @@ mod tests {
             let actual = ModuleRenderer::new("buf").path(dir.path()).collect();
 
             if cfg!(windows) {
-
                 let version_str = os_info::get().version().to_string();
-                let mut nums_of_version = version_str.split(".");
+                let mut nums_of_version = version_str.split('.');
 
                 // Gets either version 11 or not
                 let version = nums_of_version.next().unwrap().parse::<i32>().unwrap();
@@ -116,13 +113,11 @@ mod tests {
                 if version != 11 {
                     let expected = Some(format!("with {}", Color::Blue.bold().paint("🐃 v1.0.0 ")));
                     assert_eq!(expected, actual);
-                }else{
+                } else {
                     let expected = Some(format!("with {}", Color::Blue.bold().paint("🦬 v1.0.0 ")));
                     assert_eq!(expected, actual);
                 }
-
-
-            }else{
+            } else {
                 let expected = Some(format!("with {}", Color::Blue.bold().paint("🦬 v1.0.0 ")));
                 assert_eq!(expected, actual);
             }
