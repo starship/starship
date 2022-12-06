@@ -26,10 +26,10 @@ impl<'a> Default for BufConfig<'a> {
             let version_str = os_info::get().version().to_string();
             let mut nums_of_version = version_str.split(".");
             
-            // Gets either version 11 or lower for windows 11 or lower
+            // Gets either version 11 or not
             let version = nums_of_version.next().unwrap().parse::<i32>().unwrap();
 
-            if version < 11 {
+            if version != 11 {
 
                 return BufConfig {
                     format: "with [$symbol($version )]($style)",
