@@ -103,24 +103,8 @@ mod tests {
                 .unwrap();
             let actual = ModuleRenderer::new("buf").path(dir.path()).collect();
 
-            if cfg!(windows) {
-                let version_str = os_info::get().version().to_string();
-                let mut nums_of_version = version_str.split('.');
-
-                // Gets either version 11 or not
-                let version = nums_of_version.next().unwrap().parse::<i32>().unwrap();
-
-                if version != 11 {
-                    let expected = Some(format!("with {}", Color::Blue.bold().paint("🐃 v1.0.0 ")));
-                    assert_eq!(expected, actual);
-                } else {
-                    let expected = Some(format!("with {}", Color::Blue.bold().paint("🦬 v1.0.0 ")));
-                    assert_eq!(expected, actual);
-                }
-            } else {
-                let expected = Some(format!("with {}", Color::Blue.bold().paint("🦬 v1.0.0 ")));
-                assert_eq!(expected, actual);
-            }
+            let expected = Some(format!("with {}", Color::Blue.bold().paint("🐃 v1.0.0 ")));
+            assert_eq!(expected, actual);
 
             dir.close().unwrap();
         }
