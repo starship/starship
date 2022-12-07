@@ -394,7 +394,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formatting `rust` version:\n{}", error);
-            Some(format!("v{}", version))
+            Some(format!("v{version}"))
         }
     }
 }
@@ -402,7 +402,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
 fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> String {
     default_host_triple
         .map_or(toolchain, |triple| {
-            toolchain.trim_end_matches(&format!("-{}", triple))
+            toolchain.trim_end_matches(&format!("-{triple}"))
         })
         .to_owned()
 }

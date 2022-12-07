@@ -183,7 +183,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
         _ => {
             eprintln!(
-                "{0} is not yet supported by starship.\n\
+                "{shell_basename} is not yet supported by starship.\n\
                  For the time being, we support the following shells:\n\
                  * bash\n\
                  * elvish\n\
@@ -197,9 +197,8 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * cmd\n\
                  \n\
                  Please open an issue in the starship repo if you would like to \
-                 see support for {0}:\n\
+                 see support for {shell_basename}:\n\
                  https://github.com/starship/starship/issues/new\n",
-                shell_basename
             )
         }
     };

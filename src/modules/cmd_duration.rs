@@ -62,9 +62,9 @@ fn undistract_me<'a, 'b>(
 }
 
 #[cfg(feature = "notify")]
-fn undistract_me<'a, 'b>(
+fn undistract_me<'a>(
     module: Module<'a>,
-    config: &'b CmdDurationConfig,
+    config: &CmdDurationConfig,
     context: &'a Context,
     elapsed: u128,
 ) -> Module<'a> {

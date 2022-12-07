@@ -385,12 +385,11 @@ users: []
 apiVersion: v1
 clusters: []
 contexts: []
-current-context: {}
+current-context: {ctx_name}
 kind: Config
 preferences: {{}}
 users: []
 ",
-                ctx_name
             )
             .as_bytes(),
         )?;
@@ -695,7 +694,7 @@ clusters: []
 contexts:
   - context:
       cluster: test_cluster
-      user: {}
+      user: {user_name}
       namespace: test_namespace
     name: test_context
 current-context: test_context
@@ -703,7 +702,6 @@ kind: Config
 preferences: {{}}
 users: []
 ",
-                user_name
             )
             .as_bytes(),
         )?;
