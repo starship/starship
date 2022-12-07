@@ -134,4 +134,121 @@ mod tests {
 
         dir.close()
     }
+
+    #[test]
+    fn folder_with_hpp_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.hpp"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("cpp").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(149).bold().paint("C++ v11.3.0-g++ ")
+        ));
+        assert_eq!(expected, actual);
+
+        //If g++ does not exist, it should get clang
+        let actual = ModuleRenderer::new("cpp")
+            .cmd("g++ --version", None)
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(149).bold().paint("C++ v11.1.0-clang ")
+        ));
+
+        assert_eq!(expected, actual);
+
+        //If either does not exist print just C++
+        let actual = ModuleRenderer::new("cpp")
+            .cmd("g++ --version", None)
+            .cmd("clang --version", None)
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C++ ")));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_cc_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.cc"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("cpp").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(149).bold().paint("C++ v11.3.0-g++ ")
+        ));
+        assert_eq!(expected, actual);
+
+        //If g++ does not exist, it should get clang
+        let actual = ModuleRenderer::new("cpp")
+            .cmd("g++ --version", None)
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(149).bold().paint("C++ v11.1.0-clang ")
+        ));
+
+        assert_eq!(expected, actual);
+
+        //If either does not exist print just C++
+        let actual = ModuleRenderer::new("cpp")
+            .cmd("g++ --version", None)
+            .cmd("clang --version", None)
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C++ ")));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_cxx_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.cxx"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("cpp").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(149).bold().paint("C++ v11.3.0-g++ ")
+        ));
+        assert_eq!(expected, actual);
+
+        //If g++ does not exist, it should get clang
+        let actual = ModuleRenderer::new("cpp")
+            .cmd("g++ --version", None)
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Fixed(149).bold().paint("C++ v11.1.0-clang ")
+        ));
+
+        assert_eq!(expected, actual);
+
+        //If either does not exist print just C++
+        let actual = ModuleRenderer::new("cpp")
+            .cmd("g++ --version", None)
+            .cmd("clang --version", None)
+            .path(dir.path())
+            .collect();
+
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C++ ")));
+
+        assert_eq!(expected, actual);
+
+        dir.close()
+    }
 }
