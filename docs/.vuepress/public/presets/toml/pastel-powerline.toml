@@ -1,5 +1,6 @@
 format = """
 [](#9A348E)\
+$os\
 $username\
 [](bg:#DA627D fg:#9A348E)\
 $directory\
@@ -29,12 +30,20 @@ $time\
 # Disable the blank line at the start of the prompt
 # add_newline = false
 
-# You can also replace your username with a neat symbol like  to save some space
+# You can also replace your username with a neat symbol like   or disable this
+# and use the os module below
 [username]
 show_always = true
 style_user = "bg:#9A348E"
 style_root = "bg:#9A348E"
 format = '[$user ]($style)'
+disabled = false
+
+# An alternative to the username module which displays a symbol that
+# represents the current operating system
+[os]
+style = "bg:#9A348E"
+disabled = true # Disabled by default
 
 [directory]
 style = "bg:#DA627D"

@@ -292,7 +292,7 @@ everyone remember what they are. Don't worry: most of them are quite simple!
       appropriate--this is a bare minimum).
 - [ ] Add the variable to the appropriate location in the "Default Prompt
       Format" section of the documentation
-- [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
+- [ ] Add an appropriate choice of options to each preset in `docs/.vuepress/public/presets/toml`
 - [ ] Update the config file schema by running `cargo run --features config-schema -- config-schema > .github/config-schema.json`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
       following:

@@ -1,21 +1,21 @@
-# Advanced Installation
+# Розширене встановлення
 
-To install starship, you need to do two things:
+Щоб установити starship, Ви мусите зробити дві речі:
 
-1. Get the **starship** binary onto your computer
+1. Завантажити бінарний файл **starship** на Ваш комп'ютер
 1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
 
-For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
+Для більшості користувачів чудово підійдуть інструкції на [головній сторінці](/guide/#🚀-installation). Однак, для деяких більш спеціалізованих платформ потрібні інші інструкції.
 
-There are so many platforms out there that they didn't fit into the main README.md file, so here are some installation instructions for other platforms from the community. Is yours not here? Please do add it here if you figure it out!
+Існує так багато платформ, що вони не вписуються в основний файл README.md, тож ось деякі інструкції зі встановлення від спільноти для інших платформ. Вашої тут немає? Будь ласка, додайте її сюди, якщо дізнаєтесь!
 
 ## [Chocolatey](https://chocolatey.org)
 
 ### Передумови
 
-Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
+Перейдіть на [сторінку встановлення Chocolatey](https://chocolatey.org/install) та дотримуйтесь інструкцій, щоб установити Chocolatey.
 
-### Installation
+### Установлення
 
 ```powershell
 choco install starship
@@ -29,7 +29,7 @@ choco install starship
 pkg install getconf
 ```
 
-### Installation
+### Установлення
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
@@ -37,9 +37,9 @@ curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.term
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)
 
-### Installation
+### Установлення
 
-On Funtoo Linux, starship can be installed from [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
+У Funtoo Linux starship можна встановити з [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) через Portage:
 
 ```sh
 emerge app-shells/starship
@@ -47,17 +47,17 @@ emerge app-shells/starship
 
 ## [Nix](https://nixos.wiki/wiki/Nix)
 
-### Getting the Binary
+### Завантаження бінарного файлу
 
-#### Imperatively
+#### Імперативно
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### Декларативно, для одного користувача, через [home-manager](https://github.com/nix-community/home-manager)
 
-Enable the `programs.starship` module in your `home.nix` file, and add your settings
+Увімкніть модуль `programs.starship` у Вашому файлі `home.nix` та додайте ваші налаштування
 
 ```nix
 {
@@ -78,15 +78,15 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 }
 ```
 
-then run
+потім виконайте
 
 ```sh
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### Декларативно, для цілої системи, з NixOS
 
-Add `pkgs.starship` to `environment.systemPackages` in your `configuration.nix`, then run
+Додайте `pkgs.starship` до `environment.systemPackages` у Вашій `configuration.nix`, після чого виконайте
 
 ```sh
 sudo nixos-rebuild switch

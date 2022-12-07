@@ -10,7 +10,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     use super::ModuleConfig;
     use crate::configs::container::ContainerConfig;
     use crate::formatter::StringFormatter;
-    use crate::utils::read_file;
+    use crate::utils::{self, read_file};
 
     pub fn container_name(context: &Context) -> Option<String> {
         use crate::utils::context_path;
@@ -26,7 +26,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OCI".into());
         }
 
-        if context_path(context, "/run/systemd/container").exists() {
+        // WSL with systemd will set the contents of this file to "wsl"
+        // Avoid showing the container module in that case
+        let systemd_path = context_path(context, "/run/systemd/container");
+        if utils::read_file(systemd_path)
+            .ok()
+            .filter(|s| s.trim() != "wsl")
+            .is_some()
+        {
             // systemd
             return Some("Systemd".into());
         }
@@ -101,8 +108,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
+    use crate::utils;
     use nu_ansi_term::Color;
-    use std::path::PathBuf;
+    use std::fs;
 
     #[test]
     fn test_none_if_disabled() {
@@ -120,8 +128,6 @@ mod tests {
     }
 
     fn containerenv(name: Option<&str>) -> std::io::Result<(Option<String>, Option<String>)> {
-        use std::io::Write;
-
         let renderer = ModuleRenderer::new("container")
             // For a custom config
             .config(toml::toml! {
@@ -131,18 +137,15 @@ mod tests {
 
         let root_path = renderer.root_path();
 
-        let mut containerenv = PathBuf::from(root_path);
+        let containerenv = root_path.join("run/.containerenv");
 
-        containerenv.push("run");
-        std::fs::DirBuilder::new()
-            .recursive(true)
-            .create(&containerenv)?;
+        fs::create_dir_all(containerenv.parent().unwrap())?;
 
-        containerenv.push(".containerenv");
-        let mut file = std::fs::File::create(&containerenv)?;
-        if let Some(name) = name {
-            file.write_all(format!("image=\"{}\"\n", name).as_bytes())?;
-        }
+        let contents = match name {
+            Some(name) => format!("image=\"{name}\"\n"),
+            None => String::new(),
+        };
+        utils::write_file(&containerenv, contents)?;
 
         // The output of the module
         let actual = renderer
@@ -176,6 +179,73 @@ mod tests {
     #[cfg(target_os = "linux")]
     fn test_containerenv_fedora() -> std::io::Result<()> {
         let (actual, expected) = containerenv(Some("fedora-toolbox:35"))?;
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
+
+        Ok(())
+    }
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_containerenv_systemd() -> std::io::Result<()> {
+        let renderer = ModuleRenderer::new("container")
+            // For a custom config
+            .config(toml::toml! {
+               [container]
+               disabled = false
+            });
+
+        let root_path = renderer.root_path();
+
+        let systemd_path = root_path.join("run/systemd/container");
+
+        fs::create_dir_all(systemd_path.parent().unwrap())?;
+        utils::write_file(&systemd_path, "systemd-nspawn\n")?;
+
+        // The output of the module
+        let actual = renderer
+            // Run the module and collect the output
+            .collect();
+
+        // The value that should be rendered by the module.
+        let expected = Some(format!(
+            "{} ",
+            Color::Red
+                .bold()
+                .dimmed()
+                .paint(format!("⬢ [{}]", "Systemd"))
+        ));
+
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
+
+        Ok(())
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_containerenv_wsl() -> std::io::Result<()> {
+        let renderer = ModuleRenderer::new("container")
+            // For a custom config
+            .config(toml::toml! {
+               [container]
+               disabled = false
+            });
+
+        let root_path = renderer.root_path();
+
+        let systemd_path = root_path.join("run/systemd/container");
+
+        fs::create_dir_all(systemd_path.parent().unwrap())?;
+        utils::write_file(&systemd_path, "wsl\n")?;
+
+        // The output of the module
+        let actual = renderer
+            // Run the module and collect the output
+            .collect();
+
+        // The value that should be rendered by the module.
+        let expected = None;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);

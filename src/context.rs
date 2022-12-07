@@ -631,11 +631,11 @@ fn get_remote_repository_info(
     let branch_name = branch_name?;
     let branch = repository
         .branch_remote_ref(branch_name)
-        .and_then(|r| r.ok())
+        .and_then(std::result::Result::ok)
         .map(|r| r.shorten().to_string());
     let name = repository
         .branch_remote_name(branch_name)
-        .map(|n| n.to_string());
+        .map(|n| n.as_bstr().to_string());
 
     Some(Remote { branch, name })
 }
@@ -849,7 +849,7 @@ mod tests {
 
         let tmp_dir = tempfile::TempDir::new()?;
         let path = tmp_dir.path().join("a/xxx/yyy");
-        fs::create_dir_all(&path)?;
+        fs::create_dir_all(path)?;
 
         // Set up a mock symlink
         let path_actual = tmp_dir.path().join("a/xxx");

@@ -154,7 +154,7 @@ mod tests {
         // Create a fake corrupted mercurial repo.
         let hgdir = tempdir.path().join(".hg");
         fs::create_dir(&hgdir)?;
-        fs::write(&hgdir.join("requires"), "fake-corrupted-repo")?;
+        fs::write(hgdir.join("requires"), "fake-corrupted-repo")?;
 
         expect_hg_branch_with_config(
             tempdir.path(),
@@ -336,7 +336,7 @@ mod tests {
     fn run_hg(args: &[&str], repo_dir: &Path) -> io::Result<()> {
         create_command("hg")?
             .args(args)
-            .current_dir(&repo_dir)
+            .current_dir(repo_dir)
             .output()?;
         Ok(())
     }

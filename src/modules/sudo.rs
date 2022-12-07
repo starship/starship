@@ -74,8 +74,8 @@ mod tests {
             .cmd(
                 "sudo -n true",
                 Some(CommandOutput {
-                    stdout: "".to_owned(),
-                    stderr: "".to_owned(),
+                    stdout: String::new(),
+                    stderr: String::new(),
                 }),
             )
             .config(toml::toml! {
@@ -96,8 +96,8 @@ mod tests {
             .cmd(
                 "sudo -n true",
                 Some(CommandOutput {
-                    stdout: "".to_owned(),
-                    stderr: "".to_owned(),
+                    stdout: String::new(),
+                    stderr: String::new(),
                 }),
             )
             .config(toml::toml! {

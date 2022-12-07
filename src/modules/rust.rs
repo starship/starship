@@ -114,7 +114,7 @@ impl RustToolingEnvironmentInfo {
                         // Depending on the source of the toolchain override, it might not have been a full toolchain name ("stable" or "nightly").
                         log::trace!("Running rustup {toolchain} rustc --version");
                         create_command("rustup").map(|mut cmd| {
-                            cmd.args(&["run", toolchain, "rustc", "--version"]);
+                            cmd.args(["run", toolchain, "rustc", "--version"]);
                             cmd
                         })
                     })
@@ -138,9 +138,7 @@ impl RustToolingEnvironmentInfo {
             .get_or_init(|| {
                 let Output { status, stdout, .. } = create_command("rustc")
                     .and_then(|mut cmd| {
-                        cmd.args(&["-Vv"])
-                            .current_dir(&context.current_dir)
-                            .output()
+                        cmd.args(["-Vv"]).current_dir(&context.current_dir).output()
                     })
                     .ok()?;
                 if !status.success() {

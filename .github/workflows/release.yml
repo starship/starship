@@ -103,7 +103,7 @@ jobs:
         continue-on-error: true
         # aarch64 is only supported in wix 4.0 development builds
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        run: cargo install --version 0.3.3 cargo-wix
+        run: cargo install --version 0.3.4 cargo-wix
         env:
           # cargo-wix does not require static crt
           RUSTFLAGS: ''
@@ -322,6 +322,21 @@ jobs:
           $version = '${{ needs.release_please.outputs.tag_name }}'.replace('v', '')
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GH_PAT }}
+
+  choco_update:
+   name: Update Chocolatey Package
+   runs-on: windows-latest
+   needs: [release_please, github_build, upload_artifacts]
+   if: ${{ needs.release_please.outputs.release_created == 'true' }}
+   steps:
+    - name: Setup | Checkout
+      uses: actions/checkout@v3
+    - name: Setup | Artifacts
+      uses: actions/download-artifact@v3
+    - run: pwsh ./install/windows/choco/update.ps1
+      env:
+        STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
+        PUSH_TOKEN:  ${{ secrets.CHOCO_TOKEN }}
 
   merge_crowdin_pr:
     name: Merge Crowdin PR

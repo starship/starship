@@ -48,6 +48,40 @@ pub fn read_file<P: AsRef<Path> + Debug>(file_name: P) -> Result<String> {
     result
 }
 
+/// Write a string to a file
+#[cfg(test)]
+pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Result<()> {
+    use std::io::Write;
+
+    let file_name = file_name.as_ref();
+    let text = text.as_ref();
+
+    log::trace!("Trying to write {text:?} to {file_name:?}");
+    let mut file = match std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(file_name)
+    {
+        Ok(file) => file,
+        Err(err) => {
+            log::warn!("Error creating file: {:?}", err);
+            return Err(err);
+        }
+    };
+
+    match file.write_all(text.as_bytes()) {
+        Ok(_) => {
+            log::trace!("File {file_name:?} written successfully");
+        }
+        Err(err) => {
+            log::warn!("Error writing to file: {err:?}");
+            return Err(err);
+        }
+    }
+    file.sync_all()
+}
+
 /// Reads command output from stderr or stdout depending on to which stream program streamed it's output
 pub fn get_command_string_output(command: CommandOutput) -> String {
     if command.stdout.is_empty() {
@@ -433,17 +467,17 @@ pub fn wrap_seq_for_shell(
             if x == escape_begin && !escaped {
                 escaped = true;
                 match shell {
-                    Shell::Bash => format!("{}{}", BASH_BEG, escape_begin),
-                    Shell::Zsh => format!("{}{}", ZSH_BEG, escape_begin),
-                    Shell::Tcsh => format!("{}{}", TCSH_BEG, escape_begin),
+                    Shell::Bash => format!("{BASH_BEG}{escape_begin}"),
+                    Shell::Zsh => format!("{ZSH_BEG}{escape_begin}"),
+                    Shell::Tcsh => format!("{TCSH_BEG}{escape_begin}"),
                     _ => x.to_string(),
                 }
             } else if x == escape_end && escaped {
                 escaped = false;
                 match shell {
-                    Shell::Bash => format!("{}{}", escape_end, BASH_END),
-                    Shell::Zsh => format!("{}{}", escape_end, ZSH_END),
-                    Shell::Tcsh => format!("{}{}", escape_end, TCSH_END),
+                    Shell::Bash => format!("{escape_end}{BASH_END}"),
+                    Shell::Zsh => format!("{escape_end}{ZSH_END}"),
+                    Shell::Tcsh => format!("{escape_end}{TCSH_END}"),
                     _ => x.to_string(),
                 }
             } else {
@@ -559,7 +593,7 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
 fn render_time_component((component, suffix): (&u128, &&str)) -> String {
     match component {
         0 => String::new(),
-        n => format!("{}{}", n, suffix),
+        n => format!("{n}{suffix}"),
     }
 }
 
@@ -750,7 +784,7 @@ mod tests {
         };
         assert_eq!(get_command_string_output(case1), "stdout");
         let case2 = CommandOutput {
-            stdout: String::from(""),
+            stdout: String::new(),
             stderr: String::from("stderr"),
         };
         assert_eq!(get_command_string_output(case2), "stderr");

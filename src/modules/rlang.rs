@@ -144,7 +144,7 @@ https://www.gnu.org/licenses/."#;
     fn folder_with_rproj_user_folder() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let rprofile = dir.path().join(".Rproj.user");
-        fs::create_dir_all(&rprofile)?;
+        fs::create_dir_all(rprofile)?;
         check_r_render(&dir);
         dir.close()
     }

@@ -31,7 +31,9 @@ mod git_state;
 mod git_status;
 mod golang;
 mod gradle;
+mod guix_shell;
 mod haskell;
+mod haxe;
 mod helm;
 mod hg_branch;
 mod hostname;
@@ -51,6 +53,7 @@ mod nodejs;
 mod ocaml;
 mod opa;
 mod openstack;
+mod os;
 mod package;
 mod perl;
 mod php;
@@ -128,7 +131,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_status" => git_status::module(context),
             "golang" => golang::module(context),
             "gradle" => gradle::module(context),
+            "guix_shell" => guix_shell::module(context),
             "haskell" => haskell::module(context),
+            "haxe" => haxe::module(context),
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
@@ -148,6 +153,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "ocaml" => ocaml::module(context),
             "opa" => opa::module(context),
             "openstack" => openstack::module(context),
+            "os" => os::module(context),
             "package" => package::module(context),
             "perl" => perl::module(context),
             "php" => php::module(context),
@@ -182,7 +188,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
                 custom::module(custom.strip_prefix("custom.").unwrap(), context)
             }
             _ => {
-                eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
+                eprintln!("Error: Unknown module {module}. Use starship module --list to list out all supported modules.");
                 None
             }
         }
@@ -236,7 +242,9 @@ pub fn description(module: &str) -> &'static str {
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
         "gradle" => "The currently installed version of Gradle",
+        "guix_shell" => "The guix-shell environment",
         "haskell" => "The selected version of the Haskell toolchain",
+        "haxe" => "The currently installed version of Haxe",
         "helm" => "The currently installed version of Helm",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",
@@ -258,6 +266,7 @@ pub fn description(module: &str) -> &'static str {
         "ocaml" => "The currently installed version of OCaml",
         "opa" => "The currently installed version of Open Platform Agent",
         "openstack" => "The current OpenStack cloud and project",
+        "os" => "The current operating system",
         "package" => "The package version of the current directory's project",
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
@@ -296,7 +305,7 @@ mod test {
     #[test]
     fn all_modules_have_description() {
         for module in ALL_MODULES {
-            println!("Checking if {:?} has a description", module);
+            println!("Checking if {module:?} has a description");
             assert_ne!(description(module), "<no description>");
         }
     }

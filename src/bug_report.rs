@@ -1,5 +1,6 @@
 use crate::shadow;
 use crate::utils::{self, exec_cmd};
+use nu_ansi_term::Style;
 
 use std::fs;
 use std::path::PathBuf;
@@ -17,16 +18,33 @@ pub fn create() {
         starship_config: get_starship_config(),
     };
 
-    let link = make_github_issue_link(environment);
+    let issue_body = get_github_issue_body(&environment);
 
-    if open::that(&link).is_ok() {
-        println!("Take a look at your browser. A GitHub issue has been populated with your configuration.");
-        println!("If your browser has failed to open, please click this link:\n");
+    println!(
+        "{}\n{issue_body}\n\n",
+        Style::new().bold().paint("Generated bug report:")
+    );
+    println!("Forward the pre-filled report above to GitHub in your browser?");
+    println!("{} To avoid any sensitive data from being exposed, please review the included information before proceeding. Data forwarded to GitHub is subject to GitHub's privacy policy.", Style::new().bold().paint("Warning:"));
+    println!(
+        "Enter `{}` to accept, or anything else to decline, and `{}` to confirm your choice:\n",
+        Style::new().bold().paint("y"),
+        Style::new().bold().paint("Enter key")
+    );
+
+    let mut input = String::new();
+    let _ = std::io::stdin().read_line(&mut input);
+
+    if input.trim().to_lowercase() == "y" {
+        let link = make_github_issue_link(&issue_body);
+        if let Err(e) = open::that(&link) {
+            println!("Failed to open issue report in your browser: {}", e);
+            println!("Please copy the above report and open an issue manually, or try opening the following link:\n{link}");
+        }
     } else {
-        println!("Click this link to create a GitHub issue populated with your configuration:\n");
+        println!("Will not open an issue in your browser! Please copy the above report and open an issue manually.");
     }
-
-    println!("{}", link);
+    println!("Thanks for using the Starship bug report tool!");
 }
 
 const UNKNOWN_SHELL: &str = "<unknown shell>";
@@ -50,7 +68,7 @@ fn get_pkg_branch_tag() -> &'static str {
     shadow::BRANCH
 }
 
-fn make_github_issue_link(environment: Environment) -> String {
+fn get_github_issue_body(environment: &Environment) -> String {
     let shell_syntax = match environment.shell_info.name.as_ref() {
         "powershell" | "pwsh" => "pwsh",
         "fish" => "fish",
@@ -60,7 +78,7 @@ fn make_github_issue_link(environment: Environment) -> String {
         _ => "bash",
     };
 
-    let body = urlencoding::encode(&format!("#### Current Behavior
+    format!("#### Current Behavior
 <!-- A clear and concise description of the behavior. -->
 
 #### Expected Behavior
@@ -109,13 +127,16 @@ fn make_github_issue_link(environment: Environment) -> String {
         build_rust_channel =  shadow::BUILD_RUST_CHANNEL,
         build_time =  shadow::BUILD_TIME,
         shell_syntax = shell_syntax,
-    ))
-        .replace("%20", "+");
+    )
+}
+
+fn make_github_issue_link(body: &str) -> String {
+    let escaped = urlencoding::encode(body).replace("%20", "+");
 
     format!(
         "https://github.com/starship/starship/issues/new?template={}&body={}",
         urlencoding::encode("Bug_report.md"),
-        body
+        escaped
     )
     .chars()
     .take(GITHUB_CHAR_LIMIT)
@@ -225,11 +246,11 @@ fn get_shell_version(shell: &str) -> String {
     let time_limit = Duration::from_millis(500);
     match shell {
         "powershell" => exec_cmd(
-            &shell,
+            shell,
             &["(Get-Host | Select Version | Format-Table -HideTableHeaders | Out-String).trim()"],
             time_limit,
         ),
-        _ => exec_cmd(&shell, &["--version"], time_limit),
+        _ => exec_cmd(shell, &["--version"], time_limit),
     }
     .map_or_else(
         || UNKNOWN_VERSION.to_string(),
@@ -259,7 +280,8 @@ mod tests {
             starship_config: "No Starship config".to_string(),
         };
 
-        let link = make_github_issue_link(environment);
+        let body = get_github_issue_body(&environment);
+        let link = make_github_issue_link(&body);
 
         assert!(link.contains(clap::crate_version!()));
         assert!(link.contains("Linux"));

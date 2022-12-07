@@ -34,7 +34,9 @@ pub mod git_state;
 pub mod git_status;
 pub mod go;
 pub mod gradle;
+pub mod guix_shell;
 pub mod haskell;
+pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
@@ -54,6 +56,7 @@ pub mod nodejs;
 pub mod ocaml;
 pub mod opa;
 pub mod openstack;
+pub mod os;
 pub mod package;
 pub mod perl;
 pub mod php;
@@ -164,7 +167,11 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     gradle: gradle::GradleConfig<'a>,
     #[serde(borrow)]
+    guix_shell: guix_shell::GuixShellConfig<'a>,
+    #[serde(borrow)]
     haskell: haskell::HaskellConfig<'a>,
+    #[serde(borrow)]
+    haxe: haxe::HaxeConfig<'a>,
     #[serde(borrow)]
     helm: helm::HelmConfig<'a>,
     #[serde(borrow)]
@@ -202,6 +209,8 @@ pub struct FullConfig<'a> {
     opa: opa::OpaConfig<'a>,
     #[serde(borrow)]
     openstack: openstack::OspConfig<'a>,
+    #[serde(borrow)]
+    os: os::OSConfig<'a>,
     #[serde(borrow)]
     package: package::PackageConfig<'a>,
     #[serde(borrow)]

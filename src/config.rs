@@ -48,7 +48,17 @@ impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
     /// Create `ValueDeserializer` wrapper and use it to call `Deserialize::deserialize` on it.
     fn from_config(config: &'a Value) -> Result<Self, ValueError> {
         let deserializer = ValueDeserializer::new(config);
-        T::deserialize(deserializer)
+        T::deserialize(deserializer).or_else(|err| {
+            // If the error is an unrecognized key, print a warning and run
+            // deserialize ignoring that error. Otherwise, just return the error
+            if err.to_string().contains("Unknown key") {
+                log::warn!("{}", err);
+                let deserializer2 = ValueDeserializer::new(config).with_allow_unknown_keys();
+                T::deserialize(deserializer2)
+            } else {
+                Err(err)
+            }
+        })
     }
 }
 
@@ -141,7 +151,7 @@ impl StarshipConfig {
     fn config_from_file() -> Option<Value> {
         let file_path = get_config_path()?;
 
-        let toml_content = match utils::read_file(&file_path) {
+        let toml_content = match utils::read_file(file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
@@ -580,6 +590,24 @@ mod tests {
         assert_eq!(rust_config.switch_a, Switch::On);
         assert_eq!(rust_config.switch_b, Switch::Off);
         assert_eq!(rust_config.switch_c, Switch::Off);
+    }
+
+    #[test]
+    fn test_load_unknown_key_config() {
+        #[derive(Clone, Default, Deserialize)]
+        #[serde(default)]
+        struct TestConfig<'a> {
+            pub foo: &'a str,
+        }
+
+        let config = toml::toml! {
+            foo = "test"
+            bar = "ignore me"
+        };
+        let rust_config = TestConfig::from_config(&config);
+
+        assert!(rust_config.is_ok());
+        assert_eq!(rust_config.unwrap().foo, "test");
     }
 
     #[test]

@@ -16,7 +16,7 @@
         "profile_aliases": {},
         "region_aliases": {},
         "style": "bold yellow",
-        "symbol": "☁️  "
+        "symbol": "Ôÿü´©Å  "
       },
       "allOf": [
         {
@@ -29,7 +29,7 @@
         "disabled": true,
         "format": "on [$symbol($subscription)]($style) ",
         "style": "blue bold",
-        "symbol": "ﴃ "
+        "symbol": "´┤â "
       },
       "allOf": [
         {
@@ -39,9 +39,9 @@
     },
     "battery": {
       "default": {
-        "charging_symbol": " ",
+        "charging_symbol": "´ûâ ",
         "disabled": false,
-        "discharging_symbol": " ",
+        "discharging_symbol": "´ûé ",
         "display": [
           {
             "charging_symbol": null,
@@ -50,10 +50,10 @@
             "threshold": 10
           }
         ],
-        "empty_symbol": " ",
+        "empty_symbol": "´ûì ",
         "format": "[$symbol$percentage]($style) ",
-        "full_symbol": " ",
-        "unknown_symbol": " "
+        "full_symbol": "´ò© ",
+        "unknown_symbol": "´ò╝ "
       },
       "allOf": [
         {
@@ -73,7 +73,7 @@
         "disabled": false,
         "format": "with [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "🦬 ",
+        "symbol": "­ƒª¼ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -93,7 +93,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold red",
-        "symbol": "🍞 ",
+        "symbol": "­ƒì× ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -139,13 +139,13 @@
     "character": {
       "default": {
         "disabled": false,
-        "error_symbol": "[❯](bold red)",
+        "error_symbol": "[ÔØ»](bold red)",
         "format": "$symbol ",
-        "success_symbol": "[❯](bold green)",
-        "vimcmd_replace_one_symbol": "[❮](bold purple)",
-        "vimcmd_replace_symbol": "[❮](bold purple)",
-        "vimcmd_symbol": "[❮](bold green)",
-        "vimcmd_visual_symbol": "[❮](bold yellow)"
+        "success_symbol": "[ÔØ»](bold green)",
+        "vimcmd_replace_one_symbol": "[ÔØ«](bold purple)",
+        "vimcmd_replace_symbol": "[ÔØ«](bold purple)",
+        "vimcmd_symbol": "[ÔØ«](bold green)",
+        "vimcmd_visual_symbol": "[ÔØ«](bold yellow)"
       },
       "allOf": [
         {
@@ -164,7 +164,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "△ ",
+        "symbol": "Ôû│ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -202,7 +202,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "⚙️ ",
+        "symbol": "ÔÜÖ´©Å ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -217,7 +217,7 @@
         "format": "via [$symbol$environment]($style) ",
         "ignore_base": true,
         "style": "green bold",
-        "symbol": "🅒 ",
+        "symbol": "­ƒàÆ ",
         "truncation_length": 1
       },
       "allOf": [
@@ -231,7 +231,7 @@
         "disabled": false,
         "format": "[$symbol \\[$name\\]]($style) ",
         "style": "red bold dimmed",
-        "symbol": "⬢"
+        "symbol": "Ô¼ó"
       },
       "allOf": [
         {
@@ -251,7 +251,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold red",
-        "symbol": "🔮 ",
+        "symbol": "­ƒö« ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -270,7 +270,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold cyan",
-        "symbol": "Λ ",
+        "symbol": "╬ø ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -295,7 +295,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "🎯 ",
+        "symbol": "­ƒÄ» ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -319,7 +319,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "green bold",
-        "symbol": "🦕 ",
+        "symbol": "­ƒªò ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -330,13 +330,14 @@
     },
     "directory": {
       "default": {
+        "before_repo_root_style": null,
         "disabled": false,
         "fish_style_pwd_dir_length": 0,
         "format": "[$path]($style)[$read_only]($read_only_style) ",
         "home_symbol": "~",
-        "read_only": "🔒",
+        "read_only": "­ƒöÆ",
         "read_only_style": "red",
-        "repo_root_format": "[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
+        "repo_root_format": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
         "repo_root_style": null,
         "style": "cyan bold",
         "substitutions": {},
@@ -365,7 +366,7 @@
         "format": "via [$symbol$context]($style) ",
         "only_with_files": true,
         "style": "blue bold",
-        "symbol": "🐳 "
+        "symbol": "­ƒÉ│ "
       },
       "allOf": [
         {
@@ -389,7 +390,7 @@
         ],
         "detect_folders": [],
         "disabled": false,
-        "format": "via [$symbol($version )(🎯 $tfm )]($style)",
+        "format": "via [$symbol($version )(­ƒÄ» $tfm )]($style)",
         "heuristic": true,
         "style": "blue bold",
         "symbol": ".NET ",
@@ -411,7 +412,7 @@
         "disabled": false,
         "format": "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
         "style": "bold purple",
-        "symbol": "💧 ",
+        "symbol": "­ƒÆº ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -436,7 +437,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "cyan bold",
-        "symbol": "🌳 ",
+        "symbol": "­ƒî│ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -463,7 +464,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold red",
-        "symbol": " ",
+        "symbol": "¯×▒ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -491,7 +492,7 @@
         "project_aliases": {},
         "region_aliases": {},
         "style": "bold blue",
-        "symbol": "☁️  "
+        "symbol": "Ôÿü´©Å  "
       },
       "allOf": [
         {
@@ -507,9 +508,9 @@
         "ignore_branches": [],
         "only_attached": false,
         "style": "bold purple",
-        "symbol": " ",
+        "symbol": "¯éá ",
         "truncation_length": 9223372036854775807,
-        "truncation_symbol": "…"
+        "truncation_symbol": "ÔÇª"
       },
       "allOf": [
         {
@@ -526,7 +527,7 @@
         "style": "green bold",
         "tag_disabled": true,
         "tag_max_candidates": 0,
-        "tag_symbol": " 🏷  "
+        "tag_symbol": " ­ƒÅÀ  "
       },
       "allOf": [
         {
@@ -569,16 +570,16 @@
     },
     "git_status": {
       "default": {
-        "ahead": "⇡",
-        "behind": "⇣",
+        "ahead": "Ôçí",
+        "behind": "Ôçú",
         "conflicted": "=",
-        "deleted": "✘",
+        "deleted": "Ô£ÿ",
         "disabled": false,
-        "diverged": "⇕",
+        "diverged": "Ôçò",
         "format": "([\\[$all_status$ahead_behind\\]]($style) )",
         "ignore_submodules": false,
         "modified": "!",
-        "renamed": "»",
+        "renamed": "┬╗",
         "staged": "+",
         "stashed": "\\$",
         "style": "red bold",
@@ -611,7 +612,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold cyan",
-        "symbol": "🐹 ",
+        "symbol": "­ƒÉ╣ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -634,12 +635,25 @@
         "format": "via [$symbol($version )]($style)",
         "recursive": false,
         "style": "bold bright-cyan",
-        "symbol": "🅶 ",
+        "symbol": "­ƒàÂ ",
         "version_format": "v${raw}"
       },
       "allOf": [
         {
           "$ref": "#/definitions/GradleConfig"
+        }
+      ]
+    },
+    "guix_shell": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol]($style) ",
+        "style": "yellow bold",
+        "symbol": "­ƒÉâ "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GuixShellConfig"
         }
       ]
     },
@@ -658,12 +672,39 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold purple",
-        "symbol": "λ ",
+        "symbol": "╬╗ ",
         "version_format": "v${raw}"
       },
       "allOf": [
         {
           "$ref": "#/definitions/HaskellConfig"
+        }
+      ]
+    },
+    "haxe": {
+      "default": {
+        "detect_extensions": [
+          "hx",
+          "hxml"
+        ],
+        "detect_files": [
+          "haxelib.json",
+          "hxformat.json",
+          ".haxerc"
+        ],
+        "detect_folders": [
+          ".haxelib",
+          "haxe_libraries"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold fg:202",
+        "symbol": "Ôîÿ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HaxeConfig"
         }
       ]
     },
@@ -678,7 +719,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold white",
-        "symbol": "⎈ ",
+        "symbol": "ÔÄê ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -692,9 +733,9 @@
         "disabled": true,
         "format": "on [$symbol$branch]($style) ",
         "style": "bold purple",
-        "symbol": " ",
+        "symbol": "¯éá ",
         "truncation_length": 9223372036854775807,
-        "truncation_symbol": "…"
+        "truncation_symbol": "ÔÇª"
       },
       "allOf": [
         {
@@ -707,7 +748,7 @@
         "disabled": false,
         "format": "[$ssh_symbol$hostname]($style) in ",
         "ssh_only": true,
-        "ssh_symbol": "🌐 ",
+        "ssh_symbol": "­ƒîÉ ",
         "style": "green dimmed bold",
         "trim_at": "."
       },
@@ -740,7 +781,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "red dimmed",
-        "symbol": "☕ ",
+        "symbol": "Ôÿò ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -755,7 +796,7 @@
         "format": "[$symbol$number]($style) ",
         "number_threshold": 2,
         "style": "bold blue",
-        "symbol": "✦",
+        "symbol": "Ô£ª",
         "symbol_threshold": 1,
         "threshold": 1
       },
@@ -778,7 +819,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold purple",
-        "symbol": "ஃ ",
+        "symbol": "Ó«â ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -799,7 +840,7 @@
         "format": "via [$symbol($version )]($style)",
         "kotlin_binary": "kotlin",
         "style": "bold blue",
-        "symbol": "🅺 ",
+        "symbol": "­ƒà║ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -817,7 +858,7 @@
         "disabled": true,
         "format": "[$symbol$context( \\($namespace\\))]($style) in ",
         "style": "cyan bold",
-        "symbol": "☸ ",
+        "symbol": "Ôÿ© ",
         "user_aliases": {}
       },
       "allOf": [
@@ -864,7 +905,7 @@
         "format": "via [$symbol($version )]($style)",
         "lua_binary": "lua",
         "style": "bold blue",
-        "symbol": "🌙 ",
+        "symbol": "­ƒîÖ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -878,7 +919,7 @@
         "disabled": true,
         "format": "via $symbol[$ram( | $swap)]($style) ",
         "style": "white bold dimmed",
-        "symbol": "🐏 ",
+        "symbol": "­ƒÉÅ ",
         "threshold": 75
       },
       "allOf": [
@@ -892,9 +933,9 @@
         "disabled": false,
         "format": "via [$symbol$project]($style) ",
         "style": "blue bold",
-        "symbol": "⬢ ",
+        "symbol": "Ô¼ó ",
         "truncation_length": 4294967295,
-        "truncation_symbol": "…"
+        "truncation_symbol": "ÔÇª"
       },
       "allOf": [
         {
@@ -916,7 +957,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "yellow bold",
-        "symbol": "👑 ",
+        "symbol": "­ƒææ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -932,7 +973,7 @@
         "impure_msg": "impure",
         "pure_msg": "pure",
         "style": "bold blue",
-        "symbol": "❄️  "
+        "symbol": "ÔØä´©Å  "
       },
       "allOf": [
         {
@@ -962,7 +1003,7 @@
         "format": "via [$symbol($version )]($style)",
         "not_capable_style": "bold red",
         "style": "bold green",
-        "symbol": " ",
+        "symbol": "¯£ÿ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -996,7 +1037,7 @@
         "global_switch_indicator": "",
         "local_switch_indicator": "*",
         "style": "bold yellow",
-        "symbol": "🐫 ",
+        "symbol": "­ƒÉ½ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1015,7 +1056,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "🪖  ",
+        "symbol": "­ƒ¬û  ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1029,11 +1070,61 @@
         "disabled": false,
         "format": "on [$symbol$cloud(\\($project\\))]($style) ",
         "style": "bold yellow",
-        "symbol": "☁️  "
+        "symbol": "Ôÿü´©Å  "
       },
       "allOf": [
         {
           "$ref": "#/definitions/OspConfig"
+        }
+      ]
+    },
+    "os": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol]($style)",
+        "style": "bold white",
+        "symbols": {
+          "Alpine": "­ƒÅö´©Å ",
+          "Amazon": "­ƒÖé ",
+          "Android": "­ƒñû ",
+          "Arch": "­ƒÄù´©Å ",
+          "CentOS": "­ƒÆá ",
+          "Debian": "­ƒîÇ ",
+          "DragonFly": "­ƒÉë ",
+          "Emscripten": "­ƒöù ",
+          "EndeavourOS": "­ƒÜÇ ",
+          "Fedora": "­ƒÄ® ",
+          "FreeBSD": "­ƒÿê ",
+          "Garuda": "­ƒªà ",
+          "Gentoo": "­ƒù£´©Å ",
+          "HardenedBSD": "­ƒøí´©Å ",
+          "Illumos": "­ƒÉª ",
+          "Linux": "­ƒÉº ",
+          "Macos": "­ƒìÄ ",
+          "Manjaro": "­ƒÑ¡ ",
+          "Mariner": "­ƒîè ",
+          "MidnightBSD": "­ƒîÿ ",
+          "Mint": "­ƒî┐ ",
+          "NetBSD": "­ƒÜ® ",
+          "NixOS": "ÔØä´©Å ",
+          "OpenBSD": "­ƒÉí ",
+          "OracleLinux": "­ƒª┤ ",
+          "Pop": "­ƒì¡ ",
+          "Raspbian": "­ƒìô ",
+          "RedHatEnterprise": "­ƒÄ® ",
+          "Redhat": "­ƒÄ® ",
+          "Redox": "­ƒº¬ ",
+          "SUSE": "­ƒªÄ ",
+          "Solus": "ÔøÁ ",
+          "Ubuntu": "­ƒÄ» ",
+          "Unknown": "ÔØô ",
+          "Windows": "­ƒ¬ƒ ",
+          "openSUSE": "­ƒªÄ "
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OSConfig"
         }
       ]
     },
@@ -1043,7 +1134,7 @@
         "display_private": false,
         "format": "is [$symbol$version]($style) ",
         "style": "208 bold",
-        "symbol": "📦 ",
+        "symbol": "­ƒôª ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1072,7 +1163,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "149 bold",
-        "symbol": "🐪 ",
+        "symbol": "­ƒÉ¬ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1094,7 +1185,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "147 bold",
-        "symbol": "🐘 ",
+        "symbol": "­ƒÉÿ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1109,7 +1200,7 @@
         "format": "via [$symbol($username@)$stack]($style) ",
         "search_upwards": true,
         "style": "bold 5",
-        "symbol": " ",
+        "symbol": "´å▓ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1164,7 +1255,7 @@
           "python2"
         ],
         "style": "yellow bold",
-        "symbol": "🐍 ",
+        "symbol": "­ƒÉì ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1189,7 +1280,7 @@
         "disabled": false,
         "format": "via [$symbol($version-$vm_version )]($style)",
         "style": "149 bold",
-        "symbol": "🦋 ",
+        "symbol": "­ƒªï ",
         "version_format": "${raw}"
       },
       "allOf": [
@@ -1209,7 +1300,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "red bold",
-        "symbol": "🔺 ",
+        "symbol": "­ƒö║ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1236,7 +1327,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "blue bold",
-        "symbol": "📐 ",
+        "symbol": "­ƒôÉ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1262,7 +1353,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold red",
-        "symbol": "💎 ",
+        "symbol": "­ƒÆÄ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1283,7 +1374,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold red",
-        "symbol": "🦀 ",
+        "symbol": "­ƒªÇ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1309,7 +1400,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "red bold",
-        "symbol": "🆂 ",
+        "symbol": "­ƒåé ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1347,7 +1438,7 @@
         "format": "[$symbol$shlvl]($style) ",
         "repeat": false,
         "style": "bold yellow",
-        "symbol": "↕️  ",
+        "symbol": "Ôåò´©Å  ",
         "threshold": 2
       },
       "allOf": [
@@ -1374,7 +1465,7 @@
         "disabled": false,
         "format": "via [$symbol$environment]($style) ",
         "style": "blue bold",
-        "symbol": "🅢 ",
+        "symbol": "­ƒàó ",
         "truncation_length": 1
       },
       "allOf": [
@@ -1388,17 +1479,17 @@
         "disabled": true,
         "format": "[$symbol$status]($style) ",
         "map_symbol": false,
-        "not_executable_symbol": "🚫",
-        "not_found_symbol": "🔍",
+        "not_executable_symbol": "­ƒÜ½",
+        "not_found_symbol": "­ƒöì",
         "pipestatus": false,
         "pipestatus_format": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
         "pipestatus_separator": "|",
         "recognize_signal_code": true,
-        "sigint_symbol": "🧱",
-        "signal_symbol": "⚡",
+        "sigint_symbol": "­ƒº▒",
+        "signal_symbol": "ÔÜí",
         "style": "bold red",
         "success_symbol": "",
-        "symbol": "❌"
+        "symbol": "ÔØî"
       },
       "allOf": [
         {
@@ -1412,7 +1503,7 @@
         "disabled": true,
         "format": "[as $symbol]($style)",
         "style": "bold blue",
-        "symbol": "🧙 "
+        "symbol": "­ƒºÖ "
       },
       "allOf": [
         {
@@ -1432,7 +1523,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold 202",
-        "symbol": "🐦 ",
+        "symbol": "­ƒÉª ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1455,7 +1546,7 @@
         "disabled": false,
         "format": "via [$symbol$workspace]($style) ",
         "style": "bold 105",
-        "symbol": "💠 ",
+        "symbol": "­ƒÆá ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1503,7 +1594,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "cyan bold",
-        "symbol": "⍱ ",
+        "symbol": "Ôì▒ ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1558,7 +1649,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold yellow",
-        "symbol": "↯ ",
+        "symbol": "Ôå» ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -1583,7 +1674,7 @@
       "type": "string"
     },
     "continuation_prompt": {
-      "default": "[∙](bright-black) ",
+      "default": "[ÔêÖ](bright-black) ",
       "type": "string"
     },
     "scan_timeout": {
@@ -1623,7 +1714,7 @@
   "definitions": {
     "AwsConfig": {
       "title": "AWS",
-      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
       "type": "object",
       "properties": {
         "format": {
@@ -1633,7 +1724,7 @@
         },
         "symbol": {
           "description": "The symbol used before displaying the current AWS profile.",
-          "default": "☁️  ",
+          "default": "Ôÿü´©Å  ",
           "type": "string"
         },
         "style": {
@@ -1683,7 +1774,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "ﴃ ",
+          "default": "´┤â ",
           "type": "string"
         },
         "style": {
@@ -1701,23 +1792,23 @@
       "type": "object",
       "properties": {
         "full_symbol": {
-          "default": " ",
+          "default": "´ò© ",
           "type": "string"
         },
         "charging_symbol": {
-          "default": " ",
+          "default": "´ûâ ",
           "type": "string"
         },
         "discharging_symbol": {
-          "default": " ",
+          "default": "´ûé ",
           "type": "string"
         },
         "unknown_symbol": {
-          "default": " ",
+          "default": "´ò╝ ",
           "type": "string"
         },
         "empty_symbol": {
-          "default": " ",
+          "default": "´ûì ",
           "type": "string"
         },
         "display": {
@@ -1786,7 +1877,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🦬 ",
+          "default": "­ƒª¼ ",
           "type": "string"
         },
         "style": {
@@ -1837,7 +1928,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🍞 ",
+          "default": "­ƒì× ",
           "type": "string"
         },
         "style": {
@@ -1956,27 +2047,27 @@
           "type": "string"
         },
         "success_symbol": {
-          "default": "[❯](bold green)",
+          "default": "[ÔØ»](bold green)",
           "type": "string"
         },
         "error_symbol": {
-          "default": "[❯](bold red)",
+          "default": "[ÔØ»](bold red)",
           "type": "string"
         },
         "vimcmd_symbol": {
-          "default": "[❮](bold green)",
+          "default": "[ÔØ«](bold green)",
           "type": "string"
         },
         "vimcmd_visual_symbol": {
-          "default": "[❮](bold yellow)",
+          "default": "[ÔØ«](bold yellow)",
           "type": "string"
         },
         "vimcmd_replace_symbol": {
-          "default": "[❮](bold purple)",
+          "default": "[ÔØ«](bold purple)",
           "type": "string"
         },
         "vimcmd_replace_one_symbol": {
-          "default": "[❮](bold purple)",
+          "default": "[ÔØ«](bold purple)",
           "type": "string"
         },
         "disabled": {
@@ -1998,7 +2089,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "△ ",
+          "default": "Ôû│ ",
           "type": "string"
         },
         "style": {
@@ -2092,7 +2183,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "⚙️ ",
+          "default": "ÔÜÖ´©Å ",
           "type": "string"
         },
         "style": {
@@ -2146,7 +2237,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🅒 ",
+          "default": "­ƒàÆ ",
           "type": "string"
         },
         "style": {
@@ -2172,7 +2263,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "⬢",
+          "default": "Ô¼ó",
           "type": "string"
         },
         "style": {
@@ -2198,7 +2289,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🔮 ",
+          "default": "­ƒö« ",
           "type": "string"
         },
         "style": {
@@ -2241,7 +2332,7 @@
       "type": "object",
       "properties": {
         "symbol": {
-          "default": "Λ ",
+          "default": "╬ø ",
           "type": "string"
         },
         "format": {
@@ -2298,7 +2389,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🎯 ",
+          "default": "­ƒÄ» ",
           "type": "string"
         },
         "style": {
@@ -2353,7 +2444,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🦕 ",
+          "default": "­ƒªò ",
           "type": "string"
         },
         "style": {
@@ -2428,7 +2519,7 @@
           "type": "string"
         },
         "repo_root_format": {
-          "default": "[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
+          "default": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
           "type": "string"
         },
         "style": {
@@ -2442,12 +2533,19 @@
             "null"
           ]
         },
+        "before_repo_root_style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "disabled": {
           "default": false,
           "type": "boolean"
         },
         "read_only": {
-          "default": "🔒",
+          "default": "­ƒöÆ",
           "type": "string"
         },
         "read_only_style": {
@@ -2473,7 +2571,7 @@
       "type": "object",
       "properties": {
         "symbol": {
-          "default": "🐳 ",
+          "default": "­ƒÉ│ ",
           "type": "string"
         },
         "style": {
@@ -2524,7 +2622,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "via [$symbol($version )(🎯 $tfm )]($style)",
+          "default": "via [$symbol($version )(­ƒÄ» $tfm )]($style)",
           "type": "string"
         },
         "version_format": {
@@ -2593,7 +2691,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "💧 ",
+          "default": "­ƒÆº ",
           "type": "string"
         },
         "style": {
@@ -2642,7 +2740,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🌳 ",
+          "default": "­ƒî│ ",
           "type": "string"
         },
         "style": {
@@ -2731,7 +2829,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": " ",
+          "default": "¯×▒ ",
           "type": "string"
         },
         "style": {
@@ -2795,7 +2893,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "☁️  ",
+          "default": "Ôÿü´©Å  ",
           "type": "string"
         },
         "style": {
@@ -2831,7 +2929,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": " ",
+          "default": "¯éá ",
           "type": "string"
         },
         "style": {
@@ -2844,7 +2942,7 @@
           "format": "int64"
         },
         "truncation_symbol": {
-          "default": "…",
+          "default": "ÔÇª",
           "type": "string"
         },
         "only_attached": {
@@ -2895,7 +2993,7 @@
           "type": "boolean"
         },
         "tag_symbol": {
-          "default": " 🏷  ",
+          "default": " ­ƒÅÀ  ",
           "type": "string"
         },
         "tag_disabled": {
@@ -2999,11 +3097,11 @@
           "type": "string"
         },
         "ahead": {
-          "default": "⇡",
+          "default": "Ôçí",
           "type": "string"
         },
         "behind": {
-          "default": "⇣",
+          "default": "Ôçú",
           "type": "string"
         },
         "up_to_date": {
@@ -3011,7 +3109,7 @@
           "type": "string"
         },
         "diverged": {
-          "default": "⇕",
+          "default": "Ôçò",
           "type": "string"
         },
         "conflicted": {
@@ -3019,11 +3117,11 @@
           "type": "string"
         },
         "deleted": {
-          "default": "✘",
+          "default": "Ô£ÿ",
           "type": "string"
         },
         "renamed": {
-          "default": "»",
+          "default": "┬╗",
           "type": "string"
         },
         "modified": {
@@ -3067,7 +3165,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🐹 ",
+          "default": "­ƒÉ╣ ",
           "type": "string"
         },
         "style": {
@@ -3126,7 +3224,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🅶 ",
+          "default": "­ƒàÂ ",
           "type": "string"
         },
         "style": {
@@ -3170,6 +3268,28 @@
       },
       "additionalProperties": false
     },
+    "GuixShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "­ƒÉâ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "HaskellConfig": {
       "type": "object",
       "properties": {
@@ -3182,7 +3302,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "λ ",
+          "default": "╬╗ ",
           "type": "string"
         },
         "style": {
@@ -3224,6 +3344,63 @@
       },
       "additionalProperties": false
     },
+    "HaxeConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "Ôîÿ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold fg:202",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "hx",
+            "hxml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "haxelib.json",
+            "hxformat.json",
+            ".haxerc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".haxelib",
+            "haxe_libraries"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "HelmConfig": {
       "type": "object",
       "properties": {
@@ -3236,7 +3413,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "⎈ ",
+          "default": "ÔÄê ",
           "type": "string"
         },
         "style": {
@@ -3278,7 +3455,7 @@
       "type": "object",
       "properties": {
         "symbol": {
-          "default": " ",
+          "default": "¯éá ",
           "type": "string"
         },
         "style": {
@@ -3295,7 +3472,7 @@
           "format": "int64"
         },
         "truncation_symbol": {
-          "default": "…",
+          "default": "ÔÇª",
           "type": "string"
         },
         "disabled": {
@@ -3313,7 +3490,7 @@
           "type": "boolean"
         },
         "ssh_symbol": {
-          "default": "🌐 ",
+          "default": "­ƒîÉ ",
           "type": "string"
         },
         "trim_at": {
@@ -3355,7 +3532,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "☕ ",
+          "default": "Ôÿò ",
           "type": "string"
         },
         "detect_extensions": {
@@ -3420,7 +3597,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "✦",
+          "default": "Ô£ª",
           "type": "string"
         },
         "style": {
@@ -3446,7 +3623,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "ஃ ",
+          "default": "Ó«â ",
           "type": "string"
         },
         "style": {
@@ -3498,7 +3675,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🅺 ",
+          "default": "­ƒà║ ",
           "type": "string"
         },
         "style": {
@@ -3544,7 +3721,7 @@
       "type": "object",
       "properties": {
         "symbol": {
-          "default": "☸ ",
+          "default": "Ôÿ© ",
           "type": "string"
         },
         "format": {
@@ -3641,7 +3818,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🌙 ",
+          "default": "­ƒîÖ ",
           "type": "string"
         },
         "style": {
@@ -3703,7 +3880,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🐏 ",
+          "default": "­ƒÉÅ ",
           "type": "string"
         },
         "disabled": {
@@ -3723,7 +3900,7 @@
           "minimum": 0.0
         },
         "truncation_symbol": {
-          "default": "…",
+          "default": "ÔÇª",
           "type": "string"
         },
         "format": {
@@ -3731,7 +3908,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "⬢ ",
+          "default": "Ô¼ó ",
           "type": "string"
         },
         "style": {
@@ -3757,7 +3934,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "👑 ",
+          "default": "­ƒææ ",
           "type": "string"
         },
         "style": {
@@ -3806,7 +3983,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "❄️  ",
+          "default": "ÔØä´©Å  ",
           "type": "string"
         },
         "style": {
@@ -3840,7 +4017,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": " ",
+          "default": "¯£ÿ ",
           "type": "string"
         },
         "style": {
@@ -3912,7 +4089,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🐫 ",
+          "default": "­ƒÉ½ ",
           "type": "string"
         },
         "style": {
@@ -3974,7 +4151,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🪖  ",
+          "default": "­ƒ¬û  ",
           "type": "string"
         },
         "style": {
@@ -4019,7 +4196,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "☁️  ",
+          "default": "Ôÿü´©Å  ",
           "type": "string"
         },
         "style": {
@@ -4033,6 +4210,68 @@
       },
       "additionalProperties": false
     },
+    "OSConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol]($style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "symbols": {
+          "default": {
+            "Alpine": "­ƒÅö´©Å ",
+            "Amazon": "­ƒÖé ",
+            "Android": "­ƒñû ",
+            "Arch": "­ƒÄù´©Å ",
+            "CentOS": "­ƒÆá ",
+            "Debian": "­ƒîÇ ",
+            "DragonFly": "­ƒÉë ",
+            "Emscripten": "­ƒöù ",
+            "EndeavourOS": "­ƒÜÇ ",
+            "Fedora": "­ƒÄ® ",
+            "FreeBSD": "­ƒÿê ",
+            "Garuda": "­ƒªà ",
+            "Gentoo": "­ƒù£´©Å ",
+            "HardenedBSD": "­ƒøí´©Å ",
+            "Illumos": "­ƒÉª ",
+            "Linux": "­ƒÉº ",
+            "Macos": "­ƒìÄ ",
+            "Manjaro": "­ƒÑ¡ ",
+            "Mariner": "­ƒîè ",
+            "MidnightBSD": "­ƒîÿ ",
+            "Mint": "­ƒî┐ ",
+            "NetBSD": "­ƒÜ® ",
+            "NixOS": "ÔØä´©Å ",
+            "OpenBSD": "­ƒÉí ",
+            "OracleLinux": "­ƒª┤ ",
+            "Pop": "­ƒì¡ ",
+            "Raspbian": "­ƒìô ",
+            "RedHatEnterprise": "­ƒÄ® ",
+            "Redhat": "­ƒÄ® ",
+            "Redox": "­ƒº¬ ",
+            "SUSE": "­ƒªÄ ",
+            "Solus": "ÔøÁ ",
+            "Ubuntu": "­ƒÄ» ",
+            "Unknown": "ÔØô ",
+            "Windows": "­ƒ¬ƒ ",
+            "openSUSE": "­ƒªÄ "
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "PackageConfig": {
       "type": "object",
       "properties": {
@@ -4041,7 +4280,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "📦 ",
+          "default": "­ƒôª ",
           "type": "string"
         },
         "style": {
@@ -4075,7 +4314,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🐪 ",
+          "default": "­ƒÉ¬ ",
           "type": "string"
         },
         "style": {
@@ -4134,7 +4373,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🐘 ",
+          "default": "­ƒÉÿ ",
           "type": "string"
         },
         "style": {
@@ -4186,7 +4425,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": " ",
+          "default": "´å▓ ",
           "type": "string"
         },
         "style": {
@@ -4291,7 +4530,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🐍 ",
+          "default": "­ƒÉì ",
           "type": "string"
         },
         "disabled": {
@@ -4357,7 +4596,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🦋 ",
+          "default": "­ƒªï ",
           "type": "string"
         },
         "style": {
@@ -4412,7 +4651,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🔺 ",
+          "default": "­ƒö║ ",
           "type": "string"
         },
         "style": {
@@ -4466,7 +4705,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "📐 ",
+          "default": "­ƒôÉ ",
           "type": "string"
         },
         "disabled": {
@@ -4519,7 +4758,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "💎 ",
+          "default": "­ƒÆÄ ",
           "type": "string"
         },
         "style": {
@@ -4581,7 +4820,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🦀 ",
+          "default": "­ƒªÇ ",
           "type": "string"
         },
         "style": {
@@ -4640,7 +4879,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🆂 ",
+          "default": "­ƒåé ",
           "type": "string"
         },
         "detect_extensions": {
@@ -4751,7 +4990,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "↕️  ",
+          "default": "Ôåò´©Å  ",
           "type": "string"
         },
         "repeat": {
@@ -4805,7 +5044,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🅢 ",
+          "default": "­ƒàó ",
           "type": "string"
         },
         "style": {
@@ -4827,7 +5066,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "❌",
+          "default": "ÔØî",
           "type": "string"
         },
         "success_symbol": {
@@ -4835,19 +5074,19 @@
           "type": "string"
         },
         "not_executable_symbol": {
-          "default": "🚫",
+          "default": "­ƒÜ½",
           "type": "string"
         },
         "not_found_symbol": {
-          "default": "🔍",
+          "default": "­ƒöì",
           "type": "string"
         },
         "sigint_symbol": {
-          "default": "🧱",
+          "default": "­ƒº▒",
           "type": "string"
         },
         "signal_symbol": {
-          "default": "⚡",
+          "default": "ÔÜí",
           "type": "string"
         },
         "style": {
@@ -4895,7 +5134,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🧙 ",
+          "default": "­ƒºÖ ",
           "type": "string"
         },
         "style": {
@@ -4925,7 +5164,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🐦 ",
+          "default": "­ƒÉª ",
           "type": "string"
         },
         "style": {
@@ -4976,7 +5215,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "💠 ",
+          "default": "­ƒÆá ",
           "type": "string"
         },
         "style": {
@@ -5091,7 +5330,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "⍱ ",
+          "default": "Ôì▒ ",
           "type": "string"
         },
         "style": {
@@ -5215,7 +5454,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "↯ ",
+          "default": "Ôå» ",
           "type": "string"
         },
         "style": {

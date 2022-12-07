@@ -5,7 +5,7 @@ use crate::utils::get_command_string_output;
 use std::path::PathBuf;
 
 use regex::Regex;
-const JAVA_VERSION_PATTERN: &str = "(?P<version>[\\d\\.]+)[^\\s]*\\s(?:built|from)";
+const JAVA_VERSION_PATTERN: &str = "(?:JRE.*\\(|OpenJ9 )(?P<version>[\\d]+(?:\\.\\d+){0,2})";
 
 /// Creates a module with the current Java version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -72,7 +72,7 @@ fn get_java_version(context: &Context) -> Option<String> {
         })
         .unwrap_or_else(|| String::from("java"));
 
-    let output = context.exec_cmd(&java_command, &["-Xinternalversion"])?;
+    let output = context.exec_cmd(java_command, &["-Xinternalversion"])?;
     let java_version_string = get_command_string_output(output);
 
     parse_java_version(&java_version_string)
@@ -120,15 +120,17 @@ mod tests {
     fn test_parse_java_version_zulu() {
         let java_8 = "OpenJDK 64-Bit Server VM (25.222-b10) for linux-amd64 JRE (Zulu 8.40.0.25-CA-linux64) (1.8.0_222-b10), built on Jul 11 2019 11:36:39 by \"zulu_re\" with gcc 4.4.7 20120313 (Red Hat 4.4.7-3)";
         let java_11 = "OpenJDK 64-Bit Server VM (11.0.4+11-LTS) for linux-amd64 JRE (Zulu11.33+15-CA) (11.0.4+11-LTS), built on Jul 11 2019 21:37:17 by \"zulu_re\" with gcc 4.9.2 20150212 (Red Hat 4.9.2-6)";
+        let java_17 = "OpenJDK 64-Bit Server VM (17.0.5+8-LTS) for bsd-amd64 JRE (17.0.5+8-LTS) (Zulu17.38+21-CA), built on Oct  7 2022 06:03:12 by \"zulu_re\" with clang 4.2.1 Compatible Apple LLVM 11.0.0 (clang-1100.0.33.17)";
         assert_eq!(parse_java_version(java_8), Some("1.8.0".to_string()));
         assert_eq!(parse_java_version(java_11), Some("11.0.4".to_string()));
+        assert_eq!(parse_java_version(java_17), Some("17.0.5".to_string()));
     }
 
     #[test]
     fn test_parse_java_version_eclipse_openj9() {
         let java_8 = "Eclipse OpenJ9 OpenJDK 64-bit Server VM (1.8.0_222-b10) from linux-amd64 JRE with Extensions for OpenJDK for Eclipse OpenJ9 8.0.222.0, built on Jul 17 2019 21:29:18 by jenkins with g++ (GCC) 7.3.1 20180303 (Red Hat 7.3.1-5)";
         let java_11 = "Eclipse OpenJ9 OpenJDK 64-bit Server VM (11.0.4+11) from linux-amd64 JRE with Extensions for OpenJDK for Eclipse OpenJ9 11.0.4.0, built on Jul 17 2019 21:51:37 by jenkins with g++ (GCC) 7.3.1 20180303 (Red Hat 7.3.1-5)";
-        assert_eq!(parse_java_version(java_8), Some("1.8.0".to_string()));
+        assert_eq!(parse_java_version(java_8), Some("8.0.222".to_string()));
         assert_eq!(parse_java_version(java_11), Some("11.0.4".to_string()));
     }
 
@@ -183,7 +185,7 @@ mod tests {
         File::create(dir.path().join("Main.java"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").cmd("java -Xinternalversion", Some(CommandOutput {
             stdout: "OpenJDK 64-Bit Server VM (16+14) for bsd-aarch64 JRE (16+14), built on Jan 17 2021 07:19:47 by \"brew\" with clang Apple LLVM 12.0.0 (clang-1200.0.32.28)\n".to_owned(),
-            stderr: "".to_owned()
+            stderr: String::new()
         })).path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v16 ")));
         assert_eq!(expected, actual);

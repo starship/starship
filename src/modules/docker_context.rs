@@ -119,7 +119,7 @@ mod tests {
             "currentContext": "starship"
         });
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
@@ -148,7 +148,7 @@ mod tests {
             "currentContext": "starship"
         });
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
@@ -177,7 +177,7 @@ mod tests {
             "currentContext": "starship"
         });
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
@@ -203,7 +203,7 @@ mod tests {
             "currentContext": "starship"
         });
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
@@ -227,7 +227,7 @@ mod tests {
             "currentContext": "starship"
         });
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
@@ -253,7 +253,7 @@ mod tests {
 
         let config_content = "not valid json";
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
@@ -339,7 +339,7 @@ mod tests {
             "currentContext": "starship"
         });
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
@@ -368,7 +368,7 @@ mod tests {
             "currentContext": "starship"
         });
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 
@@ -400,7 +400,7 @@ mod tests {
             "currentContext": "starship"
         });
 
-        let mut docker_config = File::create(&cfg_file)?;
+        let mut docker_config = File::create(cfg_file)?;
         docker_config.write_all(config_content.to_string().as_bytes())?;
         docker_config.sync_all()?;
 

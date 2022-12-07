@@ -205,7 +205,9 @@ Invoke-Expression (&starship init powershell)
 
 注意：右侧提示和输入区显示在同一行。 如果需要在输入区的上方显示右对齐的组件，请查阅 [`fill` 组件](/config/#fill)。
 
-`right_format` 现支持 elvish、fish、zsh、xonsh、cmd。
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### 示例
 
@@ -280,5 +282,5 @@ continuation_prompt = "▶▶"
 并非每种类型的字符串都会被每个终端正确显示。 特别地，以下是已知的几种情况：
 
 - 许多终端默认禁用对 `blink` 的支持
-- `hidden` 在 iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564) 上不被支持。
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` 不被默认 macOS Terminal.app 支持
