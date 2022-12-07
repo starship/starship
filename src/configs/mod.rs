@@ -14,6 +14,7 @@ pub mod cobol;
 pub mod conda;
 pub mod container;
 pub mod crystal;
+pub mod cpp;
 pub mod custom;
 pub mod daml;
 pub mod dart;
@@ -127,6 +128,8 @@ pub struct FullConfig<'a> {
     container: container::ContainerConfig<'a>,
     #[serde(borrow)]
     crystal: crystal::CrystalConfig<'a>,
+    #[serde(borrow)]
+    cpp: cpp::CppConfig<'a>,
     #[serde(borrow)]
     daml: daml::DamlConfig<'a>,
     #[serde(borrow)]
