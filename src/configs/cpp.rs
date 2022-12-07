@@ -30,10 +30,7 @@ impl<'a> Default for CppConfig<'a> {
             detect_extensions: vec!["cc", "cpp", "cxx", "hpp"],
             detect_files: vec![],
             detect_folders: vec![],
-            commands: vec![
-                vec!["g++", "--version"],
-                vec!["clang", "--version"]
-            ],
+            commands: vec![vec!["g++", "--version"], vec!["clang", "--version"]],
         }
     }
 }

@@ -80,7 +80,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{test::ModuleRenderer};
+    use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -113,11 +113,11 @@ mod tests {
             .cmd("g++ --version", None)
             .path(dir.path())
             .collect();
-        
+
         let expected = Some(format!(
-                "via {}",
-                Color::Fixed(149).bold().paint("C++ v11.1.0-clang ")
-            ));
+            "via {}",
+            Color::Fixed(149).bold().paint("C++ v11.1.0-clang ")
+        ));
 
         assert_eq!(expected, actual);
 
@@ -127,11 +127,8 @@ mod tests {
             .cmd("clang --version", None)
             .path(dir.path())
             .collect();
-        
-        let expected = Some(format!(
-                "via {}",
-                Color::Fixed(149).bold().paint("C++ ")
-            ));
+
+        let expected = Some(format!("via {}", Color::Fixed(149).bold().paint("C++ ")));
 
         assert_eq!(expected, actual);
 
