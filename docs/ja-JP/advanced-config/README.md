@@ -205,7 +205,9 @@ Invoke-Expression (&starship init powershell)
 
 注意: 右プロンプトは入力の場所に続く単一の行です。 To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### 設定例
 
@@ -280,5 +282,5 @@ continuation_prompt = "▶▶"
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
 - Many terminals disable support for `blink` by default
-- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app

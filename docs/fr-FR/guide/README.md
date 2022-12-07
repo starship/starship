@@ -219,7 +219,6 @@ Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de
 | Alpine Linux 3.13+ | [Paquets Alpine Linux](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)               | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Paquets Fedora](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
 | Gentoo             | [Paquets Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)   | `nix-env -iA nixpkgs.starship`                                                 |
@@ -254,13 +253,13 @@ Install the latest version for your system with the MSI-installers from the [rel
 
 Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
-| Dépôt                                                                                        | Instructions                            |
-| -------------------------------------------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
-| [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
-| [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship` |
-| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)             | `scoop install starship`                |
-| [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
+| Dépôt                                                                                         | Instructions                            |
+| --------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**                                            | `cargo install starship --locked`       |
+| [Chocolatey](https://community.chocolatey.org/packages/starship)                              | `choco install starship`                |
+| [conda-forge](https://anaconda.org/conda-forge/starship)                                      | `conda install -c conda-forge starship` |
+| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)              | `scoop install starship`                |
+| [aileron](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
 
 </details>
 
@@ -417,11 +416,19 @@ Jetez un œil aux précédents projets qui ont inspiré la création de starship
 
 - **[reujab/silver](https://github.com/reujab/silver)** – Prompt multi-shell personnalisable, dans le style de powerline avec des icones.
 
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Dimension](https://dimension.dev/)
+
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icône de fusée de Starship">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Icône de roquette de Starship">
 </p>
 
 ## 📝 License
 
-Copyright © 2019-présent, [Contributeurs Starship](https://github.com/starship/starship/graphs/contributors).<br /> Ce projet est sous licence [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Copyright © 2019-présent, [contributeurs de Starship](https://github.com/starship/starship/graphs/contributors).<br /> Ce projet est sous licence [ISC](https://github.com/starship/starship/blob/master/LICENSE).

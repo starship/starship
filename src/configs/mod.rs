@@ -35,6 +35,7 @@ pub mod git_status;
 pub mod go;
 pub mod guix_shell;
 pub mod haskell;
+pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
@@ -167,6 +168,8 @@ pub struct FullConfig<'a> {
     guix_shell: guix_shell::GuixShellConfig<'a>,
     #[serde(borrow)]
     haskell: haskell::HaskellConfig<'a>,
+    #[serde(borrow)]
+    haxe: haxe::HaxeConfig<'a>,
     #[serde(borrow)]
     helm: helm::HelmConfig<'a>,
     #[serde(borrow)]

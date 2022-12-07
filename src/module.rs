@@ -43,6 +43,7 @@ pub const ALL_MODULES: &[&str] = &[
     "golang",
     "guix_shell",
     "haskell",
+    "haxe",
     "helm",
     "hg_branch",
     "hostname",

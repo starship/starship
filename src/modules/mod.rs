@@ -32,6 +32,7 @@ mod git_status;
 mod golang;
 mod guix_shell;
 mod haskell;
+mod haxe;
 mod helm;
 mod hg_branch;
 mod hostname;
@@ -131,6 +132,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "golang" => golang::module(context),
             "guix_shell" => guix_shell::module(context),
             "haskell" => haskell::module(context),
+            "haxe" => haxe::module(context),
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
@@ -241,6 +243,7 @@ pub fn description(module: &str) -> &'static str {
         "golang" => "The currently installed version of Golang",
         "guix_shell" => "The guix-shell environment",
         "haskell" => "The selected version of the Haskell toolchain",
+        "haxe" => "The currently installed version of Haxe",
         "helm" => "The currently installed version of Helm",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",

@@ -205,7 +205,9 @@ Sebagian shells mendukung right prompt yang mana dirender di baris yang sama ses
 
 Catatan: Right propmt merupakan sebuah baris yang mengikuti lokasi baris inputan. Untuk membuat modul rata ke kanan di atas baris masukan di dalam multi-line prompt, lihat [`fill` module](/config/#fill).
 
-`right_format` saat ini hanya dapat bekerja pada beberapa shells berikut: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### Contoh
 
@@ -280,5 +282,5 @@ Jika warna yang dipakai pada latar depan/latar belakang banyak, maka warna yang 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
 - Many terminals disable support for `blink` by default
-- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app
