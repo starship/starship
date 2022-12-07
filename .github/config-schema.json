@@ -2362,10 +2362,10 @@
         },
         "detect_extensions": {
           "default": [
+            "cc",
             "cpp",
-            "hpp",
             "cxx",
-            "cc"
+            "hpp"
           ],
           "type": "array",
           "items": {
