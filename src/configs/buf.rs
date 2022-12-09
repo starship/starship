@@ -23,7 +23,7 @@ impl<'a> Default for BufConfig<'a> {
         BufConfig {
             format: "with [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🦬 ",
+            symbol: "🐃 ",
             style: "bold blue",
             disabled: false,
             detect_extensions: vec![],
