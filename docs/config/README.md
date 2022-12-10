@@ -1676,7 +1676,7 @@ If an extensions you're interested in is not supported by this module, you can r
 # ~/.config/starship.toml
 
 [git_extensions]
-active_exts = ["lfs"]
+extensions = ["lfs"]
 disabled = false
 ```
 
