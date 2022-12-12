@@ -416,9 +416,9 @@ Por favor, revisa estos proyectos que inspiraron la creación de Starship. 🙏
 
 - **[reujab/silver](https://github.com/reujab/silver)** - Un prompt multi-intérprete de comandos personalizable basada en Powerline con iconos.
 
-## ❤️ Sponsors
+## ❤️ Patrocinadores
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsors/starship). Tu nombre o logo aparecerá aquí con un enlace a tu sitio web.
 
 **Supporter Tier**
 
