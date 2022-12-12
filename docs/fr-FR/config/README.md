@@ -534,7 +534,7 @@ Le module `buf` affiche la version de [Buf](https://buf.build) installée. Par d
 | ------------------------------------ | ----------------------------------------------- | ------------------------------------------------------ |
 | `format`                             | `'with [$symbol($version )]($style)'`           | Le format du module `buf`.                             |
 | `version_format`                     | `'v${raw}'`                                     | Le format de la version.                               |
-| `symbol`                             | `'🦬 '`                                          | Le symbole utilisé avant d’afficher la version de Buf. |
+| `symbol`                             | `'🐃 '`                                          | Le symbole utilisé avant d’afficher la version de Buf. |
 | `detect_extensionsdetect_extensions` | `[]`                                            | Les extensions qui déclenchent ce module.              |
 | `detect_files`                       | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Les fichiers qui activent ce module.                   |
 | `detect_folders`                     | `[]`                                            | Quels dossiers devraient activer ce module.            |
