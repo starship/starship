@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => {
                     let engines_version = get_engines_version(context);
                     let in_engines_range =
-                        check_engines_version(nodejs_version.deref().as_ref()?, engines_version);
+                        check_engines_version(nodejs_version.deref().as_ref(), engines_version);
                     if in_engines_range {
                         Some(Ok(config.style))
                     } else {
@@ -92,8 +92,8 @@ fn get_engines_version(context: &Context) -> Option<String> {
     Some(raw_version.to_string())
 }
 
-fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) -> bool {
-    if engines_version.is_none() {
+fn check_engines_version(nodejs_version: Option<&String>, engines_version: Option<String>) -> bool {
+    if engines_version.is_none() || nodejs_version.is_none() {
         return true;
     }
     let r = match VersionReq::parse(&engines_version.unwrap()) {
@@ -102,7 +102,7 @@ fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) 
     };
     let re = Regex::new(r"\d+\.\d+\.\d+").unwrap();
     let version = re
-        .captures(nodejs_version)
+        .captures(nodejs_version.unwrap())
         .unwrap()
         .get(0)
         .unwrap()
