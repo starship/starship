@@ -534,7 +534,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------- |
 | `format`            | `'with [$symbol($version )]($style)'`           | The format for the `buf` module.                      |
 | `version_format`    | `'v${raw}'`                                     | Il formato della versione.                            |
-| `symbol`            | `'🦬 '`                                          | The symbol used before displaying the version of Buf. |
+| `symbol`            | `'🐃 '`                                          | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                            | Quali estensioni dovrebbero attivare questo modulo.   |
 | `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Quali nomi di file dovrebbero attivare questo modulo. |
 | `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
