@@ -420,7 +420,7 @@ Por favor, revisa estos proyectos que inspiraron la creación de Starship. 🙏
 
 Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsors/starship). Tu nombre o logo aparecerá aquí con un enlace a tu sitio web.
 
-**Supporter Tier**
+**Patrocinadores**
 
 - [Dimension](https://dimension.dev/)
 
