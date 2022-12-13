@@ -882,7 +882,7 @@
     "nextflow": {
       "default": {
         "detect_extensions": [
-          "nf",
+          "nf"
         ],
         "detect_files": [
           "nextflow.config"
@@ -890,7 +890,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "green bold",
-        "symbol": "  ",
+        "symbol": " ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -3698,7 +3698,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "  ",
+          "default": " ",
           "type": "string"
         },
         "style": {
@@ -3711,7 +3711,7 @@
         },
         "detect_extensions": {
           "default": [
-            "nf",
+            "nf"
           ],
           "type": "array",
           "items": {
