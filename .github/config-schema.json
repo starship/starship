@@ -895,7 +895,7 @@
       },
       "allOf": [
         {
-          "$ref": "#/definitions/NimConfig"
+          "$ref": "#/definitions/NextflowConfig"
         }
       ]
     },
