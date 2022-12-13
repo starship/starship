@@ -71,12 +71,7 @@ fn parse_nf_version(nf_version_output: &str) -> Option<String> {
     nf_version_output
         .split('\n')
         .filter_map(|e| match e.trim().starts_with("version") {
-            true => Some(
-                e.split_whitespace()
-                    .nth(1)
-                    .unwrap_or_default()
-                    .to_owned(),
-            ),
+            true => Some(e.split_whitespace().nth(1).unwrap_or_default().to_owned()),
             false => None,
         })
         .map(Some)
