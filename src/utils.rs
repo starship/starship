@@ -251,7 +251,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("LuaJIT 2.0.5 -- Copyright (C) 2005-2017 Mike Pall. http://luajit.org/\n"),
             stderr: String::default(),
         }),
-        "nextflow --version"=> Some(CommandOutput {
+        "nextflow -version"=> Some(CommandOutput {
             stdout: String::from(
                 "
 
