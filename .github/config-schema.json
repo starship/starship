@@ -880,20 +880,24 @@
       ]
     },
     "nextflow": {
-        "default": {
-          "detect_extensions": ["nf"],
-          "detect_files": ["nextflow.config"],
-          "disabled": false,
-          "format": "via [$symbol($version )]($style)",
-          "style": "green bold",
-          "symbol": " ",
-          "version_format": "v${raw}"
-        },
-        "allOf": [
-          {
-            "$ref": "#/definitions/NextflowConfig"
-          }
-        ]
+      "default": {
+        "detect_extensions": [
+          "nf",
+        ],
+        "detect_files": [
+          "nextflow.config"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "green bold",
+        "symbol": "  ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NimConfig"
+        }
+      ]
     },
     "nim": {
       "default": {
@@ -3678,6 +3682,50 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "NextflowConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "green bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "nf",
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "nextflow.config"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

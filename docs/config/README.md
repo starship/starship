@@ -4091,4 +4091,3 @@ detect_extensions = ["pst"] # filters *.pst files
 shell = ["pwsh.exe", "-NoProfile", "-Command"]
 use_stdin = false
 ```
-

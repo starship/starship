@@ -61,20 +61,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn execute_nextflow_version(context: &Context) -> Option<String> {
     log::trace!("Running nextflow -version");
 
-    let version = context
+    context
         .exec_cmd("nextflow", &["-version"])
         .map(|command_output| command_output.stdout)
-        .and_then(|nf_version_output| parse_nf_version(&nf_version_output));
-    version
+        .and_then(|nf_version_output| parse_nf_version(&nf_version_output))
 }
 
 fn parse_nf_version(nf_version_output: &str) -> Option<String> {
     nf_version_output
-        .split("\n")
+        .split('\n')
         .filter_map(|e| match e.trim().starts_with("version") {
             true => Some(
-                e.trim()
-                    .split_whitespace()
+                e.split_whitespace()
                     .nth(1)
                     .unwrap_or_default()
                     .to_owned(),
@@ -89,9 +87,9 @@ fn parse_nf_version(nf_version_output: &str) -> Option<String> {
 mod tests {
     use super::parse_nf_version;
     use crate::test::ModuleRenderer;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
-    use nu_ansi_term::Color;
 
     #[test]
     fn nextflow_version() {
