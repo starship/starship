@@ -88,6 +88,9 @@ format = '\[$symbol[$ram( | $swap)]($style)\]'
 [meson]
 format = '\[[$symbol$project]($style)\]'
 
+[nextflow]
+format = '\[[$symbol($version)]($style)\]'
+
 [nim]
 format = '\[[$symbol($version)]($style)\]'
 

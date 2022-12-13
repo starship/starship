@@ -185,11 +185,11 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     lua: lua::LuaConfig<'a>,
     #[serde(borrow)]
-    nextflow: nextflow::NextflowConfig<'a>,
-    #[serde(borrow)]
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]
     meson: meson::MesonConfig<'a>,
+    #[serde(borrow)]
+    nextflow: nextflow::NextflowConfig<'a>,
     #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]
