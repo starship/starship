@@ -111,6 +111,23 @@ mod tests {
     }
 
     #[test]
+    fn nextflow_edge_version() {
+        let sample_nextflow_output = "
+
+                N E X T F L O W
+                version 22.04.5-edge build 5708
+                created 15-07-2022 16:09 UTC (18:09 CEST)
+                cite doi:10.1038/nbt.3820
+                http://nextflow.io
+
+        ";
+        assert_eq!(
+            Some(String::from("22.04.5-edge")),
+            parse_nf_version(sample_nextflow_output)
+        )
+    }
+
+    #[test]
     fn folder_without_nextflow_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("nextflow.txt"))?.sync_all()?;
