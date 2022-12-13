@@ -119,7 +119,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Elvish
 
-   ::: atenção
+   ::: warning
 
    Apenas elvish v0.18 ou superior é suportado.
 
@@ -147,7 +147,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Nushell
 
-   ::: atenção
+   ::: warning
 
    Isto irá mudar no futuro. Somente Nushell v0.61+ é suportado.
 

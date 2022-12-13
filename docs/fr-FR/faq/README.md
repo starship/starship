@@ -38,7 +38,7 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-[L'implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée dans Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module Durée de commande](https://starship.rs/config/#command-duration) et pour s'assurer que Starship est compatible avec les configurations Bash préinstallées.
+L' [implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée à Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module de durée de commande](https://starship.rs/config/#command-duration) et pour s'assurer que Starship est compatible avec les configurations Bash pré-installées.
 
 Pour une liste de tous les flags acceptés par `starship prompt`, utilisez la commande suivante :
 
@@ -107,7 +107,7 @@ Si l'un ou l'autre des symboles ne parvient pas à s'afficher correctement, votr
 
 ## Comment désinstaller Starship ?
 
-Starship est tout aussi facile à désinstaller que d'installer.
+Starship est tout aussi facile à désinstaller qu'à installer.
 
 1. Supprimez les lignes de la configuration de votre shell (par exemple `~/.bashrc`) utilisées pour initialiser Starship.
 1. Supprimez l'exécutable de Starship.

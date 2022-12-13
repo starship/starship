@@ -38,7 +38,7 @@ export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-或者在 Cmd (Windows) 中，将下面的代码添加到 `starship.lua`：
+或者在 Cmd (Windows) 中，将以下内容添加到您的 `starship.lua`：
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -58,7 +58,7 @@ export STARSHIP_CACHE=~/.starship/cache
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-或者在 Cmd (Windows) 中，将以下内容添加到您的 `starship.lua`：
+或者在 Cmd (Windows) 中，将下面的代码添加到 `starship.lua`：
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -156,7 +156,7 @@ line2
 - `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
 
-#### 样式设定
+#### 样式字符串
 
 Starship 中的大多数组件允许您为其设置显示样式。 显示样式可以通过一个字符串字段（一般是 `style`）来设置。 以下的例子给出了一些样式字符串并描述了它们的效果。 样式字符串的完整语法请查阅 [高级配置指南](/advanced-config/)。
 
@@ -564,8 +564,8 @@ symbol = '🦬 '
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `bun.lockb` 文件
-- 当前目录包含 `bunfig.toml` 文件
+- 当前目录包含一个 `bun.lockb` 文件
+- 当前目录包含一个 `bunfig.toml` 文件
 
 ### 配置项
 
@@ -892,7 +892,7 @@ format = '[$symbol \[$name\]]($style) '
 
 The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `shard.yml` 文件
+- 当前目录包含一个 `shard.yml` 文件
 - The current directory contains a `.cr` file
 
 ### 配置项
@@ -931,7 +931,7 @@ format = 'via [✨ $version](bold blue) '
 
 The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. By default the module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `daml.yaml` 文件
+- 当前目录包含一个 `daml.yaml` 文件
 
 ### 配置项
 
@@ -1219,7 +1219,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `mix.exs` 文件.
+- 当前目录包含一个 `mix.exs` 文件.
 
 ### 配置项
 
@@ -1258,8 +1258,8 @@ symbol = '🔮 '
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `elm.json` 文件
-- 当前目录包含 `elm-package.json` 文件
+- 当前目录包含一个 `elm.json` 文件
+- 当前目录包含一个 `elm-package.json` 文件
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains `*.elm` files
@@ -1364,8 +1364,8 @@ default = 'unknown user'
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- 当前目录包含 `rebar.config` 文件.
-- 当前目录包含 `erlang.mk` 文件.
+- 当前目录包含一个 `rebar.config` 文件.
+- 当前目录包含一个 `erlang.mk` 文件.
 
 ### 配置项
 
@@ -1768,7 +1768,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - 当前目录包含 `go.mod` 文件
 - 当前目录包含 `go.sum` 文件
-- 当前目录包含 `go.work` 文件
+- 当前目录包含一个 `go.work` 文件
 - 当前目录包含 `glide.yaml` 文件
 - 当前目录包含 `Gopkg.yml` 文件
 - 当前目录包含 `Gopkg.lock` 文件
