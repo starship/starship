@@ -25,6 +25,7 @@ pub mod elixir;
 pub mod elm;
 pub mod env_var;
 pub mod erlang;
+pub mod fennel;
 pub mod fill;
 pub mod gcloud;
 pub mod git_branch;
@@ -147,6 +148,8 @@ pub struct FullConfig<'a> {
     env_var: IndexMap<String, env_var::EnvVarConfig<'a>>,
     #[serde(borrow)]
     erlang: erlang::ErlangConfig<'a>,
+    #[serde(borrow)]
+    fennel: fennel::FennelConfig<'a>,
     #[serde(borrow)]
     fill: fill::FillConfig<'a>,
     #[serde(borrow)]

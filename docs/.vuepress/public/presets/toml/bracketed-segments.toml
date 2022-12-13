@@ -46,6 +46,9 @@ format = '\[[$symbol($version)]($style)\]'
 [erlang]
 format = '\[[$symbol($version)]($style)\]'
 
+[fennel]
+format = '\[[$symbol($version)]($style)\]'
+
 [gcloud]
 format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
 

@@ -473,6 +473,25 @@
         }
       ]
     },
+    "fennel": {
+      "default": {
+        "detect_extentions": [
+          "fnl"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": true,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold green",
+        "symbol": "🧅 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FennelConfig"
+        }
+      ]
+    },
     "fill": {
       "default": {
         "disabled": false,
@@ -2829,6 +2848,55 @@
             "rebar.config",
             "erlang.mk"
           ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FennelConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🧅 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "detect_extentions": {
+          "default": [
+            "fnl"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
           "type": "array",
           "items": {
             "type": "string"

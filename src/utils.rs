@@ -245,6 +245,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("0.19.1\n"),
             stderr: String::default(),
         }),
+        "fennel --version" => Some(CommandOutput {
+            stdout: String::from("Fennel 1.2.1 on PUC Lua 5.4\n"),
+            stderr: String::default(),
+        }),
         "go version" => Some(CommandOutput {
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
