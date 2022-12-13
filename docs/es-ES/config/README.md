@@ -656,7 +656,7 @@ El caracter te dirá si el último comando fue exitoso o no. Se puede hacer de d
 
 Por defecto sólo cambia el color. Si también se quiere cambiar su forma, ver [este ejemplo](#with-custom-error-shape).
 
-::: Advertencia
+::: aviso
 
 `vicmd_symbol` solo es compatible con cmd, fish y zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -2038,13 +2038,13 @@ La funcionalidad por defecto es:
 - 1 tarea -> `symbol` se muestra.
 - 2 tareas o más -> `symbol` + `number` son mostrados.
 
-::: Advertencia
+::: aviso
 
 Este módulo no está soportado por tcsh y nu.
 
 :::
 
-::: Advertencia
+::: aviso
 
 La opción `threshold` está obsoleta, pero si deseas usarla, el módulo mostrará el número de tareas en ejecución si hay más de 1 tarea, o más que el valor de configuración `threshold`, si existe. Si `threshold` se establece en 0, entonces el módulo también se mostrará cuando haya 0 tareas en ejecución.
 
@@ -2720,7 +2720,7 @@ symbol = '☁️ '
 
 The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
-::: Advertencia
+::: aviso
 
 The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
