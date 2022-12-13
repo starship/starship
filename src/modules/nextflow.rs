@@ -1,6 +1,5 @@
 use super::{Context, Module, ModuleConfig};
 
-// use super::utils::directory::truncate;
 use crate::configs::nextflow::NextflowConfig;
 use crate::formatter::StringFormatter;
 
@@ -89,6 +88,10 @@ fn parse_nf_version(nf_version_output: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::parse_nf_version;
+    use crate::test::ModuleRenderer;
+    use std::fs::File;
+    use std::io;
+    use nu_ansi_term::Color;
 
     #[test]
     fn nextflow_version() {
@@ -105,5 +108,35 @@ mod tests {
             Some(String::from("22.04.5")),
             parse_nf_version(sample_nextflow_output)
         )
+    }
+
+    #[test]
+    fn folder_without_nextflow_config() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("nextflow.txt"))?.sync_all()?;
+        let actual = ModuleRenderer::new("nextflow").path(dir.path()).collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_nextflow_config_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("nextflow.config"))?.sync_all()?;
+        let actual = ModuleRenderer::new("nextflow").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" 22.04.5 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_nf_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("workflow.nf"))?.sync_all()?;
+        let actual = ModuleRenderer::new("nextflow").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" 22.04.5 ")));
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }
