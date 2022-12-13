@@ -44,6 +44,7 @@ mod localip;
 mod lua;
 mod memory_usage;
 mod meson;
+mod nextflow;
 mod nim;
 mod nix_shell;
 mod nodejs;
@@ -140,6 +141,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
             "meson" => meson::module(context),
+            "nextflow" => nextflow::module(context),
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
             "nodejs" => nodejs::module(context),
@@ -249,6 +251,7 @@ pub fn description(module: &str) -> &'static str {
         "meson" => {
             "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"
         }
+        "nextflow" => "The currently installed version of Nextflow",
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
