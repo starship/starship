@@ -682,9 +682,8 @@ credential_process = /opt/bin/awscreds-retriever
                     "[astronauts]
 aws_access_key_id=dummy
 aws_secret_access_key=dummy
-{}={}
-",
-                    key, expiration_date
+{key}={expiration_date}
+"
                 )
                 .as_bytes(),
             )
