@@ -2,7 +2,7 @@
 
 Mientras que Starship es un prompt versátil, a veces necesitas más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en Starship.
 
-::: Advertencia
+::: warning
 
 Las configuraciones de esta sección están sujetos a cambios en futuras versiones de Starship.
 
