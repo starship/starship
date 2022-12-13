@@ -256,7 +256,7 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
                 "
 
                 N E X T F L O W
-                version 22.04.5-edge build 5708
+                version 22.04.5 build 5708
                 created 15-07-2022 16:09 UTC (18:09 CEST)
                 cite doi:10.1038/nbt.3820
                 http://nextflow.io
