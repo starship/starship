@@ -265,7 +265,7 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
-- `none`
+- `ninguno`
 
 donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
 
