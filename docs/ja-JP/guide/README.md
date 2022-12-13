@@ -334,7 +334,7 @@ mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):
+そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
 
 ```sh
 source ~/.cache/starship/init.nu

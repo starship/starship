@@ -70,7 +70,7 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 **変数**: モジュールが提供する情報を含むサブコンポーネントを小さくする。 例えば、"nodejs" モジュールの "version" 変数には、Node.js の現在のバージョンが含まれています。
 
-慣例により、ほとんどのモジュールにはデフォルトの端末色の接頭辞（「nodejs」の`via` など）と接尾辞として空のスペースがあります。
+慣例により、ほとんどのモジュールにはデフォルトの端末色の接頭辞（"nodejs" の `via` など）と接尾辞として空のスペースがあります。
 
 ### Strings
 
@@ -645,7 +645,7 @@ Each command is represented as a list of the executable name, followed by its ar
 format = 'via [$name $version]($style)'
 ```
 
-## 文字
+## Character
 
 `character`モジュールは、端末でテキストが入力される場所の横に文字（通常は矢印）を表示します。
 
@@ -772,7 +772,7 @@ vicmd_symbol = '[V](bold green) '
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
-## コマンド実行時間
+## Command Duration
 
 `cmd_duration`モジュールは、最後のコマンドの実行にかかった時間を示します。 モジュールが表示されるのは、コマンドが2秒以上かかった場合、または`min_time`値が存在する場合のみです。
 
@@ -1543,7 +1543,7 @@ truncation_symbol = ''
 ignore_branches = ['master', 'main']
 ```
 
-## Git コミット
+## Git Commit
 
 `git_commit` モジュールは、カレントディレクトリのリポジトリの現在のコミットハッシュとタグ (もしあれば) を表示します。
 
@@ -1952,7 +1952,7 @@ format = "via [⌘ $version](bold fg:202) "
 format = 'via [⎈ $version](bold white) '
 ```
 
-## ホスト名
+## Hostname
 
 `hostname`モジュールには、システムのホスト名が表示されます。
 
@@ -3736,7 +3736,7 @@ format = '[🏎💨 $version$workspace]($style) '
 format = '[🏎💨 $workspace]($style) '
 ```
 
-## 時刻
+## Time
 
 `time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 

@@ -250,7 +250,7 @@ Catatan: Continuation prompts hanya tersedia pada beberapa shells berikut:
 continuation_prompt = "▶▶"
 ```
 
-## Menata String
+## Penataan String
 
 Penataan string adalah kumpulan kata-kata, yang dipisahkan oleh ruang kosong. Kumpulannya tidak bersifat case sensitive (mis. `tebal` dan `TeBaL` dianggap sebagai string yang sama). Tiap-tiap kata berikut adalah opsinya:
 

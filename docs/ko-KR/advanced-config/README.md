@@ -239,7 +239,7 @@ Note: Continuation prompts are only available in the following shells:
 
 - `bash`
 - `zsh`
-- `파워셀`
+- `Powershell`
 
 ### Example
 

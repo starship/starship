@@ -345,7 +345,7 @@ Note: Only Nushell v0.61+ is supported
 </details>
 
 <details>
-<summary>파워셀</summary>
+<summary>Powershell</summary>
 
 다음 내용을 PowerShell 설정파일 (찾으려면 `$PROFILE` 실행) 마지막 부분에 추가하세요:
 

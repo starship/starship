@@ -52,7 +52,7 @@ By default starship logs warnings and errors into a file named `~/.cache/starshi
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-等同於在 PowersShell（Windows）的 `$PROFILE` 中添加下列文字：
+等同於在 PowerShell（Windows）的 `$PROFILE` 中添加下列文字：
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
@@ -564,8 +564,8 @@ symbol = '🦬 '
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `bun.lockb` 檔案
-- 現在資料夾中含有一個 `bunfig.toml` 檔案
+- 目前資料夾中有一個 `bun.lockb` 檔案
+- 目前資料夾中有一個 `bunfig.toml` 檔案
 
 ### 選項
 
@@ -931,7 +931,7 @@ format = 'via [✨ $version](bold blue) '
 
 The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `daml.yaml` 檔案
+- 目前資料夾中有一個 `daml.yaml` 檔案
 
 ### 選項
 
@@ -1219,7 +1219,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `mix.exs` 檔案.
+- 目前資料夾中有一個 `mix.exs` 檔案.
 
 ### 選項
 
@@ -1258,8 +1258,8 @@ symbol = '🔮 '
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `elm.json` 檔案
-- 現在資料夾中包含一個 `elm-package.json` 檔案
+- 目前資料夾中有一個 `elm.json` 檔案
+- 目前資料夾中有一個 `elm-package.json` 檔案
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains `*.elm` files
@@ -1364,8 +1364,8 @@ default = 'unknown user'
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `rebar.config` 檔案.
-- 現在資料夾中含有一個 `erlang.mk` 檔案.
+- 目前資料夾中有一個 `rebar.config` 檔案.
+- 目前資料夾中有一個 `erlang.mk` 檔案.
 
 ### 選項
 
@@ -1768,7 +1768,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
-- 現在資料夾中含有一個 `go.work` 檔案
+- 目前資料夾中有一個 `go.work` 檔案
 - 現在資料夾中含有一個 `glide.yaml` 檔案
 - 現在資料夾中含有一個 `Gopkg.yml` 檔案
 - 現在資料夾中含有一個 `Gopkg.lock` 檔案
@@ -1846,7 +1846,7 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 
 By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `stack.yaml` 檔案
+- 目前資料夾中有一個 `stack.yaml` 檔案
 - The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
 
 ### 選項

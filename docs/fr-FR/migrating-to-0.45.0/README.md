@@ -76,11 +76,11 @@ format = "took [$duration]($style) "
 
 ### Modules affectés
 
-#### Caractères
+#### Caractère
 
 | Propriété supprimée     | Remplacement     |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `symbole`               | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
