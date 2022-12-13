@@ -1475,7 +1475,7 @@ By default the module will be shown if any of the following conditions are met:
 format = 'via [e $version](bold red) '
 ```
 
-## Fennel 
+## Fennel
 
 The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org).
 By default the module will be shown if any of the following conditions are met:
@@ -1497,11 +1497,11 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable | Example   | Description                          |
-| -------- | --------- | ------------------------------------ |
-| version  | `v1.2.1`  | The version of `fennel`              |
-| symbol   |           | Mirrors the value of option `symbol` |
-| style\*  |           | Mirrors the value of option `style`  |
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v1.2.1` | The version of `fennel`              |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
