@@ -879,6 +879,22 @@
         }
       ]
     },
+    "nextflow": {
+        "default": {
+          "detect_extensions": ["nf"],
+          "detect_files": ["nextflow.config"],
+          "disabled": false,
+          "format": "via [$symbol($version )]($style)",
+          "style": "green bold",
+          "symbol": " ",
+          "version_format": "v${raw}"
+        },
+        "allOf": [
+          {
+            "$ref": "#/definitions/NextflowConfig"
+          }
+        ]
+    },
     "nim": {
       "default": {
         "detect_extensions": [
