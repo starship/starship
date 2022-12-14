@@ -120,6 +120,9 @@ symbol = " "
 [rust]
 symbol = " "
 
+[salesforce]
+symbol = "☁ "
+
 [scala]
 symbol = " "
 

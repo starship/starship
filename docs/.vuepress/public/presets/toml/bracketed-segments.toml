@@ -145,6 +145,9 @@ format = '\[[$symbol($version)]($style)\]'
 [rust]
 format = '\[[$symbol($version)]($style)\]'
 
+[salesforce]
+format = '\[[$symbol($org_name)]($style)\]'
+
 [scala]
 format = '\[[$symbol($version)]($style)\]'
 

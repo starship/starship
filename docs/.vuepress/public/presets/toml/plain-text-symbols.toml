@@ -168,6 +168,9 @@ symbol = "rb "
 [rust]
 symbol = "rs "
 
+[salesforce]
+symbold = "sf "
+
 [scala]
 symbol = "scala "
 
