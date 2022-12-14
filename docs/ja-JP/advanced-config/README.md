@@ -91,7 +91,7 @@ function starship_preprompt_user_func(prompt)
   print("🚀")
 end
 
-load(io.popen('starship init cmd'):read("*a"))()
+load(io.popen('starship init cmd'):read("*a")()
 ```
 
 - To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
