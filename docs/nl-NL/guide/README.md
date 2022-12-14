@@ -36,7 +36,9 @@
 
 <p align="center">
   <a href="https://starship.rs">Website</a>
+  ·
   <a href="#🚀-installation">Installatie</a>
+  ·
   <a href="https://starship.rs/config/">Configuratie</a>
 </p>
 
@@ -150,12 +152,12 @@
 
 **De minimalistische, razend snelle en oneindig aanpasbare prompt voor elke shell!**
 
-- **Snel:** het is snel -_echt heel erg_ snel! 🚀
-- **Aanpasbaar:** configureer elk aspect van je prompt.
+- **Snel:** het is snel -_ echt heel_ snel! 🚀
+- **Aanpasbaar:** configureer elk onderdeel van je prompt.
 - **Universeel:** werkt op elke shell, op elk besturingssysteem.
 - **Intelligent:** toont relevante informatie in een oogopslag.
 - **Rijk aan functies:** ondersteuning voor al je favoriete tools.
-- **Makkelijk:** snel te installeren - begin in een handomdraai met het te gebruiken.
+- **Makkelijk:** snel te installeren – gebruik het binnen enkele minuten.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Verken de Starship-documentatie&nbsp;&nbsp;▶</strong></a>
@@ -167,18 +169,18 @@
 
 ### Benodigdheden
 
-- Een [Nerd Font](https://www.nerdfonts.com/) is geïnstalleerd en ingeschakeld in je terminal (bijvoorbeeld probeer het [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Een [Nerd Font](https://www.nerdfonts.com/) is geïnstalleerd en ingeschakeld in je terminal (probeer bijvoorbeeld het [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Stap 1. Installeer Starship
 
-Select your operating system from the list below to view installation instructions:
+Selecteer je besturingssysteem in de onderstaande lijst en bekijk de installatie-instructies:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Installeer Starship met één van de volgende pakketbeheerders:
 
-| Repository                                                                        | Instructions           |
+| Repository                                                                        | Instructies            |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -187,9 +189,9 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Installeer Starship met één van de volgende pakketbeheerders:
 
-| Distribution | Repository                                               | Instructions                      |
+| Distribution | Repository                                               | Instructies                       |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
 | **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
 | FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
@@ -208,7 +210,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 Alternatively, install Starship using any of the following package managers:
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| Distribution       | Repository                                                                                      | Instructies                                                                    |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
@@ -235,7 +237,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 Alternatively, install Starship using any of the following package managers:
 
-| Repository                                               | Instructions                            |
+| Repository                                               | Instructies                             |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -249,9 +251,9 @@ Alternatively, install Starship using any of the following package managers:
 
 Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Install Starship using any of the following package managers:
+Installeer Starship met één van de volgende pakketbeheerders:
 
-| Repository                                                                                   | Instructions                            |
+| Repository                                                                                   | Instructies                             |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
