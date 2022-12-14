@@ -231,10 +231,10 @@ jobs:
         run: |
           # Setup dummy release artifacts
           foreach ($arch in @("aarch64", "i686", "x86_64")) {
-            New-Item -ItemType Directory -Path ./starship-$arch-pc-windows-msvc
-            New-Item -ItemType Directory -Path ./starship-$arch-pc-windows-msvc.msi
-            New-Item -ItemType File -Path ./starship-$arch-pc-windows-msvc/starship-$arch-pc-windows-msvc.zip
-            New-Item -ItemType File -Path ./starship-$arch-pc-windows-msvc.msi/starship-$arch-pc-windows-msvc.msi
+            foreach ($ext in @("zip", "msi")) {
+              New-Item -ItemType Directory -Path ./starship-$arch-pc-windows-msvc.$ext
+              New-Item -ItemType File -Path ./starship-$arch-pc-windows-msvc.$ext/starship-$arch-pc-windows-msvc.$ext
+            }
           }
           # Build package
           pwsh ./install/windows/choco/update.ps1

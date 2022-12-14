@@ -37,8 +37,8 @@ $url_i686_zip = "https://github.com/starship/starship/releases/download/$version
 $url_x86_64_msi = "https://github.com/starship/starship/releases/download/$version/starship-x86_64-pc-windows-msvc.msi"
 $url_i686_msi = "https://github.com/starship/starship/releases/download/$version/starship-i686-pc-windows-msvc.msi"
 
-$checksum_x86_64_zip = Get-FileHash -Algorithm SHA256 -Path "./starship-x86_64-pc-windows-msvc/starship-x86_64-pc-windows-msvc.zip" | Select-Object -ExpandProperty Hash
-$checksum_i686_zip = Get-FileHash -Algorithm SHA256 -Path "./starship-i686-pc-windows-msvc/starship-i686-pc-windows-msvc.zip" | Select-Object -ExpandProperty Hash
+$checksum_x86_64_zip = Get-FileHash -Algorithm SHA256 -Path "./starship-x86_64-pc-windows-msvc.zip/starship-x86_64-pc-windows-msvc.zip" | Select-Object -ExpandProperty Hash
+$checksum_i686_zip = Get-FileHash -Algorithm SHA256 -Path "./starship-i686-pc-windows-msvc.zip/starship-i686-pc-windows-msvc.zip" | Select-Object -ExpandProperty Hash
 $checksum_x86_64_msi = Get-FileHash -Algorithm SHA256 -Path "./starship-x86_64-pc-windows-msvc.msi/starship-x86_64-pc-windows-msvc.msi" | Select-Object -ExpandProperty Hash
 $checksum_i686_msi = Get-FileHash -Algorithm SHA256 -Path "./starship-i686-pc-windows-msvc.msi/starship-i686-pc-windows-msvc.msi" | Select-Object -ExpandProperty Hash
 
