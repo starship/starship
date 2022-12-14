@@ -20,19 +20,18 @@ pub struct SalesforceConfig<'a> {
     /// Show alias if possible instead of full email address
     pub show_alias: bool,
     /// Use sfdx to determine current org
-    pub use_sfdx:bool
+    pub use_sfdx: bool,
 }
 
 impl<'a> Default for SalesforceConfig<'a> {
     fn default() -> Self {
-        SalesforceConfig{
+        SalesforceConfig {
             format: "org [$symbol($org_name) ]($style)",
             symbol: "☁ ",
             style: "bold blue",
-            disabled: false,
+            disabled: true,
             show_alias: true,
-            use_sfdx: false
+            use_sfdx: false,
         }
     }
-
 }
