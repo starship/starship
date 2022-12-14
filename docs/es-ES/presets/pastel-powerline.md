@@ -4,7 +4,7 @@
 
 Este preajuste está inspirado en [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). También muestra cómo funciona la sustitución de rutas en Starship.
 
-![Captura de pantalla del preajuste Pastel Powerline](/presets/img/pastel-powerline.png)
+![Captura de pantalla del preajuste de Pastel Powerline](/presets/img/pastel-powerline.png)
 
 ### Prerequisitos
 

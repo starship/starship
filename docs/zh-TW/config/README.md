@@ -24,7 +24,7 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 disabled = true
 ```
 
-### Config File Location
+### 配置文件路徑
 
 你可以透過更改環境變數 `STARSHIP_CONFIG` 來變更設定檔存放的位置：
 
@@ -32,13 +32,13 @@ disabled = true
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
-等同於在 PowersShell（Windows）的 `$PROFILE` 中添加下列文字：
+等同於在 PowerShell（Windows）的 `$PROFILE` 中添加下列文字：
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+或用命令提示字元 (cmd) (Windows) 的話，加下面這行至 `starship.lua`
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -52,13 +52,13 @@ By default starship logs warnings and errors into a file named `~/.cache/starshi
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-等同於在 PowersShell（Windows）的 `$PROFILE` 中添加下列文字：
+等同於在 PowerShell（Windows）的 `$PROFILE` 中添加下列文字：
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+或用命令提示字元 (cmd) (Windows) 的話，加下面這行至 `starship.lua`
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -534,7 +534,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------- |
 | `format`            | `'with [$symbol($version )]($style)'`           | The format for the `buf` module.                      |
 | `version_format`    | `'v${raw}'`                                     | The version format.                                   |
-| `symbol`            | `'🦬 '`                                          | The symbol used before displaying the version of Buf. |
+| `symbol`            | `'🐃 '`                                          | The symbol used before displaying the version of Buf. |
 | `detect_extensions` | `[]`                                            | Which extensions should trigger this module.          |
 | `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Which filenames should trigger this module.           |
 | `detect_folders`    | `[]`                                            | Which folders should trigger this modules.            |
@@ -564,8 +564,8 @@ symbol = '🦬 '
 
 The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `bun.lockb` 檔案
-- 現在資料夾中含有一個 `bunfig.toml` 檔案
+- 目前資料夾中有一個 `bun.lockb` 檔案
+- 目前資料夾中有一個 `bunfig.toml` 檔案
 
 ### 選項
 
@@ -931,7 +931,7 @@ format = 'via [✨ $version](bold blue) '
 
 The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `daml.yaml` 檔案
+- 目前資料夾中有一個 `daml.yaml` 檔案
 
 ### 選項
 
@@ -1219,7 +1219,7 @@ heuristic = false
 
 The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `mix.exs` 檔案.
+- 目前資料夾中有一個 `mix.exs` 檔案.
 
 ### 選項
 
@@ -1258,8 +1258,8 @@ symbol = '🔮 '
 
 The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `elm.json` 檔案
-- 現在資料夾中包含一個 `elm-package.json` 檔案
+- 目前資料夾中有一個 `elm.json` 檔案
+- 目前資料夾中有一個 `elm-package.json` 檔案
 - The current directory contains a `.elm-version` file
 - The current directory contains a `elm-stuff` folder
 - The current directory contains `*.elm` files
@@ -1364,8 +1364,8 @@ default = 'unknown user'
 
 The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `rebar.config` 檔案.
-- 現在資料夾中含有一個 `erlang.mk` 檔案.
+- 目前資料夾中有一個 `rebar.config` 檔案.
+- 目前資料夾中有一個 `erlang.mk` 檔案.
 
 ### 選項
 
@@ -1768,7 +1768,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 - 現在資料夾中含有一個 `go.mod` 檔案
 - 現在資料夾中含有一個 `go.sum` 檔案
-- 現在資料夾中含有一個 `go.work` 檔案
+- 目前資料夾中有一個 `go.work` 檔案
 - 現在資料夾中含有一個 `glide.yaml` 檔案
 - 現在資料夾中含有一個 `Gopkg.yml` 檔案
 - 現在資料夾中含有一個 `Gopkg.lock` 檔案
@@ -1846,7 +1846,7 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 
 By default the module will be shown if any of the following conditions are met:
 
-- 現在資料夾中含有一個 `stack.yaml` 檔案
+- 目前資料夾中有一個 `stack.yaml` 檔案
 - The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
 
 ### 選項

@@ -2,7 +2,7 @@
 
 # Símbolos Nerd Font
 
-Essa predefinição altera os símbolos para cada módulo usar símbolos com Nerd Font.
+Essa personalização altera os símbolos para cada módulo usar Nerd Font.
 
 ![Captura de tela da predefinição Nerd Font Symbols](/presets/img/nerd-font-symbols.png)
 

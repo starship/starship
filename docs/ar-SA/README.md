@@ -119,13 +119,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: تحذير
+   ::: warning
 
    Only elvish v0.18 or higher is supported.
 
    :::
 
-   أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
+   أضف ما يلي إلى نهاية الملف `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -147,7 +147,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: تحذير
+   ::: warning
 
    This will change in the future. Only Nushell v0.61+ is supported.
 

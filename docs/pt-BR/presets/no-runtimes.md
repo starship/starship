@@ -4,7 +4,7 @@
 
 Esta predefinição oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, esta aqui é para você!
 
-![Captura da tela de predefinição Ocultar Versões de Runtime](/presets/img/no-runtime-versions.png)
+![Captura de tela de uma personalização ocultando a versão do runtime](/presets/img/no-runtime-versions.png)
 
 ### Configuração
 

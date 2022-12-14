@@ -25,7 +25,7 @@
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="在 Discord 上聊天"
+      alt="Chat on Discord"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
@@ -369,7 +369,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-將以下內容加到 `~/.xonshrc` 的結尾：
+將以下內容放到 `~/.xonshrc` 的結尾：
 
 ```python
 execx($(starship init xonsh))

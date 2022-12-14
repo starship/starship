@@ -2,7 +2,7 @@
 
 Mimo że Starship jest wszechstronny, czasem nie wystarczy modyfikacja pliku `starship.toml` żeby uzyskać pewne rzeczy. Na tej stronie opisano bardziej zaawansowane sposoby konfigurowania używane w Starship.
 
-::: uwaga
+::: warning
 
 Konfiguracja opisana w tej sekcji może ulec zmianie w przyszłych wydaniach Starship.
 
