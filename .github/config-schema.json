@@ -1360,6 +1360,21 @@
         }
       ]
     },
+    "salesforce": {
+      "default": {
+        "disabled": true,
+        "format": "org [$symbol($org_name) ]($style)",
+        "show_alias": true,
+        "style": "bold blue",
+        "symbol": "☁ ",
+        "use_sfdx": false
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SalesforceConfig"
+        }
+      ]
+    },
     "scala": {
       "default": {
         "detect_extensions": [
@@ -4776,6 +4791,42 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "SalesforceConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "description": "The format for the module.",
+          "default": "org [$symbol($org_name) ]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "description": "The symbol used before displaying the current AWS profile.",
+          "default": "☁ ",
+          "type": "string"
+        },
+        "style": {
+          "description": "The style for the module.",
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "description": "Disables the AWS module.",
+          "default": true,
+          "type": "boolean"
+        },
+        "show_alias": {
+          "description": "Show alias if possible instead of full email address",
+          "default": true,
+          "type": "boolean"
+        },
+        "use_sfdx": {
+          "description": "Use sfdx to determine current org",
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
