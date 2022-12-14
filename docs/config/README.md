@@ -306,6 +306,7 @@ $rlang\
 $red\
 $ruby\
 $rust\
+$salesforce\
 $scala\
 $swift\
 $terraform\
