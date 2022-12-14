@@ -277,7 +277,7 @@ pub fn description(module: &str) -> &'static str {
         "rlang" => "The currently installed version of R",
         "ruby" => "The currently installed version of Ruby",
         "rust" => "The currently installed version of Rust",
-        "salesforce" => "The currently org info",
+        "salesforce" => "The currently selected org info",
         "scala" => "The currently installed version of Scala",
         "shell" => "The currently used shell indicator",
         "shlvl" => "The current value of SHLVL",
