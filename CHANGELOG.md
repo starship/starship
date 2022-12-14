@@ -1,5 +1,42 @@
 # Changelog
 
+## [1.12.0](https://github.com/starship/starship/compare/v1.11.0...v1.12.0) (2022-12-13)
+
+
+### Features
+
+* add Haxe support ([#4395](https://github.com/starship/starship/issues/4395)) ([2766c78](https://github.com/starship/starship/commit/2766c78749e638282d1dee56f7afcc195c16c064))
+* Add operating system module ([#4109](https://github.com/starship/starship/issues/4109)) ([3109943](https://github.com/starship/starship/commit/3109943822a15b22faaa6cdfda17ca9554bcd800))
+* **aws:** add a fallback for `expiration` key ([#4455](https://github.com/starship/starship/issues/4455)) ([5a2c85d](https://github.com/starship/starship/commit/5a2c85d078c1a8c83cc055dd0e56033abb15c2bf))
+* **azure:** add username to azure module config ([#4323](https://github.com/starship/starship/issues/4323)) ([6e15c00](https://github.com/starship/starship/commit/6e15c00238a06e92cf411a669590002eb22324e7))
+* **bug-report:** ask for confirmation before opening issue ([#4543](https://github.com/starship/starship/issues/4543)) ([8bb9038](https://github.com/starship/starship/commit/8bb9038431cd369e953ca156ed09aabd7c2ba326))
+* **directory:** add before_repo_root_style ([#4595](https://github.com/starship/starship/issues/4595)) ([ea6249b](https://github.com/starship/starship/commit/ea6249b5243acf0cce2352a1b580479546b92340))
+* **git_commit:** support showing lightweight tags ([#4632](https://github.com/starship/starship/issues/4632)) ([ac37792](https://github.com/starship/starship/commit/ac37792c19d7c545d4c51cf712f13e5e81559511))
+* **guix_shell:** Initial implementation ([#4397](https://github.com/starship/starship/issues/4397)) ([d4bcc51](https://github.com/starship/starship/commit/d4bcc519e61524e1fe30f82412a09af113d75287))
+* **init:** Use which-rs to resolve starship path ([cc2c8c4](https://github.com/starship/starship/commit/cc2c8c4a5450f2811612129abfbdc1aba12def91))
+* **localip:** use reserved remote address ([#4648](https://github.com/starship/starship/issues/4648)) ([ddd54e9](https://github.com/starship/starship/commit/ddd54e9b20427b716e13d83884b4b0db03953210)), closes [#4614](https://github.com/starship/starship/issues/4614)
+* **nu:** enable right prompt ([#4490](https://github.com/starship/starship/issues/4490)) ([a7abc0f](https://github.com/starship/starship/commit/a7abc0f4508b5357e44bc1d0a8b0ed363201824c)), closes [#3982](https://github.com/starship/starship/issues/3982)
+* Open Policy Agent module ([#1740](https://github.com/starship/starship/issues/1740)) ([#4441](https://github.com/starship/starship/issues/4441)) ([865e68d](https://github.com/starship/starship/commit/865e68da3ad752a2bc85b923258f2dbd5287ada8))
+* **package:** added showing gradle version based on the gradle.properties file ([#4432](https://github.com/starship/starship/issues/4432)) ([14ee81b](https://github.com/starship/starship/commit/14ee81b9c31047993217f060b57fb327a58c0d38))
+* **preset:** Add No Empty Icons preset ([#4518](https://github.com/starship/starship/issues/4518)) ([1a3d51f](https://github.com/starship/starship/commit/1a3d51fe76c5a62d53533f5d14ceb4425d5a33a5))
+* **preset:** Add no-nerd-font preset ([#4517](https://github.com/starship/starship/issues/4517)) ([4d86a4c](https://github.com/starship/starship/commit/4d86a4c7ae70dff552cdea85d7ea7872e2321c2f))
+* **release:** add chocolatey publishing ([#4637](https://github.com/starship/starship/issues/4637)) ([df37e8d](https://github.com/starship/starship/commit/df37e8d40c7b3556f8428ce29c53f2882af2ce25))
+
+
+### Bug Fixes
+
+* **aws:** enable when using .aws/credentials ([#4604](https://github.com/starship/starship/issues/4604)) ([c8ac877](https://github.com/starship/starship/commit/c8ac8777a593358868813254c662da5fcb9fe6c8))
+* **buf:** broken icon on windows 10 ([#4689](https://github.com/starship/starship/issues/4689)) ([7341607](https://github.com/starship/starship/commit/7341607c294a633477005d777bd03b18522aabf4))
+* **ci:** cache after selecting the toolchain ([#4619](https://github.com/starship/starship/issues/4619)) ([e4dbff0](https://github.com/starship/starship/commit/e4dbff0fc7e88f792b90703f03f83e31d401b90e))
+* **config:** unrecognized config properties don't cause config error ([#4547](https://github.com/starship/starship/issues/4547)) ([1b03ef2](https://github.com/starship/starship/commit/1b03ef21f34fc4acf890b01cfca3d07158ef5c46))
+* **container:** avoid detecting WSL as a systemd-container ([#4593](https://github.com/starship/starship/issues/4593)) ([b47a4fe](https://github.com/starship/starship/commit/b47a4fe51470a36116b5c941c6e07ac5730585ea))
+* don't attempt to display cmd_duration notification if in TTY ([#4535](https://github.com/starship/starship/issues/4535)) ([0427863](https://github.com/starship/starship/commit/04278631687da388005f2c26f3da2115b9075bf5))
+* **git:** check `tag_disabled` option ([#4527](https://github.com/starship/starship/issues/4527)) ([fd165b9](https://github.com/starship/starship/commit/fd165b96cc9587f81ab68b580d371b71f4e0ff35))
+* **java:** Improved regex for Java version (starship[#4610](https://github.com/starship/starship/issues/4610)) ([#4616](https://github.com/starship/starship/issues/4616)) ([a9eb65e](https://github.com/starship/starship/commit/a9eb65ef35de948880cbf340ffbfe6af126e5e44))
+* **nu:** remove -c parameter from `term size` ([#4477](https://github.com/starship/starship/issues/4477)) ([4999530](https://github.com/starship/starship/commit/49995301ce90a0f63b2d5f9cbb30021a0f08f6ff))
+* **pwsh:** fix error log display on older versions of pwsh ([#4650](https://github.com/starship/starship/issues/4650)) ([ef83e7a](https://github.com/starship/starship/commit/ef83e7a0928231b02650b3554ccd5bf21164aaff))
+* **status:** replace multiply with cross mark emoji ([#4461](https://github.com/starship/starship/issues/4461)) ([186d99e](https://github.com/starship/starship/commit/186d99e623d22fe9e2f7e52378f2ec4015f713d4))
+
 ## [1.11.0](https://github.com/starship/starship/compare/v1.10.3...v1.11.0) (2022-10-14)
 
 

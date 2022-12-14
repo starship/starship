@@ -119,7 +119,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    #### Elvish
 
-   ::: uwaga
+   ::: warning
 
    Działa tylko dla elvish v0.18 albo wyższej wersji.
 
@@ -147,7 +147,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    #### Nushell
 
-   ::: uwaga
+   ::: warning
 
    Ten sposób zmieni się w przyszłości. Działa tylko na Nushell v0.61+.
 

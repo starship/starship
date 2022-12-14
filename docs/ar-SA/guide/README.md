@@ -178,7 +178,7 @@
 <details>
 <summary>Android</summary>
 
-قم بتثبيت Starship باستخدام أي من package managers التاليين:
+يمكنك تثبيت starship باستخدام احد ال package managers التالية:
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -189,7 +189,7 @@
 <details>
 <summary>BSD</summary>
 
-قم بتثبيت Starship باستخدام أي من package managers التاليين:
+يمكنك تثبيت starship باستخدام احد ال package managers التالية:
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -270,7 +270,7 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Bash</summary>
 
-أضف ما يلي إلى نهاية ملف `~/.bashrc`:
+أضف ما يلي إلى نهاية `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
@@ -292,7 +292,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-أضف ما يلي إلى نهاية الملف `~/.elvish/rc.elv`:
+أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
 
 ```sh
 eval (starship init elvish)
@@ -305,7 +305,7 @@ eval (starship init elvish)
 <details>
 <summary>Fish</summary>
 
-أضف ما يلي إلى نهاية الملف `~/.fish/config.fish`:
+أضف ما يلي إلى نهاية `~/.config/fish/config.fish`:
 
 ```fish
 starship init fish | source
@@ -316,7 +316,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-أضف ما يلي إلى نهاية الملف `config/ion/initrc`:
+أضف ما يلي إلى نهاية `~/.config/ion/initrc`:
 
 ```sh
 eval $(starship init ion)

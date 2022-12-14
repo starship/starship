@@ -400,15 +400,15 @@ Se você estiver procurando personalizar ainda mais a Starship:
 
 ## 🤝 Contribuindo
 
-Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você está buscando um caminho mais fácil para começar no projeto, veja essas [boas issues para começar](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Nós estamos sempre procurando contribuidores de **todos os níveis de conhecimento**! Se você deseja facilitar seu caminho para o projeto, experimente uma [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Se você é fluente em uma linguá não inglesa, nos ficaríamos gratos por qualquer ajuda em manter nossas documentações traduzidas e atualizadas em outras linguás. Se você deseja ajudar nas traduções, você pode contribuir no [Crowdin do Starship](https://translate.starship.rs/).
+Se você é fluente em um idioma diferente do inglês, agradecemos qualquer ajuda para manter nossos documentos traduzidos e atualizados em outros idiomas. Se você quiser ajudar, as traduções podem ser contribuídas no [Crowdin do Starship](https://translate.starship.rs/).
 
-Se você está interessado em ajudar contribuindo com o projeto, dê uma olhada no nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor no Discord](https://discord.gg/8Jzqu3T) e dizer oi. 👋
+Se você estiver interessado em ajudar a contribuir com starship, dê uma olhada em nosso [Guia de Contribuição](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Além disso, sinta-se à vontade para entrar no nosso [servidor do Discord](https://discord.gg/8Jzqu3T) e diga oi. 👋
 
 ## 💭 Inspirado por
 
-Por favor, confira estes projetos anteriores que ajudaram a inspirar a criação do startship. 🙏
+Por favor, confira esses trabalhos anteriores que ajudaram a inspirar a criação do starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Um prompt ZSH para astronautas.
 
