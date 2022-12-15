@@ -3,6 +3,37 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::nix_shell::NixShellConfig;
 use crate::formatter::StringFormatter;
 
+#[derive(Debug)]
+enum NixShellType {
+    Pure,
+    Impure,
+    // We're in a Nix shell, but we don't know which type.
+    Unknown,
+}
+
+impl NixShellType {
+    fn detect_shell_type(context: &Context) -> Option<NixShellType> {
+        use NixShellType::*;
+
+        let shell_type = context.get_env("IN_NIX_SHELL");
+        let shell_type_format_from_env = match shell_type.as_deref() {
+            Some("pure") => Some(Pure),
+            Some("impure") => Some(Impure),
+            _ => None,
+        };
+
+        shell_type_format_from_env.or_else(|| Self::in_new_nix_shell(context).map(|_| Unknown))
+    }
+
+    // Hack to detect if we're in a `nix shell` (in constrast to a `nix-shell`).
+    // A better way to do this will be enabled by https://github.com/NixOS/nix/issues/6677.
+    fn in_new_nix_shell(context: &Context) -> Option<()> {
+        let path = context.get_env("PATH")?;
+
+        path.contains("/nix/store").then_some(())
+    }
+}
+
 /// Creates a module showing if inside a nix-shell
 ///
 /// The module will use the `$IN_NIX_SHELL` and `$name` environment variable to
@@ -22,13 +53,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
     let shell_name = context.get_env("name");
-    let shell_type = context.get_env("IN_NIX_SHELL")?;
-    let shell_type_format = match shell_type.as_ref() {
-        "impure" => config.impure_msg,
-        "pure" => config.pure_msg,
-        _ => {
-            return None;
-        }
+    let shell_type = NixShellType::detect_shell_type(context)?;
+    let shell_type_format = match shell_type {
+        NixShellType::Pure => config.pure_msg,
+        NixShellType::Impure => config.impure_msg,
+        NixShellType::Unknown => "",
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -127,6 +156,29 @@ mod tests {
             "via {} ",
             Color::Blue.bold().paint("❄️  impure (starship)")
         ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn new_nix_shell() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env(
+                "PATH",
+                "/nix/store/v7qvqv81jp0cajvrxr9x072jgqc01yhi-nix-info/bin:/Users/user/.cargo/bin",
+            )
+            .collect();
+        let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  ")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn no_new_nix_shell() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("PATH", "/Users/user/.cargo/bin")
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
     }
