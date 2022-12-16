@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: Minimal, blendende rask og uendelig tilpasningsdyktig ledetekst for alle skall!
 actionText: Get Started →
 actionLink: ./guide/
 features:
@@ -66,7 +66,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   Legg til følgende på slutten av `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   Legg til følgende i slutten av `~/.config/fish/config.fish`:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   Legg til følgende i slutten av `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
@@ -117,7 +117,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```
 
 
-   #### Elvish
+   #### Elvisk
 
    ::: warning
 
@@ -125,7 +125,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Legg til følgende i slutten av  `~/.elvish/rc.elv`:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -136,7 +136,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   Legg til følgende i slutten av `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -159,7 +159,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   Og legg følgende til slutten av Nushell konfigurasjonen (finn det ved å kjøre `$nu.config-path`):
 
    ```sh
    source ~/.cache/starship/init.nu
@@ -178,7 +178,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Du må bruke [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) med Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
