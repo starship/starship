@@ -278,6 +278,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$gradle\
 $lua\
 $nim\
 $nodejs\
@@ -1840,13 +1841,48 @@ disabled = true
 format = 'via [🐂](yellow bold) '
 ```
 
+## Gradle
+
+The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
+
+Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
+
+- The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
+- The current directory contains a file ending with `.gradle` or `.gradle.kts`.
+
+The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+
+### Opsi
+
+| Opsi                | Bawaan                               | Deskripsi                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                  |
+| `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                                  |
+| `detect_extensions` | `["gradle", "gradle.kts"]`           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `["gradle"]`                         | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `"bold bright-cyan"`                 | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                              | Disables the `gradle` module.                                                       |
+| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                               |
+
+### Variabel
+
+| Variabel | Contoh   | Deskripsi                         |
+| -------- | -------- | --------------------------------- |
+| version  | `v7.5.1` | The version of `gradle`           |
+| symbol   |          | Menyalin nilai dari opsi `symbol` |
+| style*   |          | Menyalin nilai dari opsi `style`  |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
 ## Haskell
 
 The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
 
 Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori ini memiliki berkas `stack.yaml`
+- The current directory contains a `stack.yaml` file
 - The current directory contains any `.hs`, `.cabal`, or `.hs-boot` file
 
 ### Opsi
@@ -1917,14 +1953,14 @@ format = "via [⌘ $version](bold fg:202) "
 
 The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori ini memiliki berkas `helmfile.yaml`
+- The current directory contains a `helmfile.yaml` file
 - The current directory contains a `Chart.yaml` file
 
 ### Opsi
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `[]`                                 | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | filenames mana yang sebaiknya memicu modul ini.                                     |
@@ -1963,7 +1999,7 @@ The `hostname` module shows the system hostname.
 | `ssh_only`   | `true`                                 | Only show hostname when connected to an SSH session.                                                                                 |
 | `ssh_symbol` | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                               |
 | `trim_at`    | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | Format dari modul.                                                                                                                   |
+| `fromat`     | `'[$ssh_symbol$hostname]($style) in '` | Format dari modul.                                                                                                                   |
 | `style`      | `'bold dimmed green'`                  | Gaya penataan untuk modul.                                                                                                           |
 | `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
@@ -2000,7 +2036,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 | Opsi                | Bawaan                                                                                                   | Deskripsi                                                                           |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                 | Format dari modul.                                                                  |
+| `fromat`            | `'via [${symbol}(${version} )]($style)'`                                                                 | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                                                                                              | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                     | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot']` | filenames mana yang sebaiknya memicu modul ini.                                     |
@@ -2057,7 +2093,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
 | `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
 | `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `'[$symbol$number]($style) '` | Format dari modul.                                                       |
+| `fromat`           | `'[$symbol$number]($style) '` | Format dari modul.                                                       |
 | `symbol`           | `'✦'`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `'bold blue'`                 | Gaya penataan untuk modul.                                               |
 | `disabled`         | `false`                       | Disables the `jobs` module.                                              |
@@ -2135,7 +2171,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['kt', 'kts']`                      | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
@@ -2189,7 +2225,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | Opsi                | Bawaan                                               | Deskripsi                                                             |
 | ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`            | `'☸ '`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Format dari modul.                                                    |
+| `fromat`            | `'[$symbol$context( \($namespace\))]($style) in '` | Format dari modul.                                                    |
 | `style`             | `'cyan bold'`                                        | Gaya penataan untuk modul.                                            |
 | `context_aliases`   | `{}`                                                 | Table of context aliases to display.                                  |
 | `user_aliases`      | `{}`                                                 | Table of user aliases to display.                                     |
@@ -2287,7 +2323,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | Opsi       | Bawaan                    | Deskripsi                                              |
 | ---------- | ------------------------- | ------------------------------------------------------ |
 | `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `'[$localipv4]($style) '` | Format dari modul.                                     |
+| `fromat`   | `'[$localipv4]($style) '` | Format dari modul.                                     |
 | `style`    | `'bold yellow'`           | Gaya penataan untuk modul.                             |
 | `disabled` | `true`                    | Disables the `localip` module.                         |
 
@@ -2323,7 +2359,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🌙 '`                               | A format string representing the symbol of Lua.                                     |
 | `detect_extensions` | `['lua']`                            | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -2369,7 +2405,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Opsi        | Bawaan                                          | Deskripsi                                                |
 | ----------- | ----------------------------------------------- | -------------------------------------------------------- |
 | `threshold` | `75`                                            | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | Format dari modul.                                       |
+| `fromat`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | Format dari modul.                                       |
 | `symbol`    | `'🐏'`                                           | The symbol used before displaying the memory usage.      |
 | `style`     | `'bold dimmed white'`                           | Gaya penataan untuk modul.                               |
 | `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
@@ -2448,7 +2484,7 @@ The `hg_branch` module shows the active branch of the repo in your current direc
 | ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `symbol`            | `' '`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
 | `style`             | `'bold purple'`                  | Gaya penataan untuk modul.                                                                   |
-| `format`            | `'on [$symbol$branch]($style) '` | Format dari modul.                                                                           |
+| `fromat`            | `'on [$symbol$branch]($style) '` | Format dari modul.                                                                           |
 | `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
 | `truncation_symbol` | `'…'`                            | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
@@ -2478,7 +2514,7 @@ truncation_symbol = ''
 
 The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori ini memiliki berkas `nim.cfg`
+- The current directory contains a `nim.cfg` file
 - The current directory contains a file with the `.nim` extension
 - The current directory contains a file with the `.nims` extension
 - The current directory contains a file with the `.nimble` extension
@@ -2487,7 +2523,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul                                                                   |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module                                                           |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'👑 '`                               | The symbol used before displaying the version of Nim.                               |
 | `detect_extensions` | `['nim', 'nims', 'nimble']`          | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -2558,7 +2594,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori ini memiliki berkas `package.json`
+- The current directory contains a `package.json` file
 - The current directory contains a `.node-version` file
 - The current directory contains a `.nvmrc` file
 - The current directory contains a `node_modules` directory
@@ -3009,7 +3045,7 @@ format = '[$symbol$stack]($style) '
 
 The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- Direktori ini memiliki berkas `spago.dhall`
+- The current directory contains a `spago.dhall` file
 - The current directory contains a file with the `.purs` extension
 
 ### Opsi
@@ -3055,10 +3091,10 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 - The current directory contains a `.python-version` file
 - The current directory contains a `Pipfile` file
 - The current directory contains a `__init__.py` file
-- Direktori ini memiliki berkas `pyproject.toml`
-- Direktori ini memiliki berkas `requirements.txt`
-- Direktori ini memiliki berkas `setup.py`
-- Direktori ini memiliki berkas `tox.ini`
+- The current directory contains a `pyproject.toml` file
+- The current directory contains a `requirements.txt` file
+- The current directory contains a `setup.py` file
+- The current directory contains a `tox.ini` file
 - The current directory contains a file with the `.py` extension.
 - A virtual environment is currently activated
 
@@ -3348,7 +3384,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 | Opsi                | Bawaan                                   | Deskripsi                                                                           |
 | ------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [${symbol}(${version} )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [${symbol}(${version} )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                              | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `detect_extensions` | `['sbt', 'scala']`                       | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | filenames mana yang sebaiknya memicu modul ini.                                     |
@@ -3401,7 +3437,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                       |
 | `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                        |
 | `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown. |
-| `format`               | `'[$indicator]($style) '` | Format dari modul.                                           |
+| `fromat`               | `'[$indicator]($style) '` | Format dari modul.                                           |
 | `style`                | `'white bold'`            | Gaya penataan untuk modul.                                   |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
@@ -3410,7 +3446,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Variabel  | Bawaan | Deskripsi                                                  |
 | --------- | ------ | ---------------------------------------------------------- |
 | indicator |        | Mirrors the value of `indicator` for currently used shell. |
-| style\* |        | Menyalin nilai dari opsi `style`.                          |
+| style\* |        | Mirrors the value of option `style`.                       |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -3436,7 +3472,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | Opsi        | Bawaan                       | Deskripsi                                                     |
 | ----------- | ---------------------------- | ------------------------------------------------------------- |
 | `threshold` | `2`                          | Display threshold.                                            |
-| `format`    | `'[$symbol$shlvl]($style) '` | Format dari modul.                                            |
+| `fromat`    | `'[$symbol$shlvl]($style) '` | Format dari modul.                                            |
 | `symbol`    | `'↕️  '`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `'bold yellow'`              | Gaya penataan untuk modul.                                    |
@@ -3471,7 +3507,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 | Opsi       | Bawaan                           | Deskripsi                                        |
 | ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | Format dari modul.                               |
+| `fromat`   | `'[$symbol\[$env\]]($style) '` | Format dari modul.                               |
 | `symbol`   | `''`                             | A format string displayed before the image name. |
 | `style`    | `'bold dimmed blue'`             | Gaya penataan untuk modul.                       |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
@@ -3506,7 +3542,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 | `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` artinya tidak ada potongan. Lihat juga modul [`directory`](#directory). |
 | `symbol`            | `'🅢  '`                                | Simbol yang digunakan sebelum nama environment.                                                                                                    |
 | `style`             | `'bold blue'`                          | Gaya penataan untuk modul.                                                                                                                         |
-| `format`            | `'via [$symbol$environment]($style) '` | Format dari modul.                                                                                                                                 |
+| `fromat`            | `'via [$symbol$environment]($style) '` | Format dari modul.                                                                                                                                 |
 | `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                       |
 
 ### Variabel
@@ -3750,7 +3786,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Opsi              | Bawaan                  | Deskripsi                                                                                                                          |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                  |
+| `fromat`          | `'at [$time]($style) '` | The format string for the module.                                                                                                  |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
@@ -3803,7 +3839,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
 | `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
-| `format`      | `'[$user]($style) in '` | Format dari modul.                          |
+| `fromat`      | `'[$user]($style) in '` | Format dari modul.                          |
 | `show_always` | `false`                 | Always shows the `username` module.         |
 | `disabled`    | `false`                 | Disables the `username` module.             |
 
@@ -3876,7 +3912,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 | Opsi                | Bawaan                                       | Deskripsi                                                                           |
 | ------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`         | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'`         | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                                  | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'V '`                                       | A format string representing the symbol of V                                        |
 | `detect_extensions` | `['v']`                                      | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -3911,7 +3947,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | ---------- | -------------------------------- | ------------------------------------------------------ |
 | `symbol`   | `''`                             | The symbol used before displaying the repository name. |
 | `style`    | `'bold yellow'`                  | Gaya penataan untuk modul.                             |
-| `format`   | `'vcsh [$symbol$repo]($style) '` | Format dari modul.                                     |
+| `fromat`   | `'vcsh [$symbol$repo]($style) '` | Format dari modul.                                     |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
 
 ### Variabel
@@ -3943,7 +3979,7 @@ By default the the `zig` module shows the currently installed version of [Zig](h
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.                               |
 | `style`             | `'bold yellow'`                      | Gaya penataan untuk modul.                                                          |
@@ -4016,13 +4052,13 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `deskripsi`         | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
 | `symbol`            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
 | `style`             | `'bold green'`                  | Gaya penataan untuk modul.                                                                                                                                                                                                                                                                    |
-| `format`            | `'[$symbol($output )]($style)'` | Format dari modul.                                                                                                                                                                                                                                                                            |
+| `fromat`            | `'[$symbol($output )]($style)'` | Format dari modul.                                                                                                                                                                                                                                                                            |
 | `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
 | `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
 | `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
