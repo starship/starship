@@ -11,7 +11,7 @@ mod cobol;
 mod conda;
 mod container;
 mod crystal;
-pub(crate) mod custom;
+pub mod custom;
 mod daml;
 mod dart;
 mod deno;

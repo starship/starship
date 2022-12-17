@@ -77,7 +77,7 @@ fn get_type(os: &os_info::Info) -> Option<String> {
 fn get_version(os: &os_info::Info) -> Option<String> {
     Some(os.version())
         .filter(|&x| x != &os_info::Version::Unknown)
-        .map(|x| x.to_string())
+        .map(os_info::Version::to_string)
 }
 
 #[cfg(test)]

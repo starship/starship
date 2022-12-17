@@ -211,7 +211,7 @@ where
             }
         }
 
-        if let Segment::LineTerm = segment {
+        if matches!(segment, Segment::LineTerm) {
             break;
         }
     }

@@ -668,8 +668,8 @@ mod tests {
     fn exec_no_output() {
         let result = internal_exec_cmd("true", &[] as &[&OsStr], Duration::from_millis(500));
         let expected = Some(CommandOutput {
-            stdout: String::from(""),
-            stderr: String::from(""),
+            stdout: String::new(),
+            stderr: String::new(),
         });
 
         assert_eq!(result, expected)
@@ -682,7 +682,7 @@ mod tests {
             internal_exec_cmd("/bin/sh", &["-c", "echo hello"], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
-            stderr: String::from(""),
+            stderr: String::new(),
         });
 
         assert_eq!(result, expected)
@@ -697,7 +697,7 @@ mod tests {
             Duration::from_millis(500),
         );
         let expected = Some(CommandOutput {
-            stdout: String::from(""),
+            stdout: String::new(),
             stderr: String::from("hello\n"),
         });
 
