@@ -278,6 +278,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$gradle\
 $lua\
 $nim\
 $nodejs\
@@ -1840,6 +1841,41 @@ disabled = true
 format = 'via [🐂](yellow bold) '
 ```
 
+## Gradle
+
+The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
+- The current directory contains a file ending with `.gradle` or `.gradle.kts`.
+
+The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+
+### Opzioni
+
+| Opzione             | Default                              | Descrizione                                                                                 |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                  |
+| `version_format`    | `"v${raw}"`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                                          |
+| `detect_extensions` | `["gradle", "gradle.kts"]`           | Quali estensioni dovrebbero attivare questo modulo.                                         |
+| `detect_files`      | `[]`                                 | Quali nomi di file dovrebbero attivare questo modulo.                                       |
+| `detect_folders`    | `["gradle"]`                         | Quali cartelle dovrebbero attivare questo modulo.                                           |
+| `style`             | `"bold bright-cyan"`                 | Lo stile per il modulo.                                                                     |
+| `disabled`          | `false`                              | Disables the `gradle` module.                                                               |
+| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                                       |
+
+### Variables
+
+| Variable | Esempio  | Descrizione                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v7.5.1` | The version of `gradle`              |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style*   |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
 ## Haskell
 
 The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
@@ -2845,8 +2881,8 @@ The `package` module is shown when the current directory is the repository for a
 | `symbol`          | `'📦 '`                            | The symbol used before displaying the version the package.                                  |
 | `version_format`  | `'v${raw}'`                       | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
 | `style`           | `'bold 208'`                      | Lo stile per il modulo.                                                                     |
-| `display_private` | `false`                           | Abilita la visualizzazione della versione per i pacchetti contrassegnati come privati.      |
-| `disabled`        | `false`                           | Disabilita il modulo `package`.                                                             |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                                   |
+| `disabled`        | `false`                           | Disables the `package` module.                                                              |
 
 ### Variables
 
@@ -2964,14 +3000,14 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Opzioni
 
-| Opzione          | Default                                      | Descrizione                                                                                 |
-| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `format`         | `'via [$symbol($username@)$stack]($style) '` | The format string for the module.                                                           |
-| `version_format` | `'v${raw}'`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                                              |
-| `style`          | `'bold 5'`                                   | Lo stile per il modulo.                                                                     |
-| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.                              |
-| `disabled`       | `false`                                      | Disables the `pulumi` module.                                                               |
+| Opzione          | Default                                      | Descrizione                                                                                  |
+| ---------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `format`         | `'via [$symbol($username@)$stack]($style) '` | The format string for the module.                                                            |
+| `version_format` | `'v${raw}'`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                                               |
+| `style`          | `'bold 5'`                                   | Lo stile per il modulo.                                                                      |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.                               |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                                                |
 
 ### Variables
 
@@ -3014,16 +3050,16 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Opzioni
 
-| Opzione             | Default                              | Descrizione                                                                                  |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                   |
-| `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript.                                 |
-| `detect_extensions` | `['purs']`                           | Quali estensioni dovrebbero attivare questo modulo.                                          |
-| `detect_files`      | `['spago.dhall']`                    | Quali nomi di file dovrebbero attivare questo modulo.                                        |
-| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                            |
-| `style`             | `'bold white'`                       | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                                            |
+| Opzione             | Default                              | Descrizione                                                                                 |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
+| `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript.                                |
+| `detect_extensions` | `['purs']`                           | Quali estensioni dovrebbero attivare questo modulo.                                         |
+| `detect_files`      | `['spago.dhall']`                    | Quali nomi di file dovrebbero attivare questo modulo.                                       |
+| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                           |
+| `style`             | `'bold white'`                       | Lo stile per il modulo.                                                                     |
+| `disabled`          | `false`                              | Disables the `purescript` module.                                                           |
 
 ### Variables
 
@@ -3764,7 +3800,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3878,12 +3914,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`         | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'V '`                                       | Una stringa di formato che rappresenta il simbolo di V                                      |
+| `symbol`            | `'V '`                                       | A format string representing the symbol of V                                                |
 | `detect_extensions` | `['v']`                                      | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                           |
 | `style`             | `'blu grassetto'`                            | Lo stile per il modulo.                                                                     |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                               |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                |
 
 ### Variables
 
@@ -4016,7 +4052,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `descrizione`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
