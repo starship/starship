@@ -30,6 +30,7 @@ mod git_metrics;
 mod git_state;
 mod git_status;
 mod golang;
+mod gradle;
 mod guix_shell;
 mod haskell;
 mod haxe;
@@ -129,6 +130,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context),
             "golang" => golang::module(context),
+            "gradle" => gradle::module(context),
             "guix_shell" => guix_shell::module(context),
             "haskell" => haskell::module(context),
             "haxe" => haxe::module(context),
@@ -239,6 +241,7 @@ pub fn description(module: &str) -> &'static str {
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
+        "gradle" => "The currently installed version of Gradle",
         "guix_shell" => "The guix-shell environment",
         "haskell" => "The selected version of the Haskell toolchain",
         "haxe" => "The currently installed version of Haxe",
