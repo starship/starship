@@ -278,6 +278,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$gradle\
 $lua\
 $nim\
 $nodejs\
@@ -1840,6 +1841,41 @@ disabled = true
 format = 'via [🐂](yellow bold) '
 ```
 
+## Gradle
+
+The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
+- The current directory contains a file ending with `.gradle` or `.gradle.kts`.
+
+The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+
+### Options
+
+| Option              | الافتراضي                            | الوصف                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${raw}"`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                        |
+| `detect_extensions` | `["gradle", "gradle.kts"]`           | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `["gradle"]`                         | Which folders should trigger this module.                                 |
+| `style`             | `"bold bright-cyan"`                 | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables the `gradle` module.                                             |
+| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                     |
+
+### Variables
+
+| Variable | مثال     | الوصف                                |
+| -------- | -------- | ------------------------------------ |
+| version  | `v7.5.1` | The version of `gradle`              |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style*   |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
 ## Haskell
 
 The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
@@ -2038,13 +2074,13 @@ The default functionality is:
 - 1 job -> `symbol` is shown.
 - 2 jobs or more -> `symbol` + `number` are shown.
 
-::: warning
+::: تحذير
 
 This module is not supported on tcsh and nu.
 
 :::
 
-::: warning
+::: تحذير
 
 The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
@@ -2720,7 +2756,7 @@ symbol = '☁️ '
 
 The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
-::: warning
+::: تحذير
 
 The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
 
@@ -4016,7 +4052,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `الوصف`             | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
