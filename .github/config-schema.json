@@ -73,7 +73,7 @@
         "disabled": false,
         "format": "with [$symbol($version )]($style)",
         "style": "bold blue",
-        "symbol": "🦬 ",
+        "symbol": "🐃 ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -330,13 +330,14 @@
     },
     "directory": {
       "default": {
+        "before_repo_root_style": null,
         "disabled": false,
         "fish_style_pwd_dir_length": 0,
         "format": "[$path]($style)[$read_only]($read_only_style) ",
         "home_symbol": "~",
         "read_only": "🔒",
         "read_only_style": "red",
-        "repo_root_format": "[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
+        "repo_root_format": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
         "repo_root_style": null,
         "style": "cyan bold",
         "substitutions": {},
@@ -654,6 +655,33 @@
       "allOf": [
         {
           "$ref": "#/definitions/HaskellConfig"
+        }
+      ]
+    },
+    "haxe": {
+      "default": {
+        "detect_extensions": [
+          "hx",
+          "hxml"
+        ],
+        "detect_files": [
+          "haxelib.json",
+          "hxformat.json",
+          ".haxerc"
+        ],
+        "detect_folders": [
+          ".haxelib",
+          "haxe_libraries"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold fg:202",
+        "symbol": "⌘ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HaxeConfig"
         }
       ]
     },
@@ -1827,7 +1855,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "🦬 ",
+          "default": "🐃 ",
           "type": "string"
         },
         "style": {
@@ -2469,7 +2497,7 @@
           "type": "string"
         },
         "repo_root_format": {
-          "default": "[$before_root_path]($style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
+          "default": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
           "type": "string"
         },
         "style": {
@@ -2477,6 +2505,13 @@
           "type": "string"
         },
         "repo_root_style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "before_repo_root_style": {
           "default": null,
           "type": [
             "string",
@@ -3223,6 +3258,63 @@
         },
         "detect_folders": {
           "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "HaxeConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⌘ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold fg:202",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "hx",
+            "hxml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "haxelib.json",
+            "hxformat.json",
+            ".haxerc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".haxelib",
+            "haxe_libraries"
+          ],
           "type": "array",
           "items": {
             "type": "string"

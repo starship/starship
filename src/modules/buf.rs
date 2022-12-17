@@ -1,5 +1,4 @@
 use super::{Context, Module, ModuleConfig};
-
 use crate::configs::buf::BufConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
@@ -103,8 +102,10 @@ mod tests {
                 .sync_all()
                 .unwrap();
             let actual = ModuleRenderer::new("buf").path(dir.path()).collect();
-            let expected = Some(format!("with {}", Color::Blue.bold().paint("🦬 v1.0.0 ")));
+
+            let expected = Some(format!("with {}", Color::Blue.bold().paint("🐃 v1.0.0 ")));
             assert_eq!(expected, actual);
+
             dir.close().unwrap();
         }
 

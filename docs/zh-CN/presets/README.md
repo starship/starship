@@ -10,6 +10,14 @@
 
 [![Nerd 字体符号预设截图](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
+## [No Nerd Fonts](./no-nerd-font.md)
+
+This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+
+::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
+
+[Click to view No Nerd Font preset](./no-nerd-font)
+
 ## [Bracketed Segments](./bracketed-segments.md)
 
 此预设使用括号来分隔所有组件的提示符，不使用 Starship 默认的分隔词（“via”，“on” 等等）。
@@ -28,6 +36,12 @@
 
 [![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
 
+## [No Empty Icons](./no-empty-icons.md)
+
+This preset does not show icons if the toolset is not found.
+
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+
 ## [Pure Prompt](./pure-preset.md)
 
 此预设模拟 [Pure](https://github.com/sindresorhus/pure) 的外观和行为。
@@ -39,3 +53,9 @@
 此预设的灵感来自于 [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json)。 它同时也演示了 Starship 的路径替换功能。
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+
+## [Tokyo Night](./tokyo-night.md)
+
+This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+
+[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)

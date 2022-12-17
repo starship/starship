@@ -28,20 +28,22 @@
     "docs/ja-JP/**",
     "docs/ko-KR/**",
     "docs/nl-NL/**",
+    "docs/no-NO/**",
     "docs/pl-PL/**",
     "docs/pt-BR/**",
     "docs/pt-PT/**",
     "docs/ru-RU/**",
     "docs/tr-TR/**",
+    "docs/uk-UA/**",
     "docs/vi-VN/**",
     "docs/zh-CN/**",
     "docs/zh-TW/**",
     "target/"
   ],
   "plugins": [
-    "https://github.com/dprint/dprint-plugin-typescript/releases/download/0.78.0/plugin.wasm",
-    "https://github.com/dprint/dprint-plugin-json/releases/download/0.16.0/plugin.wasm",
-    "https://github.com/dprint/dprint-plugin-markdown/releases/download/0.14.1/plugin.wasm",
+    "https://github.com/dprint/dprint-plugin-typescript/releases/download/0.79.0/plugin.wasm",
+    "https://github.com/dprint/dprint-plugin-json/releases/download/0.17.0/plugin.wasm",
+    "https://github.com/dprint/dprint-plugin-markdown/releases/download/0.15.0/plugin.wasm",
     "https://github.com/dprint/dprint-plugin-toml/releases/download/0.5.4/plugin.wasm"
   ]
 }

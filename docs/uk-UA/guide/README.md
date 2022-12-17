@@ -165,20 +165,20 @@
 
 <a name="🚀-installation"></a>
 
-## 🚀 Встановлення
+## 🚀 Установлення
 
 ### Передумови
 
-- Встановлений та ввімкнений набір шрифтів та термінальних іконок [Nerd Font](https://www.nerdfonts.com/) (як от [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Установлений та ввімкнений у Вашому терміналі набір шрифтів [Nerd Font](https://www.nerdfonts.com/) (для прикладу, спробуйте [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Крок 1. Встановіть Starship
+### Крок 1. Установіть starship
 
-Виберіть вашу операційну систему зі списку нижче, щоб переглянути інструкцію з установки:
+Виберіть Вашу операційну систему зі списку нижче, щоб переглянути інструкцію з установки:
 
 <details>
 <summary>Android</summary>
 
-Встановіть Starship використовуючи менеджер пакетів:
+Встановіть Starship використовуючи будь-який з наступних менеджерів пакетів:
 
 | Репозиторій                                                                       | Командна інструкція    |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -210,20 +210,19 @@ curl -sS https://starship.rs/install.sh | sh
 
 Як варіант, можете встановити Starship через будь-який з наступних пакетних менеджерів:
 
-| Дистрибутив        | Репозиторій                                                                                     | Командна інструкція                                           |
-| ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| **_Будь-який_**    | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                             |
-| _Будь-який_        | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                       |
-| _Будь-який_        | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                       |
-| _Будь-який_        | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                       |
-| Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                            |
-| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                          |
+| Дистрибутив        | Репозиторій                                                                                     | Командна інструкція                                                            |
+| ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **_Будь-який_**    | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _Будь-який_        | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _Будь-який_        | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| _Будь-який_        | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
+| Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
+| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                        |
-| Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                  |
-| Manjaro            |                                                                                                 | `pacman -S starship`                                          |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                |
-| Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                    |
+| Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
+| Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
 
@@ -264,14 +263,14 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Крок 2. Налаштування вашої оболонки для використання Starship
+### Крок 2. Налаштуйте Вашу оболонку для використання starship
 
 Налаштуйте свою оболонку, щоб ініціалізувати starship. Виберіть ваш варіант зі списку:
 
 <details>
 <summary>Bash</summary>
 
-Add the following to the end of `~/.bashrc`:
+Додайте наступний рядок наприкінці `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
@@ -282,7 +281,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Вам потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) разом з Cmd. Створіть файл за шляхом `%LocalAppData%\clink\starship.lua` із наступним вмістом:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -293,20 +292,20 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.elvish/rc.elv`:
+Додайте наступний рядок наприкінці `~/.elvish/rc.elv`:
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+Примітка: Підтримується лише Elvish v0.18+
 
 </details>
 
 <details>
 <summary>Fish</summary>
 
-Add the following to the end of `~/.config/fish/config.fish`:
+Додайте наступний рядок наприкінці `~/.config/fish/config.fish`:
 
 ```fish
 starship init fish | source
@@ -317,7 +316,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-Add the following to the end of `~/.config/ion/initrc`:
+Додайте наступний рядок наприкінці `~/.config/ion/initrc`:
 
 ```sh
 eval $(starship init ion)
@@ -335,20 +334,20 @@ mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+Додайте наступний рядок наприкінці Вашої конфігурації Nushell (знайдіть її виконавши `$nu.config-path`):
 
 ```sh
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+Примітка: Підтримується лише Nushell v0.61+
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Додайте наступний рядок наприкінці Вашої конфігурації PowerShell (знайдіть її виконавши `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -359,7 +358,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-Add the following to the end of `~/.tcshrc`:
+Додайте наступний рядок наприкінці `~/.tcshrc`:
 
 ```sh
 eval `starship init tcsh`
@@ -370,7 +369,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-Add the following to the end of `~/.xonshrc`:
+Додайте наступний рядок наприкінці `~/.xonshrc`:
 
 ```python
 execx($(starship init xonsh))
@@ -381,7 +380,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-Add the following to the end of `~/.zshrc`:
+Додайте наступний рядок наприкінці `~/.zshrc`:
 
 ```sh
 eval "$(starship init zsh)"
@@ -389,7 +388,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Крок 3. Configure Starship
+### Крок 3. Налаштуйте starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
@@ -409,19 +408,27 @@ If you are interested in helping contribute to starship, please take a look at o
 
 ## 💭 Inspired By
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Будь ласка, перегляньте ці попередні роботи, які надихнули на створення starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Командний рядок ZSH для астронавтів.
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Dimension](https://dimension.dev/)
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 Ліцензія
 
 Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.

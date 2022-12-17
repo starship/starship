@@ -10,9 +10,9 @@ Las configuraciones de esta sección están sujetos a cambios en futuras version
 
 ## TransientPrompt en PowerShell
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+Es posible reemplazar la entrada impresa anteriormente con una cadena personalizada. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. Para habilitar esto, ejecuta `Enable-TransientPrompt` en la línea de comandos. Para hacerlo permanente, haz esta declaración en tu `$PROFILE`. La transitoriedad puede ser desactivada al momento con `Disable-TransientPrompt`.
 
-By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
+Por defecto, el lado izquierdo de la entrada es reemplazado por `>`. Para personalizar esto, defina una nueva función llamada `Invoke-Starship-TransientFunction`. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -26,7 +26,7 @@ Enable-TransientPrompt
 
 ## TransientPrompt y TransientRight Prompt en Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
@@ -34,7 +34,7 @@ Clink allows you to replace the previous-printed prompt with custom strings. Thi
 
 You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
 
-- By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
+- Por defecto, el lado izquierdo de la entrada es reemplazado por `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -56,11 +56,11 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt and TransientRightPrompt in Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Es posible reemplazar la entrada impresa anteriormente con una cadena personalizada. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
 
 ```fish
 function starship_transient_prompt_func
@@ -205,7 +205,9 @@ Algunos intérpretes de comandos soportan un prompt derecho que se renderiza en 
 
 Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear los módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo `fill`](/config/#fill).
 
-`right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### Ejemplo
 
@@ -263,7 +265,7 @@ Las cadenas de estilo son una lista de palabras, separadas por espacios en blanc
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
-- `none`
+- `ninguno`
 
 donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
 
@@ -280,5 +282,5 @@ Si se especifican varios colores para el primer plano/fondo, el último en la ca
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
 - Many terminals disable support for `blink` by default
-- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app

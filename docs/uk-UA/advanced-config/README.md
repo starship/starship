@@ -1,16 +1,16 @@
-# Advanced Configuration
+# Розширені налаштування
 
-While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
+Хоч Starship і універсальна оболонка, іноді необхідно зробити більше ніж просто відредагувати `star.toml`, щоб можна було робити певні речі. Ця сторінка містить деякі з найбільш просунутих методів конфігурації, які використовуються у starship.
 
 ::: warning
 
-The configurations in this section are subject to change in future releases of Starship.
+Налаштування у цьому розділі можуть відрізнятись у майбутніх релізах Starship.
 
 :::
 
-## TransientPrompt in PowerShell
+## TransientPrompt у PowerShell
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+Можна замінити попередню підказку на власний рядок. Це корисно у випадках, коли вся інформація з підказки не завжди потрібна. Щоб увімкнути це, запустіть `Enable-TransientPrompt` в сеансі консолі. Щоб зробити цю зміну постійною, додайте цю команду у ваш `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
 By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
 
@@ -26,7 +26,7 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. Це корисно у випадках, коли вся інформація з підказки не завжди потрібна. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
@@ -56,7 +56,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt and TransientRightPrompt in Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Можна замінити попередню підказку на власний рядок. Це корисно у випадках, коли вся інформація з підказки не завжди потрібна. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
@@ -205,7 +205,9 @@ Some shells support a right prompt which renders on the same line as the input. 
 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### Example
 
@@ -280,5 +282,5 @@ If multiple colors are specified for foreground/background, the last one in the 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
 - Many terminals disable support for `blink` by default
-- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app

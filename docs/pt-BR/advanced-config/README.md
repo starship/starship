@@ -8,7 +8,7 @@ As configurações nesta seção estão sujeitas a alterações em futuras vers�
 
 :::
 
-## TransientPrompt in PowerShell
+## TransientPrompt no PowerShell
 
 It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
@@ -205,7 +205,9 @@ Alguns shells suportam um prompt direito que é renderizado na mesma linha que a
 
 Nota: O prompt direito é uma única linha após o local de entrada. Para alinhar módulos à direita acima da linha de entrada em um prompt de várias linhas, consulte o [módulo `fill`](/config/#fill).
 
-`right_format` é atualmente compatível com os seguintes shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### Exemplo
 
@@ -280,5 +282,5 @@ Se várias cores forem especificadas para primeiro plano/plano de fundo, a últi
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
 - Many terminals disable support for `blink` by default
-- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app
