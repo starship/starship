@@ -144,6 +144,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let kube_ctx = env::split_paths(&kube_cfg).find_map(get_kube_context)?;
 
+    if config.ignore_contexts.contains(&kube_ctx.as_str()) {
+        return None;
+    }
+
     let ctx_components: Vec<Option<KubeCtxComponents>> = env::split_paths(&kube_cfg)
         .map(|filename| get_kube_ctx_component(filename, kube_ctx.clone()))
         .collect();
@@ -953,6 +957,45 @@ users: []
 
         let expected = Some("☸ test_user test_namespace".to_string());
         assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_ctx_ignore_simple() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let filename = dir.path().join("config");
+
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: test_cluster
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                ignore_contexts = ["test_context"]
+            })
+            .collect();
+
+        assert_eq!(None, actual);
+
         dir.close()
     }
 }

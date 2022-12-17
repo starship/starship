@@ -834,6 +834,7 @@
         "detect_folders": [],
         "disabled": true,
         "format": "[$symbol$context( \\($namespace\\))]($style) in ",
+        "ignore_contexts": [],
         "style": "cyan bold",
         "symbol": "☸ ",
         "user_aliases": {}
@@ -3686,6 +3687,13 @@
           }
         },
         "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ignore_contexts": {
           "default": [],
           "type": "array",
           "items": {
