@@ -2253,14 +2253,14 @@ dependencies = [
 
 [[package]]
 name = "process_control"
-version = "4.0.0"
+version = "4.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c5c066e788f2eca1f84fbb2da941dfa255f220d57205350e60c3d8e60c6a735"
+checksum = "e1c4e268b11b4a74bd165fc416575cfc5d5d9bf97e647c354be6802987f9724a"
 dependencies = [
  "crossbeam-channel",
  "libc",
  "signal-hook 0.3.14",
- "windows-sys 0.36.1",
+ "windows-sys 0.42.0",
 ]
 
 [[package]]
