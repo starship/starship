@@ -1563,10 +1563,11 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| Variable  | Beispiel  | Beschreibung                         |
-| --------- | --------- | ------------------------------------ |
-| hash      | `b703eb3` | The current git commit hash          |
-| style\* |           | Spiegelt den Wert der Option `style` |
+| Variable  | Beispiel  | Beschreibung                                 |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | The current git commit hash                  |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | Spiegelt den Wert der Option `style`         |
 
 *: This variable can only be used as a part of a style string
 
