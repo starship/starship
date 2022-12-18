@@ -26,6 +26,7 @@ pub mod elm;
 pub mod env_var;
 pub mod erlang;
 pub mod fill;
+pub mod flutter;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
@@ -150,6 +151,8 @@ pub struct FullConfig<'a> {
     erlang: erlang::ErlangConfig<'a>,
     #[serde(borrow)]
     fill: fill::FillConfig<'a>,
+    #[serde(borrow)]
+    flutter: flutter::FlutterConfig<'a>,
     #[serde(borrow)]
     gcloud: gcloud::GcloudConfig<'a>,
     #[serde(borrow)]
