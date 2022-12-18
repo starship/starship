@@ -133,6 +133,6 @@ impl log::Log for StarshipLogger {
 }
 
 pub fn init() {
-    log::set_boxed_logger(Box::new(StarshipLogger::default())).unwrap();
+    log::set_boxed_logger(Box::<StarshipLogger>::default()).unwrap();
     log::set_max_level(LevelFilter::Trace);
 }

@@ -184,7 +184,7 @@ fn main() {
                 println!("Supported modules list");
                 println!("----------------------");
                 for modules in ALL_MODULES {
-                    println!("{}", modules);
+                    println!("{modules}");
                 }
             }
             if let Some(module_name) = name {
@@ -198,7 +198,7 @@ fn main() {
                     configure::update_configuration(&name, &value)
                 }
             } else if let Err(reason) = configure::edit_configuration(None) {
-                eprintln!("Could not edit configuration: {}", reason);
+                eprintln!("Could not edit configuration: {reason}");
                 std::process::exit(1);
             }
         }

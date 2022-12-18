@@ -628,6 +628,29 @@
         }
       ]
     },
+    "gradle": {
+      "default": {
+        "detect_extensions": [
+          "gradle",
+          "gradle.kts"
+        ],
+        "detect_files": [],
+        "detect_folders": [
+          "gradle"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "recursive": false,
+        "style": "bold bright-cyan",
+        "symbol": "🅶 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GradleConfig"
+        }
+      ]
+    },
     "guix_shell": {
       "default": {
         "disabled": false,
@@ -3262,6 +3285,62 @@
         "detect_folders": {
           "default": [
             "Godeps"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GradleConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🅶 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold bright-cyan",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "recursive": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "gradle",
+            "gradle.kts"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            "gradle"
           ],
           "type": "array",
           "items": {

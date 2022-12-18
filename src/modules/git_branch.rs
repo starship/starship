@@ -491,10 +491,9 @@ mod tests {
                 toml::from_str(&format!(
                     "
                     [git_branch]
-                        truncation_length = {}
-                        {}
-                ",
-                    truncate_length, config_options
+                        truncation_length = {truncate_length}
+                        {config_options}
+                "
                 ))
                 .unwrap(),
             )
@@ -530,10 +529,9 @@ mod tests {
                 toml::from_str(&format!(
                     r#"
                     [git_branch]
-                        format = "{}"
-                        {}
-                "#,
-                    format, config_options
+                        format = "{format}"
+                        {config_options}
+                "#
                 ))
                 .unwrap(),
             )

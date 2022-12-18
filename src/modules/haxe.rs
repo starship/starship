@@ -132,7 +132,7 @@ mod tests {
                 "haxe --version",
                 Some(CommandOutput {
                     stdout: "4.3.0-rc.1+\n".to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(dir.path())
@@ -151,7 +151,7 @@ mod tests {
                 "haxe --version",
                 Some(CommandOutput {
                     stdout: "4.3.0-rc.1+\n".to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(dir.path())
@@ -173,7 +173,7 @@ mod tests {
                 "haxe --version",
                 Some(CommandOutput {
                     stdout: "4.3.0-rc.1+\n".to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(dir.path())
@@ -201,7 +201,7 @@ mod tests {
                 "haxe --version",
                 Some(CommandOutput {
                     stdout: "4.3.0-rc.1+\n".to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(dir.path())
@@ -230,7 +230,7 @@ mod tests {
                 "haxe --version",
                 Some(CommandOutput {
                     stdout: "4.3.0-rc.1+\n".to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(dir.path())
@@ -260,7 +260,7 @@ mod tests {
                 "haxe --version",
                 Some(CommandOutput {
                     stdout: "4.3.0-rc.1+\n".to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(dir.path())
@@ -290,7 +290,7 @@ mod tests {
                 "haxe --version",
                 Some(CommandOutput {
                     stdout: "4.3.0-rc.1+\n".to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(dir.path())
