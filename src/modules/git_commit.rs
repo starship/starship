@@ -437,7 +437,7 @@ mod tests {
             .output()?;
 
         create_command("git")?
-            .args(["describe", "tag", "v2"])
+            .args(["describe" , "tag", "v2"])
             .env("GIT_COMMITTER_DATE", "2022-01-01 00:00:01 +0000")
             .current_dir(repo_dir.path())
             .output()?;
