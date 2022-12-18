@@ -1563,10 +1563,11 @@ O módulo `git_commit` exibe o hash do comiit atual e também a tag (se existir)
 
 ### Variáveis
 
-| Variável  | Exemplo   | Descrição                        |
-| --------- | --------- | -------------------------------- |
-| hash      | `b703eb3` | A hash atual do git commit       |
-| style\* |           | Espelha o valor da opção `style` |
+| Variável  | Exemplo   | Descrição                                    |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | A hash atual do git commit                   |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | Espelha o valor da opção `style`             |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
