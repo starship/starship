@@ -89,7 +89,7 @@ fn get_wrapper_properties_file(context: &Context, recursive: bool) -> Option<Str
         .is_match()
     {
         properties = utils::read_file(
-            &context
+            context
                 .current_dir
                 .join("gradle/wrapper/gradle-wrapper.properties"),
         )
@@ -98,7 +98,7 @@ fn get_wrapper_properties_file(context: &Context, recursive: bool) -> Option<Str
     if recursive && properties.is_none() {
         for dir in context.current_dir.ancestors().skip(1) {
             properties =
-                utils::read_file(&dir.join("gradle/wrapper/gradle-wrapper.properties")).ok();
+                utils::read_file(dir.join("gradle/wrapper/gradle-wrapper.properties")).ok();
             if properties.is_some() {
                 break;
             }

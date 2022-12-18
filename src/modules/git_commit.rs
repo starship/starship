@@ -373,16 +373,7 @@ mod tests {
             .output()?;
 
         let git_tag = create_command("git")?
-            .args([
-                "for-each-ref",
-                "--contains",
-                "HEAD",
-                "--sort=-taggerdate",
-                "--count=1",
-                "--format",
-                "%(refname:short)",
-                "refs/tags",
-            ])
+            .args(["describe", "--tags"])
             .current_dir(repo_dir.path())
             .output()?
             .stdout;
@@ -443,16 +434,7 @@ mod tests {
             .output()?;
 
         let git_tag = create_command("git")?
-            .args([
-                "for-each-ref",
-                "--contains",
-                "HEAD",
-                "--sort=-taggerdate",
-                "--count=1",
-                "--format",
-                "%(refname:short)",
-                "refs/tags",
-            ])
+            .args(["describe", "--tags"])
             .current_dir(repo_dir.path())
             .output()?
             .stdout;
