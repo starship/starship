@@ -1563,10 +1563,11 @@ Le module `git_commit` affiche le hash du commit courant et l’étiquette (s’
 
 ### Variables
 
-| Variable  | Exemple   | Description                           |
-| --------- | --------- | ------------------------------------- |
-| hash      | `b703eb3` | Le hash du commit git actuel          |
-| style\* |           | Reflète la valeur de l'option `style` |
+| Variable  | Exemple   | Description                                  |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | Le hash du commit git actuel                 |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | Reflète la valeur de l'option `style`        |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
