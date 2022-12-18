@@ -69,7 +69,7 @@ rand = "0.8.5"
 rayon = "1.6.1"
 regex = "1.7.0"
 rust-ini = "0.18.0"
-semver = "1.0.14"
+semver = "1.0.15"
 serde = { version = "1.0.150", features = ["derive"] }
 serde_json = "1.0.89"
 sha1 = "0.10.5"
