@@ -1563,10 +1563,11 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Переменные
 
-| Переменная | Пример    | Описание                            |
-| ---------- | --------- | ----------------------------------- |
-| hash       | `b703eb3` | The current git commit hash         |
-| style\*  |           | Отражает значение параметра `style` |
+| Переменная | Пример    | Описание                                     |
+| ---------- | --------- | -------------------------------------------- |
+| hash       | `b703eb3` | The current git commit hash                  |
+| tag        | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\*  |           | Отражает значение параметра `style`          |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
