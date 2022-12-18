@@ -1563,10 +1563,11 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| 字段        | 示例        | 描述                          |
-| --------- | --------- | --------------------------- |
-| hash      | `b703eb3` | The current git commit hash |
-| style\* |           | `style`对应值                  |
+| 字段        | 示例        | 描述                                           |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | The current git commit hash                  |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | `style`对应值                                   |
 
 *: This variable can only be used as a part of a style string
 
