@@ -1563,10 +1563,11 @@ El módulo `git_commit` muestra el hash de la confirmación actual y también la
 
 ### Variables
 
-| Variable  | Ejemplo   | Descripción                              |
-| --------- | --------- | ---------------------------------------- |
-| hash      | `b703eb3` | El hash actual de la confirmación de git |
-| style\* |           | Refleja el valor de la opción `style`    |
+| Variable  | Ejemplo   | Descripción                                  |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | El hash actual de la confirmación de git     |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | Refleja el valor de la opción `style`        |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
