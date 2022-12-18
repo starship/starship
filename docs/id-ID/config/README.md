@@ -1563,10 +1563,11 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                        |
-| --------- | --------- | -------------------------------- |
-| hash      | `b703eb3` | The current git commit hash      |
-| style\* |           | Menyalin nilai dari opsi `style` |
+| Variabel  | Contoh    | Deskripsi                                    |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | The current git commit hash                  |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | Menyalin nilai dari opsi `style`             |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
