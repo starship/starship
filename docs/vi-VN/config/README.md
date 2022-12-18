@@ -1563,10 +1563,11 @@ Mô đun `git_commit` hiển thị hash commit hiện tại và tag (nếu có) 
 
 ### Các biến
 
-| Biến      | Ví dụ     | Mô tả                      |
-| --------- | --------- | -------------------------- |
-| hash      | `b703eb3` | Git commit hash hiện tại   |
-| style\* |           | Giá trị ghi đè của `style` |
+| Biến      | Ví dụ     | Mô tả                                        |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | Git commit hash hiện tại                     |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | Giá trị ghi đè của `style`                   |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
