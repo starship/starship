@@ -67,6 +67,9 @@ symbol = "git "
 [golang]
 symbol = "go "
 
+[gradle]
+symbol = "gradle "
+
 [guix_shell]
 symbol = "guix "
 

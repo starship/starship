@@ -326,8 +326,7 @@ mod tests {
         let expected = Some(format!(
             "on {} ",
             expect_style.paint(format!(
-                "{} {}{}",
-                expect_symbol, expect_branch_name, expect_truncation_symbol
+                "{expect_symbol} {expect_branch_name}{expect_truncation_symbol}"
             )),
         ));
         assert_eq!(expected, actual);

@@ -59,6 +59,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "erlang",
     "fennel",
     "golang",
+    "gradle",
     "haskell",
     "haxe",
     "helm",

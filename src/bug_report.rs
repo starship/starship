@@ -38,7 +38,7 @@ pub fn create() {
     if input.trim().to_lowercase() == "y" {
         let link = make_github_issue_link(&issue_body);
         if let Err(e) = open::that(&link) {
-            println!("Failed to open issue report in your browser: {}", e);
+            println!("Failed to open issue report in your browser: {e}");
             println!("Please copy the above report and open an issue manually, or try opening the following link:\n{link}");
         }
     } else {

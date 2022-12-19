@@ -34,6 +34,7 @@ pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
+pub mod gradle;
 pub mod guix_shell;
 pub mod haskell;
 pub mod haxe;
@@ -166,6 +167,8 @@ pub struct FullConfig<'a> {
     git_status: git_status::GitStatusConfig<'a>,
     #[serde(borrow)]
     golang: go::GoConfig<'a>,
+    #[serde(borrow)]
+    gradle: gradle::GradleConfig<'a>,
     #[serde(borrow)]
     guix_shell: guix_shell::GuixShellConfig<'a>,
     #[serde(borrow)]
