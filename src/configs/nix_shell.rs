@@ -13,6 +13,7 @@ pub struct NixShellConfig<'a> {
     pub style: &'a str,
     pub impure_msg: &'a str,
     pub pure_msg: &'a str,
+    pub unknown_msg: &'a str,
     pub disabled: bool,
 }
 
@@ -27,6 +28,7 @@ impl<'a> Default for NixShellConfig<'a> {
             style: "bold blue",
             impure_msg: "impure",
             pure_msg: "pure",
+            unknown_msg: "",
             disabled: false,
         }
     }

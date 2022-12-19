@@ -41,14 +41,17 @@ impl NixShellType {
 /// determine if it's inside a nix-shell and the name of it.
 ///
 /// The following options are availables:
-///     - `impure_msg` (string) // change the impure msg
-///     - `pure_msg` (string)   // change the pure msg
+///     - `impure_msg` (string)  // change the impure msg
+///     - `pure_msg` (string)    // change the pure msg
+///     - `unknown_msg` (string) // change the unknown message
 ///
 /// Will display the following:
 ///     - pure (name)    // $name == "name" in a pure nix-shell
 ///     - impure (name)  // $name == "name" in an impure nix-shell
 ///     - pure           // $name == "" in a pure nix-shell
 ///     - impure         // $name == "" in an impure nix-shell
+///     - unknown (name) // $name == "name" in an unknown nix-shell
+///     - unknown        // $name == "" in an unknown nix-shell
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("nix_shell");
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
@@ -58,7 +61,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let shell_type_format = match shell_type {
         NixShellType::Pure => config.pure_msg,
         NixShellType::Impure => config.impure_msg,
-        NixShellType::Unknown => "",
+        NixShellType::Unknown => config.unknown_msg,
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
