@@ -15,6 +15,7 @@ pub struct NixShellConfig<'a> {
     pub pure_msg: &'a str,
     pub unknown_msg: &'a str,
     pub disabled: bool,
+    pub heuristic: bool,
 }
 
 /* The trailing double spaces in `symbol` are needed to work around issues with
@@ -30,6 +31,7 @@ impl<'a> Default for NixShellConfig<'a> {
             pure_msg: "pure",
             unknown_msg: "",
             disabled: false,
+            heuristic: false,
         }
     }
 }

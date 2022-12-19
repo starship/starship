@@ -6,22 +6,27 @@ use crate::formatter::StringFormatter;
 enum NixShellType {
     Pure,
     Impure,
-    // We're in a Nix shell, but we don't know which type.
+    /// We're in a Nix shell, but we don't know which type.
+    /// This can only happen in a `nix shell` shell (not a `nix-shell` one).
     Unknown,
 }
 
 impl NixShellType {
-    fn detect_shell_type(context: &Context) -> Option<NixShellType> {
+    fn detect_shell_type(use_heuristic: bool, context: &Context) -> Option<NixShellType> {
         use NixShellType::*;
 
         let shell_type = context.get_env("IN_NIX_SHELL");
-        let shell_type_format_from_env = match shell_type.as_deref() {
-            Some("pure") => Some(Pure),
-            Some("impure") => Some(Impure),
-            _ => None,
+        match shell_type.as_deref() {
+            Some("pure") => return Some(Pure),
+            Some("impure") => return Some(Impure),
+            _ => {}
         };
 
-        shell_type_format_from_env.or_else(|| Self::in_new_nix_shell(context).map(|_| Unknown))
+        if use_heuristic {
+            Self::in_new_nix_shell(context).map(|_| Unknown)
+        } else {
+            None
+        }
     }
 
     // Hack to detect if we're in a `nix shell` (in constrast to a `nix-shell`).
@@ -57,7 +62,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: NixShellConfig = NixShellConfig::try_load(module.config);
 
     let shell_name = context.get_env("name");
-    let shell_type = NixShellType::detect_shell_type(context)?;
+    let shell_type = NixShellType::detect_shell_type(config.heuristic, context)?;
     let shell_type_format = match shell_type {
         NixShellType::Pure => config.pure_msg,
         NixShellType::Impure => config.impure_msg,
@@ -171,6 +176,10 @@ mod tests {
                 "PATH",
                 "/nix/store/v7qvqv81jp0cajvrxr9x072jgqc01yhi-nix-info/bin:/Users/user/.cargo/bin",
             )
+            .config(toml::toml! {
+                [nix_shell]
+                heuristic = true
+            })
             .collect();
         let expected = Some(format!("via {} ", Color::Blue.bold().paint("❄️  ")));
 
@@ -181,6 +190,10 @@ mod tests {
     fn no_new_nix_shell() {
         let actual = ModuleRenderer::new("nix_shell")
             .env("PATH", "/Users/user/.cargo/bin")
+            .config(toml::toml! {
+                [nix_shell]
+                heuristic = true
+            })
             .collect();
         let expected = None;
 
@@ -191,6 +204,23 @@ mod tests {
     fn no_new_nix_shell_with_nix_store_subdirectory() {
         let actual = ModuleRenderer::new("nix_shell")
             .env("PATH", "/Users/user/some/nix/store/subdirectory")
+            .config(toml::toml! {
+                [nix_shell]
+                heuristic = true
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn no_new_nix_shell_when_heuristic_is_disabled() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env(
+                "PATH",
+                "/nix/store/v7qvqv81jp0cajvrxr9x072jgqc01yhi-nix-info/bin:/Users/user/.cargo/bin",
+            )
             .collect();
         let expected = None;
 
