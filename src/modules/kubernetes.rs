@@ -160,7 +160,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
                 "namespace" => ctx_components
                     .iter()
-                    .find_map(|kube| kube.user.as_deref())
+                    .find_map(|kube| kube.namespace.as_deref())
                     .map(|namespace| Ok(Cow::Borrowed(namespace))),
 
                 "user" => ctx_components
