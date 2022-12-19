@@ -181,4 +181,14 @@ mod tests {
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn no_new_nix_shell_with_nix_store_subdirectory() {
+        let actual = ModuleRenderer::new("nix_shell")
+            .env("PATH", "/Users/user/some/nix/store/subdirectory")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
 }
