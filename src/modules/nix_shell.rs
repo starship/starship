@@ -29,7 +29,9 @@ impl NixShellType {
     fn in_new_nix_shell(context: &Context) -> Option<()> {
         let path = context.get_env("PATH")?;
 
-        path.contains("/nix/store").then_some(())
+        std::env::split_paths(&path)
+            .any(|path| path.starts_with("/nix/store"))
+            .then_some(())
     }
 }
 
