@@ -270,6 +270,7 @@ $dotnet\
 $elixir\
 $elm\
 $erlang\
+$fennel\
 $golang\
 $guix_shell\
 $haskell\
@@ -1398,6 +1399,44 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 [erlang]
 format = 'via [e $version](bold red) '
+```
+
+## Fennel
+
+The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.fnl` extension
+
+### Options
+
+| Option              | الافتراضي                            | الوصف                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel.                  |
+| `style`             | `'bold green'`                       | The style for the module.                                                 |
+| `detect_extensions` | `[fnl]`                              | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
+| `disabled`          | `false`                              | Disables the `fennel` module.                                             |
+
+### Variables
+
+| Variable  | مثال     | الوصف                                |
+| --------- | -------- | ------------------------------------ |
+| version   | `v1.2.1` | The version of `fennel`              |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### مثال
+
+```toml
+# ~/.config/starship.toml
+
+[fennel]
+symbol = '⫰ '
 ```
 
 ## Fill
@@ -4053,7 +4092,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `الوصف`             | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
