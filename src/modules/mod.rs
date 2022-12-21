@@ -22,6 +22,7 @@ mod elixir;
 mod elm;
 mod env_var;
 mod erlang;
+mod fennel;
 mod fill;
 mod gcloud;
 mod git_branch;
@@ -121,6 +122,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "elixir" => elixir::module(context),
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
+            "fennel" => fennel::module(context),
             "env_var" => env_var::module(context),
             "fill" => fill::module(context),
             "gcloud" => gcloud::module(context),
@@ -233,6 +235,7 @@ pub fn description(module: &str) -> &'static str {
         "elm" => "The currently installed version of Elm",
         "env_var" => "Displays the current value of a selected environment variable",
         "erlang" => "Current OTP version",
+        "fennel" => "The currently installed version of Fennel",
         "fill" => "Fills the remaining space on the line with a pad string",
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
