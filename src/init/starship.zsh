@@ -45,12 +45,12 @@ prompt_starship_precmd() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
-    STARSHIP_REDRAW_COUNT=0
 }
 
 # Runs after the user submits the command line, but before it is executed.
 prompt_starship_preexec() {
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
+    STARSHIP_REDRAW_COUNT=0
 }
 
 # Add hook functions
