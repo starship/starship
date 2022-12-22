@@ -139,7 +139,7 @@
  /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+[![SWUbaner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
 <h1></h1>
 
@@ -216,7 +216,7 @@ Alternatywnie, zainstaluj Starship używając dowolnego z następujących mened�
 | _Dowolna_          | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _Dowolna_          | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
 | _Dowolna_          | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
-| Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
+| Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk dodaj starship`                                                           |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
@@ -347,7 +347,7 @@ Uwaga: Obsługiwany jest tylko Nushell w wersji v0.61 wzwyż
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Dodaj następujący kod na końcu swojego pliku konfiguracyjnego PowerShell (możesz go znaleźć uruchamiając `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -390,37 +390,37 @@ eval "$(starship init zsh)"
 
 ### Krok 3. Skonfiguruj Starship
 
-Uruchom nową instancję powłoki, żeby zobaczyć swój nowy, piękny monit. Jeśli wartości domyślne są dla Ciebie satysfakcjonujące, to życzymy miłej zabawy!
+Uruchom nową instancję powłoki, żeby zobaczyć swój nowy, piękny wiersz poleceń. Jeśli wartości domyślne są dla Ciebie satysfakcjonujące, to życzymy miłej zabawy!
 
 Lecz jeśli chcesz nieco dostosować Starship:
 
-- **[Konfiguracja](https://starship.rs/config/)** – Naucz się konfigurować Starship, by móc dostosować swój monit (prompt) wedle uznania
+- **[Konfiguracja](https://starship.rs/config/)** – Naucz się konfigurować Starship, by móc dostosować swój wiersz poleceń wedle uznania
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[Gotowe konfiguracje](https://starship.rs/presets/)** – zainspiruj się konfiguracjami stworzonymi przez innych
 
 ## 🤝Wspomóż nas
 
 Zawsze szukamy pomocy od osób **na każdym poziomie zaawansowania**! Jeśli potrzebujesz łatwiejszego wdrożenia w projekt, wypróbuj [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Jeśli płynnie władasz językiem innym niż angielski, bardzo doceniamy każdą pomoc w tłumaczeniu dokumentacji. Jeśli chcesz pomóc, tłumaczenia można dodawać na [Starship Crowdin](https://translate.starship.rs/).
+Jeśli płynnie władasz językiem innym niż angielski, bardzo doceniamy każdą pomoc w tłumaczeniu dokumentacji. Jeśli chcesz pomóc, tłumaczenia można dodawać na [Crowdin Starship](https://translate.starship.rs/).
 
 Jeżeli chcesz wspomóc tworzenie starship, zapoznaj się z naszym [Poradnikiem Współpracy](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Ponadto możesz wejść na nasz [serwer Discord](https://discord.gg/8Jzqu3T) i się przywitać. 👋
 
 ## 💭Inspiracje
 
-Zapoznaj się z wcześniejszymi projektami które zainspirowały nas do stworzenia starship. 🙏
+Zapoznaj się z wcześniejszymi projektami, które zainspirowały nas do stworzenia starship. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Wiersz poleceń ZSH dla astronautów.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** - Motyw robyrussell dla wielu powłok, napisany w JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** - Wiersz polecenia typu Powerline z ikonami, działa na wielu różnych powłokach.
 
-## ❤️ Sponsors
+## ❤️ Sponsorzy
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+Wspomóż ten projekt [stając się sponsorem](https://github.com/sponsors/starship). Twoja nazwa bądź logo pojawi się tutaj wraz z linkiem do Twojej witryny.
 
-**Supporter Tier**
+**Poziom Supporter**
 
 - [Dimension](https://dimension.dev/)
 
