@@ -16,7 +16,7 @@ struct KubeCtxComponents {
     cluster: Option<String>,
 }
 
-fn get_kube_context(filename: path::PathBuf) -> Option<String> {
+fn get_current_kube_context_name(filename: path::PathBuf) -> Option<String> {
     let contents = utils::read_file(filename).ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
@@ -33,7 +33,10 @@ fn get_kube_context(filename: path::PathBuf) -> Option<String> {
     Some(current_ctx.to_string())
 }
 
-fn get_kube_ctx_component(filename: path::PathBuf, current_ctx: &str) -> Option<KubeCtxComponents> {
+fn get_kube_ctx_components(
+    filename: path::PathBuf,
+    current_ctx_name: &str,
+) -> Option<KubeCtxComponents> {
     let contents = utils::read_file(filename).ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
@@ -46,8 +49,12 @@ fn get_kube_ctx_component(filename: path::PathBuf, current_ctx: &str) -> Option<
         contexts
             .iter()
             .filter_map(|ctx| Some((ctx, ctx["name"].as_str()?)))
-            .find(|(_, name)| *name == current_ctx)
+            .find(|(_, name)| *name == current_ctx_name)
     });
+
+    // If there is no context with that name we do not want to
+    // create and return an empty KubeCtxComponents struct
+    ctx_yaml?;
 
     let ctx_components = KubeCtxComponents {
         user: ctx_yaml
@@ -126,23 +133,42 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .get_env("KUBECONFIG")
         .unwrap_or(default_config_file.to_str()?.to_string());
 
-    let kube_ctx = env::split_paths(&kube_cfg).find_map(get_kube_context)?;
+    let current_kube_ctx_name =
+        env::split_paths(&kube_cfg).find_map(get_current_kube_context_name)?;
 
-    let ctx_components: Vec<KubeCtxComponents> = env::split_paths(&kube_cfg)
-        .filter_map(|filename| get_kube_ctx_component(filename, &kube_ctx))
-        .collect();
+    // Even if we have multiple config files, the first key wins
+    // https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
+    // > Never change the value or map key. ... Example: If two files specify a red-user,
+    // > use only values from the first file's red-user. Even if the second file has
+    // > non-conflicting entries under red-user, discard them.
+    // for that reason, we can pick the first context with that name
+    let ctx_components: KubeCtxComponents = env::split_paths(&kube_cfg)
+        .find_map(|filename| get_kube_ctx_components(filename, &current_kube_ctx_name))
+        .unwrap_or({
+            // TODO: figure out if returning is more sensible. But currently we have tests depending on this
+            log::warn!(
+                "Invalid KUBECONFIG: identified current-context `{}`, but couldn't find the context in any config file(s): `{}`.\n",
+                &current_kube_ctx_name,
+                &kube_cfg
+                );
+            KubeCtxComponents {
+                user: None,
+                namespace: None,
+                cluster: None,
+            }
+        });
 
-    let kube_user = ctx_components.iter().find_map(|ctx| {
-        ctx.user
-            .as_ref()
-            .map(|kube_user| deprecated::get_kube_user_alias(&config, kube_user))
-    });
+    let kube_user = ctx_components
+        .user
+        .as_ref()
+        .map(|kube_user| deprecated::get_kube_user_alias(&config, kube_user));
 
     // Parse config under `display`.
     // Select the first style that matches the context_pattern and,
     // if it is defined, the user_pattern
     let matched_context_config = config.contexts.iter().find(|context_config| {
-        let is_context_match = match_user_regex(context_config.context_pattern, &kube_ctx);
+        let is_context_match =
+            match_user_regex(context_config.context_pattern, &current_kube_ctx_name);
         if !is_context_match {
             return false;
         };
@@ -163,9 +189,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let display_context = match matched_context_config {
         Some(ctx_cfg) => match ctx_cfg.context_alias {
             Some(context_alias) => Cow::Borrowed(context_alias),
-            None => deprecated::get_kube_context_alias(&config, &kube_ctx),
+            None => deprecated::get_kube_context_alias(&config, &current_kube_ctx_name),
         },
-        None => deprecated::get_kube_context_alias(&config, &kube_ctx),
+        None => deprecated::get_kube_context_alias(&config, &current_kube_ctx_name),
     };
 
     let display_user = match matched_context_config {
@@ -185,9 +211,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         None => config.symbol,
     };
 
-    let kube_ns = ctx_components.iter().find(|&ctx| ctx.namespace.is_some());
-    let kube_cluster = ctx_components.iter().find(|&ctx| ctx.cluster.is_some());
-
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|variable, _| match variable {
@@ -200,14 +223,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "context" => Some(Ok(display_context.clone())),
-                "namespace" => kube_ns.map(|ctx| {
-                    // unwrap is safe as kube_ns only holds kube.namespace.is_some()
-                    Ok(Cow::Borrowed(ctx.namespace.as_ref().unwrap().as_str()))
-                }),
-                "cluster" => kube_cluster.map(|ctx| {
-                    // unwrap is safe as kube_cluster only holds kube.cluster.is_some()
-                    Ok(Cow::Borrowed(ctx.cluster.as_ref().unwrap().as_str()))
-                }),
+                "namespace" => ctx_components
+                    .namespace
+                    .as_ref()
+                    .map(|kube_ns| Ok(Cow::Borrowed(kube_ns.as_str()))),
+                "cluster" => ctx_components
+                    .cluster
+                    .as_ref()
+                    .map(|kube_cluster| Ok(Cow::Borrowed(kube_cluster.as_str()))),
                 "user" => display_user.as_ref().map(|user| Ok(user.clone())),
                 _ => None,
             })
