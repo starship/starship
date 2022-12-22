@@ -171,9 +171,9 @@
 
 - Czcionka typu [Nerd Font](https://www.nerdfonts.com/) zainstalowana i ustawiona w twoim terminalu (wypróbuj na przykład [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Krok 1. Install Starship
+### Krok 1. Zainstaluj Starship
 
-Select your operating system from the list below to view installation instructions:
+Wybierz system operacyjny z poniższej listy, aby wyświetlić odpowiednie instrukcje instalacji:
 
 <details>
 <summary>Android</summary>
@@ -249,7 +249,7 @@ Alternatywnie, zainstaluj Starship używając dowolnego z następujących mened�
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Zainstaluj najnowszą wersję dla swojego systemu używając instalatorów MSI z [sekcji Releases](https://github.com/starship/starship/releases/latest).
 
 Zainstaluj Starship używając dowolnego z następujących menedżerów pakietów:
 
@@ -263,9 +263,9 @@ Zainstaluj Starship używając dowolnego z następujących menedżerów pakietó
 
 </details>
 
-### Krok 2. Setup your shell to use Starship
+### Krok 2. Skonfiguruj swoją powłokę, aby używała Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Skonfiguruj swoją powłokę, aby inicjowała Starship. Wybierz swoją z poniższej listy:
 
 <details>
 <summary>Bash</summary>
@@ -281,7 +281,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Musisz użyć [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) z Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Musisz użyć [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) z Cmd. Utwórz plik na tej ścieżce `%LocalAppData%\clink\starship.lua` z następującą zawartością:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -298,7 +298,7 @@ Dodaj na koniec pliku `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+Uwaga: Obsługiwany jest tylko Elvish w wersji v0.18 wzwyż
 
 </details>
 
@@ -327,7 +327,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Dodaj następujący kod na koniec twojego pliku env Nushell (możesz go znaleść za pomocą `$nu.env-path` w Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -340,7 +340,7 @@ Dodaj następujący kod na koniec Twojego pliku konfiguracyjnego Nushell (możes
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+Uwaga: Obsługiwany jest tylko Nushell w wersji v0.61 wzwyż
 
 </details>
 
@@ -388,13 +388,13 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Krok 3. Configure Starship
+### Krok 3. Skonfiguruj Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+Uruchom nową instancję powłoki, żeby zobaczyć swój nowy, piękny monit. Jeśli wartości domyślne są dla Ciebie satysfakcjonujące, to życzymy miłej zabawy!
 
-If you're looking to further customize Starship:
+Lecz jeśli chcesz nieco dostosować Starship:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[Konfiguracja](https://starship.rs/config/)** – Naucz się konfigurować Starship, by móc dostosować swój monit (prompt) wedle uznania
 
 - **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
 
