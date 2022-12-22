@@ -63,7 +63,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
 
     use crate::test::ModuleRenderer;
 

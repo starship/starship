@@ -5,7 +5,7 @@ use std::io;
 use std::thread::available_parallelism;
 use std::time::SystemTime;
 
-use clap::{IntoApp, Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
@@ -33,7 +33,7 @@ enum Commands {
     BugReport,
     /// Generate starship shell completions for your shell to stdout
     Completions {
-        #[clap(arg_enum)]
+        #[clap(value_enum)]
         shell: CompletionShell,
     },
     /// Edit the starship configuration
@@ -114,7 +114,7 @@ enum Commands {
 fn main() {
     // Configure the current terminal on windows to support ANSI escape sequences.
     #[cfg(windows)]
-    let _ = ansi_term::enable_ansi_support();
+    let _ = nu_ansi_term::enable_ansi_support();
     logger::init();
     init_global_threadpool();
 
@@ -184,7 +184,7 @@ fn main() {
                 println!("Supported modules list");
                 println!("----------------------");
                 for modules in ALL_MODULES {
-                    println!("{}", modules);
+                    println!("{modules}");
                 }
             }
             if let Some(module_name) = name {
@@ -198,7 +198,7 @@ fn main() {
                     configure::update_configuration(&name, &value)
                 }
             } else if let Err(reason) = configure::edit_configuration(None) {
-                eprintln!("Could not edit configuration: {}", reason);
+                eprintln!("Could not edit configuration: {reason}");
                 std::process::exit(1);
             }
         }

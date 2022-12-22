@@ -172,7 +172,7 @@ impl BatteryInfoProvider for BatteryInfoProviderImpl {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn no_battery_status() {

@@ -105,7 +105,7 @@ fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option
 #[cfg(test)]
 mod test {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
 
     const TEST_VAR_VALUE: &str = "astronauts";
 
@@ -194,7 +194,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("■ {}", TEST_VAR_VALUE))
+            style().paint(format!("■ {TEST_VAR_VALUE}"))
         ));
 
         assert_eq!(expected, actual);
@@ -211,7 +211,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("_{}", TEST_VAR_VALUE))
+            style().paint(format!("_{TEST_VAR_VALUE}"))
         ));
 
         assert_eq!(expected, actual);
@@ -228,7 +228,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("{}_", TEST_VAR_VALUE))
+            style().paint(format!("{TEST_VAR_VALUE}_"))
         ));
 
         assert_eq!(expected, actual);

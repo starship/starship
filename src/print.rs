@@ -1,5 +1,5 @@
-use ansi_term::ANSIStrings;
-use clap::{PossibleValue, ValueEnum};
+use clap::{builder::PossibleValue, ValueEnum};
+use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{self, Debug, Write as FmtWrite};
@@ -119,7 +119,7 @@ pub fn get_prompt(context: Context) -> String {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
+    write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
@@ -139,7 +139,7 @@ pub fn get_prompt(context: Context) -> String {
 pub fn module(module_name: &str, args: Properties) {
     let context = Context::new(args, Target::Main);
     let module = get_module(module_name, context).unwrap_or_default();
-    print!("{}", module);
+    print!("{module}");
 }
 
 pub fn get_module(module_name: &str, context: Context) -> Option<String> {
@@ -163,7 +163,7 @@ pub fn timings(args: Properties) {
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: module.get_name().width_graphemes(),
-            value: ansi_term::ANSIStrings(&module.ansi_strings())
+            value: nu_ansi_term::AnsiStrings(&module.ansi_strings())
                 .to_string()
                 .replace('\n', "\\n"),
             duration: module.duration,
@@ -212,7 +212,7 @@ pub fn explain(args: Properties) {
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
+                value: nu_ansi_term::AnsiStrings(&module.ansi_strings()).to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().clone(),
@@ -251,7 +251,7 @@ pub fn explain(args: Properties) {
                     escaping = true;
                 }
                 if escaping {
-                    print!("{}", g);
+                    print!("{g}");
                     escaping = !(("a"..="z").contains(&g) || ("A"..="Z").contains(&g));
                     continue;
                 }
@@ -273,7 +273,7 @@ pub fn explain(args: Properties) {
 
                     current_pos = 1;
                 }
-                print!("{}", g);
+                print!("{g}");
             }
             println!();
         } else {
@@ -373,7 +373,7 @@ fn should_add_implicit_custom_module(
     config: &toml::Value,
     module_list: &BTreeSet<String>,
 ) -> bool {
-    let explicit_module_name = format!("custom.{}", custom_module);
+    let explicit_module_name = format!("custom.{custom_module}");
     let is_explicitly_specified = module_list.contains(&explicit_module_name);
 
     if is_explicitly_specified {
@@ -460,7 +460,7 @@ impl ValueEnum for Preset {
         shadow::get_preset_list()
     }
 
-    fn to_possible_value<'a>(&self) -> Option<clap::PossibleValue<'a>> {
+    fn to_possible_value(&self) -> Option<PossibleValue> {
         Some(PossibleValue::new(self.0))
     }
 }

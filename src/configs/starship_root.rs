@@ -1,7 +1,12 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct StarshipRootConfig {
     #[serde(rename = "$schema")]
@@ -12,7 +17,12 @@ pub struct StarshipRootConfig {
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub palette: Option<String>,
+    pub palettes: HashMap<String, Palette>,
 }
+
+pub type Palette = HashMap<String, String>;
 
 // List of default prompt order
 // NOTE: If this const value is changed then Default prompt order subheading inside
@@ -47,8 +57,11 @@ pub const PROMPT_ORDER: &[&str] = &[
     "elixir",
     "elm",
     "erlang",
+    "fennel",
     "golang",
+    "gradle",
     "haskell",
+    "haxe",
     "helm",
     "java",
     "julia",
@@ -57,6 +70,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nim",
     "nodejs",
     "ocaml",
+    "opa",
     "perl",
     "php",
     "pulumi",
@@ -75,8 +89,10 @@ pub const PROMPT_ORDER: &[&str] = &[
     "zig",
     // ↑ Toolchain version modules ↑
     "buf",
+    "guix_shell",
     "nix_shell",
     "conda",
+    "meson",
     "spack",
     "memory_usage",
     "aws",
@@ -95,6 +111,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "time",
     "status",
     "container",
+    "os",
     "shell",
     "character",
 ];
@@ -105,11 +122,13 @@ impl Default for StarshipRootConfig {
         Self {
             schema: "https://starship.rs/config-schema.json".to_string(),
             format: "$all".to_string(),
-            right_format: "".to_string(),
+            right_format: String::new(),
             continuation_prompt: "[∙](bright-black) ".to_string(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
+            palette: None,
+            palettes: HashMap::default(),
         }
     }
 }

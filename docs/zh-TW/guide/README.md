@@ -25,7 +25,7 @@
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="在 Discord 上聊天"
+      alt="Chat on Discord"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
@@ -152,12 +152,12 @@
 
 **適合任何 shell 的最小、極速、無限客製化的提示字元！**
 
-- **快：**很快 —— 非常非常快！ 🚀
-- **可客製化：**全方面定制你的提示字元。
-- **通用：**適用於任何 Shell 以及作業系統。
-- **智能：**一目了然地顯示相關信息。
-- **豐富的功能：**支援所以有你喜歡的工具。
-- **易用：**安裝快速 —— 幾分鐘內就可以開始使用。
+- **效率：**很快 – _非常非常_快！ 🚀
+- **客製化：**全方面設定你的提示字元。
+- **通用性：**適用於任何 Shell 以及作業系統。
+- **智慧：**一目了然地顯示相關資訊。
+- **豐富的功能：**支援所有你喜歡的工具。
+- **易用：**安裝快速 – 幾分鐘內即可開始使用。
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
@@ -171,9 +171,9 @@
 
 - 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用（例如，你可以試試 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)）。
 
-### Step 1. Install Starship
+### 第一步 安裝 Starship
 
-Select your operating system from the list below to view installation instructions:
+瀏覽各系統的安裝指示
 
 <details>
 <summary>Android</summary>
@@ -219,8 +219,6 @@ Alternatively, install Starship using any of the following package managers:
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -265,9 +263,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### 第二步 為您的 shell 安裝 Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+設定您的 shell 以啟用 Starship。 請從下列選單選取您的 shell：
 
 <details>
 <summary>Bash</summary>
@@ -281,7 +279,7 @@ eval "$(starship init bash)"
 </details>
 
 <details>
-<summary>Cmd</summary>
+<summary>命令提示字元</summary>
 
 You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
@@ -371,7 +369,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-將以下內容加到 `~/.xonshrc` 的結尾：
+將以下內容放到 `~/.xonshrc` 的結尾：
 
 ```python
 execx($(starship init xonsh))
@@ -390,15 +388,15 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### 第三步 設定 Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+開啟一個新的 shell，您應該可以看到新的美麗 shell 提示字元。 若您對預設值感到滿意，盡情享受！
 
-If you're looking to further customize Starship:
+如果您想要更加客製化 Startship ：
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[設定](https://starship.rs/config/)**：學習如何設定 Starship 來微調提示字元的外觀
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[其他預設組態](https://starship.rs/presets/)**：從別人的設定當中獲得啟發
 
 ## 🤝 貢獻
 
@@ -417,6 +415,14 @@ If you're looking to further customize Starship:
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Dimension](https://dimension.dev/)
 
 <p align="center">
     <br>

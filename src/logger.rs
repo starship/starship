@@ -1,6 +1,6 @@
 use crate::utils;
-use ansi_term::Color;
 use log::{Level, LevelFilter, Metadata, Record};
+use nu_ansi_term::Color;
 use once_cell::sync::OnceCell;
 use std::{
     collections::HashSet,
@@ -29,7 +29,7 @@ impl Default for StarshipLogger {
             });
 
         fs::create_dir_all(&log_dir)
-            .unwrap_or_else(|err| panic!("Unable to create log dir {:?}: {:?}!", log_dir, err));
+            .unwrap_or_else(|err| panic!("Unable to create log dir {log_dir:?}: {err:?}!"));
         let session_log_file = log_dir.join(format!(
             "session_{}.log",
             env::var("STARSHIP_SESSION_KEY").unwrap_or_default()
@@ -96,12 +96,12 @@ impl log::Log for StarshipLogger {
                 })
                 .unwrap_or_else(|err: std::io::Error| {
                     panic!(
-                        "Unable to open session log file {:?}: {:?}!",
-                        self.log_file_path, err
+                        "Unable to open session log file {:?}: {err:?}!",
+                        self.log_file_path
                     )
                 })
                 .lock()
-                .map(|mut file| writeln!(file, "{}", to_print))
+                .map(|mut file| writeln!(file, "{to_print}"))
                 .expect("Log file writer mutex was poisoned!")
                 .expect("Unable to write to the log file!");
         }
@@ -133,6 +133,6 @@ impl log::Log for StarshipLogger {
 }
 
 pub fn init() {
-    log::set_boxed_logger(Box::new(StarshipLogger::default())).unwrap();
+    log::set_boxed_logger(Box::<StarshipLogger>::default()).unwrap();
     log::set_max_level(LevelFilter::Trace);
 }

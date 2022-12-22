@@ -86,33 +86,33 @@ Finally if you find a bug you can use the `bug-report` command to create a Githu
 starship bug-report
 ```
 
-## プロンプトにグリフ記号が表示されないのはなぜですか?
+## 私のプロンプトで記号のグリフがないのはなぜですか？
 
-これの最も一般的な原因は、システムの設定ミスです。 いくつかのLinuxディストリビューション 特に、すぐに使用できるフォントサポートは付属していません。 次のことを確認する必要があります。
+よくある原因はシステム上での設定ミスです。 いくつかのLinuxディストリビューションの初期設定にフォントサポートがありません。 次のことを確認してください。
 
 - ロケールが、`de_DE.UTF-8`や` ja_JP.UTF-8`などのUTF-8に設定されている。 `LC_ALL`がUTF-8でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
 - 絵文字フォントがインストールされている。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部 (特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます。--[noto emoji](https://www.google.com/get/noto/help/emoji/)は一般的な選択肢です。
 - [Nerd Font](https://www.nerdfonts.com/)を使用している。
 
-システムをテストするには、ターミナルで次のコマンドを実行します。
+ターミナルで以下のコマンドを実行することでテストできます。
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-1行目は[snake emoji](https://emojipedia.org/snake/)を生成し、2行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)を生成するはずです。
+一行目は[蛇の絵文字](https://emojipedia.org/snake/)、二行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)が表示されるはずです。
 
-いずれかのシンボルが正しく表示されない場合でも、システムの設定が間違っています。 残念ながら、フォント設定を正しくするのは難しい場合があります。 Discordのユーザーがお役に立てるかもしれません。 両方の記号が正しく表示されているにもかかわらず、まだStarshipに表示されていない場合は、[バグ報告をしてください!](https://github.com/starship/starship/issues/new/choose)
+もし、どちらの記号とも正しく表示されない場合は、システムの設定が間違っています。 不幸にも、正しくフォントを設定するのは難しいものです。 Discordのユーザーが助けてくれるかもしれません！ もし記号が正しく表示されているのにもかかわらず、Starshipが正しく表示されていない場合は、[バグの報告](https://github.com/starship/starship/issues/new/choose)をお願いします。
 
-## Starshipをアンインストールするにはどうすればいいですか?
+## Starshipをアンインストールしたい
 
-Starshipは、最初の場所にインストールするのと同じくらい簡単にアンインストールできます。
+Starshipのアンインストールはインストールと同じぐらい簡単です。
 
 1. Starshipを初期化するために使用した、シェルの設定行を削除します (例:`~/.bashrc`)。
 1. Starshipのバイナリを削除します。
 
-Starship がパッケージマネージャを使用してインストールされている場合は、アンインストール手順については、そのドキュメントを参照してください。
+パッケージマネージャーを使用してStarshipをインストールした場合は、パッケージマネージャーのアンインストールガイドを参照してください。
 
 Starship をインストールスクリプトを使用してインストールした場合、次のコマンドでバイナリが削除されます。
 

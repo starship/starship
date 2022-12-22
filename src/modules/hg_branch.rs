@@ -98,7 +98,7 @@ fn graphemes_len(text: &str) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
     use std::fs;
     use std::io;
     use std::path::Path;
@@ -154,7 +154,7 @@ mod tests {
         // Create a fake corrupted mercurial repo.
         let hgdir = tempdir.path().join(".hg");
         fs::create_dir(&hgdir)?;
-        fs::write(&hgdir.join("requires"), "fake-corrupted-repo")?;
+        fs::write(hgdir.join("requires"), "fake-corrupted-repo")?;
 
         expect_hg_branch_with_config(
             tempdir.path(),
@@ -326,8 +326,7 @@ mod tests {
         let expected = Some(format!(
             "on {} ",
             expect_style.paint(format!(
-                "{} {}{}",
-                expect_symbol, expect_branch_name, expect_truncation_symbol
+                "{expect_symbol} {expect_branch_name}{expect_truncation_symbol}"
             )),
         ));
         assert_eq!(expected, actual);
@@ -336,7 +335,7 @@ mod tests {
     fn run_hg(args: &[&str], repo_dir: &Path) -> io::Result<()> {
         create_command("hg")?
             .args(args)
-            .current_dir(&repo_dir)
+            .current_dir(repo_dir)
             .output()?;
         Ok(())
     }

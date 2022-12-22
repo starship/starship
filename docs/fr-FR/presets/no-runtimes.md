@@ -4,7 +4,7 @@
 
 Ce préréglage masque la version des environnements. Si vous travaillez dans des conteneurs ou environnements virtuels, celui-là est pour vous!
 
-![Capture d'écran du préréglage Cacher les versions des environnements](/presets/img/no-runtime-versions.png)
+![Capture d'écran du préréglage Pas de version des environnements](/presets/img/no-runtime-versions.png)
 
 ### Configuration
 

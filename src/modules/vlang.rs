@@ -70,7 +70,7 @@ fn parse_v_version(v_version: &str) -> Option<String> {
 mod tests {
     use super::parse_v_version;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

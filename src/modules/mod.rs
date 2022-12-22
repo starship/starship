@@ -11,7 +11,7 @@ mod cobol;
 mod conda;
 mod container;
 mod crystal;
-pub(crate) mod custom;
+pub mod custom;
 mod daml;
 mod dart;
 mod deno;
@@ -22,6 +22,7 @@ mod elixir;
 mod elm;
 mod env_var;
 mod erlang;
+mod fennel;
 mod fill;
 mod gcloud;
 mod git_branch;
@@ -30,7 +31,10 @@ mod git_metrics;
 mod git_state;
 mod git_status;
 mod golang;
+mod gradle;
+mod guix_shell;
 mod haskell;
+mod haxe;
 mod helm;
 mod hg_branch;
 mod hostname;
@@ -43,11 +47,14 @@ mod line_break;
 mod localip;
 mod lua;
 mod memory_usage;
+mod meson;
 mod nim;
 mod nix_shell;
 mod nodejs;
 mod ocaml;
+mod opa;
 mod openstack;
+mod os;
 mod package;
 mod perl;
 mod php;
@@ -115,6 +122,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "elixir" => elixir::module(context),
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
+            "fennel" => fennel::module(context),
             "env_var" => env_var::module(context),
             "fill" => fill::module(context),
             "gcloud" => gcloud::module(context),
@@ -124,7 +132,10 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "git_state" => git_state::module(context),
             "git_status" => git_status::module(context),
             "golang" => golang::module(context),
+            "gradle" => gradle::module(context),
+            "guix_shell" => guix_shell::module(context),
             "haskell" => haskell::module(context),
+            "haxe" => haxe::module(context),
             "helm" => helm::module(context),
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
@@ -137,11 +148,14 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "localip" => localip::module(context),
             "lua" => lua::module(context),
             "memory_usage" => memory_usage::module(context),
+            "meson" => meson::module(context),
             "nim" => nim::module(context),
             "nix_shell" => nix_shell::module(context),
             "nodejs" => nodejs::module(context),
             "ocaml" => ocaml::module(context),
+            "opa" => opa::module(context),
             "openstack" => openstack::module(context),
+            "os" => os::module(context),
             "package" => package::module(context),
             "perl" => perl::module(context),
             "php" => php::module(context),
@@ -176,7 +190,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
                 custom::module(custom.strip_prefix("custom.").unwrap(), context)
             }
             _ => {
-                eprintln!("Error: Unknown module {}. Use starship module --list to list out all supported modules.", module);
+                eprintln!("Error: Unknown module {module}. Use starship module --list to list out all supported modules.");
                 None
             }
         }
@@ -221,6 +235,7 @@ pub fn description(module: &str) -> &'static str {
         "elm" => "The currently installed version of Elm",
         "env_var" => "Displays the current value of a selected environment variable",
         "erlang" => "Current OTP version",
+        "fennel" => "The currently installed version of Fennel",
         "fill" => "Fills the remaining space on the line with a pad string",
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
@@ -229,7 +244,10 @@ pub fn description(module: &str) -> &'static str {
         "git_state" => "The current git operation, and it's progress",
         "git_status" => "Symbol representing the state of the repo",
         "golang" => "The currently installed version of Golang",
+        "gradle" => "The currently installed version of Gradle",
+        "guix_shell" => "The guix-shell environment",
         "haskell" => "The selected version of the Haskell toolchain",
+        "haxe" => "The currently installed version of Haxe",
         "helm" => "The currently installed version of Helm",
         "hg_branch" => "The active branch of the repo in your current directory",
         "hostname" => "The system hostname",
@@ -242,11 +260,16 @@ pub fn description(module: &str) -> &'static str {
         "localip" => "The currently assigned ipv4 address",
         "lua" => "The currently installed version of Lua",
         "memory_usage" => "Current system memory and swap usage",
+        "meson" => {
+            "The current Meson environment, if $MESON_DEVENV and $MESON_PROJECT_NAME are set"
+        }
         "nim" => "The currently installed version of Nim",
         "nix_shell" => "The nix-shell environment",
         "nodejs" => "The currently installed version of NodeJS",
         "ocaml" => "The currently installed version of OCaml",
+        "opa" => "The currently installed version of Open Platform Agent",
         "openstack" => "The current OpenStack cloud and project",
+        "os" => "The current operating system",
         "package" => "The package version of the current directory's project",
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
@@ -285,7 +308,7 @@ mod test {
     #[test]
     fn all_modules_have_description() {
         for module in ALL_MODULES {
-            println!("Checking if {:?} has a description", module);
+            println!("Checking if {module:?} has a description");
             assert_ne!(description(module), "<no description>");
         }
     }

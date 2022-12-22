@@ -58,11 +58,13 @@ fn parse_style(style: Pair<Rule>) -> Vec<StyleElement> {
         .collect()
 }
 
-pub fn parse(format: &str) -> Result<Vec<FormatElement>, Error<Rule>> {
-    IdentParser::parse(Rule::expression, format).map(|pairs| {
-        pairs
-            .take_while(|pair| pair.as_rule() != Rule::EOI)
-            .map(parse_value)
-            .collect()
-    })
+pub fn parse(format: &str) -> Result<Vec<FormatElement>, Box<Error<Rule>>> {
+    IdentParser::parse(Rule::expression, format)
+        .map(|pairs| {
+            pairs
+                .take_while(|pair| pair.as_rule() != Rule::EOI)
+                .map(parse_value)
+                .collect()
+        })
+        .map_err(Box::new)
 }
