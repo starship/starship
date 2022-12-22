@@ -1273,9 +1273,9 @@ dependencies = [
 
 [[package]]
 name = "git-repository"
-version = "0.30.0"
+version = "0.30.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3f82f160ad03149996a5c74f02aa0879dc308c996ea8d0397aabdd8556866c17"
+checksum = "5dbc1d1d0c346c66f18ea3c1393e8441f0729f759ec91965606b9f9ae6f2545c"
 dependencies = [
  "git-actor",
  "git-attributes",
@@ -1369,9 +1369,9 @@ dependencies = [
 
 [[package]]
 name = "git-url"
-version = "0.12.0"
+version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a6f4c5ba88ef911572dbf3c5c19212e72d1ce6dd924d933d7baa96a6d5f1cd6"
+checksum = "7cc3a878147b2cc4bb3011ef7a290ecf4d6ab11c36e50fedd99ec52702dea98c"
 dependencies = [
  "bstr",
  "git-features",
