@@ -42,7 +42,7 @@ git-repository-max-perf = ["git-features/zlib-ng", "git-repository/fast-sha1"]
 git-repository-faster = ["git-features/zlib-stock", "git-repository/fast-sha1"]
 
 [dependencies]
-chrono = { version = "0.4.23", features = ["clock", "std"] }
+chrono = { version = "0.4.23", default-features = false, features = ["clock", "std", "wasmbind"] }
 clap = { version = "4.0.32", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.0.7"
 dirs-next = "2.0.0"
