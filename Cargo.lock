@@ -309,7 +309,6 @@ dependencies = [
  "js-sys",
  "num-integer",
  "num-traits",
- "time 0.1.44",
  "wasm-bindgen",
  "winapi",
 ]
@@ -1001,7 +1000,7 @@ dependencies = [
  "bstr",
  "itoa",
  "thiserror",
- "time 0.3.14",
+ "time",
 ]
 
 [[package]]
@@ -1660,7 +1659,7 @@ dependencies = [
  "dirs-next",
  "objc-foundation",
  "objc_id",
- "time 0.3.14",
+ "time",
 ]
 
 [[package]]
@@ -2662,7 +2661,7 @@ checksum = "6c401e795850edb4e9fdde5940f856364f0fbab573e8dea58f6ee5f85fcf471d"
 dependencies = [
  "const_format",
  "is_debug",
- "time 0.3.14",
+ "time",
 ]
 
 [[package]]
@@ -2869,7 +2868,7 @@ dependencies = [
  "lazy_static",
  "libc",
  "nom 7.1.1",
- "time 0.3.14",
+ "time",
  "winapi",
 ]
 
@@ -2995,17 +2994,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "time"
-version = "0.1.44"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6db9e6914ab8b1ae1c260a4ae7a49b6c5611b40328a735b21862567685e73255"
-dependencies = [
- "libc",
- "wasi 0.10.0+wasi-snapshot-preview1",
- "winapi",
 ]
 
 [[package]]
@@ -3279,12 +3267,6 @@ name = "wasi"
 version = "0.9.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
-
-[[package]]
-name = "wasi"
-version = "0.10.0+wasi-snapshot-preview1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a143597ca7c7793eff794def352d41792a93c481eb1042423ff7ff72ba2c31f"
 
 [[package]]
 name = "wasi"
