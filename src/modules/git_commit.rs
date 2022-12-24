@@ -51,8 +51,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn git_tag(repo: &Repo, config: &GitCommitConfig) -> Option<String> {
-    // allow environment variables like GITOXIDE_OBJECT_CACHE_MEMORY and GITOXIDE_DISABLE_PACK_CACHE to speed up operation for some repos
-    let mut git_repo = repo.open().apply_environment();
+    let mut git_repo = repo.open();
+    // Increase the default object cache size to speed up operation for some repos
     git_repo.object_cache_size_if_unset(4 * 1024 * 1024);
     let head_commit = git_repo.head_commit().ok()?;
 
