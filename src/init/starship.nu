@@ -16,7 +16,7 @@ let-env PROMPT_COMMAND = {
 let has_rprompt_last_line_support = (version).version >= 0.71.0
 
 # Whether we have config items
-let has_config_items = (not ($env | get -i config | is-empty))
+let has_config_items = (not ($env | get -i config | length) == 0)
 
 if $has_rprompt_last_line_support {
     let config = if $has_config_items {
