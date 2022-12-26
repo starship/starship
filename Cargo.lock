@@ -1030,9 +1030,9 @@ dependencies = [
 
 [[package]]
 name = "git-features"
-version = "0.25.0"
+version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "510591428bb22671eb60f56430975718af88fdae55a1489d403005f74c0d3c25"
+checksum = "0f98e6ede7b790dfba16bf3c62861ae75c3719485d675b522cf7d7e748a4011c"
 dependencies = [
  "crc32fast",
  "crossbeam-channel",
@@ -1146,9 +1146,9 @@ dependencies = [
 
 [[package]]
 name = "git-odb"
-version = "0.38.0"
+version = "0.38.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a30a069e4c30d8aeabe41235f9a1595b60186a3cdfae73a7f3c89054e3e0d0ad"
+checksum = "55333419bbb25aa6d39e29155f747ad8e1777fe385f70f447be9d680824d23dd"
 dependencies = [
  "arc-swap",
  "git-features",
@@ -1256,9 +1256,9 @@ dependencies = [
 
 [[package]]
 name = "git-repository"
-version = "0.30.1"
+version = "0.30.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5dbc1d1d0c346c66f18ea3c1393e8441f0729f759ec91965606b9f9ae6f2545c"
+checksum = "1925a65a9fea6587e969a7a85cb239c8e1e438cf6dc520406df1b4c9d0e83bdc"
 dependencies = [
  "git-actor",
  "git-attributes",
@@ -1352,9 +1352,9 @@ dependencies = [
 
 [[package]]
 name = "git-url"
-version = "0.12.1"
+version = "0.12.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7cc3a878147b2cc4bb3011ef7a290ecf4d6ab11c36e50fedd99ec52702dea98c"
+checksum = "8651924c9692a778f09141ca44d1bf2dada229fe9b240f1ff1bdecd9621a1a93"
 dependencies = [
  "bstr",
  "git-features",
