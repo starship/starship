@@ -1213,6 +1213,21 @@
         }
       ]
     },
+    "pijul": {
+      "default": {
+        "disabled": true,
+        "format": "on [$symbol$channel]($style) ",
+        "style": "bold purple",
+        "symbol": " ",
+        "truncation_length": 9223372036854775807,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PijulConfig"
+        }
+      ]
+    },
     "pulumi": {
       "default": {
         "disabled": false,
@@ -4477,6 +4492,37 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "PijulConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "format": {
+          "default": "on [$symbol$channel]($style) ",
+          "type": "string"
+        },
+        "truncation_length": {
+          "default": 9223372036854775807,
+          "type": "integer",
+          "format": "int64"
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
         }
       },
       "additionalProperties": false

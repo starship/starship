@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
     feature = "config-schema",
-    derive(schemars:JsonSchema),
+    derive(schemars::JsonSchema),
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]

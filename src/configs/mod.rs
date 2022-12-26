@@ -222,6 +222,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     php: php::PhpConfig<'a>,
     #[serde(borrow)]
+    pijul: pijul::PijulConfig<'a>,
+    #[serde(borrow)]
     pulumi: pulumi::PulumiConfig<'a>,
     #[serde(borrow)]
     purescript: purescript::PureScriptConfig<'a>,

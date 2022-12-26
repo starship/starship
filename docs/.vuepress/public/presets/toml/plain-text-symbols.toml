@@ -156,6 +156,9 @@ symbol = "pl "
 [php]
 symbol = "php "
 
+[pijul]
+symbol = "pijul "
+
 [pulumi]
 symbol = "pulumi "
 
