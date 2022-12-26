@@ -3169,14 +3169,14 @@ The `pijul` module shows the active channel of the repo in your current director
 
 ### Options
 
-| Option              | Default                           | Description                                                                                  |
-| ------------------- | --------------------------------- | -------------------------------------------------------------------------------------------- |
+| Option              | Default                           | Description                                                                          |
+| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
 | `symbol`            | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
-| `style`             | `'bold purple'`                   | The style for the module.                                                                    |
-| `format`            | `'on [$symbol$channel]($style) '` | The format for the module.                                                                   |
-| `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                                |
-| `truncation_symbol` | `'…'`                             | The symbol used to indicate a branch name was truncated.                                     |
-| `disabled`          | `true`                            | Disables the `pijul` module.                                                             |
+| `style`             | `'bold purple'`                   | The style for the module.                                                            |
+| `format`            | `'on [$symbol$channel]($style) '` | The format for the module.                                                           |
+| `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
+| `truncation_symbol` | `'…'`                             | The symbol used to indicate a branch name was truncated.                             |
+| `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
 ## Pulumi
 
