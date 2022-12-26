@@ -165,6 +165,7 @@ impl<'a> ModuleRenderer<'a> {
 pub enum FixtureProvider {
     Git,
     Hg,
+    Pijul,
 }
 
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
@@ -218,6 +219,17 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .current_dir(path.path())
                 .arg("clone")
                 .arg(HG_FIXTURE.as_os_str())
+                .arg(path.path())
+                .output()?;
+
+            Ok(path)
+        }
+        FixtureProvider::Pijul => {
+            let path = tempfile::tempdir()?;
+
+            create_command("pijul")?
+                .current_dir(path.path())
+                .arg("init")
                 .arg(path.path())
                 .output()?;
 

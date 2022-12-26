@@ -61,6 +61,7 @@ pub mod os;
 pub mod package;
 pub mod perl;
 pub mod php;
+pub mod pijul;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
