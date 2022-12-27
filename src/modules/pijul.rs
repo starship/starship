@@ -81,7 +81,7 @@ fn get_pijul_current_channel(ctx: &Context) -> Option<String> {
     output
         .lines()
         .find_map(|l| l.strip_prefix("* "))
-        .map(&str::to_owned)
+        .map(str::to_owned)
 }
 
 fn get_graphemes(text: &str, length: usize) -> String {
