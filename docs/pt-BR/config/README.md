@@ -2598,14 +2598,16 @@ O módulo `nix_shell` exibe o ambiente [nix-shell](https://nixos.org/guides/nix-
 
 ### Opções
 
-| Opções       | Padrão                                         | Descrição                                         |
-| ------------ | ---------------------------------------------- | ------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | O formato do módulo.                              |
-| `symbol`     | `'❄️ '`                                        | Uma string que representa o simbolo do nix-shell. |
-| `style`      | `'bold blue'`                                  | O estilo do módulo.                               |
-| `impure_msg` | `'impure'`                                     | Uma string que exibe quando o shell é impuro.     |
-| `pure_msg`   | `'pure'`                                       | Uma string que exibe quando o shell é puro.       |
-| `disabled`   | `false`                                        | Desabilita o módulo `nix_shell`.                  |
+| Opções        | Padrão                                         | Descrição                                                             |
+| ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
+| `format`      | `'via [$symbol$state( \($name\))]($style) '` | O formato do módulo.                                                  |
+| `symbol`      | `'❄️ '`                                        | Uma string que representa o simbolo do nix-shell.                     |
+| `style`       | `'bold blue'`                                  | O estilo do módulo.                                                   |
+| `impure_msg`  | `'impure'`                                     | Uma string que exibe quando o shell é impuro.                         |
+| `pure_msg`    | `'pure'`                                       | Uma string que exibe quando o shell é puro.                           |
+| `unknown_msg` | `''`                                           | A format string shown when it is unknown if the shell is pure/impure. |
+| `disabled`    | `false`                                        | Disables the `nix_shell` module.                                      |
+| `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
 ### Variáveis
 
@@ -2627,6 +2629,7 @@ O módulo `nix_shell` exibe o ambiente [nix-shell](https://nixos.org/guides/nix-
 disabled = true
 impure_msg = '[impure shell](bold red)'
 pure_msg = '[pure shell](bold green)'
+unknown_msg = '[unknown shell](bold yellow)'
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
