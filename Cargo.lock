@@ -3104,9 +3104,9 @@ checksum = "808b51e57d0ef8f71115d8f3a01e7d3750d01c79cac4b3eda910f4389fdf92fd"
 
 [[package]]
 name = "toml_edit"
-version = "0.16.0"
+version = "0.16.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dcd65b83c7473af53e3fd994eb2888dfddfeb28cac9a82825ec5803c233c882c"
+checksum = "5c040d7eb2b695a2a39048f9d8e7ee865ef1c57cd9c44ba9b4a4d389095f7e6a"
 dependencies = [
  "indexmap",
  "itertools",
