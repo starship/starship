@@ -2598,14 +2598,16 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn     | Mặc định                                       | Mô tả                                                 |
-| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | Định dạng cho module.                                 |
-| `symbol`     | `'❄️ '`                                        | A format string representing the symbol of nix-shell. |
-| `style`      | `'bold blue'`                                  | Kiểu cho module.                                      |
-| `impure_msg` | `'impure'`                                     | A format string shown when the shell is impure.       |
-| `pure_msg`   | `'pure'`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | Disables the `nix_shell` module.                      |
+| Tuỳ chọn      | Mặc định                                       | Mô tả                                                                 |
+| ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
+| `format`      | `'via [$symbol$state( \($name\))]($style) '` | Định dạng cho module.                                                 |
+| `symbol`      | `'❄️ '`                                        | A format string representing the symbol of nix-shell.                 |
+| `style`       | `'bold blue'`                                  | Kiểu cho module.                                                      |
+| `impure_msg`  | `'impure'`                                     | A format string shown when the shell is impure.                       |
+| `pure_msg`    | `'pure'`                                       | A format string shown when the shell is pure.                         |
+| `unknown_msg` | `''`                                           | A format string shown when it is unknown if the shell is pure/impure. |
+| `disabled`    | `false`                                        | Disables the `nix_shell` module.                                      |
+| `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
 ### Các biến
 
@@ -2627,6 +2629,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 disabled = true
 impure_msg = '[impure shell](bold red)'
 pure_msg = '[pure shell](bold green)'
+unknown_msg = '[unknown shell](bold yellow)'
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
