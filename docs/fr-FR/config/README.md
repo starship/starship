@@ -2598,14 +2598,16 @@ Le module `nix_shell` affiche la version de l’environnement [nix-shell](https:
 
 ### Options
 
-| Option       | Défaut                                         | Description                                                |
-| ------------ | ---------------------------------------------- | ---------------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | Format du module.                                          |
-| `symbole`    | `'❄️ '`                                        | Une chaîne de format représentant le symbole de nix-shell. |
-| `style`      | `'bold blue'`                                  | Le style pour le module.                                   |
-| `impure_msg` | `'impure'`                                     | Une chaîne de format affichée lorsque le shell est impur.  |
-| `pure_msg`   | `'pure'`                                       | Une chaîne de format affichée lorsque le shell est pur.    |
-| `disabled`   | `false`                                        | Désactive le module `nix_shell`.                           |
+| Option        | Défaut                                         | Description                                                           |
+| ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
+| `format`      | `'via [$symbol$state( \($name\))]($style) '` | Format du module.                                                     |
+| `symbole`     | `'❄️ '`                                        | Une chaîne de format représentant le symbole de nix-shell.            |
+| `style`       | `'bold blue'`                                  | Le style pour le module.                                              |
+| `impure_msg`  | `'impure'`                                     | Une chaîne de format affichée lorsque le shell est impur.             |
+| `pure_msg`    | `'pure'`                                       | Une chaîne de format affichée lorsque le shell est pur.               |
+| `unknown_msg` | `''`                                           | A format string shown when it is unknown if the shell is pure/impure. |
+| `disabled`    | `false`                                        | Disables the `nix_shell` module.                                      |
+| `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
 ### Variables
 
@@ -2627,6 +2629,7 @@ Le module `nix_shell` affiche la version de l’environnement [nix-shell](https:
 disabled = true
 impure_msg = '[impure shell](bold red)'
 pure_msg = '[pure shell](bold green)'
+unknown_msg = '[unknown shell](bold yellow)'
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
