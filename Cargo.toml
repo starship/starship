@@ -48,9 +48,9 @@ clap_complete = "4.0.7"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.4.1"
-git-features = { version = "0.25.0", optional = true }
+git-features = { version = "0.25.1", optional = true }
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-git-repository = { version = "0.30.1", default-features = false, features = ["max-performance-safe"] }
+git-repository = { version = "0.30.2", default-features = false, features = ["max-performance-safe"] }
 indexmap = { version = "1.9.2", features = ["serde"] }
 log = { version = "0.4.17", features = ["std"] }
 # nofity-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
@@ -70,7 +70,7 @@ rayon = "1.6.1"
 regex = "1.7.0"
 rust-ini = "0.18.0"
 semver = "1.0.16"
-serde = { version = "1.0.151", features = ["derive"] }
+serde = { version = "1.0.152", features = ["derive"] }
 serde_json = "1.0.91"
 sha1 = "0.10.5"
 shadow-rs = { version = "0.19.0", default-features = false }
@@ -81,7 +81,7 @@ strsim = "0.10.0"
 systemstat = "=0.2.2"
 terminal_size = "0.2.3"
 toml = { version = "0.5.10", features = ["preserve_order"] }
-toml_edit = "0.16.0"
+toml_edit = "0.16.2"
 unicode-segmentation = "1.10.0"
 unicode-width = "0.1.10"
 urlencoding = "2.1.2"

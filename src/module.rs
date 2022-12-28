@@ -31,7 +31,6 @@ pub const ALL_MODULES: &[&str] = &[
     "dotnet",
     "elixir",
     "elm",
-    "env_var",
     "erlang",
     "fennel",
     "fill",

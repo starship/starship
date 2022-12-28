@@ -996,10 +996,12 @@
       "default": {
         "disabled": false,
         "format": "via [$symbol$state( \\($name\\))]($style) ",
+        "heuristic": false,
         "impure_msg": "impure",
         "pure_msg": "pure",
         "style": "bold blue",
-        "symbol": "❄️  "
+        "symbol": "❄️  ",
+        "unknown_msg": ""
       },
       "allOf": [
         {
@@ -2914,6 +2916,10 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "description": {
+          "default": "<env_var module>",
+          "type": "string"
         }
       },
       "additionalProperties": false
@@ -4148,7 +4154,15 @@
           "default": "pure",
           "type": "string"
         },
+        "unknown_msg": {
+          "default": "",
+          "type": "string"
+        },
         "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "heuristic": {
           "default": false,
           "type": "boolean"
         }

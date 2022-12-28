@@ -122,8 +122,8 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "elixir" => elixir::module(context),
             "elm" => elm::module(context),
             "erlang" => erlang::module(context),
+            "env_var" => env_var::module(None, context),
             "fennel" => fennel::module(context),
-            "env_var" => env_var::module(context),
             "fill" => fill::module(context),
             "gcloud" => gcloud::module(context),
             "git_branch" => git_branch::module(context),
@@ -183,8 +183,9 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "vagrant" => vagrant::module(context),
             "vcsh" => vcsh::module(context),
             "zig" => zig::module(context),
-            // Added for tests, avoid potential side effects in production code.
-            #[cfg(test)]
+            env if env.starts_with("env_var.") => {
+                env_var::module(env.strip_prefix("env_var."), context)
+            }
             custom if custom.starts_with("custom.") => {
                 // SAFETY: We just checked that the module starts with "custom."
                 custom::module(custom.strip_prefix("custom.").unwrap(), context)
@@ -233,7 +234,6 @@ pub fn description(module: &str) -> &'static str {
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "elixir" => "The currently installed versions of Elixir and OTP",
         "elm" => "The currently installed version of Elm",
-        "env_var" => "Displays the current value of a selected environment variable",
         "erlang" => "Current OTP version",
         "fennel" => "The currently installed version of Fennel",
         "fill" => "Fills the remaining space on the line with a pad string",

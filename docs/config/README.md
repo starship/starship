@@ -1380,6 +1380,14 @@ The module will be shown only if any of the following conditions are met:
 
 ::: tip
 
+The order in which env_var modules are shown can be individually set by including
+`${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`).
+By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+
+:::
+
+::: tip
+
 Multiple environmental variables can be displayed by using a `.`. (see example)
 If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
@@ -1396,13 +1404,14 @@ default = 'unknown user'
 
 ### Options
 
-| Option     | Default                        | Description                                                                  |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `''`                           | The symbol used before displaying the variable value.                        |
-| `variable` |                                | The environment variable to be displayed.                                    |
-| `default`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`   | `'with [$env_value]($style) '` | The format for the module.                                                   |
-| `disabled` | `false`                        | Disables the `env_var` module.                                               |
+| Option        | Default                        | Description                                                                  |
+| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`      | `""`                           | The symbol used before displaying the variable value.                        |
+| `variable`    |                                | The environment variable to be displayed.                                    |
+| `default`     |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
+| `description` | `"<env_var module>"`           | The description of the module that is shown when running `starship explain`. |
+| `disabled`    | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
 
@@ -2718,14 +2727,16 @@ The module will be shown when inside a nix-shell environment.
 
 ### Options
 
-| Option       | Default                                      | Description                                           |
-| ------------ | -------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                            |
-| `symbol`     | `'❄️ '`                                       | A format string representing the symbol of nix-shell. |
-| `style`      | `'bold blue'`                                | The style for the module.                             |
-| `impure_msg` | `'impure'`                                   | A format string shown when the shell is impure.       |
-| `pure_msg`   | `'pure'`                                     | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                      | Disables the `nix_shell` module.                      |
+| Option        | Default                                      | Description                                                           |
+| ------------- | -------------------------------------------- | --------------------------------------------------------------------- |
+| `format`      | `'via [$symbol$state( \($name\))]($style) '` | The format for the module.                                            |
+| `symbol`      | `'❄️ '`                                       | A format string representing the symbol of nix-shell.                 |
+| `style`       | `'bold blue'`                                | The style for the module.                                             |
+| `impure_msg`  | `'impure'`                                   | A format string shown when the shell is impure.                       |
+| `pure_msg`    | `'pure'`                                     | A format string shown when the shell is pure.                         |
+| `unknown_msg` | `''`                                         | A format string shown when it is unknown if the shell is pure/impure. |
+| `disabled`    | `false`                                      | Disables the `nix_shell` module.                                      |
+| `heuristic`   | `false`                                      | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
 ### Variables
 
@@ -2747,6 +2758,7 @@ The module will be shown when inside a nix-shell environment.
 disabled = true
 impure_msg = '[impure shell](bold red)'
 pure_msg = '[pure shell](bold green)'
+unknown_msg = '[unknown shell](bold yellow)'
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
