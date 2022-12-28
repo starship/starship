@@ -750,7 +750,7 @@
     "hg_branch": {
       "default": {
         "disabled": true,
-        "format": "on [$symbol$branch]($style) ",
+        "format": "on [$symbol$branch:$topic]($style) ",
         "style": "bold purple",
         "symbol": " ",
         "truncation_length": 9223372036854775807,
