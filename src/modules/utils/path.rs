@@ -13,6 +13,8 @@ pub trait PathExt {
     /// E.g. `\\?\UNC\server\share\foo` => `\foo`
     /// E.g. `/foo/bar` => `/foo/bar`
     fn without_prefix(&self) -> &Path;
+    /// Get device / volume info
+    fn device_id(&self) -> u64;
 }
 
 #[cfg(windows)]
@@ -99,6 +101,20 @@ impl PathExt for Path {
     #[inline]
     fn without_prefix(&self) -> &Path {
         self
+    }
+
+    #[cfg(target_os = "linux")]
+    fn device_id(&self) -> u64 {
+        use std::os::linux::fs::MetadataExt;
+        let m = self.metadata().unwrap();
+        m.st_dev()
+    }
+
+    #[cfg(all(unix, not(target_os = "linux")))]
+    pub fn device_id(&self) -> u64 {
+        use std::os::unix::fs::MetadataExt;
+        let m = self.metadata().unwrap();
+        m.dev()
     }
 }
 
