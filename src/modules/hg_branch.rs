@@ -6,6 +6,7 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
+use crate::utils::read_file;
 
 struct HgRepo {
     /// If `current_dir` is an hg repository or is contained within one,
@@ -103,9 +104,9 @@ fn get_hg_repo(ctx: &Context) -> Result<HgRepo, Error> {
             .any(|e| e.unwrap().file_name() == ".hg")
         {
             let repo = HgRepo {
-                branch: get_hg_branch_name(root_dir),
-                bookmark: get_hg_current_bookmark(root_dir),
-                topic: get_hg_topic_name(root_dir),
+                branch: get_hg_branch_name(root_dir).unwrap_or(String::from("default")),
+                bookmark: get_hg_current_bookmark(root_dir).ok(),
+                topic: get_hg_topic_name(root_dir).ok(),
             };
             return Ok(repo);
         }
@@ -113,21 +114,19 @@ fn get_hg_repo(ctx: &Context) -> Result<HgRepo, Error> {
     Err(Error::new(ErrorKind::Other, "No .hg found!"))
 }
 
-fn get_hg_branch_name(hg_root: &Path) -> String {
-    std::fs::read_to_string(hg_root.join(".hg").join("branch"))
-        .map_or_else(|_| "default".to_string(), |s| s.trim().into())
+fn get_hg_branch_name(hg_root: &Path) -> Result<String, Error> {
+    match read_file(hg_root.join(".hg").join("branch")) {
+        Ok(b) => Ok(b.trim().to_string()),
+        Err(e) => Err(e),
+    }
 }
 
-fn get_hg_current_bookmark(hg_root: &Path) -> Option<String> {
-    std::fs::read_to_string(hg_root.join(".hg").join("bookmarks.current"))
-        .map(|s| s.trim().into())
-        .ok()
+fn get_hg_current_bookmark(hg_root: &Path) -> Result<String, Error> {
+    read_file(hg_root.join(".hg").join("bookmarks.current"))
 }
 
-fn get_hg_topic_name(hg_root: &Path) -> Option<String> {
-    std::fs::read_to_string(hg_root.join(".hg").join("topic"))
-        .map(|s| s.trim().into())
-        .ok()
+fn get_hg_topic_name(hg_root: &Path) -> Result<String, Error> {
+    read_file(hg_root.join(".hg").join("topic"))
 }
 
 fn get_graphemes(text: &str, length: usize) -> String {
