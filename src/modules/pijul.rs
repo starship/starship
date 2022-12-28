@@ -72,9 +72,21 @@ fn get_pijul_current_channel(ctx: &Context) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    use nu_ansi_term::{Color, Style};
     use std::io;
+    use std::path::Path;
 
     use crate::test::ModuleRenderer;
+    use crate::utils::create_command;
+
+    enum Expect<'a> {
+        ChannelName(&'a str),
+        Empty,
+        NoTruncation,
+        Symbol(&'a str),
+        Style(Style),
+        TruncationSymbol(&'a str),
+    }
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -85,5 +97,127 @@ mod tests {
         let expected = None;
         assert_eq!(expected, actual);
         repo_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn test_pijul_disabled_per_default() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+        expect_pijul_with_config(
+            repo_dir.path(),
+            Some(toml::toml! {
+                [pijul]
+                truncation_length = 14
+            }),
+            &[Expect::Empty],
+        );
+        repo_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn test_pijul_autodisabled() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+        expect_pijul_with_config(repo_dir.path(), None, &[Expect::Empty]);
+        repo_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn test_pijul_channel() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+        run_pijul(&["channel", "new", "tributary-48198"], repo_dir.path())?;
+        run_pijul(&["channel", "switch", "tributary-48198"], repo_dir.path())?;
+        expect_pijul_with_config(
+            repo_dir.path(),
+            None,
+            &[Expect::ChannelName("tributary"), Expect::NoTruncation],
+        );
+        repo_dir.close()
+    }
+
+    #[test]
+    #[ignore]
+    fn test_pijul_configured() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+        run_pijul(&["channel", "new", "tributary-48198"], repo_dir.path())?;
+        run_pijul(&["channel", "switch", "tributary-48198"], repo_dir.path())?;
+        expect_pijul_with_config(
+            repo_dir.path(),
+            Some(toml::toml! {
+                [pijul]
+                style = "underline blue"
+                symbol = "P "
+                truncation_length = 14
+                truncation_symbol = "%"
+                disabled = false
+            }),
+            &[
+                Expect::ChannelName("tributary-4819"),
+                Expect::Style(Color::Blue.underline()),
+                Expect::Symbol("P"),
+                Expect::TruncationSymbol("%"),
+            ],
+        );
+        repo_dir.close()
+    }
+
+    fn expect_pijul_with_config(
+        repo_dir: &Path,
+        config: Option<toml::Value>,
+        expectations: &[Expect],
+    ) {
+        let actual = ModuleRenderer::new("pijul")
+            .path(repo_dir.to_str().unwrap())
+            .config(config.unwrap_or_else(|| {
+                toml::toml! {
+                    [pijul]
+                    disabled = false
+                }
+            }))
+            .collect();
+
+        let mut expect_channel_name = "main";
+        let mut expect_style = Color::Purple.bold();
+        let mut expect_symbol = "\u{e0a0}";
+        let mut expect_truncation_symbol = "…";
+
+        for expect in expectations {
+            match expect {
+                Expect::Empty => {
+                    assert_eq!(None, actual);
+                    return;
+                }
+                Expect::Symbol(symbol) => {
+                    expect_symbol = symbol;
+                }
+                Expect::TruncationSymbol(truncation_symbol) => {
+                    expect_truncation_symbol = truncation_symbol;
+                }
+                Expect::NoTruncation => {
+                    expect_truncation_symbol = "";
+                }
+                Expect::ChannelName(channel_name) => {
+                    expect_channel_name = channel_name;
+                }
+                Expect::Style(style) => expect_style = *style,
+            }
+        }
+
+        let expected = Some(format!(
+            "on {} ",
+            expect_style.paint(format!(
+                "{expect_symbol} {expect_channel_name}{expect_truncation_symbol}"
+            )),
+        ));
+        assert_eq!(expected, actual);
+    }
+
+    fn run_pijul(args: &[&str], repo_dir: &Path) -> io::Result<()> {
+        create_command("pijul")?
+            .args(args)
+            .current_dir(repo_dir)
+            .output()?;
+        Ok(())
     }
 }
