@@ -21,7 +21,7 @@ impl<'a> Default for HgBranchConfig<'a> {
         HgBranchConfig {
             symbol: " ",
             style: "bold purple",
-            format: "on [$symbol$branch]($style) ",
+            format: "on [$symbol$branch:$topic]($style) ",
             truncation_length: std::i64::MAX,
             truncation_symbol: "…",
             disabled: true,
