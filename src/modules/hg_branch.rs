@@ -7,6 +7,7 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
 use crate::utils::read_file;
+use crate::modules::utils::path::PathExt;
 
 struct HgRepo {
     /// If `current_dir` is an hg repository or is contained within one,
@@ -98,7 +99,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 fn get_hg_repo(ctx: &Context) -> Result<HgRepo, Error> {
     let dir = ctx.current_dir.as_path();
+    let dev_id = dir.device_id();
     for root_dir in dir.ancestors() {
+        if dev_id != root_dir.device_id() {
+            break;
+        }
         if root_dir
             .read_dir()?
             .any(|e| e.unwrap().file_name() == ".hg")
