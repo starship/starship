@@ -2834,6 +2834,10 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "description": {
+          "default": "<env_var module>",
+          "type": "string"
         }
       },
       "additionalProperties": false

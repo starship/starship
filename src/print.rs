@@ -2,7 +2,7 @@ use clap::{builder::PossibleValue, ValueEnum};
 use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
-use std::fmt::{self, Debug, Write as FmtWrite};
+use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
 use std::time::Duration;
 use terminal_size::terminal_size;
@@ -313,14 +313,6 @@ fn handle_module<'a>(
     context: &'a Context,
     module_list: &BTreeSet<String>,
 ) -> Vec<Module<'a>> {
-    struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
-
-    impl Debug for DebugCustomModules<'_> {
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            f.debug_list().entries(self.0.keys()).finish()
-        }
-    }
-
     let mut modules: Vec<Module> = Vec::new();
 
     if ALL_MODULES.contains(&module) {
@@ -328,34 +320,29 @@ fn handle_module<'a>(
         if !context.is_module_disabled_in_config(module) {
             modules.extend(modules::handle(module, context));
         }
-    } else if module == "custom" {
-        // Write out all custom modules, except for those that are explicitly set
-        if let Some(custom_modules) = context.config.get_custom_modules() {
-            let custom_modules = custom_modules.iter().filter_map(|(custom_module, config)| {
-                if should_add_implicit_custom_module(custom_module, config, module_list) {
-                    modules::custom::module(custom_module, context)
-                } else {
-                    None
-                }
-            });
-            modules.extend(custom_modules);
+    } else if module.starts_with("custom.") || module.starts_with("env_var.") {
+        // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
+        modules.extend(modules::handle(module, context));
+    } else if matches!(module, "custom" | "env_var") {
+        // env var is a spacial case and may contain a top-level module definition
+        if module == "env_var" {
+            modules.extend(modules::handle(module, context));
         }
-    } else if let Some(module) = module.strip_prefix("custom.") {
-        // Write out a custom module if it isn't disabled (and it exists...)
-        match context.is_custom_module_disabled_in_config(module) {
-            Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.extend(modules::custom::module(module, context)),
-            None => match context.config.get_custom_modules() {
-                Some(modules) => log::debug!(
-                    "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
-                    module,
-                    DebugCustomModules(modules),
-                    ),
-                None => log::debug!(
-                    "top level format contains custom module \"{}\", but no configuration was provided.",
-                    module,
-                    ),
-            },
+
+        // Write out all custom modules, except for those that are explicitly set
+        for (child, config) in context
+            .config
+            .get_config(&[module])
+            .and_then(|config| config.as_table().map(|t| t.iter()))
+            .into_iter()
+            .flatten()
+        {
+            // Some env var keys may be part of a top-level module definition
+            if module == "env_var" && !config.is_table() {
+                continue;
+            } else if should_add_implicit_module(module, child, config, module_list) {
+                modules.extend(modules::handle(&format!("{module}.{child}"), context));
+            }
         }
     } else {
         log::debug!(
@@ -368,12 +355,13 @@ fn handle_module<'a>(
     modules
 }
 
-fn should_add_implicit_custom_module(
-    custom_module: &str,
+fn should_add_implicit_module(
+    parent_module: &str,
+    child_module: &str,
     config: &toml::Value,
     module_list: &BTreeSet<String>,
 ) -> bool {
-    let explicit_module_name = format!("custom.{custom_module}");
+    let explicit_module_name = format!("{parent_module}.{child_module}");
     let is_explicitly_specified = module_list.contains(&explicit_module_name);
 
     if is_explicitly_specified {
@@ -538,5 +526,154 @@ mod test {
     #[cfg(feature = "config-schema")]
     fn print_schema_does_not_panic() {
         print_schema();
+    }
+
+    #[test]
+    fn custom_expands() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context();
+        context.current_dir = dir.path().to_path_buf();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                format="$custom"
+                [custom.a]
+                when=true
+                format="a"
+                [custom.b]
+                when=true
+                format="b"
+            }),
+        };
+        context.root_config.format = "$custom".to_string();
+
+        let expected = String::from("\nab");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn env_expands() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                format="$env_var"
+                [env_var]
+                format="$env_value"
+                variable = "a"
+                [env_var.b]
+                format="$env_value"
+                [env_var.c]
+                format="$env_value"
+            }),
+        };
+        context.root_config.format = "$env_var".to_string();
+        context.env.insert("a", "a".to_string());
+        context.env.insert("b", "b".to_string());
+        context.env.insert("c", "c".to_string());
+
+        let expected = String::from("\nabc");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn custom_mixed() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context();
+        context.current_dir = dir.path().to_path_buf();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                format="${custom.c}$custom${custom.b}"
+                [custom.a]
+                when=true
+                format="a"
+                [custom.b]
+                when=true
+                format="b"
+                [custom.c]
+                when=true
+                format="c"
+            }),
+        };
+        context.root_config.format = "${custom.c}$custom${custom.b}".to_string();
+
+        let expected = String::from("\ncab");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn env_mixed() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                format="${env_var.c}$env_var${env_var.b}"
+                [env_var]
+                format="$env_value"
+                variable = "d"
+                [env_var.a]
+                format="$env_value"
+                [env_var.b]
+                format="$env_value"
+                [env_var.c]
+                format="$env_value"
+            }),
+        };
+        context.root_config.format = "${env_var.c}$env_var${env_var.b}".to_string();
+        context.env.insert("a", "a".to_string());
+        context.env.insert("b", "b".to_string());
+        context.env.insert("c", "c".to_string());
+        context.env.insert("d", "d".to_string());
+
+        let expected = String::from("\ncdab");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn custom_subset() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context();
+        context.current_dir = dir.path().to_path_buf();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                format="${custom.b}"
+                [custom.a]
+                when=true
+                format="a"
+                [custom.b]
+                when=true
+                format="b"
+            }),
+        };
+        context.root_config.format = "${custom.b}".to_string();
+
+        let expected = String::from("\nb");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn custom_missing() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context();
+        context.current_dir = dir.path().to_path_buf();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                format="${custom.b}"
+                [custom.a]
+                when=true
+                format="a"
+            }),
+        };
+        context.root_config.format = "${custom.b}".to_string();
+
+        let expected = String::from("\n");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }

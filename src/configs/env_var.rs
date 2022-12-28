@@ -16,6 +16,7 @@ pub struct EnvVarConfig<'a> {
     pub default: Option<&'a str>,
     pub format: &'a str,
     pub disabled: bool,
+    pub description: &'a str,
 }
 
 impl<'a> Default for EnvVarConfig<'a> {
@@ -27,6 +28,7 @@ impl<'a> Default for EnvVarConfig<'a> {
             default: None,
             format: "with [$env_value]($style) ",
             disabled: false,
+            description: "<env_var module>",
         }
     }
 }
