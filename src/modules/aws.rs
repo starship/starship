@@ -170,6 +170,7 @@ fn has_credential_process_or_sso(
 
     Some(
         config_section.contains_key("credential_process")
+            || config_section.contains_key("sso_session")
             || config_section.contains_key("sso_start_url")
             || credential_section?.contains_key("credential_process")
             || credential_section?.contains_key("sso_start_url"),
