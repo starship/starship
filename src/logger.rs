@@ -43,9 +43,8 @@ pub fn cleanup_log_files<P: AsRef<Path>>(path: P) {
 
     for file in log_files {
         // Skip files that can't be read.
-        let file = match file {
-            Ok(file) => file,
-            Err(_) => continue,
+        let Ok (file) = file else {
+            continue;
         };
 
         // Avoid deleting files that don't look like log files.
@@ -62,9 +61,8 @@ pub fn cleanup_log_files<P: AsRef<Path>>(path: P) {
         }
 
         // Read metadata to check file age.
-        let metadata = match file.metadata() {
-            Ok(metadata) => metadata,
-            Err(_) => continue,
+        let Ok(metadata) = file.metadata() else {
+            continue;
         };
 
         // Avoid handling anything that isn't a file.
@@ -73,9 +71,8 @@ pub fn cleanup_log_files<P: AsRef<Path>>(path: P) {
         }
 
         // Get the file's modification time.
-        let modified = match metadata.modified() {
-            Ok(modified) => modified,
-            Err(_) => continue,
+        let Ok(modified) = metadata.modified() else {
+            continue;
         };
 
         // Delete the file if it hasn't changed in 24 hours.
