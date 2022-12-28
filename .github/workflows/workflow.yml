@@ -207,10 +207,6 @@ jobs:
         if: matrix.os == 'macOS-latest'
         run: brew install mercurial
 
-      # Install Pijul
-      - name: Setup | Pijul
-        run: cargo install pijul --version "~1.0.0-beta"
-
       # Run the ignored tests that expect the above setup
       - name: Build | Test
         run: "cargo llvm-cov
