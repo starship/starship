@@ -1,5 +1,5 @@
-use super::{Context, Module, ModuleConfig};
 use super::utils::truncate::truncate_text;
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::pijul::PijulConfig;
 use crate::formatter::StringFormatter;
