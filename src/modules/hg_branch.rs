@@ -6,8 +6,8 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
-use crate::utils::read_file;
 use crate::modules::utils::path::PathExt;
+use crate::utils::read_file;
 
 struct HgRepo {
     /// If `current_dir` is an hg repository or is contained within one,
@@ -109,7 +109,7 @@ fn get_hg_repo(ctx: &Context) -> Result<HgRepo, Error> {
             .any(|e| e.unwrap().file_name() == ".hg")
         {
             let repo = HgRepo {
-                branch: get_hg_branch_name(root_dir).unwrap_or(String::from("default")),
+                branch: get_hg_branch_name(root_dir).unwrap_or_else(|_| String::from("default")),
                 bookmark: get_hg_current_bookmark(root_dir).ok(),
                 topic: get_hg_topic_name(root_dir).ok(),
             };
