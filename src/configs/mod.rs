@@ -25,6 +25,7 @@ pub mod elixir;
 pub mod elm;
 pub mod env_var;
 pub mod erlang;
+pub mod fennel;
 pub mod fill;
 pub mod gcloud;
 pub mod git_branch;
@@ -33,8 +34,10 @@ pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
+pub mod gradle;
 pub mod guix_shell;
 pub mod haskell;
+pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
@@ -147,6 +150,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     erlang: erlang::ErlangConfig<'a>,
     #[serde(borrow)]
+    fennel: fennel::FennelConfig<'a>,
+    #[serde(borrow)]
     fill: fill::FillConfig<'a>,
     #[serde(borrow)]
     gcloud: gcloud::GcloudConfig<'a>,
@@ -163,9 +168,13 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     golang: go::GoConfig<'a>,
     #[serde(borrow)]
+    gradle: gradle::GradleConfig<'a>,
+    #[serde(borrow)]
     guix_shell: guix_shell::GuixShellConfig<'a>,
     #[serde(borrow)]
     haskell: haskell::HaskellConfig<'a>,
+    #[serde(borrow)]
+    haxe: haxe::HaxeConfig<'a>,
     #[serde(borrow)]
     helm: helm::HelmConfig<'a>,
     #[serde(borrow)]

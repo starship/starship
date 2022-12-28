@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="GitHub Actions workflow status"
   /></a>
   <a href="https://crates.io/crates/starship"
@@ -219,7 +219,6 @@ Alternatively, install Starship using any of the following package managers:
 | Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
 | Arch Linux         | [Arch Linux Community]  | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages]       | `dnf install starship`                                        |
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
 | NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
@@ -443,7 +442,6 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [conda-forge]: https://anaconda.org/conda-forge/starship
 [copr]: https://copr.fedorainfracloud.org/coprs/atim/starship
 [crates.io]: https://crates.io/crates/starship
-[fedora packages]: https://src.fedoraproject.org/rpms/rust-starship
 [freshports]: https://www.freshports.org/shells/starship
 [gentoo packages]: https://packages.gentoo.org/packages/app-shells/starship
 [linuxbrew]: https://formulae.brew.sh/formula/starship

@@ -105,7 +105,7 @@ fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<Strin
     context
         .read_file_from_pwd("gradle.properties")
         .and_then(|contents| {
-            let re = Regex::new(r"version=(?P<version>.*)").unwrap();
+            let re = Regex::new(r"(?m)^\s*version\s*=\s*(?P<version>.*)").unwrap();
             let caps = re.captures(&contents)?;
             format_version(&caps["version"], config.version_format)
         }).or_else(|| {
@@ -973,6 +973,18 @@ java {
         let config_name = "gradle.properties";
         let config_content = "
             version=1.2.3
+            ";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+    #[test]
+    fn test_extract_grade_version_from_properties_with_comment_and_whitespace() -> io::Result<()> {
+        let config_name = "gradle.properties";
+        let config_content = "
+            # or use -Pversion=0.0.1
+            version = 1.2.3
             ";
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(config_content))?;

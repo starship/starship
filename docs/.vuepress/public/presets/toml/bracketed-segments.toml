@@ -46,6 +46,9 @@ format = '\[[$symbol($version)]($style)\]'
 [erlang]
 format = '\[[$symbol($version)]($style)\]'
 
+[fennel]
+format = '\[[$symbol($version)]($style)\]'
+
 [gcloud]
 format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
 
@@ -58,10 +61,16 @@ format = '([\[$all_status$ahead_behind\]]($style))'
 [golang]
 format = '\[[$symbol($version)]($style)\]'
 
+[gradle]
+format = '\[[$symbol($version)]($style)\]'
+
 [guix_shell]
 format = '\[[$symbol]($style)\]'
 
 [haskell]
+format = '\[[$symbol($version)]($style)\]'
+
+[haxe]
 format = '\[[$symbol($version)]($style)\]'
 
 [helm]

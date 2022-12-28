@@ -58,11 +58,17 @@ symbol = "exs "
 [elm]
 symbol = "elm "
 
+[fennel]
+symbol = "fnl "
+
 [git_branch]
 symbol = "git "
 
 [golang]
 symbol = "go "
+
+[gradle]
+symbol = "gradle "
 
 [guix_shell]
 symbol = "guix "

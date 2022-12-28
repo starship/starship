@@ -45,7 +45,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. Par exemple, pour afficher l'heure à laquelle la dernière commande a été lancée ici, vous feriez
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -54,7 +54,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## TransientPrompt and TransientRightPrompt in Fish
+## TransientPrompt et TransientRightPrompt dans Fish
 
 It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
@@ -70,7 +70,7 @@ starship init fish | source
 enable_transience
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. Par exemple, pour afficher l'heure à laquelle la dernière commande a été lancée ici, vous feriez
 
 ```fish
 function starship_transient_rprompt_func
@@ -205,7 +205,9 @@ Certains shells peuvent gérer une invite de commande à droite, sur la même li
 
 Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. Pour aligner à droite les modules au-dessus de la ligne d’entrée d’une invite multiligne, voir le [module `fill`](/config/#fill).
 
-`right_format` est actuellement géré pour les shells suivants: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+
+Note: Nushell 0.71.0 or later is required
 
 ### Exemple
 
@@ -280,5 +282,5 @@ Si plusieurs couleurs sont définies pour l’avant-plan/arrière-plan, la derni
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
 - Many terminals disable support for `blink` by default
-- `hidden` is not supported on iTerm (https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
 - `strikethrough` is not supported by the default macOS Terminal.app
