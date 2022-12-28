@@ -76,7 +76,7 @@ mod tests {
     use std::io;
     use std::path::Path;
 
-    use crate::test::ModuleRenderer;
+    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
     use crate::utils::create_command;
 
     enum Expect<'a> {
@@ -100,50 +100,49 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn test_pijul_disabled_per_default() -> io::Result<()> {
-        let repo_dir = tempfile::tempdir()?;
+        let tempdir = fixture_repo(FixtureProvider::Pijul)?;
+        let repo_dir = tempdir.path();
         expect_pijul_with_config(
-            repo_dir.path(),
+            repo_dir,
             Some(toml::toml! {
                 [pijul]
                 truncation_length = 14
             }),
             &[Expect::Empty],
         );
-        repo_dir.close()
+        tempdir.close()
     }
 
     #[test]
-    #[ignore]
     fn test_pijul_autodisabled() -> io::Result<()> {
-        let repo_dir = tempfile::tempdir()?;
-        expect_pijul_with_config(repo_dir.path(), None, &[Expect::Empty]);
-        repo_dir.close()
+        let tempdir = tempfile::tempdir()?;
+        expect_pijul_with_config(tempdir.path(), None, &[Expect::Empty]);
+        tempdir.close()
     }
 
     #[test]
-    #[ignore]
     fn test_pijul_channel() -> io::Result<()> {
-        let repo_dir = tempfile::tempdir()?;
-        run_pijul(&["channel", "new", "tributary-48198"], repo_dir.path())?;
-        run_pijul(&["channel", "switch", "tributary-48198"], repo_dir.path())?;
+        let tempdir = fixture_repo(FixtureProvider::Pijul)?;
+        let repo_dir = tempdir.path();
+        run_pijul(&["channel", "new", "tributary-48198"], repo_dir)?;
+        run_pijul(&["channel", "switch", "tributary-48198"], repo_dir)?;
         expect_pijul_with_config(
-            repo_dir.path(),
+            repo_dir,
             None,
-            &[Expect::ChannelName("tributary"), Expect::NoTruncation],
+            &[Expect::ChannelName("tributary-48198"), Expect::NoTruncation],
         );
-        repo_dir.close()
+        tempdir.close()
     }
 
     #[test]
-    #[ignore]
     fn test_pijul_configured() -> io::Result<()> {
-        let repo_dir = tempfile::tempdir()?;
-        run_pijul(&["channel", "new", "tributary-48198"], repo_dir.path())?;
-        run_pijul(&["channel", "switch", "tributary-48198"], repo_dir.path())?;
+        let tempdir = fixture_repo(FixtureProvider::Pijul)?;
+        let repo_dir = tempdir.path();
+        run_pijul(&["channel", "new", "tributary-48198"], repo_dir)?;
+        run_pijul(&["channel", "switch", "tributary-48198"], repo_dir)?;
         expect_pijul_with_config(
-            repo_dir.path(),
+            repo_dir,
             Some(toml::toml! {
                 [pijul]
                 style = "underline blue"
@@ -159,7 +158,7 @@ mod tests {
                 Expect::TruncationSymbol("%"),
             ],
         );
-        repo_dir.close()
+        tempdir.close()
     }
 
     fn expect_pijul_with_config(
