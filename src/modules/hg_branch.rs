@@ -1,5 +1,5 @@
 use std::io::{Error, ErrorKind};
-use std::path::PathBuf;
+use std::path::Path;
 use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module, ModuleConfig};
@@ -46,7 +46,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let repo = get_hg_repo(context).ok()?;
 
-    let branch_name = &repo.bookmark.unwrap_or_else(|| repo.branch);
+    let branch_name = &repo.bookmark.unwrap_or(repo.branch);
     let truncated_graphemes = get_graphemes(branch_name, len);
     let truncation_symbol = get_graphemes(config.truncation_symbol, 1);
     // The truncation symbol should only be added if we truncated
@@ -56,8 +56,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         truncated_graphemes
     };
     let topic_graphemes = if let Some(topic) = &repo.topic {
-        let truncated_topic_graphemes = get_graphemes(&topic, len);
-        if len < graphemes_len(&topic) {
+        let truncated_topic_graphemes = get_graphemes(topic, len);
+        if len < graphemes_len(topic) {
             truncated_topic_graphemes + truncation_symbol.as_str()
         } else {
             truncated_topic_graphemes
@@ -102,11 +102,10 @@ fn get_hg_repo(ctx: &Context) -> Result<HgRepo, Error> {
             .read_dir()?
             .any(|e| e.unwrap().file_name() == ".hg")
         {
-            let hg_root = root_dir.to_path_buf();
             let repo = HgRepo {
-                branch: get_hg_branch_name(&hg_root),
-                bookmark: get_hg_current_bookmark(&hg_root),
-                topic: get_hg_topic_name(&hg_root),
+                branch: get_hg_branch_name(root_dir),
+                bookmark: get_hg_current_bookmark(root_dir),
+                topic: get_hg_topic_name(root_dir),
             };
             return Ok(repo);
         }
@@ -114,18 +113,18 @@ fn get_hg_repo(ctx: &Context) -> Result<HgRepo, Error> {
     Err(Error::new(ErrorKind::Other, "No .hg found!"))
 }
 
-fn get_hg_branch_name(hg_root: &PathBuf) -> String {
+fn get_hg_branch_name(hg_root: &Path) -> String {
     std::fs::read_to_string(hg_root.join(".hg").join("branch"))
         .map_or_else(|_| "default".to_string(), |s| s.trim().into())
 }
 
-fn get_hg_current_bookmark(hg_root: &PathBuf) -> Option<String> {
+fn get_hg_current_bookmark(hg_root: &Path) -> Option<String> {
     std::fs::read_to_string(hg_root.join(".hg").join("bookmarks.current"))
         .map(|s| s.trim().into())
         .ok()
 }
 
-fn get_hg_topic_name(hg_root: &PathBuf) -> Option<String> {
+fn get_hg_topic_name(hg_root: &Path) -> Option<String> {
     std::fs::read_to_string(hg_root.join(".hg").join("topic"))
         .map(|s| s.trim().into())
         .ok()
