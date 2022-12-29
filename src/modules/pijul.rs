@@ -77,7 +77,6 @@ mod tests {
     use std::path::Path;
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
-    use crate::utils::create_command;
 
     enum Expect<'a> {
         ChannelName(&'a str),
@@ -212,11 +211,8 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
-    fn run_pijul(args: &[&str], repo_dir: &Path) -> io::Result<()> {
-        create_command("pijul")?
-            .args(args)
-            .current_dir(repo_dir)
-            .output()?;
+    fn run_pijul(args: &[&str], _repo_dir: &Path) -> io::Result<()> {
+        crate::utils::mock_cmd("pijul", args).ok_or(io::ErrorKind::Unsupported)?;
         Ok(())
     }
 }
