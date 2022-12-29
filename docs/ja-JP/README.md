@@ -153,7 +153,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    :::
 
-   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.env-path` を実行してください）:
+   Nushellの環境ファイルの最後に以下を追記してください ( `$nu.env-path` を実行してください):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
