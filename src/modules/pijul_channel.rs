@@ -91,7 +91,9 @@ mod tests {
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("pijul_channel").path(repo_dir.path()).collect();
+        let actual = ModuleRenderer::new("pijul_channel")
+            .path(repo_dir.path())
+            .collect();
 
         let expected = None;
         assert_eq!(expected, actual);
