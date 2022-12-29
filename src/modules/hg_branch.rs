@@ -1,27 +1,13 @@
 use std::io::{Error, ErrorKind};
 use std::path::Path;
-use unicode_segmentation::UnicodeSegmentation;
 
 use super::{Context, Module, ModuleConfig};
+use super::utils::truncate::truncate_text;
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
 use crate::modules::utils::path::PathExt;
 use crate::utils::read_file;
-
-struct HgRepo {
-    /// If `current_dir` is an hg repository or is contained within one,
-    /// this is the current branch name of that repo.
-    branch: String,
-
-    /// If `current_dir` is an hg repository or is contained within one,
-    /// this is the current branch name of that repo.
-    bookmark: Option<String>,
-
-    /// If `current_dir` is an hg repository or is contained within one,
-    /// this is the current topic name of that repo.
-    topic: Option<String>,
-}
 
 /// Creates a module with the Hg bookmark or branch in the current directory
 ///
@@ -46,24 +32,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let repo = get_hg_repo(context).ok()?;
+    let repo_root = get_hg_repo_root(context).ok()?;
+    let branch_name = get_hg_current_bookmark(repo_root).unwrap_or_else(|_| {
+        get_hg_branch_name(repo_root).unwrap_or_else(|_| String::from("default"))
+    });
 
-    let branch_name = &repo.bookmark.unwrap_or(repo.branch);
-    let truncated_graphemes = get_graphemes(branch_name, len);
-    let truncation_symbol = get_graphemes(config.truncation_symbol, 1);
-    // The truncation symbol should only be added if we truncated
-    let truncated_and_symbol = if len < graphemes_len(branch_name) {
-        truncated_graphemes + truncation_symbol.as_str()
-    } else {
-        truncated_graphemes
-    };
-    let topic_graphemes = if let Some(topic) = &repo.topic {
-        let truncated_topic_graphemes = get_graphemes(topic, len);
-        if len < graphemes_len(topic) {
-            truncated_topic_graphemes + truncation_symbol.as_str()
-        } else {
-            truncated_topic_graphemes
-        }
+    let branch_graphemes = truncate_text(&branch_name, len, config.truncation_symbol);
+    let topic_graphemes = if let Some(topic) = get_hg_topic_name(repo_root).ok() {
+        truncate_text(&topic, len, config.truncation_symbol)
     } else {
         String::from("")
     };
@@ -79,7 +55,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "branch" => Some(Ok(truncated_and_symbol.as_str())),
+                "branch" => Some(Ok(branch_graphemes.as_str())),
                 "topic" => Some(Ok(topic_graphemes.as_str())),
                 _ => None,
             })
@@ -97,7 +73,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_hg_repo(ctx: &Context) -> Result<HgRepo, Error> {
+fn get_hg_repo_root<'a>(ctx: &'a Context) -> Result<&'a Path, Error> {
     let dir = ctx.current_dir.as_path();
     let dev_id = dir.device_id();
     for root_dir in dir.ancestors() {
@@ -108,12 +84,7 @@ fn get_hg_repo(ctx: &Context) -> Result<HgRepo, Error> {
             .read_dir()?
             .any(|e| e.unwrap().file_name() == ".hg")
         {
-            let repo = HgRepo {
-                branch: get_hg_branch_name(root_dir).unwrap_or_else(|_| String::from("default")),
-                bookmark: get_hg_current_bookmark(root_dir).ok(),
-                topic: get_hg_topic_name(root_dir).ok(),
-            };
-            return Ok(repo);
+            return Ok(root_dir);
         }
     }
     Err(Error::new(ErrorKind::Other, "No .hg found!"))
@@ -132,17 +103,6 @@ fn get_hg_current_bookmark(hg_root: &Path) -> Result<String, Error> {
 
 fn get_hg_topic_name(hg_root: &Path) -> Result<String, Error> {
     read_file(hg_root.join(".hg").join("topic"))
-}
-
-fn get_graphemes(text: &str, length: usize) -> String {
-    UnicodeSegmentation::graphemes(text, true)
-        .take(length)
-        .collect::<Vec<&str>>()
-        .concat()
-}
-
-fn graphemes_len(text: &str) -> usize {
-    UnicodeSegmentation::graphemes(text, true).count()
 }
 
 #[cfg(test)]
@@ -240,7 +200,7 @@ mod tests {
     fn test_hg_topic() -> io::Result<()> {
         let tempdir = fixture_repo(FixtureProvider::Hg)?;
         let repo_dir = tempdir.path();
-        run_hg(&["topic", "feature"], repo_dir)?;
+        fs::write(repo_dir.join(".hg").join("topic"), "feature")?;
 
         let actual = ModuleRenderer::new("hg_branch")
             .path(repo_dir.to_str().unwrap())
