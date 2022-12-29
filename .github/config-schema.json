@@ -1213,7 +1213,7 @@
         }
       ]
     },
-    "pijul": {
+    "pijul_channel": {
       "default": {
         "disabled": true,
         "format": "on [$symbol$channel]($style) ",
