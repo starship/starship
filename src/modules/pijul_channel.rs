@@ -1,7 +1,7 @@
 use super::utils::truncate::truncate_text;
 use super::{Context, Module, ModuleConfig};
 
-use crate::configs::pijul::PijulConfig;
+use crate::configs::pijul_channel::PijulConfig;
 use crate::formatter::StringFormatter;
 
 /// Creates a module with the Pijul channel in the current directory
@@ -17,7 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let mut module = context.new_module("pijul");
+    let mut module = context.new_module("pijul_channel");
     let config: PijulConfig = PijulConfig::try_load(module.config);
 
     // We default to disabled=true, so we have to check after loading our config module.
@@ -53,7 +53,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     module.set_segments(match parsed {
         Ok(segments) => segments,
         Err(error) => {
-            log::warn!("Error in module `pijul`:\n{}", error);
+            log::warn!("Error in module `pijul_channel`:\n{}", error);
             return None;
         }
     });
@@ -91,7 +91,7 @@ mod tests {
     fn show_nothing_on_empty_dir() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
-        let actual = ModuleRenderer::new("pijul").path(repo_dir.path()).collect();
+        let actual = ModuleRenderer::new("pijul_channel").path(repo_dir.path()).collect();
 
         let expected = None;
         assert_eq!(expected, actual);
@@ -105,7 +105,7 @@ mod tests {
         expect_pijul_with_config(
             repo_dir,
             Some(toml::toml! {
-                [pijul]
+                [pijul_channel]
                 truncation_length = 14
             }),
             &[Expect::Empty],
@@ -143,7 +143,7 @@ mod tests {
         expect_pijul_with_config(
             repo_dir,
             Some(toml::toml! {
-                [pijul]
+                [pijul_channel]
                 style = "underline blue"
                 symbol = "P "
                 truncation_length = 14
@@ -165,11 +165,11 @@ mod tests {
         config: Option<toml::Value>,
         expectations: &[Expect],
     ) {
-        let actual = ModuleRenderer::new("pijul")
+        let actual = ModuleRenderer::new("pijul_channel")
             .path(repo_dir.to_str().unwrap())
             .config(config.unwrap_or_else(|| {
                 toml::toml! {
-                    [pijul]
+                    [pijul_channel]
                     disabled = false
                 }
             }))

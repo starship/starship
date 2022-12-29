@@ -69,7 +69,7 @@ pub const ALL_MODULES: &[&str] = &[
     "package",
     "perl",
     "php",
-    "pijul",
+    "pijul_channel",
     "pulumi",
     "purescript",
     "python",

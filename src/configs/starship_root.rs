@@ -42,7 +42,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "git_metrics",
     "git_status",
     "hg_branch",
-    "pijul",
+    "pijul_channel",
     "docker_context",
     "package",
     // ↓ Toolchain version modules ↓

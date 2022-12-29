@@ -61,7 +61,7 @@ pub mod os;
 pub mod package;
 pub mod perl;
 pub mod php;
-pub mod pijul;
+pub mod pijul_channel;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
@@ -222,7 +222,7 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     php: php::PhpConfig<'a>,
     #[serde(borrow)]
-    pijul: pijul::PijulConfig<'a>,
+    pijul_channel: pijul_channel::PijulConfig<'a>,
     #[serde(borrow)]
     pulumi: pulumi::PulumiConfig<'a>,
     #[serde(borrow)]

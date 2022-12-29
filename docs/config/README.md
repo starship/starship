@@ -271,7 +271,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
-$pijul\
+$pijul_channel\
 $docker_context\
 $package\
 $c\
@@ -3165,7 +3165,7 @@ format = 'via [🔹 $version](147 bold) '
 
 ## Pijul Channel
 
-The `pijul` module shows the active channel of the repo in your current directory.
+The `pijul_channel` module shows the active channel of the repo in your current directory.
 
 ### Options
 
