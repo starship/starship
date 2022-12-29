@@ -2638,14 +2638,14 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 ### Options
 
-| Option              | Default                                 | Description                                                                                  |
-| ------------------- | --------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                                  | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `style`             | `'bold purple'`                         | The style for the module.                                                                    |
+| Option              | Default                                   | Description                                                                                  |
+| ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `' '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `style`             | `'bold purple'`                           | The style for the module.                                                                    |
 | `format`            | `'on [$symbol$branch(:$topic)]($style) '` | The format for the module.                                                                   |
-| `truncation_length` | `2^63 - 1`                              | Truncates the hg branch / topic name to `N` graphemes                                        |
-| `truncation_symbol` | `'…'`                                   | The symbol used to indicate a branch name was truncated.                                     |
-| `disabled`          | `true`                                  | Disables the `hg_branch` module.                                                             |
+| `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
+| `truncation_symbol` | `'…'`                                     | The symbol used to indicate a branch name was truncated.                                     |
+| `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
 
 ### Variables
 
