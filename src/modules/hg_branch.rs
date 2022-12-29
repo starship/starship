@@ -1,8 +1,8 @@
 use std::io::{Error, ErrorKind};
 use std::path::Path;
 
-use super::{Context, Module, ModuleConfig};
 use super::utils::truncate::truncate_text;
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
@@ -38,7 +38,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     let branch_graphemes = truncate_text(&branch_name, len, config.truncation_symbol);
-    let topic_graphemes = if let Some(topic) = get_hg_topic_name(repo_root).ok() {
+    let topic_graphemes = if let Ok(topic) = get_hg_topic_name(repo_root) {
         truncate_text(&topic, len, config.truncation_symbol)
     } else {
         String::from("")
