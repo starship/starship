@@ -111,7 +111,7 @@ impl PathExt for Path {
     }
 
     #[cfg(all(unix, not(target_os = "linux")))]
-    pub fn device_id(&self) -> u64 {
+    fn device_id(&self) -> u64 {
         use std::os::unix::fs::MetadataExt;
         let m = self.metadata().unwrap();
         m.dev()
