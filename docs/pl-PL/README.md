@@ -153,7 +153,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    :::
 
-   Dodaj następujący kod na koniec Twojego pliku Nushell env (możesz go znaleźć uruchamiając `$nu.env-path` w Nushell):
+   Dodaj następujący kod na koniec twojego pliku env Nushell (możesz go znaleść za pomocą `$nu.env-path` w Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
