@@ -108,7 +108,7 @@ Windows = " "
 [package]
 symbol = " "
 
-[pijul]
+[pijul_channel]
 symbol = "🪺 "
 
 [python]
