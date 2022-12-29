@@ -153,7 +153,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    :::
 
-   Adicione o seguinte ao final do seu arquivo env do Nushell (encontre-o executando `$nu.env-path` no Nushell):
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
