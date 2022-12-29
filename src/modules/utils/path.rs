@@ -82,6 +82,11 @@ impl PathExt for Path {
         let (_, path) = normalize::normalize_path(self);
         path
     }
+
+    fn device_id(&self) -> u64 {
+        // Maybe it should us unimplemented!
+        42u64
+    }
 }
 
 // NOTE: Windows path prefixes are only parsed on Windows.
