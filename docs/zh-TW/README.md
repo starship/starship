@@ -149,14 +149,14 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   This will change in the future. Only Nushell v0.73+ is supported.
 
    :::
 
    Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
