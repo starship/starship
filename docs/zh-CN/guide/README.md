@@ -331,7 +331,7 @@ eval $(starship init ion)
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 然后将以下内容添加到您 Nushell 配置文件的末尾（使用 `$nu.config-path` 来获取它的路径）：
@@ -340,7 +340,7 @@ starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-注意：仅支持 Nushell v0.61+
+Note: Only Nushell v0.73+ is supported
 
 </details>
 
