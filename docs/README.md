@@ -138,7 +138,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ::: warning
 
    This will change in the future.
-   Only Nushell v0.71+ is supported.
+   Only Nushell v0.73+ is supported.
 
    :::
 
