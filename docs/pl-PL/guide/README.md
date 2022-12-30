@@ -331,7 +331,7 @@ Dodaj następujący kod na koniec twojego pliku env Nushell (możesz go znaleś�
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 Dodaj następujący kod na koniec Twojego pliku konfiguracyjnego Nushell (możesz go znaleźć uruchamiając `$nu.config-path`):
@@ -340,7 +340,7 @@ Dodaj następujący kod na koniec Twojego pliku konfiguracyjnego Nushell (możes
 source ~/.cache/starship/init.nu
 ```
 
-Uwaga: Obsługiwany jest tylko Nushell w wersji v0.61 wzwyż
+Note: Only Nushell v0.73+ is supported
 
 </details>
 
