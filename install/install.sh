@@ -338,10 +338,10 @@ print_install() {
         # shellcheck disable=SC2088
         config_file="${BOLD}your nu config file${NO_COLOR} (find it by running ${BOLD}\$nu.config-path${NO_COLOR} in Nushell)"
         config_cmd="mkdir ~/.cache/starship
-        starship init nu | save ~/.cache/starship/init.nu
+        starship init nu | save -f ~/.cache/starship/init.nu
         source ~/.cache/starship/init.nu"
         warning="${warning} This will change in the future.
-  Only Nushell v0.61 or higher is supported.
+  Only Nushell v0.71 or higher is supported.
   Add the following to the end of ${BOLD}your Nushell env file${NO_COLOR} (find it by running ${BOLD}\$nu.env-path${NO_COLOR} in Nushell): \"mkdir ~/.cache/starship; starship init nu | save ~/.cache/starship/init.nu\""
         ;;
     esac
