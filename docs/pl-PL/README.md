@@ -149,14 +149,14 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    ::: warning
 
-   Ten sposób zmieni się w przyszłości. Działa tylko na Nushell v0.61+.
+   Ten sposób zmieni się w przyszłości. Only Nushell v0.73+ is supported.
 
    :::
 
    Dodaj następujący kod na koniec twojego pliku env Nushell (możesz go znaleść za pomocą `$nu.env-path` w Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    Dodaj następujący kod na koniec Twojego pliku konfiguracyjnego Nushell (możesz go znaleźć uruchamiając `$nu.config-path`):
