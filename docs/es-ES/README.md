@@ -149,14 +149,14 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    ::: warning
 
-   Esto cambiará en el futuro. Sólo se admite Nushell v0.61+.
+   Esto cambiará en el futuro. Only Nushell v0.73+ is supported.
 
    :::
 
    Añade lo siguiente al final de tu archivo Nushell env (encuéntralo ejecutando `$nu.env-path` en Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecutando `$nu.config-path`):
