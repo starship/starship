@@ -331,7 +331,7 @@ Nushellの環境ファイルの最後に以下を追記してください ( `$nu
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
@@ -340,7 +340,7 @@ starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-注意: Elvish v0.61以降でサポートされています
+Note: Only Nushell v0.73+ is supported
 
 </details>
 
