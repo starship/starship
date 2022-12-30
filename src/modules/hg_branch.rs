@@ -80,10 +80,7 @@ fn get_hg_repo_root<'a>(ctx: &'a Context) -> Result<&'a Path, Error> {
         if dev_id != root_dir.device_id() {
             break;
         }
-        if root_dir
-            .read_dir()?
-            .any(|e| e.unwrap().file_name() == ".hg")
-        {
+        if root_dir.join(".hg").is_dir() {
             return Ok(root_dir);
         }
     }
