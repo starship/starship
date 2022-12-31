@@ -340,7 +340,7 @@ Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.73+ is supported
+Nota: Sólo se admite Nushell v0.73+
 
 </details>
 
