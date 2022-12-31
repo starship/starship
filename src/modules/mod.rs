@@ -249,7 +249,7 @@ pub fn description(module: &str) -> &'static str {
         "haskell" => "The selected version of the Haskell toolchain",
         "haxe" => "The currently installed version of Haxe",
         "helm" => "The currently installed version of Helm",
-        "hg_branch" => "The active branch of the repo in your current directory",
+        "hg_branch" => "The active branch and topic of the repo in your current directory",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",
