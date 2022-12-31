@@ -113,7 +113,7 @@ impl PathExt for Path {
         use std::os::linux::fs::MetadataExt;
         match self.metadata() {
             Ok(m) => Some(m.st_dev()),
-            Err(_) => None
+            Err(_) => None,
         }
     }
 
@@ -122,7 +122,7 @@ impl PathExt for Path {
         use std::os::unix::fs::MetadataExt;
         match self.metadata() {
             Ok(m) => Some(m.st_dev()),
-            Err(_) => None
+            Err(_) => None,
         }
     }
 }
