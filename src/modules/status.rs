@@ -338,6 +338,27 @@ mod tests {
     }
 
     #[test]
+    fn failure_plaintext_status() {
+        let exit_values = [1, 2, 130];
+
+        for status in &exit_values {
+            let expected = Some(format!(
+                "{} ",
+                Color::Red.bold().paint(format!("x {status}"))
+            ));
+            let actual = ModuleRenderer::new("status")
+                .config(toml::toml! {
+                    [status]
+                    symbol = "[x](bold red) "
+                    disabled = false
+                })
+                .status(*status)
+                .collect();
+            assert_eq!(expected, actual);
+        }
+    }
+
+    #[test]
     fn failure_hex_status() {
         let exit_values = [1, 2, 130, -2_147_467_260, 2_147_500_036];
         let string_values = ["0x1", "0x2", "0x82", "0x80004004", "0x80004004"];
