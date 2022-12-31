@@ -149,7 +149,7 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    ::: warning
 
-   Hal ini dapat berubah di kemudian hari. Only Nushell v0.73+ is supported.
+   Hal ini dapat berubah di kemudian hari. Hanya Nushell v0.73+ yang menerima dukungan.
 
    :::
 
