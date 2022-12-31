@@ -149,7 +149,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    ::: warning
 
-   这部分今后可能会改变。 Only Nushell v0.73+ is supported.
+   这部分今后可能会改变。 仅支持 Nushell v0.73+。
 
    :::
 
