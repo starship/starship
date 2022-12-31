@@ -121,7 +121,7 @@ impl PathExt for Path {
     fn device_id(&self) -> Option<u64> {
         use std::os::unix::fs::MetadataExt;
         match self.metadata() {
-            Ok(m) => Some(m.st_dev()),
+            Ok(m) => Some(m.dev()),
             Err(_) => None,
         }
     }
