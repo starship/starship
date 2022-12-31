@@ -130,6 +130,9 @@ format = '\[[$symbol($version)]($style)\]'
 [php]
 format = '\[[$symbol($version)]($style)\]'
 
+[pijul_channel]
+format = '\[[$symbol$channel]($style)\]'
+
 [pulumi]
 format = '\[[$symbol$stack]($style)\]'
 
