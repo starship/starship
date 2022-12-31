@@ -340,7 +340,7 @@ starship init nu | save -f ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.73+ is supported
+注意：仅支持 Nushell v0.73+
 
 </details>
 
