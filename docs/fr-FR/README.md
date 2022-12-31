@@ -149,7 +149,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    ::: warning
 
-   Ceci va changer dans le futur. Only Nushell v0.73+ is supported.
+   Ceci va changer dans le futur. Seul Nushell v0.73+ est supporté.
 
    :::
 
