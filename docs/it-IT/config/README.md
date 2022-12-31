@@ -258,6 +258,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$pijul_channel\
 $docker_context\
 $package\
 $c\
@@ -1334,7 +1335,7 @@ default = 'unknown user'
 | `variable`    |                                | The environment variable to be displayed.                                    |
 | `default`     |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `descrizione` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled`    | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
@@ -2523,26 +2524,27 @@ style = 'bold dimmed green'
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch of the repo in your current directory.
+The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
 ### Opzioni
 
-| Opzione             | Default                          | Descrizione                                                                                  |
-| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `style`             | `'bold purple'`                  | Lo stile per il modulo.                                                                      |
-| `format`            | `'on [$symbol$branch]($style) '` | The format for the module.                                                                   |
-| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
-| `truncation_symbol` | `'…'`                            | The symbol used to indicate a branch name was truncated.                                     |
-| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
+| Opzione             | Default                                   | Descrizione                                                                                  |
+| ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `' '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `style`             | `'bold purple'`                           | Lo stile per il modulo.                                                                      |
+| `format`            | `'on [$symbol$branch(:$topic)]($style) '` | The format for the module.                                                                   |
+| `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
+| `truncation_symbol` | `'…'`                                     | The symbol used to indicate a branch name was truncated.                                     |
+| `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
 
 ### Variables
 
-| Variable  | Esempio  | Descrizione                          |
-| --------- | -------- | ------------------------------------ |
-| branch    | `master` | The active mercurial branch          |
-| symbol    |          | Mirrors the value of option `symbol` |
-| style\* |          | Mirrors the value of option `style`  |
+| Variable  | Esempio   | Descrizione                          |
+| --------- | --------- | ------------------------------------ |
+| branch    | `master`  | The active mercurial branch          |
+| topic     | `feature` | The active mercurial topic           |
+| symbol    |           | Mirrors the value of option `symbol` |
+| style\* |           | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
@@ -3032,6 +3034,21 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 [php]
 format = 'via [🔹 $version](147 bold) '
 ```
+
+## Pijul Channel
+
+The `pijul_channel` module shows the active channel of the repo in your current directory.
+
+### Opzioni
+
+| Opzione             | Default                           | Descrizione                                                                          |
+| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
+| `symbol`            | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
+| `style`             | `'bold purple'`                   | Lo stile per il modulo.                                                              |
+| `format`            | `'on [$symbol$channel]($style) '` | The format for the module.                                                           |
+| `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
+| `truncation_symbol` | `'…'`                             | The symbol used to indicate a branch name was truncated.                             |
+| `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
 ## Pulumi
 
@@ -3850,7 +3867,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3964,12 +3981,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`         | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'V '`                                       | Una stringa di formato che rappresenta il simbolo di V                                      |
+| `symbol`            | `'V '`                                       | A format string representing the symbol of V                                                |
 | `detect_extensions` | `['v']`                                      | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                           |
 | `style`             | `'blu grassetto'`                            | Lo stile per il modulo.                                                                     |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                               |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                |
 
 ### Variables
 
@@ -4102,7 +4119,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `descrizione`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
