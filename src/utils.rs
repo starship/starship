@@ -337,6 +337,18 @@ WebAssembly: unavailable
                 stderr: String::default(),
             })
         },
+        "pijul channel" => Some(CommandOutput{
+            stdout: String::from("  main\n* tributary-48198"),
+            stderr: String::default(),
+        }),
+        "pijul channel new tributary-48198" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
+        "pijul channel switch tributary-48198" => Some(CommandOutput{
+            stdout: String::from("Outputting repository ↖"),
+            stderr: String::default(),
+        }),
         "pulumi version" => Some(CommandOutput{
             stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
             stderr: String::default(),

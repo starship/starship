@@ -7,6 +7,7 @@ use crate::{
 };
 use log::{Level, LevelFilter};
 use once_cell::sync::Lazy;
+use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 use tempfile::TempDir;
@@ -165,6 +166,7 @@ impl<'a> ModuleRenderer<'a> {
 pub enum FixtureProvider {
     Git,
     Hg,
+    Pijul,
 }
 
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
@@ -221,6 +223,11 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .arg(path.path())
                 .output()?;
 
+            Ok(path)
+        }
+        FixtureProvider::Pijul => {
+            let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join(".pijul"))?;
             Ok(path)
         }
     }
