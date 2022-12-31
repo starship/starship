@@ -180,6 +180,9 @@ symbol = "scala "
 [spack]
 symbol = "spack "
 
+[status]
+symbol = "[x](bold red) "
+
 [sudo]
 symbol = "sudo "
 
