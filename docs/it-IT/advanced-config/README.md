@@ -26,13 +26,13 @@ Enable-TransientPrompt
 
 ## TransientPrompt e TransientRightPrompt in Cmd
 
-È possibile rimpiazzare il prompt precedente con una stringa di testo personalizzata. È utile nei casi in cui alcune informazioni sulla shell non ci servono. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+È possibile rimpiazzare il prompt precedente con una stringa di testo personalizzata. È utile nei casi in cui alcune informazioni sulla shell non ci servono. Per attivarlo, esegui `clink set prompt.transient <value>` dove \<value\> può essere uno tra:
 
-- `always`: always replace the previous prompt
-- `same_dir`: replace the previous prompt only if the working directory is same
-- `off`: do not replace the prompt (i.e. turn off transience)
+- `always`: sostituisce sempre il prompt precedente
+- `same_dir`: sostituisce il prompt precedente solo se la directory di lavoro è la stessa
+- `off`: non sostituisce il prompt (cioè disattiva la transizione)
 
-You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+Devi fare questo solo una volta. Fai le seguenti modifiche alla tua `starship.lua` per personalizzare ciò che viene visualizzato a sinistra e a destra:
 
 - Per impostazione predefinita, il simbolo predefinito prima dell'input sarà rimpiazzato con `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. Ad esempio, per mostrare il modulo dei `character`, dovresti fare
 
