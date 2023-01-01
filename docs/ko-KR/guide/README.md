@@ -10,7 +10,7 @@
   <a href="https://github.com/starship/starship/actions"
     ><img
       src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
-      alt="깃헙 액션 워크풀로 상태"
+      alt="GitHub Actions 워크플로 상태"
  /></a>
   <a href="https://crates.io/crates/starship"
     ><img
@@ -25,7 +25,7 @@
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="디스코드에 채팅을 하세요"
+      alt="Discord 채팅 참여하기"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
