@@ -1,8 +1,8 @@
-# Advanced Installation
+# 고급 설치
 
-To install starship, you need to do two things:
+Starship을 설치하려면 다음 두 가지를 수행해주세요
 
-1. Get the **starship** binary onto your computer
+1. **Starship** 바이너리를 당신의 컴퓨터에 받으세요
 1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
 
 For most users, the instructions on [the main page](/guide/#🚀-installation) will work great. However, for some more specialized platforms, different instructions are needed.
