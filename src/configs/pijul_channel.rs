@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-pub struct HgBranchConfig<'a> {
+pub struct PijulConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub format: &'a str,
@@ -16,12 +16,12 @@ pub struct HgBranchConfig<'a> {
     pub disabled: bool,
 }
 
-impl<'a> Default for HgBranchConfig<'a> {
+impl<'a> Default for PijulConfig<'a> {
     fn default() -> Self {
-        HgBranchConfig {
+        PijulConfig {
             symbol: " ",
             style: "bold purple",
-            format: "on [$symbol$branch(:$topic)]($style) ",
+            format: "on [$symbol$channel]($style) ",
             truncation_length: std::i64::MAX,
             truncation_symbol: "…",
             disabled: true,

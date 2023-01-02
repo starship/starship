@@ -58,6 +58,7 @@ mod os;
 mod package;
 mod perl;
 mod php;
+mod pijul_channel;
 mod pulumi;
 mod purescript;
 mod python;
@@ -159,6 +160,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "package" => package::module(context),
             "perl" => perl::module(context),
             "php" => php::module(context),
+            "pijul_channel" => pijul_channel::module(context),
             "pulumi" => pulumi::module(context),
             "purescript" => purescript::module(context),
             "python" => python::module(context),
@@ -249,7 +251,7 @@ pub fn description(module: &str) -> &'static str {
         "haskell" => "The selected version of the Haskell toolchain",
         "haxe" => "The currently installed version of Haxe",
         "helm" => "The currently installed version of Helm",
-        "hg_branch" => "The active branch of the repo in your current directory",
+        "hg_branch" => "The active branch and topic of the repo in your current directory",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
         "jobs" => "The current number of jobs running",
@@ -273,6 +275,7 @@ pub fn description(module: &str) -> &'static str {
         "package" => "The package version of the current directory's project",
         "perl" => "The currently installed version of Perl",
         "php" => "The currently installed version of PHP",
+        "pijul_channel" => "The current channel of the repo in the current directory",
         "pulumi" => "The current username, stack, and installed version of Pulumi",
         "purescript" => "The currently installed version of PureScript",
         "python" => "The currently installed version of Python",
