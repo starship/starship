@@ -697,7 +697,9 @@ users: []
     }
 
     #[test]
-    fn test_multiple_config_files_with_ns() -> io::Result<()> {
+    fn test_multiple_config_files_with_context_defined_once() -> io::Result<()> {
+        // test that we get the current context from the first config file in the KUBECONFIG,
+        // no matter if it is only defined in the latter
         let dir = tempfile::tempdir()?;
 
         let filename_cc = dir.path().join("config_cc");
@@ -750,7 +752,7 @@ users: []
             })
             .collect();
 
-        // And tes with context and namespace first
+        // And test with context and namespace first
         let actual_ctx_first = ModuleRenderer::new("kubernetes")
             .path(dir.path())
             .env(
@@ -771,6 +773,87 @@ users: []
         ));
         assert_eq!(expected, actual_cc_first);
         assert_eq!(expected, actual_ctx_first);
+
+        dir.close()
+    }
+
+    #[test]
+    fn test_multiple_config_files_with_context_defined_twice() -> io::Result<()> {
+        // tests that, if two files contain the same context,
+        // only the context config from the first is used.
+        let dir = tempfile::tempdir()?;
+
+        let config1 = dir.path().join("config1");
+
+        let mut file1 = File::create(&config1)?;
+        file1.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: test_cluster1
+      namespace: test_namespace1
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file1.sync_all()?;
+
+        let config2 = dir.path().join("config2");
+
+        let mut file2 = File::create(&config2)?;
+        file2.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      cluster: test_cluster2
+      user: test_user2
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file2.sync_all()?;
+
+        let paths1 = [config1.clone(), config2.clone()];
+        let kubeconfig_content1 = env::join_paths(paths1.iter()).unwrap();
+
+        let actual1 = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", kubeconfig_content1.to_string_lossy())
+            .config(toml::toml! {
+                [kubernetes]
+                format = "($user )($cluster )($namespace )"
+                disabled = false
+            })
+            .collect();
+
+        let expected1 = Some("test_cluster1 test_namespace1 ".to_string());
+        assert_eq!(expected1, actual1);
+
+        let paths2 = [config2, config1];
+        let kubeconfig_content2 = env::join_paths(paths2.iter()).unwrap();
+
+        let actual2 = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", kubeconfig_content2.to_string_lossy())
+            .config(toml::toml! {
+                [kubernetes]
+                format = "($user )($cluster )($namespace )"
+                disabled = false
+            })
+            .collect();
+
+        let expected2 = Some("test_user2 test_cluster2 ".to_string());
+        assert_eq!(expected2, actual2);
 
         dir.close()
     }
