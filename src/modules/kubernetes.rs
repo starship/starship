@@ -173,17 +173,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return false;
         };
 
-        if let Some(user_pattern) = context_config.user_pattern {
-            if let Some(kube_user) = &kube_user {
-                match_user_regex(user_pattern, kube_user)
-            } else {
-                // If a pattern is set, but we have no user, there is no match
-                false
-            }
-        } else {
+        let Some(user_pattern) = context_config.user_pattern else {
             // If user pattern not set, treat it as a match-all pattern
-            true
-        }
+            return true;
+        };
+        let Some(kube_user) = &kube_user else {
+            // If a pattern is set, but we have no user, there is no match
+            return false
+        };
+        match_user_regex(user_pattern, kube_user)
     });
 
     let display_context = match matched_context_config {
