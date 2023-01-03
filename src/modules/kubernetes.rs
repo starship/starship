@@ -144,7 +144,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // for that reason, we can pick the first context with that name
     let ctx_components: KubeCtxComponents = env::split_paths(&kube_cfg)
         .find_map(|filename| get_kube_ctx_components(filename, &current_kube_ctx_name))
-        .unwrap_or({
+        .unwrap_or_else( || {
             // TODO: figure out if returning is more sensible. But currently we have tests depending on this
             log::warn!(
                 "Invalid KUBECONFIG: identified current-context `{}`, but couldn't find the context in any config file(s): `{}`.\n",
