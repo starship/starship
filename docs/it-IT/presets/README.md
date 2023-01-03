@@ -14,9 +14,7 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
 
-::: tip
-This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
-:::
+::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
 
 [Click to view No Nerd Font preset](./no-nerd-font)
 
