@@ -86,17 +86,43 @@ fn get_kube_ctx_components(
     Some(ctx_components)
 }
 
-fn match_user_regex(regex: &str, text: &str) -> bool {
-    match regex::Regex::new(regex) {
-        Ok(re) => re.is_match(text),
+fn get_aliased_name<'a>(
+    pattern: Option<&'a str>,
+    current_value: Option<&String>,
+    alias: Option<&'a str>,
+) -> Option<String> {
+    let replacement = match (&alias, &current_value) {
+        (None, None) => return None,
+        (Some(alias_value), _) => (*alias_value).to_string(),
+        (None, Some(value)) => (*value).clone(),
+    };
+    let Some(pattern) = pattern else {
+        // If user pattern not set, treat it as a match-all pattern
+        return Some(replacement);
+    };
+    let Some(value) = current_value else {
+        // If a pattern is set, but we have no value, there is no match
+        return None;
+    };
+    if value.as_str() == pattern {
+        return Some(replacement);
+    }
+    let re = match regex::Regex::new(&format!("^{pattern}$")) {
+        Ok(re) => re,
         Err(error) => {
             log::warn!(
                 "Could not compile regular expression `{}`:\n{}",
-                regex,
+                &format!("^{pattern}$"),
                 error
             );
-            false
+            return None;
         }
+    };
+    let replaced = re.replace(value.as_str(), replacement.as_str());
+    match replaced {
+        Cow::Owned(replaced) => Some(replaced),
+        // It didn't match...
+        _ => None,
     }
 }
 
@@ -144,7 +170,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // for that reason, we can pick the first context with that name
     let ctx_components: KubeCtxComponents = env::split_paths(&kube_cfg)
         .find_map(|filename| get_kube_ctx_components(filename, &current_kube_ctx_name))
-        .unwrap_or_else( || {
+        .unwrap_or_else(|| {
             // TODO: figure out if returning is more sensible. But currently we have tests depending on this
             log::warn!(
                 "Invalid KUBECONFIG: identified current-context `{}`, but couldn't find the context in any config file(s): `{}`.\n",
@@ -158,47 +184,27 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             }
         });
 
-    let kube_user = ctx_components
-        .user
-        .as_ref()
-        .map(|kube_user| deprecated::get_kube_user_alias(&config, kube_user));
-
-    // Parse config under `display`.
     // Select the first style that matches the context_pattern and,
     // if it is defined, the user_pattern
-    let matched_context_config = config.contexts.iter().find(|context_config| {
-        let is_context_match =
-            match_user_regex(context_config.context_pattern, &current_kube_ctx_name);
-        if !is_context_match {
-            return false;
+    let (matched_context_config, display_context, display_user) = config.contexts.iter().find_map(|context_config| {
+        let Some(context_alias) = get_aliased_name(Some(context_config.context_pattern), Some(&current_kube_ctx_name), context_config.context_alias) else {
+            return None;
         };
 
-        let Some(user_pattern) = context_config.user_pattern else {
-            // If user pattern not set, treat it as a match-all pattern
-            return true;
-        };
-        let Some(kube_user) = &kube_user else {
-            // If a pattern is set, but we have no user, there is no match
-            return false
-        };
-        match_user_regex(user_pattern, kube_user)
-    });
+        let user_alias = get_aliased_name(context_config.user_pattern, ctx_components.user.as_ref(), context_config.user_alias);
 
-    let display_context = match matched_context_config {
-        Some(ctx_cfg) => match ctx_cfg.context_alias {
-            Some(context_alias) => Cow::Borrowed(context_alias),
-            None => deprecated::get_kube_context_alias(&config, &current_kube_ctx_name),
-        },
-        None => deprecated::get_kube_context_alias(&config, &current_kube_ctx_name),
-    };
+        if context_config.user_pattern.is_some() && user_alias.is_none() {
+            // defined pattern, but it didn't match
+            return None;
+        }
 
-    let display_user = match matched_context_config {
-        Some(ctx_cfg) => match ctx_cfg.user_alias {
-            Some(user_alias) => Some(Cow::Borrowed(user_alias)),
-            None => kube_user,
-        },
-        None => kube_user,
-    };
+        Some((Some(context_config), context_alias, user_alias))
+    }).unwrap_or_else(|| (None, current_kube_ctx_name.clone(), ctx_components.user));
+
+    // TODO: remove deprecated aliases after starship 2.0
+    let display_context =
+        deprecated::get_alias(Some(display_context), &config.context_aliases, "context").unwrap();
+    let display_user = deprecated::get_alias(display_user, &config.user_aliases, "user");
 
     let display_style = match matched_context_config {
         Some(ctx_cfg) => ctx_cfg.style.unwrap_or(config.style),
@@ -220,7 +226,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "context" => Some(Ok(display_context.clone())),
+                "context" => Some(Ok(Cow::Borrowed(display_context.as_str()))),
                 "namespace" => ctx_components
                     .namespace
                     .as_ref()
@@ -229,7 +235,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .cluster
                     .as_ref()
                     .map(|kube_cluster| Ok(Cow::Borrowed(kube_cluster.as_str()))),
-                "user" => display_user.as_ref().map(|user| Ok(user.clone())),
+                "user" => display_user
+                    .as_ref()
+                    .map(|kube_user| Ok(Cow::Borrowed(kube_user.as_str()))),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -247,62 +255,46 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 mod deprecated {
-    use super::KubernetesConfig;
     use std::borrow::Cow;
     use std::collections::HashMap;
 
-    pub fn get_kube_user_alias<'a>(
-        config: &'a KubernetesConfig,
-        kube_user: &'a str,
-    ) -> Cow<'a, str> {
-        let user_alias = get_alias(&config.user_aliases, kube_user);
-        match user_alias {
-            Some(alias) => {
-                log::warn!(
-                        "Usage of 'user_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with 'user_alias' instead. (`{}` -> `{}`)",
-                        kube_user,
-                        alias
-                    );
-                alias
-            }
-            None => Cow::Borrowed(kube_user),
-        }
-    }
-
-    pub fn get_kube_context_alias<'a>(
-        config: &'a KubernetesConfig,
-        kube_ctx: &'a str,
-    ) -> Cow<'a, str> {
-        let context_alias = get_alias(&config.context_aliases, kube_ctx);
-        match context_alias {
-            Some(alias) => {
-                log::warn!(
-                        "Usage of 'context_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with 'context_alias' instead. (`{}` -> `{}`)",
-                        kube_ctx,
-                        alias
-                    );
-                alias
-            }
-            None => Cow::Borrowed(kube_ctx),
-        }
-    }
-
-    fn get_alias<'a>(
+    pub fn get_alias<'a>(
+        current_value: Option<String>,
         aliases: &'a HashMap<String, &'a str>,
-        alias_candidate: &'a str,
-    ) -> Option<Cow<'a, str>> {
-        if let Some(val) = aliases.get(alias_candidate) {
-            return Some(Cow::Borrowed(val));
-        }
+        name: &'a str,
+    ) -> Option<String> {
+        let Some(current_value) = current_value else {
+            return None;
+        };
 
-        return aliases.iter().find_map(|(k, v)| {
-            let re = regex::Regex::new(&format!("^{k}$")).ok()?;
-            let replaced = re.replace(alias_candidate, *v);
-            match replaced {
-                Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
-                _ => None,
+        let alias = if let Some(val) = aliases.get(current_value.as_str()) {
+            // simple match without regex
+            Some((*val).to_string())
+        } else {
+            // regex match
+            aliases.iter().find_map(|(k, v)| {
+                let re = regex::Regex::new(&format!("^{k}$")).ok()?;
+                let replaced = re.replace(current_value.as_str(), *v);
+                match replaced {
+                    Cow::Owned(replaced) => Some(replaced),
+                    _ => None,
+                }
+            })
+        };
+
+        match alias {
+            Some(alias) => {
+                log::warn!(
+                        "Usage of '{}_aliases' is deprecated and will be removed in 2.0; Use 'contexts' with '{}_alias' instead. (`{}` -> `{}`)",
+                        &name,
+                        &name,
+                        &current_value,
+                        &alias
+                    );
+                Some(alias)
             }
-        });
+            None => Some(current_value),
+        }
     }
 }
 
@@ -542,6 +534,21 @@ users: []
                 disabled = false
                 [kubernetes.context_aliases]
                 "gke_.*_(?P<cluster>[\\w-]+)" = "example: $cluster"
+            },
+            "☸ example: cluster-1",
+        )
+    }
+
+    #[test]
+    fn test_config_context_ctx_alias_regex_replace() -> io::Result<()> {
+        base_test_ctx_alias(
+            "gke_infra-cluster-28cccff6_europe-west4_cluster-1",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                [[kubernetes.contexts]]
+                context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
+                context_alias = "example: $cluster"
             },
             "☸ example: cluster-1",
         )
@@ -946,6 +953,23 @@ users: []
     }
 
     #[test]
+    fn test_config_context_user_alias_regex_replace() -> io::Result<()> {
+        base_test_user_alias(
+            "gke_infra-user-28cccff6_europe-west4_cluster-1",
+            toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "[$symbol$context( \\($user\\))]($style) in "
+                [[kubernetes.contexts]]
+                context_pattern = ".*"
+                user_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
+                user_alias = "example: $cluster"
+            },
+            "☸ test_context (example: cluster-1)",
+        )
+    }
+
+    #[test]
     fn test_user_alias_broken_regex() -> io::Result<()> {
         base_test_user_alias(
             "input",
@@ -1165,7 +1189,7 @@ users: []
                 style = "bold red"
 
                 [[kubernetes.contexts]]
-                context_pattern = "test"
+                context_pattern = "test.*"
                 style = "bold green"
                 symbol = "§ "
             })
@@ -1175,6 +1199,92 @@ users: []
             "{} in ",
             Color::Green.bold().paint("§ test_context (test_namespace)")
         ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_both_pattern_must_match() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "$symbol$context ($user )"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                user_pattern = "test.*"
+                context_alias = "yy"
+                user_alias = "xx"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("§ yy xx ".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn test_config_context_only_one_pattern_matches() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let filename = dir.path().join("config");
+        let mut file = File::create(&filename)?;
+        file.write_all(
+            b"
+apiVersion: v1
+clusters: []
+contexts:
+  - context:
+      user: test_user
+    name: test_context
+current-context: test_context
+kind: Config
+preferences: {}
+users: []
+",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("kubernetes")
+            .path(dir.path())
+            .env("KUBECONFIG", filename.to_string_lossy().as_ref())
+            .config(toml::toml! {
+                [kubernetes]
+                disabled = false
+                format = "$symbol$context ($user )"
+
+                [[kubernetes.contexts]]
+                context_pattern = "test.*"
+                user_pattern = "test_BAD.*"
+                context_alias = "yy"
+                user_alias = "xx"
+                symbol = "§ "
+            })
+            .collect();
+
+        let expected = Some("☸ test_context test_user ".to_string());
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -1211,7 +1321,7 @@ users: []
                 format = "$symbol($user )($context )($cluster )($namespace)"
 
                 [[kubernetes.contexts]]
-                context_pattern = "test"
+                context_pattern = "test.*"
                 context_alias = "xyz"
                 user_alias = "abc"
                 symbol = "§ "

@@ -2474,7 +2474,7 @@ and `user_alias` options instead.
 *: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
 
 To customize the style of the module for specific environments, use the following configuration as
-part of the `environments` list:
+part of the `contexts` list:
 
 | Variable          | Description                                                                              |
 | ----------------- | ---------------------------------------------------------------------------------------- |
@@ -2484,6 +2484,11 @@ part of the `environments` list:
 | `user_alias`      | User alias to display instead of the full user name.                                     |
 | `style`           | The style for the module when using this context. If not set, will use module's style.   |
 | `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+
+Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern`
+regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N`
+(see example below and the
+[rust Regex::replace() documentation](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
 
 ### Variables
 
@@ -2524,13 +2529,14 @@ detect_files = ['k8s']
 #### Kubernetes Context specific config
 
 The `contexts` configuration option is used to customise what the current Kubernetes context name looks
-like (style and symbol) if the name matches defined regular expression.
+like (style and symbol) if the name matches the defined regular expression.
 
 ```toml
 # ~/.config/starship.toml
 
 [[kubernetes.contexts]]
-# "bold red" style + default symbol when Kubernetes current context name contains "production"
+# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
+# equals "admin_user"
 context_pattern = "production"
 user_pattern = "admin_user"
 style = "bold red"
@@ -2543,6 +2549,14 @@ context_pattern = ".*openshift.*"
 style = "green"
 symbol = "💔 "
 context_alias = "openshift"
+
+[[kubernetes.contexts]]
+# Using capture groups
+# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
+# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
+# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
+context_alias = "gke-$cluster"
 ```
 
 ## Line Break
