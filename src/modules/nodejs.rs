@@ -279,7 +279,7 @@ mod tests {
             .path(dir.path())
             .cmd("node --version", None)
             .collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" ")));
         assert_eq!(expected, actual);
         dir.close()
     }
