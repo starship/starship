@@ -23,7 +23,7 @@ license = "ISC"
 readme = "README.md"
 repository = "https://github.com/starship/starship"
 # Note: MSRV is only intended as a hint, and only the latest version is officially supported in starship.
-rust-version = "1.64"
+rust-version = "1.65"
 description = """
 The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄🌌️
 """
@@ -81,7 +81,7 @@ strsim = "0.10.0"
 systemstat = "=0.2.2"
 terminal_size = "0.2.3"
 toml = { version = "0.5.10", features = ["preserve_order"] }
-toml_edit = "0.16.2"
+toml_edit = "0.17.1"
 unicode-segmentation = "1.10.0"
 unicode-width = "0.1.10"
 urlencoding = "2.1.2"
