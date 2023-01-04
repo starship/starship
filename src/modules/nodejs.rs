@@ -92,18 +92,18 @@ fn get_engines_version(context: &Context) -> Option<String> {
     Some(raw_version.to_string())
 }
 
-fn check_engines_version(nodejs_version: Option<&String>, engines_version: Option<String>) -> bool {
+fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<String>) -> bool {
     let (nodejs_version, engines_version) = match (nodejs_version, engines_version) {
         (Some(nv), Some(ev)) => (nv, ev),
         _ => return true,
     };
-    let r = match VersionReq::parse(&engines_version.unwrap()) {
+    let r = match VersionReq::parse(&engines_version) {
         Ok(r) => r,
         Err(_e) => return true,
     };
     let re = Regex::new(r"\d+\.\d+\.\d+").unwrap();
     let version = re
-        .captures(nodejs_version.unwrap())
+        .captures(nodejs_version)
         .unwrap()
         .get(0)
         .unwrap()
