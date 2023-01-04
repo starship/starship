@@ -93,9 +93,10 @@ fn get_engines_version(context: &Context) -> Option<String> {
 }
 
 fn check_engines_version(nodejs_version: Option<&String>, engines_version: Option<String>) -> bool {
-    if engines_version.is_none() || nodejs_version.is_none() {
-        return true;
-    }
+    let (nodejs_version, engines_version) = match (nodejs_version, engines_version) {
+        (Some(nv), Some(ev)) => (nv, ev),
+        _ => return true,
+    };
     let r = match VersionReq::parse(&engines_version.unwrap()) {
         Ok(r) => r,
         Err(_e) => return true,
