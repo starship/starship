@@ -26,13 +26,13 @@ This preset will become the default preset [in a future release of starship](htt
 
 Ce préréglage modifie le format de tous les modules intégrés pour afficher leur segment entre crochets au lieu d'utiliser les labels par défaut de Starship ("via", "on", etc.).
 
-[![Capture d'écran du préréglages Segments entre crochets](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
+[![Capture d'écran du préréglages Segments entre crochets](/presets/img/bracketed-segments.png "Cliquez pour voir le préréglage Segments entre crochets")](./bracketed-segments)
 
 ## [Texte uniquement](./plain-text.md)
 
 Ce préréglage change les symboles de chaque module en texte brut. Idéal si vous n'avez pas accès à Unicode.
 
-[![Capture d'écran du préréglage Texte uniquement](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
+[![Capture d'écran du préréglage Texte uniquement](/presets/img/plain-text-symbols.png "Cliquez pour voir le préréglage Texte uniquement")](./plain-text)
 
 ## [Pas de version des environnements](./no-runtimes.md)
 
@@ -44,7 +44,7 @@ Ce préréglage masque la version des environnements. Si vous travaillez dans de
 
 This preset does not show icons if the toolset is not found.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Cliquez pour voir le préréglage Pas de version des environnements")](./no-empty-icons.md)
 
 ## [Invite de commande Pure](./pure-preset.md)
 
@@ -56,7 +56,7 @@ Ce préréglage émule l'apparence et le comportement de [Pure](https://github.c
 
 Ce préréglage s'inspire de [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Il montre également comment fonctionne la substitution de chemin dans starship.
 
-[![Capture d'écran du préréglage Pastel Powerline](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Capture d'écran du préréglage Pastel Powerline](/presets/img/pastel-powerline.png "Cliquez pour voir le préréglage Pure")](./pastel-powerline)
 
 ## [Tokyo Night](./tokyo-night.md)
 
