@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => {
                     let engines_version = get_engines_version(context);
                     let in_engines_range =
-                        check_engines_version(nodejs_version.deref().as_ref(), engines_version);
+                        check_engines_version(nodejs_version.as_deref(), engines_version);
                     if in_engines_range {
                         Some(Ok(config.style))
                     } else {
