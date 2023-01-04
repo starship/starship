@@ -26,13 +26,13 @@ This preset will become the default preset [in a future release of starship](htt
 
 このプリセットは付属のモジュール全てのフォーマットを変更し、デフォルトのStarshipの表示("via", "on", etc.)から、それぞれの情報を括弧で区分けするように変更します。
 
-[![Bracketed Segmentsプリセットのスクリーンショット](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
+[![Bracketed Segmentsプリセットのスクリーンショット](/presets/img/bracketed-segments.png "Bracketed Segmentsプリセットを表示するにはクリックしてください")](./bracketed-segments)
 
 ## [Plain Text Symbols](./plain-text.md)
 
 このプリセットはそれぞれのモジュールで記号をテキストに変更します。 Unicodeにアクセスできない場合に最適です。
 
-[![Plain Text Symbolsプリセットのスクリーンショット](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
+[![Plain Text Symbolsプリセットのスクリーンショット](/presets/img/plain-text-symbols.png "Plain Text Symbolsプリセットを表示するにはクリックしてください")](./plain-text)
 
 ## [No Runtime Versions](./no-runtimes.md)
 
@@ -44,7 +44,7 @@ This preset will become the default preset [in a future release of starship](htt
 
 This preset does not show icons if the toolset is not found.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "No Runtime Versionsプリセットを表示するにはクリックしてください")](./no-empty-icons.md)
 
 ## [Pure Prompt](./pure-preset.md)
 
@@ -56,7 +56,7 @@ This preset does not show icons if the toolset is not found.
 
 このプリセットは[M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json)にインスパイアされています。 また、starshipでパス置換がどのように機能するかを示しています。
 
-[![Pastel Powerlineプリセットのスクリーンショット](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Pastel Powerlineプリセットのスクリーンショット](/presets/img/pastel-powerline.png "Pure Promptプリセットを表示するにはクリックしてください")](./pastel-powerline)
 
 ## [Tokyo Night](./tokyo-night.md)
 
