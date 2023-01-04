@@ -26,13 +26,13 @@ This preset will become the default preset [in a future release of starship](htt
 
 Está personalização altera o formato de todos os módulos integrados para que usem colchetes ao mostrar o seguimento ao invés de usar texto convencional do Starship ("via", "on", etc.).
 
-[![Captura de tela de segmentos predefinidos](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
+[![Captura de tela de segmentos predefinidos](/presets/img/bracketed-segments.png "Clique para ver as personalizações de seguimentos entre colchetes")](./bracketed-segments)
 
 ## [Símbolos de texto simples](./plain-text.md)
 
 Essa personalização converte os símbolos para cada módulo em texto simples. Importante para quando não tiver suporte para caracteres Unicode.
 
-[![Captura de tela de personalização de símbolos de texto simples](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
+[![Captura de tela de personalização de símbolos de texto simples](/presets/img/plain-text-symbols.png "Clique para ver as personalizações para símbolos de texto simples")](./plain-text)
 
 ## [Runtime Ausente](./no-runtimes.md)
 
@@ -44,7 +44,7 @@ Esta predefinição oculta a versão do runtime da linguagem. Se você trabalha 
 
 This preset does not show icons if the toolset is not found.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Clique para ver as personalizações para remover a versão do runtime")](./no-empty-icons.md)
 
 ## [Prompt do Terminal com Pure](./pure-preset.md)
 
@@ -56,7 +56,7 @@ Essa personalização simula a aparência e o comportamento do [Pure](https://gi
 
 Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Mostra também como a substituição de segmentos do caminho completo do diretório funciona no starship.
 
-[![Capture de tela das personalizações com Pastel Powerline](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Capture de tela das personalizações com Pastel Powerline](/presets/img/pastel-powerline.png "Clique para ver as personalização para usar no prompt do terminal com Pure")](./pastel-powerline)
 
 ## [Tokyo Night](./tokyo-night.md)
 
