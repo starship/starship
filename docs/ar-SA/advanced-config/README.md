@@ -207,8 +207,6 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-Note: Nushell 0.71.0 or later is required
-
 ### مثال
 
 ```toml
