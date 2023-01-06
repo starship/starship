@@ -207,8 +207,6 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-Note: Nushell 0.71.0 or later is required
-
 ### نموونە
 
 ```toml
@@ -267,7 +265,7 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 - `<color>`
 - `هیچ`
 
-کە `<color>` دیاریکەری ڕەنگێکە (لە ژێرەوە باسکراوە). `fg:<color>` و `<color>` لە ئێستادا هەمان شت ئەکەن، بەڵام ئەمە ڕەنگە لە داهاتووا بگۆڕێت. `inverted` ڕەنگی پاشبنەما و پێشبنەما ئەگۆڕێتەوە. ڕیزبەندی ووشەکان لە زنجیرەکەدا گرنگ نییە.
+where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
 
 The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
 
