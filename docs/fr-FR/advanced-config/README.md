@@ -229,7 +229,7 @@ Génère l’invite suivante:
 
 Certains shells gèrent une invite de continuation en plus de l’invite normale. Cette invite est affichée à la place de l’invite normale quand l’utilisateur a entré une expression incomplète (par exemple, une parenthèse gauche ou une apostrophe seule).
 
-Starship peut définir l’invite de continuation en utilisant l’option `continuation_prompt`. L’invite par défaut est `"[∙](bright-black) "`.
+Starship peut définir l’invite de continuation en utilisant l’option `continuation_prompt`. The default prompt is `'[∙](bright-black) '`.
 
 Note: la valeur de `continuation_prompt` doit être une chaine littérale, sans variable.
 
@@ -244,8 +244,8 @@ Note: les invites de confirmation sont uniquement disponibles pour les shells su
 ```toml
 # ~/.config/starship.toml
 
-# Un invite de continuation qui affiche deux flèches pleines
-continuation_prompt = "▶▶"
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = '▶▶ '
 ```
 
 ## Chaînes de style
