@@ -250,7 +250,7 @@ continuation_prompt = "▶▶"
 
 ## Stile delle Stringhe
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+Le stringhe di stile sono un elenco di parole, separate da spazi bianchi. Le parole non sono sensibili alle maiuscole (cioè `grassetto` e `BoLd` sono considerate la stessa stringa). Ogni parola può essere una delle seguenti:
 
 - `bold`
 - `italic`
@@ -265,17 +265,17 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 - `<color>`
 - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+dove `<color>` è un colore specifico (discusso in seguito). `fg:<color>` e `<color>` attualmente fanno la stessa cosa, anche se questo potrebbe cambiare in futuro. `inverted` scambia lo sfondo e i colori in primo piano. L'ordine delle parole nella stringa non conta.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+Il token `none` sovrascrive tutti gli altri token in una stringa se non fa parte di uno specificatore `bg:`, così ad esempio `fg:red none fg:blue` creerà una stringa senza stile. `bg:none` imposta come colore di sfondo quello predefinito così `fg:red bg:none` è equivalente a `red` o `fg:red` e `bg:green fg:red bg:none` è equivalente a `fg:red` o `red`. Potrà diventare un errore usare `none` in combinazione con altri token in futuro.
 
-A color specifier can be one of the following:
+Uno colore specifico può essere uno di questi:
 
 - One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
 - Un `#` seguito da un valore esadecimale a sei cifre. Questo specifica un [colore esagesimale in RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Un numero compreso tra 0-255. Specifica un [codice colore ANSI a 8 bit](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Se sono specificati più colori per il primo piano/sfondo, l'ultimo nella stringa avrà la priorità.
 
 Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
 
