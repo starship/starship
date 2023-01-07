@@ -229,7 +229,7 @@ Produces a prompt like the following:
 
 Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
 
 Note: `continuation_prompt` should be set to a literal string without any variables.
 
@@ -245,7 +245,7 @@ Note: Continuation prompts are only available in the following shells:
 # ~/.config/starship.toml
 
 # A continuation prompt that displays two filled in arrows
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Style Strings
