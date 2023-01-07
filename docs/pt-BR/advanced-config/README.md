@@ -229,7 +229,7 @@ Produz um prompt como o seguinte:
 
 Alguns shells suportam um prompt de continuação junto com o prompt normal. Esse prompt é renderizado em vez do prompt normal quando o usuário insere uma instrução incompleta (como um único parêntese esquerdo ou aspas).
 
-Starship pode definir o prompt de continuação usando a opção `continuation_prompt`. O prompt padrão é `"[∙](bright-black) "`.
+Starship pode definir o prompt de continuação usando a opção `continuation_prompt`. The default prompt is `'[∙](bright-black) '`.
 
 Nota: `continuation_prompt` deve ser definido como uma string literal sem nenhuma variável.
 
@@ -244,8 +244,8 @@ Nota: os prompts de continuação estão disponíveis apenas nos seguintes shell
 ```toml
 # ~/.config/starship.toml
 
-# Um prompt de continuação que exibe duas setas preenchidas
-continuation_prompt = "▶▶"
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = '▶▶ '
 ```
 
 ## Estilo dos textos
