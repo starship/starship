@@ -229,7 +229,7 @@ Produces a prompt like the following:
 
 Einige Shells unterstützen einen speziellen Fortsetzungsprompt zusätzlich zum normalen Prompt. Dieser Prompt wird anstelle des normalen Prompts ausgegeben, wenn der Benutzer ein unvollständiges Kommando eingegeben hat (etwa wie eine einzelne linke Klammer oder ein einzelnes Anführungszeichen).
 
-Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. The default prompt is `"[∙](bright-black) "`.
+Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. The default prompt is `'[∙](bright-black) '`.
 
 Hinweis: Die `continuation_prompt` Anweisung sollte auf einen literalen String ohne Variablen gesetzt werden.
 
@@ -244,8 +244,8 @@ Hinweis: Fortsetzungs-Prompts sind nur für folgende Shells verfügbar:
 ```toml
 # ~/.config/starship.toml
 
-# Ein Fortsetzungs-Prompt der 2 ausgefüllte Pfeile darstellt
-continuation_prompt = "▶▶"
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = '▶▶ '
 ```
 
 ## Style-Strings
