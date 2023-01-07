@@ -205,7 +205,7 @@ $null = New-Module starship {
 
     # The following regex is used to strip out ANSI sequences from a string,
     # giving us just plain text. This is useful for string length calculation.
-    $ansiRegex = '([\u001B\u009B][[\]()#;?]*(?:(?:(?:[a-zA-Z\d]*(?:;[-a-zA-Z\d\/#&.:=?%@~_]*)*)?\u0007)|(?:(?:\d{1,4}(?:;\d{0,4})*)?[\dA-PR-TZcf-ntqry=><~])))'
+    $ansiRegex = [regex]'([\u001B\u009B][[\]()#;?]*(?:(?:(?:[a-zA-Z\d]*(?:;[-a-zA-Z\d\/#&.:=?%@~_]*)*)?\u0007)|(?:(?:\d{1,4}(?:;\d{0,4})*)?[\dA-PR-TZcf-ntqry=><~])))'
 
     # Disable virtualenv prompt, it breaks starship
     $ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
