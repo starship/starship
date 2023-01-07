@@ -55,11 +55,10 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
    ```sh
    brew install starship
    ```
-
-   Za pomocą [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Dodaj skrypt inicjalizacyjny do konfiguracji twojej powłoki:
@@ -120,7 +119,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    #### Elvish
 
-   ::: uwaga
+   ::: warning
 
    Działa tylko dla elvish v0.18 albo wyższej wersji.
 
@@ -148,7 +147,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    #### Nushell
 
-   ::: uwaga
+   ::: warning
 
    Ten sposób zmieni się w przyszłości. Działa tylko na Nushell v0.61+.
 

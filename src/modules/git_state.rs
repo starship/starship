@@ -1,4 +1,4 @@
-use git2::RepositoryState;
+use git_repository::state::InProgress;
 use std::path::PathBuf;
 
 use super::{Context, Module, ModuleConfig};
@@ -54,54 +54,53 @@ fn get_state_description<'a>(
     repo: &'a Repo,
     config: &GitStateConfig<'a>,
 ) -> Option<StateDescription<'a>> {
-    match repo.state {
-        RepositoryState::Clean => None,
-        RepositoryState::Merge => Some(StateDescription {
+    match repo.state.as_ref()? {
+        InProgress::Merge => Some(StateDescription {
             label: config.merge,
             current: None,
             total: None,
         }),
-        RepositoryState::Revert => Some(StateDescription {
+        InProgress::Revert => Some(StateDescription {
             label: config.revert,
             current: None,
             total: None,
         }),
-        RepositoryState::RevertSequence => Some(StateDescription {
+        InProgress::RevertSequence => Some(StateDescription {
             label: config.revert,
             current: None,
             total: None,
         }),
-        RepositoryState::CherryPick => Some(StateDescription {
+        InProgress::CherryPick => Some(StateDescription {
             label: config.cherry_pick,
             current: None,
             total: None,
         }),
-        RepositoryState::CherryPickSequence => Some(StateDescription {
+        InProgress::CherryPickSequence => Some(StateDescription {
             label: config.cherry_pick,
             current: None,
             total: None,
         }),
-        RepositoryState::Bisect => Some(StateDescription {
+        InProgress::Bisect => Some(StateDescription {
             label: config.bisect,
             current: None,
             total: None,
         }),
-        RepositoryState::ApplyMailbox => Some(StateDescription {
+        InProgress::ApplyMailbox => Some(StateDescription {
             label: config.am,
             current: None,
             total: None,
         }),
-        RepositoryState::ApplyMailboxOrRebase => Some(StateDescription {
+        InProgress::ApplyMailboxRebase => Some(StateDescription {
             label: config.am_or_rebase,
             current: None,
             total: None,
         }),
-        RepositoryState::Rebase => Some(describe_rebase(repo, config.rebase)),
-        RepositoryState::RebaseInteractive => Some(describe_rebase(repo, config.rebase)),
-        RepositoryState::RebaseMerge => Some(describe_rebase(repo, config.rebase)),
+        InProgress::Rebase => Some(describe_rebase(repo, config.rebase)),
+        InProgress::RebaseInteractive => Some(describe_rebase(repo, config.rebase)),
     }
 }
 
+// TODO: Use future gitoxide API to get the state of the rebase
 fn describe_rebase<'a>(repo: &'a Repo, rebase_config: &'a str) -> StateDescription<'a> {
     /*
      *  Sadly, libgit2 seems to have some issues with reading the state of
@@ -138,7 +137,7 @@ fn describe_rebase<'a>(repo: &'a Repo, rebase_config: &'a str) -> StateDescripti
     };
 
     let (current, total) = if let Some((c, t)) = progress {
-        (Some(format!("{}", c)), Some(format!("{}", t)))
+        (Some(format!("{c}")), Some(format!("{t}")))
     } else {
         (None, None)
     };
@@ -158,15 +157,14 @@ struct StateDescription<'a> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::ffi::OsStr;
-    use std::fs::OpenOptions;
-    use std::io::{self, Error, ErrorKind, Write};
+    use std::io::{self, Error, ErrorKind};
     use std::path::Path;
     use std::process::Stdio;
 
     use crate::test::ModuleRenderer;
-    use crate::utils::create_command;
+    use crate::utils::{create_command, write_file};
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -187,7 +185,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["rebase", "other-branch"], Some(path), false)?;
+        run_git_cmd(["rebase", "other-branch"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -202,7 +200,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["merge", "other-branch"], Some(path), false)?;
+        run_git_cmd(["merge", "other-branch"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -217,7 +215,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["cherry-pick", "other-branch"], Some(path), false)?;
+        run_git_cmd(["cherry-pick", "other-branch"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -235,7 +233,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["bisect", "start"], Some(path), false)?;
+        run_git_cmd(["bisect", "start"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -250,7 +248,7 @@ mod tests {
         let repo_dir = create_repo_with_conflict()?;
         let path = repo_dir.path();
 
-        run_git_cmd(&["revert", "--no-commit", "HEAD~1"], Some(path), false)?;
+        run_git_cmd(["revert", "--no-commit", "HEAD~1"], Some(path), false)?;
 
         let actual = ModuleRenderer::new("git_state").path(path).collect();
 
@@ -290,18 +288,9 @@ mod tests {
         let path = repo_dir.path();
         let conflicted_file = repo_dir.path().join("the_file");
 
-        let write_file = |text: &str| {
-            let mut file = OpenOptions::new()
-                .write(true)
-                .create(true)
-                .truncate(true)
-                .open(&conflicted_file)?;
-            write!(file, "{}", text)
-        };
-
         // Initialize a new git repo
         run_git_cmd(
-            &[
+            [
                 "init",
                 "--quiet",
                 path.to_str().expect("Path was not UTF-8"),
@@ -312,12 +301,12 @@ mod tests {
 
         // Set local author info
         run_git_cmd(
-            &["config", "--local", "user.email", "starship@example.com"],
+            ["config", "--local", "user.email", "starship@example.com"],
             Some(path),
             true,
         )?;
         run_git_cmd(
-            &["config", "--local", "user.name", "starship"],
+            ["config", "--local", "user.name", "starship"],
             Some(path),
             true,
         )?;
@@ -326,35 +315,35 @@ mod tests {
         // If build environment has `init.defaultBranch` global set
         // it will default to an unknown branch, so need to make & change branch
         run_git_cmd(
-            &["checkout", "-b", "master"],
+            ["checkout", "-b", "master"],
             Some(path),
             // command expected to fail if already on the expected branch
             false,
         )?;
 
         // Write a file on master and commit it
-        write_file("Version A")?;
-        run_git_cmd(&["add", "the_file"], Some(path), true)?;
+        write_file(&conflicted_file, "Version A")?;
+        run_git_cmd(["add", "the_file"], Some(path), true)?;
         run_git_cmd(
-            &["commit", "--message", "Commit A", "--no-gpg-sign"],
+            ["commit", "--message", "Commit A", "--no-gpg-sign"],
             Some(path),
             true,
         )?;
 
         // Switch to another branch, and commit a change to the file
-        run_git_cmd(&["checkout", "-b", "other-branch"], Some(path), true)?;
-        write_file("Version B")?;
+        run_git_cmd(["checkout", "-b", "other-branch"], Some(path), true)?;
+        write_file(&conflicted_file, "Version B")?;
         run_git_cmd(
-            &["commit", "--all", "--message", "Commit B", "--no-gpg-sign"],
+            ["commit", "--all", "--message", "Commit B", "--no-gpg-sign"],
             Some(path),
             true,
         )?;
 
         // Switch back to master, and commit a third change to the file
-        run_git_cmd(&["checkout", "master"], Some(path), true)?;
-        write_file("Version C")?;
+        run_git_cmd(["checkout", "master"], Some(path), true)?;
+        write_file(conflicted_file, "Version C")?;
         run_git_cmd(
-            &["commit", "--all", "--message", "Commit C", "--no-gpg-sign"],
+            ["commit", "--all", "--message", "Commit C", "--no-gpg-sign"],
             Some(path),
             true,
         )?;

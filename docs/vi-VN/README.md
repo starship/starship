@@ -55,11 +55,10 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    ```sh
    brew install starship
    ```
-
-   Với [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:
@@ -120,7 +119,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Elvish
 
-   ::: cảnh báo
+   ::: warning
 
    Only elvish v0.18 or higher is supported.
 
@@ -148,7 +147,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Nushell
 
-   ::: cảnh báo
+   ::: warning
 
    This will change in the future. Only Nushell v0.61+ is supported.
 

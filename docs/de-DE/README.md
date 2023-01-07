@@ -4,21 +4,21 @@ heroImage: /logo.svg
 heroText:
 tagline: Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!
 actionText: Loslegen →
-actionLink: ./guide/
+actionLink: ./de-DE/guide/
 features:
   - 
     title: Kompatibel
     details: Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!
   - 
     title: Rust-Powered
-    details: Bringt die Schnelligkeit und Zuverlässigkeit von Rust in deine Shell-Prompt.
+    details: Bringt die Schnelligkeit und Sicherheit von Rust in deine Shell-Prompt.
   - 
     title: Individualisierbar
     details: Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship ist eine minimale, super schnelle, und extrem anpassbare Prompt für jede Shell! Sie zeigt die Information, die man benötigt an, während sie schnell und minimal bleibt. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship ist eine minimale, super schnelle, und extrem anpassbare Prompt für jede Shell! Sie zeigt die Information, die man benötigt an, während sie schnell und minimal bleibt. Schnell-Installation verfügbar für Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, und PowerShell.
 ---
 
 <div class="center">
@@ -30,7 +30,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
 ### Voraussetzungen
 
-- Eine [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in Ihrem Terminal.
+- Eine [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in deinem Terminal.
 
 ### Schnellinstallation
 
@@ -45,7 +45,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   Um Starship selbst zu aktualisieren, lasse das Skript oben nochmal laufen. Es wird die vorhandene Version ersetzen, ohne die Konfiguration von Starship zu berühren.
+   Um Starship selbst zu aktualisieren, führe das Skript oben erneut aus. Die vorhandene Version wird ersetzt, ohne das deine Konfiguration von Starship verloren geht.
 
 
    #### Installation mithilfe eines Paket-Managers
@@ -55,19 +55,18 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    ```sh
    brew install starship
    ```
-
-   Mit [scoop](https://scoop.sh):
+   Mit [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
-1. Führe den init Befehl zum Start der Shell aus:
+1. Füge das init-Skript zur Konfigurationsdatei deiner Shell hinzu:
 
 
    #### Bash
 
-   Füge dies ans Ende von `~/.bashrc`:
+   Trage folgendes am Ende der `~/.bashrc` ein:
 
    ```sh
    # ~/.bashrc
@@ -89,7 +88,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Zsh
 
-   Füge dies ans Ende von `~/.zshrc`:
+   Trage folgendes am Ende der `~/.zshrc` ein:
 
    ```sh
    # ~/.zshrc
@@ -100,7 +99,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Powershell
 
-   Füge das folgende zum Ende von `Microsoft.PowerShell_profile.ps1` hinzu. Sie können den Speicherort dieser Datei überprüfen, indem Sie die `$PROFILE` Variable in PowerShell abfragen. Normalerweise ist der Pfad `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
+   Trage das folgende am Ende von `Microsoft.PowerShell_profile.ps1` ein. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Der Pfat lautet normalerweise `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` unter Windows und `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -122,7 +121,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Es wird nur elvish v0.18 oder höher unterstützt.
 
    :::
 
@@ -150,17 +149,17 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   Das wird sich in Zukunft ändern. Nur Nushell v0.61+ wird unterstützt.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Füge folgendes an das Ende deiner Nushell env Datei hinzu (du findest diese, indem du folgenden Befehl in Nushell ausführst `$nu.env-path`):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   Und füge folgendes am Ende deiner Nushell-Konfiguration hinzu (du findest diese, indem du folgenden Befehl in Nushell ausführst `$nu.config-path`):
 
    ```sh
    source ~/.cache/starship/init.nu
@@ -179,7 +178,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### ⌘ Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Du musst [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) mit Cmd verwenden. Trage folgendes in eine neue Datei namens `starship.lua` hinzu und lege diese Datei im Clink Scripts Verzeichnis ab:
 
    ```lua
    -- starship.lua

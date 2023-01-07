@@ -78,7 +78,7 @@ fn parse_go_version(go_stdout: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 
@@ -145,7 +145,7 @@ mod tests {
     fn folder_with_godeps() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let godeps = dir.path().join("Godeps");
-        fs::create_dir_all(&godeps)?;
+        fs::create_dir_all(godeps)?;
 
         let actual = ModuleRenderer::new("golang").path(dir.path()).collect();
 

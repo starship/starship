@@ -114,7 +114,7 @@ impl RustToolingEnvironmentInfo {
                         // Depending on the source of the toolchain override, it might not have been a full toolchain name ("stable" or "nightly").
                         log::trace!("Running rustup {toolchain} rustc --version");
                         create_command("rustup").map(|mut cmd| {
-                            cmd.args(&["run", toolchain, "rustc", "--version"]);
+                            cmd.args(["run", toolchain, "rustc", "--version"]);
                             cmd
                         })
                     })
@@ -138,9 +138,7 @@ impl RustToolingEnvironmentInfo {
             .get_or_init(|| {
                 let Output { status, stdout, .. } = create_command("rustc")
                     .and_then(|mut cmd| {
-                        cmd.args(&["-Vv"])
-                            .current_dir(&context.current_dir)
-                            .output()
+                        cmd.args(["-Vv"]).current_dir(&context.current_dir).output()
                     })
                     .ok()?;
                 if !status.success() {
@@ -396,7 +394,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formatting `rust` version:\n{}", error);
-            Some(format!("v{}", version))
+            Some(format!("v{version}"))
         }
     }
 }
@@ -404,7 +402,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
 fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> String {
     default_host_triple
         .map_or(toolchain, |triple| {
-            toolchain.trim_end_matches(&format!("-{}", triple))
+            toolchain.trim_end_matches(&format!("-{triple}"))
         })
         .to_owned()
 }

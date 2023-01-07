@@ -55,11 +55,10 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
    ```sh
    brew install starship
    ```
-
-   Scoop [ile](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Add the init script to your shell's config file:
@@ -120,7 +119,7 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
 
    #### Elvish
 
-   ::: uyarı
+   ::: warning
 
    Only elvish v0.18 or higher is supported.
 
@@ -148,7 +147,7 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
 
    #### Nushell
 
-   ::: uyarı
+   ::: warning
 
    This will change in the future. Only Nushell v0.61+ is supported.
 
@@ -179,7 +178,7 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
 
    #### Cmd
 
-   Cmd ıle beraber [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) kullanmalısınız. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Cmd ile beraber [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) kullanmalısınız. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

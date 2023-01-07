@@ -34,10 +34,7 @@ fn get_kube_context(filename: path::PathBuf) -> Option<String> {
     Some(current_ctx.to_string())
 }
 
-fn get_kube_ctx_component(
-    filename: path::PathBuf,
-    current_ctx: String,
-) -> Option<KubeCtxComponents> {
+fn get_kube_ctx_component(filename: path::PathBuf, current_ctx: &str) -> Option<KubeCtxComponents> {
     let contents = utils::read_file(filename).ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
@@ -100,7 +97,7 @@ fn get_alias<'a>(
     }
 
     return aliases.iter().find_map(|(k, v)| {
-        let re = regex::Regex::new(&format!("^{}$", k)).ok()?;
+        let re = regex::Regex::new(&format!("^{k}$")).ok()?;
         let replaced = re.replace(alias_candidate, *v);
         match replaced {
             Cow::Owned(replaced) => Some(Cow::Owned(replaced)),
@@ -120,7 +117,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     // If we have some config for doing the directory scan then we use it but if we don't then we
-    // assume we should treat it like the module is enabled to preserve backward compatability.
+    // assume we should treat it like the module is enabled to preserve backward compatibility.
     let have_scan_config = !(config.detect_files.is_empty()
         && config.detect_folders.is_empty()
         && config.detect_extensions.is_empty());
@@ -144,22 +141,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let kube_ctx = env::split_paths(&kube_cfg).find_map(get_kube_context)?;
 
-    let ctx_components: Vec<Option<KubeCtxComponents>> = env::split_paths(&kube_cfg)
-        .map(|filename| get_kube_ctx_component(filename, kube_ctx.clone()))
+    let ctx_components: Vec<KubeCtxComponents> = env::split_paths(&kube_cfg)
+        .filter_map(|filename| get_kube_ctx_component(filename, &kube_ctx))
         .collect();
-
-    let kube_user = ctx_components.iter().find(|&ctx| match ctx {
-        Some(kube) => kube.user.is_some(),
-        None => false,
-    });
-    let kube_ns = ctx_components.iter().find(|&ctx| match ctx {
-        Some(kube) => kube.namespace.is_some(),
-        None => false,
-    });
-    let kube_cluster = ctx_components.iter().find(|&ctx| match ctx {
-        Some(kube) => kube.cluster.is_some(),
-        None => false,
-    });
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -174,25 +158,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|variable| match variable {
                 "context" => Some(Ok(get_kube_context_name(&config, &kube_ctx))),
 
-                "namespace" => kube_ns.and_then(|ctx| {
-                    ctx.as_ref().map(|kube| {
-                        // unwrap is safe as kube_ns only holds kube.namespace.is_some()
-                        Ok(Cow::Borrowed(kube.namespace.as_ref().unwrap().as_str()))
-                    })
-                }),
-                "user" => kube_user.and_then(|ctx| {
-                    ctx.as_ref().map(|kube| {
-                        // unwrap is safe as kube_user only holds kube.user.is_some()
-                        Ok(get_kube_user(&config, kube.user.as_ref().unwrap().as_str()))
-                    })
-                }),
-                "cluster" => kube_cluster.and_then(|ctx| {
-                    ctx.as_ref().map(|kube| {
-                        // unwrap is safe as kube_cluster only holds kube.cluster.is_some()
-                        Ok(Cow::Borrowed(kube.cluster.as_ref().unwrap().as_str()))
-                    })
-                }),
+                "namespace" => ctx_components
+                    .iter()
+                    .find_map(|kube| kube.namespace.as_deref())
+                    .map(|namespace| Ok(Cow::Borrowed(namespace))),
 
+                "user" => ctx_components
+                    .iter()
+                    .find_map(|kube| kube.user.as_deref())
+                    .map(|user| Ok(get_kube_user(&config, user))),
+
+                "cluster" => ctx_components
+                    .iter()
+                    .find_map(|kube| kube.cluster.as_deref())
+                    .map(|cluster| Ok(Cow::Borrowed(cluster))),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -212,7 +191,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::env;
     use std::fs::{create_dir, File};
     use std::io::{self, Write};
@@ -385,12 +364,11 @@ users: []
 apiVersion: v1
 clusters: []
 contexts: []
-current-context: {}
+current-context: {ctx_name}
 kind: Config
 preferences: {{}}
 users: []
-",
-                ctx_name
+"
             )
             .as_bytes(),
         )?;
@@ -695,15 +673,14 @@ clusters: []
 contexts:
   - context:
       cluster: test_cluster
-      user: {}
+      user: {user_name}
       namespace: test_namespace
     name: test_context
 current-context: test_context
 kind: Config
 preferences: {{}}
 users: []
-",
-                user_name
+"
             )
             .as_bytes(),
         )?;

@@ -1,38 +1,9 @@
 use super::{Context, Module};
+use std::borrow::Cow;
 
 use crate::config::ModuleConfig;
 use crate::configs::env_var::EnvVarConfig;
 use crate::formatter::StringFormatter;
-use crate::segment::Segment;
-
-/// Creates `env_var_module` displayer which displays all configured environmental variables
-pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let config_table = context.config.get_env_var_modules()?;
-    let mut env_modules = config_table
-        .iter()
-        .filter(|(_, config)| config.is_table())
-        .filter_map(|(variable, _)| env_var_module(vec!["env_var", variable], context))
-        .collect::<Vec<Module>>();
-    // Old configuration is present in starship configuration
-    if config_table.iter().any(|(_, config)| !config.is_table()) {
-        if let Some(fallback_env_var_module) = env_var_module(vec!["env_var"], context) {
-            env_modules.push(fallback_env_var_module);
-        }
-    }
-    Some(env_var_displayer(env_modules, context))
-}
-
-/// A utility module to display multiple `env_variable` modules
-fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Module<'a> {
-    let mut module = context.new_module("env_var_displayer");
-
-    let module_segments = modules
-        .into_iter()
-        .flat_map(|module| module.segments)
-        .collect::<Vec<Segment>>();
-    module.set_segments(module_segments);
-    module
-}
 
 /// Creates a module with the value of the chosen environment variable
 ///
@@ -40,20 +11,36 @@ fn env_var_displayer<'a>(modules: Vec<Module>, context: &'a Context) -> Module<'
 ///     - `env_var.disabled` is absent or false
 ///     - `env_var.variable` is defined
 ///     - a variable named as the value of `env_var.variable` is defined
-fn env_var_module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Option<Module<'a>> {
-    let mut module = context.new_module(&module_config_path.join("."));
-    let config_value = context.config.get_config(&module_config_path);
-    let config = EnvVarConfig::load(config_value.expect(
-        "modules::env_var::module should only be called after ensuring that the module exists",
-    ));
+pub fn module<'a>(name: Option<&str>, context: &'a Context) -> Option<Module<'a>> {
+    let toml_config = match name {
+        Some(name) => context
+            .config
+            .get_config(&["env_var", name])
+            .map(Cow::Borrowed),
+        None => context
+            .config
+            .get_module_config("env_var")
+            .and_then(filter_config)
+            .map(Cow::Owned)
+            .map(Some)?,
+    };
 
+    let mod_name = match name {
+        Some(name) => format!("env_var.{}", name),
+        None => "env_var".to_owned(),
+    };
+
+    let config = EnvVarConfig::try_load(toml_config.as_deref());
+    // Note: Forward config if `Module` ends up needing `config`
+    let mut module = Module::new(&mod_name, config.description, None);
     if config.disabled {
         return None;
     };
 
-    let variable_name = get_variable_name(module_config_path, &config);
+    let variable_name = config.variable.or(name)?;
 
-    let env_value = get_env_value(context, variable_name?, config.default)?;
+    let env_value = context.get_env(variable_name);
+    let env_value = env_value.as_deref().or(config.default)?;
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -65,7 +52,7 @@ fn env_var_module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Op
                 _ => None,
             })
             .map(|variable| match variable {
-                "env_value" => Some(Ok(&env_value)),
+                "env_value" => Some(Ok(env_value)),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -82,30 +69,28 @@ fn env_var_module<'a>(module_config_path: Vec<&str>, context: &'a Context) -> Op
     Some(module)
 }
 
-fn get_variable_name<'a>(
-    module_config_path: Vec<&'a str>,
-    config: &'a EnvVarConfig,
-) -> Option<&'a str> {
-    match config.variable {
-        Some(v) => Some(v),
-        None => {
-            let last_element = module_config_path.last()?;
-            Some(*last_element)
-        }
-    }
-}
-
-fn get_env_value(context: &Context, name: &str, default: Option<&str>) -> Option<String> {
-    match context.get_env(name) {
-        Some(value) => Some(value),
-        None => default.map(std::borrow::ToOwned::to_owned),
-    }
+/// Filter `config` to only includes non-table values
+/// This filters the top-level table to only include its specific configuation
+fn filter_config(config: &toml::Value) -> Option<toml::Value> {
+    let o = config
+        .as_table()
+        .map(|table| {
+            table
+                .iter()
+                .filter(|(_key, val)| !val.is_table())
+                .map(|(key, val)| (key.to_owned(), val.to_owned()))
+                .collect::<toml::value::Table>()
+        })
+        .filter(|table| !table.is_empty())
+        .map(toml::Value::Table);
+    log::trace!("Filtered top-level env_var config: {o:?}");
+    o
 }
 
 #[cfg(test)]
 mod test {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
 
     const TEST_VAR_VALUE: &str = "astronauts";
 
@@ -133,7 +118,7 @@ mod test {
 
     #[test]
     fn defined_variable() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
             })
@@ -146,7 +131,7 @@ mod test {
 
     #[test]
     fn undefined_variable() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
             })
@@ -158,7 +143,7 @@ mod test {
 
     #[test]
     fn default_has_no_effect() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
                 default = "N/A"
@@ -172,7 +157,7 @@ mod test {
 
     #[test]
     fn default_takes_effect() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = ModuleRenderer::new("env_var.UNDEFINED_TEST_VAR")
             .config(toml::toml! {
                 [env_var.UNDEFINED_TEST_VAR]
                 default = "N/A"
@@ -185,7 +170,7 @@ mod test {
 
     #[test]
     fn symbol() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
                 format = "with [■ $env_value](black bold dimmed) "
@@ -194,7 +179,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("■ {}", TEST_VAR_VALUE))
+            style().paint(format!("■ {TEST_VAR_VALUE}"))
         ));
 
         assert_eq!(expected, actual);
@@ -202,7 +187,7 @@ mod test {
 
     #[test]
     fn prefix() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
                 format = "with [_$env_value](black bold dimmed) "
@@ -211,7 +196,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("_{}", TEST_VAR_VALUE))
+            style().paint(format!("_{TEST_VAR_VALUE}"))
         ));
 
         assert_eq!(expected, actual);
@@ -219,7 +204,7 @@ mod test {
 
     #[test]
     fn suffix() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
                 format = "with [${env_value}_](black bold dimmed) "
@@ -228,7 +213,7 @@ mod test {
             .collect();
         let expected = Some(format!(
             "with {} ",
-            style().paint(format!("{}_", TEST_VAR_VALUE))
+            style().paint(format!("{TEST_VAR_VALUE}_"))
         ));
 
         assert_eq!(expected, actual);
@@ -236,7 +221,7 @@ mod test {
 
     #[test]
     fn display_few() {
-        let actual = ModuleRenderer::new("env_var")
+        let actual1 = ModuleRenderer::new("env_var.TEST_VAR")
             .config(toml::toml! {
                 [env_var.TEST_VAR]
                 [env_var.TEST_VAR2]
@@ -244,11 +229,103 @@ mod test {
             .env("TEST_VAR", TEST_VAR_VALUE)
             .env("TEST_VAR2", TEST_VAR_VALUE)
             .collect();
-        let expected = Some(format!(
-            "with {} with {} ",
-            style().paint(TEST_VAR_VALUE),
-            style().paint(TEST_VAR_VALUE)
-        ));
+        let actual2 = ModuleRenderer::new("env_var.TEST_VAR2")
+            .config(toml::toml! {
+                [env_var.TEST_VAR]
+                [env_var.TEST_VAR2]
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .env("TEST_VAR2", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
+
+        assert_eq!(expected, actual1);
+        assert_eq!(expected, actual2);
+    }
+
+    #[test]
+    fn mixed() {
+        let cfg = toml::toml! {
+            [env_var]
+            variable = "TEST_VAR_OUTER"
+            format = "$env_value"
+            [env_var.TEST_VAR_INNER]
+            format = "$env_value"
+        };
+        let actual_inner = ModuleRenderer::new("env_var.TEST_VAR_INNER")
+            .config(cfg.clone())
+            .env("TEST_VAR_OUTER", "outer")
+            .env("TEST_VAR_INNER", "inner")
+            .collect();
+
+        assert_eq!(
+            actual_inner.as_deref(),
+            Some("inner"),
+            "inner module should be rendered"
+        );
+
+        let actual_outer = ModuleRenderer::new("env_var")
+            .config(cfg)
+            .env("TEST_VAR_OUTER", "outer")
+            .env("TEST_VAR_INNER", "inner")
+            .collect();
+
+        assert_eq!(
+            actual_outer.as_deref(),
+            Some("outer"),
+            "outer module should be rendered"
+        );
+    }
+
+    #[test]
+    fn no_config() {
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = Some(format!("with {} ", style().paint(TEST_VAR_VALUE)));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn disabled_child() {
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
+            .config(toml::toml! {
+                [env_var.TEST_VAR]
+                disabled = true
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn disabled_root() {
+        let actual = ModuleRenderer::new("env_var")
+            .config(toml::toml! {
+                [env_var]
+                disabled = true
+            })
+            .env("TEST_VAR", TEST_VAR_VALUE)
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn variable_override() {
+        let actual = ModuleRenderer::new("env_var.TEST_VAR")
+            .config(toml::toml! {
+                [env_var.TEST_VAR]
+                variable = "TEST_VAR2"
+            })
+            .env("TEST_VAR", "implicit name")
+            .env("TEST_VAR2", "explicit name")
+            .collect();
+        let expected = Some(format!("with {} ", style().paint("explicit name")));
 
         assert_eq!(expected, actual);
     }

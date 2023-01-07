@@ -55,11 +55,10 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
    ```sh
    brew install starship
    ```
-
-   لەگەڵ [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. نوسینی init زیادبکە بۆ فایلی ڕێکخستنی شێڵەکەت:
@@ -120,7 +119,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Elvish
 
-   ::: ئاگادارکردنەوە
+   ::: warning
 
    Only elvish v0.18 or higher is supported.
 
@@ -148,7 +147,7 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Nushell
 
-   ::: ئاگادارکردنەوە
+   ::: warning
 
    This will change in the future. Only Nushell v0.61+ is supported.
 

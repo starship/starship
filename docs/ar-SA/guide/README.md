@@ -150,17 +150,17 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**التخصيص البسيط و السريع و الغير محدود لي ال"shell"!**
 
-- **سريع:** إنها سريعة – _سريعة_ حقاً! 🚀
-- **Customizable:** configure every aspect of your prompt.
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **كثيرة المزايا:** دعم لجميع الأدوات المفضلة لديك.
-- **سهل:** سريع التثبيت – استخدمه في دقائق.
+- **Fast:** إنها _في غاية_ السرعة! 🚀
+- ** Customizable:** قم بتهيئة ال"prompt" من كل النواحي.
+- **Universal:** يعمل على أي shell، على أي نظام تشغيل.
+- ** Customizable:** تظهر المعلومات ذات الصلة في لمح البصر.
+- **Feature rich:** تدعم جميع الأدوات المفضلة لديك.
+- **Easy:** سريع التثبيت – استخدمها في دقائق معدودة.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>تصفّح مستندات Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>استكشف مستندات Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -169,16 +169,16 @@
 
 ### المتطلبات الأساسية
 
-- تثبيت [Nerd Font](https://www.nerdfonts.com/) وتمكينه في موجه الأوامر الخاصة بك (على سبيل المثال، جرب [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- تثبيت [Nerd Font](https://www.nerdfonts.com/) وتمكينه في ال terminal الخاصة بك (على سبيل المثال، جرب الخط [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### الخطوة الأولى. تثبيت starship
 
-Select your operating system from the list below to view installation instructions:
+حدد نظام التشغيل الخاص بك من القائمة أدناه لعرض تعليمات التثبيت:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+يمكنك تثبيت starship باستخدام احد ال package managers التالية:
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -189,7 +189,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+يمكنك تثبيت starship باستخدام احد ال package managers التالية:
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -202,13 +202,13 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+قم بتثبيت أحدث إصدار للنظام الخاص بك:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+يمكنك تثبيت starship باستخدام احد ال package managers التالية:
 
 | Distribution       | Repository                                                                                      | Instructions                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -218,9 +218,7 @@ Alternatively, install Starship using any of the following package managers:
 | _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
-| CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
+| CentOS +7          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -231,13 +229,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+قم بتثبيت أحدث إصدار للنظام الخاص بك:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+يمكنك تثبيت starship باستخدام احد ال package managers التالية:
 
 | Repository                                               | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -251,9 +249,9 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+قم بتثبيت أحدث إصدار للنظام الخاص بك مع MSI-installers من قسم الإصدارات [](https://github.com/starship/starship/releases/latest).
 
-Install Starship using any of the following package managers:
+يمكنك تثبيت starship باستخدام احد ال package managers التالية:
 
 | Repository                                                                                   | Instructions                            |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -265,9 +263,9 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### الخطوة الثانية. قم بإعداد ال shell الخاص بك
 
-Configure your shell to initialize starship. Select yours from the list below:
+لإعداد ال starship قم بإعداد ال shell الخاص بك. اختر ما يناسبك من هذه القائمة:
 
 <details>
 <summary>Bash</summary>
@@ -283,7 +281,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+عليك بإستخدام [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) مع Cmd. قم بإنشاء ملف في المسار `%LocalAppData%\clink\starship.lua` و ضع فيه المحتوى التالي:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -300,7 +298,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+ملاحظة: فقط +Elvish v0.18 مدعوم
 
 </details>
 
@@ -390,7 +388,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### الخطوة الثالثة. تهيئة starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
@@ -417,6 +415,14 @@ If you're looking to further customize Starship:
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Dimension](https://dimension.dev/)
 
 <p align="center">
     <br>

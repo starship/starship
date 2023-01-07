@@ -55,11 +55,10 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    ```sh
    brew install starship
    ```
-
-   Com o [Scoop](https://scoop.sh):
+   Com o [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Adicione o script de inicialização no arquivo de configuração do seu shell:
@@ -120,9 +119,9 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Elvish
 
-   ::: atenção
+   ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Apenas elvish v0.18 ou superior é suportado.
 
    :::
 
@@ -148,13 +147,13 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Nushell
 
-   ::: atenção
+   ::: warning
 
-   This will change in the future. Somente Nushell v0.61+ é suportado.
+   Isto irá mudar no futuro. Somente Nushell v0.61+ é suportado.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Adicione o seguinte ao final do seu arquivo env do Nushell (encontre-o executando `$nu.env-path` no Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu

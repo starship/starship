@@ -102,11 +102,19 @@ fn get_setup_cfg_version(context: &Context, config: &PackageConfig) -> Option<St
 }
 
 fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let file_contents = context.read_file_from_pwd("build.gradle")?;
-    let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap();
-    let caps = re.captures(&file_contents)?;
+    context
+        .read_file_from_pwd("gradle.properties")
+        .and_then(|contents| {
+            let re = Regex::new(r"(?m)^\s*version\s*=\s*(?P<version>.*)").unwrap();
+            let caps = re.captures(&contents)?;
+            format_version(&caps["version"], config.version_format)
+        }).or_else(|| {
+            let build_file_contents = context.read_file_from_pwd("build.gradle")?;
+            let re = Regex::new(r#"(?m)^version ['"](?P<version>[^'"]+)['"]$"#).unwrap(); /*dark magic*/
+            let caps = re.captures(&build_file_contents)?;
+            format_version(&caps["version"], config.version_format)
 
-    format_version(&caps["version"], config.version_format)
+        })
 }
 
 fn get_composer_version(context: &Context, config: &PackageConfig) -> Option<String> {
@@ -150,9 +158,9 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
     let mut in_ver = false;
     let mut depth = 0;
     loop {
-        match reader.read_event(&mut buf) {
+        match reader.read_event_into(&mut buf) {
             Ok(QXEvent::Start(ref e)) => {
-                in_ver = depth == 1 && e.name() == b"version";
+                in_ver = depth == 1 && e.name().as_ref() == b"version";
                 depth += 1;
             }
             Ok(QXEvent::End(_)) => {
@@ -160,7 +168,7 @@ fn get_maven_version(context: &Context, config: &PackageConfig) -> Option<String
                 depth -= 1;
             }
             Ok(QXEvent::Text(t)) if in_ver => {
-                let ver = t.unescape_and_decode(&reader).ok();
+                let ver = t.unescape().ok().map(std::borrow::Cow::into_owned);
                 return match ver {
                     // Ignore version which is just a property reference
                     Some(ref v) if !v.starts_with('$') => format_version(v, config.version_format),
@@ -219,12 +227,12 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
 
     let mut cargo_toml: toml::Value = toml::from_str(&file_contents).ok()?;
     let cargo_version = cargo_toml.get("package").and_then(|p| p.get("version"));
-    let raw_version = if let Some(v) = cargo_version.and_then(|v| v.as_str()) {
+    let raw_version = if let Some(v) = cargo_version.and_then(toml::Value::as_str) {
         // regular version string
         v
     } else if cargo_version
         .and_then(|v| v.get("workspace"))
-        .and_then(|w| w.as_bool())
+        .and_then(toml::Value::as_bool)
         .unwrap_or_default()
     {
         // workspace version string (`package.version.worspace = true`)
@@ -341,7 +349,7 @@ fn format_version(version: &str, version_format: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::{test::ModuleRenderer, utils::CommandOutput};
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
     use std::io::Write;
@@ -518,7 +526,7 @@ license = "MIT"
 }
 "##
                     .to_owned(),
-                    stderr: "".to_owned(),
+                    stderr: String::new(),
                 }),
             )
             .path(project_dir.path())
@@ -960,6 +968,29 @@ java {
         expect_output(&project_dir, None, None);
         project_dir.close()
     }
+    #[test]
+    fn test_extract_grade_version_from_properties() -> io::Result<()> {
+        let config_name = "gradle.properties";
+        let config_content = "
+            version=1.2.3
+            ";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
+    #[test]
+    fn test_extract_grade_version_from_properties_with_comment_and_whitespace() -> io::Result<()> {
+        let config_name = "gradle.properties";
+        let config_content = "
+            # or use -Pversion=0.0.1
+            version = 1.2.3
+            ";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
 
     #[test]
     fn test_extract_mix_version() -> io::Result<()> {
@@ -1398,7 +1429,7 @@ environment:
         let text = String::from(contains.unwrap_or(""));
         let expected = Some(format!(
             "is {} ",
-            Color::Fixed(208).bold().paint(format!("📦 {}", text))
+            Color::Fixed(208).bold().paint(format!("📦 {text}"))
         ));
 
         if contains.is_some() {

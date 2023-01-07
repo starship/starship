@@ -1,7 +1,7 @@
 [character]
 success_symbol = "[>](bold green)"
 error_symbol = "[x](bold red)"
-vicmd_symbol = "[<](bold green)"
+vimcmd_symbol = "[<](bold green)"
 
 [git_commit]
 tag_symbol = " tag "
@@ -15,6 +15,9 @@ deleted = "x"
 
 [aws]
 symbol = "aws "
+
+[bun]
+symbol = "bun "
 
 [c]
 symbol = "C "
@@ -55,11 +58,20 @@ symbol = "exs "
 [elm]
 symbol = "elm "
 
+[fennel]
+symbol = "fnl "
+
 [git_branch]
 symbol = "git "
 
 [golang]
 symbol = "go "
+
+[gradle]
+symbol = "gradle "
+
+[guix_shell]
+symbol = "guix "
 
 [hg_branch]
 symbol = "hg "
@@ -82,6 +94,9 @@ symbol = "nodejs "
 [memory_usage]
 symbol = "memory "
 
+[meson]
+symbol = "meson "
+
 [nim]
 symbol = "nim "
 
@@ -91,6 +106,47 @@ symbol = "nix "
 [ocaml]
 symbol = "ml "
 
+[opa]
+symbol = "opa "
+
+[os.symbols]
+Alpine = "alp "
+Amazon = "amz "
+Android = "andr "
+Arch = "rch "
+CentOS = "cent "
+Debian = "deb "
+DragonFly = "dfbsd "
+Emscripten = "emsc "
+EndeavourOS = "ndev "
+Fedora = "fed "
+FreeBSD = "fbsd "
+Garuda = "garu "
+Gentoo = "gent "
+HardenedBSD = "hbsd "
+Illumos = "lum "
+Linux = "lnx "
+Macos = "mac "
+Manjaro = "mjo "
+Mariner = "mrn "
+MidnightBSD = "mid "
+Mint = "mint "
+NetBSD = "nbsd "
+NixOS = "nix "
+OpenBSD = "obsd "
+openSUSE = "osuse "
+OracleLinux = "orac "
+Pop = "pop "
+Raspbian = "rasp "
+Redhat = "rhl "
+RedHatEnterprise = "rhel "
+Redox = "redox "
+Solus = "sol "
+SUSE = "suse "
+Ubuntu = "ubnt "
+Unknown = "unk "
+Windows = "win "
+
 [package]
 symbol = "pkg "
 
@@ -99,6 +155,9 @@ symbol = "pl "
 
 [php]
 symbol = "php "
+
+[pijul_channel]
+symbol = "pijul "
 
 [pulumi]
 symbol = "pulumi "
@@ -124,8 +183,17 @@ symbol = "scala "
 [spack]
 symbol = "spack "
 
+[status]
+symbol = "[x](bold red) "
+
 [sudo]
 symbol = "sudo "
 
 [swift]
 symbol = "swift "
+
+[terraform]
+symbol = "terraform "
+
+[zig]
+symbol = "zig "

@@ -1,3 +1,6 @@
+[bun]
+format = "via [$symbol]($style)"
+
 [buf]
 format = "via [$symbol]($style)"
 
@@ -31,7 +34,16 @@ format = 'via [$symbol]($style)'
 [erlang]
 format = 'via [$symbol]($style)'
 
+[fennel]
+format = 'via [$symbol]($style)'
+
 [golang]
+format = 'via [$symbol]($style)'
+
+[gradle]
+format = 'via [$symbol]($style)'
+
+[haxe]
 format = 'via [$symbol]($style)'
 
 [helm]
@@ -46,6 +58,9 @@ format = 'via [$symbol]($style)'
 [lua]
 format = 'via [$symbol]($style)'
 
+[meson]
+format = 'via [$symbol]($style)'
+
 [nim]
 format = 'via [$symbol]($style)'
 
@@ -54,6 +69,9 @@ format = 'via [$symbol]($style)'
 
 [ocaml]
 format = 'via [$symbol(\($switch_indicator$switch_name\) )]($style)'
+
+[opa]
+format = 'via [$symbol]($style)'
 
 [perl]
 format = 'via [$symbol]($style)'
