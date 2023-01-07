@@ -229,7 +229,7 @@ starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
 
 Beberapa shells mendukung continuation prompt bersamaan dengan prompt biasa. Prompt tersebutlah yang akan dirender daripada prompt biasa ketika pengguna memasukkan perintah yang kurang lengkap (seperti tanda kurung atau tanda kutipan tunggal).
 
-Starship dapat mengatur continuation prompt dengan opsi `continuation_prompt`. Prompt bawaannya adalah `"[∙](bright-black) "`.
+Starship dapat mengatur continuation prompt dengan opsi `continuation_prompt`. The default prompt is `'[∙](bright-black) '`.
 
 Catatan: `continuation_prompt` harus diubah menjadi string literal tanpa variabel apapun.
 
@@ -244,8 +244,8 @@ Catatan: Continuation prompts hanya tersedia pada beberapa shells berikut:
 ```toml
 # ~/.config/starship.toml
 
-# Continuation prompt yang menampilkan dua panah solid
-continuation_prompt = "▶▶"
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = '▶▶ '
 ```
 
 ## Penataan String
