@@ -244,7 +244,7 @@ Nota: Los prompts de continuación solo están disponibles en los siguientes int
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Un prompt de continuación que muestra dos flechas rellenas
 continuation_prompt = '▶▶ '
 ```
 
