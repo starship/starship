@@ -244,7 +244,7 @@ Nota: os prompts de continuação estão disponíveis apenas nos seguintes shell
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Um prompt de continuação que exibe duas setas preenchidas
 continuation_prompt = '▶▶ '
 ```
 
