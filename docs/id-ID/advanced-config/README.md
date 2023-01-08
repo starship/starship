@@ -244,7 +244,7 @@ Catatan: Continuation prompts hanya tersedia pada beberapa shells berikut:
 ```toml
 # ~/.config/starship.toml
 
-# A continuation prompt that displays two filled in arrows
+# Continuation prompt yang menampilkan dua panah solid
 continuation_prompt = '▶▶ '
 ```
 
