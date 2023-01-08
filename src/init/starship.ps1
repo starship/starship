@@ -23,7 +23,7 @@ $null = New-Module starship {
         }
     }
 
-    function Invoke-Native {
+    function Build-ProcessInfo {
         param($Executable, $Arguments)
         $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
             StandardOutputEncoding = [System.Text.Encoding]::UTF8;
@@ -39,8 +39,7 @@ $null = New-Module starship {
             foreach ($arg in $Arguments) {
                 $startInfo.ArgumentList.Add($arg);
             }
-        }
-        else {
+        } else {
             # Build an arguments string which follows the C++ command-line argument quoting rules
             # See: https://docs.microsoft.com/en-us/previous-versions//17w5ykft(v=vs.85)?redirectedfrom=MSDN
             $escaped = $Arguments | ForEach-Object {
@@ -51,7 +50,12 @@ $null = New-Module starship {
             }
             $startInfo.Arguments = $escaped -Join ' ';
         }
-        $process = [System.Diagnostics.Process]::Start($startInfo)
+        $startInfo
+    }
+
+    function Invoke-Native {
+        param($Executable, $Arguments)
+        $process = [System.Diagnostics.Process]::Start((Build-ProcessInfo -Executable $Executable -Arguments $Arguments))
 
         # Read the output and error streams asynchronously
         # Avoids potential deadlocks when the child process fills one of the buffers
@@ -156,9 +160,17 @@ $null = New-Module starship {
                 ""
             }
         } else {
-            $promptText = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
-            $arguments += "--right"
-            $rpromptText = Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+            $lproc = [System.Diagnostics.Process]::Start((Build-ProcessInfo -Executable ::STARSHIP:: -Arguments $arguments))
+            $rproc = [System.Diagnostics.Process]::Start((Build-ProcessInfo -Executable ::STARSHIP:: -Arguments ($arguments + "--right")))
+            $lsout = $lproc.StandardOutput.ReadToEndAsync()
+            $rsout = $rproc.StandardOutput.ReadToEndAsync()
+            $lserr = $lproc.StandardError.ReadToEndAsync()
+            $rserr = $rproc.StandardError.ReadToEndAsync()
+            [System.Threading.Tasks.Task]::WaitAll(@($lsout, $rsout, $lserr, $rserr))
+            if ($lserr.Result.Trim() -ne '') { $host.ui.WriteErrorLine($lserr.Result) }
+            if ($rserr.Result.Trim() -ne '') { $host.ui.WriteErrorLine($rserr.Result) }
+            $promptText  = $lsout.Result;
+            $rpromptText = $rsout.Result;
         }
 
         $promptLines = $promptText.Split("`n")
