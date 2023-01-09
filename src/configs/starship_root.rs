@@ -36,6 +36,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "kubernetes",
     "directory",
     "vcsh",
+    "fossil_branch",
     "git_branch",
     "git_commit",
     "git_state",
