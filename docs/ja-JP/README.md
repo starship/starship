@@ -4,7 +4,7 @@ heroImage: /logo.svg
 heroText:
 tagline: シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！
 actionText: Get Started →
-actionLink: ./ja-JP/guide/
+actionLink: ./guide/
 features:
   - 
     title: 互換性優先
