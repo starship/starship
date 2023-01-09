@@ -25,6 +25,7 @@ mod erlang;
 mod fennel;
 mod fill;
 mod fossil_branch;
+mod fossil_metrics;
 mod gcloud;
 mod git_branch;
 mod git_commit;
@@ -128,6 +129,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "fennel" => fennel::module(context),
             "fill" => fill::module(context),
             "fossil_branch" => fossil_branch::module(context),
+            "fossil_metrics" => fossil_metrics::module(context),
             "gcloud" => gcloud::module(context),
             "git_branch" => git_branch::module(context),
             "git_commit" => git_commit::module(context),
@@ -242,6 +244,7 @@ pub fn description(module: &str) -> &'static str {
         "fennel" => "The currently installed version of Fennel",
         "fill" => "Fills the remaining space on the line with a pad string",
         "fossil_branch" => "The active branch of the check-out in your current directory",
+        "fossil_metrics" => "The currently added/deleted lines in your check-out",
         "gcloud" => "The current GCP client configuration",
         "git_branch" => "The active branch of the repo in your current directory",
         "git_commit" => "The active commit (and tag if any) of the repo in your current directory",
