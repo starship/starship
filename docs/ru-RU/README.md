@@ -55,11 +55,10 @@ description: Starship - минимальная, быстрая и бесконе
    ```sh
    brew install starship
    ```
-
-   С [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Добавить сценарий инициализации в конфигурационный файл вашей оболочки:
@@ -120,7 +119,11 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Elvish
 
-   ::: warning Поддерживается только elvish v0.17 или выше. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    Добавьте следующую строку в конец `~/.elvish/rc.elv`:
 
@@ -144,7 +147,13 @@ description: Starship - минимальная, быстрая и бесконе
 
    #### Nushell
 
-   ::: warning Это будет изменено. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.61+ is supported.
+
+   :::
+
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -153,8 +162,6 @@ description: Starship - минимальная, быстрая и бесконе
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 

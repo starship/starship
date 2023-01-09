@@ -31,6 +31,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("pulumi");
     let config = PulumiConfig::try_load(module.config);
 
+    let project_file_in_cwd = context
+        .try_begin_scan()?
+        .set_files(&["Pulumi.yaml", "Pulumi.yml"])
+        .is_match();
+
+    if !project_file_in_cwd && !config.search_upwards {
+        return None;
+    }
+
     let project_file = find_package_file(&context.logical_dir)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -92,7 +101,7 @@ fn parse_version(version: &str) -> &str {
     version
 }
 
-/// Find a file describing a Pulumi package in the current directory (or any parrent directory).
+/// Find a file describing a Pulumi package in the current directory (or any parent directory).
 fn find_package_file(path: &Path) -> Option<PathBuf> {
     for path in path.ancestors() {
         log::trace!("Looking for package file in {:?}", path);
@@ -114,7 +123,7 @@ fn find_package_file(path: &Path) -> Option<PathBuf> {
 /// Pulumi has no CLI option that is fast enough to get this for us, but finding
 /// the location is simple. We get it ourselves.
 fn stack_name(project_file: &Path, context: &Context) -> Option<String> {
-    let mut file = File::open(&project_file).ok()?;
+    let mut file = File::open(project_file).ok()?;
 
     let mut contents = String::new();
     file.read_to_string(&mut contents).ok()?;
@@ -160,7 +169,7 @@ fn get_pulumi_workspace(context: &Context, name: &str, project_file: &Path) -> O
         hasher.update(project_file.to_str()?.as_bytes());
         crate::utils::encode_to_hex(&hasher.finalize())
     };
-    let unique_file_name = format!("{}-{}-workspace.json", name, project_file);
+    let unique_file_name = format!("{name}-{project_file}-workspace.json");
     let mut path = pulumi_home_dir(context)?;
     path.push("workspaces");
     path.push(unique_file_name);
@@ -199,7 +208,7 @@ mod tests {
     use super::*;
     use crate::context::Target;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn pulumi_version_release() {
@@ -276,9 +285,9 @@ mod tests {
         yaml.sync_all()?;
 
         let workspace_path = root.join(".pulumi").join("workspaces");
-        let _ = std::fs::create_dir_all(&workspace_path)?;
+        std::fs::create_dir_all(&workspace_path)?;
         let workspace_path = &workspace_path.join("starship-test-workspace.json");
-        let mut workspace = File::create(&workspace_path)?;
+        let mut workspace = File::create(workspace_path)?;
         serde_json::to_writer_pretty(
             &mut workspace,
             &serde_json::json!(
@@ -290,9 +299,9 @@ mod tests {
         workspace.sync_all()?;
 
         let credential_path = root.join(".pulumi");
-        let _ = std::fs::create_dir_all(&credential_path)?;
+        std::fs::create_dir_all(&credential_path)?;
         let credential_path = &credential_path.join("credentials.json");
-        let mut credential = File::create(&credential_path)?;
+        let mut credential = File::create(credential_path)?;
         serde_json::to_writer_pretty(
             &mut credential,
             &serde_json::json!(
@@ -343,9 +352,9 @@ mod tests {
         yaml.sync_all()?;
 
         let workspace_path = root.join(".pulumi").join("workspaces");
-        let _ = std::fs::create_dir_all(&workspace_path)?;
+        std::fs::create_dir_all(&workspace_path)?;
         let workspace_path = &workspace_path.join("starship-test-workspace.json");
-        let mut workspace = File::create(&workspace_path)?;
+        let mut workspace = File::create(workspace_path)?;
         serde_json::to_writer_pretty(
             &mut workspace,
             &serde_json::json!(
@@ -357,9 +366,9 @@ mod tests {
         workspace.sync_all()?;
 
         let credential_path = root.join(".pulumi");
-        let _ = std::fs::create_dir_all(&credential_path)?;
+        std::fs::create_dir_all(&credential_path)?;
         let credential_path = &credential_path.join("starship-test-credential.json");
-        let mut credential = File::create(&credential_path)?;
+        let mut credential = File::create(credential_path)?;
         serde_json::to_writer_pretty(
             &mut credential,
             &serde_json::json!(
@@ -408,5 +417,48 @@ mod tests {
         assert_eq!(expected, rendered.expect("a result"));
         dir.close()?;
         Ok(())
+    }
+
+    #[test]
+    fn do_not_search_upwards() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let child_dir = dir.path().join("child");
+        std::fs::create_dir(&child_dir)?;
+        let yaml = File::create(dir.path().join("Pulumi.yaml"))?;
+        yaml.sync_all()?;
+
+        let actual = ModuleRenderer::new("pulumi")
+            .path(&child_dir)
+            .logical_path(&child_dir)
+            .config(toml::toml! {
+                [pulumi]
+                format = "in [$symbol($stack)]($style) "
+                search_upwards = false
+            })
+            .collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn search_upwards_default() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let child_dir = dir.path().join("child");
+        std::fs::create_dir(&child_dir)?;
+        let yaml = File::create(dir.path().join("Pulumi.yaml"))?;
+        yaml.sync_all()?;
+
+        let actual = ModuleRenderer::new("pulumi")
+            .path(&child_dir)
+            .logical_path(&child_dir)
+            .config(toml::toml! {
+                [pulumi]
+                format = "in [$symbol($stack)]($style) "
+            })
+            .collect();
+        let expected = Some(format!("in {} ", Color::Fixed(5).bold().paint(" ")));
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }

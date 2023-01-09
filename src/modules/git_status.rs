@@ -34,6 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     //Return None if not in git repository
     context.get_repo().ok()?;
+
     if let Some(git_status) = git_status_wsl(context, &config) {
         if git_status.is_empty() {
             return None;
@@ -372,7 +373,12 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 
     // Ensure this is WSL
     // This is lowercase in WSL1 and uppercase in WSL2, just skip the first letter
-    if !uname().release().contains("icrosoft") {
+    if !uname()
+        .ok()?
+        .release()
+        .to_string_lossy()
+        .contains("icrosoft")
+    {
         return None;
     }
 
@@ -431,7 +437,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
                 crate::config::get_config_path().unwrap_or_else(|| "/dev/null".to_string()),
             )
             .env("WSLENV", wslenv)
-            .args(&["module", "git_status", "--path", winpath]);
+            .args(["module", "git_status", "--path", winpath]);
             c
         })
         .and_then(|mut c| c.output())
@@ -464,7 +470,7 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{ANSIStrings, Color};
+    use nu_ansi_term::{AnsiStrings, Color};
     use std::ffi::OsStr;
     use std::fs::{self, File};
     use std::io::{self, prelude::*};
@@ -473,23 +479,11 @@ mod tests {
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
     use crate::utils::create_command;
 
-    /// Right after the calls to git the filesystem state may not have finished
-    /// updating yet causing some of the tests to fail. These barriers are placed
-    /// after each call to git.
-    /// This barrier is windows-specific though other operating systems may need it
-    /// in the future.
-    #[cfg(not(windows))]
-    fn barrier() {}
-    #[cfg(windows)]
-    fn barrier() {
-        std::thread::sleep(std::time::Duration::from_millis(500));
-    }
-
     #[allow(clippy::unnecessary_wraps)]
     fn format_output(symbols: &str) -> Option<String> {
         Some(format!(
             "{} ",
-            Color::Red.bold().paint(format!("[{}]", symbols))
+            Color::Red.bold().paint(format!("[{symbols}]"))
         ))
     }
 
@@ -548,7 +542,7 @@ mod tests {
         ahead(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("⇡");
 
@@ -568,7 +562,7 @@ mod tests {
                 [git_status]
                 ahead="⇡$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("⇡1");
 
@@ -583,7 +577,7 @@ mod tests {
         diverge(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("⇕");
 
@@ -602,7 +596,7 @@ mod tests {
                 [git_status]
                 diverged=r"⇕⇡$ahead_count⇣$behind_count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("⇕⇡1⇣1");
 
@@ -619,7 +613,7 @@ mod tests {
                 [git_status]
                 up_to_date="✓"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("✓");
 
@@ -634,7 +628,7 @@ mod tests {
         create_conflict(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("=");
 
@@ -653,7 +647,7 @@ mod tests {
                 [git_status]
                 conflicted = "=$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("=1");
 
@@ -668,7 +662,7 @@ mod tests {
         create_untracked(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("?");
 
@@ -687,7 +681,7 @@ mod tests {
                 [git_status]
                 untracked = "?$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("?1");
 
@@ -702,13 +696,12 @@ mod tests {
         create_untracked(repo_dir.path())?;
 
         create_command("git")?
-            .args(&["config", "status.showUntrackedFiles", "no"])
+            .args(["config", "status.showUntrackedFiles", "no"])
             .current_dir(repo_dir.path())
             .output()?;
-        barrier();
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = None;
 
@@ -719,18 +712,16 @@ mod tests {
     #[test]
     fn shows_stashed() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
-        barrier();
 
         create_stash(repo_dir.path())?;
 
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD"])
+            .args(["reset", "--hard", "HEAD"])
             .current_dir(repo_dir.path())
             .output()?;
-        barrier();
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("$");
 
@@ -741,23 +732,20 @@ mod tests {
     #[test]
     fn shows_stashed_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
-        barrier();
 
         create_stash(repo_dir.path())?;
-        barrier();
 
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD"])
+            .args(["reset", "--hard", "HEAD"])
             .current_dir(repo_dir.path())
             .output()?;
-        barrier();
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
                 stashed = r"\$$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("$1");
 
@@ -772,7 +760,7 @@ mod tests {
         create_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("!");
 
@@ -791,7 +779,7 @@ mod tests {
                 [git_status]
                 modified = "!$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("!1");
 
@@ -806,7 +794,7 @@ mod tests {
         create_added(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("!");
 
@@ -821,7 +809,7 @@ mod tests {
         create_staged(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("+");
 
@@ -840,11 +828,11 @@ mod tests {
                 [git_status]
                 staged = "+[$count](green)"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = Some(format!(
             "{} ",
-            ANSIStrings(&[
+            AnsiStrings(&[
                 Color::Red.bold().paint("[+"),
                 Color::Green.paint("1"),
                 Color::Red.bold().paint("]"),
@@ -862,7 +850,7 @@ mod tests {
         create_staged_and_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("!+");
 
@@ -877,7 +865,7 @@ mod tests {
         create_renamed(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("»");
 
@@ -896,7 +884,7 @@ mod tests {
                 [git_status]
                 renamed = "»$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("»1");
 
@@ -911,7 +899,7 @@ mod tests {
         create_renamed_and_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("»!");
 
@@ -926,7 +914,7 @@ mod tests {
         create_deleted(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("✘");
 
@@ -945,7 +933,7 @@ mod tests {
                 [git_status]
                 deleted = "✘$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("✘1");
 
@@ -960,7 +948,7 @@ mod tests {
         create_staged_and_ignored(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("+");
 
@@ -974,7 +962,7 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_command("git")?
-            .args(&[
+            .args([
                 OsStr::new("config"),
                 OsStr::new("core.worktree"),
                 worktree_dir.path().as_os_str(),
@@ -985,7 +973,7 @@ mod tests {
         File::create(worktree_dir.path().join("test_file"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("✘?");
 
@@ -1004,20 +992,19 @@ mod tests {
         File::create(repo_dir.path().join("a"))?.sync_all()?;
         File::create(repo_dir.path().join("b"))?.sync_all()?;
         create_command("git")?
-            .args(&["add", "--all"])
-            .current_dir(&repo_dir.path())
+            .args(["add", "--all"])
+            .current_dir(repo_dir.path())
             .output()?;
         create_command("git")?
-            .args(&["commit", "-m", "add new files", "--no-gpg-sign"])
-            .current_dir(&repo_dir.path())
+            .args(["commit", "-m", "add new files", "--no-gpg-sign"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         fs::remove_file(repo_dir.path().join("a"))?;
         fs::rename(repo_dir.path().join("b"), repo_dir.path().join("c"))?;
-        barrier();
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .config(toml::toml! {
                 [git_status]
                 ahead = "A"
@@ -1037,81 +1024,71 @@ mod tests {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
         create_command("git")?
-            .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
-            .current_dir(&repo_dir)
+            .args(["commit", "-am", "Update readme", "--no-gpg-sign"])
+            .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
 
     fn behind(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD^"])
+            .args(["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
 
     fn diverge(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD^"])
+            .args(["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         fs::write(repo_dir.join("Cargo.toml"), " ")?;
 
         create_command("git")?
-            .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
+            .args(["commit", "-am", "Update readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
 
     fn create_conflict(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD^"])
+            .args(["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         fs::write(repo_dir.join("readme.md"), "# goodbye")?;
 
         create_command("git")?
-            .args(&["add", "."])
+            .args(["add", "."])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         create_command("git")?
-            .args(&["commit", "-m", "Change readme", "--no-gpg-sign"])
+            .args(["commit", "-m", "Change readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         create_command("git")?
-            .args(&["pull", "--rebase"])
+            .args(["pull", "--rebase"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
 
     fn create_stash(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
-        barrier();
 
         create_command("git")?
-            .args(&["stash", "--all"])
+            .args(["stash", "--all"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1126,10 +1103,9 @@ mod tests {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
         create_command("git")?
-            .args(&["add", "-A", "-N"])
+            .args(["add", "-A", "-N"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1144,10 +1120,9 @@ mod tests {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
         create_command("git")?
-            .args(&["add", "."])
+            .args(["add", "."])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
@@ -1157,10 +1132,9 @@ mod tests {
         file.sync_all()?;
 
         create_command("git")?
-            .args(&["add", "."])
+            .args(["add", "."])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         writeln!(&mut file, "modified")?;
         file.sync_all()?;
@@ -1170,32 +1144,28 @@ mod tests {
 
     fn create_renamed(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["mv", "readme.md", "readme.md.bak"])
+            .args(["mv", "readme.md", "readme.md.bak"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         create_command("git")?
-            .args(&["add", "-A"])
+            .args(["add", "-A"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         Ok(())
     }
 
     fn create_renamed_and_modified(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["mv", "readme.md", "readme.md.bak"])
+            .args(["mv", "readme.md", "readme.md.bak"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         create_command("git")?
-            .args(&["add", "-A"])
+            .args(["add", "-A"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         let mut file = File::create(repo_dir.join("readme.md.bak"))?;
         writeln!(&mut file, "modified")?;
@@ -1216,10 +1186,9 @@ mod tests {
         file.sync_all()?;
 
         create_command("git")?
-            .args(&["add", ".gitignore"])
+            .args(["add", ".gitignore"])
             .current_dir(repo_dir)
             .output()?;
-        barrier();
 
         let mut file = File::create(repo_dir.join("ignored.txt"))?;
         writeln!(&mut file, "modified")?;

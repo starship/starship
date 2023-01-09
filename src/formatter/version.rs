@@ -1,5 +1,6 @@
 use super::string_formatter::StringFormatterError;
 use super::StringFormatter;
+use crate::segment;
 use once_cell::sync::Lazy;
 use std::ops::Deref;
 use versions::Versioning;
@@ -9,9 +10,9 @@ pub struct VersionFormatter<'a> {
 }
 
 impl<'a> VersionFormatter<'a> {
-    /// Creates an instance of a VersionFormatter from a format string
+    /// Creates an instance of a `VersionFormatter` from a format string
     ///
-    /// Like the StringFormatter, this will throw an error when the string isn't
+    /// Like the `StringFormatter`, this will throw an error when the string isn't
     /// parseable.
     pub fn new(format: &'a str) -> Result<Self, StringFormatterError> {
         let formatter = StringFormatter::new(format)?;
@@ -56,7 +57,7 @@ impl<'a> VersionFormatter<'a> {
         formatted.map(|segments| {
             segments
                 .iter()
-                .map(|segment| segment.value())
+                .map(segment::Segment::value)
                 .collect::<String>()
         })
     }
@@ -70,7 +71,7 @@ impl<'a> VersionFormatter<'a> {
             Ok(formatted) => Some(formatted),
             Err(error) => {
                 log::warn!("Error formatting `{}` version:\n{}", module_name, error);
-                Some(format!("v{}", version))
+                Some(format!("v{version}"))
             }
         }
     }

@@ -160,7 +160,7 @@
 - **Mudah:** pemasangan singkat – mulai menggunakannya dalam hitungan menit.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Jelajahi dokumentasi Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -219,8 +219,6 @@ Alternatively, install Starship using any of the following package managers:
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -251,14 +249,17 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Install Starship using any of the following package managers:
 
-| Repository                                                                       | Instructions                            |
-| -------------------------------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
-| [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
-| [conda-forge](https://anaconda.org/conda-forge/starship)                         | `conda install -c conda-forge starship` |
-| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json) | `scoop install starship`                |
+| Repository                                                                                   | Instructions                            |
+| -------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
+| [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
+| [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship` |
+| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)             | `scoop install starship`                |
+| [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
 
 </details>
 
@@ -280,7 +281,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Kamu perlu menggunakan [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) pada Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -297,7 +298,7 @@ Tambahkan skrip berikut pada baris akhir `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -326,21 +327,20 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Run the following:
+Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
 
 ```sh
 mkdir ~/.cache/starship
 starship init nu | save ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+Lalu tambahkan baris berikut di baris terakhir konfigurasi Nushell (temukan dengan menjalankan `$nu.config-path`):
 
 ```sh
-starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.60+ is supported
+Note: Only Nushell v0.61+ is supported
 
 </details>
 
@@ -392,7 +392,7 @@ eval "$(starship init zsh)"
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-If you're looking to further customize Starship:
+Jika kamu ingin mengkustomisasi Starship lebih jauh:
 
 - **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
 
@@ -404,7 +404,7 @@ We are always looking for contributors of **all skill levels**! If you're lookin
 
 If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Jika kamu tertarik untuk membantu berkontribusi ke starship, silakan lihat [Pedoman Berkontribusi](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) kami. Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 Terinspirasi Oleh
 
@@ -416,9 +416,17 @@ Please check out these previous works that helped inspire the creation of starsh
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
 
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Dimension](https://dimension.dev/)
+
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Ikon roket Starship">
 </p>
 
 ## 📝 Lisensi

@@ -5,6 +5,7 @@ use super::utils::directory_win as directory_utils;
 use super::utils::path::PathExt as SPathExt;
 use indexmap::IndexMap;
 use path_slash::{PathBufExt, PathExt};
+use std::borrow::Cow;
 use std::iter::FromIterator;
 use std::path::{Path, PathBuf};
 use unicode_segmentation::UnicodeSegmentation;
@@ -22,7 +23,7 @@ use crate::formatter::StringFormatter;
 ///
 /// **Contraction**
 /// - Paths beginning with the home directory or with a git repo right inside
-///   the home directory will be contracted to `~`, or the set HOME_SYMBOL
+///   the home directory will be contracted to `~`, or the set `HOME_SYMBOL`
 /// - Paths containing a git repo will contract to begin at the repo root
 ///
 /// **Substitution**
@@ -51,7 +52,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Attempt repository path contraction (if we are in a git repository)
     // Otherwise use the logical path, automatically contracting
-    let repo = context.get_repo().ok();
+    let repo = if config.truncate_to_repo || config.repo_root_style.is_some() {
+        context.get_repo().ok()
+    } else {
+        None
+    };
     let dir_string = if config.truncate_to_repo {
         repo.and_then(|r| r.workdir.as_ref())
             .filter(|&root| root != &home_dir)
@@ -63,8 +68,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut is_truncated = dir_string.is_some();
 
     // the home directory if required.
-    let dir_string =
-        dir_string.unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol));
+    let dir_string = dir_string
+        .unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol).to_string());
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -89,14 +94,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             let contracted_home_dir = contract_path(display_dir, &home_dir, &home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
-                contracted_home_dir,
+                contracted_home_dir.to_string(),
                 &dir_string,
             )
         } else {
             String::from(config.truncation_symbol)
         }
     } else {
-        String::from("")
+        String::new()
     };
 
     let path_vec = match &repo.and_then(|r| r.workdir.as_ref()) {
@@ -110,13 +115,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 || ((num_segments_after_root - 1) as i64) < config.truncation_length
             {
                 let root = repo_path_vec[0];
-                let before = dir_string.replace(&contracted_path, "");
-                [prefix + &before, root.to_string(), after_repo_root]
+                let before = before_root_dir(&dir_string, &contracted_path);
+                [prefix + before.as_str(), root.to_string(), after_repo_root]
             } else {
-                ["".to_string(), "".to_string(), prefix + &dir_string]
+                [String::new(), String::new(), prefix + dir_string.as_str()]
             }
         }
-        _ => ["".to_string(), "".to_string(), prefix + &dir_string],
+        _ => [String::new(), String::new(), prefix + dir_string.as_str()],
     };
 
     let path_vec = if config.use_os_path_sep {
@@ -132,6 +137,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.repo_root_format
     };
     let repo_root_style = config.repo_root_style.unwrap_or(config.style);
+    let before_repo_root_style = config.before_repo_root_style.unwrap_or(config.style);
 
     let parsed = StringFormatter::new(display_format).and_then(|formatter| {
         formatter
@@ -139,6 +145,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "style" => Some(Ok(config.style)),
                 "read_only_style" => Some(Ok(config.read_only_style)),
                 "repo_root_style" => Some(Ok(repo_root_style)),
+                "before_repo_root_style" => Some(Ok(before_repo_root_style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -178,7 +185,7 @@ fn remove_extended_path_prefix(path: String) -> String {
     }
     // Trim any Windows extended-path prefix from the display path
     if let Some(unc) = try_trim_prefix(&path, r"\\?\UNC\") {
-        return format!(r"\\{}", unc);
+        return format!(r"\\{unc}");
     }
     if let Some(p) = try_trim_prefix(&path, r"\\?\") {
         return p.to_string();
@@ -204,13 +211,17 @@ fn is_readonly_dir(path: &Path) -> bool {
 ///
 /// Replaces the `top_level_path` in a given `full_path` with the provided
 /// `top_level_replacement`.
-fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement: &str) -> String {
+fn contract_path<'a>(
+    full_path: &'a Path,
+    top_level_path: &'a Path,
+    top_level_replacement: &'a str,
+) -> Cow<'a, str> {
     if !full_path.normalised_starts_with(top_level_path) {
         return full_path.to_slash_lossy();
     }
 
     if full_path.normalised_equals(top_level_path) {
-        return top_level_replacement.to_string();
+        return Cow::from(top_level_replacement);
     }
 
     // Because we've done a normalised path comparison above
@@ -221,12 +232,12 @@ fn contract_path(full_path: &Path, top_level_path: &Path, top_level_replacement:
         .strip_prefix(top_level_path.without_prefix())
         .unwrap_or(full_path);
 
-    format!(
+    Cow::from(format!(
         "{replacement}{separator}{path}",
         replacement = top_level_replacement,
         separator = "/",
         path = sub_path.to_slash_lossy()
-    )
+    ))
 }
 
 /// Contract the root component of a path based on the real path
@@ -319,7 +330,7 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
         .map(|word| -> String {
             let chars = UnicodeSegmentation::graphemes(word, true).collect::<Vec<&str>>();
             match word {
-                "" => "".to_string(),
+                "" => String::new(),
                 _ if chars.len() <= pwd_dir_length => word.to_string(),
                 _ if word.starts_with('.') => chars[..=pwd_dir_length].join(""),
                 _ => chars[..pwd_dir_length].join(""),
@@ -334,13 +345,21 @@ fn convert_path_sep(path: &str) -> String {
     return PathBuf::from_slash(path).to_string_lossy().into_owned();
 }
 
+/// Get the path before the git repo root by trim the most right repo name.
+fn before_root_dir(path: &str, repo: &str) -> String {
+    match path.rsplit_once(repo) {
+        Some((a, _)) => a.to_string(),
+        None => path.to_string(),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
     use crate::utils::home_dir;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     #[cfg(not(target_os = "windows"))]
     use std::os::unix::fs::symlink;
     #[cfg(target_os = "windows")]
@@ -424,7 +443,7 @@ mod tests {
         let top_level_path = Path::new("C:\\Users\\astronaut");
 
         let output = contract_path(full_path, top_level_path, "~");
-        assert_eq!(output, "C:");
+        assert_eq!(output, "C:/");
     }
 
     #[test]
@@ -484,7 +503,7 @@ mod tests {
 
     fn init_repo(path: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["init"])
+            .args(["init"])
             .current_dir(path)
             .output()
             .map(|_| ())
@@ -493,6 +512,8 @@ mod tests {
     fn make_known_tempdir(root: &Path) -> io::Result<(TempDir, String)> {
         fs::create_dir_all(root)?;
         let dir = TempDir::new_in(root)?;
+        // the .to_string_lossy().to_string() here looks weird but is required
+        // to convert it from a Cow.
         let path = dir
             .path()
             .file_name()
@@ -670,7 +691,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep(&format!("/foo/bar/{}/path", strange_sub)))
+                .paint(convert_path_sep(&format!("/foo/bar/{strange_sub}/path")))
         ));
 
         assert_eq!(expected, actual);
@@ -687,7 +708,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep(&format!("~/{}/starship", name)))
+                .paint(convert_path_sep(&format!("~/{name}/starship")))
         ));
 
         assert_eq!(expected, actual);
@@ -705,7 +726,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep(&format!("{}/engine/schematics", name)))
+                .paint(convert_path_sep(&format!("{name}/engine/schematics")))
         ));
 
         assert_eq!(expected, actual);
@@ -769,7 +790,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep(&format!("{}/thrusters/rocket", name)))
+                .paint(convert_path_sep(&format!("{name}/thrusters/rocket")))
         ));
 
         assert_eq!(expected, actual);
@@ -789,7 +810,7 @@ mod tests {
             })
             .path(&dir)
             .collect();
-        let dir_str = dir.to_slash_lossy();
+        let dir_str = dir.to_slash_lossy().to_string();
         let expected = Some(format!(
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(
@@ -819,7 +840,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&to_fish_style(
                 100,
-                dir.to_slash_lossy(),
+                dir.to_slash_lossy().to_string(),
                 ""
             )))
         ));
@@ -845,7 +866,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep(&format!("{}/rocket", name)))
+                .paint(convert_path_sep(&format!("{name}/rocket")))
         ));
 
         assert_eq!(expected, actual);
@@ -870,7 +891,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/thrusters/rocket",
-                to_fish_style(1, dir.to_slash_lossy(), "/thrusters/rocket")
+                to_fish_style(1, dir.to_slash_lossy().to_string(), "/thrusters/rocket")
             )))
         ));
 
@@ -992,7 +1013,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, tmp_dir.path().to_slash_lossy().to_string(), "")
             )))
         ));
 
@@ -1023,7 +1044,15 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(
+                    1,
+                    tmp_dir
+                        .path()
+                        .join("above-repo")
+                        .to_slash_lossy()
+                        .to_string(),
+                    ""
+                )
             )))
         ));
 
@@ -1090,7 +1119,7 @@ mod tests {
         let src_dir = repo_dir.join("src");
         let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
         let symlink_src_dir = symlink_dir.join("src");
-        fs::create_dir_all(&src_dir)?;
+        fs::create_dir_all(src_dir)?;
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
@@ -1116,7 +1145,7 @@ mod tests {
         let src_dir = repo_dir.join("src/meters/fuel-gauge");
         let symlink_dir = tmp_dir.path().join("rocket-controls-symlink");
         let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&src_dir)?;
+        fs::create_dir_all(src_dir)?;
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
@@ -1145,7 +1174,7 @@ mod tests {
             .join("above-repo")
             .join("rocket-controls-symlink");
         let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&src_dir)?;
+        fs::create_dir_all(src_dir)?;
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
@@ -1180,7 +1209,7 @@ mod tests {
             .join("above-repo")
             .join("rocket-controls-symlink");
         let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&src_dir)?;
+        fs::create_dir_all(src_dir)?;
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
@@ -1198,7 +1227,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().to_slash_lossy(), "")
+                to_fish_style(1, tmp_dir.path().to_slash_lossy().to_string(), "")
             )))
         ));
 
@@ -1217,7 +1246,7 @@ mod tests {
             .join("above-repo")
             .join("rocket-controls-symlink");
         let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&src_dir)?;
+        fs::create_dir_all(src_dir)?;
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
@@ -1235,7 +1264,15 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                to_fish_style(
+                    1,
+                    tmp_dir
+                        .path()
+                        .join("above-repo")
+                        .to_slash_lossy()
+                        .to_string(),
+                    ""
+                )
             )))
         ));
 
@@ -1254,7 +1291,7 @@ mod tests {
             .join("above-repo")
             .join("rocket-controls-symlink");
         let symlink_src_dir = symlink_dir.join("src/meters/fuel-gauge");
-        fs::create_dir_all(&src_dir)?;
+        fs::create_dir_all(src_dir)?;
         init_repo(&repo_dir).unwrap();
         symlink(&repo_dir, &symlink_dir)?;
 
@@ -1364,7 +1401,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep(&format!("…/{}/a/subpath", name)))
+                .paint(convert_path_sep(&format!("…/{name}/a/subpath")))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1389,7 +1426,7 @@ mod tests {
             "{} ",
             Color::Cyan
                 .bold()
-                .paint(convert_path_sep(&format!("~/{}/a/subpath", name)))
+                .paint(convert_path_sep(&format!("~/{name}/a/subpath")))
         ));
         assert_eq!(expected, actual);
         tmp_dir.close()
@@ -1659,12 +1696,14 @@ mod tests {
                 truncation_symbol = "…/"
                 truncate_to_repo = false
                 repo_root_style = "green"
+                before_repo_root_style = "blue"
             })
             .path(dir)
             .collect();
         let expected = Some(format!(
-            "{}{}repo{} ",
-            Color::Cyan.bold().paint(convert_path_sep("…/above/")),
+            "{}{}{}repo{} ",
+            Color::Blue.prefix(),
+            convert_path_sep("…/above/"),
             Color::Green.prefix(),
             Color::Cyan.bold().paint(convert_path_sep("/src/sub/path"))
         ));
@@ -1759,10 +1798,28 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(format!("~/{}/starship", name))
+            Color::Cyan.bold().paint(format!("~/{name}/starship"))
         ));
 
         assert_eq!(expected, actual);
         tmp_dir.close()
+    }
+
+    #[test]
+    fn parent_and_sub_git_repo_are_in_same_name_folder() {
+        assert_eq!(
+            before_root_dir("~/user/gitrepo/gitrepo", "gitrepo"),
+            "~/user/gitrepo/".to_string()
+        );
+
+        assert_eq!(
+            before_root_dir("~/user/gitrepo-diff/gitrepo", "gitrepo"),
+            "~/user/gitrepo-diff/".to_string()
+        );
+
+        assert_eq!(
+            before_root_dir("~/user/gitrepo-diff/gitrepo", "aaa"),
+            "~/user/gitrepo-diff/gitrepo".to_string()
+        );
     }
 }

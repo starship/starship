@@ -1,13 +1,17 @@
-[Return to Presets](./README.md#plain-text-symbols)
+[Volver a Preajustes](./README.md#plain-text-symbols)
 
-## Plain Text Symbols Preset
+## Preajuste Símbolos de Texto sin Formato
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Este preajuste cambia los símbolos a texto sin formato. Bueno si usted no tiene acceso a Unicode.
 
 ![Captura de pantalla del ajuste de los Símbolos de Texto Plano](/presets/img/plain-text-symbols.png)
 
 ### Configuración
 
-[Click to download TOML](/presets/toml/plain-text-symbols.toml)
+```sh
+starship preset plain-text-symbols > ~/.config/starship.toml
+```
+
+[Clic para descargar TOML](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml

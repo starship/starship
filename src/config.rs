@@ -1,12 +1,15 @@
+use crate::configs::Palette;
+use crate::context::Context;
 use crate::serde_utils::ValueDeserializer;
 use crate::utils;
-use ansi_term::Color;
+use nu_ansi_term::Color;
 use serde::{
     de::value::Error as ValueError, de::Error as SerdeError, Deserialize, Deserializer, Serialize,
 };
 
 use std::borrow::Cow;
 use std::clone::Clone;
+use std::collections::HashMap;
 use std::io::ErrorKind;
 
 use std::env;
@@ -34,23 +37,37 @@ where
         }
     }
 
-    /// Helper function that will call ModuleConfig::from_config(config) if config is Some,
-    /// or ModuleConfig::default() if config is None.
+    /// Helper function that will call `ModuleConfig::from_config(config)  if config is Some,
+    /// or `ModuleConfig::default()` if config is None.
     fn try_load(config: Option<&'a Value>) -> Self {
         config.map(Self::load).unwrap_or_default()
     }
 }
 
 impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
-    /// Create ValueDeserializer wrapper and use it to call Deserialize::deserialize on it.
+    /// Create `ValueDeserializer` wrapper and use it to call `Deserialize::deserialize` on it.
     fn from_config(config: &'a Value) -> Result<Self, ValueError> {
         let deserializer = ValueDeserializer::new(config);
-        T::deserialize(deserializer)
+        T::deserialize(deserializer).or_else(|err| {
+            // If the error is an unrecognized key, print a warning and run
+            // deserialize ignoring that error. Otherwise, just return the error
+            if err.to_string().contains("Unknown key") {
+                log::warn!("{}", err);
+                let deserializer2 = ValueDeserializer::new(config).with_allow_unknown_keys();
+                T::deserialize(deserializer2)
+            } else {
+                Err(err)
+            }
+        })
     }
 }
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(untagged)]
 pub enum Either<A, B> {
     First(A),
@@ -72,8 +89,8 @@ where
     {
         let either = Either::<Vec<T>, T>::deserialize(deserializer)?;
         match either {
-            Either::First(v) => Ok(VecOr(v)),
-            Either::Second(s) => Ok(VecOr(vec![s])),
+            Either::First(v) => Ok(Self(v)),
+            Either::Second(s) => Ok(Self(vec![s])),
         }
     }
 }
@@ -134,7 +151,7 @@ impl StarshipConfig {
     fn config_from_file() -> Option<Value> {
         let file_path = get_config_path()?;
 
-        let toml_content = match utils::read_file(&file_path) {
+        let toml_content = match utils::read_file(file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
@@ -244,19 +261,19 @@ impl StarshipConfig {
     pub fn get_custom_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["custom"])?.as_table()
     }
-    /// Get the table of all the registered env_var modules, if any
+    /// Get the table of all the registered `env_var` modules, if any
     pub fn get_env_var_modules(&self) -> Option<&toml::value::Table> {
         self.get_config(&["env_var"])?.as_table()
     }
 }
 
 /// Deserialize a style string in the starship format with serde
-pub fn deserialize_style<'de, D>(de: D) -> Result<ansi_term::Style, D::Error>
+pub fn deserialize_style<'de, D>(de: D) -> Result<nu_ansi_term::Style, D::Error>
 where
     D: Deserializer<'de>,
 {
     Cow::<'_, str>::deserialize(de).and_then(|s| {
-        parse_style_string(s.as_ref()).ok_or_else(|| D::Error::custom("Invalid style string"))
+        parse_style_string(s.as_ref(), None).ok_or_else(|| D::Error::custom("Invalid style string"))
     })
 }
 
@@ -268,12 +285,16 @@ where
  - 'bold'
  - 'italic'
  - 'inverted'
- - '<color>'       (see the parse_color_string doc for valid color strings)
+ - 'blink'
+ - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
-pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
+pub fn parse_style_string(
+    style_string: &str,
+    context: Option<&Context>,
+) -> Option<nu_ansi_term::Style> {
     style_string
         .split_whitespace()
-        .fold(Some(ansi_term::Style::new()), |maybe_style, token| {
+        .fold(Some(nu_ansi_term::Style::new()), |maybe_style, token| {
             maybe_style.and_then(|style| {
                 let token = token.to_lowercase();
 
@@ -293,6 +314,9 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                     "italic" => Some(style.italic()),
                     "dimmed" => Some(style.dimmed()),
                     "inverted" => Some(style.reverse()),
+                    "blink" => Some(style.blink()),
+                    "hidden" => Some(style.hidden()),
+                    "strikethrough" => Some(style.strikethrough()),
                     // When the string is supposed to be a color:
                     // Decide if we yield none, reset background or set color.
                     color_string => {
@@ -300,7 +324,15 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
                             None // fg:none yields no style.
                         } else {
                             // Either bg or valid color or both.
-                            let parsed = parse_color_string(color_string);
+                            let parsed = parse_color_string(
+                                color_string,
+                                context.and_then(|x| {
+                                    get_palette(
+                                        &x.root_config.palettes,
+                                        x.root_config.palette.as_deref(),
+                                    )
+                                }),
+                            );
                             // bg + invalid color = reset the background to default.
                             if !col_fg && parsed.is_none() {
                                 let mut new_style = style;
@@ -327,9 +359,12 @@ pub fn parse_style_string(style_string: &str) -> Option<ansi_term::Style> {
  There are three valid color formats:
   - #RRGGBB      (a hash followed by an RGB hex)
   - u8           (a number from 0-255, representing an ANSI color)
-  - colstring    (one of the 16 predefined color strings)
+  - colstring    (one of the 16 predefined color strings or a custom user-defined color)
 */
-fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
+fn parse_color_string(
+    color_string: &str,
+    palette: Option<&Palette>,
+) -> Option<nu_ansi_term::Color> {
     // Parse RGB hex values
     log::trace!("Parsing color_string: {}", color_string);
     if color_string.starts_with('#') {
@@ -345,13 +380,23 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
         let g: u8 = u8::from_str_radix(&color_string[3..5], 16).ok()?;
         let b: u8 = u8::from_str_radix(&color_string[5..7], 16).ok()?;
         log::trace!("Read RGB color string: {},{},{}", r, g, b);
-        return Some(Color::RGB(r, g, b));
+        return Some(Color::Rgb(r, g, b));
     }
 
     // Parse a u8 (ansi color)
     if let Result::Ok(ansi_color_num) = color_string.parse::<u8>() {
         log::trace!("Read ANSI color string: {}", ansi_color_num);
         return Some(Color::Fixed(ansi_color_num));
+    }
+
+    // Check palette for a matching user-defined color
+    if let Some(palette_color) = palette.as_ref().and_then(|x| x.get(color_string)) {
+        log::trace!(
+            "Read user-defined color string: {} defined as {}",
+            color_string,
+            palette_color
+        );
+        return parse_color_string(palette_color, None);
     }
 
     // Check for any predefined color strings
@@ -365,14 +410,14 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
         "purple" => Some(Color::Purple),
         "cyan" => Some(Color::Cyan),
         "white" => Some(Color::White),
-        "bright-black" => Some(Color::Fixed(8)), // "bright-black" is dark grey
-        "bright-red" => Some(Color::Fixed(9)),
-        "bright-green" => Some(Color::Fixed(10)),
-        "bright-yellow" => Some(Color::Fixed(11)),
-        "bright-blue" => Some(Color::Fixed(12)),
-        "bright-purple" => Some(Color::Fixed(13)),
-        "bright-cyan" => Some(Color::Fixed(14)),
-        "bright-white" => Some(Color::Fixed(15)),
+        "bright-black" => Some(Color::DarkGray), // "bright-black" is dark grey
+        "bright-red" => Some(Color::LightRed),
+        "bright-green" => Some(Color::LightGreen),
+        "bright-yellow" => Some(Color::LightYellow),
+        "bright-blue" => Some(Color::LightBlue),
+        "bright-purple" => Some(Color::LightPurple),
+        "bright-cyan" => Some(Color::LightCyan),
+        "bright-white" => Some(Color::LightGray),
         _ => None,
     };
 
@@ -384,10 +429,28 @@ fn parse_color_string(color_string: &str) -> Option<ansi_term::Color> {
     predefined_color
 }
 
+fn get_palette<'a>(
+    palettes: &'a HashMap<String, Palette>,
+    palette_name: Option<&str>,
+) -> Option<&'a Palette> {
+    if let Some(palette_name) = palette_name {
+        let palette = palettes.get(palette_name);
+        if palette.is_some() {
+            log::trace!("Found color palette: {}", palette_name);
+        } else {
+            log::warn!("Could not find color palette: {}", palette_name);
+        }
+        palette
+    } else {
+        log::trace!("No color palette specified, using defaults");
+        None
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ansi_term::Style;
+    use nu_ansi_term::Style;
 
     // Small wrapper to allow deserializing Style without a struct with #[serde(deserialize_with=)]
     #[derive(Default, Clone, Debug, PartialEq)]
@@ -506,8 +569,8 @@ mod tests {
             {
                 let s = String::deserialize(deserializer)?;
                 match s.to_ascii_lowercase().as_str() {
-                    "on" => Ok(Switch::On),
-                    _ => Ok(Switch::Off),
+                    "on" => Ok(Self::On),
+                    _ => Ok(Self::Off),
                 }
             }
         }
@@ -527,6 +590,24 @@ mod tests {
         assert_eq!(rust_config.switch_a, Switch::On);
         assert_eq!(rust_config.switch_b, Switch::Off);
         assert_eq!(rust_config.switch_c, Switch::Off);
+    }
+
+    #[test]
+    fn test_load_unknown_key_config() {
+        #[derive(Clone, Default, Deserialize)]
+        #[serde(default)]
+        struct TestConfig<'a> {
+            pub foo: &'a str,
+        }
+
+        let config = toml::toml! {
+            foo = "test"
+            bar = "ignore me"
+        };
+        let rust_config = TestConfig::from_config(&config);
+
+        assert!(rust_config.is_ok());
+        assert_eq!(rust_config.unwrap().foo, "test");
     }
 
     #[test]
@@ -570,7 +651,7 @@ mod tests {
         let config = Value::from("#a12BcD");
         assert_eq!(
             <StyleWrapper>::from_config(&config).unwrap().0,
-            Color::RGB(0xA1, 0x2B, 0xCD).into()
+            Color::Rgb(0xA1, 0x2B, 0xCD).into()
         );
     }
 
@@ -596,7 +677,7 @@ mod tests {
         assert!(mystyle.is_dimmed);
         assert_eq!(
             mystyle,
-            ansi_term::Style::new()
+            nu_ansi_term::Style::new()
                 .bold()
                 .italic()
                 .underline()
@@ -616,7 +697,7 @@ mod tests {
         assert!(mystyle.is_reverse);
         assert_eq!(
             mystyle,
-            ansi_term::Style::new()
+            nu_ansi_term::Style::new()
                 .bold()
                 .italic()
                 .underline()
@@ -627,11 +708,74 @@ mod tests {
     }
 
     #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_blink_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD bLiNk");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_blink);
+        assert_eq!(
+            mystyle,
+            nu_ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .blink()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_hidden_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD hIDDen");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_hidden);
+        assert_eq!(
+            mystyle,
+            nu_ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .hidden()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
+    fn table_get_styles_bold_italic_underline_green_dimmed_strikethrough_silly_caps() {
+        let config = Value::from("bOlD ItAlIc uNdErLiNe GrEeN diMMeD StRiKEthROUgh");
+        let mystyle = <StyleWrapper>::from_config(&config).unwrap().0;
+        assert!(mystyle.is_bold);
+        assert!(mystyle.is_italic);
+        assert!(mystyle.is_underline);
+        assert!(mystyle.is_dimmed);
+        assert!(mystyle.is_strikethrough);
+        assert_eq!(
+            mystyle,
+            nu_ansi_term::Style::new()
+                .bold()
+                .italic()
+                .underline()
+                .dimmed()
+                .strikethrough()
+                .fg(Color::Green)
+        );
+    }
+
+    #[test]
     fn table_get_styles_plain_and_broken_styles() {
         // Test a "plain" style with no formatting
         let config = Value::from("");
         let plain_style = <StyleWrapper>::from_config(&config).unwrap().0;
-        assert_eq!(plain_style, ansi_term::Style::new());
+        assert_eq!(plain_style, nu_ansi_term::Style::new());
 
         // Test a string that's clearly broken
         let config = Value::from("djklgfhjkldhlhk;j");
@@ -696,7 +840,7 @@ mod tests {
             Style::new()
                 .underline()
                 .fg(Color::Fixed(120))
-                .on(Color::RGB(5, 5, 5))
+                .on(Color::Rgb(5, 5, 5))
         );
 
         // Test that the last color style is always the one used
@@ -706,5 +850,77 @@ mod tests {
             multi_style,
             Style::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
         );
+    }
+
+    #[test]
+    fn table_get_colors_palette() {
+        // Test using colors defined in palette
+        let mut palette = Palette::new();
+        palette.insert("mustard".to_string(), "#af8700".to_string());
+        palette.insert("sky-blue".to_string(), "51".to_string());
+        palette.insert("red".to_string(), "#d70000".to_string());
+        palette.insert("blue".to_string(), "17".to_string());
+        palette.insert("green".to_string(), "green".to_string());
+
+        assert_eq!(
+            parse_color_string("mustard", Some(&palette)),
+            Some(Color::Rgb(175, 135, 0))
+        );
+        assert_eq!(
+            parse_color_string("sky-blue", Some(&palette)),
+            Some(Color::Fixed(51))
+        );
+
+        // Test overriding predefined colors
+        assert_eq!(
+            parse_color_string("red", Some(&palette)),
+            Some(Color::Rgb(215, 0, 0))
+        );
+        assert_eq!(
+            parse_color_string("blue", Some(&palette)),
+            Some(Color::Fixed(17))
+        );
+
+        // Test overriding a predefined color with itself
+        assert_eq!(
+            parse_color_string("green", Some(&palette)),
+            Some(Color::Green)
+        )
+    }
+
+    #[test]
+    fn table_get_palette() {
+        // Test retrieving color palette by name
+        let mut palette1 = Palette::new();
+        palette1.insert("test-color".to_string(), "123".to_string());
+
+        let mut palette2 = Palette::new();
+        palette2.insert("test-color".to_string(), "#ABCDEF".to_string());
+
+        let mut palettes = HashMap::<String, Palette>::new();
+        palettes.insert("palette1".to_string(), palette1);
+        palettes.insert("palette2".to_string(), palette2);
+
+        assert_eq!(
+            get_palette(&palettes, Some("palette1"))
+                .unwrap()
+                .get("test-color")
+                .unwrap(),
+            "123"
+        );
+
+        assert_eq!(
+            get_palette(&palettes, Some("palette2"))
+                .unwrap()
+                .get("test-color")
+                .unwrap(),
+            "#ABCDEF"
+        );
+
+        // Test retrieving nonexistent color palette
+        assert!(get_palette(&palettes, Some("palette3")).is_none());
+
+        // Test default behavior
+        assert!(get_palette(&palettes, None).is_none());
     }
 }

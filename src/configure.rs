@@ -24,7 +24,7 @@ pub fn update_configuration(name: &str, value: &str) {
 
     match handle_update_configuration(&mut doc, name, value) {
         Err(e) => {
-            eprintln!("{}", e);
+            eprintln!("{e}");
             process::exit(1);
         }
         _ => write_configuration(&doc),
@@ -61,8 +61,7 @@ fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> R
     }
 
     let mut new_value = toml_edit::Value::from_str(value)
-        .map(toml_edit::Item::Value)
-        .unwrap_or_else(|_| toml_edit::value(value));
+        .map_or_else(|_| toml_edit::value(value), toml_edit::Item::Value);
 
     if let Some(value) = current_item.as_value() {
         *new_value.as_value_mut().unwrap().decor_mut() = value.decor().clone();
@@ -100,7 +99,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
             "# $all is shorthand for {}",
             PROMPT_ORDER
                 .iter()
-                .map(|module_name| format!("${}", module_name))
+                .map(|module_name| format!("${module_name}"))
                 .collect::<String>()
         );
 
@@ -111,7 +110,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
                 "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
                 custom_modules
                     .keys()
-                    .map(|module_name| format!("${{custom.{}}}", module_name))
+                    .map(|module_name| format!("${{custom.{module_name}}}"))
                     .collect::<String>()
             );
         }
@@ -125,7 +124,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
 
     let string_config = toml::to_string_pretty(&print_config).unwrap();
 
-    println!("{}", string_config);
+    println!("{string_config}");
 }
 
 fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value {
@@ -147,7 +146,7 @@ fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value 
         for &segment in parents {
             source_cursor = if let Some(child) = source_cursor
                 .get_mut(segment)
-                .and_then(|value| value.as_table_mut())
+                .and_then(toml::Value::as_table_mut)
             {
                 child
             } else {
@@ -187,7 +186,7 @@ pub fn toggle_configuration(name: &str, key: &str) {
 
     match handle_toggle_configuration(&mut doc, name, key) {
         Err(e) => {
-            eprintln!("{}", e);
+            eprintln!("{e}");
             process::exit(1);
         }
         _ => write_configuration(&doc),
@@ -203,17 +202,17 @@ fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Res
 
     let values = table
         .get_mut(name)
-        .ok_or_else(|| format!("Given module '{}' not found in config file", name))?
+        .ok_or_else(|| format!("Given module '{name}' not found in config file"))?
         .as_table_like_mut()
-        .ok_or_else(|| format!("Given config entry '{}' is not a module", key))?;
+        .ok_or_else(|| format!("Given config entry '{key}' is not a module"))?;
 
     let old_value = values
         .get(key)
-        .ok_or_else(|| format!("Given config key '{}' must exist in config file", key))?;
+        .ok_or_else(|| format!("Given config key '{key}' must exist in config file"))?;
 
     let old = old_value
         .as_bool()
-        .ok_or_else(|| format!("Given config key '{}' must be in 'boolean' format", key))?;
+        .ok_or_else(|| format!("Given config key '{key}' must be in 'boolean' format"))?;
 
     let mut new_value = toml_edit::value(!old);
     // Above code already checks if it is a value (bool)
@@ -233,7 +232,7 @@ pub fn get_configuration() -> Value {
 
 pub fn get_configuration_edit() -> Document {
     let file_path = get_config_path();
-    let toml_content = match utils::read_file(&file_path) {
+    let toml_content = match utils::read_file(file_path) {
         Ok(content) => {
             log::trace!("Config file content: \"\n{}\"", &content);
             Some(content)
@@ -261,17 +260,29 @@ pub fn write_configuration(doc: &Document) {
 
     let config_str = doc.to_string();
 
-    File::create(&config_path)
+    File::create(config_path)
         .and_then(|mut file| file.write_all(config_str.as_ref()))
         .expect("Error writing starship config");
 }
 
-pub fn edit_configuration() {
+pub fn edit_configuration(editor_override: Option<&str>) -> Result<(), Box<dyn std::error::Error>> {
+    // Argument currently only used for testing, but could be used to specify
+    // an editor override on the command line.
     let config_path = get_config_path();
-    let editor_cmd = shell_words::split(&get_editor()).expect("Unmatched quotes found in $EDITOR.");
 
-    let command = utils::create_command(&editor_cmd[0])
-        .expect("Unable to locate editor in $PATH.")
+    let editor_cmd = shell_words::split(&get_editor(editor_override))?;
+    let mut command = match utils::create_command(&editor_cmd[0]) {
+        Ok(cmd) => cmd,
+        Err(e) => {
+            eprintln!(
+                "Unable to find editor {:?}. Are $VISUAL and $EDITOR set correctly?",
+                editor_cmd[0]
+            );
+            return Err(Box::new(e));
+        }
+    };
+
+    let res = command
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
@@ -279,24 +290,20 @@ pub fn edit_configuration() {
         .arg(config_path)
         .status();
 
-    match command {
-        Ok(_) => (),
-        Err(error) => match error.kind() {
-            ErrorKind::NotFound => {
-                eprintln!(
-                    "Error: editor {:?} was not found. Did you set your $EDITOR or $VISUAL \
-                    environment variables correctly?",
-                    editor_cmd
-                );
-                std::process::exit(1)
-            }
-            other_error => panic!("failed to open file: {:?}", other_error),
-        },
-    };
+    if let Err(e) = res {
+        eprintln!("Unable to launch editor {editor_cmd:?}");
+        return Err(Box::new(e));
+    }
+
+    Ok(())
 }
 
-fn get_editor() -> String {
-    get_editor_internal(env::var("VISUAL").ok(), env::var("EDITOR").ok())
+fn get_editor(editor_override: Option<&str>) -> String {
+    if let Some(cmd) = editor_override {
+        cmd.to_string()
+    } else {
+        get_editor_internal(std::env::var("VISUAL").ok(), std::env::var("EDITOR").ok())
+    }
 }
 
 fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String {
@@ -345,17 +352,17 @@ mod tests {
 
     #[test]
     fn visual_empty_editor_set() {
-        let actual = get_editor_internal(Some("".into()), Some("bar".into()));
+        let actual = get_editor_internal(Some(String::new()), Some("bar".into()));
         assert_eq!("bar", actual);
     }
     #[test]
     fn visual_empty_editor_empty() {
-        let actual = get_editor_internal(Some("".into()), Some("".into()));
+        let actual = get_editor_internal(Some(String::new()), Some(String::new()));
         assert_eq!(STD_EDITOR, actual);
     }
     #[test]
     fn visual_empty_editor_not_set() {
-        let actual = get_editor_internal(Some("".into()), None);
+        let actual = get_editor_internal(Some(String::new()), None);
         assert_eq!(STD_EDITOR, actual);
     }
 
@@ -366,13 +373,25 @@ mod tests {
     }
     #[test]
     fn visual_not_set_editor_empty() {
-        let actual = get_editor_internal(None, Some("".into()));
+        let actual = get_editor_internal(None, Some(String::new()));
         assert_eq!(STD_EDITOR, actual);
     }
     #[test]
     fn visual_not_set_editor_not_set() {
         let actual = get_editor_internal(None, None);
         assert_eq!(STD_EDITOR, actual);
+    }
+
+    #[test]
+    fn no_panic_when_editor_unparseable() {
+        let outcome = edit_configuration(Some("\"vim"));
+        assert!(outcome.is_err());
+    }
+
+    #[test]
+    fn no_panic_when_editor_not_found() {
+        let outcome = edit_configuration(Some("this_editor_does_not_exist"));
+        assert!(outcome.is_err());
     }
 
     #[test]

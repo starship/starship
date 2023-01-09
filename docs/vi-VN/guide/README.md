@@ -145,7 +145,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="Starship với iTerm2 and chủ đề Snazzy"
   width="50%"
   align="right"
  />
@@ -160,7 +160,7 @@
 - **Dễ dàng:** cài đặt nhanh chóng – bắt đầu sử dụng nó trong vài phút.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -219,8 +219,6 @@ Alternatively, install Starship using any of the following package managers:
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -251,14 +249,17 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Install Starship using any of the following package managers:
 
-| Repository                                                                       | Instructions                            |
-| -------------------------------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
-| [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
-| [conda-forge](https://anaconda.org/conda-forge/starship)                         | `conda install -c conda-forge starship` |
-| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json) | `scoop install starship`                |
+| Repository                                                                                   | Instructions                            |
+| -------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
+| [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
+| [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship` |
+| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)             | `scoop install starship`                |
+| [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
 
 </details>
 
@@ -297,7 +298,7 @@ Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -326,7 +327,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Run the following:
+Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -336,11 +337,10 @@ starship init nu | save ~/.cache/starship/init.nu
 And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
 ```sh
-starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.60+ is supported
+Note: Only Nushell v0.61+ is supported
 
 </details>
 
@@ -400,21 +400,29 @@ If you're looking to further customize Starship:
 
 ## 🤝 Đóng góp
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Chúng tôi luôn luôn tìm kiếm những cộng tác viên ở **tất cả các các mức độ về kĩ năng**! Nếu bạn đang tìm kiếm cách dễ dàng để tham gia vào dự án, thử một [good issue đầu tiên](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+Nếu bạn thành thạo một ngôn ngữ không phải Tiếng Anh, chúng tôi đánh giá cao mọi sự giúp đỡ của bạn trong việc dịch tài liệu của chúng tôi và cập nhật các ngôn ngữ khác. Nếu bạn muốn giúp đỡ, những bản dịch có thể được đóng góp trên [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Nếu bạn thích thú trong việc giúp đỡ đóng góp cho starship, xin hãy xem [Hướng dẫn đóng góp](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) của chúng tôi. Ngoài ra, vui lòng truy cập vào [máy chủ Discord](https://discord.gg/8Jzqu3T) và nói xin chào. 👋
 
 ## Cảm hứng
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Xin hãy xem qua những công việc này trước đây, những thứ đã giúp truyền cảm hứng để tạo ra starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Dimension](https://dimension.dev/)
 
 <p align="center">
     <br>
@@ -423,4 +431,4 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## 📝 Giấy phép
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Bản quyền © 2019-nay, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Dự án này được [ISC](https://github.com/starship/starship/blob/master/LICENSE) cấp phép.

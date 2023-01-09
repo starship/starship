@@ -1,4 +1,4 @@
-# Advanced Installation
+# 高级安装
 
 安装Starship有以下两个步骤：
 

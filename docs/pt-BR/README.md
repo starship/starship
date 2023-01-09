@@ -55,11 +55,10 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    ```sh
    brew install starship
    ```
-
-   Com o [Scoop](https://scoop.sh):
+   Com o [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Adicione o script de inicialização no arquivo de configuração do seu shell:
@@ -120,7 +119,11 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Elvish
 
-   ::: warning Apenas a versão v0.17 ou superior do elvish é suportada. :::
+   ::: warning
+
+   Apenas elvish v0.18 ou superior é suportado.
+
+   :::
 
    Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
@@ -144,17 +147,21 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Nushell
 
-   ::: Atenção Isto vai mudar no futuro. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   Isto irá mudar no futuro. Somente Nushell v0.61+ é suportado.
+
+   :::
+
+   Adicione o seguinte ao final do seu arquivo env do Nushell (encontre-o executando `$nu.env-path` no Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   E adicione o seguinte ao final da sua configuração do Nushell (encontre-o executando `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
@@ -171,7 +178,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Cmd
 
-   Você precisa do [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) com Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Você precisa do [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) com Cmd. Adicione o seguinte num arquivo `starship.lua` e coloque este arquivo no diretório scripts do Clink:
 
    ```lua
    -- starship.lua

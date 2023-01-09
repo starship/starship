@@ -5,7 +5,7 @@ use std::io;
 use std::thread::available_parallelism;
 use std::time::SystemTime;
 
-use clap::{IntoApp, Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
@@ -33,7 +33,7 @@ enum Commands {
     BugReport,
     /// Generate starship shell completions for your shell to stdout
     Completions {
-        #[clap(arg_enum)]
+        #[clap(value_enum)]
         shell: CompletionShell,
     },
     /// Edit the starship configuration
@@ -55,13 +55,22 @@ enum Commands {
     ///  Prints a specific prompt module
     Module {
         /// The name of the module to be printed
-        #[clap(required = true, required_unless_present = "list")]
+        #[clap(required_unless_present("list"))]
         name: Option<String>,
         /// List out all supported modules
         #[clap(short, long)]
         list: bool,
         #[clap(flatten)]
         properties: Properties,
+    },
+    /// Prints a preset config
+    Preset {
+        /// The name of preset to be printed
+        #[clap(required_unless_present("list"), value_enum)]
+        name: Option<print::Preset>,
+        /// List out all preset names
+        #[clap(short, long)]
+        list: bool,
     },
     /// Prints the computed starship configuration
     PrintConfig {
@@ -108,9 +117,15 @@ enum Commands {
 fn main() {
     // Configure the current terminal on windows to support ANSI escape sequences.
     #[cfg(windows)]
-    let _ = ansi_term::enable_ansi_support();
+    let _ = nu_ansi_term::enable_ansi_support();
     logger::init();
     init_global_threadpool();
+
+    // Delete old log files
+    rayon::spawn(|| {
+        let log_dir = logger::get_log_dir();
+        logger::cleanup_log_files(log_dir);
+    });
 
     let args = match Cli::try_parse() {
         Ok(args) => args,
@@ -180,20 +195,22 @@ fn main() {
                 println!("Supported modules list");
                 println!("----------------------");
                 for modules in ALL_MODULES {
-                    println!("{}", modules);
+                    println!("{modules}");
                 }
             }
             if let Some(module_name) = name {
                 print::module(&module_name, properties);
             }
         }
+        Commands::Preset { name, list } => print::preset_command(name, list),
         Commands::Config { name, value } => {
             if let Some(name) = name {
                 if let Some(value) = value {
                     configure::update_configuration(&name, &value)
                 }
-            } else {
-                configure::edit_configuration()
+            } else if let Err(reason) = configure::edit_configuration(None) {
+                eprintln!("Could not edit configuration: {reason}");
+                std::process::exit(1);
             }
         }
         Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),

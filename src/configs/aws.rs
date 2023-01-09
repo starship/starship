@@ -2,21 +2,19 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 /// ## AWS
 ///
-/// The `aws` module shows the current AWS region and profile when
-/// credentials or a `credential_process` have been setup. This is based on
-/// `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env var with
-/// `~/.aws/config` file. This module also shows an expiration timer when using temporary
-/// credentials.
+/// The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials.
+/// The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 ///
-/// The module will display a profile only if its credentials are present in
-/// `~/.aws/credentials` or a `credential_process` is defined in
-/// `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`,
-/// `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will
-/// also suffice.
+/// The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice.
+/// If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 ///
 /// When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 /// is read from the `AWS_VAULT` env var and the credentials expiration date
@@ -25,7 +23,7 @@ use std::collections::HashMap;
 /// When using [awsu](https://github.com/kreuzwerker/awsu) the profile
 /// is read from the `AWSU_PROFILE` env var.
 ///
-/// When using [AWSume](https://awsu.me) the profile
+/// When using [`AWSume`](https://awsu.me) the profile
 /// is read from the `AWSUME_PROFILE` env var and the credentials expiration
 /// date is read from the `AWSUME_EXPIRATION` env var.
 pub struct AwsConfig<'a> {
@@ -50,7 +48,7 @@ pub struct AwsConfig<'a> {
 impl<'a> Default for AwsConfig<'a> {
     fn default() -> Self {
         AwsConfig {
-            format: "on [$symbol($profile )(\\($region\\) )(\\[$duration\\])]($style)",
+            format: "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",
             symbol: "☁️  ",
             style: "bold yellow",
             disabled: false,

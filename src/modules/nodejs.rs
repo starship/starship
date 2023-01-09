@@ -2,7 +2,6 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::nodejs::NodejsConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
-use crate::utils;
 
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -10,7 +9,6 @@ use semver::Version;
 use semver::VersionReq;
 use serde_json as json;
 use std::ops::Deref;
-use std::path::Path;
 
 /// Creates a module with the current Node.js version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -45,7 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map_style(|variable| match variable {
                 "style" => {
-                    let engines_version = get_engines_version(&context.current_dir);
+                    let engines_version = get_engines_version(context);
                     let in_engines_range =
                         check_engines_version(nodejs_version.deref().as_ref()?, engines_version);
                     if in_engines_range {
@@ -87,8 +85,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_engines_version(base_dir: &Path) -> Option<String> {
-    let json_str = utils::read_file(base_dir.join("package.json")).ok()?;
+fn get_engines_version(context: &Context) -> Option<String> {
+    let json_str = context.read_file_from_pwd("package.json")?;
     let package_json: json::Value = json::from_str(&json_str).ok()?;
     let raw_version = package_json.get("engines")?.get("node")?.as_str()?;
     Some(raw_version.to_string())
@@ -119,7 +117,7 @@ fn check_engines_version(nodejs_version: &str, engines_version: Option<String>) 
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
     use std::io::Write;
@@ -149,7 +147,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("package.json"))?.sync_all()?;
         let esy_lock = dir.path().join("esy.lock");
-        fs::create_dir_all(&esy_lock)?;
+        fs::create_dir_all(esy_lock)?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
         let expected = None;
@@ -227,7 +225,7 @@ mod tests {
     fn folder_with_node_modules() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let node_modules = dir.path().join("node_modules");
-        fs::create_dir_all(&node_modules)?;
+        fs::create_dir_all(node_modules)?;
 
         let actual = ModuleRenderer::new("nodejs").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));

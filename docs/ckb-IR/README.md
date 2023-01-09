@@ -55,11 +55,10 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
    ```sh
    brew install starship
    ```
-
-   لەگەڵ [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. نوسینی init زیادبکە بۆ فایلی ڕێکخستنی شێڵەکەت:
@@ -120,7 +119,11 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Elvish
 
-   ::: warning تەنها elvish v0.17 یان بەرزتر پشتگیری کراوە. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    ئەمەی خوارەوە زیادبکە لە کۆتایی `~/.elvish/rc.elv`:
 
@@ -144,7 +147,13 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
 
    #### Nushell
 
-   ::: warning This will change in the future. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.61+ is supported.
+
+   :::
+
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
@@ -153,8 +162,6 @@ description: 'Starship: یەکێ لە promptـە سوکەڵە، خێرا، و ب
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 

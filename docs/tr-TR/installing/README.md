@@ -1,4 +1,4 @@
-# Advanced Installation
+# Gelişmiş Kurulum
 
 Starship'i kurmak için, 2 şeye ihtiyacınız var:
 

@@ -1,4 +1,4 @@
-# Frequently Asked Questions
+# よくある質問
 
 ## デモGIFで使用される構成は何ですか？
 
@@ -12,7 +12,7 @@
 
 ## デモのGIFのようにコマンド補完はどうしたら使用できますか？
 
-補完サポート、または自動補完は選択したシェルによって提供されます。 デモ中では、デフォルトの[Fish Shell](https://fishshell.com/)によって補完されています。 Z Shell (zsh) を利用しているのであれば、[zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)を照参してください。
+補完サポート、または自動補完は選択したシェルによって提供されます。 デモ中では、デフォルトの[Fish Shell](https://fishshell.com/)によって補完されています。 Z Shell (zsh) を利用しているのであれば、[zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)を参照してください。
 
 ## トップレベルの`format`と`<module>.disabled`は同じように動作しますか？
 
@@ -56,7 +56,7 @@ CentOS6や7などで事前にビルドされたバイナリを使用していて
 curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## どうして`Executing command "..." timed out.`という警告が出てくるのでしょうか?
 
 Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
 
@@ -64,7 +64,7 @@ Starship executes different commands to get information to display in the prompt
 
 不明な記号に遭遇した場合、`starship explain` を使用することで、現在表示しているモジュールの説明を見ることができます。
 
-## Starship is doing something unexpected, how can I debug it?
+## Starshipがなにか想定外の挙動をしているとき、どのようにデバッグすればよいですか？
 
 You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
@@ -86,37 +86,37 @@ Finally if you find a bug you can use the `bug-report` command to create a Githu
 starship bug-report
 ```
 
-## プロンプトにグリフ記号が表示されないのはなぜですか?
+## 私のプロンプトで記号のグリフがないのはなぜですか？
 
-これの最も一般的な原因は、システムの設定ミスです。 いくつかのLinuxディストリビューション 特に、すぐに使用できるフォントサポートは付属していません。 次のことを確認する必要があります。
+よくある原因はシステム上での設定ミスです。 いくつかのLinuxディストリビューションの初期設定にフォントサポートがありません。 次のことを確認してください。
 
 - ロケールが、`de_DE.UTF-8`や` ja_JP.UTF-8`などのUTF-8に設定されている。 `LC_ALL`がUTF-8でない場合、[変更する必要があります](https://www.tecmint.com/set-system-locales-in-linux/)。
 - 絵文字フォントがインストールされている。 ほとんどのシステムにはデフォルトで絵文字フォントが付属していますが、 一部 (特にArch Linux) はそうではありません。 通常、システムの パッケージマネージャーからインストールすることができます。--[noto emoji](https://www.google.com/get/noto/help/emoji/)は一般的な選択肢です。
 - [Nerd Font](https://www.nerdfonts.com/)を使用している。
 
-システムをテストするには、ターミナルで次のコマンドを実行します。
+ターミナルで以下のコマンドを実行することでテストできます。
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-1行目は[snake emoji](https://emojipedia.org/snake/)を生成し、2行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)を生成するはずです。
+一行目は[蛇の絵文字](https://emojipedia.org/snake/)、二行目は[powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs)が表示されるはずです。
 
-いずれかのシンボルが正しく表示されない場合でも、システムの設定が間違っています。 残念ながら、フォント設定を正しくするのは難しい場合があります。 Discordのユーザーがお役に立てるかもしれません。 両方の記号が正しく表示されているにもかかわらず、まだStarshipに表示されていない場合は、[バグ報告をしてください!](https://github.com/starship/starship/issues/new/choose)
+もし、どちらの記号とも正しく表示されない場合は、システムの設定が間違っています。 不幸にも、正しくフォントを設定するのは難しいものです。 Discordのユーザーが助けてくれるかもしれません！ もし記号が正しく表示されているのにもかかわらず、Starshipが正しく表示されていない場合は、[バグの報告](https://github.com/starship/starship/issues/new/choose)をお願いします。
 
-## Starshipをアンインストールするにはどうすればいいですか?
+## Starshipをアンインストールしたい
 
-Starshipは、最初の場所にインストールするのと同じくらい簡単にアンインストールできます。
+Starshipのアンインストールはインストールと同じぐらい簡単です。
 
 1. Starshipを初期化するために使用した、シェルの設定行を削除します (例:`~/.bashrc`)。
 1. Starshipのバイナリを削除します。
 
-Starship がパッケージマネージャを使用してインストールされている場合は、アンインストール手順については、そのドキュメントを参照してください。
+パッケージマネージャーを使用してStarshipをインストールした場合は、パッケージマネージャーのアンインストールガイドを参照してください。
 
 Starship をインストールスクリプトを使用してインストールした場合、次のコマンドでバイナリが削除されます。
 
 ```sh
-# Locate and delete the starship binary
+# starshipのバイナリを見つけて削除
 sh -c 'rm "$(command -v 'starship')"'
 ```

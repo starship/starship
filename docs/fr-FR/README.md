@@ -55,11 +55,10 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    ```sh
    brew install starship
    ```
-
-   Avec [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Ajouter le script d’initialisation au fichier configuration de votre shell:
@@ -120,7 +119,11 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Elvish
 
-   ::: warning Seul elvish v0.17 ou supérieur est pris en charge. :::
+   ::: warning
+
+   Seul elvish v0.18 ou supérieur est pris en charge.
+
+   :::
 
    Ajoutez ce qui suit à la fin de `~/.elvish/rc.elv`:
 
@@ -144,17 +147,21 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Nushell
 
-   ::: warning Cela va changer dans le futur. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   Ceci va changer dans le futur. Seul Nushell v0.61+ est supporté.
+
+   :::
+
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en exécutant `$nu.config path`):
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
@@ -171,7 +178,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    #### Cmd
 
-   Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Vous devez utiliser [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) avec Cmd. Ajoutez le code ci-dessous dans un fichier `starship.lua` et placez-le dans le dossier des scripts Clink:
 
    ```lua
    -- starship.lua

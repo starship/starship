@@ -160,7 +160,7 @@
 - **Easy:** 빠른 설치 - 몇 분 안에 사용할 수 있습니다.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -173,12 +173,12 @@
 
 ### 1단계. Starship 설치하기
 
-Select your operating system from the list below to view installation instructions:
+아래의 목록 중 해당하는 운영체제를 골라 설치 지침을 확인하세요:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -189,7 +189,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -219,8 +219,6 @@ Alternatively, install Starship using any of the following package managers:
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -251,20 +249,23 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install Starship using any of the following package managers:
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-| Repository                                                                       | Instructions                            |
-| -------------------------------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
-| [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
-| [conda-forge](https://anaconda.org/conda-forge/starship)                         | `conda install -c conda-forge starship` |
-| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json) | `scoop install starship`                |
+다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
+
+| Repository                                                                                   | Instructions                            |
+| -------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
+| [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
+| [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship` |
+| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)             | `scoop install starship`                |
+| [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
 
 </details>
 
 ### 2단계. 쉘에 Starship 적용하기
 
-Configure your shell to initialize starship. Select yours from the list below:
+쉘에 Starship 초기 설정을 합니다. 아래의 리스트 중에 해당하는 것을 고르세요:
 
 <details>
 <summary>Bash</summary>
@@ -297,7 +298,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.17+ is supported
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -326,7 +327,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Run the following:
+Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -336,18 +337,17 @@ starship init nu | save ~/.cache/starship/init.nu
 And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
 ```sh
-starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.60+ is supported
+Note: Only Nushell v0.61+ is supported
 
 </details>
 
 <details>
-<summary>파워셀</summary>
+<summary>Powershell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+다음 내용을 PowerShell 설정파일 (찾으려면 `$PROFILE` 실행) 마지막 부분에 추가하세요:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -390,9 +390,9 @@ eval "$(starship init zsh)"
 
 ### 3단계. Starship 설정하기
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+새로운 쉘 인스턴스를 시작하면 아름다운 새 쉘 프롬프트를 볼 수 있습니다. 기본 설정에 만족한다면, 즐기세요!
 
-If you're looking to further customize Starship:
+Starship을 추가로 커스터마이징 하고싶다면:
 
 - **[Configuration](https://starship.rs/config/)** – 원하는대로 프롬프트를 수정할 수 있도록 Starship 설정을 배울 수 있습니다.
 
@@ -400,15 +400,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 기여하기
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+우리는 언제나 **기술 수준에 관계없이** 기여자를 찾고 있습니다! 프로젝트에 참여하고자 한다면, [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) 를 보내보세요.
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. 번역에 도움을 주고자 한다면, [Starship Crowdin](https://translate.starship.rs/) 에서 기여할 수 있습니다.
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Starship 에 기여하는데 관심이 있다면, [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 를 한 번 살펴봐 주세요 그리고 부담갖지 말고 [Discord 서버](https://discord.gg/8Jzqu3T) 에 들러 인사 한 마디 남겨보세요 👋
 
 ## 💭 Inspired By
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보세요. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -416,9 +416,17 @@ Please check out these previous works that helped inspire the creation of starsh
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
 
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Dimension](https://dimension.dev/)
+
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship 로켓 아이콘">
 </p>
 
 ## 📝라이선스

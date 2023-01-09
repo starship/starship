@@ -1,13 +1,17 @@
-[Return to Presets](./README.md#pure)
+[Retornar para Personalizações](./README.md#pure)
 
-# Pure Preset
+# Personalização do prompt do terminal com Pure
 
-Essa configuração simula a aparência e o comportamento do [Pure](https://github.com/sindresorhus/pure).
+Essa personalização simula a aparência e o comportamento do [Pure](https://github.com/sindresorhus/pure).
 
-![Captura de tela da configuração emulando Pure](/presets/img/pure-preset.png)
+![Captura de tela da personalização do prompt do terminal usando Pure](/presets/img/pure-preset.png)
 
 ### Configuração
 
-[Click to download TOML](/presets/toml/pure-preset.toml)
+```sh
+starship preset pure-preset > ~/.config/starship.toml
+```
+
+[Clique para baixar o TOML](/presets/toml/pure-preset.toml)
 
 <<< @/.vuepress/public/presets/toml/pure-preset.toml

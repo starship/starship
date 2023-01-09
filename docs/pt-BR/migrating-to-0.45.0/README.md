@@ -1,4 +1,4 @@
-# Migrando para V0.45.0
+# Migrando para v0.45.0
 
 Starship v0.45.0 é o lançamento com grandes mudanças, em preparação para a grande versão v1.0.0. Nos fizemos algumas grandes mudanças em como é feita as configurações do prompt. para aceitar uma customização maior.
 

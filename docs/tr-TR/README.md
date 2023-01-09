@@ -2,23 +2,23 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
+tagline: Sade, hızlı, dilediğiniz gibi özelleştirilebilen ve istenilen shell'de kullanılabilen prompt!
+actionText: Kullanmaya Başlayın →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    title: Önce Uyumluluk
+    details: En yaygın işletim sistemlerindeki en yaygın shell'ler üzerinde çalışır. Use it everywhere!
   - 
     title: Rust-Powered
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    details: Prompt'u mümkün olduğunca hızlı ve güvenilir hale getirmek için sınıfının en iyisi Rust hızını ve güvenliğini sağlar.
   - 
-    title: Customizable
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+    title: Özelleştirilebilir
+    details: Her küçük ayrıntı beğeninize göre özelleştirilebilir, böylece bu prompt'u istediğiniz kadar minimal veya zengin özelliklere sahip hale getirirsiniz.
+footer: ISC Lisanslı | Telif Hakkı © 2019-günümüz Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship, her prompt için minimal, son derece hızlı ve son derece özelleştirilebilir bir shelldir! Şık ve minimal kalırken ihtiyacınız olan bilgileri gösterir. Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd ve PowerShell için hızlı kurulum mevcuttur.
 ---
 
 <div class="center">
@@ -30,36 +30,35 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 ### Ön koşullar
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- Terminalinizde bir [Nerd Font](https://www.nerdfonts.com/) yüklü ve etkin olmalı.
 
-### Quick Install
+### Hızlı Kurulum
 
 1. Install the **starship** binary:
 
 
-   #### Install Latest Version
+   #### En Son Sürümü Yükle
 
-   With Shell:
+   Shell ile:
 
    ```sh
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Starship'in kendisini güncellemek için yukarıdaki komudu yeniden çalıştırın. Starship'in yapılandırmasına dokunmadan mevcut sürümün yerini alacak.
 
 
-   #### Install via Package Manager
+   #### Paket Yöneticisi ile yükleme
 
-   With [Homebrew](https://brew.sh/):
+   Homebrew [ile](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
-
-   With [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Add the init script to your shell's config file:
@@ -67,7 +66,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   `~/.bashrc` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.bashrc
@@ -78,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   `~/.config/fish/config.fish` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -89,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   `~/.zshrc` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.zshrc
@@ -109,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   `~/.config/ion/initrc` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.config/ion/initrc
@@ -120,9 +119,13 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: warning Only elvish v0.17 or higher is supported. :::
+   ::: warning
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   Only elvish v0.18 or higher is supported.
+
+   :::
+
+   `~/.elvish/rc.elv` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -133,7 +136,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   `~/.tcshrc` dosyasının sonuna ekleyın:
 
    ```sh
    # ~/.tcshrc
@@ -144,23 +147,27 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: warning This will change in the future. Only Nushell v0.60+ is supported. ::: Run the following:
+   ::: warning
+
+   This will change in the future. Only Nushell v0.61+ is supported.
+
+   :::
+
+   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşabilirsiniz) sonuna ekleyin:
 
    ```sh
-   mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
    source ~/.cache/starship/init.nu
    ```
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   `~/.xonshrc` dosyasının sonuna ekleyin:
 
    ```sh
    # ~/.xonshrc
@@ -171,7 +178,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Cmd ile beraber [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) kullanmalısınız. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

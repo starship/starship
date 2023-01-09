@@ -87,8 +87,8 @@ fn get_battery_status(context: &Context) -> Option<BatteryStatus> {
 
 /// the merge returns Charging if at least one is charging
 ///                   Discharging if at least one is Discharging
-///                   Full if both are Full or one is Full and the other Unknow
-///                   Empty if both are Empty or one is Empty and the other Unknow
+///                   Full if both are Full or one is Full and the other Unknown
+///                   Empty if both are Empty or one is Empty and the other Unknown
 ///                   Unknown otherwise
 fn merge_battery_states(state1: battery::State, state2: battery::State) -> battery::State {
     use battery::State::{Charging, Discharging, Unknown};
@@ -172,7 +172,7 @@ impl BatteryInfoProvider for BatteryInfoProviderImpl {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn no_battery_status() {

@@ -1,9 +1,9 @@
 use std::env;
+use std::fmt::{self, Debug};
 use std::io::Write;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::Duration;
-use std::time::Instant;
 
 use process_control::{ChildExt, Control, Output};
 
@@ -22,17 +22,20 @@ use crate::{
 ///
 /// Finally, the content of the module itself is also set by a command.
 pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
-    let start: Instant = Instant::now();
-    let toml_config = context.config.get_custom_module_config(name).expect(
-        "modules::custom::module should only be called after ensuring that the module exists",
-    );
+    let toml_config = get_config(name, context)?;
     let config = CustomConfig::load(toml_config);
+    if config.disabled {
+        return None;
+    }
 
     if let Some(os) = config.os {
         if os != env::consts::OS && !(os == "unix" && cfg!(unix)) {
             return None;
         }
     }
+
+    // Note: Forward config if `Module` ends up needing `config`
+    let mut module = Module::new(&format!("custom.{name}"), config.description, None);
 
     let mut is_match = context
         .try_begin_scan()?
@@ -51,8 +54,6 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             return None;
         }
     }
-
-    let mut module = Module::new(name, config.description, Some(toml_config));
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -86,13 +87,37 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             log::warn!("Error in module `custom.{}`:\n{}", name, error);
         }
     };
-    let elapsed = start.elapsed();
-    log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
-    module.duration = elapsed;
     Some(module)
 }
 
-/// Return the invoking shell, using `shell` and fallbacking in order to STARSHIP_SHELL and "sh"/"cmd"
+/// Gets the TOML config for the custom module, handling the case where the module is not defined
+fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a toml::Value> {
+    struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
+
+    impl Debug for DebugCustomModules<'_> {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_list().entries(self.0.keys()).finish()
+        }
+    }
+
+    let config = context.config.get_custom_module_config(module_name);
+
+    if config.is_some() {
+        return config;
+    } else if let Some(modules) = context.config.get_custom_modules() {
+        log::debug!(
+                "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
+                DebugCustomModules(modules),
+        );
+    } else {
+        log::debug!(
+            "top level format contains custom module {module_name:?}, but no configuration was provided.",
+        );
+    };
+    None
+}
+
+/// Return the invoking shell, using `shell` and fallbacking in order to `STARSHIP_SHELL` and "sh"/"cmd"
 fn get_shell<'a, 'b>(
     shell_args: &'b [&'a str],
     context: &Context,
@@ -110,7 +135,7 @@ fn get_shell<'a, 'b>(
 }
 
 /// Attempt to run the given command in a shell by passing it as either `stdin` or an argument to `get_shell()`,
-/// depending on the configuration or by invoking a platform-specific falback shell if `shell` is empty.
+/// depending on the configuration or by invoking a platform-specific fallback shell if `shell` is empty.
 fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<Output> {
     let (shell, shell_args) = get_shell(config.shell.0.as_ref(), context);
     let mut use_stdin = config.use_stdin;
@@ -235,9 +260,9 @@ fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<S
     }
 }
 
-/// If the specified shell refers to PowerShell, adds the arguments "-Command -" to the
+/// If the specified shell refers to `PowerShell`, adds the arguments "-Command -" to the
 /// given command.
-/// Retruns `false` if the shell shell expects scripts as arguments, `true` if as `stdin`.
+/// Returns `false` if the shell shell expects scripts as arguments, `true` if as `stdin`.
 fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool {
     let shell_exe = Path::new(shell).file_stem();
     let no_args = shell_args.is_empty();
@@ -270,7 +295,7 @@ mod tests {
     use super::*;
 
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 
@@ -289,7 +314,10 @@ mod tests {
     fn render_cmd(cmd: &str) -> io::Result<Option<String>> {
         let dir = tempfile::tempdir()?;
         let cmd = cmd.to_owned();
-        let shell = SHELL.iter().map(|s| s.to_owned()).collect::<Vec<_>>();
+        let shell = SHELL
+            .iter()
+            .map(std::borrow::ToOwned::to_owned)
+            .collect::<Vec<_>>();
         let out = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
@@ -308,7 +336,10 @@ mod tests {
     fn render_when(cmd: &str) -> io::Result<bool> {
         let dir = tempfile::tempdir()?;
         let cmd = cmd.to_owned();
-        let shell = SHELL.iter().map(|s| s.to_owned()).collect::<Vec<_>>();
+        let shell = SHELL
+            .iter()
+            .map(std::borrow::ToOwned::to_owned)
+            .collect::<Vec<_>>();
         let out = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
@@ -593,7 +624,7 @@ mod tests {
         let actual = ModuleRenderer::new("custom.test")
             .path(dir.path())
             .config(toml::toml! {
-                command_timeout = 10000
+                command_timeout = 100_000
                 [custom.test]
                 format = "test"
                 when = when
@@ -675,5 +706,19 @@ mod tests {
         assert_eq!(expected, actual);
 
         dir.close()
+    }
+
+    #[test]
+    fn disabled() {
+        let actual = ModuleRenderer::new("custom.test")
+            .config(toml::toml! {
+                [custom.test]
+                disabled = true
+                when = true
+                format = "test"
+            })
+            .collect();
+        let expected = None;
+        assert_eq!(expected, actual);
     }
 }
