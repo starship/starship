@@ -2542,7 +2542,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
 | rama      | `maestro` | La rama mercurial activa               |
-| topic     | `feature` | The active mercurial topic             |
+| tema      | `función` | The active mercurial topic             |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -3035,7 +3035,7 @@ El módulo `php` muestra la versión instalada de [PHP](https://www.php.net/). P
 format = 'via [🔹 $version](147 bold) '
 ```
 
-## Pijul Channel
+## Canal Pijul
 
 The `pijul_channel` module shows the active channel of the repo in your current directory.
 
@@ -3069,7 +3069,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 | Opción           | Predeterminado                               | Descripción                                                                             |
 | ---------------- | -------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`         | `'via [$symbol($username@)$stack]($style) '` | La cadena de formato para el módulo.                                                    |
+| `format`         | `'vía [$symbol($username@)$stack]($style) '` | La cadena de formato para el módulo.                                                    |
 | `version_format` | `'v${raw}'`                                  | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
 | `symbol`         | `' '`                                       | Una cadena de formato que se muestra antes de la pila de Pulumi.                        |
 | `style`          | `'bold 5'`                                   | El estilo del módulo.                                                                   |
