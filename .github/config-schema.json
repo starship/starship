@@ -1744,6 +1744,13 @@
           "type": "string"
         }
       }
+    },
+    "profiles": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": false,

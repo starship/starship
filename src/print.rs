@@ -11,6 +11,7 @@ use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
+use crate::formatter::string_formatter::StringFormatterError;
 use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
@@ -403,32 +404,42 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
 /// and the list of all modules used in a format string
 fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
     let config = &context.root_config;
+    let (formatter, config_param) = match &context.target {
+        Target::Main => (StringFormatter::new(&config.format), "format".to_string()),
+        Target::Right => (
+            StringFormatter::new(&config.right_format),
+            "right_format".to_string(),
+        ),
+        Target::Continuation => (
+            StringFormatter::new(&config.continuation_prompt),
+            "continuation_prompt".to_string(),
+        ),
+        Target::Profile(name) => (
+            match config.profiles.get(name) {
+                Some(format) => StringFormatter::new(format),
+                _ => Err(StringFormatterError::Custom("Invalid Profile".to_string())),
+            },
+            format!("profile: {}", &name),
+        ),
+    };
 
-    let lformatter = StringFormatter::new(&config.format);
     let rformatter = StringFormatter::new(&config.right_format);
-    let cformatter = StringFormatter::new(&config.continuation_prompt);
-    if lformatter.is_err() {
-        log::error!("Error parsing `format`")
+
+    if formatter.is_err() {
+        log::error!("Error parsing `{}`", config_param);
     }
     if rformatter.is_err() {
         log::error!("Error parsing `right_format`")
     }
-    if cformatter.is_err() {
-        log::error!("Error parsing `continuation_prompt`")
-    }
 
-    match (lformatter, rformatter, cformatter) {
-        (Ok(lf), Ok(rf), Ok(cf)) => {
+    match (formatter, rformatter) {
+        (Ok(lf), Ok(rf)) => {
             let mut modules: BTreeSet<String> = BTreeSet::new();
             if context.target != Target::Continuation {
                 modules.extend(lf.get_variables());
                 modules.extend(rf.get_variables());
             }
-            match context.target {
-                Target::Main => (lf, modules),
-                Target::Right => (rf, modules),
-                Target::Continuation => (cf, modules),
-            }
+            (lf, modules)
         }
         _ => (StringFormatter::raw(">"), BTreeSet::new()),
     }
@@ -476,6 +487,26 @@ mod test {
     use crate::test::default_context;
 
     #[test]
+    fn main_prompt() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                add_newline=false
+                format="$character"
+                [character]
+                format=">\n>"
+            }),
+        };
+        context.root_config.format = "$character".to_string();
+        context.target = Target::Main;
+        context.root_config.add_newline = false;
+
+        let expected = String::from(">\n>");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn right_prompt() {
         let mut context = default_context();
         context.config = StarshipConfig {
@@ -489,6 +520,54 @@ mod test {
         context.target = Target::Right;
 
         let expected = String::from(">>"); // should strip new lines
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn custom_prompt() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                add_newline = false
+                [profiles]
+                test="0_0$character"
+                [character]
+                format=">>"
+            }),
+        };
+        context
+            .root_config
+            .profiles
+            .insert("test".to_string(), "0_0$character".to_string());
+        context.target = Target::Profile("test".to_string());
+        context.root_config.add_newline = false;
+
+        let expected = String::from("0_0>>");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn custom_prompt_fallback() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                add_newline=false
+                [profiles]
+                test="0_0$character"
+                [character]
+                format=">>"
+            }),
+        };
+        context
+            .root_config
+            .profiles
+            .insert("test".to_string(), "0_0$character".to_string());
+        context.target = Target::Profile("wrong_prompt".to_string());
+        context.root_config.add_newline = false;
+
+        let expected = String::from(">");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
     }
