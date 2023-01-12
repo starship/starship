@@ -85,8 +85,11 @@ enum Commands {
         /// Print the right prompt (instead of the standard left prompt)
         #[clap(long)]
         right: bool,
-        /// Print the continuation prompt (instead of the standard left prompt)
+        /// Print the prompt with the specified profile name (instead of the standard left prompt)
         #[clap(long, conflicts_with = "right")]
+        profile: Option<String>,
+        /// Print the continuation prompt (instead of the standard left prompt)
+        #[clap(long, conflicts_with = "right", conflicts_with = "profile")]
         continuation: bool,
         #[clap(flatten)]
         properties: Properties,
@@ -172,12 +175,14 @@ fn main() {
         Commands::Prompt {
             properties,
             right,
+            profile,
             continuation,
         } => {
-            let target = match (right, continuation) {
-                (true, _) => Target::Right,
-                (_, true) => Target::Continuation,
-                (_, _) => Target::Main,
+            let target = match (right, profile, continuation) {
+                (true, _, _) => Target::Right,
+                (_, Some(profile_name), _) => Target::Profile(profile_name),
+                (_, _, true) => Target::Continuation,
+                (_, _, _) => Target::Main,
             };
             print::prompt(properties, target)
         }

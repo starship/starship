@@ -48,9 +48,9 @@ clap_complete = "4.0.7"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.4.1"
-git-features = { version = "0.26.0", optional = true }
+git-features = { version = "0.26.1", optional = true }
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-git-repository = { version = "0.31.0", default-features = false, features = ["max-performance-safe"] }
+git-repository = { version = "0.33.0", default-features = false, features = ["max-performance-safe"] }
 indexmap = { version = "1.9.2", features = ["serde"] }
 log = { version = "0.4.17", features = ["std"] }
 # nofity-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
@@ -62,12 +62,12 @@ open = "3.2.0"
 # update os module config and tests when upgrading os_info
 os_info = "3.5.1"
 path-slash = "0.2.1"
-pest = "2.5.2"
-pest_derive = "2.5.2"
+pest = "2.5.3"
+pest_derive = "2.5.3"
 quick-xml = "0.27.1"
 rand = "0.8.5"
 rayon = "1.6.1"
-regex = "1.7.0"
+regex = "1.7.1"
 rust-ini = "0.18.0"
 semver = "1.0.16"
 serde = { version = "1.0.152", features = ["derive"] }
