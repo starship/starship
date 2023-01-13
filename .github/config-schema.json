@@ -5649,6 +5649,10 @@
             }
           ]
         },
+        "whenrepo": {
+          "default": false,
+          "type": "boolean"
+        },
         "shell": {
           "default": [],
           "allOf": [

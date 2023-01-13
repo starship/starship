@@ -34,6 +34,11 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
+    let repo = context.get_repo();
+    if config.whenrepo && repo.is_err() {
+        return None;
+    }
+
     // Note: Forward config if `Module` ends up needing `config`
     let mut module = Module::new(&format!("custom.{name}"), config.description, None);
 
@@ -294,7 +299,7 @@ fn handle_shell(command: &mut Command, shell: &str, shell_args: &[&str]) -> bool
 mod tests {
     use super::*;
 
-    use crate::test::ModuleRenderer;
+    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
@@ -720,5 +725,41 @@ mod tests {
             .collect();
         let expected = None;
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_render_whenrepo_not_in() -> io::Result<()> {
+        let repo_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("custom.test")
+            .path(repo_dir.path())
+            .config(toml::toml! {
+                [custom.test]
+                when = true
+                whenrepo = true
+                format = "test"
+            })
+            .collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn test_render_whenrepo_in() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        let actual = ModuleRenderer::new("custom.test")
+            .path(repo_dir.path())
+            .config(toml::toml! {
+                [custom.test]
+                when = true
+                whenrepo = true
+                format = "test"
+            })
+            .collect();
+        let expected = Some("test".to_string());
+        assert_eq!(expected, actual);
+        repo_dir.close()
     }
 }
