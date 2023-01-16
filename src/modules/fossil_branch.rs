@@ -8,6 +8,15 @@ use crate::modules::utils::truncate::truncate_text;
 ///
 /// Will display the branch name if the current directory is a Fossil check-out
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let is_checkout = context
+        .try_begin_scan()?
+        .set_files(&[".fslckout"])
+        .is_match();
+
+    if !is_checkout {
+        return None;
+    }
+
     let mut module = context.new_module("fossil_branch");
     let config = FossilBranchConfig::try_load(module.config);
 
