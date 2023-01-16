@@ -96,10 +96,21 @@ impl<'a> FossilDiff<'a> {
 #[cfg(test)]
 mod tests {
     use std::io;
+    use std::path::Path;
 
-    use crate::test::ModuleRenderer;
+    use nu_ansi_term::{Color, Style};
+
+    use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
 
     use super::FossilDiff;
+
+    enum Expect<'a> {
+        Empty,
+        Added(Option<&'a str>),
+        AddedStyle(Style),
+        Deleted(Option<&'a str>),
+        DeletedStyle(Style),
+    }
 
     #[test]
     fn show_nothing_on_empty_dir() -> io::Result<()> {
@@ -112,6 +123,63 @@ mod tests {
         assert_eq!(expected, actual);
 
         checkout_dir.close()
+    }
+
+    #[test]
+    fn test_fossil_metrics_disabled_per_default() -> io::Result<()> {
+        let tempdir = fixture_repo(FixtureProvider::Fossil)?;
+        let checkout_dir = tempdir.path();
+        expect_fossil_metrics_with_config(
+            checkout_dir,
+            Some(toml::toml! {
+                // no "disabled=false" in config!
+                [fossil_metrics]
+                only_nonzero_diffs = false
+            }),
+            &[Expect::Empty],
+        );
+        tempdir.close()
+    }
+
+    #[test]
+    fn test_fossil_metrics_autodisabled() -> io::Result<()> {
+        let tempdir = tempfile::tempdir()?;
+        expect_fossil_metrics_with_config(tempdir.path(), None, &[Expect::Empty]);
+        tempdir.close()
+    }
+
+    #[test]
+    fn test_fossil_metrics() -> io::Result<()> {
+        let tempdir = fixture_repo(FixtureProvider::Fossil)?;
+        let checkout_dir = tempdir.path();
+        expect_fossil_metrics_with_config(
+            checkout_dir,
+            None,
+            &[Expect::Added(Some("3")), Expect::Deleted(Some("2"))],
+        );
+        tempdir.close()
+    }
+
+    #[test]
+    fn test_fossil_metrics_configured() -> io::Result<()> {
+        let tempdir = fixture_repo(FixtureProvider::Fossil)?;
+        let checkout_dir = tempdir.path();
+        expect_fossil_metrics_with_config(
+            checkout_dir,
+            Some(toml::toml! {
+                [fossil_metrics]
+                added_style = "underline blue"
+                deleted_style = "underline purple"
+                disabled = false
+            }),
+            &[
+                Expect::Added(Some("3")),
+                Expect::AddedStyle(Color::Blue.underline()),
+                Expect::Deleted(Some("2")),
+                Expect::DeletedStyle(Color::Purple.underline()),
+            ],
+        );
+        tempdir.close()
     }
 
     #[test]
@@ -149,6 +217,51 @@ mod tests {
             added: "3",
             deleted: "2",
         };
+        assert_eq!(expected, actual);
+    }
+
+    fn expect_fossil_metrics_with_config(
+        checkout_dir: &Path,
+        config: Option<toml::Value>,
+        expectations: &[Expect],
+    ) {
+        let actual = ModuleRenderer::new("fossil_metrics")
+            .path(checkout_dir.to_str().unwrap())
+            .config(config.unwrap_or_else(|| {
+                toml::toml! {
+                    [fossil_metrics]
+                    disabled = false
+                }
+            }))
+            .collect();
+
+        let mut expect_added = Some("3");
+        let mut expect_added_style = Color::Green.bold();
+        let mut expect_deleted = Some("2");
+        let mut expect_deleted_style = Color::Red.bold();
+
+        for expect in expectations {
+            match expect {
+                Expect::Empty => {
+                    assert_eq!(None, actual);
+                    return;
+                }
+                Expect::Added(added) => expect_added = *added,
+                Expect::AddedStyle(style) => expect_added_style = *style,
+                Expect::Deleted(deleted) => expect_deleted = *deleted,
+                Expect::DeletedStyle(style) => expect_deleted_style = *style,
+            }
+        }
+
+        let expected = Some(format!(
+            "{}{}",
+            expect_added
+                .map(|added| format!("{} ", expect_added_style.paint(format!("+{added}"))))
+                .unwrap_or(String::from("")),
+            expect_deleted
+                .map(|deleted| format!("{} ", expect_deleted_style.paint(format!("-{deleted}"))))
+                .unwrap_or(String::from("")),
+        ));
         assert_eq!(expected, actual);
     }
 }
