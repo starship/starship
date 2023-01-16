@@ -77,7 +77,6 @@ mod tests {
     use nu_ansi_term::{Color, Style};
 
     use crate::test::{fixture_repo, FixtureProvider, ModuleRenderer};
-    use crate::utils::create_command;
 
     enum Expect<'a> {
         BranchName(&'a str),
@@ -102,10 +101,9 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn test_fossil_branch_disabled_per_default() -> io::Result<()> {
         let tempdir = fixture_repo(FixtureProvider::Fossil)?;
-        let checkout_dir = &tempdir.path().join("checkout");
+        let checkout_dir = tempdir.path();
         expect_fossil_branch_with_config(
             checkout_dir,
             Some(toml::toml! {
@@ -119,7 +117,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn test_fossil_branch_autodisabled() -> io::Result<()> {
         let tempdir = tempfile::tempdir()?;
         expect_fossil_branch_with_config(tempdir.path(), None, &[Expect::Empty]);
@@ -127,10 +124,9 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn test_fossil_branch() -> io::Result<()> {
         let tempdir = fixture_repo(FixtureProvider::Fossil)?;
-        let checkout_dir = &tempdir.path().join("checkout");
+        let checkout_dir = tempdir.path();
         run_fossil(&["branch", "new", "topic-branch", "trunk"], checkout_dir)?;
         run_fossil(&["update", "topic-branch"], checkout_dir)?;
         expect_fossil_branch_with_config(
@@ -142,27 +138,23 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn test_fossil_branch_configured() -> io::Result<()> {
         let tempdir = fixture_repo(FixtureProvider::Fossil)?;
-        let checkout_dir = &tempdir.path().join("checkout");
-        run_fossil(
-            &["branch", "new", "another-topic-branch", "trunk"],
-            checkout_dir,
-        )?;
-        run_fossil(&["update", "another-topic-branch"], checkout_dir)?;
+        let checkout_dir = tempdir.path();
+        run_fossil(&["branch", "new", "topic-branch", "trunk"], checkout_dir)?;
+        run_fossil(&["update", "topic-branch"], checkout_dir)?;
         expect_fossil_branch_with_config(
             checkout_dir,
             Some(toml::toml! {
                 [fossil_branch]
                 style = "underline blue"
                 symbol = "F "
-                truncation_length = 14
+                truncation_length = 10
                 truncation_symbol = "%"
                 disabled = false
             }),
             &[
-                Expect::BranchName("another-topic-"),
+                Expect::BranchName("topic-bran"),
                 Expect::Style(Color::Blue.underline()),
                 Expect::Symbol("F"),
                 Expect::TruncationSymbol("%"),
@@ -216,11 +208,8 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
-    fn run_fossil(args: &[&str], checkout_dir: &Path) -> io::Result<()> {
-        create_command("fossil")?
-            .args(args)
-            .current_dir(checkout_dir)
-            .output()?;
+    fn run_fossil(args: &[&str], _checkout_dir: &Path) -> io::Result<()> {
+        crate::utils::mock_cmd("fossil", args).ok_or(io::ErrorKind::Unsupported)?;
         Ok(())
     }
 }

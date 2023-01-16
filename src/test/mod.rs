@@ -177,17 +177,10 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
         FixtureProvider::Fossil => {
             let path = tempfile::tempdir()?;
-
-            create_command("fossil")?
-                .current_dir(path.path())
-                .args(["init", "repository.fossil"])
-                .output()?;
-
-            create_command("fossil")?
-                .current_dir(path.path())
-                .args(["open", "--workdir", "checkout", "repository.fossil"])
-                .output()?;
-
+            fs::OpenOptions::new()
+                .create(true)
+                .write(true)
+                .open(path.path().join(".fslckout"))?;
             Ok(path)
         }
         FixtureProvider::Git => {
