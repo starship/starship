@@ -167,6 +167,7 @@ impl<'a> ModuleRenderer<'a> {
 
 #[derive(Clone, Copy)]
 pub enum FixtureProvider {
+    Fossil,
     Git,
     Hg,
     Pijul,
@@ -174,6 +175,21 @@ pub enum FixtureProvider {
 
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
+        FixtureProvider::Fossil => {
+            let path = tempfile::tempdir()?;
+
+            create_command("fossil")?
+                .current_dir(path.path())
+                .args(["init", "repository.fossil"])
+                .output()?;
+
+            create_command("fossil")?
+                .current_dir(path.path())
+                .args(["open", "--workdir", "checkout", "repository.fossil"])
+                .output()?;
+
+            Ok(path)
+        }
         FixtureProvider::Git => {
             let path = tempfile::tempdir()?;
 
