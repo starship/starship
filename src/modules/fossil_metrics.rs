@@ -6,6 +6,15 @@ use crate::formatter::StringFormatter;
 /// Creates a module with currently added/deleted lines in the Fossil check-out in the current
 /// directory.
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    let is_checkout = context
+        .try_begin_scan()?
+        .set_files(&[".fslckout"])
+        .is_match();
+
+    if !is_checkout {
+        return None;
+    }
+
     let mut module = context.new_module("fossil_metrics");
     let config = FossilMetricsConfig::try_load(module.config);
 
