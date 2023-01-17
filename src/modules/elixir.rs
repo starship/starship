@@ -39,7 +39,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "version" => versions
                     .deref()
                     .as_ref()
-                    .map(|(_, elixir_version)| elixir_version)
                     .map(|elixir_version| {
                         VersionFormatter::format_module_version(
                             module.get_name(),
@@ -47,11 +46,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             config.version_format,
                         )
                     })?
-                    .map(Ok),
-                "otp_version" => versions
-                    .deref()
-                    .as_ref()
-                    .map(|(otp_version, _)| otp_version.to_string())
                     .map(Ok),
                 _ => None,
             })
@@ -69,22 +63,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_elixir_version(context: &Context) -> Option<(String, String)> {
-    let output = context.exec_cmd("elixir", &["--version"])?.stdout;
+fn get_elixir_version(context: &Context) -> Option<String> {
+    let output = context.exec_cmd("elixir", &["--short-version"])?.stdout;
 
     parse_elixir_version(&output)
 }
 
-fn parse_elixir_version(version: &str) -> Option<(String, String)> {
+fn parse_elixir_version(version: &str) -> Option<String> {
     let mut lines = version.lines();
-    // split line into ["Erlang/OTP", "22", "[erts-10.5]", ...], take "22"
-    let otp_version = lines.next()?.split_whitespace().nth(1)?;
-    // skip empty line
-    let _ = lines.next()?;
-    // split line into ["Elixir", "1.10", "(compiled", ...], take "1.10"
-    let elixir_version = lines.next()?.split_whitespace().nth(1)?;
+    let elixir_version = lines.next();
 
-    Some((otp_version.to_string(), elixir_version.to_string()))
+    Some(elixir_version?.to_string())
 }
 
 #[cfg(test)]
@@ -97,32 +86,20 @@ mod tests {
 
     #[test]
     fn test_parse_elixir_version() {
-        let stable_input = "\
-Erlang/OTP 23 [erts-11.1.7] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:1]
-
-Elixir 1.11.3 (compiled with Erlang/OTP 21)
-";
-        let rc_input = "\
-Erlang/OTP 23 [erts-11.1.7] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:1]
-
-Elixir 1.12.0-rc.0 (31d2b99) (compiled with Erlang/OTP 21)
-";
-        let dev_input = "\
-Erlang/OTP 23 [erts-11.1.7] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1]
-
-Elixir 1.13.0-dev (compiled with Erlang/OTP 23)
-";
+        let stable_input = "1.11.3";
+        let rc_input = "1.12.0-rc.0";
+        let dev_input = "1.13.0-dev";
         assert_eq!(
             parse_elixir_version(stable_input),
-            Some(("23".to_string(), "1.11.3".to_string()))
+            Some("1.11.3".to_string())
         );
         assert_eq!(
             parse_elixir_version(rc_input),
-            Some(("23".to_string(), "1.12.0-rc.0".to_string()))
+            Some("1.12.0-rc.0".to_string())
         );
         assert_eq!(
             parse_elixir_version(dev_input),
-            Some(("23".to_string(), "1.13.0-dev".to_string()))
+            Some("1.13.0-dev".to_string())
         );
     }
 
@@ -145,7 +122,7 @@ Elixir 1.13.0-dev (compiled with Erlang/OTP 23)
 
         let expected = Some(format!(
             "via {}",
-            Color::Purple.bold().paint("💧 v1.10 (OTP 22) ")
+            Color::Purple.bold().paint("💧 v1.10 ")
         ));
         let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 
