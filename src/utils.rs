@@ -232,12 +232,9 @@ Default target: x86_64-apple-macosx\n",
             stdout: String::from("stdout ok!\n"),
             stderr: String::from("stderr ok!\n"),
         }),
-        "elixir --version" => Some(CommandOutput {
+        "elixir --short-version" => Some(CommandOutput {
             stdout: String::from(
-                "\
-Erlang/OTP 22 [erts-10.6.4] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
-
-Elixir 1.10 (compiled with Erlang/OTP 22)\n",
+                "1.14.2",
             ),
             stderr: String::default(),
         }),

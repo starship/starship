@@ -410,7 +410,7 @@
         ],
         "detect_folders": [],
         "disabled": false,
-        "format": "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
+        "format": "via [$symbol($version )]($style)",
         "style": "bold purple",
         "symbol": "💧 ",
         "version_format": "v${raw}"
@@ -2726,7 +2726,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
+          "default": "via [$symbol($version )]($style)",
           "type": "string"
         },
         "version_format": {
