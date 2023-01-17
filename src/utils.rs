@@ -234,7 +234,7 @@ Default target: x86_64-apple-macosx\n",
         }),
         "elixir --short-version" => Some(CommandOutput {
             stdout: String::from(
-                "1.14.2",
+                "1.10",
             ),
             stderr: String::default(),
         }),
