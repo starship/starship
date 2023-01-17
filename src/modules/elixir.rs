@@ -120,10 +120,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("mix.exs"))?.sync_all()?;
 
-        let expected = Some(format!(
-            "via {}",
-            Color::Purple.bold().paint("💧 v1.10 ")
-        ));
+        let expected = Some(format!("via {}", Color::Purple.bold().paint("💧 v1.10 ")));
         let output = ModuleRenderer::new("elixir").path(dir.path()).collect();
 
         assert_eq!(output, expected);
