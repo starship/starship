@@ -423,6 +423,7 @@ Apoie este projeto [tornando-se um patrocinador](https://github.com/sponsors/sta
 **Supporter Tier**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>
