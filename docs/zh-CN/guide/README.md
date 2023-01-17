@@ -423,6 +423,7 @@ eval "$(starship init zsh)"
 **支持者级别**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>
