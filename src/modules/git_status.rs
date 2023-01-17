@@ -284,7 +284,9 @@ impl RepoStatus {
 
     fn is_staged(short_status: &str) -> bool {
         // is_index_modified || is_index_added
-        short_status.starts_with('M') || short_status.starts_with('A') || short_status.starts_with('T')
+        short_status.starts_with('M')
+            || short_status.starts_with('A')
+            || short_status.starts_with('T')
     }
 
     fn is_typechange(short_status: &str) -> bool {
