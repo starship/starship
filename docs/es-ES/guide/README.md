@@ -423,6 +423,7 @@ Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsor
 **Patrocinadores**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>
