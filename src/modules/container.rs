@@ -199,6 +199,7 @@ mod tests {
         Ok(())
     }
 
+    #[cfg(target_os = "linux")]
     fn containerenv_systemd(
         name: Option<&str>,
         display: Option<&str>,
