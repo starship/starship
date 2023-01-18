@@ -16,6 +16,7 @@ pub struct PhpConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub use_symfony_cli: bool,
 }
 
 impl<'a> Default for PhpConfig<'a> {
@@ -29,6 +30,7 @@ impl<'a> Default for PhpConfig<'a> {
             detect_extensions: vec!["php"],
             detect_files: vec!["composer.json", ".php-version"],
             detect_folders: vec![],
+            use_symfony_cli: false,
         }
     }
 }

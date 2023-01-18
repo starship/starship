@@ -337,6 +337,12 @@ WebAssembly: unavailable
                 stderr: String::default(),
             })
         },
+        "symfony php -nr echo PHP_MAJOR_VERSION.\".\".PHP_MINOR_VERSION.\".\".PHP_RELEASE_VERSION;" => {
+            Some(CommandOutput {
+                stdout: String::from("8.1.13"),
+                stderr: String::default(),
+            })
+        },
         "pijul channel" => Some(CommandOutput{
             stdout: String::from("  main\n* tributary-48198"),
             stderr: String::default(),
