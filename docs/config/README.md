@@ -3156,6 +3156,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `style`             | `'147 bold'`                         | The style for the module.                                                 |
 | `disabled`          | `false`                              | Disables the `php` module.                                                |
+| `use_symfony_cli`   | `false`                              | Use the `symfony-cli` binary instead of system `php` binary               |
 
 ### Variables
 
