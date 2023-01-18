@@ -1188,7 +1188,7 @@ checksum = "ad3f84ec28896f6a4b3f3174a1125117ac91788b1c64d96f25eabcd8d01cc7e3"
 dependencies = [
  "git-command",
  "git-config-value",
- "nix 0.26.1",
+ "nix 0.26.2",
  "parking_lot 0.12.1",
  "thiserror",
 ]
@@ -1790,9 +1790,9 @@ dependencies = [
 
 [[package]]
 name = "nix"
-version = "0.26.1"
+version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46a58d1d356c6597d08cde02c2f09d785b09e28711837b1ed667dc652c08a694"
+checksum = "bfdda3d196821d6af13126e40375cdf7da646a96114af134d5f417a9a1dc8e1a"
 dependencies = [
  "bitflags",
  "cfg-if 1.0.0",
@@ -2806,7 +2806,7 @@ dependencies = [
  "indexmap",
  "log",
  "mockall",
- "nix 0.26.1",
+ "nix 0.26.2",
  "notify-rust",
  "nu-ansi-term",
  "once_cell",
