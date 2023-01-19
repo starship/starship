@@ -53,6 +53,7 @@ pub mod memory_usage;
 pub mod meson;
 pub mod nim;
 pub mod nix_shell;
+pub mod devbox_shell;
 pub mod nodejs;
 pub mod ocaml;
 pub mod opa;
@@ -136,6 +137,8 @@ pub struct FullConfig<'a> {
     dart: dart::DartConfig<'a>,
     #[serde(borrow)]
     deno: deno::DenoConfig<'a>,
+    #[serde(borrow)]
+    devbox_shell: devbox_shell::DevboxShellConfig<'a>,
     #[serde(borrow)]
     directory: directory::DirectoryConfig<'a>,
     #[serde(borrow)]
