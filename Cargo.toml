@@ -43,7 +43,7 @@ git-repository-faster = ["git-features/zlib-stock", "git-repository/fast-sha1"]
 
 [dependencies]
 chrono = { version = "0.4.23", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.1.0", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.1.1", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.1.0"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
@@ -114,7 +114,7 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.26.1", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.26.2", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
 shadow-rs = { version = "0.20.0", default-features = false }
