@@ -43,6 +43,9 @@ symbol = "dart "
 [deno]
 symbol = "deno "
 
+[devbox_shell]
+symbol = "devbox "
+
 [dotnet]
 symbol = ".NET "
 

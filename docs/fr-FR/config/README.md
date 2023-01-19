@@ -242,7 +242,7 @@ Le `format` par défaut est utilisé pour définir le format de l'invite, si il 
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Est équivalent à 
 format = """
 $username\
 $hostname\
@@ -258,8 +258,10 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$pijul_channel\
 $docker_context\
 $package\
+$bun\
 $c\
 $cmake\
 $cobol\
@@ -270,8 +272,9 @@ $dotnet\
 $elixir\
 $elm\
 $erlang\
+$fennel\
 $golang\
-$guix_shell\
+$gradle\
 $haskell\
 $haxe\
 $helm\
@@ -300,7 +303,9 @@ $vlang\
 $vagrant\
 $zig\
 $buf\
+$guix_shell\
 $nix_shell\
+$devbox_shell\
 $conda\
 $meson\
 $spack\
@@ -317,10 +322,11 @@ $cmd_duration\
 $line_break\
 $jobs\
 $battery\
+$battery\
 $time\
 $status\
-$os\
 $container\
+$os\
 $shell\
 $character"""
 ```
@@ -1040,6 +1046,40 @@ Le module `deno` affiche la version de [Deno](https://deno.land/) installée. Pa
 [deno]
 format = 'via [🦕 $version](green bold) '
 ```
+
+## Devbox-shell
+
+The `devbox_shell` module shows the [devbox-shell](https://www.jetpack.io/devbox/docs/contributor-quickstart/#start-your-development-shell) environment.
+The module will be shown when inside a devbox-shell environment.
+
+### Options
+
+| Option     | Default                    | Description                                            |
+| ---------- | -------------------------- | ------------------------------------------------------ |
+| `format`   | `'via [$symbol]($style) '` | The format for the module.                             |
+| `symbol`   | `"</> "`                   | A format string representing the symbol of guix-shell. |
+| `style`    | `"purple bold"`            | The style for the module.                              |
+| `disabled` | `false`                    | Disables the `devbox_shell` module.                      |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[devbox_shell]
+disabled = true
+format = 'via [</>](yellow bold) '
+```
+
 
 ## Dossier
 
