@@ -86,7 +86,7 @@ unicode-segmentation = "1.10.0"
 unicode-width = "0.1.10"
 urlencoding = "2.1.2"
 versions = "4.1.0"
-which = "4.3.0"
+which = "4.4.0"
 yaml-rust = "0.4.5"
 
 process_control = { version = "4.0.1", features = ["crossbeam-channel"] }
