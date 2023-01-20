@@ -245,7 +245,7 @@ mod tests {
     #[test]
     #[cfg(target_os = "linux")]
     fn test_containerenv_systemd() -> std::io::Result<()> {
-        let (actual, expected) = containerenv_systemd(Some("systemd-nspawn"), Some("Systemd"))?;
+        let (actual, expected) = containerenv_systemd(None, Some("Systemd"))?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
