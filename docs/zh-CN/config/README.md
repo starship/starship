@@ -24,7 +24,7 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 disabled = true
 ```
 
-### Config File Location
+### 配置文件路径
 
 您可以使用 `STARSHIP_CONFIG` 环境变量更改默认配置文件的位置：
 
@@ -72,11 +72,11 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 依惯例，大多组件都有一个带有默认终端颜色的前缀（例如“nodejs”的 `via`），以及一个空格作为后缀。
 
-### Strings
+### 字符串
 
 In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+下列 Starship 语法符号在格式字符串中具有特殊用途，必须转义才能以原字符显示： `$ [ ] ( )`。
 
 | Symbol | Type                      | Notes                                                  |
 | ------ | ------------------------- | ------------------------------------------------------ |
