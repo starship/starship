@@ -26,18 +26,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             return Some("OCI".into());
         }
 
-        // WSL with systemd will set the contents of this file to "wsl"
-        // Avoid showing the container module in that case
-        let systemd_path = context_path(context, "/run/systemd/container");
-        if utils::read_file(systemd_path)
-            .ok()
-            .filter(|s| s.trim() != "wsl")
-            .is_some()
-        {
-            // systemd
-            return Some("Systemd".into());
-        }
-
         let container_env_path = context_path(context, "/run/.containerenv");
 
         if container_env_path.exists() {
@@ -58,6 +46,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 .unwrap_or_else(|_| "podman".into());
 
             return Some(image_res);
+        }
+
+        // WSL with systemd will set the contents of this file to "wsl"
+        // Avoid showing the container module in that case
+        // Honor the contents of this file if "docker" and not running in podman or wsl
+        let systemd_path = context_path(context, "/run/systemd/container");
+        if let Ok(s) = utils::read_file(systemd_path) {
+            match s.trim() {
+                "docker" => return Some("Docker".into()),
+                "wsl" => (),
+                _ => return Some("Systemd".into()),
+            }
         }
 
         if context_path(context, "/.dockerenv").exists() {
@@ -137,6 +137,12 @@ mod tests {
 
         let root_path = renderer.root_path();
 
+        // simulate file found on ubuntu images to ensure podman containerenv is preferred
+        let systemd_path = root_path.join("run/systemd/container");
+
+        fs::create_dir_all(systemd_path.parent().unwrap())?;
+        utils::write_file(&systemd_path, "docker\n")?;
+
         let containerenv = root_path.join("run/.containerenv");
 
         fs::create_dir_all(containerenv.parent().unwrap())?;
@@ -185,9 +191,12 @@ mod tests {
 
         Ok(())
     }
-    #[test]
+
     #[cfg(target_os = "linux")]
-    fn test_containerenv_systemd() -> std::io::Result<()> {
+    fn containerenv_systemd(
+        name: Option<&str>,
+        display: Option<&str>,
+    ) -> std::io::Result<(Option<String>, Option<String>)> {
         let renderer = ModuleRenderer::new("container")
             // For a custom config
             .config(toml::toml! {
@@ -200,7 +209,12 @@ mod tests {
         let systemd_path = root_path.join("run/systemd/container");
 
         fs::create_dir_all(systemd_path.parent().unwrap())?;
-        utils::write_file(&systemd_path, "systemd-nspawn\n")?;
+
+        let contents = match name {
+            Some(name) => format!("{name}\n"),
+            None => "systemd-nspawn\n".to_string(),
+        };
+        utils::write_file(&systemd_path, contents)?;
 
         // The output of the module
         let actual = renderer
@@ -208,13 +222,23 @@ mod tests {
             .collect();
 
         // The value that should be rendered by the module.
-        let expected = Some(format!(
-            "{} ",
-            Color::Red
-                .bold()
-                .dimmed()
-                .paint(format!("⬢ [{}]", "Systemd"))
-        ));
+        let expected = display.map(|_| {
+            format!(
+                "{} ",
+                Color::Red
+                    .bold()
+                    .dimmed()
+                    .paint(format!("⬢ [{}]", display.unwrap_or("Systemd")))
+            )
+        });
+
+        Ok((actual, expected))
+    }
+
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_containerenv_systemd() -> std::io::Result<()> {
+        let (actual, expected) = containerenv_systemd(None, Some("Systemd"))?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
@@ -224,28 +248,19 @@ mod tests {
 
     #[test]
     #[cfg(target_os = "linux")]
-    fn test_containerenv_wsl() -> std::io::Result<()> {
-        let renderer = ModuleRenderer::new("container")
-            // For a custom config
-            .config(toml::toml! {
-               [container]
-               disabled = false
-            });
+    fn test_containerenv_docker_in_systemd() -> std::io::Result<()> {
+        let (actual, expected) = containerenv_systemd(Some("docker"), Some("Docker"))?;
 
-        let root_path = renderer.root_path();
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
 
-        let systemd_path = root_path.join("run/systemd/container");
+        Ok(())
+    }
 
-        fs::create_dir_all(systemd_path.parent().unwrap())?;
-        utils::write_file(&systemd_path, "wsl\n")?;
-
-        // The output of the module
-        let actual = renderer
-            // Run the module and collect the output
-            .collect();
-
-        // The value that should be rendered by the module.
-        let expected = None;
+    #[test]
+    #[cfg(target_os = "linux")]
+    fn test_containerenv_wsl_in_systemd() -> std::io::Result<()> {
+        let (actual, expected) = containerenv_systemd(Some("wsl"), None)?;
 
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
