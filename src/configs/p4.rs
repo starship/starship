@@ -17,9 +17,9 @@ pub struct P4Config<'a> {
 impl<'a> Default for P4Config<'a> {
     fn default() -> Self {
         P4Config {
-            symbol: "",
-            style: "bold yellow",
-            format: "p4 [$symbol$repo]($style) ",
+            symbol: "p4",
+            style: "bold blue",
+            format: "[$symbol $user@$client#$changelist]($style) ",
             disabled: false,
         }
     }
