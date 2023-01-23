@@ -72,6 +72,7 @@ pub const ALL_MODULES: &[&str] = &[
     "pulumi",
     "purescript",
     "python",
+    "p4",
     "raku",
     "red",
     "rlang",
