@@ -13,27 +13,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("p4");
     let config: P4Config = P4Config::try_load(module.config);
 
-    if config.disabled {
+    if config.disabled || !is_p4_logged(context) {
         return None;
     }
 
-    context.exec_cmd("p4", &["login", "-s"])?;
-
-    let info_output = context.exec_cmd("p4", &["info"])?.stdout;
-    let info_map = parse_p4_info(&info_output);
-
-    let root_folder = info_map.get("Client root").unwrap_or(&&"");
-    let current_dir = &context.current_dir;
+    let info = get_p4_info(context)?;
  
-    if !current_dir.starts_with(root_folder) {
+    if !context.current_dir.starts_with(info.client_root) {
         return None;
     }
 
-    let user = info_map.get("User name").unwrap_or(&&"unknown");
-    let client = info_map.get("Client name").unwrap_or(&&"unknown");
-
-    let changelist_output = context.exec_cmd("p4", &["changes", "-m1", "#have"])?.stdout;
-    let changelist = changelist_output.split(" ").nth(1).unwrap_or("?");
+    let changelist = get_p4_last_changelist_number(context)?;
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -46,9 +36,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "changelist" => Some(Ok(changelist)),
-                "user" => Some(Ok(user)),
-                "client" => Some(Ok(client)),
+                "changelist" => Some(Ok(&changelist)),
+                "user" => Some(Ok(&info.user_name)),
+                "client" => Some(Ok(&info.client_name)),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -65,7 +55,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_p4_info(output: &str) -> HashMap<&str, &str> {
+struct P4Info {
+    user_name: String,
+    client_name: String,
+    client_root: String
+}
+
+fn is_p4_logged(context: &Context) -> bool {
+    match context.exec_cmd("p4", &["login", "-s"]) {
+        Some(_) => true,
+        None => false
+    }
+}
+
+fn get_p4_info(context: &Context) -> Option<P4Info> {
+    let info_output = context.exec_cmd("p4", &["info"])?.stdout;
+    let info_map = parse_p4_info_output(&info_output);
+
+    Some(P4Info {
+        user_name: info_map.get("User name")?.to_string(),
+        client_name: info_map.get("Client name")?.to_string(),
+        client_root: info_map.get("Client root")?.to_string()
+    })
+}
+
+fn get_p4_last_changelist_number<'a>(context: &Context) -> Option<String> {
+    context.exec_cmd("p4", &["changes", "-m1", "#have"])?.stdout.split(" ").nth(1).and_then(|s| Some(s.to_string()))
+}
+
+fn parse_p4_info_output(output: &str) -> HashMap<&str, &str> {
     let mut info_map = HashMap::new();
 
     for line in output.lines() {
