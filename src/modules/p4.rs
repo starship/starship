@@ -13,7 +13,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("p4");
     let config: P4Config = P4Config::try_load(module.config);
 
-    if config.disabled {
+    if config.disabled || !is_p4_logged(context) {
         return None;
     }
 
