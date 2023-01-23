@@ -52,6 +52,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "hg_state",
     "pijul_channel",
     "docker_context",
+    "p4",
     "package",
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
