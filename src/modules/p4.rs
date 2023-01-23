@@ -17,24 +17,23 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let user_cmd = context.exec_cmd("p4", &["info"]);
-    let info_map = match &user_cmd {
-        Some(output) => parse_key_values(&output.stdout),
-        None => return None
-    };
+    context.exec_cmd("p4", &["login", "-s"])?;
 
-    let user = info_map.get("User name").unwrap_or(&"");
-    let client = info_map.get("Client name").unwrap_or(&"unknown");
+    let info_output = context.exec_cmd("p4", &["info"])?.stdout;
+    let info_map = parse_p4_info(&info_output);
 
-    if user.is_empty() {
+    let root_folder = info_map.get("Client root").unwrap_or(&&"");
+    let current_dir = &context.current_dir;
+ 
+    if !current_dir.starts_with(root_folder) {
         return None;
     }
 
-    let changelist_cmd = context.exec_cmd("p4", &["changes", "-m1", "#have"]);
-    let changelist = match &changelist_cmd {
-        Some(output) => output.stdout.split(" ").nth(1).unwrap_or("?"),
-        None => ""
-    };
+    let user = info_map.get("User name").unwrap_or(&&"unknown");
+    let client = info_map.get("Client name").unwrap_or(&&"unknown");
+
+    let changelist_output = context.exec_cmd("p4", &["changes", "-m1", "#have"])?.stdout;
+    let changelist = changelist_output.split(" ").nth(1).unwrap_or("?");
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -66,19 +65,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_key_values(output: &str) -> HashMap<&str, &str> {
+fn parse_p4_info(output: &str) -> HashMap<&str, &str> {
     let mut info_map = HashMap::new();
-    let pairs = output
-        .split("\n")
-        .map(|e| { e.split(":") });
-            
-    for mut pair in pairs {
-        let k = pair.nth(0).unwrap_or_default().trim();
-        let v = pair.nth(0).unwrap_or_default().trim();
 
-        if !k.is_empty() {
-            info_map.insert(k, v);
-        }
+    for line in output.lines() {
+        match line.split_once(":") {
+            Some((k, v)) => {
+                info_map.insert(k, v.trim());
+            }
+            None => {}
+        };
     }
 
     info_map
