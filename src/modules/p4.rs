@@ -17,8 +17,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    if !is_p4_logged(context) {
-        log::debug!("User not logged in p4");
+    let info = get_p4_info(context)?;
+
+    if !context.current_dir.starts_with(info.client_root) {
         return None;
     }
 
@@ -123,12 +124,15 @@ fn parse_p4_info_output(output: &str) -> HashMap<&str, &str> {
 mod tests {
     use nu_ansi_term::Color;
 
-    use crate::{modules::p4::P4Info, test::ModuleRenderer, utils::CommandOutput};
+    use super::P4Info;
+
+    use crate::test::ModuleRenderer;
+    use crate::utils::CommandOutput;
 
     #[test]
-    fn logged_deep_inside_p4_workspace() {
+    fn logged_inside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
-            .path(r"/home/human/p4/MyWorkspace/MyRepository/subdir")
+            .path(r"C:\Perforce\MyWorkspace\MyRepository")
             .collect();
         let expected = Some(format!(
             "{} ",
@@ -236,7 +240,7 @@ User name: {}
 Client name: {}
 Client host: MyPC
 Client root: {}
-Current directory: /home/human
+Current directory: {}
 Peer address: 127.0.0.1:55855
 Client address: 127.0.0.1
 Server address: sc-helixa.test.com:1666
@@ -250,7 +254,7 @@ Server license: University of Test 1000 users (support ends 2023/02/15) (expires
 Server license-ip: 127.0.0.1:1666
 Case Handling: insensitive
 ",
-                info.user_name, info.client_name, info.client_root
+                info.user_name, info.client_name, info.client_root, ""
             ),
             stderr: String::default(),
         })
