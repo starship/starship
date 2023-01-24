@@ -62,10 +62,7 @@ struct P4Info {
 }
 
 fn is_p4_logged(context: &Context) -> bool {
-    match context.exec_cmd("p4", &["login", "-s"]) {
-        Some(_) => true,
-        None => false,
-    }
+    context.exec_cmd("p4", &["login", "-s"]).is_some()
 }
 
 fn get_p4_info(context: &Context) -> Option<P4Info> {
@@ -79,24 +76,21 @@ fn get_p4_info(context: &Context) -> Option<P4Info> {
     })
 }
 
-fn get_p4_last_changelist_number<'a>(context: &Context) -> Option<String> {
+fn get_p4_last_changelist_number(context: &Context) -> Option<String> {
     context
         .exec_cmd("p4", &["changes", "-m1", "#have"])?
         .stdout
-        .split(" ")
+        .split_whitespace()
         .nth(1)
-        .and_then(|s| Some(s.to_string()))
+        .map(|s| s.to_string())
 }
 
 fn parse_p4_info_output(output: &str) -> HashMap<&str, &str> {
     let mut info_map = HashMap::new();
 
     for line in output.lines() {
-        match line.split_once(":") {
-            Some((k, v)) => {
-                info_map.insert(k, v.trim());
-            }
-            None => {}
+        if let Some((k, v)) = line.split_once(':') {
+            info_map.insert(k, v.trim());
         };
     }
 
@@ -106,8 +100,6 @@ fn parse_p4_info_output(output: &str) -> HashMap<&str, &str> {
 #[cfg(test)]
 mod tests {
     use nu_ansi_term::Color;
-
-    use super::P4Info;
 
     use crate::test::ModuleRenderer;
 
@@ -134,28 +126,28 @@ mod tests {
 
     // }
 
-    fn build_mock_p4_info_output(info: &P4Info) -> String {
-        format!(
-            r"\
-User name: {}
-Client name: {}
-Client host: MyPC
-Client root: {}
-Current directory: {}
-Peer address: 127.0.0.1:55855
-Client address: 127.0.0.1
-Server address: sc-helixa.test.com:1666
-Server root: C:\Program Files\Perforce\Server
-Server date: 2023/01/23 18:09:14 -0500 Eastern Standard Time
-Server uptime: 661:14:26
-Server version: P4D/NTX64/2020.1/1953492 (2020/04/24)
-Server encryption: encrypted
-Server cert expires: Jul  3 13:53:58 2024 GMT
-Server license: University of Test 1000 users (support ends 2023/02/15) (expires 2023/02/15) 
-Server license-ip: 127.0.0.1:1666
-Case Handling: insensitive
-",
-            info.user_name, info.client_name, info.client_root, info.current_directory
-        )
-    }
+    //     fn build_mock_p4_info_output(info: &P4Info) -> String {
+    //         format!(
+    //             r"\
+    // User name: {}
+    // Client name: {}
+    // Client host: MyPC
+    // Client root: {}
+    // Current directory: c:\Users\human
+    // Peer address: 127.0.0.1:55855
+    // Client address: 127.0.0.1
+    // Server address: sc-helixa.test.com:1666
+    // Server root: C:\Program Files\Perforce\Server
+    // Server date: 2023/01/23 18:09:14 -0500 Eastern Standard Time
+    // Server uptime: 661:14:26
+    // Server version: P4D/NTX64/2020.1/1953492 (2020/04/24)
+    // Server encryption: encrypted
+    // Server cert expires: Jul  3 13:53:58 2024 GMT
+    // Server license: University of Test 1000 users (support ends 2023/02/15) (expires 2023/02/15)
+    // Server license-ip: 127.0.0.1:1666
+    // Case Handling: insensitive
+    // ",
+    //             info.user_name, info.client_name, info.client_root
+    //         )
+    //     }
 }
