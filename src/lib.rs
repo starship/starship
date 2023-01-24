@@ -7,6 +7,7 @@ shadow!(shadow);
 
 // Lib is present to allow for benchmarking
 pub mod bug_report;
+pub mod check;
 pub mod config;
 pub mod configs;
 pub mod configure;
