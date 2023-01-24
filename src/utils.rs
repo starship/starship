@@ -446,6 +446,36 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
             stdout: String::from("22.1.3\n"),
             stderr: String::default(),
         }),
+        "p4 login -s" => Some(CommandOutput {
+            stdout: String::from("User human ticket expires in 11 hours 21 minutes.\n"),
+            stderr: String::default()
+        }),
+        "p4 info" => Some(CommandOutput {
+            stdout: String::from(
+r"User name: human
+Client name: MyWorkspace
+Client host: MyPC
+Client root: C:\Perforce\MyWorkspace
+Current directory: c:\Users\human
+Peer address: 127.0.0.1:55855
+Client address: 127.0.0.1
+Server address: sc-helixa.test.com:1666
+Server root: C:\Program Files\Perforce\Server
+Server date: 2023/01/23 18:09:14 -0500 Eastern Standard Time
+Server uptime: 661:14:26
+Server version: P4D/NTX64/2020.1/1953492 (2020/04/24)
+Server encryption: encrypted
+Server cert expires: Jul  3 13:53:58 2024 GMT
+Server license: University of Test 1000 users (support ends 2023/02/15) (expires 2023/02/15) 
+Server license-ip: 127.0.0.1:1666
+Case Handling: insensitive
+"),
+            stderr: String::default()
+        }),
+        "p4 changes -m1 #have" => Some(CommandOutput {
+            stdout: String::from("Change 176579 on 2023/01/23 by human@MyWorkspace 'doing some work'\n"),
+            stderr: String::default()
+        }),
         _ => return None,
     };
     Some(out)
