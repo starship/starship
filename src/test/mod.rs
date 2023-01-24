@@ -180,7 +180,8 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
-                .open(path.path().join(".fslckout"))?;
+                .open(path.path().join(".fslckout"))?
+                .sync_all()?;
             Ok(path)
         }
         FixtureProvider::Git => {
