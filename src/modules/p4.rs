@@ -124,8 +124,6 @@ fn parse_p4_info_output(output: &str) -> HashMap<&str, &str> {
 mod tests {
     use nu_ansi_term::Color;
 
-    use super::P4Info;
-
     use crate::test::ModuleRenderer;
     use crate::utils::CommandOutput;
 
