@@ -269,6 +269,7 @@ $shlvl\
 $singularity\
 $kubernetes\
 $directory\
+$p4\
 $vcsh\
 $fossil_branch\
 $fossil_metrics\
