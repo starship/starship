@@ -37,6 +37,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "singularity",
     "kubernetes",
     "directory",
+    "p4",
     "vcsh",
     "git_branch",
     "git_commit",
@@ -46,7 +47,6 @@ pub const PROMPT_ORDER: &[&str] = &[
     "hg_branch",
     "pijul_channel",
     "docker_context",
-    "p4",
     "package",
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)

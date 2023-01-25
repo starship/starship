@@ -264,6 +264,7 @@ $shlvl\
 $singularity\
 $kubernetes\
 $directory\
+$p4\
 $vcsh\
 $git_branch\
 $git_commit\
