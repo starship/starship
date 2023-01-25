@@ -124,13 +124,12 @@ fn parse_p4_info_output(output: &str) -> HashMap<&str, &str> {
 mod tests {
     use nu_ansi_term::Color;
 
-    use crate::test::ModuleRenderer;
-    use crate::utils::CommandOutput;
+    use crate::{modules::p4::P4Info, test::ModuleRenderer, utils::CommandOutput};
 
     #[test]
-    fn logged_inside_p4_workspace() {
+    fn logged_deep_inside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
-            .path(r"C:\Perforce\MyWorkspace\MyRepository")
+            .path(r"C:\Perforce\MyWorkspace\MyRepository\subdir")
             .collect();
         let expected = Some(format!(
             "{} ",
@@ -143,7 +142,7 @@ mod tests {
     #[test]
     fn logged_just_inside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
-            .path(r"/home/human/p4/MyWorkspace")
+            .path(r"C:\Perforce\MyWorkspace\")
             .collect();
         let expected = Some(format!(
             "{} ",
@@ -157,7 +156,7 @@ mod tests {
     fn not_logged_inside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
             .cmd("p4 login -s", None)
-            .path(r"/home/human/p4/MyWorkspace/MyRepository")
+            .path(r"C:\Perforce\MyWorkspace\MyRepository")
             .collect();
         let expected = None;
 
@@ -167,7 +166,7 @@ mod tests {
     #[test]
     fn logged_outside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
-            .path(r"/home/human/outside/perforce")
+            .path(r"C:\outside\perforce")
             .collect();
         let expected = None;
 
@@ -178,7 +177,7 @@ mod tests {
     fn good_p4_username_and_workspace() {
         let user_name = "testusernamer";
         let client_name = "Workspace";
-        let client_root = r"/home/human/p4/MyWorkspace";
+        let client_root = r"C:\Perforce\Workspace";
 
         let info = P4Info {
             user_name: String::from(user_name),
@@ -204,11 +203,8 @@ mod tests {
     fn good_p4_changelist_number() {
         let changelist = 12;
         let actual = ModuleRenderer::new("p4")
-            .cmd(
-                "p4 changes -m1 #have",
-                build_mock_p4_changes_output(changelist),
-            )
-            .path(r"/home/human/p4/MyWorkspace/MyRepository")
+            .cmd("p4 changes -m1 #have", build_mock_p4_changes_output(changelist))
+            .path(r"C:\Perforce\MyWorkspace\MyRepository")
             .collect();
         let expected = Some(format!(
             "{} ",
@@ -222,11 +218,8 @@ mod tests {
 
     fn build_mock_p4_changes_output(changelist: i32) -> Option<CommandOutput> {
         Some(CommandOutput {
-            stdout: format!(
-                "Change {} on 2023/01/23 by human@MyWorkspace 'doing some work'\n",
-                changelist
-            ),
-            stderr: String::default(),
+            stdout: format!("Change {} on 2023/01/23 by human@MyWorkspace 'doing some work'\n", changelist),
+            stderr: String::default()
         })
     }
 
