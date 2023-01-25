@@ -180,7 +180,10 @@ mod tests {
     fn good_p4_changelist_number() {
         let changelist = 12;
         let actual = ModuleRenderer::new("p4")
-            .cmd("p4 changes -m1 #have", build_mock_p4_changes_output(changelist))
+            .cmd(
+                "p4 changes -m1 #have",
+                build_mock_p4_changes_output(changelist),
+            )
             .path(r"C:\Perforce\MyWorkspace\MyRepository")
             .collect();
         let expected = Some(format!(
@@ -195,8 +198,11 @@ mod tests {
 
     fn build_mock_p4_changes_output(changelist: i32) -> Option<CommandOutput> {
         Some(CommandOutput {
-            stdout: format!("Change {} on 2023/01/23 by human@MyWorkspace 'doing some work'\n", changelist),
-            stderr: String::default()
+            stdout: format!(
+                "Change {} on 2023/01/23 by human@MyWorkspace 'doing some work'\n",
+                changelist
+            ),
+            stderr: String::default(),
         })
     }
 
