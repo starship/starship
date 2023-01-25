@@ -2249,7 +2249,7 @@ checksum = "eda0fc3b0fb7c975631757e14d9049da17374063edb6ebbcbc54d880d4fe94e9"
 dependencies = [
  "once_cell",
  "thiserror",
- "toml",
+ "toml 0.5.11",
 ]
 
 [[package]]
@@ -2651,6 +2651,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_spanned"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2c68e921cef53841b8925c2abadd27c9b891d9613bdc43d6b823062866df38e8"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "sha1"
 version = "0.10.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2833,7 +2842,7 @@ dependencies = [
  "systemstat",
  "tempfile",
  "terminal_size",
- "toml",
+ "toml 0.6.0",
  "toml_edit",
  "unicode-segmentation",
  "unicode-width",
@@ -3083,25 +3092,41 @@ version = "0.5.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f4f7f0dd8d50a853a531c426359045b1998f04219d88799810762cd4ad314234"
 dependencies = [
- "indexmap",
  "serde",
 ]
 
 [[package]]
-name = "toml_datetime"
-version = "0.5.0"
+name = "toml"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "808b51e57d0ef8f71115d8f3a01e7d3750d01c79cac4b3eda910f4389fdf92fd"
+checksum = "4fb9d890e4dc9298b70f740f615f2e05b9db37dce531f6b24fb77ac993f9f217"
+dependencies = [
+ "indexmap",
+ "serde",
+ "serde_spanned",
+ "toml_datetime",
+ "toml_edit",
+]
+
+[[package]]
+name = "toml_datetime"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4553f467ac8e3d374bc9a177a26801e5d0f9b211aa1673fb137a403afd1c9cf5"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "toml_edit"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a34cc558345efd7e88b9eda9626df2138b80bb46a7606f695e751c892bc7dac6"
+checksum = "729bfd096e40da9c001f778f5cdecbd2957929a24e10e5883d9392220a751581"
 dependencies = [
  "indexmap",
- "itertools",
  "nom8",
+ "serde",
+ "serde_spanned",
  "toml_datetime",
 ]
 
@@ -3609,7 +3634,7 @@ version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b68db261ef59e9e52806f688020631e987592bd83619edccda9c47d42cde4f6c"
 dependencies = [
- "toml",
+ "toml 0.5.11",
 ]
 
 [[package]]
