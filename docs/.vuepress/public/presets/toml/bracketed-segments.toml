@@ -121,6 +121,9 @@ format = '\[[$symbol$cloud(\($project\))]($style)\]'
 [os]
 format = '\[[$symbol]($style)\]'
 
+[p4]
+format = '\[[$symbol $user@$client#$changelist]($style)\]'
+
 [package]
 format = '\[[$symbol$version]($style)\]'
 
