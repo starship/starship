@@ -429,7 +429,7 @@ fn parse_color_string(
     predefined_color
 }
 
-fn get_palette<'a>(
+pub fn get_palette<'a>(
     palettes: &'a HashMap<String, Palette>,
     palette_name: Option<&str>,
 ) -> Option<&'a Palette> {
