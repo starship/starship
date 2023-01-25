@@ -424,7 +424,7 @@ prompt = '(foo)'
         dir.close()
     }
 
-    fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+    fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Table>) {
         let config = starship_config.unwrap_or(toml::toml! {
             [python]
             python_binary = "python2"
@@ -439,7 +439,7 @@ prompt = '(foo)'
         assert_eq!(expected, actual);
     }
 
-    fn check_python3_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+    fn check_python3_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Table>) {
         let config = starship_config.unwrap_or(toml::toml! {
              [python]
              python_binary = "python3"
@@ -456,7 +456,7 @@ prompt = '(foo)'
 
     fn check_multiple_binaries_renders(
         dir: &tempfile::TempDir,
-        starship_config: Option<toml::Value>,
+        starship_config: Option<toml::Table>,
     ) {
         let config = starship_config.unwrap_or(toml::toml! {
              [python]
@@ -472,7 +472,7 @@ prompt = '(foo)'
         assert_eq!(expected, actual);
     }
 
-    fn check_pyenv_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+    fn check_pyenv_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Table>) {
         let config = starship_config.unwrap_or(toml::toml! {
              [python]
              pyenv_version_name = true
