@@ -3043,23 +3043,22 @@ if the user is logged with the `p4` command line tool with `p4 login`.
 
 ### Options
 
-| Option            | Default                                          | Description                                                   |
-| ----------------- | ------------------------------------------------ | ------------------------------------------------------------- |
-| `format`          | `'[$symbol $user@$client#$changelist]($style) '` | The format for the module.                                    |
-| `symbol`          | `'p4'`                                          | The symbol used before displaying the workspace informations. |
-| `style`           | `'bold blue'`                                    | The style for the module.                                     |
-| `disabled`        | `false`                                          | Disables the `p4` module.                                     |
+| Option     | Default                                          | Description                                                   |
+| ---------- | ------------------------------------------------ | ------------------------------------------------------------- |
+| `format`   | `'[$symbol $user@$client#$changelist]($style) '` | The format for the module.                                    |
+| `symbol`   | `'p4'`                                           | The symbol used before displaying the workspace informations. |
+| `style`    | `'bold blue'`                                    | The style for the module.                                     |
+| `disabled` | `false`                                          | Disables the `p4` module.                                     |
 
 ### Variables
 
 | Variable   | Example      | Description                                            |
 | ---------- | ------------ | ------------------------------------------------------ |
-| user       |  `'myuser'`  | The currently logged in user (`P4USER`)                |
+| user       | `'myuser'`   | The currently logged in user (`P4USER`)                |
 | client     | `'Workspace` | The currently set workspace (`P4CLIENT`)               |
-| changelist |    `17500`   | The revision number of the repository in the workspace |
+| changelist | `17500`      | The revision number of the repository in the workspace |
 | symbol     |              | Mirrors the value of option `symbol`                   |
 | style\*    |              | Mirrors the value of option `style`                    |
-
 
 *: This variable can only be used as a part of a style string
 
