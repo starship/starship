@@ -80,9 +80,8 @@ fn create_offset_time_string(
     );
     if utc_time_offset_in_hours < 24_f32 && utc_time_offset_in_hours > -24_f32 {
         let utc_offset_in_seconds: i32 = (utc_time_offset_in_hours * 3600_f32) as i32;
-        let timezone_offset = match FixedOffset::east_opt(utc_offset_in_seconds) {
-            Some(offset) => offset,
-            None => return Err("Invalid offset"),
+        let Some(timezone_offset) = FixedOffset::east_opt(utc_offset_in_seconds) else {
+            return Err("Invalid offset")
         };
         log::trace!("Target timezone offset is {}", timezone_offset);
 
