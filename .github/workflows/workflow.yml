@@ -155,7 +155,11 @@ jobs:
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
 
       - name: Check | Detect Changes
-        run: git diff --exit-code .github/config-schema.json
+        uses: reviewdog/action-suggester@v1.6.0
+        with:
+          tool_name: starship config-schema
+          filter_mode: nofilter
+          fail_on_error: 'true'
 
   # Run tests on Linux, macOS, and Windows
   # On both Rust stable and Rust nightly
