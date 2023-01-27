@@ -8,9 +8,9 @@ use once_cell::unsync::OnceCell;
 
 use super::{Context, Module, ModuleConfig};
 
+use super::utils::duration::Duration;
 use crate::configs::aws::AwsConfig;
 use crate::formatter::StringFormatter;
-use crate::utils::render_time;
 
 type Profile = String;
 type Region = String;
@@ -224,7 +224,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let duration = {
         get_credentials_duration(context, aws_profile.as_ref(), &aws_creds).map(|duration| {
             if duration > 0 {
-                render_time((duration * 1000) as u128, false)
+                Duration::from((duration * 1000) as u64).fmt_humanized(false)
             } else {
                 config.expiration_symbol.to_string()
             }
