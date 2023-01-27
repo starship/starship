@@ -17,7 +17,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    
     if !is_p4_logged(context) {
         log::debug!("User not logged in p4");
         return None;
