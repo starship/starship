@@ -335,11 +335,11 @@ impl<'a> Context<'a> {
     }
 
     // TODO: This should be used directly by clap parse
-    pub fn get_cmd_duration(&self) -> Option<u128> {
+    pub fn get_cmd_duration(&self) -> Option<u64> {
         self.properties
             .cmd_duration
             .as_deref()
-            .and_then(|cd| cd.parse::<u128>().ok())
+            .and_then(|cd| cd.parse::<u64>().ok())
     }
 
     /// Execute a command and return the output on stdout and stderr if successful
