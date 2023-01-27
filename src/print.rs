@@ -334,7 +334,7 @@ fn handle_module<'a>(
         for (child, config) in context
             .config
             .get_config(&[module])
-            .and_then(|config| config.as_table().map(|t| t.iter()))
+            .and_then(|config| config.as_table().map(toml::map::Map::iter))
             .into_iter()
             .flatten()
         {

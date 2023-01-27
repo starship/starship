@@ -26,7 +26,7 @@ pub fn module<'a>(name: Option<&str>, context: &'a Context) -> Option<Module<'a>
     };
 
     let mod_name = match name {
-        Some(name) => format!("env_var.{}", name),
+        Some(name) => format!("env_var.{name}"),
         None => "env_var".to_owned(),
     };
 
@@ -78,7 +78,7 @@ fn filter_config(config: &toml::Value) -> Option<toml::Value> {
             table
                 .iter()
                 .filter(|(_key, val)| !val.is_table())
-                .map(|(key, val)| (key.to_owned(), val.to_owned()))
+                .map(|(key, val)| (key.clone(), val.clone()))
                 .collect::<toml::value::Table>()
         })
         .filter(|table| !table.is_empty())

@@ -130,9 +130,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
 fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value {
     // Extract all the requested sections into a new configuration.
     let mut subset = toml::value::Table::new();
-    let config = if let Some(config) = config.as_table_mut() {
-        config
-    } else {
+    let Some(config) = config.as_table_mut() else {
         // This function doesn't make any sense if the root is not a table.
         return toml::Value::Table(subset);
     };
@@ -156,9 +154,7 @@ fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value 
         }
 
         // Extract the value to move.
-        let value = if let Some(value) = source_cursor.remove(end) {
-            value
-        } else {
+        let Some(value) = source_cursor.remove(end) else {
             // We didn't find a value for this path, so move on to the next path.
             continue 'paths;
         };
