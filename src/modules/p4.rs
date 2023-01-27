@@ -13,17 +13,38 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("p4");
     let config: P4Config = P4Config::try_load(module.config);
 
-    if config.disabled || !is_p4_logged(context) {
+    if config.disabled {
         return None;
     }
+
+    log::debug!("Checking if logged in p4");
+
+    context.exec_cmd("p4", &["login", "-s"])?;
+
+    log::debug!("User logged in p4");
 
     let info = get_p4_info(context)?;
 
-    if !context.current_dir.starts_with(info.client_root) {
+    log::debug!("Got p4 info");
+
+    if !context.current_dir.starts_with(&info.client_root) {
+        log::debug!(
+            "User outside p4 repository ({} outside {})",
+            context.current_dir.display(),
+            info.client_root
+        );
         return None;
     }
 
+    log::debug!(
+        "User inside p4 repository ({} inside {})",
+        context.current_dir.display(),
+        info.client_root
+    );
+
     let changelist = get_p4_last_changelist_number(context)?;
+
+    log::debug!("Got p4 changelist number {}", changelist);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -59,10 +80,6 @@ struct P4Info {
     user_name: String,
     client_name: String,
     client_root: String,
-}
-
-fn is_p4_logged(context: &Context) -> bool {
-    context.exec_cmd("p4", &["login", "-s"]).is_some()
 }
 
 fn get_p4_info(context: &Context) -> Option<P4Info> {
