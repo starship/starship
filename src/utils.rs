@@ -455,8 +455,8 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
 r"User name: human
 Client name: MyWorkspace
 Client host: MyPC
-Client root: C:\Perforce\MyWorkspace
-Current directory: c:\Users\human
+Client root: /home/human/p4/MyWorkspace
+Current directory: /home/human
 Peer address: 127.0.0.1:55855
 Client address: 127.0.0.1
 Server address: sc-helixa.test.com:1666
