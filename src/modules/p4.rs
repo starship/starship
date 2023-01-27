@@ -192,7 +192,7 @@ mod tests {
             "{} ",
             Color::Blue
                 .bold()
-                .paint(format!("p4 {}@{}#176579", user_name, client_name))
+                .paint(format!("p4 {user_name}@{client_name}#176579"))
         ));
 
         assert_eq!(expected, actual);
@@ -212,7 +212,7 @@ mod tests {
             "{} ",
             Color::Blue
                 .bold()
-                .paint(format!("p4 human@MyWorkspace#{}", changelist))
+                .paint(format!("p4 human@MyWorkspace#{changelist}"))
         ));
 
         assert_eq!(expected, actual);
@@ -221,8 +221,7 @@ mod tests {
     fn build_mock_p4_changes_output(changelist: i32) -> Option<CommandOutput> {
         Some(CommandOutput {
             stdout: format!(
-                "Change {} on 2023/01/23 by human@MyWorkspace 'doing some work'\n",
-                changelist
+                "Change {changelist} on 2023/01/23 by human@MyWorkspace 'doing some work'\n"
             ),
             stderr: String::default(),
         })
