@@ -129,7 +129,7 @@ mod tests {
     #[test]
     fn logged_deep_inside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
-            .path(r"C:\Perforce\MyWorkspace\MyRepository\subdir")
+            .path(r"/home/human/p4/MyWorkspace/MyRepository/subdir")
             .collect();
         let expected = Some(format!(
             "{} ",
@@ -142,7 +142,7 @@ mod tests {
     #[test]
     fn logged_just_inside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
-            .path(r"C:\Perforce\MyWorkspace\")
+            .path(r"/home/human/p4/MyWorkspace")
             .collect();
         let expected = Some(format!(
             "{} ",
@@ -156,7 +156,7 @@ mod tests {
     fn not_logged_inside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
             .cmd("p4 login -s", None)
-            .path(r"C:\Perforce\MyWorkspace\MyRepository")
+            .path(r"/home/human/p4/MyWorkspace/MyRepository")
             .collect();
         let expected = None;
 
@@ -166,7 +166,7 @@ mod tests {
     #[test]
     fn logged_outside_p4_workspace() {
         let actual = ModuleRenderer::new("p4")
-            .path(r"C:\outside\perforce")
+            .path(r"/home/human/outside/perforce")
             .collect();
         let expected = None;
 
@@ -177,7 +177,7 @@ mod tests {
     fn good_p4_username_and_workspace() {
         let user_name = "testusernamer";
         let client_name = "Workspace";
-        let client_root = r"C:\Perforce\Workspace";
+        let client_root = r"/home/human/p4/MyWorkspace";
 
         let info = P4Info {
             user_name: String::from(user_name),
@@ -207,7 +207,7 @@ mod tests {
                 "p4 changes -m1 #have",
                 build_mock_p4_changes_output(changelist),
             )
-            .path(r"C:\Perforce\MyWorkspace\MyRepository")
+            .path(r"/home/human/p4/MyWorkspace/MyRepository")
             .collect();
         let expected = Some(format!(
             "{} ",
