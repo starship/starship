@@ -17,9 +17,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    log::debug!("Checking if logged in p4");
-
-    context.exec_cmd("p4", &["login", "-s"])?;
+    
+    if !is_p4_logged(context) {
+        log::debug!("User not logged in p4");
+        return None;
+    }
 
     log::debug!("User logged in p4");
 
@@ -80,6 +82,10 @@ struct P4Info {
     user_name: String,
     client_name: String,
     client_root: String,
+}
+
+fn is_p4_logged(context: &Context) -> bool {
+    context.exec_cmd("p4", &["login", "-s"]).is_some()
 }
 
 fn get_p4_info(context: &Context) -> Option<P4Info> {
