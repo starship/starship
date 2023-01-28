@@ -64,7 +64,7 @@ $null = New-Module starship {
         # Manually write it to console
         if ($stderr.Result.Trim() -ne '') {
             # Write-Error doesn't work here
-            $host.ui.WriteErrorLine($stderr)
+            $host.ui.WriteErrorLine($stderr.Result)
         }
 
         $stdout.Result;

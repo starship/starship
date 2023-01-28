@@ -37,6 +37,9 @@ symbol = " "
 [haskell]
 symbol = " "
 
+[haxe]
+symbol = "⌘ "
+
 [hg_branch]
 symbol = " "
 
@@ -104,6 +107,9 @@ Windows = " "
 
 [package]
 symbol = " "
+
+[pijul_channel]
+symbol = "🪺 "
 
 [python]
 symbol = " "

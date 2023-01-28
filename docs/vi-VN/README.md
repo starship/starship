@@ -119,7 +119,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Elvish
 
-   ::: cảnh báo
+   ::: warning
 
    Only elvish v0.18 or higher is supported.
 
@@ -147,7 +147,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Nushell
 
-   ::: cảnh báo
+   ::: warning
 
    This will change in the future. Only Nushell v0.61+ is supported.
 

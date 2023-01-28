@@ -85,8 +85,11 @@ enum Commands {
         /// Print the right prompt (instead of the standard left prompt)
         #[clap(long)]
         right: bool,
-        /// Print the continuation prompt (instead of the standard left prompt)
+        /// Print the prompt with the specified profile name (instead of the standard left prompt)
         #[clap(long, conflicts_with = "right")]
+        profile: Option<String>,
+        /// Print the continuation prompt (instead of the standard left prompt)
+        #[clap(long, conflicts_with = "right", conflicts_with = "profile")]
         continuation: bool,
         #[clap(flatten)]
         properties: Properties,
@@ -117,6 +120,12 @@ fn main() {
     let _ = nu_ansi_term::enable_ansi_support();
     logger::init();
     init_global_threadpool();
+
+    // Delete old log files
+    rayon::spawn(|| {
+        let log_dir = logger::get_log_dir();
+        logger::cleanup_log_files(log_dir);
+    });
 
     let args = match Cli::try_parse() {
         Ok(args) => args,
@@ -166,12 +175,14 @@ fn main() {
         Commands::Prompt {
             properties,
             right,
+            profile,
             continuation,
         } => {
-            let target = match (right, continuation) {
-                (true, _) => Target::Right,
-                (_, true) => Target::Continuation,
-                (_, _) => Target::Main,
+            let target = match (right, profile, continuation) {
+                (true, _, _) => Target::Right,
+                (_, Some(profile_name), _) => Target::Profile(profile_name),
+                (_, _, true) => Target::Continuation,
+                (_, _, _) => Target::Main,
             };
             print::prompt(properties, target)
         }
@@ -184,7 +195,7 @@ fn main() {
                 println!("Supported modules list");
                 println!("----------------------");
                 for modules in ALL_MODULES {
-                    println!("{}", modules);
+                    println!("{modules}");
                 }
             }
             if let Some(module_name) = name {
@@ -198,7 +209,7 @@ fn main() {
                     configure::update_configuration(&name, &value)
                 }
             } else if let Err(reason) = configure::edit_configuration(None) {
-                eprintln!("Could not edit configuration: {}", reason);
+                eprintln!("Could not edit configuration: {reason}");
                 std::process::exit(1);
             }
         }

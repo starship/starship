@@ -50,9 +50,6 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v2
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
@@ -60,6 +57,9 @@ jobs:
           override: true
           profile: minimal
           components: clippy
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Lint
         uses: actions-rs/cargo@v1.0.3
@@ -75,15 +75,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v2
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked
@@ -97,15 +97,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v2
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --no-default-features
@@ -119,15 +119,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v2
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --all-features
@@ -141,15 +141,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v2
-
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
         with:
           toolchain: stable
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Run | Generate Schema
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
@@ -177,9 +177,6 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v2
-
       # Install all the required dependencies for testing
       - name: Setup | Rust
         uses: actions-rs/toolchain@v1.0.7
@@ -188,6 +185,9 @@ jobs:
           components: llvm-tools-preview
           profile: minimal
           override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
@@ -200,7 +200,7 @@ jobs:
         run: cargo install --version 0.3.4 cargo-wix
         env:
           # cargo-wix does not require static crt
-          RUSTFLAGS: ''
+          RUSTFLAGS: ""
 
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
@@ -227,10 +227,23 @@ jobs:
           command: wix
           args: --dbg-build -v --nocapture -I install/windows/main.wxs
 
+      - name: Build | Chocolatey Package [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: |
+          # Setup dummy release artifacts
+          New-Item -ItemType Directory -Path ./starship-x86_64-pc-windows-msvc
+          New-Item -ItemType Directory -Path ./starship-i686-pc-windows-msvc
+          New-Item -ItemType File -Path ./starship-x86_64-pc-windows-msvc/starship-x86_64-pc-windows-msvc.zip
+          New-Item -ItemType File -Path ./starship-i686-pc-windows-msvc/starship-i686-pc-windows-msvc.zip
+          # Build package
+          pwsh ./install/windows/choco/update.ps1
+        env:
+          STARSHIP_VERSION: v1.2.3
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         if: github.repository == 'starship/starship'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: lcov.info
-          fail_ci_if_error: true

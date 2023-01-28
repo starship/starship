@@ -1,9 +1,9 @@
 use std::env;
+use std::fmt::{self, Debug};
 use std::io::Write;
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::Duration;
-use std::time::Instant;
 
 use process_control::{ChildExt, Control, Output};
 
@@ -22,11 +22,11 @@ use crate::{
 ///
 /// Finally, the content of the module itself is also set by a command.
 pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
-    let start: Instant = Instant::now();
-    let toml_config = context.config.get_custom_module_config(name).expect(
-        "modules::custom::module should only be called after ensuring that the module exists",
-    );
+    let toml_config = get_config(name, context)?;
     let config = CustomConfig::load(toml_config);
+    if config.disabled {
+        return None;
+    }
 
     if let Some(os) = config.os {
         if os != env::consts::OS && !(os == "unix" && cfg!(unix)) {
@@ -34,7 +34,8 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
-    let mut module = Module::new(name, config.description, Some(toml_config));
+    // Note: Forward config if `Module` ends up needing `config`
+    let mut module = Module::new(&format!("custom.{name}"), config.description, None);
 
     let mut is_match = context
         .try_begin_scan()?
@@ -48,46 +49,72 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             Either::First(b) => b,
             Either::Second(s) => exec_when(s, &config, context),
         };
+
+        if !is_match {
+            return None;
+        }
     }
 
-    if is_match {
-        let parsed = StringFormatter::new(config.format).and_then(|formatter| {
-            formatter
-                .map_meta(|var, _| match var {
-                    "symbol" => Some(config.symbol),
-                    _ => None,
-                })
-                .map_style(|variable| match variable {
-                    "style" => Some(Ok(config.style)),
-                    _ => None,
-                })
-                .map_no_escaping(|variable| match variable {
-                    "output" => {
-                        let output = exec_command(config.command, context, &config)?;
-                        let trimmed = output.trim();
+    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+        formatter
+            .map_meta(|var, _| match var {
+                "symbol" => Some(config.symbol),
+                _ => None,
+            })
+            .map_style(|variable| match variable {
+                "style" => Some(Ok(config.style)),
+                _ => None,
+            })
+            .map_no_escaping(|variable| match variable {
+                "output" => {
+                    let output = exec_command(config.command, context, &config)?;
+                    let trimmed = output.trim();
 
-                        if trimmed.is_empty() {
-                            None
-                        } else {
-                            Some(Ok(trimmed.to_string()))
-                        }
+                    if trimmed.is_empty() {
+                        None
+                    } else {
+                        Some(Ok(trimmed.to_string()))
                     }
-                    _ => None,
-                })
-                .parse(None, Some(context))
-        });
+                }
+                _ => None,
+            })
+            .parse(None, Some(context))
+    });
 
-        match parsed {
-            Ok(segments) => module.set_segments(segments),
-            Err(error) => {
-                log::warn!("Error in module `custom.{}`:\n{}", name, error);
-            }
-        };
-    }
-    let elapsed = start.elapsed();
-    log::trace!("Took {:?} to compute custom module {:?}", elapsed, name);
-    module.duration = elapsed;
+    match parsed {
+        Ok(segments) => module.set_segments(segments),
+        Err(error) => {
+            log::warn!("Error in module `custom.{}`:\n{}", name, error);
+        }
+    };
     Some(module)
+}
+
+/// Gets the TOML config for the custom module, handling the case where the module is not defined
+fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a toml::Value> {
+    struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
+
+    impl Debug for DebugCustomModules<'_> {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_list().entries(self.0.keys()).finish()
+        }
+    }
+
+    let config = context.config.get_custom_module_config(module_name);
+
+    if config.is_some() {
+        return config;
+    } else if let Some(modules) = context.config.get_custom_modules() {
+        log::debug!(
+                "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
+                DebugCustomModules(modules),
+        );
+    } else {
+        log::debug!(
+            "top level format contains custom module {module_name:?}, but no configuration was provided.",
+        );
+    };
+    None
 }
 
 /// Return the invoking shell, using `shell` and fallbacking in order to `STARSHIP_SHELL` and "sh"/"cmd"
@@ -679,5 +706,19 @@ mod tests {
         assert_eq!(expected, actual);
 
         dir.close()
+    }
+
+    #[test]
+    fn disabled() {
+        let actual = ModuleRenderer::new("custom.test")
+            .config(toml::toml! {
+                [custom.test]
+                disabled = true
+                when = true
+                format = "test"
+            })
+            .collect();
+        let expected = None;
+        assert_eq!(expected, actual);
     }
 }

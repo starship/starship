@@ -12,7 +12,17 @@ let-env PROMPT_COMMAND = {
     ^::STARSHIP:: prompt $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
 }
 
-# Not well-suited for `starship prompt --right`.
-# Built-in right prompt is equivalent to $fill$right_format in the first prompt line.
-# Thus does not play well with default `add_newline = True`.
-let-env PROMPT_COMMAND_RIGHT = {''}
+# Whether we have config items
+let has_config_items = (not ($env | get -i config | is-empty))
+
+let config = if $has_config_items {
+    $env.config | upsert render_right_prompt_on_last_line true
+} else {
+    {render_right_prompt_on_last_line: true}
+}
+{config: $config} | load-env
+
+let-env PROMPT_COMMAND_RIGHT = {
+    let width = (term size).columns
+    ^::STARSHIP:: prompt --right $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
+}

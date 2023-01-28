@@ -76,7 +76,7 @@ format = "tomó [$duration]($style) "
 
 ### Módulos afectados
 
-#### Character
+#### Carácter
 
 | Propiedad eliminada     | Reemplazo        |
 | ----------------------- | ---------------- |
@@ -235,7 +235,7 @@ behind = "⇣${count}"
 ++ format = '[$symbol\[$env\]]($style) '
 ```
 
-#### Hora
+#### Time
 
 | Propiedad eliminada | Reemplazo     |
 | ------------------- | ------------- |

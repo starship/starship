@@ -58,11 +58,17 @@ symbol = "exs "
 [elm]
 symbol = "elm "
 
+[fennel]
+symbol = "fnl "
+
 [git_branch]
 symbol = "git "
 
 [golang]
 symbol = "go "
+
+[gradle]
+symbol = "gradle "
 
 [guix_shell]
 symbol = "guix "
@@ -150,6 +156,9 @@ symbol = "pl "
 [php]
 symbol = "php "
 
+[pijul_channel]
+symbol = "pijul "
+
 [pulumi]
 symbol = "pulumi "
 
@@ -173,6 +182,9 @@ symbol = "scala "
 
 [spack]
 symbol = "spack "
+
+[status]
+symbol = "[x](bold red) "
 
 [sudo]
 symbol = "sudo "
