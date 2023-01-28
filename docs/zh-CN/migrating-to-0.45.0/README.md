@@ -226,7 +226,7 @@ behind = "⇣${count}"
 | `prefix`         | `format`    |
 | `suffix`         | `format`    |
 
-**Changes to the Default Configuration**
+**更改默认配置**
 
 ```diff
 [singularity]
@@ -241,7 +241,7 @@ behind = "⇣${count}"
 | ---------------- | ------------- |
 | `format`         | `time_format` |
 
-**Changes to the Default Configuration**
+**更改默认配置**
 
 ```diff
 [time]
@@ -257,7 +257,7 @@ behind = "⇣${count}"
 | `prefix`         | `format`    |
 | `suffix`         | `format`    |
 
-**Changes to the Default Configuration**
+**更改默认配置**
 
 ```diff
 [custom.example]
