@@ -41,7 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let topic_graphemes = if let Ok(topic) = get_hg_topic_name(repo_root) {
         truncate_text(&topic, len, config.truncation_symbol)
     } else {
-        String::from("")
+        String::new()
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
