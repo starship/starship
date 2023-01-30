@@ -11,7 +11,6 @@ use crate::configs::PROMPT_ORDER;
 use crate::utils;
 use std::fs::File;
 use std::io::Write;
-use toml::Value;
 use toml_edit::Document;
 
 #[cfg(not(windows))]
@@ -130,9 +129,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
 fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value {
     // Extract all the requested sections into a new configuration.
     let mut subset = toml::value::Table::new();
-    let config = if let Some(config) = config.as_table_mut() {
-        config
-    } else {
+    let Some(config) = config.as_table_mut() else {
         // This function doesn't make any sense if the root is not a table.
         return toml::Value::Table(subset);
     };
@@ -156,9 +153,7 @@ fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value 
         }
 
         // Extract the value to move.
-        let value = if let Some(value) = source_cursor.remove(end) {
-            value
-        } else {
+        let Some(value) = source_cursor.remove(end) else {
             // We didn't find a value for this path, so move on to the next path.
             continue 'paths;
         };
@@ -222,7 +217,7 @@ fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Res
     Ok(())
 }
 
-pub fn get_configuration() -> Value {
+pub fn get_configuration() -> toml::Table {
     let starship_config = StarshipConfig::initialize();
 
     starship_config
@@ -431,7 +426,7 @@ mod tests {
             ok = true
         };
         let actual_config = extract_toml_paths(
-            config,
+            toml::Value::Table(config),
             &[
                 "extract_root".to_owned(),
                 "extract_section".to_owned(),
@@ -439,7 +434,7 @@ mod tests {
             ],
         );
 
-        assert_eq!(expected_config, actual_config);
+        assert_eq!(toml::Value::Table(expected_config), actual_config);
     }
 
     fn create_doc() -> Document {

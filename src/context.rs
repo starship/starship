@@ -250,9 +250,9 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, git::discover::Error> {
+    pub fn get_repo(&self) -> Result<&Repo, Box<git::discover::Error>> {
         self.repo
-            .get_or_try_init(|| -> Result<Repo, git::discover::Error> {
+            .get_or_try_init(|| -> Result<Repo, Box<git::discover::Error>> {
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<git::open::Options>::default();
@@ -286,7 +286,7 @@ impl<'a> Context<'a> {
                         Ok(repo) => repo,
                         Err(e) => {
                             log::debug!("Failed to find git repo: {e}");
-                            return Err(e);
+                            return Err(Box::new(e));
                         }
                     };
 
@@ -647,11 +647,12 @@ pub enum Shell {
 }
 
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Target {
     Main,
     Right,
     Continuation,
+    Profile(String),
 }
 
 /// Properties as passed on from the shell as arguments

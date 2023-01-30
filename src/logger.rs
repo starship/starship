@@ -35,10 +35,9 @@ pub fn get_log_dir() -> PathBuf {
 /// Deletes all log files in the log directory that were modified more than 24 hours ago.
 pub fn cleanup_log_files<P: AsRef<Path>>(path: P) {
     let log_dir = path.as_ref();
-    let log_files = match fs::read_dir(log_dir) {
-        Ok(log_files) => log_files,
+    let Ok(log_files) = fs::read_dir(log_dir) else {
         // Avoid noisily handling errors in this cleanup function.
-        Err(_) => return,
+        return
     };
 
     for file in log_files {

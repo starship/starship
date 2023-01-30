@@ -12,8 +12,8 @@ enum NixShellType {
 }
 
 impl NixShellType {
-    fn detect_shell_type(use_heuristic: bool, context: &Context) -> Option<NixShellType> {
-        use NixShellType::*;
+    fn detect_shell_type(use_heuristic: bool, context: &Context) -> Option<Self> {
+        use NixShellType::{Impure, Pure, Unknown};
 
         let shell_type = context.get_env("IN_NIX_SHELL");
         match shell_type.as_deref() {
