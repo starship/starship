@@ -47,8 +47,10 @@ pub fn show_check(args: Properties) {
         );
     }
 
-    let user_modules = build_user_module_output(context);
-    let preset_modules = build_preset_module_output();
+    println!("{}\n", AnsiStrings(&build_style_line(context)));
+
+    let user_modules = build_user_module_line(context);
+    let preset_modules = build_preset_module_line();
 
     println!("{}\n", filter_emoji(&user_modules));
     println!("{}\n", filter_emoji(&preset_modules));
@@ -89,7 +91,23 @@ fn build_color_table<'a, T: AsRef<str> + std::fmt::Display>(
         .collect::<Vec<AnsiString>>()
 }
 
-fn build_user_module_output(context: &Context) -> String {
+fn build_style_line<'a>(context: &'a Context<'a>) -> Vec<AnsiString<'a>> {
+    let width = 13;
+    [
+        "bold",
+        "italic",
+        "underline",
+        "dimmed",
+        "inverted",
+        "blink",
+        "hidden",
+        "strikethrough",
+    ].iter().map(
+        |s| parse_style_string(s, Some(context)).unwrap().paint(format!("{: ^width$}", *s))
+    ).collect::<Vec<AnsiString>>()
+}
+
+fn build_user_module_line(context: &Context) -> String {
     Vec::from_iter(
         compute_modules(context)
             .iter()
@@ -99,7 +117,7 @@ fn build_user_module_output(context: &Context) -> String {
     .join("")
 }
 
-fn build_preset_module_output() -> String {
+fn build_preset_module_line() -> String {
     String::from_utf8(
         shadow::get_preset_list()
             .iter()
@@ -169,7 +187,7 @@ mod test {
         let one_color_table = build_color_table(&["1"], ctx);
         for row in unstyle(&AnsiStrings(&one_color_table)).lines() {
             assert_eq!(row.width_graphemes(), cell_size);
-            line_count = line_count + 1;
+            line_count += 1;
         }
         assert_eq!(line_count, 1);
 
@@ -177,7 +195,7 @@ mod test {
         let three_color_table = build_color_table(&["1", "2", "3"], ctx);
         for row in unstyle(&AnsiStrings(&three_color_table)).lines() {
             assert_eq!(row.width_graphemes(), cell_size * 3);
-            line_count = line_count + 1;
+            line_count += 1;
         }
         assert_eq!(line_count, 3);
     }
