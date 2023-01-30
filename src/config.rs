@@ -1,6 +1,6 @@
 use crate::configs::Palette;
 use crate::context::Context;
-use crate::serde_utils::ValueDeserializer;
+use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
 use nu_ansi_term::Color;
 use serde::{
@@ -22,12 +22,12 @@ where
     E: SerdeError,
 {
     /// Construct a `ModuleConfig` from a toml value.
-    fn from_config(config: &'a Value) -> Result<Self, E>;
+    fn from_config<V: Into<ValueRef<'a>>>(config: V) -> Result<Self, E>;
 
     /// Loads the TOML value into the config.
     /// Missing values are set to their default values.
     /// On error, logs an error message.
-    fn load(config: &'a Value) -> Self {
+    fn load<V: Into<ValueRef<'a>>>(config: V) -> Self {
         match Self::from_config(config) {
             Ok(config) => config,
             Err(e) => {
@@ -39,14 +39,15 @@ where
 
     /// Helper function that will call `ModuleConfig::from_config(config)  if config is Some,
     /// or `ModuleConfig::default()` if config is None.
-    fn try_load(config: Option<&'a Value>) -> Self {
-        config.map(Self::load).unwrap_or_default()
+    fn try_load<V: Into<ValueRef<'a>>>(config: Option<V>) -> Self {
+        config.map(Into::into).map(Self::load).unwrap_or_default()
     }
 }
 
 impl<'a, T: Deserialize<'a> + Default> ModuleConfig<'a, ValueError> for T {
     /// Create `ValueDeserializer` wrapper and use it to call `Deserialize::deserialize` on it.
-    fn from_config(config: &'a Value) -> Result<Self, ValueError> {
+    fn from_config<V: Into<ValueRef<'a>>>(config: V) -> Result<Self, ValueError> {
+        let config = config.into();
         let deserializer = ValueDeserializer::new(config);
         T::deserialize(deserializer).or_else(|err| {
             // If the error is an unrecognized key, print a warning and run
@@ -114,8 +115,9 @@ where
 }
 
 /// Root config of starship.
+#[derive(Default)]
 pub struct StarshipConfig {
-    pub config: Option<Value>,
+    pub config: Option<toml::Table>,
 }
 
 pub fn get_config_path() -> Option<String> {
@@ -136,19 +138,15 @@ pub fn get_config_path() -> Option<String> {
 impl StarshipConfig {
     /// Initialize the Config struct
     pub fn initialize() -> Self {
-        if let Some(file_data) = Self::config_from_file() {
-            Self {
-                config: Some(file_data),
-            }
-        } else {
-            Self {
-                config: Some(Value::Table(toml::value::Table::new())),
-            }
-        }
+        Self::config_from_file()
+            .map(|config| Self {
+                config: Some(config),
+            })
+            .unwrap_or_default()
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<Value> {
+    fn config_from_file() -> Option<toml::Table> {
         let file_path = get_config_path()?;
 
         let toml_content = match utils::read_file(file_path) {
@@ -195,7 +193,7 @@ impl StarshipConfig {
 
     /// Get the value of the config in a specific path
     pub fn get_config(&self, path: &[&str]) -> Option<&Value> {
-        let mut prev_table = self.config.as_ref()?.as_table()?;
+        let mut prev_table = self.config.as_ref()?;
 
         assert_ne!(
             path.len(),

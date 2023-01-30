@@ -164,7 +164,7 @@ mod tests {
 
     fn expect_pijul_with_config(
         repo_dir: &Path,
-        config: Option<toml::Value>,
+        config: Option<toml::Table>,
         expectations: &[Expect],
     ) {
         let actual = ModuleRenderer::new("pijul_channel")
