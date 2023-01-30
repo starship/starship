@@ -37,7 +37,10 @@ enum Commands {
         shell: CompletionShell,
     },
     /// Print example output that the user can use to judge appearance
-    Check(Properties),
+    Check {
+        #[clap(long)]
+        style: Option<String>,
+    },
     /// Edit the starship configuration
     Config {
         /// Configuration key to edit
@@ -218,7 +221,7 @@ fn main() {
         Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),
         Commands::Toggle { name, value } => configure::toggle_configuration(&name, &value),
         Commands::BugReport => bug_report::create(),
-        Commands::Check(props) => check::show_check(props),
+        Commands::Check { style } => check::show_check(style),
         Commands::Time => {
             match SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)

@@ -2,13 +2,14 @@ use crate::config::{get_palette, parse_style_string};
 use crate::context::{Context, Properties, Target};
 use crate::print::{compute_modules, UnicodeWidthGraphemes};
 use crate::shadow;
-use nu_ansi_term::{AnsiString, AnsiStrings};
+use nu_ansi_term::{AnsiString, AnsiStrings, Style};
 use std::cmp;
 use std::collections::HashSet;
 use std::iter;
 
-pub fn show_check(args: Properties) {
-    let context = &Context::new(args, Target::Main);
+pub fn show_check(user_style: Option<String>) {
+    let context = &Context::new(Properties::default(), Target::Main);
+    let extra_style = &user_style.unwrap_or_else(|| String::from(""));
 
     println!(
         "{}\n",
@@ -31,6 +32,7 @@ pub fn show_check(args: Properties) {
                 "bright-cyan",
                 "bright-white",
             ],
+            extra_style,
             context
         ))
     );
@@ -43,24 +45,26 @@ pub fn show_check(args: Properties) {
     {
         println!(
             "{}\n",
-            AnsiStrings(&build_color_table(&palette_table, context))
+            AnsiStrings(&build_color_table(&palette_table, extra_style, context))
         );
     }
 
-    println!("{}\n", AnsiStrings(&build_style_line(context)));
+    println!("{}\n", AnsiStrings(&build_style_line(extra_style, context)));
 
     let user_modules = build_user_module_line(context);
     let preset_modules = build_preset_module_line();
+    let ansi_style = parse_style_string(extra_style, Some(context)).unwrap_or_else(Style::new);
 
-    println!("{}\n", filter_emoji(&user_modules));
-    println!("{}\n", filter_emoji(&preset_modules));
+    println!("{}\n", ansi_style.paint(filter_emoji(&user_modules)));
+    println!("{}\n", ansi_style.paint(filter_emoji(&preset_modules)));
 
-    println!("{}\n", filter_nerdfonts(&user_modules));
-    println!("{}\n", filter_nerdfonts(&preset_modules));
+    println!("{}\n", ansi_style.paint(filter_nerdfonts(&user_modules)));
+    println!("{}\n", ansi_style.paint(filter_nerdfonts(&preset_modules)));
 }
 
 fn build_color_table<'a, T: AsRef<str> + std::fmt::Display>(
     colors: &'a [T],
+    extra_style: &str,
     context: &'a Context,
 ) -> Vec<AnsiString<'a>> {
     if colors.is_empty() {
@@ -82,18 +86,22 @@ fn build_color_table<'a, T: AsRef<str> + std::fmt::Display>(
                     iter::once(AnsiString::from(""))
                 }
                 .chain(iter::once(
-                    parse_style_string(format!("fg:{fg} bg:{bg}").as_str(), Some(context))
-                        .unwrap_or_else(|| panic!("Unprintable color found: {bg}"))
-                        .paint(format!("{: ^maxw$}", *fg)),
+                    parse_style_string(
+                        format!("{extra_style} fg:{fg} bg:{bg}").as_str(),
+                        Some(context),
+                    )
+                    .unwrap_or_else(|| panic!("Unprintable color found: {bg}"))
+                    .paint(format!("{: ^maxw$}", *fg)),
                 ))
             })
         })
         .collect::<Vec<AnsiString>>()
 }
 
-fn build_style_line<'a>(context: &'a Context<'a>) -> Vec<AnsiString<'a>> {
+fn build_style_line<'a>(extra_style: &str, context: &'a Context<'a>) -> Vec<AnsiString<'a>> {
+    // "none" style returns None from parse_style_string, so must be handled separately
     let width = 13;
-    [
+    let non_color_styles = [
         "bold",
         "italic",
         "underline",
@@ -102,9 +110,22 @@ fn build_style_line<'a>(context: &'a Context<'a>) -> Vec<AnsiString<'a>> {
         "blink",
         "hidden",
         "strikethrough",
-    ].iter().map(
-        |s| parse_style_string(s, Some(context)).unwrap().paint(format!("{: ^width$}", *s))
-    ).collect::<Vec<AnsiString>>()
+    ];
+    let extra_color = String::from_iter(extra_style.split_whitespace().filter(|style| {
+        !non_color_styles
+            .iter()
+            .chain(iter::once(&"none"))
+            .any(|non_color| style == non_color)
+    }));
+    non_color_styles
+        .iter()
+        .map(|s| {
+            parse_style_string(&format!("{} {}", extra_color, s), Some(context))
+                .unwrap()
+                .paint(format!("{: ^width$}", *s))
+        })
+        .chain(iter::once(AnsiString::from("    none     ")))
+        .collect::<Vec<AnsiString>>()
 }
 
 fn build_user_module_line(context: &Context) -> String {
@@ -184,7 +205,7 @@ mod test {
         let ctx = &Context::new(Properties::default(), Target::Main);
         let mut line_count = 0;
 
-        let one_color_table = build_color_table(&["1"], ctx);
+        let one_color_table = build_color_table(&["1"], "", ctx);
         for row in unstyle(&AnsiStrings(&one_color_table)).lines() {
             assert_eq!(row.width_graphemes(), cell_size);
             line_count += 1;
@@ -192,7 +213,7 @@ mod test {
         assert_eq!(line_count, 1);
 
         line_count = 0;
-        let three_color_table = build_color_table(&["1", "2", "3"], ctx);
+        let three_color_table = build_color_table(&["1", "2", "3"], "", ctx);
         for row in unstyle(&AnsiStrings(&three_color_table)).lines() {
             assert_eq!(row.width_graphemes(), cell_size * 3);
             line_count += 1;
@@ -216,6 +237,7 @@ mod test {
                 "bright-blue",
                 "bright-purple",
             ],
+            "",
             ctx,
         );
         for row in unstyle(&AnsiStrings(&variable_color_table)).lines() {
@@ -237,6 +259,7 @@ mod test {
                 "bright-cyan",
                 "bright-white",
             ],
+            "",
             ctx,
         );
         for row in unstyle(&AnsiStrings(&wrapped_color_table)).lines() {
@@ -249,7 +272,7 @@ mod test {
     #[test]
     fn no_colors() {
         let ctx = &Context::new(Properties::default(), Target::Main);
-        let table = build_color_table::<String>(&[], ctx);
+        let table = build_color_table::<String>(&[], "", ctx);
         assert_eq!(unstyle(&AnsiStrings(&table)), "");
     }
 
@@ -257,6 +280,6 @@ mod test {
     #[should_panic]
     fn unprintable_color() {
         let ctx = &Context::new(Properties::default(), Target::Main);
-        let _table = build_color_table(&["rainbow"], ctx);
+        let _table = build_color_table(&["rainbow"], "", ctx);
     }
 }
