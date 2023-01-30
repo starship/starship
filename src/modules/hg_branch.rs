@@ -309,7 +309,7 @@ mod tests {
 
     fn expect_hg_branch_with_config(
         repo_dir: &Path,
-        config: Option<toml::Value>,
+        config: Option<toml::Table>,
         expectations: &[Expect],
     ) {
         let actual = ModuleRenderer::new("hg_branch")

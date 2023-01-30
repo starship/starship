@@ -87,7 +87,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     /// Sets the config of the underlying context
-    pub fn config(mut self, config: toml::Value) -> Self {
+    pub fn config(mut self, config: toml::Table) -> Self {
         self.context.root_config = StarshipRootConfig::load(&config);
         self.context.config = StarshipConfig {
             config: Some(config),

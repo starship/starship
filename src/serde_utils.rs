@@ -6,11 +6,43 @@ use serde::de::{
 use std::{cmp::Ordering, fmt};
 use toml::Value;
 
+/// A `toml::Value` that borrows its contents instead of owning them.
+#[derive(Debug, Clone, Copy)]
+pub enum ValueRef<'a> {
+    Boolean(bool),
+    Integer(i64),
+    Float(f64),
+    String(&'a str),
+    Datetime(&'a toml::value::Datetime),
+    Array(&'a [Value]),
+    Table(&'a toml::map::Map<String, Value>),
+}
+
+impl<'de> From<&'de Value> for ValueRef<'de> {
+    fn from(value: &'de Value) -> Self {
+        match value {
+            Value::Boolean(b) => ValueRef::Boolean(*b),
+            Value::Integer(i) => ValueRef::Integer(*i),
+            Value::Float(f) => ValueRef::Float(*f),
+            Value::String(s) => ValueRef::String(s),
+            Value::Array(a) => ValueRef::Array(a),
+            Value::Table(t) => ValueRef::Table(t),
+            Value::Datetime(d) => ValueRef::Datetime(d),
+        }
+    }
+}
+
+impl<'de> From<&'de toml::Table> for ValueRef<'de> {
+    fn from(value: &'de toml::Table) -> Self {
+        ValueRef::Table(value)
+    }
+}
+
 /// A helper struct for deserializing a TOML value references with serde.
 /// This also prints a warning and suggestions if a key is unknown.
 #[derive(Debug)]
 pub struct ValueDeserializer<'de> {
-    value: &'de Value,
+    value: ValueRef<'de>,
     info: Option<StructInfo>,
     current_key: Option<&'de str>,
     error_on_ignored: bool,
@@ -24,9 +56,9 @@ struct StructInfo {
 }
 
 impl<'de> ValueDeserializer<'de> {
-    pub fn new(value: &'de Value) -> Self {
+    pub fn new<T: Into<ValueRef<'de>>>(value: T) -> Self {
         ValueDeserializer {
-            value,
+            value: value.into(),
             info: None,
             current_key: None,
             error_on_ignored: true,
@@ -34,7 +66,7 @@ impl<'de> ValueDeserializer<'de> {
     }
 
     fn with_info(
-        value: &'de Value,
+        value: ValueRef<'de>,
         info: Option<StructInfo>,
         current_key: &'de str,
         ignored: bool,
@@ -86,20 +118,20 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
         V: Visitor<'de>,
     {
         match self.value {
-            Value::Boolean(b) => visitor.visit_bool(*b),
-            Value::Integer(i) => visitor.visit_i64(*i),
-            Value::Float(f) => visitor.visit_f64(*f),
-            Value::String(s) => visitor.visit_borrowed_str(s),
-            Value::Array(a) => {
+            ValueRef::Boolean(b) => visitor.visit_bool(b),
+            ValueRef::Integer(i) => visitor.visit_i64(i),
+            ValueRef::Float(f) => visitor.visit_f64(f),
+            ValueRef::String(s) => visitor.visit_borrowed_str(s),
+            ValueRef::Array(a) => {
                 let seq = SeqDeserializer::new(a.iter().map(ValueDeserializer::new));
                 seq.deserialize_seq(visitor)
             }
-            Value::Table(t) => {
+            ValueRef::Table(t) => {
                 let map = MapDeserializer::new(t.iter().map(|(k, v)| {
                     (
                         k.as_str(),
                         ValueDeserializer::with_info(
-                            v,
+                            v.into(),
                             self.info,
                             k.as_str(),
                             self.error_on_ignored,
@@ -108,7 +140,7 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
                 }));
                 map.deserialize_map(visitor)
             }
-            Value::Datetime(d) => visitor.visit_string(d.to_string()),
+            ValueRef::Datetime(d) => visitor.visit_string(d.to_string()),
         }
         .map_err(|e| self.error(e))
     }

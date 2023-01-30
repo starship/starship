@@ -128,7 +128,7 @@ mod tests {
 
     #[test]
     fn get_symbol_default() {
-        let config = OSConfig::try_load(None);
+        let config = OSConfig::default();
 
         let type_expected_pairs = [
             (Type::Alpine, Some("🏔️ ")),
