@@ -222,7 +222,7 @@ mod tests {
 
     fn expect_fossil_metrics_with_config(
         checkout_dir: &Path,
-        config: Option<toml::Value>,
+        config: Option<toml::Table>,
         expectations: &[Expect],
     ) {
         let actual = ModuleRenderer::new("fossil_metrics")
