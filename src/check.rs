@@ -9,7 +9,9 @@ use std::iter;
 
 pub fn show_check(user_style: Option<String>) {
     let context = &Context::new(Properties::default(), Target::Main);
-    let extra_style = &user_style.unwrap_or_else(|| String::from(""));
+    let extra_style = &user_style.map_or("".to_string(), |style| {
+        parse_style_string(&style, Some(context)).map_or("".to_string(), move |_s| style)
+    });
 
     println!(
         "{}\n",
@@ -75,6 +77,24 @@ fn build_color_table<'a, T: AsRef<str> + std::fmt::Display>(
         .fold(4, |w, c| cmp::max(w, c.width_graphemes()));
     // color table looks much better when only one bg is used per row
     let row_width = colors.len() / ((colors.len() * maxw + context.width - 1) / context.width);
+    let extra_attr = &extra_style
+        .split_whitespace()
+        .filter(|style| {
+            [
+                "bold",
+                "italic",
+                "underline",
+                "dimmed",
+                "inverted",
+                "blink",
+                "hidden",
+                "strikethrough",
+            ]
+            .iter()
+            .any(|non_color| style == non_color)
+        })
+        .collect::<Vec<&str>>()
+        .join(" ");
     colors
         .iter()
         .enumerate()
@@ -87,7 +107,7 @@ fn build_color_table<'a, T: AsRef<str> + std::fmt::Display>(
                 }
                 .chain(iter::once(
                     parse_style_string(
-                        format!("{extra_style} fg:{fg} bg:{bg}").as_str(),
+                        format!("{extra_attr} fg:{fg} bg:{bg}").as_str(),
                         Some(context),
                     )
                     .unwrap_or_else(|| panic!("Unprintable color found: {bg}"))
@@ -99,7 +119,6 @@ fn build_color_table<'a, T: AsRef<str> + std::fmt::Display>(
 }
 
 fn build_style_line<'a>(extra_style: &str, context: &'a Context<'a>) -> Vec<AnsiString<'a>> {
-    // "none" style returns None from parse_style_string, so must be handled separately
     let width = 13;
     let non_color_styles = [
         "bold",
@@ -110,21 +129,20 @@ fn build_style_line<'a>(extra_style: &str, context: &'a Context<'a>) -> Vec<Ansi
         "blink",
         "hidden",
         "strikethrough",
+        "none",
     ];
-    let extra_color = String::from_iter(extra_style.split_whitespace().filter(|style| {
-        !non_color_styles
-            .iter()
-            .chain(iter::once(&"none"))
-            .any(|non_color| style == non_color)
-    }));
+    let extra_color = extra_style
+        .split_whitespace()
+        .filter(|style| !non_color_styles.iter().any(|non_color| style == non_color))
+        .collect::<Vec<&str>>()
+        .join(" ");
     non_color_styles
         .iter()
         .map(|s| {
-            parse_style_string(&format!("{} {}", extra_color, s), Some(context))
-                .unwrap()
+            parse_style_string(&format!("{extra_color} {s}"), Some(context))
+                .unwrap_or_else(Style::new)
                 .paint(format!("{: ^width$}", *s))
         })
-        .chain(iter::once(AnsiString::from("    none     ")))
         .collect::<Vec<AnsiString>>()
 }
 
@@ -200,6 +218,24 @@ mod test {
     }
 
     #[test]
+    fn user_styled_style_line() {
+        let ctx = &Context::new(Properties::default(), Target::Main);
+
+        let none_style_length = AnsiStrings(&build_style_line("none", ctx))
+            .to_string()
+            .len();
+        let missing_style_length = AnsiStrings(&build_style_line("", ctx)).to_string().len();
+        let bold_style_length = AnsiStrings(&build_style_line("bold", ctx))
+            .to_string()
+            .len();
+        let color_style_length = AnsiStrings(&build_style_line("red", ctx)).to_string().len();
+
+        assert_eq!(none_style_length, missing_style_length);
+        assert_eq!(missing_style_length, bold_style_length);
+        assert!(color_style_length > none_style_length);
+    }
+
+    #[test]
     fn color_table_short_name() {
         let cell_size = 4;
         let ctx = &Context::new(Properties::default(), Target::Main);
@@ -270,6 +306,28 @@ mod test {
     }
 
     #[test]
+    fn user_styled_color_table() {
+        let ctx = &Context::new(Properties::default(), Target::Main);
+
+        let none_style_length = AnsiStrings(&build_color_table(&["blue"], "none", ctx))
+            .to_string()
+            .len();
+        let missing_style_length = AnsiStrings(&build_color_table(&["blue"], "", ctx))
+            .to_string()
+            .len();
+        let color_style_length = AnsiStrings(&build_color_table(&["blue"], "red", ctx))
+            .to_string()
+            .len();
+        let bold_style_length = AnsiStrings(&build_color_table(&["blue"], "bold", ctx))
+            .to_string()
+            .len();
+
+        assert_eq!(none_style_length, missing_style_length);
+        assert_eq!(missing_style_length, color_style_length);
+        assert!(bold_style_length > none_style_length);
+    }
+
+    #[test]
     fn no_colors() {
         let ctx = &Context::new(Properties::default(), Target::Main);
         let table = build_color_table::<String>(&[], "", ctx);
@@ -281,5 +339,12 @@ mod test {
     fn unprintable_color() {
         let ctx = &Context::new(Properties::default(), Target::Main);
         let _table = build_color_table(&["rainbow"], "", ctx);
+    }
+
+    #[test]
+    fn module_lines() {
+        let ctx = &Context::new(Properties::default(), Target::Main);
+        assert!(build_preset_module_line().len() > 0);
+        assert!(build_user_module_line(ctx).len() > 0);
     }
 }
