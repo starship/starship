@@ -519,6 +519,20 @@
         }
       ]
     },
+    "fossil_metrics": {
+      "default": {
+        "added_style": "bold green",
+        "deleted_style": "bold red",
+        "disabled": true,
+        "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "only_nonzero_diffs": true
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FossilMetricsConfig"
+        }
+      ]
+    },
     "gcloud": {
       "default": {
         "disabled": false,
@@ -3019,6 +3033,32 @@
         "truncation_symbol": {
           "default": "…",
           "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FossilMetricsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+          "type": "string"
+        },
+        "added_style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "deleted_style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "only_nonzero_diffs": {
+          "default": true,
+          "type": "boolean"
         },
         "disabled": {
           "default": true,
