@@ -38,6 +38,13 @@ enum Commands {
     },
     /// Print example output that the user can use to judge appearance
     Check {
+        text: Option<String>,
+        #[clap(long)]
+        colors: bool,
+        #[clap(long)]
+        palette: Option<String>,
+        #[clap(long)]
+        fonts: bool,
         #[clap(long)]
         style: Option<String>,
     },
@@ -221,7 +228,7 @@ fn main() {
         Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),
         Commands::Toggle { name, value } => configure::toggle_configuration(&name, &value),
         Commands::BugReport => bug_report::create(),
-        Commands::Check { style } => check::show_check(style),
+        Commands::Check { text, colors, palette, fonts, style } => check::show_check(text, colors, palette, fonts, style),
         Commands::Time => {
             match SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)

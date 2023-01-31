@@ -7,61 +7,74 @@ use std::cmp;
 use std::collections::HashSet;
 use std::iter;
 
-pub fn show_check(user_style: Option<String>) {
+pub fn show_check(text: Option<String>, mut colors: bool, palette: Option<String>, mut fonts: bool, user_style: Option<String>) {
     let context = &Context::new(Properties::default(), Target::Main);
     let extra_style = &user_style.map_or("".to_string(), |style| {
         parse_style_string(&style, Some(context)).map_or("".to_string(), move |_s| style)
     });
-
-    println!(
-        "{}\n",
-        AnsiStrings(&build_color_table(
-            &[
-                "black",
-                "red",
-                "green",
-                "yellow",
-                "blue",
-                "purple",
-                "cyan",
-                "white",
-                "bright-black",
-                "bright-red",
-                "bright-green",
-                "bright-yellow",
-                "bright-blue",
-                "bright-purple",
-                "bright-cyan",
-                "bright-white",
-            ],
-            extra_style,
-            context
-        ))
-    );
-
-    if let Some(palette_table) = get_palette(
-        &context.root_config.palettes,
-        context.root_config.palette.as_deref(),
-    )
-    .map(|p| p.keys().collect::<Vec<&String>>())
-    {
-        println!(
-            "{}\n",
-            AnsiStrings(&build_color_table(&palette_table, extra_style, context))
-        );
+    if !colors && !fonts && text.is_none() {
+        colors = true;
+        fonts = true;
     }
 
-    println!("{}\n", AnsiStrings(&build_style_line(extra_style, context)));
+    if colors {
+        println!(
+            "{}\n",
+            AnsiStrings(&build_color_table(
+                &[
+                    "black",
+                    "red",
+                    "green",
+                    "yellow",
+                    "blue",
+                    "purple",
+                    "cyan",
+                    "white",
+                    "bright-black",
+                    "bright-red",
+                    "bright-green",
+                    "bright-yellow",
+                    "bright-blue",
+                    "bright-purple",
+                    "bright-cyan",
+                    "bright-white",
+                ],
+                extra_style,
+                context
+            ))
+        );
+        let check_palette = palette.as_deref().or(context.root_config.palette.as_deref());
 
-    let user_modules = build_user_module_line(context);
-    let preset_modules = build_preset_module_line();
-    let ansi_style = parse_style_string(extra_style, Some(context)).unwrap_or_else(Style::new);
+        if let Some(palette_table) = get_palette(
+            &context.root_config.palettes,
+            check_palette,
+        )
+        .map(|p| p.keys().collect::<Vec<&String>>())
+        {
+            println!(
+                "{}\n",
+                AnsiStrings(&build_color_table(&palette_table, extra_style, context))
+            );
+        }
 
-    println!("{}\n", ansi_style.paint(filter_emoji(&user_modules)));
-    println!("{}\n", ansi_style.paint(filter_emoji(&preset_modules)));
+        println!("{}\n", AnsiStrings(&build_style_line(extra_style, context)));
+    };
 
-    println!("{}\n", ansi_style.paint(filter_nerdfonts(&user_modules)));
-    println!("{}\n", ansi_style.paint(filter_nerdfonts(&preset_modules)));
+    if fonts {
+        let user_modules = build_user_module_line(context);
+        let preset_modules = build_preset_module_line();
+        let ansi_style = parse_style_string(extra_style, Some(context)).unwrap_or_else(Style::new);
+
+        println!("{}\n", ansi_style.paint(filter_emoji(&user_modules)));
+        println!("{}\n", ansi_style.paint(filter_emoji(&preset_modules)));
+
+        println!("{}\n", ansi_style.paint(filter_nerdfonts(&user_modules)));
+        println!("{}\n", ansi_style.paint(filter_nerdfonts(&preset_modules)));
+    };
+
+    if let Some(check_text) = text {
+        println!("{}\n", parse_style_string(extra_style, Some(context)).unwrap_or_else(Style::new).paint(check_text));
+    };
 }
 
 fn build_color_table<'a, T: AsRef<str> + std::fmt::Display>(
