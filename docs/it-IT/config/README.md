@@ -252,6 +252,7 @@ $singularity\
 $kubernetes\
 $directory\
 $vcsh\
+$fossil_branch\
 $git_branch\
 $git_commit\
 $git_state\
@@ -1335,7 +1336,7 @@ default = 'unknown user'
 | `variable`    |                                | The environment variable to be displayed.                                    |
 | `default`     |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `descrizione` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled`    | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
@@ -1474,6 +1475,42 @@ Produces a prompt that looks like:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
+```
+
+## Fossil Branch
+
+The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
+
+### Opzioni
+
+| Opzione             | Default                          | Descrizione                                                                              |
+| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol$branch]($style) '` | The format for the module. Use `'$branch'` to refer to the current branch name.          |
+| `symbol`            | `' '`                           | The symbol used before the branch name of the check-out in your current directory.       |
+| `style`             | `'bold purple'`                  | Lo stile per il modulo.                                                                  |
+| `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                          |
+| `truncation_symbol` | `'…'`                            | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
+| `disabled`          | `true`                           | Disables the `fossil_branch` module.                                                     |
+
+### Variables
+
+| Variable  | Esempio | Descrizione                          |
+| --------- | ------- | ------------------------------------ |
+| branch    | `trunk` | The active Fossil branch             |
+| symbol    |         | Mirrors the value of option `symbol` |
+| style\* |         | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+
+[fossil_branch]
+symbol = '🦎 '
+truncation_length = 4
+truncation_symbol = ''
 ```
 
 ## Google Cloud (`gcloud`)
@@ -2933,8 +2970,8 @@ The `package` module is shown when the current directory is the repository for a
 | `symbol`          | `'📦 '`                            | The symbol used before displaying the version the package.                                  |
 | `version_format`  | `'v${raw}'`                       | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
 | `style`           | `'bold 208'`                      | Lo stile per il modulo.                                                                     |
-| `display_private` | `false`                           | Abilita la visualizzazione della versione per i pacchetti contrassegnati come privati.      |
-| `disabled`        | `false`                           | Disabilita il modulo `package`.                                                             |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.                                   |
+| `disabled`        | `false`                           | Disables the `package` module.                                                              |
 
 ### Variables
 
@@ -2967,16 +3004,16 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Opzioni
 
-| Opzione             | Default                                                                                                  | Descrizione                                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                                           |
-| `version_format`    | `'v${raw}'`                                                                                              | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl                                       |
-| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Quali estensioni dovrebbero attivare questo modulo.                                         |
-| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
-| `detect_folders`    | `[]`                                                                                                     | Quali cartelle dovrebbero attivare questo modulo.                                           |
-| `style`             | `'bold 149'`                                                                                             | Lo stile per il modulo.                                                                     |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                                                 |
+| Opzione             | Default                                                                                                  | Descrizione                                                                                  |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                                            |
+| `version_format`    | `'v${raw}'`                                                                                              | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
+| `symbol`            | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl                                        |
+| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Quali estensioni dovrebbero attivare questo modulo.                                          |
+| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Quali nomi di file dovrebbero attivare questo modulo.                                        |
+| `detect_folders`    | `[]`                                                                                                     | Quali cartelle dovrebbero attivare questo modulo.                                            |
+| `style`             | `'bold 149'`                                                                                             | Lo stile per il modulo.                                                                      |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                                                  |
 
 ### Variables
 
@@ -3005,16 +3042,16 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Opzioni
 
-| Opzione             | Default                              | Descrizione                                                                                  |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                   |
-| `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minore`, & `patch` |
-| `symbol`            | `'🐘 '`                               | The symbol used before displaying the version of PHP.                                        |
-| `detect_extensions` | `['php']`                            | Quali estensioni dovrebbero attivare questo modulo.                                          |
-| `detect_files`      | `['composer.json', '.php-version']`  | Quali nomi di file dovrebbero attivare questo modulo.                                        |
-| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                            |
-| `style`             | `'147 bold'`                         | Lo stile per il modulo.                                                                      |
-| `disabled`          | `false`                              | Disables the `php` module.                                                                   |
+| Opzione             | Default                              | Descrizione                                                                                 |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                                  |
+| `version_format`    | `'v${raw}'`                          | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🐘 '`                               | The symbol used before displaying the version of PHP.                                       |
+| `detect_extensions` | `['php']`                            | Quali estensioni dovrebbero attivare questo modulo.                                         |
+| `detect_files`      | `['composer.json', '.php-version']`  | Quali nomi di file dovrebbero attivare questo modulo.                                       |
+| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                           |
+| `style`             | `'147 bold'`                         | Lo stile per il modulo.                                                                     |
+| `disabled`          | `false`                              | Disables the `php` module.                                                                  |
 
 ### Variables
 
@@ -3867,7 +3904,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3981,12 +4018,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`         | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'V '`                                       | Una stringa di formato che rappresenta il simbolo di V                                      |
+| `symbol`            | `'V '`                                       | A format string representing the symbol of V                                                |
 | `detect_extensions` | `['v']`                                      | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                           |
 | `style`             | `'blu grassetto'`                            | Lo stile per il modulo.                                                                     |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                               |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                |
 
 ### Variables
 
@@ -4119,7 +4156,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `descrizione`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
