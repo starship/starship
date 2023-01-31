@@ -207,8 +207,6 @@ Invoke-Expression (&starship init powershell)
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-Note: Nushell 0.71.0 or later is required
-
 ### 示例
 
 ```toml
@@ -231,7 +229,7 @@ right_format = """$all"""
 
 一些 Shell 也同时支持多行提示符。 若用户输入了不完整的命令（例如一个左括号或引号），Shell 会渲染多行提示符。
 
-使用 `continuation_prompt` 选项来设置 Starship 的多行提示符。 它的默认值为 `[∙](bright-black)`。
+使用 `continuation_prompt` 选项来设置 Starship 的多行提示符。 The default prompt is `'[∙](bright-black) '`.
 
 注意：`continuation_prompt` 应设置为没有变量的字符串。
 
@@ -247,7 +245,7 @@ right_format = """$all"""
 # ~/.config/starship.toml
 
 # A continuation prompt that displays two filled in arrows
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## 样式字符串

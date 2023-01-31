@@ -14,7 +14,11 @@ Este preajuste cambia los símbolos de cada módulo para usar símbolos Nerd Fon
 
 This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
 
-::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
+::: tip
+
+This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+
+:::
 
 [Click to view No Nerd Font preset](./no-nerd-font)
 
@@ -52,7 +56,7 @@ Esta preajuste emula la apariencia y el comportamiento de [Pure](https://github.
 
 Este preajuste está inspirado en [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). También muestra cómo funciona la sustitución de rutas en Starship.
 
-[![Captura de pantalla del preajuste Pastel Powerline](/presets/img/pastel-powerline.png "Haga clic para ver el preajuste del Prompt de Pure")](./pastel-powerline)
+[![Captura de pantalla del preajuste de Pastel Powerline](/presets/img/pastel-powerline.png "Haga clic para ver el preajuste del Prompt de Pure")](./pastel-powerline)
 
 ## [Tokyo Night](./tokyo-night.md)
 

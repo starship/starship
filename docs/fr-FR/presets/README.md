@@ -14,7 +14,11 @@ Ce préréglage change les symboles de chaque module pour utiliser les symboles 
 
 This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
 
-::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
+::: tip
+
+This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+
+:::
 
 [Click to view No Nerd Font preset](./no-nerd-font)
 
@@ -28,7 +32,7 @@ Ce préréglage modifie le format de tous les modules intégrés pour afficher l
 
 Ce préréglage change les symboles de chaque module en texte brut. Idéal si vous n'avez pas accès à Unicode.
 
-[![Capture d'écran du préréglage Symboles en texte brut](/presets/img/plain-text-symbols.png "Cliquez pour voir le préréglage Texte uniquement")](./plain-text)
+[![Capture d'écran du préréglage Texte uniquement](/presets/img/plain-text-symbols.png "Cliquez pour voir le préréglage Texte uniquement")](./plain-text)
 
 ## [Pas de version des environnements](./no-runtimes.md)
 

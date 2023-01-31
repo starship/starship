@@ -207,8 +207,6 @@ Note: l’invite à droite est une seule ligne, sur la même ligne que l’entr�
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-Note: Nushell 0.71.0 or later is required
-
 ### Exemple
 
 ```toml
@@ -231,7 +229,7 @@ Génère l’invite suivante:
 
 Certains shells gèrent une invite de continuation en plus de l’invite normale. Cette invite est affichée à la place de l’invite normale quand l’utilisateur a entré une expression incomplète (par exemple, une parenthèse gauche ou une apostrophe seule).
 
-Starship peut définir l’invite de continuation en utilisant l’option `continuation_prompt`. L’invite par défaut est `"[∙](bright-black) "`.
+Starship peut définir l’invite de continuation en utilisant l’option `continuation_prompt`. The default prompt is `'[∙](bright-black) '`.
 
 Note: la valeur de `continuation_prompt` doit être une chaine littérale, sans variable.
 
@@ -247,7 +245,7 @@ Note: les invites de confirmation sont uniquement disponibles pour les shells su
 # ~/.config/starship.toml
 
 # Un invite de continuation qui affiche deux flèches pleines
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Chaînes de style

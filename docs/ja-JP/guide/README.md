@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="GitHub Actions workflow status"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -331,7 +331,7 @@ Nushellの環境ファイルの最後に以下を追記してください ( `$nu
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
@@ -340,7 +340,7 @@ starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-注意: Elvish v0.61以降でサポートされています
+注意: Elvish v0.73以降でサポートされています
 
 </details>
 
@@ -423,6 +423,7 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 **Supporter Tier**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>
