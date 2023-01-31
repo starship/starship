@@ -167,6 +167,7 @@ impl<'a> ModuleRenderer<'a> {
 
 #[derive(Clone, Copy)]
 pub enum FixtureProvider {
+    Fossil,
     Git,
     Hg,
     Pijul,
@@ -174,6 +175,15 @@ pub enum FixtureProvider {
 
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
+        FixtureProvider::Fossil => {
+            let path = tempfile::tempdir()?;
+            fs::OpenOptions::new()
+                .create(true)
+                .write(true)
+                .open(path.path().join(".fslckout"))?
+                .sync_all()?;
+            Ok(path)
+        }
         FixtureProvider::Git => {
             let path = tempfile::tempdir()?;
 
