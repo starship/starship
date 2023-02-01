@@ -7,7 +7,13 @@ use std::cmp;
 use std::collections::HashSet;
 use std::iter;
 
-pub fn show_check(text: Option<String>, mut colors: bool, palette: Option<String>, mut fonts: bool, user_style: Option<String>) {
+pub fn show_check(
+    text: Option<String>,
+    mut colors: bool,
+    palette: Option<String>,
+    mut fonts: bool,
+    user_style: Option<String>,
+) {
     let context = &Context::new(Properties::default(), Target::Main);
     let extra_style = &user_style.map_or("".to_string(), |style| {
         parse_style_string(&style, Some(context)).map_or("".to_string(), move |_s| style)
@@ -43,13 +49,12 @@ pub fn show_check(text: Option<String>, mut colors: bool, palette: Option<String
                 context
             ))
         );
-        let check_palette = palette.as_deref().or(context.root_config.palette.as_deref());
+        let check_palette = palette
+            .as_deref()
+            .or(context.root_config.palette.as_deref());
 
-        if let Some(palette_table) = get_palette(
-            &context.root_config.palettes,
-            check_palette,
-        )
-        .map(|p| p.keys().collect::<Vec<&String>>())
+        if let Some(palette_table) = get_palette(&context.root_config.palettes, check_palette)
+            .map(|p| p.keys().collect::<Vec<&String>>())
         {
             println!(
                 "{}\n",
@@ -73,7 +78,12 @@ pub fn show_check(text: Option<String>, mut colors: bool, palette: Option<String
     };
 
     if let Some(check_text) = text {
-        println!("{}\n", parse_style_string(extra_style, Some(context)).unwrap_or_else(Style::new).paint(check_text));
+        println!(
+            "{}\n",
+            parse_style_string(extra_style, Some(context))
+                .unwrap_or_else(Style::new)
+                .paint(check_text)
+        );
     };
 }
 
@@ -357,7 +367,7 @@ mod test {
     #[test]
     fn module_lines() {
         let ctx = &Context::new(Properties::default(), Target::Main);
-        assert!(build_preset_module_line().len() > 0);
-        assert!(build_user_module_line(ctx).len() > 0);
+        assert!(!build_preset_module_line().is_empty());
+        assert!(!build_user_module_line(ctx).is_empty());
     }
 }

@@ -228,7 +228,13 @@ fn main() {
         Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),
         Commands::Toggle { name, value } => configure::toggle_configuration(&name, &value),
         Commands::BugReport => bug_report::create(),
-        Commands::Check { text, colors, palette, fonts, style } => check::show_check(text, colors, palette, fonts, style),
+        Commands::Check {
+            text,
+            colors,
+            palette,
+            fonts,
+            style,
+        } => check::show_check(text, colors, palette, fonts, style),
         Commands::Time => {
             match SystemTime::now()
                 .duration_since(SystemTime::UNIX_EPOCH)
