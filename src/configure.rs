@@ -11,7 +11,6 @@ use crate::configs::PROMPT_ORDER;
 use crate::utils;
 use std::fs::File;
 use std::io::Write;
-use toml::Value;
 use toml_edit::Document;
 
 #[cfg(not(windows))]
@@ -218,7 +217,7 @@ fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Res
     Ok(())
 }
 
-pub fn get_configuration() -> Value {
+pub fn get_configuration() -> toml::Table {
     let starship_config = StarshipConfig::initialize();
 
     starship_config
@@ -427,7 +426,7 @@ mod tests {
             ok = true
         };
         let actual_config = extract_toml_paths(
-            config,
+            toml::Value::Table(config),
             &[
                 "extract_root".to_owned(),
                 "extract_section".to_owned(),
@@ -435,7 +434,7 @@ mod tests {
             ],
         );
 
-        assert_eq!(expected_config, actual_config);
+        assert_eq!(toml::Value::Table(expected_config), actual_config);
     }
 
     fn create_doc() -> Document {

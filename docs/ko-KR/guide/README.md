@@ -9,8 +9,8 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
-      alt="깃헙 액션 워크풀로 상태"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
+      alt="GitHub Actions 워크플로 상태"
  /></a>
   <a href="https://crates.io/crates/starship"
     ><img
@@ -25,7 +25,7 @@
   <a href="https://discord.gg/starship"
     ><img
       src="https://img.shields.io/discord/567163873606500352?label=discord&logoColor=white&style=flat-square"
-      alt="디스코드에 채팅을 하세요"
+      alt="Discord 채팅 참여하기"
  /></a>
   <a href="https://twitter.com/StarshipPrompt"
     ><img
@@ -331,7 +331,7 @@ Add the following to the end of your Nushell env file (find it by running `$nu.e
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
@@ -340,7 +340,7 @@ And add the following to the end of your Nushell configuration (find it by runni
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+Note: Only Nushell v0.73+ is supported
 
 </details>
 
@@ -423,6 +423,7 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 **Supporter Tier**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

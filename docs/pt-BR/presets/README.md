@@ -14,7 +14,11 @@ Essa predefinição altera os símbolos para cada módulo usar símbolos com Ner
 
 This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
 
-::: tip This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544). :::
+::: tip
+
+This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+
+:::
 
 [Click to view No Nerd Font preset](./no-nerd-font)
 
@@ -34,7 +38,7 @@ Essa personalização converte os símbolos para cada módulo em texto simples. 
 
 Esta predefinição oculta a versão do runtime da linguagem. Se você trabalha com containers ou ambientes virtualizados, esta aqui é para você!
 
-[![Captura da tela de predefinição Ocultar Versões de Runtime](/presets/img/no-runtime-versions.png "Clique para ver as personalizações para remover a versão do runtime")](./no-runtimes)
+[![Captura de tela de uma personalização ocultando a versão do runtime](/presets/img/no-runtime-versions.png "Clique para ver as personalizações para remover a versão do runtime")](./no-runtimes)
 
 ## [No Empty Icons](./no-empty-icons.md)
 
@@ -44,7 +48,7 @@ This preset does not show icons if the toolset is not found.
 
 ## [Prompt do Terminal com Pure](./pure-preset.md)
 
-Essa configuração simula a aparência e o comportamento do [Pure](https://github.com/sindresorhus/pure).
+Essa personalização simula a aparência e o comportamento do [Pure](https://github.com/sindresorhus/pure).
 
 [![Captura de tela da personalização do prompt do terminal usando Pure](/presets/img/pure-preset.png "Clique para ver as personalização para usar no prompt do terminal com Pure")](./pure-preset)
 

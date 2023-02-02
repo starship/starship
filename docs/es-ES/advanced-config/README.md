@@ -1,18 +1,18 @@
 # Configuración Avanzada
 
-Mientras que Starship es un prompt versátil, a veces necesitas más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en Starship.
+A pesar de que Starship es una prompt versátil, a veces necesitas hacer más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en Starship.
 
 ::: warning
 
-Las configuraciones de esta sección están sujetos a cambios en futuras versiones de Starship.
+Las configuraciones de esta sección están sujetas a cambios en futuras versiones de Starship.
 
 :::
 
-## TransientPrompt en PowerShell
+## Prompt Transitoria en PowerShell
 
-Es posible reemplazar la entrada impresa anteriormente con una cadena personalizada. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. Para habilitar esto, ejecuta `Enable-TransientPrompt` en la línea de comandos. Para hacerlo permanente, haz esta declaración en tu `$PROFILE`. La transitoriedad puede ser desactivada al momento con `Disable-TransientPrompt`.
+Con una cadena personalizada, es posible reemplazar la prompt anteriormente impresa. Esto es útil en los casos en que toda la información de la prompt no es siempre necesaria. Para habilitar esto, ejecuta `Enable-TransientPrompt` en la línea de comandos. Para hacerlo permanente, pon esta misma sentencia en tu `$PROFILE`. La transitoriedad puede ser desactivada al momento con `Disable-TransientPrompt`.
 
-Por defecto, el lado izquierdo de la entrada es reemplazado por `>`. Para personalizar esto, defina una nueva función llamada `Invoke-Starship-TransientFunction`. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
+Por defecto, el lado izquierdo de la prompt es reemplazado por `>`. Para personalizar esto, defina una nueva función llamada `Invoke-Starship-TransientFunction`. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -207,8 +207,6 @@ Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. P
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-Note: Nushell 0.71.0 or later is required
-
 ### Ejemplo
 
 ```toml
@@ -231,7 +229,7 @@ Produce un prompt como el siguiente:
 
 Algunos intérpretes de comandos admiten un prompt de continuacion junto con el prompt normal. Este prompt es renderizado en lugar del prompt normal cuando el usuario ha introducido una orden incompleta (como solamente un paréntesis izquierdo o comilla).
 
-Starship puede establecer el prompt de continuación usando la opción `continuation_prompt`. El prompt por defecto es `"[∙](bright-black) "`.
+Starship puede establecer el prompt de continuación usando la opción `continuation_prompt`. El indicador por defecto es `'[∙](bright-black) '`.
 
 Nota: `continuation_prompt` debe establecerse en una cadena literal sin ninguna variable.
 
@@ -247,7 +245,7 @@ Nota: Los prompts de continuación solo están disponibles en los siguientes int
 # ~/.config/starship.toml
 
 # Un prompt de continuación que muestra dos flechas rellenas
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Cadenas de Estilo
@@ -279,7 +277,7 @@ Un especificador de color puede ser uno de los siguientes:
 
 Si se especifican varios colores para el primer plano/fondo, el último en la cadena tendrá prioridad.
 
-Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+No todas las cadenas de estilo se mostrarán correctamente en cada terminal. En particular, existen las siguientes rarezas conocidas:
 
 - Many terminals disable support for `blink` by default
 - `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
