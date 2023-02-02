@@ -1650,7 +1650,7 @@ El módulo `git_commit` muestra el hash de la confirmación actual y también la
 | Variable  | Ejemplo   | Descripción                                  |
 | --------- | --------- | -------------------------------------------- |
 | hash      | `b703eb3` | El hash actual de la confirmación de git     |
-| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| etiqueta  | `v1.0.0`  | The tag name if showing tag info is enabled. |
 | style\* |           | Refleja el valor de la opción `style`        |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
@@ -2019,7 +2019,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 | Variable  | Ejemplo  | Descripción                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v4.2.5` | The version of `haxe`                  |
+| version   | `v4.2.5` | La versión de `haxe`                   |
 | symbol    |          | Refleja el valor de la opción `symbol` |
 | style\* |          | Refleja el valor de la opción `style`  |
 
