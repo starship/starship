@@ -99,6 +99,38 @@ mod tests {
     }
 
     #[test]
+    fn test_ceiling_directory() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+        let level1 = repo_dir.path().join("level1");
+        let level2 = level1.join("level2");
+        std::fs::create_dir(&level1)?;
+        std::fs::create_dir(&level2)?;
+
+        const CEILING_DIRECTORY_VAR: &str = "GIT_CEILING_DIRECTORIES";
+
+        let prev_ceiling = std::env::var_os(CEILING_DIRECTORY_VAR);
+        std::env::set_var(CEILING_DIRECTORY_VAR, level1.as_os_str());
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    only_detached = false
+            })
+            .path(level2)
+            .collect();
+
+        let expected = None;
+
+        match prev_ceiling {
+            Some(ceiling) => std::env::set_var(CEILING_DIRECTORY_VAR, ceiling),
+            None => std::env::remove_var(CEILING_DIRECTORY_VAR),
+        };
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn test_render_commit_hash() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
