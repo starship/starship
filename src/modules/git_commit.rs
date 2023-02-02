@@ -109,6 +109,7 @@ mod tests {
         const CEILING_DIRECTORY_VAR: &str = "GIT_CEILING_DIRECTORIES";
 
         let prev_ceiling = std::env::var_os(CEILING_DIRECTORY_VAR);
+        #[allow(clippy::disallowed_methods)]
         std::env::set_var(CEILING_DIRECTORY_VAR, level1.as_os_str());
 
         let actual = ModuleRenderer::new("git_commit")
