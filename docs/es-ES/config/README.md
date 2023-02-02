@@ -1948,14 +1948,14 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `["gradle"]`                         | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `"bold bright-cyan"`                 | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `gradle` module.                                                           |
-| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                                   |
+| `disabled`          | `false`                              | Deshabilita el módulo `gradle`.                                                         |
+| `recursivo`         | `false`                              | Enables recursive finding for the `gradle` directory.                                   |
 
 ### Variables
 
 | Variable | Ejemplo  | Descripción                            |
 | -------- | -------- | -------------------------------------- |
-| version  | `v7.5.1` | The version of `gradle`                |
+| version  | `v7.5.1` | La versión de `gradle`                 |
 | symbol   |          | Refleja el valor de la opción `symbol` |
 | style*   |          | Refleja el valor de la opción `style`  |
 
@@ -2013,7 +2013,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | Qué carpetas deberían activar estos módulos.                                            |
 | `symbol`            | `"⌘ "`                                                                                          | Una cadena de formato que representa el símbolo de Helm.                                |
 | `style`             | `"bold fg:202"`                                                                                 | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                             |
+| `disabled`          | `false`                                                                                         | Deshabilita el módulo `haxe`.                                                           |
 
 ### Variables
 
@@ -2535,7 +2535,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | `format`            | `'via [$symbol$project]($style) '` | El formato del módulo.                                                                    |
 | `symbol`            | `'⬢ '`                             | The symbol used before displaying the project name.                                       |
 | `style`             | `'blue bold'`                      | El estilo del módulo.                                                                     |
-| `disabled`          | `false`                            | Disables the `meson` module.                                                              |
+| `disabled`          | `false`                            | Deshabilita el módulo `meson`.                                                            |
 
 ### Variables
 
@@ -2785,13 +2785,13 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | `detect_files`      | `[]`                                 | Qué nombres de archivo deberían activar este módulo.                                    |
 | `detect_folders`    | `[]`                                 | Qué carpetas deberían activar este módulo.                                              |
 | `style`             | `'bold blue'`                        | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                              | Disables the `opa` module.                                                              |
+| `disabled`          | `false`                              | Deshabilita el módulo `opa`.                                                            |
 
 ### Variables
 
 | Variable  | Ejemplo   | Descripción                            |
 | --------- | --------- | -------------------------------------- |
-| version   | `v0.44.0` | The version of `opa`                   |
+| version   | `v0.44.0` | La versión de `opa`                    |
 | symbol    |           | Refleja el valor de la opción `symbol` |
 | style\* |           | Refleja el valor de la opción `style`  |
 
@@ -2841,7 +2841,7 @@ style = 'bold yellow'
 symbol = '☁️ '
 ```
 
-## OS
+## SO
 
 The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
 
@@ -2863,8 +2863,8 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | ---------- | --------------------- | ------------------------------------------------------ |
 | `format`   | `"[$symbol]($style)"` | El formato del módulo.                                 |
 | `style`    | `"bold white"`        | El estilo del módulo.                                  |
-| `disabled` | `true`                | Disables the `os` module.                              |
-| `symbols`  |                       | A table that maps each operating system to its symbol. |
+| `disabled` | `true`                | Deshabilita el módulo `os`.                            |
+| `símbolos` |                       | A table that maps each operating system to its symbol. |
 
 `symbols` allows you to define arbitrary symbols to display for each operating system type. Operating system types not defined by your configuration use the default symbols table below. All operating systems currently supported by the module are listed below. If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
 
@@ -2914,10 +2914,10 @@ Windows = "🪟 "
 | Variable  | Ejemplo      | Descripción                                                        |
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
-| name      | `Arch Linux` | The current operating system name                                  |
-| type      | `Arch`       | The current operating system type                                  |
+| name      | `Arch Linux` | El nombre actual del sistema operativo                             |
+| tipo      | `Arch`       | El tipo actual de sistema operativo                                |
 | codename  |              | The current operating system codename, if applicable               |
-| edition   |              | The current operating system edition, if applicable                |
+| edición   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
 | style\* |              | Refleja el valor de la opción `style`                              |
 
@@ -3898,7 +3898,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 | `disabled`        | `true`                  | Deshabilita el módulo `time`.                                                                                                                                               |
 | `time_range`      | `'-'`                   | Establece el intervalo de tiempo durante el cual se mostrará el módulo. Las horas deben especificarse en formato de 24 horas                                                |
 
-If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Configurar manualmente `time_format` sobrescribirá la configuración `use_12hr`.
+If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. De lo contrario, el valor predeterminado es `'%T'`. Configurar manualmente `time_format` sobrescribirá la configuración `use_12hr`.
 
 ### Variables
 
