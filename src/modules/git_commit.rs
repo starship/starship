@@ -123,6 +123,7 @@ mod tests {
         let expected = None;
 
         match prev_ceiling {
+            #[allow(clippy::disallowed_methods)]
             Some(ceiling) => std::env::set_var(CEILING_DIRECTORY_VAR, ceiling),
             None => std::env::remove_var(CEILING_DIRECTORY_VAR),
         };
