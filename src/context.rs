@@ -280,7 +280,7 @@ impl<'a> Context<'a> {
                 let shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(
                         &self.current_dir,
-                        git::discover::upwards::Options::default().apply_environment(),
+                        Default::default(),
                         git_open_opts_map,
                     ) {
                         Ok(repo) => repo,
