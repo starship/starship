@@ -17,8 +17,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let git_head = git_repo.head().ok()?;
 
     let is_detached = git_head.is_detached();
-    if config.only_detached && !is_detached {
+    if config.only_detached && !is_detached && config.tag_max_candidates == 0 {
         return None;
+    };
+
+    let should_show_hash = !config.only_detached || config.only_detached && is_detached;
+    let tag_symbol = if !should_show_hash && !config.tag_symbol.trim().is_empty() {
+        config.tag_symbol.trim_start()
+    } else {
+        config.tag_symbol
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -28,10 +35,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "hash" => Some(Ok(git_hash(context.get_repo().ok()?, &config)?)),
+                "hash" if should_show_hash => {
+                    Some(Ok(git_hash(context.get_repo().ok()?, &config)?))
+                }
                 "tag" if !config.tag_disabled => Some(Ok(format!(
                     "{}{}",
-                    config.tag_symbol,
+                    tag_symbol,
                     git_tag(context.get_repo().ok()?, &config)?
                 ))),
                 _ => None,
@@ -329,6 +338,52 @@ mod tests {
             Color::Green
                 .bold()
                 .paint(format!("({})", expected_output.trim()))
+        ));
+
+        assert_eq!(expected, actual);
+        Ok(())
+    }
+
+    #[test]
+    fn test_render_only_tag_without_hash_on_branch_with_only_detached() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(["tag", "v1", "-m", "Testing tags"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        create_command("git")?
+            .args(["rev-parse", "HEAD"])
+            .current_dir(repo_dir.path())
+            .output()?
+            .stdout;
+
+        let git_tag = create_command("git")?
+            .args(["describe", "--tags", "--exact-match", "HEAD"])
+            .current_dir(repo_dir.path())
+            .output()?
+            .stdout;
+        let tag_output = str::from_utf8(&git_tag).unwrap().trim();
+
+        let expected_output = format!("{tag_output}");
+
+        let actual = ModuleRenderer::new("git_commit")
+            .config(toml::toml! {
+                [git_commit]
+                    only_detached = true
+                    tag_disabled = false
+                    tag_symbol = " "
+                    tag_max_candidates = 1
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        let expected = Some(format!(
+            "{} ",
+            Color::Green
+                .bold()
+                .paint(format!("( {})", expected_output.trim()))
         ));
 
         assert_eq!(expected, actual);
