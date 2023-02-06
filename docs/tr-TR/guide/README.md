@@ -169,7 +169,7 @@
 
 ### Ön koşullar
 
-- [Nerd Font](https://www.nerdfonts.com/) kurulu ve terminalinizde kullanılıyor olmalı (başlarken [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)'u deneyebilirsiniz).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### 1. Adım Starship'i Kur
 
