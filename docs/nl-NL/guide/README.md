@@ -169,7 +169,7 @@
 
 ### Benodigdheden
 
-- Een [Nerd Font](https://www.nerdfonts.com/) is geïnstalleerd en ingeschakeld in je terminal (probeer bijvoorbeeld het [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Stap 1. Installeer Starship
 
