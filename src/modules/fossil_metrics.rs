@@ -26,7 +26,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // Read the total number of added and deleted lines from "fossil diff --numstat"
     let output = context.exec_cmd("fossil", &["diff", "--numstat"])?.stdout;
-    let stats = FossilDiff::try_parse(&output, config.only_nonzero_diffs)?;
+    let stats = FossilDiff::parse(&output, config.only_nonzero_diffs);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -62,34 +62,26 @@ struct FossilDiff<'a> {
 }
 
 impl<'a> FossilDiff<'a> {
-    fn try_parse(diff_numstat: &'a str, only_nonzero_diffs: bool) -> Option<Self> {
-        let mut split = match diff_numstat.lines().last() {
-            Some(line) => line.split_whitespace(),
-            None => {
-                log::warn!("Error in module `fossil_metrics`:\nLast line of numstat diff missing.");
-                return None;
-            }
-        };
+    /// Parses the output of `fossil diff --numstat` as a `FossilDiff` struct.
+    pub fn parse(diff_numstat: &'a str, only_nonzero_diffs: bool) -> Self {
+        // Fossil formats the last line of the output as "%10d %10d TOTAL over %d changed files\n"
+        // where the 1st and 2nd placeholders are the number of added and deleted lines respectively
+        let total_line = diff_numstat.lines().last().unwrap_or("");
+        let mut split = total_line.split_whitespace();
+
+        let zero = if only_nonzero_diffs { "" } else { "0" };
 
         let added = match split.next() {
-            Some("0") if only_nonzero_diffs => "",
+            Some("0") | None => zero,
             Some(s) => s,
-            None => {
-                log::warn!("Error in module `fossil_metrics`:\nNumber of added lines missing.");
-                return None;
-            }
         };
 
         let deleted = match split.next() {
-            Some("0") if only_nonzero_diffs => "",
+            Some("0") | None => zero,
             Some(s) => s,
-            None => {
-                log::warn!("Error in module `fossil_metrics`:\nNumber of deleted lines missing.");
-                return None;
-            }
         };
 
-        Some(Self { added, deleted })
+        Self { added, deleted }
     }
 }
 
@@ -184,9 +176,7 @@ mod tests {
 
     #[test]
     fn parse_no_changes_discard_zeros() {
-        let actual =
-            FossilDiff::try_parse("         0          0 TOTAL over 0 changed files\n", true)
-                .unwrap();
+        let actual = FossilDiff::parse("         0          0 TOTAL over 0 changed files\n", true);
         let expected = FossilDiff {
             added: "",
             deleted: "",
@@ -196,9 +186,7 @@ mod tests {
 
     #[test]
     fn parse_no_changes_keep_zeros() {
-        let actual =
-            FossilDiff::try_parse("         0          0 TOTAL over 0 changed files\n", false)
-                .unwrap();
+        let actual = FossilDiff::parse("         0          0 TOTAL over 0 changed files\n", false);
         let expected = FossilDiff {
             added: "0",
             deleted: "0",
@@ -208,11 +196,10 @@ mod tests {
 
     #[test]
     fn parse_with_changes() {
-        let actual = FossilDiff::try_parse(
+        let actual = FossilDiff::parse(
             "         3          2 README.md\n         3          2 TOTAL over 1 changed files\n",
             true,
-        )
-        .unwrap();
+        );
         let expected = FossilDiff {
             added: "3",
             deleted: "2",
