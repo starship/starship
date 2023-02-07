@@ -60,7 +60,7 @@ nu-ansi-term = "0.46.0"
 once_cell = "1.17.0"
 open = "3.2.0"
 # update os module config and tests when upgrading os_info
-os_info = "3.5.1"
+os_info = "3.6.0"
 path-slash = "0.2.1"
 pest = "2.5.4"
 pest_derive = "2.5.4"
