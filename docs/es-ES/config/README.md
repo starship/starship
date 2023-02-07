@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Registros
 
-Starship registra por defecto los mensajes de advertencia y error en un fichero con nombre `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, en el que la clave de sesión corresponde con una instancia de tu terminal. Esto, sin embargo, puede ser cambiado usando la variable de entorno `STARSHIP_CACHE`:
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Esto, sin embargo, puede ser cambiado usando la variable de entorno `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -1088,7 +1088,7 @@ Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repos
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interactúa con las opciones de truncamiento estándar de una manera que puede sorprenderse primero: si no es cero, los componentes de la ruta que normalmente se truncarían se muestran con esa cantidad de caracteres. Por ejemplo, la ruta `/built/this/city/on/rock/and/roll`, que normalmente se mostraría como `rock/and/roll`, se mostraría como `/b/t/c/o/rock/and/roll` con `fish_style_pwd_dir_length = 1`--los componentes de ruta que normalmente se eliminarían se muestran con un solo carácter. Para `fish_style_pwd_dir_length = 2`, sería `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` interactúa con las opciones de truncamiento estándar de una manera que puede sorprenderse primero: si no es cero, los componentes de la ruta que normalmente se truncarían se muestran con esa cantidad de caracteres. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. Para `fish_style_pwd_dir_length = 2`, sería `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -2895,6 +2895,8 @@ Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
 OpenBSD = "🐡 "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
 openSUSE = "🦎 "
 OracleLinux = "🦴 "
 Pop = "🍭 "
@@ -3700,18 +3702,18 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Variables
 
-| Variable       | Ejemplo | Descripción                                                                                                        |
-| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
-| status         | `127`   | El código de salida del último comando                                                                             |
-| hex_status     | `0x7F`  | El código de salida del último comando en hexadecimal                                                              |
-| int            | `127`   | El código de salida del último comando                                                                             |
-| common_meaning | `ERROR` | Comprobación del código si no es una señal                                                                         |
-| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizado                                       |
-| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada                                    |
-| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado                               |
-| pipestatus     |         | Renderizado en los códigos de salida de los programas del pipeline, esto sólo está disponible en pipestatus_format |
-| symbol         |         | Refleja el valor de la opción `symbol`                                                                             |
-| style\*      |         | Refleja el valor de la opción `style`                                                                              |
+| Variable       | Ejemplo | Descripción                                                                                |
+| -------------- | ------- | ------------------------------------------------------------------------------------------ |
+| status         | `127`   | El código de salida del último comando                                                     |
+| hex_status     | `0x7F`  | El código de salida del último comando en hexadecimal                                      |
+| int            | `127`   | El código de salida del último comando                                                     |
+| common_meaning | `ERROR` | Comprobación del código si no es una señal                                                 |
+| signal_number  | `9`     | Número de señal correspondiente al código de salida, sólo si está señalizado               |
+| signal_name    | `KILL`  | Nombre de la señal correspondiente al código de salida, sólo si está señalizada            |
+| maybe_int      | `7`     | Contiene el número de código de salida cuando no se ha encontrado ningún significado       |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
+| symbol         |         | Refleja el valor de la opción `symbol`                                                     |
+| style\*      |         | Refleja el valor de la opción `style`                                                      |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
@@ -4075,7 +4077,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-Por defecto, el módulo `zig` muestra la versión instalada de [Zig](https://ziglang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). El módulo se mostrará si se cumplen alguna de las siguientes condiciones:
 
 - El directorio actual contiene un archivo `.zig`
 
