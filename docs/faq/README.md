@@ -96,7 +96,7 @@ This will output the trace log and a breakdown of all modules that either took
 more than 1ms to execute or produced some output.
 
 Finally if you find a bug you can use the `bug-report` command to create a
-Github issue.
+GitHub issue.
 
 ```sh
 starship bug-report
