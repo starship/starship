@@ -121,7 +121,10 @@ mod tests {
             }
             None => OsString::new(),
         };
-        let parent_dir = repo_dir.path().parent().expect("tempdir should always have a parent");
+        let parent_dir = repo_dir
+            .path()
+            .parent()
+            .expect("tempdir should always have a parent");
         ceiling.push(parent_dir);
         ceiling.push(CEILING_DIRECTORY_SEP);
         ceiling.push(parent_dir);
@@ -131,10 +134,10 @@ mod tests {
 
         let assert_discovery = |cwd: &Path| -> io::Result<()> {
             let mut git_output = create_command("git")?
-            .args(["rev-parse", "HEAD"])
-            .current_dir(cwd)
-            .output()?
-            .stdout;
+                .args(["rev-parse", "HEAD"])
+                .current_dir(cwd)
+                .output()?
+                .stdout;
             git_output.truncate(7);
             let expected_hash = str::from_utf8(&git_output).unwrap();
 
@@ -174,7 +177,7 @@ mod tests {
         assert_no_discovery(&level2)?;
         assert_discovery(&level1)?;
         assert_discovery(repo_dir.path())?;
-        
+
         repo_dir.close()
     }
 
