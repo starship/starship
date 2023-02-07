@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logging
 
-Mặc định, starship logs các cảnh báo và các lỗi trong một tập tin tên là `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, nơi đó khoá của phiên làm việc tương ứng với thực thể terminal của bạn. Cái này, tuy nhiên có thể được thay đổi bằng cách sử dụng biến môi trường `STARSHIP_CACHE`:
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Cái này, tuy nhiên có thể được thay đổi bằng cách sử dụng biến môi trường `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -1088,7 +1088,7 @@ Cho ví dụ, `~/Dev/Nix/nixpkgs/pkgs` nơi `nixpkgs` là gốc của repo, và 
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -2895,6 +2895,8 @@ Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
 OpenBSD = "🐡 "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
 openSUSE = "🦎 "
 OracleLinux = "🦴 "
 Pop = "🍭 "
@@ -3700,18 +3702,18 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 
 ### Các biến
 
-| Biến           | Ví dụ   | Mô tả                                                                                       |
-| -------------- | ------- | ------------------------------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                                           |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                    |
-| int            | `127`   | The exit code of the last command                                                           |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
-| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
-| symbol         |         | Giá trị ghi đè tuỳ chọn `symbol`                                                            |
-| style\*      |         | Giá trị ghi đè của `style`                                                                  |
+| Biến           | Ví dụ   | Mô tả                                                                                      |
+| -------------- | ------- | ------------------------------------------------------------------------------------------ |
+| status         | `127`   | The exit code of the last command                                                          |
+| hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
+| int            | `127`   | The exit code of the last command                                                          |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                        |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
+| symbol         |         | Giá trị ghi đè tuỳ chọn `symbol`                                                           |
+| style\*      |         | Giá trị ghi đè của `style`                                                                 |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -4075,7 +4077,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
 
 - The current directory contains a `.zig` file
 
