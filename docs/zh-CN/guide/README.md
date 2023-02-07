@@ -169,7 +169,7 @@
 
 ### 前置要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 安装并在终端启用 [Nerd Font](https://www.nerdfonts.com/) 字体（如 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) ）。
 
 ### 步骤 1. 安装 Starship
 
