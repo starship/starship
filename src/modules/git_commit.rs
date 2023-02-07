@@ -100,35 +100,81 @@ mod tests {
 
     #[test]
     fn test_ceiling_directory() -> io::Result<()> {
+        use std::{env, ffi::OsString, path::Path};
+
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
         let level1 = repo_dir.path().join("level1");
         let level2 = level1.join("level2");
+        let level3 = level2.join("level3");
         std::fs::create_dir(&level1)?;
         std::fs::create_dir(&level2)?;
+        std::fs::create_dir(&level3)?;
 
+        // Set ceiling directory
         const CEILING_DIRECTORY_VAR: &str = "GIT_CEILING_DIRECTORIES";
+        const CEILING_DIRECTORY_SEP: &str = if cfg!(windows) { ";" } else { ":" };
 
-        let prev_ceiling = std::env::var_os(CEILING_DIRECTORY_VAR);
-        #[allow(clippy::disallowed_methods)]
-        std::env::set_var(CEILING_DIRECTORY_VAR, level1.as_os_str());
+        let mut ceiling = match env::var_os(CEILING_DIRECTORY_VAR) {
+            Some(mut var) => {
+                var.push(CEILING_DIRECTORY_SEP);
+                var
+            }
+            None => OsString::new(),
+        };
+        let parent_dir = repo_dir.path().parent().expect("tempdir should always have a parent");
+        ceiling.push(parent_dir);
+        ceiling.push(CEILING_DIRECTORY_SEP);
+        ceiling.push(parent_dir);
+        ceiling.push(CEILING_DIRECTORY_SEP);
+        ceiling.push(&level1);
+        env::set_var(CEILING_DIRECTORY_VAR, ceiling);
 
-        let actual = ModuleRenderer::new("git_commit")
-            .config(toml::toml! {
-                [git_commit]
-                    only_detached = false
-            })
-            .path(level2)
-            .collect();
+        let assert_discovery = |cwd: &Path| -> io::Result<()> {
+            let mut git_output = create_command("git")?
+            .args(["rev-parse", "HEAD"])
+            .current_dir(cwd)
+            .output()?
+            .stdout;
+            git_output.truncate(7);
+            let expected_hash = str::from_utf8(&git_output).unwrap();
 
-        let expected = None;
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        only_detached = false
+                })
+                .path(cwd)
+                .collect();
 
-        match prev_ceiling {
-            #[allow(clippy::disallowed_methods)]
-            Some(ceiling) => std::env::set_var(CEILING_DIRECTORY_VAR, ceiling),
-            None => std::env::remove_var(CEILING_DIRECTORY_VAR),
+            let expected = Some(format!(
+                "{} ",
+                Color::Green.bold().paint(format!("({expected_hash})"))
+            ));
+
+            assert_eq!(expected, actual);
+            Ok(())
         };
 
-        assert_eq!(expected, actual);
+        let assert_no_discovery = |cwd: &Path| -> io::Result<()> {
+            let actual = ModuleRenderer::new("git_commit")
+                .config(toml::toml! {
+                    [git_commit]
+                        only_detached = false
+                })
+                .path(cwd)
+                .collect();
+
+            let expected = None;
+
+            assert_eq!(expected, actual);
+            Ok(())
+        };
+
+        assert_no_discovery(&level3)?;
+        assert_no_discovery(&level2)?;
+        assert_discovery(&level1)?;
+        assert_discovery(repo_dir.path())?;
+        
         repo_dir.close()
     }
 
