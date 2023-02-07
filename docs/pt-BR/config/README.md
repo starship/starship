@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logging
 
-Por padrão o starship grava logs de erros e warnings dentro de um arquivo chamado `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, onde a session key corresponde a instancia do seu terminal. Isto, no entanto pode ser alterado usando a variável de ambiente `STARSHIP_CACHE`:
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Isto, no entanto pode ser alterado usando a variável de ambiente `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -1088,7 +1088,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interage com as opções de truncação padrão de uma forma que pode suprimir no começo: se não for zero, os componentes do path que normalmente seriam truncados são exibidos com todos caracteres. Por exemplo, o caminho `/built/this/city/on/rock/and/roll`, que normalmente seria exibido como`rock/and/roll`, seria exibido como `/b/t/c/o/rock/and/roll` com`fish_style_pwd_dir_length = 1`--os componentes de path que normalmente seriam removidos são exibidos com um único caractere. Para `fish_style_pwd_dir_length = 2`, seria `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` interage com as opções de truncação padrão de uma forma que pode suprimir no começo: se não for zero, os componentes do path que normalmente seriam truncados são exibidos com todos caracteres. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. Para `fish_style_pwd_dir_length = 2`, seria `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -2895,6 +2895,8 @@ Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
 OpenBSD = "🐡 "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
 openSUSE = "🦎 "
 OracleLinux = "🦴 "
 Pop = "🍭 "
@@ -3700,18 +3702,18 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 ### Variáveis
 
-| Variável       | Exemplo | Descrição                                                                                                |
-| -------------- | ------- | -------------------------------------------------------------------------------------------------------- |
-| status         | `127`   | O codígo de saída do último comando                                                                      |
-| hex_status     | `0x7F`  | O codígo de saída do último comando em hex                                                               |
-| int            | `127`   | O codígo de saída do último comando                                                                      |
-| common_meaning | `ERROR` | Significa que o código não é um sinal                                                                    |
-| signal_number  | `9`     | Número do sinal correspondente ao código de saída, apenas se sinalizado                                  |
-| signal_name    | `KILL`  | Nome do sinal correspondente ao código de saída, apenas se for sinalizado                                |
-| maybe_int      | `7`     | Contém o código de saída quando nenhum significado for encontrado                                        |
-| pipestatus     |         | Exibição do pipeline de programas com os códigos de saída, este é apenas disponível no pipestatus_format |
-| symbol         |         | Espelha o valor da opção `symbol`                                                                        |
-| style\*      |         | Espelha o valor da opção `style`                                                                         |
+| Variável       | Exemplo | Descrição                                                                                  |
+| -------------- | ------- | ------------------------------------------------------------------------------------------ |
+| status         | `127`   | O codígo de saída do último comando                                                        |
+| hex_status     | `0x7F`  | O codígo de saída do último comando em hex                                                 |
+| int            | `127`   | O codígo de saída do último comando                                                        |
+| common_meaning | `ERROR` | Significa que o código não é um sinal                                                      |
+| signal_number  | `9`     | Número do sinal correspondente ao código de saída, apenas se sinalizado                    |
+| signal_name    | `KILL`  | Nome do sinal correspondente ao código de saída, apenas se for sinalizado                  |
+| maybe_int      | `7`     | Contém o código de saída quando nenhum significado for encontrado                          |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
+| symbol         |         | Espelha o valor da opção `symbol`                                                          |
+| style\*      |         | Espelha o valor da opção `style`                                                           |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -4075,7 +4077,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-Por padrão, o módulo `zig` mostra a versão atualmente instalada do [Zig](https://ziglang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
 
 - O diretório atual contém arquivo com a extensão `.zig`
 
