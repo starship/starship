@@ -9,11 +9,13 @@
         "workarounds:all",
         // automerge minor updates
         ":automergeMinor",
+        ":automergeBranch"
     ],
     "labels": ["📦 dependencies"],
     "semanticCommits": "enabled",
     "semanticCommitType": "build",
     "rangeStrategy": "bump",
+    "rebaseWhen": "conflicted",
     "packageRules": [
         // group updates to related packages
         {
