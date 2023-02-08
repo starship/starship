@@ -1,3 +1,4 @@
+use super::utils::path::PathExt;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::fossil_metrics::FossilMetricsConfig;
@@ -15,12 +16,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let is_checkout = context
-        .try_begin_scan()?
-        .set_files(&[".fslckout"])
-        .is_match();
-
-    if !is_checkout {
+    if !is_checkout(context) {
         return None;
     }
 
@@ -52,6 +48,19 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn is_checkout(ctx: &Context) -> bool {
+    let dev_id = ctx.current_dir.device_id();
+    for dir in ctx.current_dir.as_path().ancestors() {
+        if dev_id != dir.device_id() {
+            break;
+        }
+        if dir.join(".fslckout").is_file() {
+            return true;
+        }
+    }
+    false
 }
 
 /// Represents the parsed output from a Fossil diff with the --numstat option enabled.
@@ -146,6 +155,18 @@ mod tests {
         let checkout_dir = tempdir.path();
         expect_fossil_metrics_with_config(
             checkout_dir,
+            None,
+            &[Expect::Added(Some("3")), Expect::Deleted(Some("2"))],
+        );
+        tempdir.close()
+    }
+
+    #[test]
+    fn test_fossil_metrics_subdir() -> io::Result<()> {
+        let tempdir = fixture_repo(FixtureProvider::Fossil)?;
+        let checkout_dir = tempdir.path();
+        expect_fossil_metrics_with_config(
+            &checkout_dir.join("subdir"),
             None,
             &[Expect::Added(Some("3")), Expect::Deleted(Some("2"))],
         );
