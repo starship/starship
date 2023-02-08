@@ -9,6 +9,7 @@
         "workarounds:all",
         // automerge minor updates
         ":automergeMinor",
+        ":automergeBranch"
     ],
     "labels": ["📦 dependencies"],
     "semanticCommits": "enabled",
