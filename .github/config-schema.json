@@ -1151,6 +1151,7 @@
           "NetBSD": "🚩 ",
           "NixOS": "❄️ ",
           "OpenBSD": "🐡 ",
+          "OpenCloudOS": "☁️ ",
           "OracleLinux": "🦴 ",
           "Pop": "🍭 ",
           "Raspbian": "🍓 ",
@@ -1162,6 +1163,7 @@
           "Ubuntu": "🎯 ",
           "Unknown": "❓ ",
           "Windows": "🪟 ",
+          "openEuler": "🦉 ",
           "openSUSE": "🦎 "
         }
       },
@@ -4479,6 +4481,7 @@
             "NetBSD": "🚩 ",
             "NixOS": "❄️ ",
             "OpenBSD": "🐡 ",
+            "OpenCloudOS": "☁️ ",
             "OracleLinux": "🦴 ",
             "Pop": "🍭 ",
             "Raspbian": "🍓 ",
@@ -4490,6 +4493,7 @@
             "Ubuntu": "🎯 ",
             "Unknown": "❓ ",
             "Windows": "🪟 ",
+            "openEuler": "🦉 ",
             "openSUSE": "🦎 "
           },
           "type": "object",

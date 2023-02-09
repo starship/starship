@@ -60,10 +60,10 @@ nu-ansi-term = "0.46.0"
 once_cell = "1.17.0"
 open = "3.2.0"
 # update os module config and tests when upgrading os_info
-os_info = "3.5.1"
+os_info = "3.6.0"
 path-slash = "0.2.1"
-pest = "2.5.4"
-pest_derive = "2.5.4"
+pest = "2.5.5"
+pest_derive = "2.5.5"
 quick-xml = "0.27.1"
 rand = "0.8.5"
 rayon = "1.6.1"
@@ -71,7 +71,7 @@ regex = "1.7.1"
 rust-ini = "0.18.0"
 semver = "1.0.16"
 serde = { version = "1.0.152", features = ["derive"] }
-serde_json = "1.0.92"
+serde_json = "1.0.93"
 sha1 = "0.10.5"
 shadow-rs = { version = "0.20.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
@@ -80,8 +80,8 @@ starship-battery = { version = "0.7.9", optional = true }
 strsim = "0.10.0"
 systemstat = "=0.2.3"
 terminal_size = "0.2.3"
-toml = { version = "0.7.1", features = ["preserve_order"] }
-toml_edit = "0.19.1"
+toml = { version = "0.7.2", features = ["preserve_order"] }
+toml_edit = "0.19.3"
 unicode-segmentation = "1.10.1"
 unicode-width = "0.1.10"
 urlencoding = "2.1.2"
