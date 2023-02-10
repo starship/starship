@@ -130,6 +130,8 @@ mod tests {
         ceiling.push(parent_dir);
         ceiling.push(CEILING_DIRECTORY_SEP);
         ceiling.push(&level1);
+
+        #[allow(clippy::disallowed_methods)]
         env::set_var(CEILING_DIRECTORY_VAR, ceiling);
 
         let assert_discovery = |cwd: &Path| -> io::Result<()> {
