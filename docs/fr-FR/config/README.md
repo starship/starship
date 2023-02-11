@@ -2114,21 +2114,21 @@ disabled = false
 
 Le module `java` affiche la version de [Java](https://www.oracle.com/java/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - Le dossier courant contient un fichier avec l’extension `.java`, `.class`, `.gradle`, `.jar`, `.clj` ou `.cljc`
 
 ### Options
 
-| Option                               | Défaut                                                                                                   | Description                                                                                |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [${symbol}(${version} )]($style)'`                                                                 | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                                              | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `detect_extensionsdetect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                     | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                                                                     | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'☕ '`                                                                                                   | Une chaîne de caractères représentant le symbole de Java                                   |
-| `style`                              | `'red dimmed'`                                                                                           | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                                                  | Désactive le module `java`.                                                                |
+| Option                               | Défaut                                                                                                                | Description                                                                                |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [${symbol}(${version} )]($style)'`                                                                              | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                                                                                                           | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensionsdetect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `[]`                                                                                                                  | Quels dossiers devraient activer ce module.                                                |
+| `symbole`                            | `'☕ '`                                                                                                                | Une chaîne de caractères représentant le symbole de Java                                   |
+| `style`                              | `'red dimmed'`                                                                                                        | Le style pour le module.                                                                   |
+| `disabled`                           | `false`                                                                                                               | Désactive le module `java`.                                                                |
 
 ### Variables
 
