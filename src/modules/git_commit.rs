@@ -128,6 +128,7 @@ mod tests {
                 .parent()
                 .expect("tempdir should always have a parent"),
         )?;
+        ceiling.push(CEILING_DIRECTORY_SEP);
         ceiling.push(&parent_dir);
         ceiling.push(CEILING_DIRECTORY_SEP);
         ceiling.push(&parent_dir);
