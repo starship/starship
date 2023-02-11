@@ -2114,21 +2114,21 @@ disabled = false
 
 `Java`モジュールは、現在インストールされている[Java](https://www.oracle.com/java/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - カレントディレクトリに拡張子が`.java`、`.class`、`.gradle`、`.jar`、`.clj`または`.cljc`のファイルが含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                                                                                    | 説明                                                     |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                 | module のフォーマットです。                                      |
-| `version_format`    | `'v${raw}'`                                                                                              | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                     | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot']` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                                                                                     | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `symbol`            | `'☕ '`                                                                                                   | A format string representing the symbol of Java        |
-| `style`             | `'red dimmed'`                                                                                           | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                                                  | `java`モジュールを無効にします。                                    |
+| オプション               | デフォルト                                                                                                                 | 説明                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                                                                                                           | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                                                                  | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java        |
+| `style`             | `'red dimmed'`                                                                                                        | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                                                               | `java`モジュールを無効にします。                                    |
 
 ### 変数
 
