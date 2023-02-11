@@ -2114,21 +2114,21 @@ disabled = false
 
 The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Opsi
 
-| Opsi                | Bawaan                                                                                                   | Deskripsi                                                                           |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `fromat`            | `'via [${symbol}(${version} )]($style)'`                                                                 | Format dari modul.                                                                  |
-| `version_format`    | `'v${raw}'`                                                                                              | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                     | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot']` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                                                                                     | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `symbol`            | `'☕ '`                                                                                                   | A format string representing the symbol of Java                                     |
-| `style`             | `'red dimmed'`                                                                                           | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                                                                                  | Disables the `java` module.                                                         |
+| Opsi                | Bawaan                                                                                                                | Deskripsi                                                                           |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `fromat`            | `'via [${symbol}(${version} )]($style)'`                                                                              | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                                                                                                           | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                                                                                                  | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java                                     |
+| `style`             | `'red dimmed'`                                                                                                        | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                                                                                               | Disables the `java` module.                                                         |
 
 ### Variabel
 
