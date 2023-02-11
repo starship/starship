@@ -109,6 +109,7 @@ mod tests {
         std::fs::create_dir(&level1)?;
         std::fs::create_dir(&level2)?;
         std::fs::create_dir(&level3)?;
+        let level1 = dunce::canonicalize(level1)?;
 
         // Set ceiling directory
         const CEILING_DIRECTORY_VAR: &str = "GIT_CEILING_DIRECTORIES";
@@ -121,13 +122,15 @@ mod tests {
             }
             None => OsString::new(),
         };
-        let parent_dir = repo_dir
-            .path()
-            .parent()
-            .expect("tempdir should always have a parent");
-        ceiling.push(parent_dir);
+        let parent_dir = dunce::canonicalize(
+            repo_dir
+                .path()
+                .parent()
+                .expect("tempdir should always have a parent"),
+        )?;
+        ceiling.push(&parent_dir);
         ceiling.push(CEILING_DIRECTORY_SEP);
-        ceiling.push(parent_dir);
+        ceiling.push(&parent_dir);
         ceiling.push(CEILING_DIRECTORY_SEP);
         ceiling.push(&level1);
 
