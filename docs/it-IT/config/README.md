@@ -2114,21 +2114,21 @@ disabled = false
 
 The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - The current directory contains a file with the `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc` extension
 
 ### Opzioni
 
-| Opzione             | Default                                                                                                  | Descrizione                                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                 | The format for the module.                                                                  |
-| `version_format`    | `'v${raw}'`                                                                                              | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                     | Quali estensioni dovrebbero attivare questo modulo.                                         |
-| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot']` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this modules.                                                  |
-| `symbol`            | `'☕ '`                                                                                                   | A format string representing the symbol of Java                                             |
-| `style`             | `'red dimmed'`                                                                                           | Lo stile per il modulo.                                                                     |
-| `disabled`          | `false`                                                                                                  | Disables the `java` module.                                                                 |
+| Opzione             | Default                                                                                                               | Descrizione                                                                                 |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | The format for the module.                                                                  |
+| `version_format`    | `'v${raw}'`                                                                                                           | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Quali estensioni dovrebbero attivare questo modulo.                                         |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
+| `detect_folders`    | `[]`                                                                                                                  | Which folders should trigger this modules.                                                  |
+| `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java                                             |
+| `style`             | `'red dimmed'`                                                                                                        | Lo stile per il modulo.                                                                     |
+| `disabled`          | `false`                                                                                                               | Disables the `java` module.                                                                 |
 
 ### Variables
 
