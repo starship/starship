@@ -12,7 +12,7 @@ Starship は汎用性の高いシェルですが、時には特定の処理を�
 
 過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 有効にするには、 `Enable-TransientPrompt` をシェルで実行してください。 `$PROFILE` に追記することによって常時有効にすることが出来ます。 また、 `Disable-TransientPrompt` によっていつでも無効化することが出来ます。
 
-デフォルトでは、入力の左側が `>` 出置き換えられます。 カスタマイズするには、関数を `Invoke-Starship-TransientFunction` という名前で定義してください。 Starshipの `character` モジュールを表示する場合はこのようにします：
+デフォルトでは、入力した文字列の左側を `>` で置換します。 カスタマイズするには、関数を `Invoke-Starship-TransientFunction` という名前で定義してください。 Starshipの `character` モジュールを表示する場合はこのようにします：
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -24,12 +24,12 @@ Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
 ```
 
-## TransientPrompt and TransientRightPrompt in Cmd
+## Cmd の TransientPrompt と TransientRightPrompt
 
-Clink allows you to replace the previous-printed prompt with custom strings. 全ての情報が必要では無い時に役に立ちます。 To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink を使うと直前に出力したプロント文字列をカスタマイズできます。 全ての情報が必要では無い時に役に立ちます。 有効化するには次のコマンドを実行します。 `clink set prompt.transient <value>` 。 \<value\> には次のいずれかの値を指定します。
 
-- `always`: always replace the previous prompt
-- `same_dir`: replace the previous prompt only if the working directory is same
+- `always`: 直前に出力したプロンプト文字列を常に置換します。
+- `same_dir`: 作業ディレクトリが同じなら、直前に出力したプロンプト文字列を置換します。
 - `off`: do not replace the prompt (i.e. turn off transience)
 
 You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
