@@ -30,11 +30,11 @@ Clink を使うと直前に出力したプロント文字列をカスタマイ�
 
 - `always`: 直前に出力したプロンプト文字列を常に置換します。
 - `same_dir`: 作業ディレクトリが同じなら、直前に出力したプロンプト文字列を置換します。
-- `off`: do not replace the prompt (i.e. turn off transience)
+- `off`: プロンプト文字列を置換しません(無効化します)。
 
-You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+この操作が必要なのは1度だけです。 自分の `starship.lua` を次のように編集すると、プロンプト文字列の左側や右側に出力する文字列を変更できます。
 
-- デフォルトでは、入力の左側が `>` 出置き換えられます。 To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. Starshipの `character` モジュールを表示する場合はこのようにします：
+- デフォルトでは、入力した文字列の左側を `>` へ置換します。 カスタマイズするには、新しい関数  `starship_transient_prompt_func` を定義します。 この関数の受け取る引数は今のプロンプト文字列で、あなたが変更できるようになっています。 Starshipの `character` モジュールを表示する場合はこのようにします：
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -45,7 +45,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- デフォルトでは、入力した文字列の右側は空です。 カスタマイズするには、新しい関数 `starship_transient_rprompt_func` を定義します。 この関数の受け取る引数は今のプロンプト文字列で、あなたが変更できるようになっています。 例えば、直前のコマンドを実行した時刻を表示するには次のようにします。
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -54,13 +54,13 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## TransientPrompt and TransientRightPrompt in Fish
+## Fish の TransientPrompt と TransientRightPrompt
 
 過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. Starshipの `character` モジュールを表示する場合はこのようにします：
+- By default, the left side of input gets replaced with a bold-green `❯`. カスタマイズするには、新しい関数  `starship_transient_prompt_func` を定義します。 Starshipの `character` モジュールを表示する場合はこのようにします：
 
 ```fish
 function starship_transient_prompt_func
@@ -70,7 +70,7 @@ starship init fish | source
 enable_transience
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- デフォルトでは、入力した文字列の右側は空です。 カスタマイズするには、新しい関数 `starship_transient_rprompt_func` を定義します。 例えば、直前のコマンドを実行した時刻を表示するには次のようにします。
 
 ```fish
 function starship_transient_rprompt_func
