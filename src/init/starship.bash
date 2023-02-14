@@ -68,9 +68,14 @@ starship_precmd() {
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
+# If the user appears to be using https://github.com/akinomyoga/ble.sh,
+# then hook our functions into their framework.
+if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
+    blehook PREEXEC!='starship_preexec "$_"'
+    blehook PRECMD!='starship_precmd'
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-if [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
+elif [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
     # bash-preexec needs a single function--wrap the args into a closure and pass
     starship_preexec_all(){ starship_preexec "$_"; }
     preexec_functions+=(starship_preexec_all)
