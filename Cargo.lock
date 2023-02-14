@@ -1013,9 +1013,9 @@ dependencies = [
 
 [[package]]
 name = "git-features"
-version = "0.26.2"
+version = "0.26.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "639e64c26a31abf446952e27ef278c537eed8e813a8bc649b5da6cb51b2e1227"
+checksum = "688ac55de8f6126dd2e43cf51a74e94b8407102334a5d7810948c5b6f2772668"
 dependencies = [
  "crc32fast",
  "crossbeam-channel",
