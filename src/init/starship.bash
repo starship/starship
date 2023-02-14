@@ -58,13 +58,13 @@ starship_precmd() {
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
         PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
-        if [[ ${BLE_VERSION-} ]]; then
-            bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        if [[ ${BLE_ATTACHED-} ]]; then
+            bleopt prompt_rps1="${PS1//[!$'\n']}$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         fi
     else
         PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
-        if [[ ${BLE_VERSION-} ]]; then
-            bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
+        if [[ ${BLE_ATTACHED-} ]]; then
+            bleopt prompt_rps1="${PS1//[!$'\n']}$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
         fi
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
@@ -120,9 +120,3 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 # Set the continuation prompt
 PS2="$(::STARSHIP:: prompt --continuation)"
 
-if [[ ${BLE_VERSION-} ]]; then
-    # Calculate number of newlines in the prompt string
-    p_string="$(::STARSHIP:: prompt)"
-    nlns_count="${p_string//[!$'\n']/}"
-    for ((c=1;c<=${#nlns_count};c++)); do nlns="\n${nlns}"; done
-fi
