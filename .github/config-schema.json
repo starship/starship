@@ -816,7 +816,8 @@
           ".java-version",
           "deps.edn",
           "project.clj",
-          "build.boot"
+          "build.boot",
+          ".sdkmanrc"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -3783,7 +3784,8 @@
             ".java-version",
             "deps.edn",
             "project.clj",
-            "build.boot"
+            "build.boot",
+            ".sdkmanrc"
           ],
           "type": "array",
           "items": {
