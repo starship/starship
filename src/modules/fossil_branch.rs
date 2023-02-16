@@ -18,7 +18,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     // See if we're in a check-out by scanning upwards for a directory containing ".fslckout"
-    context.upwards_sibling_scan(".fslckout")?;
+    context
+        .begin_ancestor_scan()
+        .set_files(&[".fslckout"])
+        .scan()?;
 
     let len = if config.truncation_length <= 0 {
         log::warn!(

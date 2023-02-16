@@ -249,21 +249,14 @@ impl<'a> Context<'a> {
         })
     }
 
-    /// Scans upwards for a directory containing an item with the given name, starting at the
-    /// current directory.
-    ///
-    /// The scan does not cross device boundaries.
-    pub fn upwards_sibling_scan<P: AsRef<Path>>(&'a self, name: P) -> Option<&'a Path> {
-        let initial_device_id = self.current_dir.device_id();
-        for dir in self.current_dir.ancestors() {
-            if initial_device_id != dir.device_id() {
-                break;
-            }
-            if dir.join(name.as_ref()).exists() {
-                return Some(dir);
-            }
+    /// Begins an ancestor scan at the current directory, see [`ScanAncestors`] for available
+    /// methods.
+    pub fn begin_ancestor_scan(&'a self) -> ScanAncestors<'a> {
+        ScanAncestors {
+            path: &self.current_dir,
+            files: &[],
+            folders: &[],
         }
-        None
     }
 
     /// Will lazily get repo root and branch when a module requests it.
@@ -622,6 +615,48 @@ impl<'a> ScanDir<'a> {
                 .has_any_positive_extension(self.extensions)
                 || self.dir_contents.has_any_positive_file_name(self.files)
                 || self.dir_contents.has_any_positive_folder(self.folders))
+    }
+}
+
+/// Scans the ancestors of a given path until a directory containing one of the given files or
+/// folders is found.
+pub struct ScanAncestors<'a> {
+    path: &'a Path,
+    files: &'a [&'a str],
+    folders: &'a [&'a str],
+}
+
+impl<'a> ScanAncestors<'a> {
+    #[must_use]
+    pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
+        self.files = files;
+        self
+    }
+
+    #[must_use]
+    pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
+        self.folders = folders;
+        self
+    }
+
+    /// Scans upwards starting from the initial path until a directory containing one of the given
+    /// files or folders is found.
+    ///
+    /// The scan does not cross device boundaries.
+    pub fn scan(&self) -> Option<&'a Path> {
+        let initial_device_id = self.path.device_id();
+        for dir in self.path.ancestors() {
+            if initial_device_id != dir.device_id() {
+                break;
+            }
+
+            if self.files.iter().any(|name| dir.join(name).is_file())
+                || self.folders.iter().any(|name| dir.join(name).is_dir())
+            {
+                return Some(dir);
+            }
+        }
+        None
     }
 }
 

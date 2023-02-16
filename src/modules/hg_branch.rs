@@ -31,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let repo_root = context.upwards_sibling_scan(".hg")?;
+    let repo_root = context.begin_ancestor_scan().set_folders(&[".hg"]).scan()?;
     let branch_name = get_hg_current_bookmark(repo_root).unwrap_or_else(|_| {
         get_hg_branch_name(repo_root).unwrap_or_else(|_| String::from("default"))
     });
