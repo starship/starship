@@ -1,3 +1,5 @@
+use regex::Regex;
+
 use super::utils::path::PathExt;
 use super::{Context, Module, ModuleConfig};
 
@@ -75,20 +77,26 @@ impl<'a> FossilDiff<'a> {
     pub fn parse(diff_numstat: &'a str, only_nonzero_diffs: bool) -> Self {
         // Fossil formats the last line of the output as "%10d %10d TOTAL over %d changed files\n"
         // where the 1st and 2nd placeholders are the number of added and deleted lines respectively
-        let total_line = diff_numstat.lines().last().unwrap_or("");
-        let mut split = total_line.split_whitespace();
+        let re = Regex::new(r"^\s*(\d+)\s+(\d+) TOTAL over \d+ changed files$").unwrap();
 
-        let zero = if only_nonzero_diffs { "" } else { "0" };
+        let (added, deleted) = diff_numstat
+            .lines()
+            .last()
+            .and_then(|s| re.captures(s))
+            .and_then(|caps| {
+                let added = match caps.get(1)?.as_str() {
+                    "0" if only_nonzero_diffs => "",
+                    s => s,
+                };
 
-        let added = match split.next() {
-            Some("0") | None => zero,
-            Some(s) => s,
-        };
+                let deleted = match caps.get(2)?.as_str() {
+                    "0" if only_nonzero_diffs => "",
+                    s => s,
+                };
 
-        let deleted = match split.next() {
-            Some("0") | None => zero,
-            Some(s) => s,
-        };
+                Some((added, deleted))
+            })
+            .unwrap_or_default();
 
         Self { added, deleted }
     }
@@ -224,6 +232,27 @@ mod tests {
         let expected = FossilDiff {
             added: "3",
             deleted: "2",
+        };
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn parse_ignore_empty() {
+        let actual = FossilDiff::parse("", true);
+        let expected = FossilDiff {
+            added: "",
+            deleted: "",
+        };
+        assert_eq!(expected, actual);
+    }
+
+    /// Tests output as produced by Fossil v2.3 to v2.14, i.e. without the summary line.
+    #[test]
+    fn parse_ignore_when_missing_total_line() {
+        let actual = FossilDiff::parse("         3          2 README.md\n", true);
+        let expected = FossilDiff {
+            added: "",
+            deleted: "",
         };
         assert_eq!(expected, actual);
     }
