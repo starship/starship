@@ -17,14 +17,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let is_checkout = context
-        .try_begin_scan()?
-        .set_files(&[".fslckout"])
-        .is_match();
-
-    if !is_checkout {
-        return None;
-    }
+    // See if we're in a check-out by scanning upwards for a directory containing ".fslckout"
+    context.upwards_sibling_scan(".fslckout")?;
 
     let len = if config.truncation_length <= 0 {
         log::warn!(
@@ -131,6 +125,18 @@ mod tests {
         run_fossil(&["update", "topic-branch"], checkout_dir)?;
         expect_fossil_branch_with_config(
             checkout_dir,
+            None,
+            &[Expect::BranchName("topic-branch"), Expect::NoTruncation],
+        );
+        tempdir.close()
+    }
+
+    #[test]
+    fn test_fossil_branch_subdir() -> io::Result<()> {
+        let tempdir = fixture_repo(FixtureProvider::Fossil)?;
+        let checkout_dir = tempdir.path();
+        expect_fossil_branch_with_config(
+            &checkout_dir.join("subdir"),
             None,
             &[Expect::BranchName("topic-branch"), Expect::NoTruncation],
         );

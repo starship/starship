@@ -177,6 +177,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
         FixtureProvider::Fossil => {
             let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join("subdir"))?;
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
