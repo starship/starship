@@ -6,8 +6,7 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
-use crate::modules::utils::path::PathExt;
-use crate::utils::read_file;
+use crate::utils::{read_file, PathExt};
 
 /// Creates a module with the Hg bookmark or branch in the current directory
 ///
