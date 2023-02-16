@@ -1,7 +1,7 @@
 use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::module::Module;
-use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
+use crate::utils::{create_command, exec_timeout, read_file, CommandOutput, PathExt};
 
 use crate::modules;
 use crate::utils::{self, home_dir};
@@ -247,6 +247,23 @@ impl<'a> Context<'a> {
             folders: &[],
             extensions: &[],
         })
+    }
+
+    /// Scans upwards for a directory containing an item with the given name, starting at the
+    /// current directory.
+    ///
+    /// The scan does not cross device boundaries.
+    pub fn upwards_sibling_scan<P: AsRef<Path>>(&'a self, name: P) -> Option<&'a Path> {
+        let initial_device_id = self.current_dir.device_id();
+        for dir in self.current_dir.ancestors() {
+            if initial_device_id != dir.device_id() {
+                break;
+            }
+            if dir.join(name.as_ref()).exists() {
+                return Some(dir);
+            }
+        }
+        None
     }
 
     /// Will lazily get repo root and branch when a module requests it.
