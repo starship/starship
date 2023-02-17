@@ -1013,9 +1013,9 @@ dependencies = [
 
 [[package]]
 name = "git-features"
-version = "0.26.4"
+version = "0.26.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "688ac55de8f6126dd2e43cf51a74e94b8407102334a5d7810948c5b6f2772668"
+checksum = "64be6a1e602760c2c83aac3d05553c90805748bba9cb0f0e944d66b0f85cea0d"
 dependencies = [
  "crc32fast",
  "crossbeam-channel",
@@ -1046,9 +1046,9 @@ dependencies = [
 
 [[package]]
 name = "git-hash"
-version = "0.10.2"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dfea33ea1987a757e7bdda54c42d1c5bbcd741a997db98b6be5d2e739a221602"
+checksum = "2c4af641a41fdb4b1d5c2be9783cd8ffcd4e22a6ad41581c1f0dc3e882000585"
 dependencies = [
  "hex",
  "thiserror",
