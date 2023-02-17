@@ -683,6 +683,9 @@ pub struct Properties {
     /// The number of currently running jobs
     #[clap(short, long, default_value_t, value_parser=parse_jobs)]
     pub jobs: i64,
+    /// The current value of SHLVL, for shells that mis-handle it in $()
+    #[clap(long)]
+    pub shlvl: Option<i64>,
 }
 
 impl Default for Properties {
@@ -696,6 +699,7 @@ impl Default for Properties {
             cmd_duration: None,
             keymap: "viins".to_string(),
             jobs: 0,
+            shlvl: None,
         }
     }
 }
