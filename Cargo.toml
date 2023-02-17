@@ -48,7 +48,7 @@ clap_complete = "4.1.2"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.4.1"
-git-features = { version = "0.26.4", optional = true }
+git-features = { version = "0.26.5", optional = true }
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
 git-repository = { version = "0.35.0", default-features = false, features = ["max-performance-safe"] }
 indexmap = { version = "1.9.2", features = ["serde"] }
