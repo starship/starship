@@ -6,7 +6,7 @@ use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
 use crate::modules;
 use crate::utils::{self, home_dir};
 use clap::Parser;
-use git_repository::{
+use gix::{
     self as git,
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state, Repository, ThreadSafeRepository,
