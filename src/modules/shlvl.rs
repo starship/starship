@@ -10,7 +10,9 @@ const SHLVL_ENV_VAR: &str = "SHLVL";
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let props = &context.properties;
-    let shlvl = props.shlvl.unwrap_or(context.get_env(SHLVL_ENV_VAR)?.parse::<i64>().ok()?);
+    let shlvl = props
+        .shlvl
+        .unwrap_or(context.get_env(SHLVL_ENV_VAR)?.parse::<i64>().ok()?);
 
     let mut module = context.new_module("shlvl");
     let config: ShLvlConfig = ShLvlConfig::try_load(module.config);
