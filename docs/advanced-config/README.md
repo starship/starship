@@ -91,6 +91,14 @@ eval "$(starship init zsh)"
 enable_transience
 ```
 
+Note: The current zsh transient prompt implementation has some known limitations:
+
+- The shell behaves as if `notify` option was always off (note that it's on by default).
+- The exit status from the shell on Ctrl-D is aways 0.
+
+Refer to the related [issue](https://github.com/starship/starship/issues/888) and
+[pull request](https://github.com/starship/starship/pull/4205) for more details.
+
 ## TransientPrompt and TransientRightPrompt in Fish
 
 It is possible to replace the previous-printed prompt with a custom string. This
