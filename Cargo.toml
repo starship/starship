@@ -36,10 +36,10 @@ notify = ["notify-rust"]
 
 # Enables most of the `max-performace` features of the `git_repository` module for better performance.
 # This can be more difficult to build in some conditions and requires cmake.
-git-repository-max-perf = ["git-features/zlib-ng", "git-repository/fast-sha1"]
+git-repository-max-perf = ["gix-features/zlib-ng", "gix/fast-sha1"]
 # Slower than `git-repository-max-perf`, but better than the default.
 # Unlike `git-repository-max-perf` this does not require cmake and allows dynamic zlib linking.
-git-repository-faster = ["git-features/zlib-stock", "git-repository/fast-sha1"]
+git-repository-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
 chrono = { version = "0.4.23", default-features = false, features = ["clock", "std", "wasmbind"] }
@@ -48,9 +48,9 @@ clap_complete = "4.1.2"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.4.1"
-git-features = { version = "0.26.5", optional = true }
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-git-repository = { version = "0.35.0", default-features = false, features = ["max-performance-safe"] }
+gix = { version = "0.36.0", default-features = false, features = ["max-performance-safe"] }
+gix-features = { version = "0.26.4", optional = true }
 indexmap = { version = "1.9.2", features = ["serde"] }
 log = { version = "0.4.17", features = ["std"] }
 # nofity-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
