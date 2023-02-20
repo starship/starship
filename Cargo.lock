@@ -283,9 +283,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.1.4"
+version = "4.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f13b9c79b5d1dd500d20ef541215a6423c75829ef43117e1b4d17fd8af0b5d76"
+checksum = "ec0b0588d44d4d63a87dbd75c136c166bbfd9a86a31cb89e09906521c7d3f5e3"
 dependencies = [
  "bitflags",
  "clap_derive",
@@ -300,9 +300,9 @@ dependencies = [
 
 [[package]]
 name = "clap_complete"
-version = "4.1.1"
+version = "4.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d6540eedc41f8a5a76cf3d8d458057dcdf817be4158a55b5f861f7a5483de75"
+checksum = "bd125be87bf4c255ebc50de0b7f4d2a6201e8ac3dc86e39c0ad081dc5e7236fe"
 dependencies = [
  "clap",
 ]
@@ -1013,9 +1013,9 @@ dependencies = [
 
 [[package]]
 name = "git-features"
-version = "0.26.4"
+version = "0.26.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "688ac55de8f6126dd2e43cf51a74e94b8407102334a5d7810948c5b6f2772668"
+checksum = "64be6a1e602760c2c83aac3d05553c90805748bba9cb0f0e944d66b0f85cea0d"
 dependencies = [
  "crc32fast",
  "crossbeam-channel",
@@ -1046,9 +1046,9 @@ dependencies = [
 
 [[package]]
 name = "git-hash"
-version = "0.10.2"
+version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dfea33ea1987a757e7bdda54c42d1c5bbcd741a997db98b6be5d2e739a221602"
+checksum = "2c4af641a41fdb4b1d5c2be9783cd8ffcd4e22a6ad41581c1f0dc3e882000585"
 dependencies = [
  "hex",
  "thiserror",
@@ -1837,10 +1837,11 @@ checksum = "61807f77802ff30975e01f4f071c8ba10c022052f98b3294119f3e615d13e5be"
 
 [[package]]
 name = "notify-rust"
-version = "4.7.0"
+version = "4.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ce656bb6d22a93ae276a23de52d1aec5ba4db3ece3c0eb79dfd5add7384db6a"
+checksum = "2bfa211d18e360f08e36c364308f394b5eb23a6629150690e109a916dc6f610e"
 dependencies = [
+ "log",
  "mac-notification-sys",
  "serde",
  "tauri-winrt-notification",
@@ -1978,9 +1979,9 @@ dependencies = [
 
 [[package]]
 name = "ordered-stream"
-version = "0.1.3"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4eb9ba3f3e42dbdd3b7b122de5ca169c81e93d561eb900da3a8c99bcfcf381a"
+checksum = "9aa2b01e1d916879f73a53d01d1d6cee68adbb31d6d9177a8cfce093cced1d50"
 dependencies = [
  "futures-core",
  "pin-project-lite",
@@ -2712,9 +2713,9 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.20.0"
+version = "0.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8da90bd2a722461267a2c5d20b2c6de76dba087348e60484fd6c3fbb48b766d6"
+checksum = "0942b9991e2cfab3d5059e508d517c66bc460b302a2a8187a90d0aae4f08531d"
 dependencies = [
  "const_format",
  "is_debug",
@@ -3668,9 +3669,9 @@ dependencies = [
 
 [[package]]
 name = "zbus"
-version = "3.7.0"
+version = "3.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "379d587c0ccb632d1179cf44082653f682842f0535f0fdfaefffc34849cc855e"
+checksum = "f770930448dd412a4a7131dd968a8e6df0064db4d7916fbbd2d6c3f26b566938"
 dependencies = [
  "async-broadcast",
  "async-executor",
@@ -3706,9 +3707,9 @@ dependencies = [
 
 [[package]]
 name = "zbus_macros"
-version = "3.7.0"
+version = "3.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "66492a2e90c0df7190583eccb8424aa12eb7ff06edea415a4fff6688fae18cf8"
+checksum = "4832059b438689017db7340580ebabba07f114eab91bf990c6e55052408b40d8"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
