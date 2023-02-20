@@ -416,11 +416,11 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 - **[reujab/silver](https://github.com/reujab/silver)** – アイコンと cross-shell 対応のカスタマイズ可能な powerline ライクなプロンプト。
 
-## ❤️ Sponsors
+## ❤️ スポンサー
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+[スポンサーになることで](https://github.com/sponsors/starship)このプロジェクトをサポートできます。 名前やロゴがあなたのホームページへのリンクとともに表示されます。
 
-**Supporter Tier**
+**スポンサーティア**
 
 - [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
