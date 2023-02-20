@@ -3,68 +3,179 @@
 Here is a collection of community-submitted configuration presets for Starship.
 If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
 
-To get details on how to use a preset, simply click on the image.
+## Starship Config
 
-## [Nerd Font Symbols](./nerd-font.md)
+command_timeout = 10_000
+## FIRST LINE/ROW: Info & Status
+## First param ─┌
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+[username]
+format = " [ ╭─$user]($style)"
+show_always = true
+style_root = "bold red"
+style_user = "bold red"
 
-[![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
+# Second param
+[hostname]
+disabled = false
+format = " <<<[$hostname]($style)>>> [In Directory [-->](blue)](bold dimmed blue) "
+ssh_only = false
+style = "bold dimmed red"
+trim_at = "-"
 
-## [No Nerd Fonts](./no-nerd-font.md)
+# Third param
+[directory]
+format = "| [($path)]($style)($read_only) | on [ master ](bold purple)" 
+truncate_to_repo = true
+truncation_length = 10
+truncation_symbol = "/"
+read_only = "🛡️"
+home_symbol = "~/ "
+style = "#FFAA00"
+disabled = false 
 
-This preset changes the symbols for several modules so that no Nerd Font symbols
-are used anywhere in the prompt.
+[git_branch]
+always_show_remote = true 
+format = ': [($remote_branch)]($style) '
+symbol = ' '
+style = 'blink bold dimmed purple'
+truncation_length = 10
+truncation_symbol = '...'
+disabled = false 
 
-::: tip
+[memory_usage]
+format = "<< [Ram : ${ram}(, Usage : ${ram_pct})]($style) >> "
+threshold = 10
+style = "bold dimmed green"
+disabled = false
 
-This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+# Fourth param
+[sudo]
+disabled = true
 
-:::
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
 
-[Click to view No Nerd Font preset](./no-nerd-font)
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
 
-## [Bracketed Segments](./bracketed-segments.md)
+[git_status]
+ahead = "⇡${count}"
+behind = "⇣${count}"
+deleted = "x"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+style = "white"
 
-This preset changes the format of all the built-in modules to show their segment
-in brackets instead of using the default Starship wording ("via", "on", etc.).
+# Last param in the first line/row
+[cmd_duration]
+disabled = false
+format = " [<--](#FF0059) [This action took](bold #00FF27) [$duration]($style)"
+min_time = 0
+style = "bold #FF2E00"
 
-[![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
+## SECOND LINE/ROW: Prompt
 
-## [Plain Text Symbols](./plain-text.md)
+# Somewhere at the beginning
+[battery]
+full_symbol = " "
+charging_symbol = " "
+discharging_symbol = " "
+format = " $[full_symbol$charging_symbol$discharging_symbol$percentage] "
+disabled = true 
 
-This preset changes the symbols for each module into plain text. Great if you
-don't have access to Unicode.
+[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
+disabled = false
+style = "bold red"
+threshold = 10
 
-[![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
+[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
+disabled = false
+style = "bold yellow"
+threshold = 50
 
-## [No Runtime Versions](./no-runtimes.md)
+[[battery.display]]  # "bold green" style when capacity is between 10% and 30%
+disabled = false
+style = "bold green"
+threshold = 101
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+# Prompt: optional param 1
+[time]
+disabled = true
+format = " 🕙 $time($style)\n"
+style = "bright-white"
+time_format = "%T"
 
-[![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
+# Prompt: param 2
+[character]
+error_symbol = " [δ-->](bold red)"
+success_symbol = " [\\[╰─∫\\]](bold red) [Φ-->](bold red)"
 
-## [No Empty Icons](./no-empty-icons.md)
+# SYMBOLS
+[status]
+disabled = false 
+format = ' [\[$symbol$status_common_meaning$status_signal_name$status_maybe_integer\]]($style)'
+map_symbol = true
+pipestatus = true
+symbol = "╰─ζ"
+style = "bold red"
 
-This preset does not show icons if the toolset is not found.
+[aws]
+symbol = " "
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+[conda]
+symbol = " "
 
-## [Pure Prompt](./pure-preset.md)
+[dart]
+symbol = " "
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+[docker_context]
+symbol = " "
 
-[![Screenshot of Pure preset](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
+[elixir]
+symbol = " "
 
-## [Pastel Powerline](./pastel-powerline.md)
+[elm]
+symbol = " "
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json).
-It also shows how path substitution works in starship.
+[golang]
+symbol = " "
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[java]
+symbol = " "
 
-## [Tokyo Night](./tokyo-night.md)
+[julia]
+symbol = " "
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+[nim]
+symbol = " "
 
-[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[nix_shell]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[package]
+symbol = " "
+disabled = false
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = "Rust "
+
+[swift]
+symbol = "ﯣ "
+
+[python]
+symbol = " "
+
+# You can edit this file to this liking.....
