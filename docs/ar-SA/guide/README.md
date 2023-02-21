@@ -169,7 +169,7 @@
 
 ### المتطلبات الأساسية
 
-- تثبيت [Nerd Font](https://www.nerdfonts.com/) وتمكينه في ال terminal الخاصة بك (على سبيل المثال، جرب الخط [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### الخطوة الأولى. تثبيت starship
 

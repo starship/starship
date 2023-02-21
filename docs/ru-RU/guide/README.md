@@ -169,7 +169,7 @@
 
 ### Обязательные требования
 
-- Установленный и включённый [шрифт Powerline](https://www.nerdfonts.com/) (например, [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Шаг 1. Установите Starship
 

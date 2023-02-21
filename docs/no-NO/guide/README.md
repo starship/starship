@@ -169,7 +169,7 @@
 
 ### Nødvendig forutsetninger
 
-- En [Nerd Font](https://www.nerdfonts.com/) installert og aktivert i terminalen (for eksempel [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Steg 1. Installer Starship
 
