@@ -56,6 +56,10 @@ jobs:
             os: ubuntu-latest
             name: starship-arm-unknown-linux-musleabihf.tar.gz
 
+          - target: powerpc64le-unknown-linux-musl
+            os: ubuntu-latest
+            name: starship-powerpc64le-unknown-linux-musl.tar.gz
+
           - target: x86_64-apple-darwin
             os: macOS-11
             name: starship-x86_64-apple-darwin.tar.gz

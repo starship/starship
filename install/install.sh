@@ -15,10 +15,10 @@ NO_COLOR="$(tput sgr0 2>/dev/null || printf '')"
 
 SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   i686-unknown-linux-musl aarch64-unknown-linux-musl \
-                  arm-unknown-linux-musleabihf x86_64-apple-darwin \
-                  aarch64-apple-darwin x86_64-pc-windows-msvc \
-                  i686-pc-windows-msvc aarch64-pc-windows-msvc \
-                  x86_64-unknown-freebsd"
+                  powerpc64le-unknown-linux-musl arm-unknown-linux-musleabihf \
+                  x86_64-apple-darwin aarch64-apple-darwin \
+                  x86_64-pc-windows-msvc i686-pc-windows-msvc \
+                  aarch64-pc-windows-msvc x86_64-unknown-freebsd"
 
 info() {
   printf '%s\n' "${BOLD}${GREY}>${NO_COLOR} $*"
@@ -209,6 +209,7 @@ detect_platform() {
 
 # Currently supporting:
 #   - x86_64
+#   - powerpc64le
 #   - i386
 #   - arm
 #   - arm64
@@ -219,6 +220,7 @@ detect_arch() {
     amd64) arch="x86_64" ;;
     armv*) arch="arm" ;;
     arm64) arch="aarch64" ;;
+    ppc64le) arch="powerpc64le" ;;
   esac
 
   # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
