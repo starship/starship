@@ -44,7 +44,7 @@ This preset will become the default preset [in a future release of starship](htt
 
 This preset does not show icons if the toolset is not found.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "No Runtime Versionsプリセットを表示するにはクリックしてください")](./no-empty-icons.md)
+[![Empty Icons プリセットのスクリーンショット](/presets/img/no-empty-icons.png "No Runtime Versionsプリセットを表示するにはクリックしてください")](./no-empty-icons.md)
 
 ## [Pure Prompt](./pure-preset.md)
 
@@ -60,6 +60,6 @@ This preset does not show icons if the toolset is not found.
 
 ## [Tokyo Night](./tokyo-night.md)
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+このプリセットは[tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme)を参考にしています。
 
-[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[![Tokyo Night プリセットのスクリーンショット](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
