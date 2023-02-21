@@ -49,7 +49,7 @@ dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.4.1"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.36.1", default-features = false, features = ["max-performance-safe"] }
+gix = { version = "0.37.1", default-features = false, features = ["max-performance-safe"] }
 gix-features = { version = "0.26.5", optional = true }
 indexmap = { version = "1.9.2", features = ["serde"] }
 log = { version = "0.4.17", features = ["std"] }
