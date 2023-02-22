@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let should_show_hash = !config.only_detached || config.only_detached && is_detached;
+    let should_show_hash = !config.only_detached || is_detached;
     let tag_symbol = if !should_show_hash && !config.tag_symbol.trim().is_empty() {
         config.tag_symbol.trim_start()
     } else {
@@ -356,8 +356,7 @@ mod tests {
         create_command("git")?
             .args(["rev-parse", "HEAD"])
             .current_dir(repo_dir.path())
-            .output()?
-            .stdout;
+            .output()?;
 
         let git_tag = create_command("git")?
             .args(["describe", "--tags", "--exact-match", "HEAD"])
@@ -366,7 +365,7 @@ mod tests {
             .stdout;
         let tag_output = str::from_utf8(&git_tag).unwrap().trim();
 
-        let expected_output = format!("{tag_output}");
+        let expected_output = tag_output.to_string();
 
         let actual = ModuleRenderer::new("git_commit")
             .config(toml::toml! {
