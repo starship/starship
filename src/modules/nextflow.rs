@@ -21,7 +21,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     // 2. Check nextflow version
-    let mut nextflow_version = context.get_env("NXF_VER").unwrap_or_default();
+    let mut nextflow_version = context.get_env("NXF_VER").filter(|v| v.trim().is_empty());
 
     if nextflow_version.trim().is_empty() {
         // run nextflow -version if environment variable not set
