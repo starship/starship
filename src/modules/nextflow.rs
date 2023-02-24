@@ -68,13 +68,12 @@ fn execute_nextflow_version(context: &Context) -> Option<String> {
 }
 
 fn parse_nf_version(nf_version_output: &str) -> Option<String> {
-    nf_version_output
-        .split('\n')
-            .find_map(|e| e
-                        .trim_start()
-                        .strip_prefix("version ")
-                        .and_then(|e| e.split_ascii_whitespace().next())
-                        .map(str::to_owned));
+    nf_version_output.split('\n').find_map(|e| {
+        e.trim_start()
+            .strip_prefix("version ")
+            .and_then(|e| e.split_ascii_whitespace().next())
+            .map(str::to_owned)
+    })
 }
 
 #[cfg(test)]
