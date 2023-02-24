@@ -868,9 +868,9 @@ dependencies = [
 
 [[package]]
 name = "gix"
-version = "0.37.1"
+version = "0.37.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2450b1c21db868ac46d4c40574c2b969d20c66b8115c2fa4e0b128ff60b73e7"
+checksum = "f4bd774f338c0e403983e3d34bca57a798eb4142f8b96009a2b2c2daed52d4d6"
 dependencies = [
  "gix-actor",
  "gix-attributes",
@@ -1030,9 +1030,9 @@ dependencies = [
 
 [[package]]
 name = "gix-diff"
-version = "0.26.2"
+version = "0.26.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5b71124e49d2575f7b230428f169f106caca984c2e5592aa4e1118cf7c8d504"
+checksum = "31cdac2ae475ff7a13b9d5c80c0661245f14d9bf8d9268d4bb9c748cfe246d36"
 dependencies = [
  "gix-hash",
  "gix-object",
@@ -1154,9 +1154,9 @@ dependencies = [
 
 [[package]]
 name = "gix-object"
-version = "0.26.3"
+version = "0.26.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "990d20624b03b216a091e687bb8a27a0b3658b576aa17818264a742c1222bd32"
+checksum = "edce7170ebcf6fc1487304631556f8bc2b70c8bcbf997a2d73634688bcc92f4e"
 dependencies = [
  "bstr",
  "btoi",
