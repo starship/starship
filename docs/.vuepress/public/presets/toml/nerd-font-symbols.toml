@@ -53,7 +53,7 @@ symbol = " "
 symbol = "喝 "
 
 [nextflow]
-symbol = " "
+symbol = "∝ "
 
 [nim]
 symbol = " "

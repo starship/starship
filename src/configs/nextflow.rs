@@ -22,7 +22,7 @@ impl<'a> Default for NextflowConfig<'a> {
         NextflowConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: " ",
+            symbol: "∝ ",
             style: "green bold",
             disabled: false,
             detect_extensions: vec!["nf"],
