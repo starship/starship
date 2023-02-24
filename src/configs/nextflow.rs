@@ -15,6 +15,7 @@ pub struct NextflowConfig<'a> {
     pub disabled: bool,
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
+    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> Default for NextflowConfig<'a> {
@@ -27,6 +28,7 @@ impl<'a> Default for NextflowConfig<'a> {
             disabled: false,
             detect_extensions: vec!["nf"],
             detect_files: vec!["nextflow.config"],
+            detect_folders: vec![],
         }
     }
 }
