@@ -70,12 +70,11 @@ fn execute_nextflow_version(context: &Context) -> Option<String> {
 fn parse_nf_version(nf_version_output: &str) -> Option<String> {
     nf_version_output
         .split('\n')
-        .filter_map(|e| match e.trim().starts_with("version") {
-            true => Some(e.split_whitespace().nth(1).unwrap_or_default().to_owned()),
-            false => None,
-        })
-        .map(Some)
-        .collect::<Option<String>>()
+            .find_map(|e| e
+                        .trim_start()
+                        .strip_prefix("version ")
+                        .and_then(|e| e.split_ascii_whitespace().next())
+                        .map(str::to_owned));
 }
 
 #[cfg(test)]
