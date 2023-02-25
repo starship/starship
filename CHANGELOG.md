@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.13.0](https://github.com/starship/starship/compare/v1.12.0...v1.13.0) (2023-02-24)
+
+
+### Features
+
+* add pijul_channel module ([#4765](https://github.com/starship/starship/issues/4765)) ([67b6376](https://github.com/starship/starship/commit/67b6376e2ef0835350e3e856ade6602b6c187c42))
+* **config:** Adds support for --profile &lt;custom profile name&gt; ([#3467](https://github.com/starship/starship/issues/3467)) ([10433e3](https://github.com/starship/starship/commit/10433e31effb4040c47d02d565d1643bcf984fa6))
+* **env_var:** Add support for env_var.VAR in format ([#4497](https://github.com/starship/starship/issues/4497)) ([5d4cb6f](https://github.com/starship/starship/commit/5d4cb6ff8f6bd1915aa2c16162950b270f1759b1))
+* **fennel:** add fennel module ([#4717](https://github.com/starship/starship/issues/4717)) ([e93dbf8](https://github.com/starship/starship/commit/e93dbf86301e19a89bd64997d95ba63a64f473aa))
+* **fossil_branch:** add fossil_branch module ([#4806](https://github.com/starship/starship/issues/4806)) ([41eb98b](https://github.com/starship/starship/commit/41eb98b310cd8134cec7bd8dcb55869a984653cf))
+* **gradle:** add gradle module ([#4423](https://github.com/starship/starship/issues/4423)) ([220844d](https://github.com/starship/starship/commit/220844daa014046bedbc9ce703f8b18fbe267e3c))
+* **hg_branch:** Add support for mercurial topics and find hg root dir ([#4771](https://github.com/starship/starship/issues/4771)) ([8d2256a](https://github.com/starship/starship/commit/8d2256ab1d0ba288fb6ba9b9248bc2210ca01059))
+* **java:** Add `.sdkmanrc` for Java ([#4888](https://github.com/starship/starship/issues/4888)) ([07c2298](https://github.com/starship/starship/commit/07c2298965ee67300319c012bdf5fadbc8db4931))
+* **logger:** delete old logs & avoid more dup logs ([#4348](https://github.com/starship/starship/issues/4348)) ([e47ea57](https://github.com/starship/starship/commit/e47ea57db21125372aeeae87ce555855a98adaab))
+* **nix:** support new `nix shell` command ([#4724](https://github.com/starship/starship/issues/4724)) ([19fdf9b](https://github.com/starship/starship/commit/19fdf9bba59f6ae5a756b81d221a9dc3185208f5))
+
+
+### Bug Fixes
+
+* 'to to' -&gt; 'to' ([8c2135f](https://github.com/starship/starship/commit/8c2135f55d4a8b1026ce3cf7055efde6ab47d13d))
+* **container:** reduce docker, podman and systemd confusion ([#4832](https://github.com/starship/starship/issues/4832)) ([85d683d](https://github.com/starship/starship/commit/85d683daf235854ffc356354c6b3ba7096de6193))
+* **fish:** enable transient prompt when in vi mode ([#4826](https://github.com/starship/starship/issues/4826)) ([9ac924e](https://github.com/starship/starship/commit/9ac924eb3f0f8faa6da0375d92fc1dc22b8ba721))
+* **git_commit:** fix potential test failure ([#4734](https://github.com/starship/starship/issues/4734)) ([27d167b](https://github.com/starship/starship/commit/27d167b7a202cd1da39a731813df155dacb4c81b))
+* Improve regex for extracting gradle package version from gradle.properties ([#4759](https://github.com/starship/starship/issues/4759)) ([9093891](https://github.com/starship/starship/commit/9093891acbe2c86b1615c37386dadbb0cc632199))
+* let-env warning when using nushell ([#4893](https://github.com/starship/starship/issues/4893)) ([e6c5571](https://github.com/starship/starship/commit/e6c5571fc9c1f47c711d5fcdd1799ced5b546454))
+* **nodejs:** apply `style` even if node version is unavailable ([#4713](https://github.com/starship/starship/issues/4713)) ([e88484d](https://github.com/starship/starship/commit/e88484d5674b7c038346ff1c89089e535d2e2d6d))
+* **package:** Improve regex for extracting gradle version from gradle.properties ([#4760](https://github.com/starship/starship/issues/4760)) ([9093891](https://github.com/starship/starship/commit/9093891acbe2c86b1615c37386dadbb0cc632199))
+* Remove vulnerable time-0.1.x chrono dependency ([#4750](https://github.com/starship/starship/issues/4750)) ([255f91c](https://github.com/starship/starship/commit/255f91c3ce896f71b874f260b61f86232485d823))
+
 ## [1.12.0](https://github.com/starship/starship/compare/v1.11.0...v1.12.0) (2022-12-13)
 
 
