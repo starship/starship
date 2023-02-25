@@ -804,6 +804,20 @@ mod tests {
         assert_eq!(&bresult3, "\\[OH NO\\]");
         assert_eq!(&bresult4, "herpaderp");
         assert_eq!(&bresult5, "");
+
+        let presult0 = wrap_seq_for_shell(test0.to_string(), Shell::PowerShell, '\x1b', 'm');
+        let presult1 = wrap_seq_for_shell(test1.to_string(), Shell::PowerShell, '\x1b', 'm');
+        let presult2 = wrap_seq_for_shell(test2.to_string(), Shell::PowerShell, '\x1b', 'J');
+        let presult3 = wrap_seq_for_shell(test3.to_string(), Shell::PowerShell, 'O', 'O');
+        let presult4 = wrap_seq_for_shell(test4.to_string(), Shell::PowerShell, '\x1b', 'm');
+        let presult5 = wrap_seq_for_shell(test5.to_string(), Shell::PowerShell, '\x1b', 'm');
+
+        assert_eq!(&presult0, "\\[\x1b2m\\]hellomynamekeyes\\[\x1b2m\\]");
+        assert_eq!(&presult1, "\\[\x1b]330;m\\]lol\\[\x1b]0m\\]");
+        assert_eq!(&presult2, "\\[\x1bJ\\]");
+        assert_eq!(&presult3, "\\[OH NO\\]");
+        assert_eq!(&presult4, "herpaderp");
+        assert_eq!(&presult5, "");
     }
 
     #[test]
