@@ -495,6 +495,7 @@ pub fn wrap_seq_for_shell(
             if x == escape_begin && !escaped {
                 escaped = true;
                 match shell {
+                    Shell::PowerShell => format!("{BASH_BEG}{escape_begin}"),
                     Shell::Bash => format!("{BASH_BEG}{escape_begin}"),
                     Shell::Zsh => format!("{ZSH_BEG}{escape_begin}"),
                     Shell::Tcsh => format!("{TCSH_BEG}{escape_begin}"),
@@ -503,6 +504,7 @@ pub fn wrap_seq_for_shell(
             } else if x == escape_end && escaped {
                 escaped = false;
                 match shell {
+                    Shell::PowerShell => format!("{escape_end}{BASH_END}"),
                     Shell::Bash => format!("{escape_end}{BASH_END}"),
                     Shell::Zsh => format!("{escape_end}{ZSH_END}"),
                     Shell::Tcsh => format!("{escape_end}{TCSH_END}"),
