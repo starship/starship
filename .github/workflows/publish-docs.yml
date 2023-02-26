@@ -8,14 +8,13 @@ jobs:
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
-        with:
-          # Required to include the recently merged Crowdin PR
-          ref: master
 
       - name: Setup | Node
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          cache: 'npm'
+          cache-dependency-path: docs/package-lock.json
 
       - name: Setup | Install dependencies
         run: npm install
