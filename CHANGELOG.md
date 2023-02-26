@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/starship/starship/compare/v1.13.0...v1.13.1) (2023-02-26)
+
+
+### Bug Fixes
+
+* trigger release ([ff82fb9](https://github.com/starship/starship/commit/ff82fb99af88c007a18c7655fb0150c4415bb5db))
+
 ## [1.13.0](https://github.com/starship/starship/compare/v1.12.0...v1.13.0) (2023-02-24)
 
 
