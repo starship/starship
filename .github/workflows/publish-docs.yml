@@ -1,0 +1,35 @@
+name: Publish Docs
+on: workflow_dispatch
+
+jobs:
+  publish_docs:
+    name: Publish docs to Netlify
+    runs-on: ubuntu-latest
+    needs: merge_crowdin_pr
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
+        with:
+          # Required to include the recently merged Crowdin PR
+          ref: master
+
+      - name: Setup | Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Setup | Install dependencies
+        run: npm install
+        working-directory: docs
+
+      - name: Build | Build docs site
+        run: npm run build
+        working-directory: docs
+
+      - name: Publish
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --prod --dir=docs/.vuepress/dist
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

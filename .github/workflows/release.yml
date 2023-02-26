@@ -106,7 +106,7 @@ jobs:
         run: cargo install --version 0.3.4 cargo-wix
         env:
           # cargo-wix does not require static crt
-          RUSTFLAGS: ''
+          RUSTFLAGS: ""
 
       - name: Build | Build
         uses: actions-rs/cargo@v1.0.3
@@ -324,19 +324,19 @@ jobs:
           ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GH_PAT }}
 
   choco_update:
-   name: Update Chocolatey Package
-   runs-on: windows-latest
-   needs: [release_please, github_build, upload_artifacts]
-   if: ${{ needs.release_please.outputs.release_created == 'true' }}
-   steps:
-    - name: Setup | Checkout
-      uses: actions/checkout@v3
-    - name: Setup | Artifacts
-      uses: actions/download-artifact@v3
-    - run: pwsh ./install/windows/choco/update.ps1
-      env:
-        STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
-        PUSH_TOKEN:  ${{ secrets.CHOCO_TOKEN }}
+    name: Update Chocolatey Package
+    runs-on: windows-latest
+    needs: [release_please, github_build, upload_artifacts]
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
+      - name: Setup | Artifacts
+        uses: actions/download-artifact@v3
+      - run: pwsh ./install/windows/choco/update.ps1
+        env:
+          STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
+          PUSH_TOKEN: ${{ secrets.CHOCO_TOKEN }}
 
   merge_crowdin_pr:
     name: Merge Crowdin PR
@@ -351,33 +351,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish_docs:
-    name: Publish docs to Netlify
+    name: Trigger docs deployment
     runs-on: ubuntu-latest
     needs: merge_crowdin_pr
     steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@v3
-        with:
-          # Required to include the recently merged Crowdin PR
-          ref: master
-
-      - name: Setup | Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Setup | Install dependencies
-        run: npm install
-        working-directory: docs
-
-      - name: Build | Build docs site
-        run: npm run build
-        working-directory: docs
-
-      - name: Publish
-        uses: netlify/actions/cli@master
-        with:
-          args: deploy --prod --dir=docs/.vuepress/dist
-        env:
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      - name: Trigger workflow dispatch
+        run: gh workflow run publish-docs.yml
