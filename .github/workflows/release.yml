@@ -361,6 +361,11 @@ jobs:
           # Required to include the recently merged Crowdin PR
           ref: master
 
+      - name: Setup | Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
       - name: Setup | Install dependencies
         run: npm install
         working-directory: docs
