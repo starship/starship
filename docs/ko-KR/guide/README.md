@@ -169,7 +169,7 @@
 
 ### 준비 사항
 
-- 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다. (ex. [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads))
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### 1단계. Starship 설치하기
 

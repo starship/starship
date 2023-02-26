@@ -169,7 +169,7 @@
 
 ### Prasyarat
 
-- Sebuah [Nerd Font](https://www.nerdfonts.com/) terpasang dan aktif pada terminal (contohnya, coba [Nerd Font Fira Code](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Langkah 1. Pasang Starship
 

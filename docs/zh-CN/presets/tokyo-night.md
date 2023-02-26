@@ -2,13 +2,13 @@
 
 # Tokyo Night Preset
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+此预设受 [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme) 的启发。
 
-![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png)
+![Tokyo Night预设预览](/presets/img/tokyo-night.png)
 
 ### 前置要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- 安装一种 [Nerd fonts](https://www.nerdfonts.com/) 并在您的终端启用。
 
 ### 配置
 

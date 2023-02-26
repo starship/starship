@@ -165,7 +165,7 @@
 
 ### پێشمەرجەکان
 
-- فۆنتێکی [Nerd](https://www.nerdfonts.com/) دامەزرابێ و چالاککرابێ لە تێرمیناڵەکەتدا (بۆ نموونە، [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) تاقی بکەرەوە).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Step 1. Install Starship
 

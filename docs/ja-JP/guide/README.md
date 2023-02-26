@@ -169,7 +169,7 @@
 
 ### 必要なもの
 
-- [Nerd Font](https://www.nerdfonts.com/)がインストールされ、端末にて有効になっている（例えば、[Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)を試してみてください）。
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Step 1. Starshipをインストール
 
@@ -416,11 +416,11 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 - **[reujab/silver](https://github.com/reujab/silver)** – アイコンと cross-shell 対応のカスタマイズ可能な powerline ライクなプロンプト。
 
-## ❤️ Sponsors
+## ❤️ スポンサー
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+[スポンサーになることで](https://github.com/sponsors/starship)このプロジェクトをサポートできます。 名前やロゴがあなたのホームページへのリンクとともに表示されます。
 
-**Supporter Tier**
+**スポンサーティア**
 
 - [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
