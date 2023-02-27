@@ -137,6 +137,10 @@ jobs:
     name: Check if config schema is up to date
     needs: cargo_check
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
