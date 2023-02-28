@@ -290,12 +290,11 @@ impl CustomStyle {
         Default::default()
     }
 
-    pub fn custom(&self, prev: Option<&nu_ansi_term::AnsiString>) -> nu_ansi_term::Style {
+    pub fn custom(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
         match prev {
             None => self.style,
-            Some(prev_string) => {
+            Some(prev_style) => {
                 let mut current = self.style;
-                let prev_style = prev_string.style_ref();
                 if self.bg_prev_bg {
                     current.background = prev_style.background;
                 } else if self.bg_prev_fg {
@@ -924,6 +923,66 @@ mod tests {
         assert_eq!(
             <StyleWrapper>::from_config(&config).unwrap().0,
             Color::Red.bold().into()
+        );
+    }
+
+    #[test]
+    fn table_get_styles_previous() {
+        // Test that previous has no effect when there is no previous style
+        let both_prevfg = <StyleWrapper>::from_config(&Value::from(
+            "bold fg:black fg:prevbg bg:prevfg underline",
+        ))
+        .unwrap()
+        .0;
+
+        assert_eq!(
+            both_prevfg.custom(None),
+            Style::new().fg(Color::Black).bold().underline()
+        );
+
+        // But if there is a style on the previous string, then use that
+        let prev_style = Style::new().underline().fg(Color::Yellow).on(Color::Red);
+
+        assert_eq!(
+            both_prevfg.custom(Some(&prev_style)),
+            Style::new()
+                .fg(Color::Red)
+                .on(Color::Yellow)
+                .bold()
+                .underline()
+        );
+
+        // Test that all the combinations of previous colors work
+        let fg_prev_fg = <StyleWrapper>::from_config(&Value::from("fg:prevfg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            fg_prev_fg.custom(Some(&prev_style)),
+            Style::new().fg(Color::Yellow)
+        );
+
+        let fg_prev_bg = <StyleWrapper>::from_config(&Value::from("fg:prevbg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            fg_prev_bg.custom(Some(&prev_style)),
+            Style::new().fg(Color::Red)
+        );
+
+        let bg_prev_fg = <StyleWrapper>::from_config(&Value::from("bg:prevfg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            bg_prev_fg.custom(Some(&prev_style)),
+            Style::new().on(Color::Yellow)
+        );
+
+        let bg_prev_bg = <StyleWrapper>::from_config(&Value::from("bg:prevbg"))
+            .unwrap()
+            .0;
+        assert_eq!(
+            bg_prev_bg.custom(Some(&prev_style)),
+            Style::new().on(Color::Red)
         );
     }
 
