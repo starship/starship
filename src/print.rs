@@ -288,7 +288,7 @@ pub fn explain(args: Properties) {
     }
 }
 
-fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
+pub fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     let mut prompt_order: Vec<Module<'a>> = Vec::new();
 
     let (_formatter, modules) = load_formatter_and_modules(context);

@@ -129,6 +129,15 @@ Unfortunately, getting font configuration correct is sometimes difficult. Users
 on the Discord may be able to help. If both symbols display correctly, but
 you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
 
+A more complete test can be performed by running the `check` command:
+
+```sh
+startship check
+```
+
+Output from this command is dependant on your local configuration and can vary
+from one run to another.
+
 ## How do I uninstall Starship?
 
 Starship is just as easy to uninstall as it is to install in the first place.

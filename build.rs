@@ -38,9 +38,7 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
             format!(
                 r#"
 "{name}" => {{
-        let stdout = io::stdout();
-        let mut stdout = stdout.lock();
-        let _ = stdout.write_all(include_bytes!(r"{full_path}"));
+        include_bytes!(r"{full_path}")
 }}
 "#
             )
@@ -60,11 +58,17 @@ pub fn get_preset_list<'a>() -> &'a [print::Preset] {{
     ]
 }}
 
-pub fn print_preset_content(name: &str) {{
+pub fn get_preset_content(name: &str) -> &'static [u8]{{
     match name {{
     {match_arms}
-    _ => {{}}
+    _ => {{b""}}
     }}
+}}
+
+pub fn print_preset_content(name: &str) {{
+    let stdout = io::stdout();
+    let mut stdout = stdout.lock();
+    let _ = stdout.write_all(get_preset_content(name));
 }}
 "#
     )?;
