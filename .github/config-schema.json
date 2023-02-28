@@ -29,6 +29,7 @@
         "disabled": true,
         "format": "on [$symbol($subscription)]($style) ",
         "style": "blue bold",
+        "subscription_aliases": {},
         "symbol": "ﴃ "
       },
       "allOf": [
@@ -1845,6 +1846,13 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "subscription_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
