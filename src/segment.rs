@@ -17,7 +17,7 @@ pub struct TextSegment {
 
 impl TextSegment {
     // Returns the AnsiString of the segment value
-    fn ansi_string(&self, prev: Option<&AnsiString>) -> AnsiString {
+    fn ansi_string(&self, prev: Option<&Style>) -> AnsiString {
         match self.style {
             Some(style) => style.custom(prev).paint(&self.value),
             None => AnsiString::from(&self.value),
@@ -161,7 +161,7 @@ impl Segment {
     }
 
     // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, prev: Option<&AnsiString>) -> AnsiString {
+    pub fn ansi_string(&self, prev: Option<&Style>) -> AnsiString {
         match self {
             Self::Fill(fs) => fs.ansi_string(None),
             Self::Text(ts) => ts.ansi_string(prev),
