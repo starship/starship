@@ -71,7 +71,7 @@ starship_precmd() {
 
     local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}")
     # Prepare the timer data, if needed.
-    if [[ $STARSHIP_START_TIME ]]; then
+    if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
         ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
