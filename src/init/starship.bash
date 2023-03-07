@@ -65,7 +65,9 @@ starship_precmd() {
     # command pipeline, which may rely on it.
     _starship_set_return "$STARSHIP_CMD_STATUS"
 
-    eval "$_PRESERVED_PROMPT_COMMAND"
+    if [[ -n "${_PRESERVED_PROMPT_COMMAND-}" ]]; then
+        eval "$_PRESERVED_PROMPT_COMMAND"
+    fi
 
     local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}")
     # Prepare the timer data, if needed.
