@@ -713,7 +713,7 @@ error_symbol = '[➜](bold red) '
 # ~/.config/starship.toml
 
 [character]
-vicmd_symbol = '[V](bold green) '
+vimcmd_symbol = '[V](bold green) '
 ```
 
 ## CMake
