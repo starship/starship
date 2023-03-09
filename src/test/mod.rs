@@ -176,11 +176,16 @@ pub enum FixtureProvider {
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
         FixtureProvider::Fossil => {
+            let checkout_db = if cfg!(windows) {
+                "_FOSSIL_"
+            } else {
+                ".fslckout"
+            };
             let path = tempfile::tempdir()?;
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
-                .open(path.path().join(".fslckout"))?
+                .open(path.path().join(checkout_db))?
                 .sync_all()?;
             Ok(path)
         }
