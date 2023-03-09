@@ -34,7 +34,7 @@ battery = ["starship-battery"]
 config-schema = ["schemars"]
 notify = ["notify-rust"]
 
-# Enables most of the `max-performace` features of the `gix` module for better performance.
+# Enables most of the `max-performance` features of the `gix` module for better performance.
 # This can be more difficult to build in some conditions and requires cmake.
 gix-max-perf = ["gix-features/zlib-ng", "gix/fast-sha1"]
 # Slower than `git-repository-max-perf`, but better than the default.
@@ -53,7 +53,7 @@ gix = { version = "0.42.0", default-features = false, features = ["max-performan
 gix-features = { version = "0.28.1", optional = true }
 indexmap = { version = "1.9.2", features = ["serde"] }
 log = { version = "0.4.17", features = ["std"] }
-# nofity-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
+# notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.8.0", optional = true }
 nu-ansi-term = "0.47.0"
