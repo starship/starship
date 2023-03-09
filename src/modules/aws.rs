@@ -121,7 +121,7 @@ fn get_credentials_duration(
     aws_profile: Option<&Profile>,
     aws_creds: &AwsCredsFile,
 ) -> Option<i64> {
-    let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWSUME_EXPIRATION"];
+    let expiration_env_vars = ["AWS_CREDENTIAL_EXPIRATION", "AWSUME_EXPIRATION"];
     let expiration_date = if let Some(expiration_date) = expiration_env_vars
         .iter()
         .find_map(|env_var| context.get_env(env_var))
@@ -646,7 +646,7 @@ credential_process = /opt/bin/awscreds-retriever
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
             .env(
-                "AWS_SESSION_EXPIRATION",
+                "AWS_CREDENTIAL_EXPIRATION",
                 now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
             )
             .collect();
@@ -771,7 +771,7 @@ aws_secret_access_key=dummy
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
             .env(
-                "AWS_SESSION_EXPIRATION",
+                "AWS_CREDENTIAL_EXPIRATION",
                 now.to_rfc3339_opts(SecondsFormat::Secs, true),
             )
             .collect();

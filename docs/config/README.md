@@ -360,7 +360,7 @@ If the option `force_display` is set to `true`, all available information will b
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 is read from the `AWS_VAULT` env var and the credentials expiration date
-is read from the `AWS_SESSION_EXPIRATION` env var.
+is read from the `AWS_CREDENTIAL_EXPIRATION` env var.
 
 When using [awsu](https://github.com/kreuzwerker/awsu) the profile
 is read from the `AWSU_PROFILE` env var.
