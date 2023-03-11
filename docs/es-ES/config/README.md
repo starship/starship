@@ -9,22 +9,22 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Toda la configuración de starship se incluye en este fichero [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Get editor completions based on the config schema
-"$schema" = 'https://starship.rs/config-schema.json'
+# Obtener terminaciones del editor basado en el esquema de configuración
+"$schema" = 'https://starship.rs/config-schema. son'
 
-# Inserts a blank line between shell prompts
+# Inserta una línea en blanco entre las instrucciones del intérprete de comandos
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# Reemplaza el símbolo '❯' en el prompt con ''➜'
+[character] # El nombre del módulo que estamos configurando es 'character'
+success_symbol = '[➜](bold green)' # El segmento 'success_symbol' se está configurando en '➜'  con el color 'bold green'
 
-# Disable the package module, hiding it from the prompt completely
+# Desactiva el módulo del paquete, ocultándolo del prompt completamente
 [package]
 disabled = true
 ```
 
-### Config File Location
+### Configurar ubicación del archivo
 
 Puedes cambiar la ubicación por defecto del archivo de configuración con la variable de entorno `STARSHIP_CONFIG`:
 
@@ -72,7 +72,7 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 Por convención, la mayoría de los módulos tienen un prefijo del color por defecto de la terminal (por ejemplo, `vía` en "nodejs") y un espacio vacío como sufijo.
 
-### Strings
+### Cadenas de Texto
 
 In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
 
