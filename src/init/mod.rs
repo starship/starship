@@ -169,7 +169,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
             r#"eval ({} init elvish --print-full-init | slurp)"#,
-            starship.sprint_posix()?
+            starship.sprint()?
         ),
         "tcsh" => print!(
             r#"eval `({} init tcsh --print-full-init)`"#,
