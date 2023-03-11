@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="Statut du workflow actions GitHub"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -169,7 +169,7 @@
 
 ### Pré-requis
 
-- Une police [Nerd Font](https://www.nerdfonts.com/) installée et activée dans votre terminal (Par exemple, essayez [Fira Code](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Étape 1. Installer Starship
 
@@ -331,7 +331,7 @@ Add the following to the end of your Nushell env file (find it by running `$nu.e
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en exécutant `$nu.config path`):
@@ -340,7 +340,7 @@ Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en 
 source ~/.cache/starship/init.nu
 ```
 
-Note: Seul Nushell v0.61+ est supporté
+Note: Seul Nushell v0.73+ est supporté
 
 </details>
 
@@ -423,6 +423,7 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 **Supporter Tier**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

@@ -1,6 +1,6 @@
 [プリセット一覧に戻る](./README.md#no-nerd-fonts)
 
-# No Nerd Fonts Preset
+# No Nerd Fonts プリセット
 
 This preset restricts the use of symbols to those from emoji and powerline sets.
 

@@ -249,6 +249,18 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("Fennel 1.2.1 on PUC Lua 5.4\n"),
             stderr: String::default(),
         }),
+        "fossil branch current" => Some(CommandOutput{
+            stdout: String::from("topic-branch"),
+            stderr: String::default(),
+        }),
+        "fossil branch new topic-branch trunk" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
+        "fossil update topic-branch" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
         "go version" => Some(CommandOutput {
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),

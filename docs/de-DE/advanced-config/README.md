@@ -207,8 +207,6 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-Note: Nushell 0.71.0 or later is required
-
 ### Beispiel
 
 ```toml
@@ -231,7 +229,7 @@ Produces a prompt like the following:
 
 Einige Shells unterstützen einen speziellen Fortsetzungsprompt zusätzlich zum normalen Prompt. Dieser Prompt wird anstelle des normalen Prompts ausgegeben, wenn der Benutzer ein unvollständiges Kommando eingegeben hat (etwa wie eine einzelne linke Klammer oder ein einzelnes Anführungszeichen).
 
-Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. The default prompt is `"[∙](bright-black) "`.
+Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. The default prompt is `'[∙](bright-black) '`.
 
 Hinweis: Die `continuation_prompt` Anweisung sollte auf einen literalen String ohne Variablen gesetzt werden.
 
@@ -247,7 +245,7 @@ Hinweis: Fortsetzungs-Prompts sind nur für folgende Shells verfügbar:
 # ~/.config/starship.toml
 
 # Ein Fortsetzungs-Prompt der 2 ausgefüllte Pfeile darstellt
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Style-Strings

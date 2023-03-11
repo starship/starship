@@ -61,6 +61,9 @@ symbol = "elm "
 [fennel]
 symbol = "fnl "
 
+[fossil_branch]
+symbol = "fossil "
+
 [git_branch]
 symbol = "git "
 
@@ -134,6 +137,8 @@ Mint = "mint "
 NetBSD = "nbsd "
 NixOS = "nix "
 OpenBSD = "obsd "
+OpenCloudOS = "ocos "
+openEuler = "oeul "
 openSUSE = "osuse "
 OracleLinux = "orac "
 Pop = "pop "

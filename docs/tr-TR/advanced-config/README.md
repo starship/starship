@@ -8,15 +8,16 @@ Bu bölümdeki yapılandırmalar, Starship'in gelecekteki sürümlerinde değiş
 
 :::
 
-## TransientPrompt in PowerShell
+## PowerShell'de TransientPrompt
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+Önceden yazdırılan istemi özel bir dizeyle değiştirmek mümkündür. Bu tüm bilgi istemi bilgilerinin her zaman gerekli olmadığı durumlarda kullanışlıdır. Etkinleştirmek için shell oturumunda `Enable-TransientPrompt`'u çalıştırın. Kalıcı hale getirmek için, profilinize `$PROFILE` ifadesini koyun. Geçicilik anında devre dışı bırakılabilir `Disable-TransientPrompt`.
 
-By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
+Varsayılan olarak, girişin sol tarafı `>` ile değiştirilir. Bunu özelleştirmek için `Invoke-Starship-TransientFunction` adında yeni bir fonksiyon tanımlayın. Örneğin, Starship'in `karakter` modülünü burada göster, yapın
 
 ```powershell
+
 function Invoke-Starship-TransientFunction {
-  &starship module character
+  &starhip modülü karakteri
 }
 
 Invoke-Expression (&starship init powershell)
@@ -26,7 +27,7 @@ Enable-TransientPrompt
 
 ## TransientPrompt and TransientRightPrompt in Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink allows you to replace the previous-printed prompt with custom strings. Bu tüm bilgi istemi bilgilerinin her zaman gerekli olmadığı durumlarda kullanışlıdır. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
 
 - `always`: always replace the previous prompt
 - `same_dir`: replace the previous prompt only if the working directory is same
@@ -34,7 +35,7 @@ Clink allows you to replace the previous-printed prompt with custom strings. Thi
 
 You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
 
-- By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
+- Varsayılan olarak, girişin sol tarafı `>` ile değiştirilir. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. Örneğin, Starship'in `karakter` modülünü burada göster, yapın
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -56,11 +57,11 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 ## TransientPrompt and TransientRightPrompt in Fish
 
-It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Önceden yazdırılan istemi özel bir dizeyle değiştirmek mümkündür. Bu tüm bilgi istemi bilgilerinin her zaman gerekli olmadığı durumlarda kullanışlıdır. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
 
 Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. Örneğin, Starship'in `karakter` modülünü burada göster, yapın
 
 ```fish
 function starship_transient_prompt_func
@@ -206,8 +207,6 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-Note: Nushell 0.71.0 or later is required
-
 ### Example
 
 ```toml
@@ -230,7 +229,7 @@ Produces a prompt like the following:
 
 Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
 
 Note: `continuation_prompt` should be set to a literal string without any variables.
 
@@ -246,7 +245,7 @@ Note: Continuation prompts are only available in the following shells:
 # ~/.config/starship.toml
 
 # A continuation prompt that displays two filled in arrows
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Style Strings

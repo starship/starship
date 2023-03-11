@@ -35,6 +35,7 @@ impl<'a> Default for JavaConfig<'a> {
                 "deps.edn",
                 "project.clj",
                 "build.boot",
+                ".sdkmanrc",
             ],
             detect_folders: vec![],
         }

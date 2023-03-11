@@ -4,6 +4,7 @@ use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
+use std::path::PathBuf;
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
@@ -464,13 +465,22 @@ impl ValueEnum for Preset {
     }
 }
 
-pub fn preset_command(name: Option<Preset>, list: bool) {
+pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool) {
     if list {
         println!("{}", preset_list());
         return;
     }
     let variant = name.expect("name argument must be specified");
-    shadow::print_preset_content(variant.0);
+    let content = shadow::get_preset_content(variant.0);
+    if let Some(output) = output {
+        if let Err(err) = std::fs::write(output, content) {
+            eprintln!("Error writing preset to file: {err}");
+            std::process::exit(1);
+        }
+    } else if let Err(err) = std::io::stdout().write_all(content) {
+        eprintln!("Error writing preset to stdout: {err}");
+        std::process::exit(1);
+    }
 }
 
 fn preset_list() -> String {
@@ -485,6 +495,7 @@ mod test {
     use super::*;
     use crate::config::StarshipConfig;
     use crate::test::default_context;
+    use crate::utils;
 
     #[test]
     fn main_prompt() {
@@ -595,10 +606,23 @@ mod test {
 
     #[test]
     fn preset_command_does_not_panic_on_correct_inputs() {
-        preset_command(None, true);
+        preset_command(None, None, true);
         Preset::value_variants()
             .iter()
-            .for_each(|v| preset_command(Some(v.clone()), false));
+            .for_each(|v| preset_command(Some(v.clone()), None, false));
+    }
+
+    #[test]
+    fn preset_command_output_to_file() -> std::io::Result<()> {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("preset.toml");
+        preset_command(Some(Preset("nerd-font-symbols")), Some(path.clone()), false);
+
+        let actual = utils::read_file(&path)?;
+        let expected = include_str!("../docs/.vuepress/public/presets/toml/nerd-font-symbols.toml");
+        assert_eq!(actual, expected);
+
+        dir.close()
     }
 
     #[test]
