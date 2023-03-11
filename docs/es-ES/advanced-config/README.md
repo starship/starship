@@ -26,10 +26,10 @@ Enable-TransientPrompt
 
 ## TransientPrompt y TransientRight Prompt en Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink re permite reemplazar el prompt impreso anteriormente con cadenas personalizadas. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. Para habilitar esto, ejecuta `Clink set prompt.transitent <value>` donde \<value\> puede ser uno de:
 
-- `always`: always replace the previous prompt
-- `same_dir`: replace the previous prompt only if the working directory is same
+- `always`: reemplazar siempre el prompt anterior
+- `same_dir`: reemplazar el prompt anterior sólo si el directorio de trabajo es el mismo
 - `off`: do not replace the prompt (i.e. turn off transience)
 
 You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
