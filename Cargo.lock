@@ -2238,9 +2238,9 @@ dependencies = [
 
 [[package]]
 name = "quick-xml"
-version = "0.27.1"
+version = "0.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffc053f057dd768a56f62cd7e434c42c831d296968997e9ac1f76ea7c2d14c41"
+checksum = "7a306703b4ad75d304a1bbc17d91d4399993caa163ad5028ffb044e5152ffcdd"
 dependencies = [
  "memchr",
 ]
@@ -2722,7 +2722,7 @@ dependencies = [
  "pest",
  "pest_derive",
  "process_control",
- "quick-xml 0.27.1",
+ "quick-xml 0.28.0",
  "rand 0.8.5",
  "rayon",
  "regex",
