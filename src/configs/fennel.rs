@@ -13,6 +13,7 @@ pub struct FennelConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    #[serde(alias = "detect_extentions")] // TODO: remove it after breaking change releases
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,

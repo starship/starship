@@ -6,5 +6,6 @@ edn = "edn"
 esy = "esy"
 numver = "numver"
 afe = "afe"
+extentions = "extentions" # TODO: should be extensions
 [files]
 extend-exclude = ["CHANGELOG.md", "docs/*"]
