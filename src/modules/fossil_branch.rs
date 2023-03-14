@@ -17,9 +17,15 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
+    let checkout_db = if cfg!(windows) {
+        "_FOSSIL_"
+    } else {
+        ".fslckout"
+    };
+
     let is_checkout = context
         .try_begin_scan()?
-        .set_files(&[".fslckout"])
+        .set_files(&[checkout_db])
         .is_match();
 
     if !is_checkout {
