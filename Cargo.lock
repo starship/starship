@@ -836,9 +836,9 @@ dependencies = [
 
 [[package]]
 name = "gix"
-version = "0.41.0"
+version = "0.42.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1853c840375a04e02315cb225b6d802291abfabbf08e500727c98a8670f1bf1"
+checksum = "fd5e0d9c5df90c9b4d325ec716762beb7d6c1465a4049fec5c4f6b72e7824656"
 dependencies = [
  "gix-actor",
  "gix-attributes",
@@ -1023,9 +1023,9 @@ dependencies = [
 
 [[package]]
 name = "gix-features"
-version = "0.28.0"
+version = "0.28.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e6a9dfa7b3c1a99315203e8b97f8f99f3bd95731590607abeaa5ca31bc41fe3"
+checksum = "0b76f9a80f6dd7be66442ae86e1f534effad9546676a392acc95e269d0c21c22"
 dependencies = [
  "crc32fast",
  "crossbeam-channel",
@@ -1156,9 +1156,9 @@ dependencies = [
 
 [[package]]
 name = "gix-pack"
-version = "0.33.0"
+version = "0.33.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "66bc9d22f0d0620d013003ab05ead5c60124b6e1101bc245be9be4fd7e2330cb"
+checksum = "e122e8e688313bdbd7ea40631beea562a56211e351ad24739fe412ab6df4e4b7"
 dependencies = [
  "clru",
  "gix-chunk",
@@ -1213,9 +1213,9 @@ dependencies = [
 
 [[package]]
 name = "gix-ref"
-version = "0.27.0"
+version = "0.27.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3de7cd1050fa82be4240994defc1f1f2fd9def5d8815dcd005f5ddc5e3dc7511"
+checksum = "0949e07aa4ed00a5936c2f4529013540708f367906f542cf19db814957e80449"
 dependencies = [
  "gix-actor",
  "gix-features",
