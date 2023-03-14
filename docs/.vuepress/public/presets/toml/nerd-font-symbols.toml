@@ -46,6 +46,9 @@ symbol = "⌘ "
 [hg_branch]
 symbol = " "
 
+[hostname]
+ssh_symbol = " "
+
 [java]
 symbol = " "
 
