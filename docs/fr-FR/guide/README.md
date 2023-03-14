@@ -422,7 +422,6 @@ Soutenez ce projet en [devenant un collaborateur](https://github.com/sponsors/st
 
 **Palier Collaborateur**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">
