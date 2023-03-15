@@ -325,7 +325,7 @@ fn get_config_path() -> OsString {
 
 #[cfg(test)]
 mod tests {
-    use std::{io, fs::create_dir};
+    use std::{fs::create_dir, io};
 
     use super::*;
 
@@ -589,20 +589,45 @@ mod tests {
 
     #[test]
     fn print_configuration_scenarios() -> io::Result<()> {
-        run_print_configuration_test("home, no env uses home", true, EnvConfigScenario::NoEnvSpecified, PRINT_CONFIG_HOME)?;
-        run_print_configuration_test("existing env uses env", true, EnvConfigScenario::ExistingEnvSpecified, PRINT_CONFIG_ENV)?;
-        run_print_configuration_test("no home, no env uses default", false, EnvConfigScenario::NoEnvSpecified, PRINT_CONFIG_DEFAULT)?;
-        run_print_configuration_test("home, nonexisting env uses default", true, EnvConfigScenario::NonExistingEnvSpecified, PRINT_CONFIG_DEFAULT)?;
+        run_print_configuration_test(
+            "home, no env uses home",
+            true,
+            StarshipConfigEnvScenario::NoEnvSpecified,
+            PRINT_CONFIG_HOME,
+        )?;
+        run_print_configuration_test(
+            "existing env uses env",
+            true,
+            StarshipConfigEnvScenario::ExistingEnvSpecified,
+            PRINT_CONFIG_ENV,
+        )?;
+        run_print_configuration_test(
+            "no home, no env uses default",
+            false,
+            StarshipConfigEnvScenario::NoEnvSpecified,
+            PRINT_CONFIG_DEFAULT,
+        )?;
+        run_print_configuration_test(
+            "home, nonexisting env uses default",
+            true,
+            StarshipConfigEnvScenario::NonExistingEnvSpecified,
+            PRINT_CONFIG_DEFAULT,
+        )?;
         Ok(())
     }
 
-    enum EnvConfigScenario {
-        NoEnvSpecified,
-        NonExistingEnvSpecified,
-        ExistingEnvSpecified,
+    enum StarshipConfigEnvScenario {
+        None,
+        NonExisting,
+        Existing,
     }
 
-    fn run_print_configuration_test(message: &str, home_file_exists: bool, env_config_scenario: EnvConfigScenario, expected_first_line: &str) -> io::Result<()> {
+    fn run_print_configuration_test(
+        message: &str,
+        home_file_exists: bool,
+        env_config_scenario: StarshipConfigEnvScenario,
+        expected_first_line: &str,
+    ) -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().to_path_buf().join(".config");
         create_dir(&config_path)?;
@@ -614,15 +639,15 @@ mod tests {
         }
 
         let env_starship_config = match env_config_scenario {
-            EnvConfigScenario::NonExistingEnvSpecified => Some(env_path),
-            EnvConfigScenario::NoEnvSpecified => None,
-            EnvConfigScenario::ExistingEnvSpecified => {
+            StarshipConfigEnvScenario::NonExisting => Some(env_path),
+            StarshipConfigEnvScenario::None => None,
+            StarshipConfigEnvScenario::Existing => {
                 let mut env_file = File::create(&env_path)?;
                 env_file.write(PRINT_CONFIG_ENV.as_bytes())?;
                 Some(env_path)
             }
         };
-        
+
         temp_env::with_vars(
             [
                 ("STARSHIP_CONFIG", env_starship_config),
@@ -630,7 +655,7 @@ mod tests {
             ],
             || {
                 let config = print_configuration(false, &["custom".to_string()]);
-                let first_line = config.split("\n").nth(0).unwrap();
+                let first_line = config.split('\n').next().unwrap();
                 assert_eq!(expected_first_line, first_line, "{message}");
             },
         );
