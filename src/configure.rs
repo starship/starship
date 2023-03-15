@@ -635,7 +635,7 @@ mod tests {
         let env_path = dir.path().join("env.toml");
         if home_file_exists {
             let mut home_file = File::create(home_path)?;
-            home_file.write(PRINT_CONFIG_HOME.as_bytes())?;
+            home_file.write_all(PRINT_CONFIG_HOME.as_bytes())?;
         }
 
         let env_starship_config = match env_config_scenario {
@@ -643,7 +643,7 @@ mod tests {
             StarshipConfigEnvScenario::None => None,
             StarshipConfigEnvScenario::Existing => {
                 let mut env_file = File::create(&env_path)?;
-                env_file.write(PRINT_CONFIG_ENV.as_bytes())?;
+                env_file.write_all(PRINT_CONFIG_ENV.as_bytes())?;
                 Some(env_path)
             }
         };
