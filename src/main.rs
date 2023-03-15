@@ -217,7 +217,10 @@ fn main() {
                 std::process::exit(1);
             }
         }
-        Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),
+        Commands::PrintConfig { default, name } => {
+            configure::print_configuration(default, &name);
+            ()
+        }
         Commands::Toggle { name, value } => configure::toggle_configuration(&name, &value),
         Commands::BugReport => bug_report::create(),
         Commands::Time => {
