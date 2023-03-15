@@ -71,7 +71,7 @@ fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> R
     Ok(())
 }
 
-pub fn print_configuration(use_default: bool, paths: &[String]) {
+pub fn print_configuration(use_default: bool, paths: &[String]) -> String {
     let config = if use_default {
         // Get default config
         let default_config = crate::configs::FullConfig::default();
@@ -124,6 +124,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) {
     let string_config = toml::to_string_pretty(&print_config).unwrap();
 
     println!("{string_config}");
+    string_config
 }
 
 fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value {
@@ -220,9 +221,7 @@ fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Res
 pub fn get_configuration() -> toml::Table {
     let starship_config = StarshipConfig::initialize();
 
-    starship_config
-        .config
-        .expect("Failed to load starship config")
+    starship_config.config.unwrap_or(toml::Table::new())
 }
 
 pub fn get_configuration_edit() -> Document {
@@ -326,6 +325,8 @@ fn get_config_path() -> OsString {
 
 #[cfg(test)]
 mod tests {
+    use std::{io, fs::create_dir};
+
     use super::*;
 
     // This is every possible permutation, 3² = 9.
@@ -580,5 +581,59 @@ mod tests {
         assert!(doc["a"]["b"]["c"]["d"]["e"]["f"]["g"]["h"]
             .as_bool()
             .unwrap())
+    }
+
+    const PRINT_CONFIG_DEFAULT: &str = "[custom]";
+    const PRINT_CONFIG_HOME: &str = "[custom.home]";
+    const PRINT_CONFIG_ENV: &str = "[custom.env]";
+
+    #[test]
+    fn print_configuration_scenarios() -> io::Result<()> {
+        run_print_configuration_test("home, no env uses home", true, EnvConfigScenario::NoEnvSpecified, PRINT_CONFIG_HOME)?;
+        run_print_configuration_test("existing env uses env", true, EnvConfigScenario::ExistingEnvSpecified, PRINT_CONFIG_ENV)?;
+        run_print_configuration_test("no home, no env uses default", false, EnvConfigScenario::NoEnvSpecified, PRINT_CONFIG_DEFAULT)?;
+        run_print_configuration_test("home, nonexisting env uses default", true, EnvConfigScenario::NonExistingEnvSpecified, PRINT_CONFIG_DEFAULT)?;
+        Ok(())
+    }
+
+    enum EnvConfigScenario {
+        NoEnvSpecified,
+        NonExistingEnvSpecified,
+        ExistingEnvSpecified,
+    }
+
+    fn run_print_configuration_test(message: &str, home_file_exists: bool, env_config_scenario: EnvConfigScenario, expected_first_line: &str) -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().to_path_buf().join(".config");
+        create_dir(&config_path)?;
+        let home_path = config_path.join("starship.toml");
+        let env_path = dir.path().join("env.toml");
+        if home_file_exists {
+            let mut home_file = File::create(home_path)?;
+            home_file.write(PRINT_CONFIG_HOME.as_bytes())?;
+        }
+
+        let env_starship_config = match env_config_scenario {
+            EnvConfigScenario::NonExistingEnvSpecified => Some(env_path),
+            EnvConfigScenario::NoEnvSpecified => None,
+            EnvConfigScenario::ExistingEnvSpecified => {
+                let mut env_file = File::create(&env_path)?;
+                env_file.write(PRINT_CONFIG_ENV.as_bytes())?;
+                Some(env_path)
+            }
+        };
+        
+        temp_env::with_vars(
+            [
+                ("STARSHIP_CONFIG", env_starship_config),
+                ("HOME", Some(dir.path().to_path_buf())),
+            ],
+            || {
+                let config = print_configuration(false, &["custom".to_string()]);
+                let first_line = config.split("\n").nth(0).unwrap();
+                assert_eq!(expected_first_line, first_line, "{message}");
+            },
+        );
+        dir.close()
     }
 }

@@ -1,4 +1,5 @@
 use process_control::{ChildExt, Control};
+use std::env;
 use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs::read_to_string;
@@ -626,6 +627,11 @@ fn render_time_component((component, suffix): (&u128, &&str)) -> String {
 }
 
 pub fn home_dir() -> Option<PathBuf> {
+    if cfg!(test) {
+        if env::var("HOME").is_ok() {
+            return Some(PathBuf::from(env::var("HOME").unwrap()));
+        }
+    }
     dirs_next::home_dir()
 }
 
