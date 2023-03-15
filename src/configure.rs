@@ -592,25 +592,25 @@ mod tests {
         run_print_configuration_test(
             "home, no env uses home",
             true,
-            StarshipConfigEnvScenario::NoEnvSpecified,
+            StarshipConfigEnvScenario::None,
             PRINT_CONFIG_HOME,
         )?;
         run_print_configuration_test(
             "existing env uses env",
             true,
-            StarshipConfigEnvScenario::ExistingEnvSpecified,
+            StarshipConfigEnvScenario::Existing,
             PRINT_CONFIG_ENV,
         )?;
         run_print_configuration_test(
             "no home, no env uses default",
             false,
-            StarshipConfigEnvScenario::NoEnvSpecified,
+            StarshipConfigEnvScenario::None,
             PRINT_CONFIG_DEFAULT,
         )?;
         run_print_configuration_test(
             "home, nonexisting env uses default",
             true,
-            StarshipConfigEnvScenario::NonExistingEnvSpecified,
+            StarshipConfigEnvScenario::NonExisting,
             PRINT_CONFIG_DEFAULT,
         )?;
         Ok(())
