@@ -115,9 +115,17 @@ where
 }
 
 /// Root config of starship.
-#[derive(Default)]
 pub struct StarshipConfig {
     pub config: Option<toml::Table>,
+}
+
+// Default config is an empty table
+impl Default for StarshipConfig {
+    fn default() -> Self {
+        Self {
+            config: Some(toml::value::Table::new()),
+        }
+    }
 }
 
 pub fn get_config_path() -> Option<String> {
@@ -149,19 +157,21 @@ impl StarshipConfig {
     fn config_from_file() -> Option<toml::Table> {
         let file_path = get_config_path()?;
 
-        let toml_content = match utils::read_file(file_path) {
+        let toml_content = match utils::read_file(&file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
             }
             Err(e) => {
-                let level = if e.kind() == ErrorKind::NotFound {
-                    log::Level::Debug
+                if e.kind() == ErrorKind::NotFound {
+                    log::error!(
+                        "The path: \"{}\" specified in STARSHIP_CONFIG does not exist",
+                        &file_path
+                    );
                 } else {
-                    log::Level::Error
+                    log::error!("Unable to read config file content: {}", &e);
                 };
 
-                log::log!(level, "Unable to read config file content: {}", &e);
                 None
             }
         }?;
