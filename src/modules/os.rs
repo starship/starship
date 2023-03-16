@@ -77,7 +77,7 @@ fn get_type(os: &os_info::Info) -> Option<String> {
 fn get_version(os: &os_info::Info) -> Option<String> {
     Some(os.version())
         .filter(|&x| x != &os_info::Version::Unknown)
-        .map(|x| x.to_string())
+        .map(os_info::Version::to_string)
 }
 
 #[cfg(test)]
@@ -128,7 +128,7 @@ mod tests {
 
     #[test]
     fn get_symbol_default() {
-        let config = OSConfig::try_load(None);
+        let config = OSConfig::default();
 
         let type_expected_pairs = [
             (Type::Alpine, Some("🏔️ ")),
@@ -355,6 +355,8 @@ mod tests {
             Type::NetBSD => "🚩 ",
             Type::NixOS => "❄️ ",
             Type::OpenBSD => "🐡 ",
+            Type::OpenCloudOS => "☁️ ",
+            Type::openEuler => "🦉 ",
             Type::openSUSE => "🦎 ",
             Type::OracleLinux => "🦴 ",
             Type::Pop => "🍭 ",

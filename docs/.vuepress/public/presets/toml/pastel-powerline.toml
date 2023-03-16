@@ -12,6 +12,7 @@ $c\
 $elixir\
 $elm\
 $golang\
+$gradle\
 $haskell\
 $java\
 $julia\
@@ -94,6 +95,10 @@ format = '[$all_status$ahead_behind ]($style)'
 
 [golang]
 symbol = " "
+style = "bg:#86BBD8"
+format = '[ $symbol ($version) ]($style)'
+
+[gradle]
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 

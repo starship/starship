@@ -473,6 +473,25 @@
         }
       ]
     },
+    "fennel": {
+      "default": {
+        "detect_extentions": [
+          "fnl"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": true,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold green",
+        "symbol": "🧅 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FennelConfig"
+        }
+      ]
+    },
     "fill": {
       "default": {
         "disabled": false,
@@ -482,6 +501,21 @@
       "allOf": [
         {
           "$ref": "#/definitions/FillConfig"
+        }
+      ]
+    },
+    "fossil_branch": {
+      "default": {
+        "disabled": true,
+        "format": "on [$symbol$branch]($style) ",
+        "style": "bold purple",
+        "symbol": " ",
+        "truncation_length": 9223372036854775807,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FossilBranchConfig"
         }
       ]
     },
@@ -621,6 +655,29 @@
         }
       ]
     },
+    "gradle": {
+      "default": {
+        "detect_extensions": [
+          "gradle",
+          "gradle.kts"
+        ],
+        "detect_files": [],
+        "detect_folders": [
+          "gradle"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "recursive": false,
+        "style": "bold bright-cyan",
+        "symbol": "🅶 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GradleConfig"
+        }
+      ]
+    },
     "guix_shell": {
       "default": {
         "disabled": false,
@@ -708,7 +765,7 @@
     "hg_branch": {
       "default": {
         "disabled": true,
-        "format": "on [$symbol$branch]($style) ",
+        "format": "on [$symbol$branch(:$topic)]($style) ",
         "style": "bold purple",
         "symbol": " ",
         "truncation_length": 9223372036854775807,
@@ -752,7 +809,8 @@
           ".java-version",
           "deps.edn",
           "project.clj",
-          "build.boot"
+          "build.boot",
+          ".sdkmanrc"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -947,10 +1005,12 @@
       "default": {
         "disabled": false,
         "format": "via [$symbol$state( \\($name\\))]($style) ",
+        "heuristic": false,
         "impure_msg": "impure",
         "pure_msg": "pure",
         "style": "bold blue",
-        "symbol": "❄️  "
+        "symbol": "❄️  ",
+        "unknown_msg": ""
       },
       "allOf": [
         {
@@ -1085,6 +1145,7 @@
           "NetBSD": "🚩 ",
           "NixOS": "❄️ ",
           "OpenBSD": "🐡 ",
+          "OpenCloudOS": "☁️ ",
           "OracleLinux": "🦴 ",
           "Pop": "🍭 ",
           "Raspbian": "🍓 ",
@@ -1096,6 +1157,7 @@
           "Ubuntu": "🎯 ",
           "Unknown": "❓ ",
           "Windows": "🪟 ",
+          "openEuler": "🦉 ",
           "openSUSE": "🦎 "
         }
       },
@@ -1168,6 +1230,21 @@
       "allOf": [
         {
           "$ref": "#/definitions/PhpConfig"
+        }
+      ]
+    },
+    "pijul_channel": {
+      "default": {
+        "disabled": true,
+        "format": "on [$symbol$channel]($style) ",
+        "style": "bold purple",
+        "symbol": " ",
+        "truncation_length": 9223372036854775807,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PijulConfig"
         }
       ]
     },
@@ -1699,6 +1776,13 @@
         "additionalProperties": {
           "type": "string"
         }
+      }
+    },
+    "profiles": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   },
@@ -2805,6 +2889,10 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "description": {
+          "default": "<env_var module>",
+          "type": "string"
         }
       },
       "additionalProperties": false
@@ -2859,6 +2947,55 @@
       },
       "additionalProperties": false
     },
+    "FennelConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🧅 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "detect_extentions": {
+          "default": [
+            "fnl"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "FillConfig": {
       "type": "object",
       "properties": {
@@ -2872,6 +3009,37 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FossilBranchConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "on [$symbol$branch]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "truncation_length": {
+          "default": 9223372036854775807,
+          "type": "integer",
+          "format": "int64"
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
           "type": "boolean"
         }
       },
@@ -3204,6 +3372,62 @@
       },
       "additionalProperties": false
     },
+    "GradleConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🅶 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold bright-cyan",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "recursive": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "gradle",
+            "gradle.kts"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            "gradle"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "GuixShellConfig": {
       "type": "object",
       "properties": {
@@ -3399,7 +3623,7 @@
           "type": "string"
         },
         "format": {
-          "default": "on [$symbol$branch]($style) ",
+          "default": "on [$symbol$branch(:$topic)]($style) ",
           "type": "string"
         },
         "truncation_length": {
@@ -3493,7 +3717,8 @@
             ".java-version",
             "deps.edn",
             "project.clj",
-            "build.boot"
+            "build.boot",
+            ".sdkmanrc"
           ],
           "type": "array",
           "items": {
@@ -3934,7 +4159,15 @@
           "default": "pure",
           "type": "string"
         },
+        "unknown_msg": {
+          "default": "",
+          "type": "string"
+        },
         "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "heuristic": {
           "default": false,
           "type": "boolean"
         }
@@ -4183,6 +4416,7 @@
             "NetBSD": "🚩 ",
             "NixOS": "❄️ ",
             "OpenBSD": "🐡 ",
+            "OpenCloudOS": "☁️ ",
             "OracleLinux": "🦴 ",
             "Pop": "🍭 ",
             "Raspbian": "🍓 ",
@@ -4194,6 +4428,7 @@
             "Ubuntu": "🎯 ",
             "Unknown": "❓ ",
             "Windows": "🪟 ",
+            "openEuler": "🦉 ",
             "openSUSE": "🦎 "
           },
           "type": "object",
@@ -4345,6 +4580,37 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "PijulConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "format": {
+          "default": "on [$symbol$channel]($style) ",
+          "type": "string"
+        },
+        "truncation_length": {
+          "default": 9223372036854775807,
+          "type": "integer",
+          "format": "int64"
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
         }
       },
       "additionalProperties": false

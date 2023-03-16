@@ -34,7 +34,13 @@ format = 'via [$symbol]($style)'
 [erlang]
 format = 'via [$symbol]($style)'
 
+[fennel]
+format = 'via [$symbol]($style)'
+
 [golang]
+format = 'via [$symbol]($style)'
+
+[gradle]
 format = 'via [$symbol]($style)'
 
 [haxe]

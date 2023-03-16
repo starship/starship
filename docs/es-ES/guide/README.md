@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="Estado del flujo de trabajo de GitHub Actions"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -169,7 +169,7 @@
 
 ### Prerequisitos
 
-- Una [Nerd Font](https://www.nerdfonts.com/) instalada y habilitada en tu terminal (por ejemplo, prueba [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Paso 1. Instalar Starship
 
@@ -331,7 +331,7 @@ Añade lo siguiente al final de tu archivo Nushell env (encuéntralo ejecutando 
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecutando `$nu.config-path`):
@@ -340,7 +340,7 @@ Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecu
 source ~/.cache/starship/init.nu
 ```
 
-Nota: Sólo se admite Nushell v0.61+
+Nota: Sólo se admite Nushell v0.73+
 
 </details>
 
@@ -423,6 +423,7 @@ Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsor
 **Patrocinadores**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

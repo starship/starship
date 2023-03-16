@@ -6,7 +6,7 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 
 ![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png)
 
-### Prerequisites
+### Nødvendig forutsetninger
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
 

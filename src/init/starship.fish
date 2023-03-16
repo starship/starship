@@ -70,12 +70,18 @@ function transient_execute
     commandline -f execute
 end
 
-function enable_transience
-    bind \r transient_execute
+# --user is the default, but listed anyway to make it explicit.
+function enable_transience --description 'enable transient prompt keybindings'
+    bind --user \r transient_execute
+    bind --user -M insert \r transient_execute
 end
 
-function disable_transience
-    bind \r execute
+# Erase the transient prompt related key bindings.
+# --user is the default, but listed anyway to make it explicit.
+# Erasing a user binding will revert to the preset.
+function disable_transience --description 'remove transient prompt keybindings'
+    bind --user -e \r
+    bind --user -M insert -e \r
 end
 
 # Set up the session key that will be used to store logs

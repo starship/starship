@@ -34,24 +34,12 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
             .and_then(|v| v.strip_suffix(".toml"))
             .expect("Failed to process filename");
         presets.push_str(format!("print::Preset(\"{name}\"),\n").as_str());
-        match_arms.push_str(
-            format!(
-                r#"
-"{name}" => {{
-        let stdout = io::stdout();
-        let mut stdout = stdout.lock();
-        let _ = stdout.write_all(include_bytes!(r"{full_path}"));
-}}
-"#
-            )
-            .as_str(),
-        );
+        match_arms.push_str(format!(r#""{name}" => include_bytes!(r"{full_path}"),"#).as_str());
     }
 
     writeln!(
         file,
         r#"
-use std::io::{{self, Write}};
 use crate::print;
 
 pub fn get_preset_list<'a>() -> &'a [print::Preset] {{
@@ -60,10 +48,10 @@ pub fn get_preset_list<'a>() -> &'a [print::Preset] {{
     ]
 }}
 
-pub fn print_preset_content(name: &str) {{
+pub fn get_preset_content(name: &str) -> &[u8] {{
     match name {{
     {match_arms}
-    _ => {{}}
+    _ => unreachable!(),
     }}
 }}
 "#

@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### ロギング
 
-デフォルトでは、Starship は警告やエラーログを `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log` という名前のファイルに出力します。このセッションキーはターミナルのインスタンスに相当します。 しかし、これは `STARSHIP_CACHE` という環境変数を使って変更できます：
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. しかし、これは `STARSHIP_CACHE` という環境変数を使って変更できます：
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -252,12 +252,14 @@ $singularity\
 $kubernetes\
 $directory\
 $vcsh\
+$fossil_branch\
 $git_branch\
 $git_commit\
 $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$pijul_channel\
 $docker_context\
 $package\
 $c\
@@ -270,6 +272,7 @@ $dotnet\
 $elixir\
 $elm\
 $erlang\
+$fennel\
 $golang\
 $guix_shell\
 $haskell\
@@ -278,6 +281,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$gradle\
 $lua\
 $nim\
 $nodejs\
@@ -1084,7 +1088,7 @@ fish スタイルの pwd オプションを使用している場合、切り捨�
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1305,6 +1309,12 @@ format = 'via [ $version](cyan bold) '
 
 ::: tip
 
+The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+
+:::
+
+::: tip
+
 `.`を使うことで複数の環境変数を表示することができます。 (例を確認してみてください) `variable`が設定されていない場合、このモジュールは`.`以降に書かれている環境変数の値を表示します。
 
 例: 次の設定ではUSER環境変数を表示します。
@@ -1320,13 +1330,14 @@ default = 'unknown user'
 
 ### オプション
 
-| オプション      | デフォルト                          | 説明                                    |
-| ---------- | ------------------------------ | ------------------------------------- |
-| `symbol`   | `''`                           | 環境変数を表示する前に使用される記号です。                 |
-| `variable` |                                | 表示される環境変数です。                          |
-| `default`  |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。 |
-| `format`   | `'with [$env_value]($style) '` | module のフォーマットです。                     |
-| `disabled` | `false`                        | `env_var`モジュールを無効にします。                |
+| オプション      | デフォルト                          | 説明                                                                           |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                           | 環境変数を表示する前に使用される記号です。                                                        |
+| `variable` |                                | 表示される環境変数です。                                                                 |
+| `default`  |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。                                        |
+| `format`   | `"with [$env_value]($style) "` | module のフォーマットです。                                                            |
+| `説明`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                        | `env_var`モジュールを無効にします。                                                       |
 
 ### 変数
 
@@ -1399,6 +1410,44 @@ default = 'unknown user'
 format = 'via [e $version](bold red) '
 ```
 
+## Fennel
+
+The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a file with the `.fnl` extension
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                       |
+| ------------------- | ------------------------------------ | -------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                        |
+| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。   |
+| `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel. |
+| `style`             | `'bold green'`                       | モジュールのスタイルです。                                            |
+| `detect_extensions` | `[fnl]`                              | どの拡張子がこのモジュールをアクティブにするか                                  |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                                |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                |
+| `disabled`          | `false`                              | Disables the `fennel` module.                            |
+
+### 変数
+
+| 変数        | 設定例      | 説明                      |
+| --------- | -------- | ----------------------- |
+| version   | `v1.2.1` | The version of `fennel` |
+| symbol    |          | オプション `symbol` の値をミラーする |
+| style\* |          | オプション `style` の値をミラーする  |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[fennel]
+symbol = '⫰ '
+```
+
 ## Fill
 
 `fill` モジュールは行の余分なスペースを記号で埋めます。 一行に複数の`fill`モジュールが存在する場合、それらはスペースを均等に分割します。 これは、他のモジュールの位置合わせに便利です。
@@ -1426,6 +1475,42 @@ style = 'bold green'
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
+```
+
+## Fossil Branch
+
+The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
+
+### オプション
+
+| オプション               | デフォルト                            | 説明                                                                                 |
+| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol$branch]($style) '` | module のフォーマットです。 Use `'$branch'` to refer to the current branch name.             |
+| `symbol`            | `' '`                           | The symbol used before the branch name of the check-out in your current directory. |
+| `style`             | `'bold purple'`                  | モジュールのスタイルです。                                                                      |
+| `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                    |
+| `truncation_symbol` | `'…'`                            | ブランチ名切り捨てられていることを示すための記号です。 You can use `''` for no symbol.                        |
+| `disabled`          | `true`                           | Disables the `fossil_branch` module.                                               |
+
+### 変数
+
+| 変数        | 設定例     | 説明                       |
+| --------- | ------- | ------------------------ |
+| branch    | `trunk` | The active Fossil branch |
+| symbol    |         | オプション `symbol` の値をミラーする  |
+| style\* |         | オプション `style` の値をミラーする   |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+
+[fossil_branch]
+symbol = '🦎 '
+truncation_length = 4
+truncation_symbol = ''
 ```
 
 ## Google Cloud (`gcloud`)
@@ -1543,7 +1628,7 @@ truncation_symbol = ''
 ignore_branches = ['master', 'main']
 ```
 
-## Git Commit
+## Git コミット
 
 `git_commit` モジュールは、カレントディレクトリのリポジトリの現在のコミットハッシュとタグ (もしあれば) を表示します。
 
@@ -1562,10 +1647,11 @@ ignore_branches = ['master', 'main']
 
 ### 変数
 
-| 変数        | 設定例       | 説明                     |
-| --------- | --------- | ---------------------- |
-| hash      | `b703eb3` | 現在の git コミットハッシュ       |
-| style\* |           | オプション `style` の値をミラーする |
+| 変数        | 設定例       | 説明                                           |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | 現在の git コミットハッシュ                             |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | オプション `style` の値をミラーする                       |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1840,6 +1926,41 @@ disabled = true
 format = 'via [🐂](yellow bold) '
 ```
 
+## Gradle
+
+The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
+
+デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+
+- The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
+- The current directory contains a file ending with `.gradle` or `.gradle.kts`.
+
+The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
+| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.     |
+| `detect_extensions` | `["gradle", "gradle.kts"]`           | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `["gradle"]`                         | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold bright-cyan"`                 | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                              | Disables the `gradle` module.                          |
+| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.  |
+
+### 変数
+
+| 変数      | 設定例      | 説明                      |
+| ------- | -------- | ----------------------- |
+| version | `v7.5.1` | The version of `gradle` |
+| symbol  |          | オプション `symbol` の値をミラーする |
+| style*  |          | オプション `style` の値をミラーする  |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
 ## Haskell
 
 The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
@@ -1952,7 +2073,7 @@ format = "via [⌘ $version](bold fg:202) "
 format = 'via [⎈ $version](bold white) '
 ```
 
-## Hostname
+## ホスト名
 
 `hostname`モジュールには、システムのホスト名が表示されます。
 
@@ -1993,21 +2114,21 @@ disabled = false
 
 `Java`モジュールは、現在インストールされている[Java](https://www.oracle.com/java/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - カレントディレクトリに拡張子が`.java`、`.class`、`.gradle`、`.jar`、`.clj`または`.cljc`のファイルが含まれている
 
 ### オプション
 
-| オプション               | デフォルト                                                                                                    | 説明                                                     |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                 | module のフォーマットです。                                      |
-| `version_format`    | `'v${raw}'`                                                                                              | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                     | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot']` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                                                                                     | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `symbol`            | `'☕ '`                                                                                                   | A format string representing the symbol of Java        |
-| `style`             | `'red dimmed'`                                                                                           | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                                                  | `java`モジュールを無効にします。                                    |
+| オプション               | デフォルト                                                                                                                 | 説明                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                                                                                                           | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                                                                  | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java        |
+| `style`             | `'red dimmed'`                                                                                                        | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                                                               | `java`モジュールを無効にします。                                    |
 
 ### 変数
 
@@ -2222,7 +2343,7 @@ disabled = false
 [kubernetes.context_aliases]
 'dev.local.cluster.k8s' = 'dev'
 '.*/openshift-cluster/.*' = 'openshift'
-'gke_.*_(?P<var_cluster>[\\w-]+)' = 'gke-$var_cluster'
+'gke_.*_(?P<var_cluster>[\w-]+)' = 'gke-$var_cluster'
 [kubernetes.user_aliases]
 'dev.local.cluster.k8s' = 'dev'
 'root/.*' = 'root'
@@ -2251,12 +2372,12 @@ Long and automatically generated cluster names can be identified and shortened u
 # OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
 '.*/openshift-cluster/.*' = 'openshift'
 # Or better, to rename every OpenShift cluster at once:
-'.*/(?P<var_cluster>[\\w-]+)/.*' = '$var_cluster'
+'.*/(?P<var_cluster>[\w-]+)/.*' = '$var_cluster'
 
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-'gke_.*_(?P<var_cluster>[\\w-]+)' = 'gke-$var_cluster'
+'gke_.*_(?P<var_cluster>[\w-]+)' = 'gke-$var_cluster'
 ```
 
 ## Line Break
@@ -2440,26 +2561,27 @@ style = 'bold dimmed green'
 
 ## Mercurial Branch
 
-` hg_branch `モジュールは、現在のディレクトリにあるリポジトリのアクティブなブランチを示します。
+The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
 ### オプション
 
-| オプション               | デフォルト                            | 説明                                                                                           |
-| ------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
-| `symbol`            | `' '`                           | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
-| `style`             | `'bold purple'`                  | モジュールのスタイルです。                                                                                |
-| `format`            | `'on [$symbol$branch]($style) '` | module のフォーマットです。                                                                            |
-| `truncation_length` | `2^63 - 1`                       | Truncates the hg branch name to `N` graphemes                                                |
-| `truncation_symbol` | `'…'`                            | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
-| `disabled`          | `true`                           | Disables the `hg_branch` module.                                                             |
+| オプション               | デフォルト                                     | 説明                                                                                           |
+| ------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `symbol`            | `' '`                                    | The symbol used before the hg bookmark or branch name of the repo in your current directory. |
+| `style`             | `'bold purple'`                           | モジュールのスタイルです。                                                                                |
+| `format`            | `'on [$symbol$branch(:$topic)]($style) '` | module のフォーマットです。                                                                            |
+| `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
+| `truncation_symbol` | `'…'`                                     | ブランチ名切り捨てられていることを示すための記号です。                                                                  |
+| `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
 
 ### 変数
 
-| 変数        | 設定例      | 説明                          |
-| --------- | -------- | --------------------------- |
-| branch    | `master` | The active mercurial branch |
-| symbol    |          | オプション `symbol` の値をミラーする     |
-| style\* |          | オプション `style` の値をミラーする      |
+| 変数        | 設定例       | 説明                          |
+| --------- | --------- | --------------------------- |
+| branch    | `master`  | The active mercurial branch |
+| topic     | `feature` | The active mercurial topic  |
+| symbol    |           | オプション `symbol` の値をミラーする     |
+| style\* |           | オプション `style` の値をミラーする      |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2522,14 +2644,16 @@ symbol = '🎣 '
 
 ### オプション
 
-| オプション        | デフォルト                                          | 説明                                                    |
-| ------------ | ---------------------------------------------- | ----------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | module のフォーマットです。                                     |
-| `symbol`     | `'❄️ '`                                        | A format string representing the symbol of nix-shell. |
-| `style`      | `'bold blue'`                                  | モジュールのスタイルです。                                         |
-| `impure_msg` | `'impure'`                                     | A format string shown when the shell is impure.       |
-| `pure_msg`   | `'pure'`                                       | A format string shown when the shell is pure.         |
-| `disabled`   | `false`                                        | `nix_shell`モジュールを無効にします。                              |
+| オプション         | デフォルト                                          | 説明                                                                    |
+| ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
+| `format`      | `'via [$symbol$state( \($name\))]($style) '` | module のフォーマットです。                                                     |
+| `symbol`      | `'❄️ '`                                        | A format string representing the symbol of nix-shell.                 |
+| `style`       | `'bold blue'`                                  | モジュールのスタイルです。                                                         |
+| `impure_msg`  | `'impure'`                                     | A format string shown when the shell is impure.                       |
+| `pure_msg`    | `'pure'`                                       | A format string shown when the shell is pure.                         |
+| `unknown_msg` | `''`                                           | A format string shown when it is unknown if the shell is pure/impure. |
+| `disabled`    | `false`                                        | `nix_shell`モジュールを無効にします。                                              |
+| `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
 ### 変数
 
@@ -2551,6 +2675,7 @@ symbol = '🎣 '
 disabled = true
 impure_msg = '[impure shell](bold red)'
 pure_msg = '[pure shell](bold green)'
+unknown_msg = '[unknown shell](bold yellow)'
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
@@ -2770,6 +2895,8 @@ Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
 OpenBSD = "🐡 "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
 openSUSE = "🦎 "
 OracleLinux = "🦴 "
 Pop = "🍭 "
@@ -2911,7 +3038,7 @@ format = 'via [🦪 $version]($style) '
 
 `php`モジュールは、現在インストールされている[PHP](https://www.php.net/) のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- The current directory contains a `composer.json` file
+- カレントディレクトリに`composer.json`ファイルが含まれている
 - カレントディレクトリに`.php-version`ファイルが含まれている
 - カレントディレクトリに拡張子が`.php`のファイルが含まれている
 
@@ -2946,6 +3073,21 @@ format = 'via [🦪 $version]($style) '
 [php]
 format = 'via [🔹 $version](147 bold) '
 ```
+
+## Pijul Channel
+
+The `pijul_channel` module shows the active channel of the repo in your current directory.
+
+### オプション
+
+| オプション               | デフォルト                             | 説明                                                                                   |
+| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
+| `symbol`            | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
+| `style`             | `'bold purple'`                   | モジュールのスタイルです。                                                                        |
+| `format`            | `'on [$symbol$channel]($style) '` | module のフォーマットです。                                                                    |
+| `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
+| `truncation_symbol` | `'…'`                             | ブランチ名切り捨てられていることを示すための記号です。                                                          |
+| `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
 ## Pulumi
 
@@ -3560,18 +3702,18 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ### 変数
 
-| 変数             | 設定例     | 説明                                                                                          |
-| -------------- | ------- | ------------------------------------------------------------------------------------------- |
-| status         | `127`   | The exit code of the last command                                                           |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                    |
-| int            | `127`   | The exit code of the last command                                                           |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                         |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
-| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
-| symbol         |         | オプション `symbol` の値をミラーする                                                                     |
-| style\*      |         | オプション `style` の値をミラーする                                                                      |
+| 変数             | 設定例     | 説明                                                                                         |
+| -------------- | ------- | ------------------------------------------------------------------------------------------ |
+| status         | `127`   | The exit code of the last command                                                          |
+| hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
+| int            | `127`   | The exit code of the last command                                                          |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                        |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
+| symbol         |         | オプション `symbol` の値をミラーする                                                                    |
+| style\*      |         | オプション `style` の値をミラーする                                                                     |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -3736,7 +3878,7 @@ format = '[🏎💨 $version$workspace]($style) '
 format = '[🏎💨 $workspace]($style) '
 ```
 
-## Time
+## 時刻
 
 `time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
 
@@ -3935,7 +4077,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-デフォルトでは`zig`モジュールは、現在インストールされている[Zig](https://ziglang.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - カレントディレクトリに拡張子が`.zig`のファイルが含まれている
 

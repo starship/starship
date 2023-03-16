@@ -6,7 +6,7 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 ![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png)
 
-### Prerequisites
+### Nødvendig forutsetninger
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
 

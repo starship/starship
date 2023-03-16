@@ -682,9 +682,8 @@ credential_process = /opt/bin/awscreds-retriever
                     "[astronauts]
 aws_access_key_id=dummy
 aws_secret_access_key=dummy
-{}={}
-",
-                    key, expiration_date
+{key}={expiration_date}
+"
                 )
                 .as_bytes(),
             )
@@ -803,10 +802,14 @@ aws_secret_access_key=dummy
     #[test]
     fn missing_any_credentials() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let config_path = dir.path().join("config");
-        let mut file = File::create(&config_path)?;
 
-        file.write_all(
+        let credential_path = dir.path().join("credentials");
+        File::create(&credential_path)?;
+
+        let config_path = dir.path().join("config");
+        let mut config_file = File::create(&config_path)?;
+
+        config_file.write_all(
             "[default]
 region = us-east-1
 output = json
@@ -819,6 +822,10 @@ region = us-east-2
 
         let actual = ModuleRenderer::new("aws")
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env(
+                "AWS_CREDENTIALS_FILE",
+                credential_path.to_string_lossy().as_ref(),
+            )
             .collect();
         let expected = None;
 

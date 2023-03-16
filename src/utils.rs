@@ -245,6 +245,22 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("0.19.1\n"),
             stderr: String::default(),
         }),
+        "fennel --version" => Some(CommandOutput {
+            stdout: String::from("Fennel 1.2.1 on PUC Lua 5.4\n"),
+            stderr: String::default(),
+        }),
+        "fossil branch current" => Some(CommandOutput{
+            stdout: String::from("topic-branch"),
+            stderr: String::default(),
+        }),
+        "fossil branch new topic-branch trunk" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
+        "fossil update topic-branch" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
         "go version" => Some(CommandOutput {
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
@@ -333,6 +349,18 @@ WebAssembly: unavailable
                 stderr: String::default(),
             })
         },
+        "pijul channel" => Some(CommandOutput{
+            stdout: String::from("  main\n* tributary-48198"),
+            stderr: String::default(),
+        }),
+        "pijul channel new tributary-48198" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
+        "pijul channel switch tributary-48198" => Some(CommandOutput{
+            stdout: String::from("Outputting repository ↖"),
+            stderr: String::default(),
+        }),
         "pulumi version" => Some(CommandOutput{
             stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
             stderr: String::default(),
@@ -668,8 +696,8 @@ mod tests {
     fn exec_no_output() {
         let result = internal_exec_cmd("true", &[] as &[&OsStr], Duration::from_millis(500));
         let expected = Some(CommandOutput {
-            stdout: String::from(""),
-            stderr: String::from(""),
+            stdout: String::new(),
+            stderr: String::new(),
         });
 
         assert_eq!(result, expected)
@@ -682,7 +710,7 @@ mod tests {
             internal_exec_cmd("/bin/sh", &["-c", "echo hello"], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
-            stderr: String::from(""),
+            stderr: String::new(),
         });
 
         assert_eq!(result, expected)
@@ -697,7 +725,7 @@ mod tests {
             Duration::from_millis(500),
         );
         let expected = Some(CommandOutput {
-            stdout: String::from(""),
+            stdout: String::new(),
             stderr: String::from("hello\n"),
         });
 
