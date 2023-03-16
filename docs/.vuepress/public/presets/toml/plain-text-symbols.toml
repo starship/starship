@@ -183,7 +183,7 @@ symbol = "rb "
 symbol = "rs "
 
 [salesforce]
-symbold = "sf "
+symbol = "sf "
 
 [scala]
 symbol = "scala "
