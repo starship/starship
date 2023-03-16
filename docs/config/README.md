@@ -3643,6 +3643,7 @@ format = 'via [⚙️ $version](red bold)'
 
 The `saleforce` module shows the currently selected username.
 Username can be retrieved in two ways:
+
 - using sfdx (slower)
 - by extracting username from files in `.sf` or `.sfdx` folders in root folder of repository.
 
@@ -3652,7 +3653,7 @@ In case user prefers first strategy, it is recommended to increase command timeo
 ### Options
 
 | Option       | Default                               | Description                                                                                                |
-|--------------|---------------------------------------|------------------------------------------------------------------------------------------------------------|
+| ------------ | ------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `format`     | `'org [$symbol($org_name) ]($style)'` | The format for the module.                                                                                 |
 | `symbol`     | `'☁ '`                                | A format string representing the symbol of Scala.                                                          |
 | `style`      | `'bold blue'`                         | The style for the module.                                                                                  |
@@ -3671,6 +3672,7 @@ command_timeout = 3000
 disabled = false
 use_sfdx = true
 ```
+
 ## Scala
 
 The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/).
