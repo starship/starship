@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
@@ -25,7 +25,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 Some(w) => w,
                 None => return None,
             };
-            get_org_name_from_config_files(&workdir)
+            get_org_name_from_config_files(workdir)
         }
     };
     let org_name = match org_name_option {
@@ -43,9 +43,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "org_name" => {
-                    return Some(Ok(org_name.clone()));
-                }
+                "org_name" => Some(Ok(org_name.clone())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -85,20 +83,16 @@ fn get_org_name_from_command(context: &Context) -> Option<String> {
     };
     match result.result {
         Some(r) => {
-            match r.alias {
-                Some(alias) => return Some(alias),
-                None => (),
-            };
-            return match r.username {
-                Some(username) => Some(username),
-                None => None,
-            };
+            if let Some(alias) = r.alias {
+                return Some(alias);
+            }
+            r.username
         }
         None => None,
     }
 }
 
-fn get_org_name_from_config_files(repo_path: &PathBuf) -> Option<String> {
+fn get_org_name_from_config_files(repo_path: &Path) -> Option<String> {
     let sf_configuration_file = repo_path.join(".sf").join("config.json");
     if sf_configuration_file.exists() {
         return get_org_name_from_sf_config_file(sf_configuration_file);
@@ -107,7 +101,7 @@ fn get_org_name_from_config_files(repo_path: &PathBuf) -> Option<String> {
     if sfdx_configuration_file.exists() {
         return get_org_name_from_sfdx_config_file(sfdx_configuration_file);
     }
-    return None;
+    None
 }
 
 #[derive(Deserialize, Serialize)]
@@ -130,7 +124,7 @@ fn get_org_name_from_sfdx_config_file(sfdx_config_file: PathBuf) -> Option<Strin
             return None;
         }
     };
-    return result.defaultusername;
+    result.defaultusername
 }
 
 #[derive(Deserialize, Serialize)]
@@ -154,5 +148,5 @@ fn get_org_name_from_sf_config_file(sfdx_config_file: PathBuf) -> Option<String>
             return None;
         }
     };
-    return result.target_org;
+    result.target_org
 }
