@@ -21,7 +21,7 @@ impl<'a> Default for ShLvlConfig<'a> {
         ShLvlConfig {
             threshold: 2,
             format: "[$symbol$shlvl]($style) ",
-            symbol: "↕️  ", // extra space for emoji
+            symbol: "↕️ ",
             repeat: false,
             style: "bold yellow",
             disabled: true,
