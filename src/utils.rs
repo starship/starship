@@ -603,6 +603,11 @@ pub fn render_time(raw_millis: u128, show_seconds: bool, show_millis: bool) -> S
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
     let (hours, days) = (raw_hours % 24, raw_hours / 24);
 
+    // Render seconds if show_seconds is false and time is less than one minute
+    if raw_seconds < 60 && !show_seconds {
+        return format!("{raw_seconds}s");
+    }
+
     let components = [days, hours, minutes];
     let suffixes = ["d", "h", "m"];
 
@@ -674,6 +679,14 @@ mod tests {
     #[test]
     fn test_1d() {
         assert_eq!(render_time(86_400_000_u128, true, true), "1d")
+    }
+    #[test]
+    fn test_10s_seconds_disabled() {
+        assert_eq!(render_time(10_000_u128, false, false), "10s")
+    }
+    #[test]
+    fn test_90s_seconds_disabled() {
+        assert_eq!(render_time(90_000_u128, false, false), "1m")
     }
 
     #[test]
