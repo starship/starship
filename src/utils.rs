@@ -591,7 +591,7 @@ pub fn exec_timeout(cmd: &mut Command, time_limit: Duration) -> Option<CommandOu
 }
 
 // Render the time into a nice human-readable string
-pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
+pub fn render_time(raw_millis: u128, show_seconds: bool, show_millis: bool) -> String {
     // Make sure it renders something if the time equals zero instead of an empty string
     if raw_millis == 0 {
         return "0ms".into();
@@ -603,14 +603,17 @@ pub fn render_time(raw_millis: u128, show_millis: bool) -> String {
     let (minutes, raw_hours) = (raw_minutes % 60, raw_minutes / 60);
     let (hours, days) = (raw_hours % 24, raw_hours / 24);
 
-    let components = [days, hours, minutes, seconds];
-    let suffixes = ["d", "h", "m", "s"];
+    let components = [days, hours, minutes];
+    let suffixes = ["d", "h", "m"];
 
     let mut rendered_components: Vec<String> = components
         .iter()
         .zip(&suffixes)
         .map(render_time_component)
         .collect();
+    if show_seconds {
+        rendered_components.push(render_time_component((&seconds, &"s")));
+    }
     if show_millis || raw_millis < 1000 {
         rendered_components.push(render_time_component((&millis, &"ms")));
     }
@@ -650,27 +653,27 @@ mod tests {
 
     #[test]
     fn test_0ms() {
-        assert_eq!(render_time(0_u128, true), "0ms")
+        assert_eq!(render_time(0_u128, true, true), "0ms")
     }
     #[test]
     fn test_500ms() {
-        assert_eq!(render_time(500_u128, true), "500ms")
+        assert_eq!(render_time(500_u128, true, true), "500ms")
     }
     #[test]
     fn test_10s() {
-        assert_eq!(render_time(10_000_u128, true), "10s")
+        assert_eq!(render_time(10_000_u128, true, true), "10s")
     }
     #[test]
     fn test_90s() {
-        assert_eq!(render_time(90_000_u128, true), "1m30s")
+        assert_eq!(render_time(90_000_u128, true, true), "1m30s")
     }
     #[test]
     fn test_10110s() {
-        assert_eq!(render_time(10_110_000_u128, true), "2h48m30s")
+        assert_eq!(render_time(10_110_000_u128, true, true), "2h48m30s")
     }
     #[test]
     fn test_1d() {
-        assert_eq!(render_time(86_400_000_u128, true), "1d")
+        assert_eq!(render_time(86_400_000_u128, true, true), "1d")
     }
 
     #[test]

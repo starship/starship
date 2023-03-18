@@ -224,7 +224,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let duration = {
         get_credentials_duration(context, aws_profile.as_ref(), &aws_creds).map(|duration| {
             if duration > 0 {
-                render_time((duration * 1000) as u128, false)
+                render_time(
+                    (duration * 1000) as u128,
+                    config.duration_show_seconds,
+                    false,
+                )
             } else {
                 config.expiration_symbol.to_string()
             }

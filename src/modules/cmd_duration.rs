@@ -34,7 +34,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "duration" => Some(Ok(render_time(elapsed, config.show_milliseconds))),
+                "duration" => Some(Ok(render_time(elapsed, true, config.show_milliseconds))),
                 _ => None,
             })
             .parse(None, Some(context))

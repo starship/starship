@@ -10,6 +10,7 @@
     "aws": {
       "default": {
         "disabled": false,
+        "duration_show_seconds": true,
         "expiration_symbol": "X",
         "force_display": false,
         "format": "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",
@@ -1822,6 +1823,11 @@
         "force_display": {
           "description": "If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.",
           "default": false,
+          "type": "boolean"
+        },
+        "duration_show_seconds": {
+          "description": "Show seconds in duration",
+          "default": true,
           "type": "boolean"
         }
       },
