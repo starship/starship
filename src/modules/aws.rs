@@ -121,7 +121,11 @@ fn get_credentials_duration(
     aws_profile: Option<&Profile>,
     aws_creds: &AwsCredsFile,
 ) -> Option<i64> {
-    let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWSUME_EXPIRATION"];
+    let expiration_env_vars = [
+        "AWS_CREDENTIAL_EXPIRATION",
+        "AWS_SESSION_EXPIRATION",
+        "AWSUME_EXPIRATION",
+    ];
     let expiration_date = if let Some(expiration_date) = expiration_env_vars
         .iter()
         .find_map(|env_var| context.get_env(env_var))
@@ -636,28 +640,32 @@ credential_process = /opt/bin/awscreds-retriever
     fn expiration_date_set() {
         use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 
-        let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
-            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0).unwrap(),
-            Utc,
-        );
+        let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWS_CREDENTIAL_EXPIRATION"];
+        expiration_env_vars.iter().for_each(|env_var| {
+            let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
+                NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0)
+                    .unwrap(),
+                Utc,
+            );
 
-        let actual = ModuleRenderer::new("aws")
-            .env("AWS_PROFILE", "astronauts")
-            .env("AWS_REGION", "ap-northeast-2")
-            .env("AWS_ACCESS_KEY_ID", "dummy")
-            .env(
-                "AWS_SESSION_EXPIRATION",
-                now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
-            )
-            .collect();
-        let expected = Some(format!(
-            "on {}",
-            Color::Yellow
-                .bold()
-                .paint("☁️  astronauts (ap-northeast-2) [30m] ")
-        ));
+            let actual = ModuleRenderer::new("aws")
+                .env("AWS_PROFILE", "astronauts")
+                .env("AWS_REGION", "ap-northeast-2")
+                .env("AWS_ACCESS_KEY_ID", "dummy")
+                .env(
+                    env_var,
+                    now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
+                )
+                .collect();
+            let expected = Some(format!(
+                "on {}",
+                Color::Yellow
+                    .bold()
+                    .paint("☁️  astronauts (ap-northeast-2) [30m] ")
+            ));
 
-        assert_eq!(expected, actual);
+            assert_eq!(expected, actual);
+        });
     }
 
     #[test]
