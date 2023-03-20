@@ -66,7 +66,7 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 ### Терминология
 
-**Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Модуль**: Компонент строки, дающий информацию на основе контекстной информации вашей ОС. Например, модуль "nodejs" отображает установленную версию Node.js, если вы находитесь в директории Node.js проекта.
 
 **Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
