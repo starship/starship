@@ -21,7 +21,7 @@ pub struct GitStatusConfig<'a> {
     pub modified: &'a str,
     pub staged: &'a str,
     pub untracked: &'a str,
-    pub typechange: &'a str,
+    pub typechanged: &'a str,
     pub ignore_submodules: bool,
     pub disabled: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -44,7 +44,7 @@ impl<'a> Default for GitStatusConfig<'a> {
             modified: "!",
             staged: "+",
             untracked: "?",
-            typechange: "⇢",
+            typechanged: "",
             ignore_submodules: false,
             disabled: false,
             windows_starship: None,

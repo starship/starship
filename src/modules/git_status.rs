@@ -10,7 +10,7 @@ use std::ffi::OsStr;
 use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str =
-    "$conflicted$stashed$deleted$renamed$modified$typechange$staged$untracked";
+    "$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked";
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -99,8 +99,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "untracked" => info.get_untracked().and_then(|count| {
                         format_count(config.untracked, "git_status.untracked", context, count)
                     }),
-                    "typechange" => info.get_typechange().and_then(|count| {
-                        format_count(config.typechange, "git_status.typechange", context, count)
+                    "typechanged" => info.get_typechanged().and_then(|count| {
+                        format_count(config.typechanged, "git_status.typechanged", context, count)
                     }),
                     _ => None,
                 };
@@ -193,8 +193,8 @@ impl<'a> GitStatusInfo<'a> {
         self.get_repo_status().map(|data| data.untracked)
     }
 
-    pub fn get_typechange(&self) -> Option<usize> {
-        self.get_repo_status().map(|data| data.typechange)
+    pub fn get_typechanged(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.typechanged)
     }
 }
 
@@ -267,7 +267,7 @@ struct RepoStatus {
     renamed: usize,
     modified: usize,
     staged: usize,
-    typechange: usize,
+    typechanged: usize,
     untracked: usize,
 }
 
@@ -283,13 +283,13 @@ impl RepoStatus {
     }
 
     fn is_staged(short_status: &str) -> bool {
-        // is_index_modified || is_index_added
+        // is_index_modified || is_index_added || is_index_typechanged
         short_status.starts_with('M')
             || short_status.starts_with('A')
             || short_status.starts_with('T')
     }
 
-    fn is_typechange(short_status: &str) -> bool {
+    fn is_typechanged(short_status: &str) -> bool {
         short_status.ends_with('T')
     }
 
@@ -306,8 +306,8 @@ impl RepoStatus {
             self.staged += 1;
         }
 
-        if Self::is_typechange(short_status) {
-            self.typechange += 1;
+        if Self::is_typechanged(short_status) {
+            self.typechanged += 1;
         }
     }
 
@@ -773,12 +773,16 @@ mod tests {
     }
 
     #[test]
-    fn shows_typechange() -> io::Result<()> {
+    fn shows_typechanged() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
-        create_typechange(repo_dir.path())?;
+        create_typechanged(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                typechanged = "⇢"
+            })
             .path(repo_dir.path())
             .collect();
         let expected = format_output("⇢");
@@ -856,11 +860,13 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_staged(repo_dir.path())?;
+        create_staged_typechange(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
                 staged = "+[$count](green)"
+                typechanged = "⇢[$count](green)"
             })
             .path(repo_dir.path())
             .collect();
@@ -868,7 +874,7 @@ mod tests {
             "{} ",
             AnsiStrings(&[
                 Color::Red.bold().paint("[+"),
-                Color::Green.paint("1"),
+                Color::Green.paint("2"),
                 Color::Red.bold().paint("]"),
             ])
         ));
@@ -1090,7 +1096,7 @@ mod tests {
         Ok(())
     }
 
-    fn create_typechange(repo_dir: &Path) -> io::Result<()> {
+    fn create_typechanged(repo_dir: &Path) -> io::Result<()> {
         fs::remove_file(repo_dir.join("readme.md"))?;
 
         #[cfg(not(target_os = "windows"))]
@@ -1101,6 +1107,17 @@ mod tests {
             repo_dir.join("Cargo.toml"),
             repo_dir.join("readme.md"),
         )?;
+
+        Ok(())
+    }
+
+    fn create_staged_typechange(repo_dir: &Path) -> io::Result<()> {
+        create_typechanged(repo_dir)?;
+
+        create_command("git")?
+            .args(["add", "."])
+            .current_dir(repo_dir)
+            .output()?;
 
         Ok(())
     }
