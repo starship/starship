@@ -861,13 +861,11 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_staged(repo_dir.path())?;
-        create_staged_typechange(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
                 [git_status]
                 staged = "+[$count](green)"
-                typechanged = "⇢[$count](green)"
             })
             .path(repo_dir.path())
             .collect();
@@ -875,7 +873,33 @@ mod tests {
             "{} ",
             AnsiStrings(&[
                 Color::Red.bold().paint("[+"),
-                Color::Green.paint("2"),
+                Color::Green.paint("1"),
+                Color::Red.bold().paint("]"),
+            ])
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_typechange_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_typechange(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                staged = "+[$count](green)"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            AnsiStrings(&[
+                Color::Red.bold().paint("[+"),
+                Color::Green.paint("1"),
                 Color::Red.bold().paint("]"),
             ])
         ));
