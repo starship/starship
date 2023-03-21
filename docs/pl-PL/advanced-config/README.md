@@ -1,6 +1,6 @@
 # Zaawansowana konfiguracja
 
-Mimo że Starship jest wszechstronny, czasem nie wystarczy modyfikacja pliku `starship.toml` żeby uzyskać pewne rzeczy. Na tej stronie opisano bardziej zaawansowane sposoby konfigurowania używane w Starship.
+Mimo że Starship jest wszechstronny, czasem nie wystarczy modyfikacja pliku `starship.toml` żeby osiągnąć zamierzony efekt. Na tej stronie opisano bardziej zaawansowane sposoby konfigurowania używane w Starship.
 
 ::: warning
 
@@ -207,8 +207,6 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-Note: Nushell 0.71.0 or later is required
-
 ### Example
 
 ```toml
@@ -231,7 +229,7 @@ Produces a prompt like the following:
 
 Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
 
 Note: `continuation_prompt` should be set to a literal string without any variables.
 
@@ -247,7 +245,7 @@ Note: Continuation prompts are only available in the following shells:
 # ~/.config/starship.toml
 
 # A continuation prompt that displays two filled in arrows
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Style Strings

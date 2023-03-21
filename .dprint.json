@@ -41,9 +41,9 @@
     "target/"
   ],
   "plugins": [
-    "https://github.com/dprint/dprint-plugin-typescript/releases/download/0.80.2/plugin.wasm",
+    "https://github.com/dprint/dprint-plugin-typescript/releases/download/0.83.0/plugin.wasm",
     "https://github.com/dprint/dprint-plugin-json/releases/download/0.17.0/plugin.wasm",
-    "https://github.com/dprint/dprint-plugin-markdown/releases/download/0.15.1/plugin.wasm",
+    "https://github.com/dprint/dprint-plugin-markdown/releases/download/0.15.2/plugin.wasm",
     "https://github.com/dprint/dprint-plugin-toml/releases/download/0.5.4/plugin.wasm"
   ]
 }

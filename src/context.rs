@@ -6,8 +6,7 @@ use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
 use crate::modules;
 use crate::utils::{self, home_dir};
 use clap::Parser;
-use git_repository::{
-    self as git,
+use gix::{
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state, Repository, ThreadSafeRepository,
 };
@@ -250,15 +249,15 @@ impl<'a> Context<'a> {
     }
 
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, git::discover::Error> {
+    pub fn get_repo(&self) -> Result<&Repo, Box<gix::discover::Error>> {
         self.repo
-            .get_or_try_init(|| -> Result<Repo, git::discover::Error> {
+            .get_or_try_init(|| -> Result<Repo, Box<gix::discover::Error>> {
                 // custom open options
                 let mut git_open_opts_map =
-                    git_sec::trust::Mapping::<git::open::Options>::default();
+                    git_sec::trust::Mapping::<gix::open::Options>::default();
 
                 // don't use the global git configs
-                let config = git::permissions::Config {
+                let config = gix::permissions::Config {
                     git_binary: false,
                     system: false,
                     git: false,
@@ -268,13 +267,13 @@ impl<'a> Context<'a> {
                 };
                 // change options for config permissions without touching anything else
                 git_open_opts_map.reduced =
-                    git_open_opts_map.reduced.permissions(git::Permissions {
+                    git_open_opts_map.reduced.permissions(gix::Permissions {
                         config,
-                        ..git::Permissions::default_for_level(git_sec::Trust::Reduced)
+                        ..gix::Permissions::default_for_level(git_sec::Trust::Reduced)
                     });
-                git_open_opts_map.full = git_open_opts_map.full.permissions(git::Permissions {
+                git_open_opts_map.full = git_open_opts_map.full.permissions(gix::Permissions {
                     config,
-                    ..git::Permissions::default_for_level(git_sec::Trust::Full)
+                    ..gix::Permissions::default_for_level(git_sec::Trust::Full)
                 });
 
                 let shared_repo =
@@ -286,7 +285,7 @@ impl<'a> Context<'a> {
                         Ok(repo) => repo,
                         Err(e) => {
                             log::debug!("Failed to find git repo: {e}");
-                            return Err(e);
+                            return Err(Box::new(e));
                         }
                     };
 

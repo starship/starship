@@ -52,6 +52,8 @@ impl<'a> Default for OSConfig<'a> {
                 Type::NetBSD => "🚩 ",
                 Type::NixOS => "❄️ ",
                 Type::OpenBSD => "🐡 ",
+                Type::OpenCloudOS => "☁️ ",
+                Type::openEuler => "🦉 ",
                 Type::openSUSE => "🦎 ",
                 Type::OracleLinux => "🦴 ",
                 Type::Pop => "🍭 ",

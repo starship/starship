@@ -87,7 +87,7 @@ impl<'a> ModuleRenderer<'a> {
     }
 
     /// Sets the config of the underlying context
-    pub fn config(mut self, config: toml::Value) -> Self {
+    pub fn config(mut self, config: toml::Table) -> Self {
         self.context.root_config = StarshipRootConfig::load(&config);
         self.context.config = StarshipConfig {
             config: Some(config),
@@ -167,6 +167,7 @@ impl<'a> ModuleRenderer<'a> {
 
 #[derive(Clone, Copy)]
 pub enum FixtureProvider {
+    Fossil,
     Git,
     Hg,
     Pijul,
@@ -174,6 +175,20 @@ pub enum FixtureProvider {
 
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
+        FixtureProvider::Fossil => {
+            let checkout_db = if cfg!(windows) {
+                "_FOSSIL_"
+            } else {
+                ".fslckout"
+            };
+            let path = tempfile::tempdir()?;
+            fs::OpenOptions::new()
+                .create(true)
+                .write(true)
+                .open(path.path().join(checkout_db))?
+                .sync_all()?;
+            Ok(path)
+        }
         FixtureProvider::Git => {
             let path = tempfile::tempdir()?;
 

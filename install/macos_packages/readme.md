@@ -138,7 +138,7 @@ attempts, run
 xcrun notarytool history --keychain-profile "AC_PASSWORD"
 ```
 
-Find the `id` of the attempt you wish to view, then run one of these commmands:
+Find the `id` of the attempt you wish to view, then run one of these commands:
 
 ```
 xcrun notarytool info <run-id> --keychain-profile "AC_PASSWORD"

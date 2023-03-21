@@ -16,10 +16,13 @@
         <projectSourceUrl>https://github.com/starship/starship</projectSourceUrl>
         <iconUrl>https://starship.rs/icon.png</iconUrl>
         <tags>powershell prompt starship pwsh</tags>
-        <copyright>© 2022 Starship Contributors</copyright>
+        <copyright>© 2023 Starship Contributors</copyright>
         <licenseUrl>https://github.com/starship/starship/blob/master/LICENSE</licenseUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <releaseNotes></releaseNotes>
+        <dependencies>
+            <dependency id="chocolatey" version="0.9.9" />
+        </dependencies>
     </metadata>
     <files>
         <file src="tools\**" target="tools" />

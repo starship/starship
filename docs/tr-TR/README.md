@@ -149,14 +149,14 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   This will change in the future. Only Nushell v0.73+ is supported.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Nushell env dosyanızın sonuna aşağıdakileri ekleyin (Nushell'de `$nu.env-path` komutunu çalıştırarak bulabilirsiniz):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşabilirsiniz) sonuna ekleyin:

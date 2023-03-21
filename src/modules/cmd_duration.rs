@@ -52,9 +52,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 #[cfg(not(feature = "notify"))]
-fn undistract_me<'a, 'b>(
+fn undistract_me<'a>(
     module: Module<'a>,
-    _config: &'b CmdDurationConfig,
+    _config: &CmdDurationConfig,
     _context: &'a Context,
     _elapsed: u128,
 ) -> Module<'a> {
@@ -62,9 +62,9 @@ fn undistract_me<'a, 'b>(
 }
 
 #[cfg(feature = "notify")]
-fn undistract_me<'a, 'b>(
+fn undistract_me<'a>(
     module: Module<'a>,
-    config: &'b CmdDurationConfig,
+    config: &CmdDurationConfig,
     context: &'a Context,
     elapsed: u128,
 ) -> Module<'a> {

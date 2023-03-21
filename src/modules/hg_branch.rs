@@ -41,7 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let topic_graphemes = if let Ok(topic) = get_hg_topic_name(repo_root) {
         truncate_text(&topic, len, config.truncation_symbol)
     } else {
-        String::from("")
+        String::new()
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -309,7 +309,7 @@ mod tests {
 
     fn expect_hg_branch_with_config(
         repo_dir: &Path,
-        config: Option<toml::Value>,
+        config: Option<toml::Table>,
         expectations: &[Expect],
     ) {
         let actual = ModuleRenderer::new("hg_branch")

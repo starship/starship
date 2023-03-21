@@ -15,12 +15,11 @@ let-env PROMPT_COMMAND = {
 # Whether we have config items
 let has_config_items = (not ($env | get -i config | is-empty))
 
-let config = if $has_config_items {
+let-env config = if $has_config_items {
     $env.config | upsert render_right_prompt_on_last_line true
 } else {
     {render_right_prompt_on_last_line: true}
 }
-{config: $config} | load-env
 
 let-env PROMPT_COMMAND_RIGHT = {
     let width = (term size).columns

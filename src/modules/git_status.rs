@@ -445,9 +445,10 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 
     // Get foreign starship to use WSL config
     // https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows/
-    let wslenv = env::var("WSLENV")
-        .map(|e| e + ":STARSHIP_CONFIG/wp")
-        .unwrap_or_else(|_| "STARSHIP_CONFIG/wp".to_string());
+    let wslenv = env::var("WSLENV").map_or_else(
+        |_| "STARSHIP_CONFIG/wp".to_string(),
+        |e| e + ":STARSHIP_CONFIG/wp",
+    );
 
     let out = match create_command(starship_exe)
         .map(|mut c| {

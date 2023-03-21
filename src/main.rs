@@ -2,6 +2,7 @@
 
 use clap::crate_authors;
 use std::io;
+use std::path::PathBuf;
 use std::thread::available_parallelism;
 use std::time::SystemTime;
 
@@ -68,6 +69,9 @@ enum Commands {
         /// The name of preset to be printed
         #[clap(required_unless_present("list"), value_enum)]
         name: Option<print::Preset>,
+        /// Output the preset to a file instead of stdout
+        #[clap(short, long, conflicts_with = "list")]
+        output: Option<PathBuf>,
         /// List out all preset names
         #[clap(short, long)]
         list: bool,
@@ -202,7 +206,7 @@ fn main() {
                 print::module(&module_name, properties);
             }
         }
-        Commands::Preset { name, list } => print::preset_command(name, list),
+        Commands::Preset { name, list, output } => print::preset_command(name, output, list),
         Commands::Config { name, value } => {
             if let Some(name) = name {
                 if let Some(value) = value {

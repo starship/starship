@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.12.0"
+version = "1.13.1"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -29,74 +29,74 @@ The minimal, blazing-fast, and infinitely customizable prompt for any shell! ☄
 """
 
 [features]
-default = ["battery", "notify", "git-repository-max-perf"]
+default = ["battery", "notify", "gix-max-perf"]
 battery = ["starship-battery"]
 config-schema = ["schemars"]
 notify = ["notify-rust"]
 
-# Enables most of the `max-performace` features of the `git_repository` module for better performance.
+# Enables most of the `max-performace` features of the `gix` module for better performance.
 # This can be more difficult to build in some conditions and requires cmake.
-git-repository-max-perf = ["git-features/zlib-ng", "git-repository/fast-sha1"]
+gix-max-perf = ["gix-features/zlib-ng", "gix/fast-sha1"]
 # Slower than `git-repository-max-perf`, but better than the default.
 # Unlike `git-repository-max-perf` this does not require cmake and allows dynamic zlib linking.
-git-repository-faster = ["git-features/zlib-stock", "git-repository/fast-sha1"]
+gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
-chrono = { version = "0.4.23", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.1.1", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.1.0"
+chrono = { version = "0.4.24", default-features = false, features = ["clock", "std", "wasmbind"] }
+clap = { version = "4.1.11", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.1.5"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.4.1"
-git-features = { version = "0.26.1", optional = true }
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-git-repository = { version = "0.33.0", default-features = false, features = ["max-performance-safe"] }
+gix = { version = "0.42.0", default-features = false, features = ["max-performance-safe"] }
+gix-features = { version = "0.28.1", optional = true }
 indexmap = { version = "1.9.2", features = ["serde"] }
 log = { version = "0.4.17", features = ["std"] }
 # nofity-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
-notify-rust = { version = "4.7.0", optional = true }
-nu-ansi-term = "0.46.0"
-once_cell = "1.17.0"
-open = "3.2.0"
+notify-rust = { version = "4.8.0", optional = true }
+nu-ansi-term = "0.47.0"
+once_cell = "1.17.1"
+open = "4.0.1"
 # update os module config and tests when upgrading os_info
-os_info = "3.5.1"
+os_info = "3.6.0"
 path-slash = "0.2.1"
-pest = "2.5.3"
-pest_derive = "2.5.3"
-quick-xml = "0.27.1"
+pest = "2.5.6"
+pest_derive = "2.5.6"
+quick-xml = "0.28.1"
 rand = "0.8.5"
-rayon = "1.6.1"
+rayon = "1.7.0"
 regex = "1.7.1"
 rust-ini = "0.18.0"
-semver = "1.0.16"
-serde = { version = "1.0.152", features = ["derive"] }
-serde_json = "1.0.91"
+semver = "1.0.17"
+serde = { version = "1.0.158", features = ["derive"] }
+serde_json = "1.0.94"
 sha1 = "0.10.5"
-shadow-rs = { version = "0.20.0", default-features = false }
+shadow-rs = { version = "0.21.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.7.9", optional = true }
 strsim = "0.10.0"
-systemstat = "=0.2.2"
-terminal_size = "0.2.3"
-toml = { version = "0.5.10", features = ["preserve_order"] }
-toml_edit = "0.17.1"
-unicode-segmentation = "1.10.0"
+systemstat = "=0.2.3"
+terminal_size = "0.2.5"
+toml = { version = "0.7.3", features = ["preserve_order"] }
+toml_edit = "0.19.7"
+unicode-segmentation = "1.10.1"
 unicode-width = "0.1.10"
 urlencoding = "2.1.2"
 versions = "4.1.0"
-which = "4.3.0"
+which = "4.4.0"
 yaml-rust = "0.4.5"
 
-process_control = { version = "4.0.1", features = ["crossbeam-channel"] }
+process_control = { version = "4.0.2", features = ["crossbeam-channel"] }
 
 guess_host_triple = "0.1.3"
 home = "0.5.4"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
-version = "0.8.11"
+version = "0.8.12"
 optional = true
 features = ["preserve_order", "indexmap"]
 
@@ -104,7 +104,7 @@ features = ["preserve_order", "indexmap"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.44.0"
+version = "0.46.0"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
@@ -114,10 +114,10 @@ features = [
 ]
 
 [target.'cfg(not(windows))'.dependencies]
-nix = { version = "0.26.1", default-features = false, features = ["feature", "fs", "user"] }
+nix = { version = "0.26.2", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.20.0", default-features = false }
+shadow-rs = { version = "0.21.0", default-features = false }
 dunce = "1.0.3"
 
 [target.'cfg(windows)'.build-dependencies]
@@ -125,7 +125,7 @@ winres = "0.1.12"
 
 [dev-dependencies]
 mockall = "0.11"
-tempfile = "3.3.0"
+tempfile = "3.4.0"
 
 [profile.release]
 codegen-units = 1

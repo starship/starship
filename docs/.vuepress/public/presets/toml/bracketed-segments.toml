@@ -49,6 +49,9 @@ format = '\[[$symbol($version)]($style)\]'
 [fennel]
 format = '\[[$symbol($version)]($style)\]'
 
+[fossil_branch]
+format = '\[[$symbol$branch]($style)\]'
+
 [gcloud]
 format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
 
