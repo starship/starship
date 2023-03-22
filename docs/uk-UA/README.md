@@ -15,10 +15,10 @@ features:
   - 
     title: Персоналізація
     details: Кожна дрібничка налаштовується відповідно до ваших потреб, щоб зробити командний рядок аскетичним чи багатофункціональним, таким, яким ви б хотіли б його бачити.
-footer: ISC Licensed | Copyright © 2019-present Starship Contributors
+footer: Ліцензія ISC | Авторське право © 2019-по сьогодні Учасники Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки! Показує потрібну інформацію залишаючись блискучим та мінімальним. Швидке встановлення доступне для Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd і PowerShell.
 ---
 
 <div class="center">
@@ -28,40 +28,40 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
   </video>
 </div>
 
-### Передумови
+### Вимоги
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal.
+- A Встановлений та увімкнений шрифт [Nerd Font](https://www.nerdfonts.com/) у вашому терміналі.
 
-### Quick Install
+### Швидке встановлення
 
-1. Install the **starship** binary:
+1. Встановіть **starship**:
 
 
-   #### Install Latest Version
+   #### Встановлення останньої версії
 
-   With Shell:
+   З оболонки:
 
    ```sh
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+   Для оновлення Starship перезапустіть команду вказану вище. Це допоможе замінити поточну версію не чіпаючи налаштувань Starship.
 
 
-   #### Install via Package Manager
+   #### Встановлення за допомогою пакетних менеджерів
 
-   With [Homebrew](https://brew.sh/):
+   [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
-   With [Winget](https://github.com/microsoft/winget-cli):
+   [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
    winget install starship
    ```
 
-1. Add the init script to your shell's config file:
+1. Додайте init скрипт до конфігураційного файлу оболонки:
 
 
    #### Bash
@@ -99,7 +99,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Powershell
 
-   Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
+   Додайте наступний рядок в кінець `Microsoft.PowerShell_profile.ps1`. Ви можете перевірити розташування цього файлу, звернувшись до змінної `$PROFILE` у PowerShell. Зазвичай це `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` або `~/.config/powershell/Microsoft.PowerShell_profile.ps1` у -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -121,7 +121,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Підтримуються лише elv0.18 або вище.
 
    :::
 
@@ -149,7 +149,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.73+ is supported.
+   Це зміниться в майбутньому. Підтримується лише Nushell v0.73+.
 
    :::
 
@@ -178,7 +178,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   Вам потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) разом з Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Вам потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) разом з Cmd. Додайте наступне у файл `starship.lua` і розмістіть цей файл у теці скриптів Cline:
 
    ```lua
    -- starship.lua
