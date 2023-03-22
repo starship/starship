@@ -3,18 +3,18 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!
-actionText: Get Started →
+actionText: Початок роботи →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    title: Сумісність на першому місці
+    details: Працює з більшістю оболонок у всіх популярних операційних системах. Можна використовувати будь-де!
   - 
-    title: Rust-Powered
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    title: Rust під капотом
+    details: Використовує найкращу в класі швидкість та безпеку застосунків створених за допомогою Rust, що робить ваш командний рядок швидким та надійним.
   - 
-    title: Customizable
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
+    title: Персоналізація
+    details: Кожна дрібничка налаштовується відповідно до ваших потреб, щоб зробити командний рядок аскетичним чи багатофункціональним, таким, яким ви б хотіли б його бачити.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
@@ -153,7 +153,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Додайте наступне в кінець вашого файлу env (його можна знайти за допомогою змінної `$nu.env-path` в Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
