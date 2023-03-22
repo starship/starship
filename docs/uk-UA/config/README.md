@@ -1,121 +1,121 @@
 # Налаштування
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Щоб почати налаштування starship, створіть наступний файл: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Всі налаштування для starship виконуються в цьому [TOML](https://github.com/toml-lang/toml) файлі:
 
 ```toml
-# Get editor completions based on the config schema
+# Отримання автозавершення вводу команд з config-schema.json
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# Додавати порожні рядки між командними рядками
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# Заміняти символ '❯' в командному рядку на символ  '➜'
+[character] # Назва модуля, який ми налаштовуємо – 'character'
+success_symbol = '[➜](bold green)' # Частина 'success_symbol' буде використовувати символ '➜' підсвічений значенням 'bold green'
 
-# Disable the package module, hiding it from the prompt completely
+# Вимкнути модуль package, повністю приховавши його в командному рядку
 [package]
 disabled = true
 ```
 
-### Config File Location
+### Розташування файлу налаштувань
 
-You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
+Ви можете змінити типове розташування файлу налаштувань за допомогою змінної середовища `STARSHIP_CONFIG`:
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Так само і в PowerShell (Windows), можна додати цей рядок до `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Або для Cmd (Windows), додайте рядок до вашого файлу `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
-### Logging
+### Ведення журналу
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+Стандартно starship виводить попередження та інформацію про помилки у файл `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, де ключ сесії відповідає екземпляру вашого термінала. Це, однак, може бути змінено за допомогою змінної середовища `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
 ```
 
-Equivalently in PowerShell (Windows) would be adding this line to your `$PROFILE`:
+Так само і в PowerShell (Windows), можна додати цей рядок до `$PROFILE`:
 
 ```powershell
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Або для Cmd (Windows), додайте рядок до вашого файлу `starship.lua`:
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 ```
 
-### Terminology
+### Термінологія
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**Модуль**: Компонент командного рядка, що надає інформацію на основі контексту з вашої ОС. Наприклад, модуль "nodejs" показує версію Node.js, яка встановлена на вашому компʼютері, якщо ваша поточна тека є проєктом Node.js.
 
-**Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
+**Змінна**: менші субкомпоненти, що містять інформацію, що надається модулем. Наприклад, змінна "version" в модулі "nodejs" містить поточну версію Node.js.
 
-By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
+Згідно з правилами, більшість модулів мають префікс стандартного кольору термінала (наприклад, `via` в "nodejs") та порожнє місце як суфікс.
 
-### Strings
+### Рядки
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+В синтаксисі TOML [текстові значення](https://toml.io/en/v1.0.0#string) оголошуються за допомогою лапок `'`, `"`, `'''`, or `"""`.
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+Наступні символи синтаксису Starship мають спеціальне призначення у форматуванні рядків і повинні бути екрановані, якщо ви хочете показувати їх як символи: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
-| ------ | ------------------------- | ------------------------------------------------------ |
-| `'`    | literal string            | less escaping                                          |
-| `"`    | string                    | more escaping                                          |
-| `'''`  | multi-line literal string | less escaping                                          |
-| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
+| Символ | Тип                    | Примітки                                                              |
+| ------ | ---------------------- | --------------------------------------------------------------------- |
+| `'`    | літерал                | менш екранований                                                      |
+| `"`    | рядок                  | більш екранований                                                     |
+| `'''`  | багаторядковий літерал | менш екранований                                                      |
+| `"""`  | багаторядковий рядок   | більш екранований, нові рядки в оголошеннях можуть бути проігноровані |
 
-For example:
+Наприклад:
 
 ```toml
-# literal string
+# літерал
 format = '☺\☻ '
 
-# regular string
+# звичайний рядок
 format = "☺\\☻ "
 
-# escaping Starship symbols
+# екрановані службові символи Starship
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+При використанні символів розриву рядків можна використовувати багаторядкові оголошення. Наприклад, якщо ви хочете вивести символ `$` на новий рядок, такі значення для `format` є еквівалентними:
 
 ```toml
-# with literal string
+# для літералів
 format = '''
 
 \$'''
 
-# with multiline basic string
+# для звичайних багаторядкових рядків
 format = """
 
 \\$"""
 
-# with basic string
+# для звичайних рядків
 format = "\n\\$"
 ```
 
-In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+У звичайних рядках, символ нового рядка можна використовувати наступним чином, щоб уникнути його показу.
 
 ```toml
 format = """
@@ -128,52 +128,52 @@ line2
 """
 ```
 
-### Format Strings
+### Формат рядків
 
-Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
+Формат рядків це формат, з яким модуль виводить всі змінні. У більшості модулів є запис з назвою `format`, який налаштовує формат виводу модуля. Можна використовувати текст, змінні та текстові групи у форматуванні рядків.
 
-#### Variable
+#### Змінна
 
-A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
+Змінна починається з символу `$`, за яким йде назва змінної. Назва змінною може складатись лише з літер та цифр та символу `_`.
 
-For example:
+Наприклад:
 
-- `'$version'` is a format string with a variable named `version`.
-- `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
-- `'$git_branch $git_commit'` has the two variables separated with a space.
+- `'$version` – це форматований рядок зі змінною з назвою `version`.
+- `$git_branch$git_commit'` – рядок з двома змінними `git_branch` і `git_commit`.
+- `'$git_branch $git_commit'` має дві змінні, розділені пробілом.
 
-#### Text Group
+#### Текстова група
 
-A text group is made up of two different parts.
+Текстова група складається з двох різних частин.
 
-The first part, which is enclosed in a `[]`, is a [format string](#format-strings). You can add texts, variables, or even nested text groups in it.
+Перша частина, яка вкладена у квадратні дужки `[]` – це [форматований рядок](#format-strings). Ви можете додати текст, змінні або навіть вкладені текстові групи.
 
-In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
+В наступній частині, що вкладена в круглі дужки `()`, міститься [опис стилю рядка](#style-strings). Ця частина використовується для стилізації першої частини.
 
-For example:
+Наприклад:
 
-- `'[on](red bold)'` will print a string `on` with bold text colored red.
-- `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
+- `'[on](red bold)'` – виведе рядок `on` жирним шрифтом підсвічений червоним.
+- `'[⌘ $version](bold green)'` – виведе символ `⌘` разом з вмістом змінної  `version` жирним шрифтом підсвіченим зеленим.
+- `'[a [b](red) c](green)'` – виведе `a b c`, де `b` – червона, а `a` та `c` – зелені.
 
-#### Style Strings
+#### Стилі рядків
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Більшість модулів в starship дозволяють вам налаштовувати стилі їх виводу. Це робиться за допомогою запису (зазвичай `style`), який є рядком, що вказує на конфігурацію. Ось деякі приклади стилів поряд з тим, що вони роблять. За деталями щодо повного синтаксису зверніться до [Довідника з розширеного налаштування](/advanced-config/).
 
-- `'fg:green bg:blue'` sets green text on a blue background
-- `'bg:blue fg:bright-green'` sets bright green text on a blue background
-- `'bold fg:27'` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `'underline bg:#bf5700'` sets underlined text on a burnt orange background
-- `'bold italic fg:purple'` sets bold italic purple text
-- `''` explicitly disables all styling
+- `'fg:green bg:blue'` – зелений текст на блакитному фоні
+- `'bg:blue fg:bright-green'` – яскраво зелений текст на блакитному фоні
+- `'bold fg:27'` – жирний текст з [ANSI кольором](https://i.stack.imgur.com/KTSQa.png) 27
+- `'underline bg:#bf5700'` – підкреслений текст на яскраво помаранчевому фоні
+- `'bold italic fg:purple'` – жирний курсив пурпурового кольору
+- `''` – явним чином вимикає всі стилі
 
-Note that what styling looks like will be controlled by your terminal emulator. For example, some terminal emulators will brighten the colors instead of bolding text, and some color themes use the same values for the normal and bright colors. Also, to get italic text, your terminal must support italics.
+Зверніть увагу, що те, як виглядатиме стиль, як буде залежати від вашого емулятора термінала. Наприклад, деякі емулятори терміналів будуть виділяти кольори замість показу жирного тексту, а також деякі кольорові теми використовують однакові значення для нормального і яскравого кольорів. Також, щоб отримати курсив, ваш термінал має містити його підтримку.
 
-#### Conditional Format Strings
+#### Умовне форматування
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+Наприклад:
 
 - `'(@$region)'` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
@@ -365,7 +365,7 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 
 ### Variables
 
-| Variable  | Example          | Description                                 |
+| Змінна    | Example          | Description                                 |
 | --------- | ---------------- | ------------------------------------------- |
 | region    | `ap-northeast-1` | The current AWS region                      |
 | profile   | `astronauts`     | The current AWS profile                     |
@@ -426,7 +426,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Options
 
-| Variable   | Default                                  | Description                                |
+| Змінна     | Default                                  | Description                                |
 | ---------- | ---------------------------------------- | ------------------------------------------ |
 | `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
 | `symbol`   | `'ﴃ '`                                   | The symbol used in the format.             |
@@ -547,7 +547,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | `version` | `v1.0.0` | The version of `buf`                 |
 | `symbol`  |          | Mirrors the value of option `symbol` |
@@ -586,7 +586,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.1.4` | The version of `bun`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -623,12 +623,12 @@ The `c` module shows some information about your C compiler. By default the modu
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| name     | clang   | The name of the compiler             |
-| version  | 13.0.0  | The version of the compiler          |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style    |         | Mirrors the value of option `style`  |
+| Змінна  | Example | Description                          |
+| ------- | ------- | ------------------------------------ |
+| name    | clang   | The name of the compiler             |
+| version | 13.0.0  | The version of the compiler          |
+| symbol  |         | Mirrors the value of option `symbol` |
+| style   |         | Mirrors the value of option `style`  |
 
 NB that `version` is not in the default format.
 
@@ -681,9 +681,9 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Variables
 
-| Variable | Example | Description                                                                                              |
-| -------- | ------- | -------------------------------------------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
+| Змінна | Example | Description                                                                                              |
+| ------ | ------- | -------------------------------------------------------------------------------------------------------- |
+| symbol |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Examples
 
@@ -738,7 +738,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v3.17.3` | The version of cmake                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -768,7 +768,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Змінна    | Example    | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v3.1.2.0` | The version of `cobol`               |
 | symbol    |            | Mirrors the value of option `symbol` |
@@ -803,7 +803,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Variables
 
-| Variable  | Example  | Description                             |
+| Змінна    | Example  | Description                             |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Mirrors the value of option `style`     |
@@ -843,7 +843,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Variables
 
-| Variable    | Example      | Description                          |
+| Змінна      | Example      | Description                          |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current conda environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
@@ -875,7 +875,7 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Variables
 
-| Variable  | Example             | Description                          |
+| Змінна    | Example             | Description                          |
 | --------- | ------------------- | ------------------------------------ |
 | name      | `fedora-toolbox:35` | The name of the container            |
 | symbol    |                     | Mirrors the value of option `symbol` |
@@ -914,7 +914,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.32.1` | The version of `crystal`             |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -952,7 +952,7 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.2.0` | The version of `daml`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -992,7 +992,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.8.4` | The version of `dart`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1030,7 +1030,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.8.3` | The version of `deno`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1094,7 +1094,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Variables
 
-| Variable  | Example               | Description                         |
+| Змінна    | Example               | Description                         |
 | --------- | --------------------- | ----------------------------------- |
 | path      | `'D:/Projects'`       | The current directory path          |
 | style\* | `'black bold dimmed'` | Mirrors the value of option `style` |
@@ -1106,7 +1106,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 Let us consider the path `/path/to/home/git_repo/src/lib`
 
-| Variable           | Example               | Description                             |
+| Змінна             | Example               | Description                             |
 | ------------------ | --------------------- | --------------------------------------- |
 | before_root_path | `'/path/to/home/'`    | The path before git root directory path |
 | repo_root          | `'git_repo'`          | The git root directory name             |
@@ -1145,7 +1145,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Variables
 
-| Variable  | Example        | Description                          |
+| Змінна    | Example        | Description                          |
 | --------- | -------------- | ------------------------------------ |
 | context   | `test_context` | The current docker context           |
 | symbol    |                | Mirrors the value of option `symbol` |
@@ -1199,7 +1199,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variables
 
-| Variable  | Example          | Description                                                        |
+| Змінна    | Example          | Description                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
@@ -1240,7 +1240,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Variables
 
-| Variable    | Example | Description                          |
+| Змінна      | Example | Description                          |
 | ----------- | ------- | ------------------------------------ |
 | version     | `v1.10` | The version of `elixir`              |
 | otp_version |         | The otp version of `elixir`          |
@@ -1283,7 +1283,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.19.1` | The version of `elm`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1341,7 +1341,7 @@ default = 'unknown user'
 
 ### Variables
 
-| Variable  | Example                                     | Description                                |
+| Змінна    | Example                                     | Description                                |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
@@ -1393,7 +1393,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v22.1.3` | The version of `erlang`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1431,7 +1431,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.1` | The version of `fennel`              |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1494,7 +1494,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | branch    | `trunk` | The active Fossil branch             |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -1530,7 +1530,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Variables
 
-| Variable  | Example       | Description                                                        |
+| Змінна    | Example       | Description                                                        |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
 | account   | `foo`         | The current GCP profile                                            |
@@ -1606,7 +1606,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Variable      | Example  | Description                                                                                            |
+| Змінна        | Example  | Description                                                                                            |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
@@ -1647,7 +1647,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| Variable  | Example   | Description                                  |
+| Змінна    | Example   | Description                                  |
 | --------- | --------- | -------------------------------------------- |
 | hash      | `b703eb3` | The current git commit hash                  |
 | tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
@@ -1686,7 +1686,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Variables
 
-| Variable         | Example    | Description                         |
+| Змінна           | Example    | Description                         |
 | ---------------- | ---------- | ----------------------------------- |
 | state            | `REBASING` | The current state of the repo       |
 | progress_current | `1`        | The current operation progress      |
@@ -1727,7 +1727,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable          | Example | Description                                 |
+| Змінна            | Example | Description                                 |
 | ----------------- | ------- | ------------------------------------------- |
 | added             | `1`     | The current number of added lines           |
 | deleted           | `2`     | The current number of deleted lines         |
@@ -1781,7 +1781,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 The following variables can be used in `format`:
 
-| Variable       | Description                                                                                                   |
+| Змінна         | Description                                                                                                   |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
 | `all_status`   | Shortcut for`$conflicted$stashed$deleted$renamed$modified$staged$untracked`                                   |
 | `ahead_behind` | Displays `diverged`, `ahead`, `behind` or `up_to_date` format string based on the current status of the repo. |
@@ -1798,16 +1798,16 @@ The following variables can be used in `format`:
 
 The following variables can be used in `diverged`:
 
-| Variable       | Description                                    |
+| Змінна         | Description                                    |
 | -------------- | ---------------------------------------------- |
 | `ahead_count`  | Number of commits ahead of the tracking branch |
 | `behind_count` | Number of commits behind the tracking branch   |
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variable | Description              |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Змінна  | Description              |
+| ------- | ------------------------ |
+| `count` | Show the number of files |
 
 ### Example
 
@@ -1877,7 +1877,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.12.1` | The version of `go`                  |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1909,7 +1909,7 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
@@ -1953,11 +1953,11 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ### Variables
 
-| Variable | Example  | Description                          |
-| -------- | -------- | ------------------------------------ |
-| version  | `v7.5.1` | The version of `gradle`              |
-| symbol   |          | Mirrors the value of option `symbol` |
-| style*   |          | Mirrors the value of option `style`  |
+| Змінна  | Example  | Description                          |
+| ------- | -------- | ------------------------------------ |
+| version | `v7.5.1` | The version of `gradle`              |
+| symbol  |          | Mirrors the value of option `symbol` |
+| style*  |          | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
@@ -1984,7 +1984,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable       | Example     | Description                                                                             |
+| Змінна         | Example     | Description                                                                             |
 | -------------- | ----------- | --------------------------------------------------------------------------------------- |
 | version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
 | snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
@@ -2017,7 +2017,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v4.2.5` | The version of `haxe`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2056,7 +2056,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v3.1.1` | The version of `helm`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2090,7 +2090,7 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable   | Example    | Description                                           |
+| Змінна     | Example    | Description                                           |
 | ---------- | ---------- | ----------------------------------------------------- |
 | hostname   | `computer` | The hostname of the computer                          |
 | style\*  |            | Mirrors the value of option `style`                   |
@@ -2132,7 +2132,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | version   | `v14`   | The version of `java`                |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -2187,7 +2187,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | number    | `1`     | The number of jobs                   |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -2229,7 +2229,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.4.0` | The version of `julia`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2268,7 +2268,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.4.21` | The version of `kotlin`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -2321,7 +2321,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 
 ### Variables
 
-| Variable  | Example              | Description                              |
+| Змінна    | Example              | Description                              |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-context`   | The current kubernetes context name      |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
@@ -2414,7 +2414,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### Variables
 
-| Variable  | Example      | Description                         |
+| Змінна    | Example      | Description                         |
 | --------- | ------------ | ----------------------------------- |
 | localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
 | style\* |              | Mirrors the value of option `style` |
@@ -2456,7 +2456,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.4.0` | The version of `lua`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2497,7 +2497,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable         | Example       | Description                                                        |
+| Змінна           | Example       | Description                                                        |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
@@ -2539,7 +2539,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Змінна    | Example    | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | project   | `starship` | The current Meson project name       |
 | symbol    | `🐏`        | Mirrors the value of option `symbol` |
@@ -2576,7 +2576,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | branch    | `master`  | The active mercurial branch          |
 | topic     | `feature` | The active mercurial topic           |
@@ -2620,7 +2620,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.0` | The version of `nimc`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2657,7 +2657,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | state     | `pure`  | The state of the nix-shell           |
 | name      | `lorri` | The name of the nix-shell            |
@@ -2706,7 +2706,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Змінна    | Example    | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v13.12.0` | The version of `node`                |
 | symbol    |            | Mirrors the value of option `symbol` |
@@ -2751,7 +2751,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Variables
 
-| Variable         | Example      | Description                                                       |
+| Змінна           | Example      | Description                                                       |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
@@ -2789,7 +2789,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.44.0` | The version of `opa`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -2821,7 +2821,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | cloud     | `corp`  | The current OpenStack cloud          |
 | project   | `dev`   | The current OpenStack project        |
@@ -2913,7 +2913,7 @@ Windows = "🪟 "
 
 ### Variables
 
-| Variable  | Example      | Description                                                        |
+| Змінна    | Example      | Description                                                        |
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
@@ -2977,7 +2977,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.0.0` | The version of your package          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3019,7 +3019,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Змінна    | Example   | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v5.26.1` | The version of `perl`                |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -3057,7 +3057,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v7.3.8` | The version of `php`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3117,7 +3117,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Змінна    | Example    | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `pulumi`              |
 | stack     | `dev`      | The current Pulumi stack             |
@@ -3169,7 +3169,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `0.13.5` | The version of `purescript`          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3230,7 +3230,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 ### Variables
 
-| Variable     | Example         | Description                                |
+| Змінна       | Example         | Description                                |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `'v3.8.1'`      | The version of `python`                    |
 | symbol       | `'🐍 '`          | Mirrors the value of option `symbol`       |
@@ -3302,11 +3302,11 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 ### Variables
 
-| Variable | Example       | Description                          |
-| -------- | ------------- | ------------------------------------ |
-| version  | `v4.0.5`      | The version of `R`                   |
-| symbol   |               | Mirrors the value of option `symbol` |
-| style    | `'blue bold'` | Mirrors the value of option `style`  |
+| Змінна  | Example       | Description                          |
+| ------- | ------------- | ------------------------------------ |
+| version | `v4.0.5`      | The version of `R`                   |
+| symbol  |               | Mirrors the value of option `symbol` |
+| style   | `'blue bold'` | Mirrors the value of option `style`  |
 
 ### Example
 
@@ -3339,7 +3339,7 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 
 ### Variables
 
-| Variable   | Example | Description                          |
+| Змінна     | Example | Description                          |
 | ---------- | ------- | ------------------------------------ |
 | version    | `v6.d`  | The version of `raku`                |
 | vm_version | `moar`  | The version of VM `raku` is built on |
@@ -3376,7 +3376,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `red`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3420,7 +3420,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `ruby`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3459,7 +3459,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variables
 
-| Variable  | Example           | Description                                  |
+| Змінна    | Example           | Description                                  |
 | --------- | ----------------- | -------------------------------------------- |
 | version   | `v1.43.0-nightly` | The version of `rustc`                       |
 | numver    | `1.51.0`          | The numeric component of the `rustc` version |
@@ -3501,7 +3501,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `2.13.5` | The version of `scala`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3549,7 +3549,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable  | Default | Description                                                |
+| Змінна    | Default | Description                                                |
 | --------- | ------- | ---------------------------------------------------------- |
 | indicator |         | Mirrors the value of `indicator` for currently used shell. |
 | style\* |         | Mirrors the value of option `style`.                       |
@@ -3586,7 +3586,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | shlvl     | `3`     | The current value of `SHLVL`         |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -3620,7 +3620,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### Variables
 
-| Variable  | Example      | Description                          |
+| Змінна    | Example      | Description                          |
 | --------- | ------------ | ------------------------------------ |
 | env       | `centos.img` | The current Singularity image        |
 | symbol    |              | Mirrors the value of option `symbol` |
@@ -3653,7 +3653,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 ### Variables
 
-| Variable    | Example      | Description                          |
+| Змінна      | Example      | Description                          |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current spack environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
@@ -3702,7 +3702,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable       | Example | Description                                                                                |
+| Змінна         | Example | Description                                                                                |
 | -------------- | ------- | ------------------------------------------------------------------------------------------ |
 | status         | `127`   | The exit code of the last command                                                          |
 | hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
@@ -3753,7 +3753,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
@@ -3802,7 +3802,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.2.4` | The version of `swift`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3849,7 +3849,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Змінна    | Example    | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `terraform`           |
 | workspace | `default`  | The current Terraform workspace      |
@@ -3904,7 +3904,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 ### Variables
 
-| Variable  | Example    | Description                         |
+| Змінна    | Example    | Description                         |
 | --------- | ---------- | ----------------------------------- |
 | time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
@@ -3951,10 +3951,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Variables
 
-| Variable | Example      | Description                                                                                 |
-| -------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style`  | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `'matchai'`  | The currently logged-in user ID.                                                            |
+| Змінна  | Example      | Description                                                                                 |
+| ------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `style` | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `user`  | `'matchai'`  | The currently logged-in user ID.                                                            |
 
 ### Example
 
@@ -3990,7 +3990,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Variables
 
-| Variable  | Example          | Description                          |
+| Змінна    | Example          | Description                          |
 | --------- | ---------------- | ------------------------------------ |
 | version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
 | symbol    |                  | Mirrors the value of option `symbol` |
@@ -4029,7 +4029,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Змінна    | Example | Description                          |
 | --------- | ------- | ------------------------------------ |
 | version   | `v0.2`  | The version of `v`                   |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -4058,7 +4058,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Variable  | Example                                     | Description                          |
+| Змінна    | Example                                     | Description                          |
 | --------- | ------------------------------------------- | ------------------------------------ |
 | repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
 | symbol    |                                             | Mirrors the value of option `symbol` |
@@ -4096,7 +4096,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Змінна    | Example  | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.6.0` | The version of `zig`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -4172,7 +4172,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 ### Variables
 
-| Variable  | Description                            |
+| Змінна    | Description                            |
 | --------- | -------------------------------------- |
 | output    | The output of shell command in `shell` |
 | symbol    | Mirrors the value of option `symbol`   |
