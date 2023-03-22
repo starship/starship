@@ -6,7 +6,7 @@ If toolset files are identified the toolset icon is displayed. If the toolset is
 
 ![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
 
-### Configuration
+### Налаштування
 
 ```sh
 starship preset no-empty-icons -o ~/.config/starship.toml
