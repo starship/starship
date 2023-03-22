@@ -1,0 +1,11 @@
+# See https://github.com/crate-ci/typos/blob/master/docs/reference.md to configure typos
+[default.extend-words]
+mis = "mis"
+Nd = "Nd"
+edn = "edn"
+esy = "esy"
+numver = "numver"
+afe = "afe"
+extentions = "extentions" # TODO: should be extensions
+[files]
+extend-exclude = ["CHANGELOG.md", "docs/*"]

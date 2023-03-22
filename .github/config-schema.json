@@ -475,7 +475,7 @@
     },
     "fennel": {
       "default": {
-        "detect_extentions": [
+        "detect_extensions": [
           "fnl"
         ],
         "detect_files": [],
@@ -2955,7 +2955,7 @@
           "default": true,
           "type": "boolean"
         },
-        "detect_extentions": {
+        "detect_extensions": {
           "default": [
             "fnl"
           ],
