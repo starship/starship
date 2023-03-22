@@ -6,7 +6,7 @@ This preset changes the symbols for each module into plain text. Great if you do
 
 ![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png)
 
-### Configuration
+### Налаштування
 
 ```sh
 starship preset plain-text-symbols -o ~/.config/starship.toml
