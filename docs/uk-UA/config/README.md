@@ -179,13 +179,13 @@ line2
 - `'(якийсь текст)'` ніколи не буде показуватись, через те, що немає змінних, загорнутих в дужки.
 - Коли `$combined` є посиланням для `\[$a$b\]`, `'($combined)'` не показуватиме нічого, лише якщо `$a` і `$b` одночасно містять `None`. Це працює так само й для `'(\[$a$b\] )'`.
 
-### Negative matching
+### Негативний збіг
 
-Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading '!' character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+Багато модулів мають змінні `detect_extensions`, `detect_files` та `detect_folders`. Вони отримують перелік рядків для порівняння, чи в них є збіги, чи – немає. Символ для перевірки "негативного збігу"  (негативний збіг – те що не має мати збігу з вказаним значенням) – '!' знак оклику, вказується на початку параметра, що перевіряється. Наявність _будь-якого_ індикатора негативного збігу в теці призведе до того, що результат роботи модуля буде перевірятись на негативний збіг.
 
-Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
+Розширення зіставляються як із символами після останньої крапки в назві файлу, так і з символами після першої крапки в назві файлу. Наприклад, `foo.bar.tar.gz` буде збігатись з `bar.tar.gz` і `gz` у змінній `detect_extensions`. Файли, назва яких починається з крапки, взагалі не вважаються такими, що мають розширення.
 
-To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+Щоб побачити, як це працює на практиці, ви можете шукати збіг для файлів TypeScript, але не для MPEG Transport Stream, таким чином:
 
 ```toml
 detect_extensions = ['ts', '!video.ts', '!audio.ts']
@@ -197,15 +197,15 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 
 ### Параметри
 
-| Параметр          | Стандартно                     | Опис                                                                                                                                                                                            |
-| ----------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Налаштовує формат командного рядка.                                                                                                                                                             |
-| `right_format`    | `''`                           | Див [Увімкнути командний рядок праворуч](/advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                           | Тайм-аут для сканування файлів (у мілісекундах).                                                                                                                                                |
-| `command_timeout` | `500`                          | Тайм-аут для команд, виконаних starship (у мілісекундах).                                                                                                                                       |
-| `add_newline`     | `true`                         | Вставити порожній рядок між командними рядками в оболонці.                                                                                                                                      |
-| `palette`         | `''`                           | Встановлює кольорову палітру використовуючи `palettes`.                                                                                                                                         |
-| `palettes`        | `{}`                           | Колекція кольорових палітр, для призначення [кольорів](/advanced-config/#style-strings) до назв визначених користувачем. Note that color palettes cannot reference their own color definitions. |
+| Параметр          | Стандартно                     | Опис                                                                                                                                                                                                                |
+| ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Налаштовує формат командного рядка.                                                                                                                                                                                 |
+| `right_format`    | `''`                           | Див [Увімкнути командний рядок праворуч](/advanced-config/#enable-right-prompt)                                                                                                                                     |
+| `scan_timeout`    | `30`                           | Тайм-аут для сканування файлів (у мілісекундах).                                                                                                                                                                    |
+| `command_timeout` | `500`                          | Тайм-аут для команд, виконаних starship (у мілісекундах).                                                                                                                                                           |
+| `add_newline`     | `true`                         | Вставити порожній рядок між командними рядками в оболонці.                                                                                                                                                          |
+| `palette`         | `''`                           | Встановлює кольорову палітру використовуючи `palettes`.                                                                                                                                                             |
+| `palettes`        | `{}`                           | Колекція кольорових палітр, для призначення [кольорів](/advanced-config/#style-strings) до назв визначених користувачем. Зверніть увагу, що кольорові палітри не можуть посилатися на їх власні визначення кольору. |
 
 ### Приклад
 
