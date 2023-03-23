@@ -8,7 +8,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 ### Передумови
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- A Встановлений та увімкнений шрифт [Nerd Font](https://www.nerdfonts.com/) у вашому терміналі
 
 ### Налаштування
 
