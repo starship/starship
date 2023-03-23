@@ -81,7 +81,7 @@ strsim = "0.10.0"
 systemstat = "=0.2.3"
 terminal_size = "0.2.5"
 toml = { version = "0.7.3", features = ["preserve_order"] }
-toml_edit = "0.19.7"
+toml_edit = "0.19.8"
 unicode-segmentation = "1.10.1"
 unicode-width = "0.1.10"
 urlencoding = "2.1.2"
