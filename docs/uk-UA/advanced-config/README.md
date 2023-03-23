@@ -207,7 +207,7 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -239,7 +239,7 @@ Note: Continuation prompts are only available in the following shells:
 - `zsh`
 - `PowerShell`
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
