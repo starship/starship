@@ -803,12 +803,12 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Variables
 
-| Змінна    | Example  | Опис                                    |
+| Змінна    | Приклад  | Опис                                    |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Mirrors the value of option `style`     |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 ### Приклад
 
@@ -914,15 +914,15 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Variables
 
-| Змінна    | Example   | Опис                                 |
+| Змінна    | Приклад   | Опис                                 |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.32.1` | The version of `crystal`             |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -952,15 +952,15 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.2.0` | The version of `daml`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -992,15 +992,15 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.8.4` | The version of `dart`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1030,13 +1030,13 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.8.3` | The version of `deno`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1094,19 +1094,19 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Variables
 
-| Змінна    | Example               | Опис                                |
+| Змінна    | Приклад               | Опис                                |
 | --------- | --------------------- | ----------------------------------- |
 | path      | `'D:/Projects'`       | The current directory path          |
 | style\* | `'black bold dimmed'` | Mirrors the value of option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 <details>
 <summary>The git repos have additional variables.</summary>
 
 Let us consider the path `/path/to/home/git_repo/src/lib`
 
-| Змінна             | Example               | Опис                                    |
+| Змінна             | Приклад               | Опис                                    |
 | ------------------ | --------------------- | --------------------------------------- |
 | before_root_path | `'/path/to/home/'`    | The path before git root directory path |
 | repo_root          | `'git_repo'`          | The git root directory name             |
@@ -1116,7 +1116,7 @@ Let us consider the path `/path/to/home/git_repo/src/lib`
 
 </details>
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1145,15 +1145,15 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Variables
 
-| Змінна    | Example        | Опис                                 |
+| Змінна    | Приклад        | Опис                                 |
 | --------- | -------------- | ------------------------------------ |
 | context   | `test_context` | The current docker context           |
 | symbol    |                | Mirrors the value of option `symbol` |
 | style\* |                | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1199,16 +1199,16 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variables
 
-| Змінна    | Example          | Опис                                                               |
+| Змінна    | Приклад          | Опис                                                               |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
 | symbol    |                  | Mirrors the value of option `symbol`                               |
 | style\* |                  | Mirrors the value of option `style`                                |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1240,16 +1240,16 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Variables
 
-| Змінна      | Example | Опис                                 |
+| Змінна      | Приклад | Опис                                 |
 | ----------- | ------- | ------------------------------------ |
 | version     | `v1.10` | The version of `elixir`              |
 | otp_version |         | The otp version of `elixir`          |
 | symbol      |         | Mirrors the value of option `symbol` |
 | style\*   |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1283,15 +1283,15 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Variables
 
-| Змінна    | Example   | Опис                                 |
+| Змінна    | Приклад   | Опис                                 |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.19.1` | The version of `elm`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1330,26 +1330,26 @@ default = 'unknown user'
 
 ### Параметри
 
-| Параметр      | Стандартно                     | Опис                                                                         |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | The symbol used before displaying the variable value.                        |
-| `variable`    |                                | The environment variable to be displayed.                                    |
-| `default`     |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | Disables the `env_var` module.                                               |
+| Параметр     | Стандартно                     | Опис                                                                         |
+| ------------ | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`     | `""`                           | The symbol used before displaying the variable value.                        |
+| `змінна`     |                                | The environment variable to be displayed.                                    |
+| `стандартно` |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`     | `"with [$env_value]($style) "` | The format for the module.                                                   |
+| `опис`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `disabled`   | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
 
-| Змінна    | Example                                     | Опис                                       |
+| Змінна    | Приклад                                     | Опис                                       |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
 | style\* | `black bold dimmed`                         | Mirrors the value of option `style`        |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1393,15 +1393,15 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Variables
 
-| Змінна    | Example   | Опис                                 |
+| Змінна    | Приклад   | Опис                                 |
 | --------- | --------- | ------------------------------------ |
 | version   | `v22.1.3` | The version of `erlang`              |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1431,15 +1431,15 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.1` | The version of `fennel`              |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1460,7 +1460,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 | `style`    | `'bold black'` | The style for the module.         |
 | `disabled` | `false`        | Disables the `fill` module        |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1494,15 +1494,15 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | branch    | `trunk` | The active Fossil branch             |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1530,17 +1530,17 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 
 ### Variables
 
-| Змінна    | Example       | Опис                                                               |
+| Змінна    | Приклад       | Опис                                                               |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
 | account   | `foo`         | The current GCP profile                                            |
 | domain    | `example.com` | The current GCP profile domain                                     |
 | project   |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| active    | `стандартно`  | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | Mirrors the value of option `symbol`                               |
 | style\* |               | Mirrors the value of option `style`                                |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 ### Приклади
 
@@ -1606,7 +1606,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Змінна        | Example  | Опис                                                                                                   |
+| Змінна        | Приклад  | Опис                                                                                                   |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
@@ -1614,9 +1614,9 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | symbol        |          | Mirrors the value of option `symbol`                                                                   |
 | style\*     |          | Mirrors the value of option `style`                                                                    |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1647,15 +1647,15 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| Змінна    | Example   | Опис                                         |
+| Змінна    | Приклад   | Опис                                         |
 | --------- | --------- | -------------------------------------------- |
 | hash      | `b703eb3` | The current git commit hash                  |
 | tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
 | style\* |           | Mirrors the value of option `style`          |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1686,16 +1686,16 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Variables
 
-| Змінна           | Example    | Опис                                |
+| Змінна           | Приклад    | Опис                                |
 | ---------------- | ---------- | ----------------------------------- |
 | state            | `REBASING` | The current state of the repo       |
 | progress_current | `1`        | The current operation progress      |
 | progress_total   | `2`        | The total operation progress        |
 | style\*        |            | Mirrors the value of option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1727,16 +1727,16 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Змінна            | Example | Опис                                        |
+| Змінна            | Приклад | Опис                                        |
 | ----------------- | ------- | ------------------------------------------- |
 | added             | `1`     | The current number of added lines           |
 | deleted           | `2`     | The current number of deleted lines         |
 | added_style\*   |         | Mirrors the value of option `added_style`   |
 | deleted_style\* |         | Mirrors the value of option `deleted_style` |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1794,7 +1794,7 @@ The following variables can be used in `format`:
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | style\*      | Mirrors the value of option `style`                                                                           |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 The following variables can be used in `diverged`:
 
@@ -1809,7 +1809,7 @@ The following variables can be used in `conflicted`, `ahead`, `behind`, `untrack
 | ------- | ------------------------ |
 | `count` | Show the number of files |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1877,15 +1877,15 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Variables
 
-| Змінна    | Example   | Опис                                 |
+| Змінна    | Приклад   | Опис                                 |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.12.1` | The version of `go`                  |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1909,14 +1909,14 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -1953,13 +1953,13 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ### Variables
 
-| Змінна  | Example  | Опис                                 |
+| Змінна  | Приклад  | Опис                                 |
 | ------- | -------- | ------------------------------------ |
 | version | `v7.5.1` | The version of `gradle`              |
 | symbol  |          | Mirrors the value of option `symbol` |
 | style*  |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 ## Haskell
 
@@ -1984,7 +1984,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Змінна         | Example     | Опис                                                                                    |
+| Змінна         | Приклад     | Опис                                                                                    |
 | -------------- | ----------- | --------------------------------------------------------------------------------------- |
 | version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
 | snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
@@ -1992,7 +1992,7 @@ By default the module will be shown if any of the following conditions are met:
 | symbol         |             | Mirrors the value of option `symbol`                                                    |
 | style\*      |             | Mirrors the value of option `style`                                                     |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 ## Haxe
 
@@ -2017,15 +2017,15 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v4.2.5` | The version of `haxe`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2056,15 +2056,15 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v3.1.1` | The version of `helm`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2090,15 +2090,15 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Змінна     | Example    | Опис                                                  |
+| Змінна     | Приклад    | Опис                                                  |
 | ---------- | ---------- | ----------------------------------------------------- |
 | hostname   | `computer` | The hostname of the computer                          |
 | style\*  |            | Mirrors the value of option `style`                   |
 | ssh_symbol | `'🌏 '`     | The symbol to represent when connected to SSH session |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2132,15 +2132,15 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | version   | `v14`   | The version of `java`                |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2187,15 +2187,15 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | number    | `1`     | The number of jobs                   |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2229,15 +2229,15 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.4.0` | The version of `julia`               |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2268,15 +2268,15 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Variables
 
-| Змінна    | Example   | Опис                                 |
+| Змінна    | Приклад   | Опис                                 |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.4.21` | The version of `kotlin`              |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2321,7 +2321,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 
 ### Variables
 
-| Змінна    | Example              | Опис                                     |
+| Змінна    | Приклад              | Опис                                     |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-context`   | The current kubernetes context name      |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
@@ -2330,9 +2330,9 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | symbol    |                      | Mirrors the value of option `symbol`     |
 | style\* |                      | Mirrors the value of option `style`      |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2390,7 +2390,7 @@ The `line_break` module separates the prompt into two lines.
 | ---------- | ---------- | ------------------------------------------------------------------ |
 | `disabled` | `false`    | Disables the `line_break` module, making the prompt a single line. |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2414,14 +2414,14 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### Variables
 
-| Змінна    | Example      | Опис                                |
+| Змінна    | Приклад      | Опис                                |
 | --------- | ------------ | ----------------------------------- |
 | localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
 | style\* |              | Mirrors the value of option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2456,15 +2456,15 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.4.0` | The version of `lua`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2497,7 +2497,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Змінна           | Example       | Опис                                                               |
+| Змінна           | Приклад       | Опис                                                               |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
@@ -2508,7 +2508,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 *: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2539,15 +2539,15 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 ### Variables
 
-| Змінна    | Example    | Опис                                 |
+| Змінна    | Приклад    | Опис                                 |
 | --------- | ---------- | ------------------------------------ |
 | project   | `starship` | The current Meson project name       |
 | symbol    | `🐏`        | Mirrors the value of option `symbol` |
 | style\* |            | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2576,16 +2576,16 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 ### Variables
 
-| Змінна    | Example   | Опис                                 |
+| Змінна    | Приклад   | Опис                                 |
 | --------- | --------- | ------------------------------------ |
 | branch    | `master`  | The active mercurial branch          |
 | topic     | `feature` | The active mercurial topic           |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2620,15 +2620,15 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.0` | The version of `nimc`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2657,16 +2657,16 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | state     | `pure`  | The state of the nix-shell           |
 | name      | `lorri` | The name of the nix-shell            |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2706,15 +2706,15 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Variables
 
-| Змінна    | Example    | Опис                                 |
+| Змінна    | Приклад    | Опис                                 |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v13.12.0` | The version of `node`                |
 | symbol    |            | Mirrors the value of option `symbol` |
 | style\* |            | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2751,7 +2751,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Variables
 
-| Змінна           | Example      | Опис                                                              |
+| Змінна           | Приклад      | Опис                                                              |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
@@ -2759,9 +2759,9 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | symbol           |              | Mirrors the value of option `symbol`                              |
 | style\*        |              | Mirrors the value of option `style`                               |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2789,15 +2789,15 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 ### Variables
 
-| Змінна    | Example   | Опис                                 |
+| Змінна    | Приклад   | Опис                                 |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.44.0` | The version of `opa`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2821,16 +2821,16 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | cloud     | `corp`  | The current OpenStack cloud          |
 | project   | `dev`   | The current OpenStack project        |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2913,19 +2913,19 @@ Windows = "🪟 "
 
 ### Variables
 
-| Змінна    | Example      | Опис                                                               |
+| Змінна    | Приклад      | Опис                                                               |
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
-| type      | `Arch`       | The current operating system type                                  |
+| тип       | `Arch`       | The current operating system type                                  |
 | codename  |              | The current operating system codename, if applicable               |
 | edition   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
 | style\* |              | Mirrors the value of option `style`                                |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -2977,15 +2977,15 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.0.0` | The version of your package          |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3019,13 +3019,13 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Variables
 
-| Змінна    | Example   | Опис                                 |
+| Змінна    | Приклад   | Опис                                 |
 | --------- | --------- | ------------------------------------ |
 | version   | `v5.26.1` | The version of `perl`                |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3057,15 +3057,15 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v7.3.8` | The version of `php`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3117,7 +3117,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Змінна    | Example    | Опис                                 |
+| Змінна    | Приклад    | Опис                                 |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `pulumi`              |
 | stack     | `dev`      | The current Pulumi stack             |
@@ -3125,9 +3125,9 @@ By default the module will be shown if any of the following conditions are met:
 | symbol    |            | Mirrors the value of option `symbol` |
 | style\* |            | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 #### With Pulumi Version
 
@@ -3169,15 +3169,15 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `0.13.5` | The version of `purescript`          |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3230,7 +3230,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 ### Variables
 
-| Змінна       | Example         | Опис                                       |
+| Змінна       | Приклад         | Опис                                       |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `'v3.8.1'`      | The version of `python`                    |
 | symbol       | `'🐍 '`          | Mirrors the value of option `symbol`       |
@@ -3238,7 +3238,7 @@ The default values and order for `python_binary` was chosen to first identify th
 | pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `'venv'`        | The current `virtualenv` name              |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3302,13 +3302,13 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 ### Variables
 
-| Змінна  | Example       | Опис                                 |
+| Змінна  | Приклад       | Опис                                 |
 | ------- | ------------- | ------------------------------------ |
 | version | `v4.0.5`      | The version of `R`                   |
 | symbol  |               | Mirrors the value of option `symbol` |
 | style   | `'blue bold'` | Mirrors the value of option `style`  |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3339,14 +3339,14 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 
 ### Variables
 
-| Змінна     | Example | Опис                                 |
+| Змінна     | Приклад | Опис                                 |
 | ---------- | ------- | ------------------------------------ |
 | version    | `v6.d`  | The version of `raku`                |
 | vm_version | `moar`  | The version of VM `raku` is built on |
 | symbol     |         | Mirrors the value of option `symbol` |
 | style\*  |         | Mirrors the value of option `style`  |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3376,15 +3376,15 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `red`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3420,15 +3420,15 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `ruby`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3459,7 +3459,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variables
 
-| Змінна    | Example           | Опис                                         |
+| Змінна    | Приклад           | Опис                                         |
 | --------- | ----------------- | -------------------------------------------- |
 | version   | `v1.43.0-nightly` | The version of `rustc`                       |
 | numver    | `1.51.0`          | The numeric component of the `rustc` version |
@@ -3467,9 +3467,9 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | symbol    |                   | Mirrors the value of option `symbol`         |
 | style\* |                   | Mirrors the value of option `style`          |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3501,15 +3501,15 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `2.13.5` | The version of `scala`               |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3554,7 +3554,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | indicator |            | Mirrors the value of `indicator` for currently used shell. |
 | style\* |            | Mirrors the value of option `style`.                       |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 ### Приклади
 
@@ -3586,15 +3586,15 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | shlvl     | `3`     | The current value of `SHLVL`         |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3620,15 +3620,15 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### Variables
 
-| Змінна    | Example      | Опис                                 |
+| Змінна    | Приклад      | Опис                                 |
 | --------- | ------------ | ------------------------------------ |
 | env       | `centos.img` | The current Singularity image        |
 | symbol    |              | Mirrors the value of option `symbol` |
 | style\* |              | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3653,15 +3653,15 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 ### Variables
 
-| Змінна      | Example      | Опис                                 |
+| Змінна      | Приклад      | Опис                                 |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current spack environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
 | style\*   |              | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3702,7 +3702,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Змінна         | Example | Опис                                                                                       |
+| Змінна         | Приклад | Опис                                                                                       |
 | -------------- | ------- | ------------------------------------------------------------------------------------------ |
 | status         | `127`   | The exit code of the last command                                                          |
 | hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
@@ -3715,9 +3715,9 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | symbol         |         | Mirrors the value of option `symbol`                                                       |
 | style\*      |         | Mirrors the value of option `style`                                                        |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3753,14 +3753,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3802,15 +3802,15 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.2.4` | The version of `swift`               |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3849,16 +3849,16 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Змінна    | Example    | Опис                                 |
-| --------- | ---------- | ------------------------------------ |
-| version   | `v0.12.24` | The version of `terraform`           |
-| workspace | `default`  | The current Terraform workspace      |
-| symbol    |            | Mirrors the value of option `symbol` |
-| style\* |            | Mirrors the value of option `style`  |
+| Змінна    | Приклад      | Опис                                 |
+| --------- | ------------ | ------------------------------------ |
+| version   | `v0.12.24`   | The version of `terraform`           |
+| workspace | `стандартно` | The current Terraform workspace      |
+| symbol    |              | Mirrors the value of option `symbol` |
+| style\* |              | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 #### With Terraform Version
 
@@ -3904,14 +3904,14 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 ### Variables
 
-| Змінна    | Example    | Опис                                |
+| Змінна    | Приклад    | Опис                                |
 | --------- | ---------- | ----------------------------------- |
 | time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3951,12 +3951,12 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Variables
 
-| Змінна  | Example      | Опис                                                                                        |
+| Змінна  | Приклад      | Опис                                                                                        |
 | ------- | ------------ | ------------------------------------------------------------------------------------------- |
 | `style` | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
 | `user`  | `'matchai'`  | The currently logged-in user ID.                                                            |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -3990,15 +3990,15 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Variables
 
-| Змінна    | Example          | Опис                                 |
+| Змінна    | Приклад          | Опис                                 |
 | --------- | ---------------- | ------------------------------------ |
 | version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
 | symbol    |                  | Mirrors the value of option `symbol` |
 | style\* |                  | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -4029,13 +4029,13 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 ### Variables
 
-| Змінна    | Example | Опис                                 |
+| Змінна    | Приклад | Опис                                 |
 | --------- | ------- | ------------------------------------ |
 | version   | `v0.2`  | The version of `v`                   |
 | symbol    |         | Mirrors the value of option `symbol` |
 | style\* |         | Mirrors the value of option `style`  |
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -4058,15 +4058,15 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Змінна    | Example                                     | Опис                                 |
+| Змінна    | Приклад                                     | Опис                                 |
 | --------- | ------------------------------------------- | ------------------------------------ |
 | repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
 | symbol    |                                             | Mirrors the value of option `symbol` |
 | style\* | `black bold dimmed`                         | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -4096,15 +4096,15 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 ### Variables
 
-| Змінна    | Example  | Опис                                 |
+| Змінна    | Приклад  | Опис                                 |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.6.0` | The version of `zig`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -4158,7 +4158,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `опис`              | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
@@ -4178,7 +4178,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | symbol    | Mirrors the value of option `symbol`   |
 | style\* | Mirrors the value of option `style`    |
 
-*: This variable can only be used as a part of a style string
+*: Ця змінна може бути використана лише як частина стилю рядка
 
 #### Custom command shell
 
@@ -4209,7 +4209,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 
 :::
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
