@@ -2609,7 +2609,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Параметр            | Стандартно                           | Опис                                                                      |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module                                                 |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля                                                             |
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'👑 '`                               | The symbol used before displaying the version of Nim.                     |
 | `detect_extensions` | `['nim', 'nims', 'nimble']`          | Which extensions should trigger this module.                              |
@@ -3552,7 +3552,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | Змінна    | Стандартно | Опис                                                       |
 | --------- | ---------- | ---------------------------------------------------------- |
 | indicator |            | Mirrors the value of `indicator` for currently used shell. |
-| style\* |            | Mirrors the value of option `style`.                       |
+| style\* |            | Віддзеркалює значення параметра `style`.                   |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
