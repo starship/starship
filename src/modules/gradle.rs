@@ -75,7 +75,7 @@ fn parse_gradle_version_from_properties(wrapper_properties: &str) -> Option<Stri
         .rsplit_once('/')?
         .1
         .strip_prefix("gradle-")?
-        .split_once('-')?
+        .rsplit_once('-')?
         .0;
     Some(version.to_string())
 }
