@@ -68,7 +68,7 @@ disabled = false
 # represents the current operating system
 [os]
 style = "bg:user_os_hex"
-disabled = true          # Disabled by default
+disabled = true
 
 [directory]
 style = "bg:path_hex"
@@ -165,6 +165,6 @@ format = '[ $symbol ($version) ]($style)'
 
 [time]
 disabled = false
-time_format = "%R"           # Hour:Minute Format
+time_format = "%R"
 style = "bg:time_hex"
 format = '[ $time ]($style)'
