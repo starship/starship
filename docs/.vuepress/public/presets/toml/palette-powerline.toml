@@ -1,5 +1,5 @@
 right_format = """
-[](fg:tooling_hex bg:none)\
+[${custom.leftcap}](fg:tooling_hex bg:none)\
 $c\
 $elixir\
 $elm\
@@ -12,8 +12,7 @@ $nodejs\
 $nim\
 $rust\
 $scala\
-[](fg:tooling_hex bg:none) \
-
+[${custom.rightcap}](fg:tooling_hex bg:none) \
 """
 
 format = """
@@ -40,7 +39,6 @@ add_newline = true
 
 palette = 'pastel'
 
-# Define custom colors
 [palettes.pastel]
 user_os_hex = '#9A348E'
 tooling_hex = '#86BBD8'
@@ -49,11 +47,28 @@ git_hex = '#FCA17D'
 time_hex = '#33658A'
 endcap_hex = '#06969A'
 
+[palettes.tokyo]
+user_os_hex = '#a3aed2'
+tooling_hex = '#a3aed2'
+path_hex = '#769ff0'
+git_hex = '#394260'
+time_hex = '#1d2230'
+endcap_hex = '#769ff0'
+
 [custom.dualline]
 when = true
 format = " \n "
 
-# You can also replace your username with a neat symbol like   or disable this
+# one can replace the caps:
+#      
+[custom.leftcap]
+when = true
+format = ''
+[custom.rightcap]
+when = true
+format = ''
+
+# You can also replace your username with a neat symbol like   or disable thiswhen = true
 # and use the os module below
 [username]
 show_always = true
