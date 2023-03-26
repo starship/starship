@@ -497,18 +497,18 @@ threshold = 10
 style = 'bold red'
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+Типові значення для опції `charging_symbol` і `discharging_symbol` є відповідно типовими значеннями параметрів `charging_symbol` та `discharging_symbol` `батареї`.
 
 #### Параметри
 
-The `display` option is an array of the following table.
+Параметр `display` є масивом з наступної таблиці.
 
-| Параметр             | Стандартно   | Опис                                                                                                      |
-| -------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
-| `threshold`          | `10`         | The upper bound for the display option.                                                                   |
-| `style`              | `'red bold'` | The style used if the display option is in use.                                                           |
-| `charging_symbol`    |              | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
-| `discharging_symbol` |              | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+| Параметр             | Стандартно   | Опис                                                                                                                                  |
+| -------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `threshold`          | `10`         | Верхня межа для параметра.                                                                                                            |
+| `style`              | `'red bold'` | Стиль, який використовується, якщо параметр використовується.                                                                         |
+| `charging_symbol`    |              | Необов'язковий символ, що показується якщо параметр display використовується, стандартно використовується параметр `charging_symbol`. |
+| `discharging_symbol` |              | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option.                             |
 
 #### Приклад
 
