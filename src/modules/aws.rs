@@ -97,8 +97,14 @@ fn get_aws_profile_and_region(
     context: &Context,
     aws_config: &AwsConfigFile,
 ) -> (Option<Profile>, Option<Region>) {
-    let profile_env_vars = ["AWSU_PROFILE", "AWS_VAULT", "AWSUME_PROFILE", "AWS_PROFILE"];
-    let region_env_vars = ["AWS_REGION", "AWS_DEFAULT_REGION"];
+    let profile_env_vars = [
+        "AWS_SSO_PROFILE",
+        "AWSU_PROFILE",
+        "AWS_VAULT",
+        "AWSUME_PROFILE",
+        "AWS_PROFILE",
+    ];
+    let region_env_vars = ["AWS_REGION", "AWS_SSO_DEFAULT_REGION", "AWS_DEFAULT_REGION"];
     let profile = profile_env_vars
         .iter()
         .find_map(|env_var| context.get_env(env_var));
@@ -122,6 +128,7 @@ fn get_credentials_duration(
     aws_creds: &AwsCredsFile,
 ) -> Option<i64> {
     let expiration_env_vars = [
+        "AWS_SSO_SESSION_EXPIRATION",
         "AWS_CREDENTIAL_EXPIRATION",
         "AWS_SESSION_EXPIRATION",
         "AWSUME_EXPIRATION",
@@ -389,6 +396,21 @@ mod tests {
     }
 
     #[test]
+    fn profile_set_from_aws_sso() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_SSO_PROFILE", "astronauts-aws-sso")
+            .env("AWS_PROFILE", "astronauts-profile")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts-aws-sso ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn profile_and_region_set() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
@@ -603,6 +625,25 @@ credential_process = /opt/bin/awscreds-retriever
     }
 
     #[test]
+    fn profile_and_region_set_with_display_sso_profile() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_SSO_PROFILE", "astronauts")
+            .env("AWS_REGION", "ap-northeast-1")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .config(toml::toml! {
+                [aws]
+                format = "on [$symbol$profile $region]($style) "
+            })
+            .collect();
+        let expected = Some(format!(
+            "on {} ",
+            Color::Yellow.bold().paint("☁️  astronauts ap-northeast-1")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn profile_and_region_set_with_display_profile() {
         let actual = ModuleRenderer::new("aws")
             .env("AWS_PROFILE", "astronauts")
@@ -640,7 +681,11 @@ credential_process = /opt/bin/awscreds-retriever
     fn expiration_date_set() {
         use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 
-        let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWS_CREDENTIAL_EXPIRATION"];
+        let expiration_env_vars = [
+            "AWS_SSO_SESSION_EXPIRATION",
+            "AWS_SESSION_EXPIRATION",
+            "AWS_CREDENTIAL_EXPIRATION",
+        ];
         expiration_env_vars.iter().for_each(|env_var| {
             let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
                 NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0)
@@ -779,7 +824,7 @@ aws_secret_access_key=dummy
             .env("AWS_REGION", "ap-northeast-2")
             .env("AWS_ACCESS_KEY_ID", "dummy")
             .env(
-                "AWS_SESSION_EXPIRATION",
+                "AWS_SSO_SESSION_EXPIRATION",
                 now.to_rfc3339_opts(SecondsFormat::Secs, true),
             )
             .collect();
