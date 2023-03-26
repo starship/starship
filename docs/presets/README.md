@@ -62,6 +62,7 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 It also shows how path substitution works in starship.
 
 [![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pastel Prompt preset")](./pastel-powerline)
+
 ## [Palette Powerline](./palette-powerline.md)
 
 This preset is inspired by [Pastel Powerline](https://starship.rs/presets/#pastel-powerline).

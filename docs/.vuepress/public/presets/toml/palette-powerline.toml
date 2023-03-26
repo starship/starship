@@ -35,10 +35,8 @@ $time\
 [ ](fg:time_hex)\
 """
 
-
 # blank line at the start of the prompt
 add_newline = true
-
 
 palette = 'pastel'
 

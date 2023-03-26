@@ -4,7 +4,6 @@
 
 This preset is inspired by [Pastel Powerline](https://starship.rs/presets/#pastel-powerline).
 
-
 ![Screenshot of Palette Powerline preset](/presets/img/palette-powerline.png)
 
 ### Prerequisites
