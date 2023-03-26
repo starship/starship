@@ -60,7 +60,7 @@ when = true
 format = " \n "
 
 # one can replace the caps:
-#      
+#     
 [custom.leftcap]
 when = true
 format = ''
