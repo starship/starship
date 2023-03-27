@@ -340,7 +340,7 @@ fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string
 
 /// Convert the path separators in `path` to the specified path separators.
 fn convert_path_sep(path: &str, separator_symbol: &str) -> String {
-    path.replace("/", separator_symbol)
+    path.replace('/', separator_symbol)
 }
 
 /// Get the path before the git repo root by trim the most right repo name.
@@ -1963,7 +1963,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(format!("|some|nested|path")),
+            Color::Cyan.bold().paint("|some|nested|path"),
         ));
 
         assert_eq!(expected, actual);
