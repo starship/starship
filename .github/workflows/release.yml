@@ -317,11 +317,16 @@ jobs:
     env:
       URL_64: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-x86_64-pc-windows-msvc.msi
       URL_32: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-i686-pc-windows-msvc.msi
+      URL_ARM: https://github.com/starship/starship/releases/download/${{ needs.release_please.outputs.tag_name }}/starship-aarch64-pc-windows-msvc.zip
     steps:
+      # Publishing will fail if the repo is too far behind the upstream
+      - run: gh repo sync matchai/winget-pkgs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
       - run: |
           $version = '${{ needs.release_please.outputs.tag_name }}'.replace('v', '')
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GH_PAT }}
+          ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 $env:URL_ARM -t ${{ secrets.GH_PAT }}
 
   choco_update:
     name: Update Chocolatey Package
