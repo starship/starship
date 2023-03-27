@@ -20,7 +20,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Shell::Bash => Some(config.bash_indicator),
                     Shell::Fish => Some(config.fish_indicator),
                     Shell::Zsh => Some(config.zsh_indicator),
-                    Shell::PowerShell => Some(config.powershell_indicator),
+                    Shell::PowerShellCore => Some(config.powershellcore_indicator),
+                    Shell::WindowsPowerShell => Some(config.windowspowershell_indicator)
                     Shell::Ion => Some(config.ion_indicator),
                     Shell::Elvish => Some(config.elvish_indicator),
                     Shell::Tcsh => Some(config.tcsh_indicator),
@@ -40,6 +41,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "fish_indicator" => Some(Ok(config.fish_indicator)),
                 "zsh_indicator" => Some(Ok(config.zsh_indicator)),
                 "powershell_indicator" => Some(Ok(config.powershell_indicator)),
+                "powershellcore_indicator" => Some(Ok(config.powershellcore_indicator)),
+                "windowspowershell_indicator" => Some(Ok(config.windowspowershell_indicator)),
                 "ion_indicator" => Some(Ok(config.ion_indicator)),
                 "elvish_indicator" => Some(Ok(config.elvish_indicator)),
                 "tcsh_indicator" => Some(Ok(config.tcsh_indicator)),
@@ -172,10 +175,10 @@ mod tests {
     }
 
     #[test]
-    fn test_powershell_default_format() {
+    fn test_powershellcore_default_format() {
         let expected = Some(format!("{} ", Color::White.bold().paint("psh")));
         let actual = ModuleRenderer::new("shell")
-            .shell(Shell::PowerShell)
+            .shell(Shell::PowerShellCore)
             .config(toml::toml! {
                 [shell]
                 disabled = false
@@ -186,10 +189,10 @@ mod tests {
     }
 
     #[test]
-    fn test_powershell_custom_format() {
+    fn test_powershellcore_custom_format() {
         let expected = Some(format!("{} ", Color::Cyan.bold().paint("powershell")));
         let actual = ModuleRenderer::new("shell")
-            .shell(Shell::PowerShell)
+            .shell(Shell::PowerShellCore)
             .config(toml::toml! {
                 [shell]
                 powershell_indicator = "[powershell](bold cyan)"
