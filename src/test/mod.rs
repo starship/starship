@@ -28,7 +28,7 @@ fn init_logger() {
     let nul = if cfg!(windows) { "nul" } else { "/dev/null" };
     let nul = PathBuf::from(nul);
 
-    // Maxmimum log level
+    // Maximum log level
     log::set_max_level(LevelFilter::Trace);
     logger.set_log_level(Level::Trace);
     logger.set_log_file_path(nul);
