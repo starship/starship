@@ -34,7 +34,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
-    if config.whenrepo && context.get_repo().is_err() {
+    if config.require_repo && context.get_repo().is_err() {
         return None;
     }
 
@@ -727,7 +727,7 @@ mod tests {
     }
 
     #[test]
-    fn test_render_whenrepo_not_in() -> io::Result<()> {
+    fn test_render_require_repo_not_in() -> io::Result<()> {
         let repo_dir = tempfile::tempdir()?;
 
         let actual = ModuleRenderer::new("custom.test")
@@ -735,7 +735,7 @@ mod tests {
             .config(toml::toml! {
                 [custom.test]
                 when = true
-                whenrepo = true
+                require_repo = true
                 format = "test"
             })
             .collect();
@@ -745,7 +745,7 @@ mod tests {
     }
 
     #[test]
-    fn test_render_whenrepo_in() -> io::Result<()> {
+    fn test_render_require_repo_in() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         let actual = ModuleRenderer::new("custom.test")
@@ -753,7 +753,7 @@ mod tests {
             .config(toml::toml! {
                 [custom.test]
                 when = true
-                whenrepo = true
+                require_repo = true
                 format = "test"
             })
             .collect();

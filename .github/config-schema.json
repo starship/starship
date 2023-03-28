@@ -5649,7 +5649,7 @@
             }
           ]
         },
-        "whenrepo": {
+        "require_repo": {
           "default": false,
           "type": "boolean"
         },
