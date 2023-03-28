@@ -43,8 +43,8 @@ gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
 chrono = { version = "0.4.24", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.1.13", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.1.5"
+clap = { version = "4.1.14", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.1.6"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.4.1"
@@ -67,11 +67,11 @@ pest_derive = "2.5.6"
 quick-xml = "0.28.1"
 rand = "0.8.5"
 rayon = "1.7.0"
-regex = "1.7.2"
+regex = "1.7.3"
 rust-ini = "0.18.0"
 semver = "1.0.17"
-serde = { version = "1.0.158", features = ["derive"] }
-serde_json = "1.0.94"
+serde = { version = "1.0.159", features = ["derive"] }
+serde_json = "1.0.95"
 sha1 = "0.10.5"
 shadow-rs = { version = "0.21.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
