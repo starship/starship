@@ -34,8 +34,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
-    let repo = context.get_repo();
-    if config.whenrepo && repo.is_err() {
+    if config.whenrepo && context.get_repo().is_err() {
         return None;
     }
 
