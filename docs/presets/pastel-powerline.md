@@ -14,7 +14,7 @@ It also shows how path substitution works in starship.
 ### Configuration
 
 ```sh
-starship preset pastel-powerline > ~/.config/starship.toml
+starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/pastel-powerline.toml)

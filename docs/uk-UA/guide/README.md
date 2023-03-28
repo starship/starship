@@ -169,7 +169,7 @@
 
 ### Передумови
 
-- Установлений та ввімкнений у Вашому терміналі набір шрифтів [Nerd Font](https://www.nerdfonts.com/) (для прикладу, спробуйте [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Крок 1. Установіть starship
 

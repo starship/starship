@@ -24,7 +24,7 @@ Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
 ```
 
-## 在 Cmd 中的 命令行提示(TransitentPrompt )和 语法高亮(TransentRightPrompt)
+## 在 Cmd 中的命令行提示（TransientPrompt）和语法高亮（TransientRightPrompt）
 
 可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 要启用该功能，运行命令`clink set prompt.transient <value>`，&lt;prompt.transient>之后跟以下单词中的一个：
 
@@ -54,7 +54,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## 在 Fish 中的 命令行提示(TransitentPrompt)和语法高亮(TransentRightPrompt)
+## 在 Fish 中的命令行提示（TransientPrompt）和语法高亮（TransientRightPrompt）
 
 可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 若要启用该功能，请在 shell 中运行 `Enable-TransitientPrompt`命令 若要永久启用该功能，请将 上述语句放在您的 `~/.config/fish/config.fish` 中。 通过在shell中运行 `Disable-TransientPrompt`命令来禁用这项功能。
 

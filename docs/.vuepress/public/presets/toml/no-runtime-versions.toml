@@ -49,6 +49,9 @@ format = 'via [$symbol]($style)'
 [helm]
 format = 'via [$symbol]($style)'
 
+[java]
+format = 'via [$symbol]($style)'
+
 [julia]
 format = 'via [$symbol]($style)'
 

@@ -70,7 +70,7 @@ pub fn module<'a>(name: Option<&str>, context: &'a Context) -> Option<Module<'a>
 }
 
 /// Filter `config` to only includes non-table values
-/// This filters the top-level table to only include its specific configuation
+/// This filters the top-level table to only include its specific configuration
 fn filter_config(config: &toml::Value) -> Option<toml::Value> {
     let o = config
         .as_table()

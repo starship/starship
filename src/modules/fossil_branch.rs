@@ -17,11 +17,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    // See if we're in a check-out by scanning upwards for a directory containing ".fslckout"
-    context
+    let checkout_db = if cfg!(windows) {
+        "_FOSSIL_"
+    } else {
+        ".fslckout"
+    };
+    // See if we're in a check-out by scanning upwards for a directory containing the checkout_db file
+    let is_checkout = context
         .begin_ancestor_scan()
-        .set_files(&[".fslckout"])
+        .set_files(&[checkout_db])
         .scan()?;
+
+    if !is_checkout {
+        return None;
+    }
+
 
     let len = if config.truncation_length <= 0 {
         log::warn!(
