@@ -1860,7 +1860,7 @@ You can disable the module or use the `windows_starship` option to use a Windows
 | `staged`            | `'+'`                                         | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                         | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                         | The format of `deleted`                                                                                     |
-| `typechanged`       |                                               | The format of `typechange`                                                                                  |
+| `typechanged`       | `""`                                          | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                  | The style for the module.                                                                                   |
 | `ignore_submodules` | `false`                                       | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                       | Disables the `git_status` module.                                                                           |
