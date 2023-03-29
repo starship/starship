@@ -16,6 +16,9 @@ deleted = "x"
 [aws]
 symbol = "aws "
 
+[azure]
+symbol = "az "
+
 [bun]
 symbol = "bun "
 
