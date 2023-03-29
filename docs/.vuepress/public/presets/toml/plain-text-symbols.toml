@@ -64,6 +64,9 @@ symbol = "fnl "
 [fossil_branch]
 symbol = "fossil "
 
+[gcloud]
+symbol = "gcp "
+
 [git_branch]
 symbol = "git "
 
