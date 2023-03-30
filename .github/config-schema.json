@@ -5681,12 +5681,12 @@
     "CustomConfig": {
       "type": "object",
       "properties": {
-        "format": {
-          "default": "[$symbol($output )]($style)",
-          "type": "string"
-        },
         "symbol": {
           "default": "",
+          "type": "string"
+        },
+        "format": {
+          "default": "[$symbol($output )]($style)",
           "type": "string"
         },
         "command": {
@@ -5753,6 +5753,13 @@
             "boolean",
             "null"
           ]
+        },
+        "formats": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         },
         "ignore_timeout": {
           "default": false,

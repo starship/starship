@@ -177,7 +177,10 @@ impl<'de> Deserializer<'de> for ValueDeserializer<'de> {
             .filter(|StructInfo { name, .. }| name == &"StarshipRootConfig")
             .and(self.current_key)
             .map_or(false, |key| {
-                ALL_MODULES.contains(&key) || key == "custom" || key == "env_var" || key == "formats" || key == "formats"
+                ALL_MODULES.contains(&key)
+                    || key == "custom"
+                    || key == "env_var"
+                    || key == "formats"
             })
         {
             return visitor.visit_none();
