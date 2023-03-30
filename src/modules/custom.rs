@@ -5,7 +5,7 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::Duration;
 
-use process_control::{ChildExt, Control, Output};
+use process_control::{ChildExt, Control, Output, ExitStatus};
 
 use super::{Context, Module, ModuleConfig};
 
@@ -55,7 +55,10 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
         }
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+
+    let (output, status) = exec_command(config.command, context, &config)?;
+    let format = config.formats.get(&status.code().unwrap_or(-1).to_string()).unwrap_or(&config.format);
+    let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
                 "symbol" => Some(config.symbol),
@@ -67,9 +70,8 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             })
             .map_no_escaping(|variable| match variable {
                 "output" => {
-                    let output = exec_command(config.command, context, &config)?;
                     let trimmed = output.trim();
-
+                
                     if trimmed.is_empty() {
                         None
                     } else {
@@ -237,24 +239,24 @@ fn exec_when(cmd: &str, config: &CustomConfig, context: &Context) -> bool {
 }
 
 /// Execute the given command, returning its output on success
-fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<String> {
+fn exec_command(cmd: &str, context: &Context, config: &CustomConfig) -> Option<(String, ExitStatus)> {
     log::trace!("Running '{cmd}'");
 
     if let Some(output) = shell_command(cmd, config, context) {
-        if !output.status.success() {
-            log::trace!("Non-zero exit code '{:?}'", output.status.code());
-            log::trace!(
-                "stdout: {}",
-                std::str::from_utf8(&output.stdout).unwrap_or("<invalid utf8>")
-            );
-            log::trace!(
-                "stderr: {}",
-                std::str::from_utf8(&output.stderr).unwrap_or("<invalid utf8>")
-            );
-            return None;
-        }
+        // if !output.status.success() {
+        //     log::trace!("Non-zero exit code '{:?}'", output.status.code());
+        //     log::trace!(
+        //         "stdout: {}",
+        //         std::str::from_utf8(&output.stdout).unwrap_or("<invalid utf8>")
+        //     );
+        //     log::trace!(
+        //         "stderr: {}",
+        //         std::str::from_utf8(&output.stderr).unwrap_or("<invalid utf8>")
+        //     );
+        //     return None;
+        // }
 
-        Some(String::from_utf8_lossy(&output.stdout).into())
+        Some((String::from_utf8_lossy(&output.stdout).into(), output.status))
     } else {
         None
     }
