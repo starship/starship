@@ -14,6 +14,7 @@ use serde::{self, Deserialize, Serialize};
 pub struct CustomConfig<'a> {
     pub symbol: &'a str,
     pub format: &'a str,
+    pub error: &'a str,
     pub command: &'a str,
     pub when: Either<bool, &'a str>,
     pub shell: VecOr<&'a str>,
@@ -39,6 +40,7 @@ impl<'a> Default for CustomConfig<'a> {
     fn default() -> Self {
         CustomConfig {
             format: "[$symbol($output )]($style)",
+            error: "Non-zero exit code $status",
             symbol: "",
             command: "",
             when: Either::First(false),

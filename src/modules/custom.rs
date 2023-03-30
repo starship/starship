@@ -56,10 +56,16 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     let (output, status) = exec_command(config.command, context, &config)?;
+    let status_code = status.code().unwrap_or(2);
     let format = config
         .formats
-        .get(&status.code().unwrap_or(-1).to_string())
-        .unwrap_or(&config.format);
+        .get(&status_code.to_string())
+        .unwrap_or_else(|| {
+            return match status_code {
+                0 => &config.format,
+                _ => &config.error
+            };   
+        });
     let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -79,62 +85,71 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         Some(Ok(trimmed.to_string()))
                     }
-                }
-                _ => None,
+                },
+                "status" => Some(Ok(status_code.to_string())),
+                _ => None
             })
-            .parse(None, Some(context))
-    });
+        .parse(None, Some(context))
+});
 
-    match parsed {
-        Ok(segments) => module.set_segments(segments),
-        Err(error) => {
-            log::warn!("Error in module `custom.{}`:\n{}", name, error);
-        }
-    };
-    Some(module)
+match parsed {
+    Ok(segments) => module.set_segments(segments),
+    Err(error) => {
+        log::warn!("Error in module `custom.{}`:\n{}", name, error);
+    }
+};
+Some(module)
 }
 
 /// Gets the TOML config for the custom module, handling the case where the module is not defined
 fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a toml::Value> {
-    struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
+struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
 
-    impl Debug for DebugCustomModules<'_> {
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            f.debug_list().entries(self.0.keys()).finish()
-        }
+impl Debug for DebugCustomModules<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_list().entries(self.0.keys()).finish()
     }
+}
 
-    let config = context.config.get_custom_module_config(module_name);
+let config = context.config.get_custom_module_config(module_name);
 
-    if config.is_some() {
-        return config;
-    } else if let Some(modules) = context.config.get_custom_modules() {
-        log::debug!(
-                "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
-                DebugCustomModules(modules),
-        );
-    } else {
-        log::debug!(
-            "top level format contains custom module {module_name:?}, but no configuration was provided.",
-        );
-    };
-    None
+if config.is_some() {
+    return config;
+} else if let Some(modules) = context.config.get_custom_modules() {
+    log::debug!(
+            "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
+            DebugCustomModules(modules),
+    );
+} else {
+    log::debug!(
+        "top level format contains custom module {module_name:?}, but no configuration was provided.",
+    );
+};
+None
 }
 
 /// Return the invoking shell, using `shell` and fallbacking in order to `STARSHIP_SHELL` and "sh"/"cmd"
 fn get_shell<'a, 'b>(
-    shell_args: &'b [&'a str],
-    context: &Context,
+shell_args: &'b [&'a str],
+context: &Context,
 ) -> (std::borrow::Cow<'a, str>, &'b [&'a str]) {
-    if !shell_args.is_empty() {
-        (shell_args[0].into(), &shell_args[1..])
-    } else if let Some(env_shell) = context.get_env("STARSHIP_SHELL") {
-        (env_shell.into(), &[] as &[&str])
-    } else if cfg!(windows) {
-        // `/C` is added by `handle_shell`
-        ("cmd".into(), &[] as &[&str])
-    } else {
-        ("sh".into(), &[] as &[&str])
+if !shell_args.is_empty() {
+    (shell_args[0].into(), &shell_args[1..])
+} else if let Some(env_shell) = context.get_env("STARSHIP_SHELL") {
+    (env_shell.into(), &[] as &[&str])
+} else if cfg!(windows) {
+    // `/C` is added by `handle_shell`
+    ("cmd".into(), &[] as &[&str])
+} else {
+    ("sh".into(), &[] as &[&str])
+}
+}
+
+
+fn get_cmd_wrapper(shell: &str, cmd: &str, context: &Context) -> String {
+    match shell {
+        "powershell" | "pwsh" => format!("{}; exit $LASTEXITCODE", cmd),
+        _ => cmd.to_string()
     }
 }
 
@@ -143,6 +158,8 @@ fn get_shell<'a, 'b>(
 fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<Output> {
     let (shell, shell_args) = get_shell(config.shell.0.as_ref(), context);
     let mut use_stdin = config.use_stdin;
+
+    let cmd_wrapper = get_cmd_wrapper(&shell, cmd, context);
 
     let mut command = match create_command(shell.as_ref()) {
         Ok(command) => command,
@@ -179,7 +196,8 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     let use_stdin = use_stdin.unwrap_or_else(|| handle_shell(&mut command, &shell, shell_args));
 
     if !use_stdin {
-        command.arg(cmd);
+        let wrapped_wrapper = format!("\"{}\"", cmd_wrapper.clone());
+        command.arg(wrapped_wrapper);
     }
 
     let mut child = match command.spawn() {
@@ -194,7 +212,7 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     };
 
     if use_stdin {
-        child.stdin.as_mut()?.write_all(cmd.as_bytes()).ok()?;
+        child.stdin.as_mut()?.write_all(cmd_wrapper.as_bytes()).ok()?;
     }
 
     let mut output = child.controlled_with_output();
@@ -249,19 +267,6 @@ fn exec_command(
     log::trace!("Running '{cmd}'");
 
     if let Some(output) = shell_command(cmd, config, context) {
-        // if !output.status.success() {
-        //     log::trace!("Non-zero exit code '{:?}'", output.status.code());
-        //     log::trace!(
-        //         "stdout: {}",
-        //         std::str::from_utf8(&output.stdout).unwrap_or("<invalid utf8>")
-        //     );
-        //     log::trace!(
-        //         "stderr: {}",
-        //         std::str::from_utf8(&output.stderr).unwrap_or("<invalid utf8>")
-        //     );
-        //     return None;
-        // }
-
         Some((
             String::from_utf8_lossy(&output.stdout).into(),
             output.status,
