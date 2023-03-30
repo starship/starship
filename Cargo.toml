@@ -43,15 +43,15 @@ gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
 chrono = { version = "0.4.24", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.1.14", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.1.6"
+clap = { version = "4.2.1", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.2.0"
 dirs-next = "2.0.0"
 dunce = "1.0.3"
 gethostname = "0.4.1"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.43.0", default-features = false, features = ["max-performance-safe"] }
+gix = { version = "0.43.1", default-features = false, features = ["max-performance-safe"] }
 gix-features = { version = "0.28.1", optional = true }
-indexmap = { version = "1.9.2", features = ["serde"] }
+indexmap = { version = "1.9.3", features = ["serde"] }
 log = { version = "0.4.17", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
@@ -104,7 +104,7 @@ features = ["preserve_order", "indexmap"]
 deelevate = "0.2.0"
 
 [target.'cfg(windows)'.dependencies.windows]
-version = "0.46.0"
+version = "0.47.0"
 features = [
   "Win32_Foundation",
   "Win32_UI_Shell",
@@ -125,7 +125,7 @@ winres = "0.1.12"
 
 [dev-dependencies]
 mockall = "0.11"
-tempfile = "3.4.0"
+tempfile = "3.5.0"
 
 [profile.release]
 codegen-units = 1
