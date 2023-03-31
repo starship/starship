@@ -148,7 +148,7 @@ fn get_cmd_wrapper(shell: &str, cmd: &str, use_stdin: bool) -> String {
         "powershell" | "pwsh" => {
             format!("{}; exit $LASTEXITCODE", cmd)
         }
-        "bash" => {
+        "bash" | "sh" => {
             let (pre, escape, post) = match use_stdin {
                 true => ("", "", ""),
                 false => ("\"", "\\", "\""),
