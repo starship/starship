@@ -56,18 +56,13 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     let (output, status) = exec_command(config.command, context, &config)?;
-    let has_code = status.code().is_some();
-    let status_code = status.code().unwrap_or(0);
-    let format = match has_code {
-        true => config
-            .formats
-            .get(&status_code.to_string())
-            .unwrap_or(match status_code {
-                0 => &config.format,
-                _ => &config.error,
-            }),
-        false => config.error,
-    };
+    status.code()?;
+    let status_code = status.code().unwrap();
+    let format_opt = config.formats.get(&status_code.to_string());
+    if format_opt.is_none() && status_code != 0 {
+        return None;
+    }
+    let format = format_opt.unwrap_or(&config.format);
 
     let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
@@ -81,10 +76,6 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             })
             .map_no_escaping(|variable| match variable {
                 "output" => {
-                    if !has_code {
-                        return None;
-                    }
-
                     let trimmed = output.trim();
 
                     if trimmed.is_empty() {
@@ -93,10 +84,7 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                         Some(Ok(trimmed.to_string()))
                     }
                 }
-                "status" => match has_code {
-                    true => Some(Ok(status_code.to_string())),
-                    false => None,
-                },
+                "status" => Some(Ok(status_code.to_string())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -157,15 +145,20 @@ fn get_shell<'a, 'b>(
 
 fn get_cmd_wrapper(shell: &str, cmd: &str, use_stdin: bool) -> String {
     match shell {
-        "powershell" | "pwsh" => format!("{}; exit $LASTEXITCODE", cmd),
-        "bash" => format!(
-            "{}; exit {}$?",
-            cmd,
-            match use_stdin {
-                true => "",
-                false => "\\",
-            }
-        ),
+        "powershell" | "pwsh" => {
+            let (pre, post) = match use_stdin {
+                true => ("", ""),
+                false => ("\"", "\""),
+            };
+            format!("{}{}; exit $LASTEXITCODE{}", pre, cmd, post)
+        }
+        "bash" => {
+            let (pre, escape, post) = match use_stdin {
+                true => ("", "", ""),
+                false => ("\"", "\\", "\""),
+            };
+            format!("{}{}; exit {}$?{}", pre, cmd, escape, post)
+        }
         _ => cmd.to_string(),
     }
 }
@@ -213,8 +206,7 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     let cmd_wrapper = get_cmd_wrapper(&shell, cmd, use_stdin);
 
     if !use_stdin {
-        let wrapped_wrapper = format!("\"{}\"", cmd_wrapper);
-        command.arg(wrapped_wrapper);
+        command.arg(cmd_wrapper.clone());
     }
 
     let mut child = match command.spawn() {
