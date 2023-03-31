@@ -58,11 +58,10 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     let (output, status) = exec_command(config.command, context, &config)?;
     status.code()?;
     let status_code = status.code().unwrap();
-    let format_opt = config.formats.get(&status_code.to_string());
-    if format_opt.is_none() && status_code != 0 {
-        return None;
-    }
-    let format = format_opt.unwrap_or(&config.format);
+    let format = config
+        .formats
+        .get(&status_code.to_string())
+        .unwrap_or(&config.format);
 
     let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
