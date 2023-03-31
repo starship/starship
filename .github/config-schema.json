@@ -5689,6 +5689,10 @@
           "default": "[$symbol($output )]($style)",
           "type": "string"
         },
+        "error": {
+          "default": "Error $status",
+          "type": "string"
+        },
         "command": {
           "default": "",
           "type": "string"

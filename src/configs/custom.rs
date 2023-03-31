@@ -40,7 +40,7 @@ impl<'a> Default for CustomConfig<'a> {
     fn default() -> Self {
         CustomConfig {
             format: "[$symbol($output )]($style)",
-            error: "Non-zero exit code $status",
+            error: "Error $status",
             symbol: "",
             command: "",
             when: Either::First(false),

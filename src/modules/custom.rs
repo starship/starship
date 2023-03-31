@@ -56,16 +56,19 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     }
 
     let (output, status) = exec_command(config.command, context, &config)?;
-    let status_code = status.code().unwrap_or(2);
-    let format = config
-        .formats
-        .get(&status_code.to_string())
-        .unwrap_or_else(|| {
-            return match status_code {
+    let has_code = status.code().is_some();
+    let status_code = status.code().unwrap_or(0);
+    let format = match has_code {
+        true => config
+            .formats
+            .get(&status_code.to_string())
+            .unwrap_or(match status_code {
                 0 => &config.format,
-                _ => &config.error
-            };   
-        });
+                _ => &config.error,
+            }),
+        false => config.error,
+    };
+
     let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -78,6 +81,10 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
             })
             .map_no_escaping(|variable| match variable {
                 "output" => {
+                    if !has_code {
+                        return None;
+                    }
+
                     let trimmed = output.trim();
 
                     if trimmed.is_empty() {
@@ -85,71 +92,81 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         Some(Ok(trimmed.to_string()))
                     }
+                }
+                "status" => match has_code {
+                    true => Some(Ok(status_code.to_string())),
+                    false => None,
                 },
-                "status" => Some(Ok(status_code.to_string())),
-                _ => None
+                _ => None,
             })
-        .parse(None, Some(context))
-});
+            .parse(None, Some(context))
+    });
 
-match parsed {
-    Ok(segments) => module.set_segments(segments),
-    Err(error) => {
-        log::warn!("Error in module `custom.{}`:\n{}", name, error);
-    }
-};
-Some(module)
+    match parsed {
+        Ok(segments) => module.set_segments(segments),
+        Err(error) => {
+            log::warn!("Error in module `custom.{}`:\n{}", name, error);
+        }
+    };
+    Some(module)
 }
 
 /// Gets the TOML config for the custom module, handling the case where the module is not defined
 fn get_config<'a>(module_name: &str, context: &'a Context<'a>) -> Option<&'a toml::Value> {
-struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
+    struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
 
-impl Debug for DebugCustomModules<'_> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_list().entries(self.0.keys()).finish()
+    impl Debug for DebugCustomModules<'_> {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_list().entries(self.0.keys()).finish()
+        }
     }
-}
 
-let config = context.config.get_custom_module_config(module_name);
+    let config = context.config.get_custom_module_config(module_name);
 
-if config.is_some() {
-    return config;
-} else if let Some(modules) = context.config.get_custom_modules() {
-    log::debug!(
+    if config.is_some() {
+        return config;
+    } else if let Some(modules) = context.config.get_custom_modules() {
+        log::debug!(
             "top level format contains custom module {module_name:?}, but no configuration was provided. Configuration for the following modules were provided: {:?}",
             DebugCustomModules(modules),
     );
-} else {
-    log::debug!(
+    } else {
+        log::debug!(
         "top level format contains custom module {module_name:?}, but no configuration was provided.",
     );
-};
-None
+    };
+    None
 }
 
 /// Return the invoking shell, using `shell` and fallbacking in order to `STARSHIP_SHELL` and "sh"/"cmd"
 fn get_shell<'a, 'b>(
-shell_args: &'b [&'a str],
-context: &Context,
+    shell_args: &'b [&'a str],
+    context: &Context,
 ) -> (std::borrow::Cow<'a, str>, &'b [&'a str]) {
-if !shell_args.is_empty() {
-    (shell_args[0].into(), &shell_args[1..])
-} else if let Some(env_shell) = context.get_env("STARSHIP_SHELL") {
-    (env_shell.into(), &[] as &[&str])
-} else if cfg!(windows) {
-    // `/C` is added by `handle_shell`
-    ("cmd".into(), &[] as &[&str])
-} else {
-    ("sh".into(), &[] as &[&str])
-}
+    if !shell_args.is_empty() {
+        (shell_args[0].into(), &shell_args[1..])
+    } else if let Some(env_shell) = context.get_env("STARSHIP_SHELL") {
+        (env_shell.into(), &[] as &[&str])
+    } else if cfg!(windows) {
+        // `/C` is added by `handle_shell`
+        ("cmd".into(), &[] as &[&str])
+    } else {
+        ("sh".into(), &[] as &[&str])
+    }
 }
 
-
-fn get_cmd_wrapper(shell: &str, cmd: &str, context: &Context) -> String {
+fn get_cmd_wrapper(shell: &str, cmd: &str, use_stdin: bool) -> String {
     match shell {
         "powershell" | "pwsh" => format!("{}; exit $LASTEXITCODE", cmd),
-        _ => cmd.to_string()
+        "bash" => format!(
+            "{}; exit {}$?",
+            cmd,
+            match use_stdin {
+                true => "",
+                false => "\\",
+            }
+        ),
+        _ => cmd.to_string(),
     }
 }
 
@@ -158,8 +175,6 @@ fn get_cmd_wrapper(shell: &str, cmd: &str, context: &Context) -> String {
 fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<Output> {
     let (shell, shell_args) = get_shell(config.shell.0.as_ref(), context);
     let mut use_stdin = config.use_stdin;
-
-    let cmd_wrapper = get_cmd_wrapper(&shell, cmd, context);
 
     let mut command = match create_command(shell.as_ref()) {
         Ok(command) => command,
@@ -195,8 +210,10 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
 
     let use_stdin = use_stdin.unwrap_or_else(|| handle_shell(&mut command, &shell, shell_args));
 
+    let cmd_wrapper = get_cmd_wrapper(&shell, cmd, use_stdin);
+
     if !use_stdin {
-        let wrapped_wrapper = format!("\"{}\"", cmd_wrapper.clone());
+        let wrapped_wrapper = format!("\"{}\"", cmd_wrapper);
         command.arg(wrapped_wrapper);
     }
 
@@ -212,7 +229,11 @@ fn shell_command(cmd: &str, config: &CustomConfig, context: &Context) -> Option<
     };
 
     if use_stdin {
-        child.stdin.as_mut()?.write_all(cmd_wrapper.as_bytes()).ok()?;
+        child
+            .stdin
+            .as_mut()?
+            .write_all(cmd_wrapper.as_bytes())
+            .ok()?;
     }
 
     let mut output = child.controlled_with_output();
