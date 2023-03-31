@@ -142,17 +142,13 @@ fn get_shell<'a, 'b>(
     }
 }
 
-fn get_cmd_wrapper(shell: &str, cmd: &str, use_stdin: bool) -> String {
+fn get_cmd_wrapper(shell: &str, cmd: &str, _use_stdin: bool) -> String {
     match shell {
         "powershell" | "pwsh" => {
             format!("{}; exit $LASTEXITCODE", cmd)
         }
         "bash" | "sh" => {
-            let (pre, escape, post) = match use_stdin {
-                true => ("", "", ""),
-                false => ("\"", "\\", "\""),
-            };
-            format!("{}{}; exit {}$?{}", pre, cmd, escape, post)
+            format!("{}; exit $?", cmd)
         }
         _ => cmd.to_string(),
     }
