@@ -375,7 +375,7 @@ mod tests {
     }
 
     #[test]
-    fn no_panic_when_editor_unparseable() {
+    fn no_panic_when_editor_unparsable() {
         let outcome = edit_configuration(&Default::default(), Some("\"vim"));
         assert!(outcome.is_err());
     }

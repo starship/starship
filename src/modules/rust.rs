@@ -93,7 +93,7 @@ impl RustToolingEnvironmentInfo {
     fn get_rustup_rustc_version(&self, context: &Context) -> &RustupRunRustcVersionOutcome {
         self.rustup_rustc_output.get_or_init(|| {
             let out = if let Some(toolchain) = self.get_env_toolchain_override(context) {
-                // First try runnig ~/.rustup/toolchains/<toolchain>/bin/rustc --version
+                // First try running ~/.rustup/toolchains/<toolchain>/bin/rustc --version
                 rustup_home()
                     .map(|rustup_folder| {
                         rustup_folder
