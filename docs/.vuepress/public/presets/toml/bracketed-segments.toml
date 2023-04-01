@@ -160,6 +160,9 @@ format = '\[[$symbol($version)]($style)\]'
 [scala]
 format = '\[[$symbol($version)]($style)\]'
 
+[solidity]
+format = '\[[$symbol($version)]($style)\]'
+
 [spack]
 format = '\[[$symbol$environment]($style)\]'
 
