@@ -435,7 +435,9 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
         .map(|mut c| {
             c.env(
                 "STARSHIP_CONFIG",
-                context.get_config_path_os().unwrap_or_else(|| PathBuf::from("/dev/null")),
+                context
+                    .get_config_path_os()
+                    .unwrap_or_else(|| PathBuf::from("/dev/null")),
             )
             .env("WSLENV", wslenv)
             .args(["module", "git_status", "--path", winpath]);
