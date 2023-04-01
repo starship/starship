@@ -115,7 +115,7 @@ mod tests {
         // The output of the module
         let actual = ModuleRenderer::new("solidity")
             // For a custom path
-            .path(&tempdir.path())
+            .path(tempdir.path())
             // Run the module and collect the output
             .collect();
 
@@ -137,7 +137,7 @@ mod tests {
         // The output of the module
         let actual = ModuleRenderer::new("solidity")
             // For a custom path
-            .path(&tempdir.path())
+            .path(tempdir.path())
             // For a custom config
             .config(toml::toml! {
                [solidity]
