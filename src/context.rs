@@ -943,6 +943,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path,
+            Default::default(),
         );
 
         let expected_path = Path::new(r"C:\");

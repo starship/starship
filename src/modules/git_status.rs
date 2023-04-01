@@ -7,8 +7,6 @@ use crate::configs::git_status::GitStatusConfig;
 use crate::formatter::StringFormatter;
 use crate::segment::Segment;
 use std::ffi::OsStr;
-#[cfg(target_os = "linux")]
-use std::path::PathBuf;
 use std::sync::Arc;
 
 const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
@@ -435,14 +433,9 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 
     let out = match create_command(starship_exe)
         .map(|mut c| {
-            c.env(
-                "STARSHIP_CONFIG",
-                context
-                    .get_config_path_os()
-                    .unwrap_or_else(|| PathBuf::from("/dev/null")),
-            )
-            .env("WSLENV", wslenv)
-            .args(["module", "git_status", "--path", winpath]);
+            c.env("STARSHIP_CONFIG", context.get_config_path_os())
+                .env("WSLENV", wslenv)
+                .args(["module", "git_status", "--path", winpath]);
             c
         })
         .and_then(|mut c| c.output())
