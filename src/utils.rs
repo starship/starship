@@ -1,5 +1,4 @@
 use process_control::{ChildExt, Control};
-
 use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs::read_to_string;
