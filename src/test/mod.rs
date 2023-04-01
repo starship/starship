@@ -43,7 +43,7 @@ pub fn default_context() -> Context<'static> {
         Target::Main,
         PathBuf::new(),
         PathBuf::new(),
-        Default::default()
+        Default::default(),
     );
     context.config = StarshipConfig { config: None };
     context

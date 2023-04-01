@@ -10,7 +10,7 @@ use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
-use starship::context::{Properties, Target, Context};
+use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::*;
 
@@ -220,9 +220,10 @@ fn main() {
         }
         Commands::PrintConfig { default, name } => {
             configure::print_configuration(&Context::default(), default, &name);
-            ()
         }
-        Commands::Toggle { name, value } => configure::toggle_configuration(&Context::default(), &name, &value),
+        Commands::Toggle { name, value } => {
+            configure::toggle_configuration(&Context::default(), &name, &value)
+        }
         Commands::BugReport => bug_report::create(),
         Commands::Time => {
             match SystemTime::now()

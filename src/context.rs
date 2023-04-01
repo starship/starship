@@ -107,7 +107,14 @@ impl<'a> Context<'a> {
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
             .unwrap_or_else(|| path.clone());
 
-        Context::new_with_shell_and_path(arguments, shell, target, path, logical_path, Default::default())
+        Context::new_with_shell_and_path(
+            arguments,
+            shell,
+            target,
+            path,
+            logical_path,
+            Default::default(),
+        )
     }
 
     /// Create a new instance of Context for the provided directory
@@ -117,7 +124,7 @@ impl<'a> Context<'a> {
         target: Target,
         path: PathBuf,
         logical_path: PathBuf,
-        env: Env<'a>
+        env: Env<'a>,
     ) -> Context<'a> {
         let config = StarshipConfig::initialize(&get_config_path_os(&env));
 
@@ -867,7 +874,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default()
+            Default::default(),
         );
 
         assert_ne!(context.current_dir, context.logical_dir);
@@ -892,7 +899,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default()
+            Default::default(),
         );
 
         let expected_current_dir = &test_path;
@@ -914,7 +921,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
-            Default::default()
+            Default::default(),
         );
 
         let expected_current_dir = home_dir()

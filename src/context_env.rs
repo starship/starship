@@ -1,8 +1,8 @@
-use std::ffi::OsString;
 #[cfg(test)]
 use std::collections::HashMap;
 #[cfg(not(test))]
 use std::env;
+use std::ffi::OsString;
 
 #[derive(Default)]
 pub struct Env<'a> {

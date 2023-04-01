@@ -1,6 +1,6 @@
 use crate::configs::Palette;
 use crate::context::Context;
-use crate::context_env::Env;
+
 use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
 use nu_ansi_term::Color;
@@ -14,7 +14,6 @@ use std::collections::HashMap;
 use std::ffi::OsString;
 use std::io::ErrorKind;
 
-use std::env;
 use toml::Value;
 
 /// Root config of a module.

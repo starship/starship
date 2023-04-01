@@ -1,5 +1,5 @@
 use process_control::{ChildExt, Control};
-use std::env;
+
 use std::ffi::OsStr;
 use std::fmt::Debug;
 use std::fs::read_to_string;
@@ -10,7 +10,6 @@ use std::time::{Duration, Instant};
 
 use crate::context::Context;
 use crate::context::Shell;
-use crate::context_env::Env;
 
 /// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
 #[cfg(not(test))]

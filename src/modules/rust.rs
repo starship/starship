@@ -757,7 +757,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default()
+            Default::default(),
         );
 
         assert_eq!(
@@ -779,7 +779,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default()
+            Default::default(),
         );
 
         assert_eq!(
@@ -803,7 +803,7 @@ version = "12"
             Target::Main,
             child_dir_path.clone(),
             child_dir_path,
-            Default::default()
+            Default::default(),
         );
 
         assert_eq!(
@@ -824,7 +824,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default()
+            Default::default(),
         );
 
         assert_eq!(find_rust_toolchain_file(&context), None);
@@ -843,7 +843,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default()
+            Default::default(),
         );
 
         assert_eq!(
@@ -865,7 +865,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
-            Default::default()
+            Default::default(),
         );
 
         assert_eq!(
@@ -889,7 +889,7 @@ version = "12"
             Target::Main,
             child_dir_path.clone(),
             child_dir_path,
-            Default::default()
+            Default::default(),
         );
 
         assert_eq!(
