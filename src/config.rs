@@ -1,5 +1,6 @@
 use crate::configs::Palette;
 use crate::context::Context;
+use crate::context_env::Env;
 use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
 use nu_ansi_term::Color;
@@ -10,6 +11,7 @@ use serde::{
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
+use std::ffi::OsString;
 use std::io::ErrorKind;
 
 use std::env;
@@ -120,25 +122,10 @@ pub struct StarshipConfig {
     pub config: Option<toml::Table>,
 }
 
-pub fn get_config_path() -> Option<String> {
-    if let Ok(path) = env::var("STARSHIP_CONFIG") {
-        // Use $STARSHIP_CONFIG as the config path if available
-        log::debug!("STARSHIP_CONFIG is set: {}", &path);
-        Some(path)
-    } else {
-        // Default to using ~/.config/starship.toml
-        log::debug!("STARSHIP_CONFIG is not set");
-        let config_path = utils::home_dir()?.join(".config/starship.toml");
-        let config_path_str = config_path.to_str()?.to_owned();
-        log::debug!("Using default config path: {}", config_path_str);
-        Some(config_path_str)
-    }
-}
-
 impl StarshipConfig {
     /// Initialize the Config struct
-    pub fn initialize() -> Self {
-        Self::config_from_file()
+    pub fn initialize(config_file_path: &OsString) -> Self {
+        Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
             })
@@ -146,10 +133,8 @@ impl StarshipConfig {
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<toml::Table> {
-        let file_path = get_config_path()?;
-
-        let toml_content = match utils::read_file(file_path) {
+    fn config_from_file(config_file_path: &OsString) -> Option<toml::Table> {
+        let toml_content = match utils::read_file(config_file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)

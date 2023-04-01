@@ -10,6 +10,7 @@ use std::time::{Duration, Instant};
 
 use crate::context::Context;
 use crate::context::Shell;
+use crate::context_env::Env;
 
 /// Create a `PathBuf` from an absolute path, where the root directory will be mocked in test
 #[cfg(not(test))]
@@ -627,11 +628,6 @@ fn render_time_component((component, suffix): (&u128, &&str)) -> String {
 }
 
 pub fn home_dir() -> Option<PathBuf> {
-    if cfg!(test) {
-        if env::var("HOME").is_ok() {
-            return Some(PathBuf::from(env::var("HOME").unwrap()));
-        }
-    }
     dirs_next::home_dir()
 }
 

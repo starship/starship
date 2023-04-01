@@ -1,5 +1,5 @@
-use std::env;
-use std::ffi::OsString;
+
+
 use std::io::ErrorKind;
 use std::process;
 use std::process::Stdio;
@@ -8,6 +8,7 @@ use std::str::FromStr;
 use crate::config::ModuleConfig;
 use crate::config::StarshipConfig;
 use crate::configs::PROMPT_ORDER;
+use crate::context::Context;
 use crate::utils;
 use std::fs::File;
 use std::io::Write;
@@ -18,15 +19,15 @@ const STD_EDITOR: &str = "vi";
 #[cfg(windows)]
 const STD_EDITOR: &str = "notepad.exe";
 
-pub fn update_configuration(name: &str, value: &str) {
-    let mut doc = get_configuration_edit();
+pub fn update_configuration(context: &Context, name: &str, value: &str) {
+    let mut doc = get_configuration_edit(context);
 
     match handle_update_configuration(&mut doc, name, value) {
         Err(e) => {
             eprintln!("{e}");
             process::exit(1);
         }
-        _ => write_configuration(&doc),
+        _ => write_configuration(context, &doc),
     }
 }
 
@@ -71,7 +72,7 @@ fn handle_update_configuration(doc: &mut Document, name: &str, value: &str) -> R
     Ok(())
 }
 
-pub fn print_configuration(use_default: bool, paths: &[String]) -> String {
+pub fn print_configuration(context: &Context, use_default: bool, paths: &[String]) -> String {
     let config = if use_default {
         // Get default config
         let default_config = crate::configs::FullConfig::default();
@@ -79,7 +80,7 @@ pub fn print_configuration(use_default: bool, paths: &[String]) -> String {
         toml::value::Value::try_from(default_config).unwrap()
     } else {
         // Get config as toml::Value
-        let user_config = get_configuration();
+        let user_config = get_configuration(context);
         // Convert into FullConfig and fill in default values
         let user_config = crate::configs::FullConfig::load(&user_config);
         // Convert back to Value because toml can't serialize FullConfig directly
@@ -177,15 +178,15 @@ fn extract_toml_paths(mut config: toml::Value, paths: &[String]) -> toml::Value 
     toml::Value::Table(subset)
 }
 
-pub fn toggle_configuration(name: &str, key: &str) {
-    let mut doc = get_configuration_edit();
+pub fn toggle_configuration(context: &Context, name: &str, key: &str) {
+    let mut doc = get_configuration_edit(context);
 
     match handle_toggle_configuration(&mut doc, name, key) {
         Err(e) => {
             eprintln!("{e}");
             process::exit(1);
         }
-        _ => write_configuration(&doc),
+        _ => write_configuration(context, &doc),
     }
 }
 
@@ -218,14 +219,14 @@ fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Res
     Ok(())
 }
 
-pub fn get_configuration() -> toml::Table {
-    let starship_config = StarshipConfig::initialize();
+pub fn get_configuration(context: &Context) -> toml::Table {
+    let starship_config = StarshipConfig::initialize(&context.get_config_path_os());
 
     starship_config.config.unwrap_or(toml::Table::new())
 }
 
-pub fn get_configuration_edit() -> Document {
-    let file_path = get_config_path();
+pub fn get_configuration_edit(context: &Context) -> Document {
+    let file_path = context.get_config_path_os();
     let toml_content = match utils::read_file(file_path) {
         Ok(content) => {
             log::trace!("Config file content: \"\n{}\"", &content);
@@ -249,8 +250,8 @@ pub fn get_configuration_edit() -> Document {
         .expect("Failed to load starship config")
 }
 
-pub fn write_configuration(doc: &Document) {
-    let config_path = get_config_path();
+pub fn write_configuration(context: &Context, doc: &Document) {
+    let config_path = context.get_config_path_os();
 
     let config_str = doc.to_string();
 
@@ -259,10 +260,10 @@ pub fn write_configuration(doc: &Document) {
         .expect("Error writing starship config");
 }
 
-pub fn edit_configuration(editor_override: Option<&str>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn edit_configuration(context: &Context, editor_override: Option<&str>) -> Result<(), Box<dyn std::error::Error>> {
     // Argument currently only used for testing, but could be used to specify
     // an editor override on the command line.
-    let config_path = get_config_path();
+    let config_path = context.get_config_path_os();
 
     let editor_cmd = shell_words::split(&get_editor(editor_override))?;
     let mut command = match utils::create_command(&editor_cmd[0]) {
@@ -312,20 +313,12 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
     STD_EDITOR.into()
 }
 
-fn get_config_path() -> OsString {
-    if let Some(config_path) = env::var_os("STARSHIP_CONFIG") {
-        return config_path;
-    }
-    utils::home_dir()
-        .expect("couldn't find home directory")
-        .join(".config")
-        .join("starship.toml")
-        .into()
-}
 
 #[cfg(test)]
 mod tests {
     use std::{io, fs::create_dir};
+
+    use crate::{context_env::Env, context::{Shell, Target}};
 
     use super::*;
 
@@ -380,13 +373,13 @@ mod tests {
 
     #[test]
     fn no_panic_when_editor_unparseable() {
-        let outcome = edit_configuration(Some("\"vim"));
+        let outcome = edit_configuration(&Default::default(), Some("\"vim"));
         assert!(outcome.is_err());
     }
 
     #[test]
     fn no_panic_when_editor_not_found() {
-        let outcome = edit_configuration(Some("this_editor_does_not_exist"));
+        let outcome = edit_configuration(&Default::default(), Some("this_editor_does_not_exist"));
         assert!(outcome.is_err());
     }
 
@@ -583,7 +576,7 @@ mod tests {
             .unwrap())
     }
 
-    const PRINT_CONFIG_DEFAULT: &str = "[custom]";
+    const PRINT_CONFIG_DEFAULT: &str = "[custom.default]";
     const PRINT_CONFIG_HOME: &str = "[custom.home]";
     const PRINT_CONFIG_ENV: &str = "[custom.env]";
 
@@ -622,18 +615,36 @@ mod tests {
                 Some(env_path)
             }
         };
+
+        let mut env = Env::default();
+        if let Some(v) = env_starship_config {
+            env.insert("STARSHIP_CONFIG", v.to_string_lossy().to_string());
+        }
+        env.insert("HOME", dir.path().to_path_buf().to_string_lossy().to_string());
         
-        temp_env::with_vars(
-            [
-                ("STARSHIP_CONFIG", env_starship_config),
-                ("HOME", Some(dir.path().to_path_buf())),
-            ],
-            || {
-                let config = print_configuration(false, &["custom".to_string()]);
-                let first_line = config.split("\n").nth(0).unwrap();
-                assert_eq!(expected_first_line, first_line, "{message}");
-            },
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            Target::Main,
+            Default::default(),
+            Default::default(),
+            env
         );
+        let config = print_configuration(&context, false, &["custom".to_string()]);
+        let first_line = config.split("\n").nth(0).unwrap();
+        assert_eq!(expected_first_line, first_line, "{message}");
+
+        // temp_env::with_vars(
+        //     [
+        //         // ("STARSHIP_CONFIG", env_starship_config),
+        //         // ("HOME", Some(dir.path().to_path_buf())),
+        //     ],
+        //     || {
+        //         let config = print_configuration(&Context::default(), false, &["custom".to_string()]);
+        //         let first_line = config.split("\n").nth(0).unwrap();
+        //         assert_eq!(expected_first_line, first_line, "{message}");
+        //     },
+        // );
         dir.close()
     }
 }

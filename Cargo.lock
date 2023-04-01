@@ -2730,7 +2730,6 @@ dependencies = [
  "starship-battery",
  "strsim",
  "systemstat",
- "temp-env",
  "tempfile",
  "terminal_size",
  "toml 0.7.3",
@@ -2829,15 +2828,6 @@ dependencies = [
  "quick-xml 0.23.1",
  "strum",
  "windows 0.39.0",
-]
-
-[[package]]
-name = "temp-env"
-version = "0.3.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8c0c07fe42fe15dcf97c394cb8350483a6e5095affb3a99e0dfd5f664be15fc3"
-dependencies = [
- "once_cell",
 ]
 
 [[package]]

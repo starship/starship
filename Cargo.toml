@@ -125,7 +125,6 @@ winres = "0.1.12"
 
 [dev-dependencies]
 mockall = "0.11"
-temp-env = "0.3.2"
 tempfile = "3.4.0"
 
 [profile.release]
