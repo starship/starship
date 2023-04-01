@@ -575,7 +575,8 @@
         "deleted_style": "bold red",
         "disabled": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
-        "only_nonzero_diffs": true
+        "only_nonzero_diffs": true,
+				"ignore_submodules": false
       },
       "allOf": [
         {
