@@ -69,8 +69,8 @@ fn parse_solidity_version(version: &str) -> Option<String> {
     solcjs --version out looks like 0.8.15+commit.e14f2714.Emscripten.clang */
     let version_var = match version.split_whitespace().nth(7) {
         // Will return Some(x) for solc --version and None for solcjs --version
-        Some(c) => c.split_terminator("+").nth(0)?, //Isolates the versioning number e.g "0.8.16"
-        None => version.split_terminator("+").nth(0)?, //Isolates the version number e.g "0.8.15"
+        Some(c) => c.split_terminator('a').next()?, //Isolates the versioning number e.g "0.8.16"
+        None => version.split_terminator('a').next()?, //Isolates the version number e.g "0.8.15"
     };
 
     Some(version_var.to_string())
