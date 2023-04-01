@@ -252,7 +252,7 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     singularity: singularity::SingularityConfig<'a>,
     #[serde(borrow)]
-    solidtiy: solidity::SolidityConfig<'a>,
+    solidity: solidity::SolidityConfig<'a>,
     #[serde(borrow)]
     spack: spack::SpackConfig<'a>,
     #[serde(borrow)]
