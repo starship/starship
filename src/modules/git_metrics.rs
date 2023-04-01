@@ -23,20 +23,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
     let repo_root = repo.workdir.as_ref()?;
 
-    let diff = context
-        .exec_cmd(
-            "git",
-            &[
-                OsStr::new("--git-dir"),
-                repo.path.as_os_str(),
-                OsStr::new("--work-tree"),
-                repo_root.as_os_str(),
-                OsStr::new("--no-optional-locks"),
-                OsStr::new("diff"),
-                OsStr::new("--shortstat"),
-            ],
-        )?
-        .stdout;
+    let mut args = vec![
+        OsStr::new("--git-dir"),
+        repo.path.as_os_str(),
+        OsStr::new("--work-tree"),
+        repo_root.as_os_str(),
+        OsStr::new("--no-optional-locks"),
+        OsStr::new("diff"),
+        OsStr::new("--shortstat"),
+    ];
+
+    if config.ignore_submodules {
+        args.push(OsStr::new("--ignore-submodules"));
+    }
+
+    let diff = context.exec_cmd("git", &args)?.stdout;
 
     let stats = GitDiff::parse(&diff);
 
