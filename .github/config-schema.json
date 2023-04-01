@@ -1514,8 +1514,12 @@
         }
       ]
     },
-    "solidtiy": {
+    "solidity": {
       "default": {
+        "compiler": [
+          "solc",
+          "solcjs"
+        ],
         "detect_extensions": [
           "sol"
         ],
@@ -1524,7 +1528,7 @@
         "disabled": false,
         "format": "via [$symbol($version)]($style)",
         "style": "bold blue",
-        "symbol": "S",
+        "symbol": "S ",
         "version_format": "v${major}.${minor}.${patch}"
       },
       "allOf": [
@@ -5256,8 +5260,19 @@
           "type": "string"
         },
         "symbol": {
-          "default": "S",
+          "default": "S ",
           "type": "string"
+        },
+        "compiler": {
+          "default": [
+            "solc",
+            "solcjs"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
         },
         "detect_extensions": {
           "default": [
