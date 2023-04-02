@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="GitHub Actions workflow status"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -169,7 +169,7 @@
 
 ### 必要なもの
 
-- [Nerd Font](https://www.nerdfonts.com/)がインストールされ、端末にて有効になっている（例えば、[Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)を試してみてください）。
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Step 1. Starshipをインストール
 
@@ -331,7 +331,7 @@ Nushellの環境ファイルの最後に以下を追記してください ( `$nu
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
@@ -340,7 +340,7 @@ starship init nu | save ~/.cache/starship/init.nu
 source ~/.cache/starship/init.nu
 ```
 
-注意: Elvish v0.61以降でサポートされています
+注意: Elvish v0.73以降でサポートされています
 
 </details>
 
@@ -416,13 +416,14 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 - **[reujab/silver](https://github.com/reujab/silver)** – アイコンと cross-shell 対応のカスタマイズ可能な powerline ライクなプロンプト。
 
-## ❤️ Sponsors
+## ❤️ スポンサー
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+[スポンサーになることで](https://github.com/sponsors/starship)このプロジェクトをサポートできます。 名前やロゴがあなたのホームページへのリンクとともに表示されます。
 
-**Supporter Tier**
+**スポンサーティア**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

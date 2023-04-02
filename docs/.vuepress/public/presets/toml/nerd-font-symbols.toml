@@ -46,6 +46,9 @@ symbol = "⌘ "
 [hg_branch]
 symbol = " "
 
+[hostname]
+ssh_symbol = " "
+
 [java]
 symbol = " "
 
@@ -97,7 +100,7 @@ NixOS = " "
 OpenBSD = " "
 openSUSE = " "
 OracleLinux = " "
-Pop = " "
+Pop = " "
 Raspbian = " "
 Redhat = " "
 RedHatEnterprise = " "

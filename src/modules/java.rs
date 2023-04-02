@@ -246,6 +246,16 @@ mod tests {
     }
 
     #[test]
+    fn folder_with_sdkman_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".sdkmanrc"))?.sync_all()?;
+        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn folder_with_gradle_kotlin_build_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("build.gradle.kts"))?.sync_all()?;

@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Journalisation
 
-Par défaut, Starship enregistre les avertissements et les erreurs dans un fichier nommé `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, où la clé de session correspond à une instance de votre terminal. Ceci peut cependant être modifié en utilisant la variable d'environnement `STARSHIP_CACHE`:
+By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Ceci peut cependant être modifié en utilisant la variable d'environnement `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -252,12 +252,14 @@ $singularity\
 $kubernetes\
 $directory\
 $vcsh\
+$fossil_branch\
 $git_branch\
 $git_commit\
 $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$pijul_channel\
 $docker_context\
 $package\
 $c\
@@ -270,6 +272,7 @@ $dotnet\
 $elixir\
 $elm\
 $erlang\
+$fennel\
 $golang\
 $guix_shell\
 $haskell\
@@ -278,6 +281,7 @@ $helm\
 $java\
 $julia\
 $kotlin\
+$gradle\
 $lua\
 $nim\
 $nodejs\
@@ -1084,7 +1088,7 @@ Par exemple, `~/Dev/Nix/nixpkgs/pkgs` où `nixpkgs` est la racine du repo, et l'
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_leng` interagit avec les options de troncature d'une manière qui peut être surprenante au début : si elle n'est pas nulle, les composantes du chemin qui seraient normalement tronquées sont affichées à la place avec autant de caractères. Par exemple, le chemin `/built/this/city/on/rock/and/roll`, qui devrait normalement être affiché comme `rock/and/roll`, sera affiché sous la forme de `/b/t/c/o/rock/and/roll` avec `fish_style_pwd_dir_length = 1`--les composants de chemin qui seraient normalement supprimés sont affichés avec un caractère unique. Pour `fish_style_pwd_dir_length = 2`, ce serait `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_leng` interagit avec les options de troncature d'une manière qui peut être surprenante au début : si elle n'est pas nulle, les composantes du chemin qui seraient normalement tronquées sont affichées à la place avec autant de caractères. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. Pour `fish_style_pwd_dir_length = 2`, ce serait `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1305,6 +1309,12 @@ Le module `env_var` affiche la valeur actuelle de la variable d’environnement 
 
 ::: tip
 
+The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+
+:::
+
+::: tip
+
 Plusieurs variables d’environnement peuvent être affichées en utilisant un `.`. (voir exemple). Si l’option de configuration `variable` n’est pas définie, le module affichera la valeur de la variable dont le nom est le texte après le caractère `.`.
 
 Exemple : la configuration suivante va afficher la valeur de la variable d’environnement UTILISATEUR
@@ -1320,13 +1330,14 @@ default = 'unknown user'
 
 ### Options
 
-| Option     | Défaut                         | Description                                                                         |
-| ---------- | ------------------------------ | ----------------------------------------------------------------------------------- |
-| `symbole`  | `''`                           | Le symbole utilisé avant d'afficher la valeur de la variable.                       |
-| `variable` |                                | La variable d'environnement à afficher.                                             |
-| `default`  |                                | La valeur par défaut à afficher lorsque la variable sélectionnée n'est pas définie. |
-| `format`   | `'with [$env_value]($style) '` | Format du module.                                                                   |
-| `disabled` | `false`                        | Désactive le module `env_var`.                                                      |
+| Option        | Défaut                         | Description                                                                          |
+| ------------- | ------------------------------ | ------------------------------------------------------------------------------------ |
+| `symbole`     | `""`                           | Le symbole utilisé avant d'afficher la valeur de la variable.                        |
+| `variable`    |                                | La variable d'environnement à afficher.                                              |
+| `default`     |                                | La valeur par défaut à afficher lorsque la variable sélectionnée n'est pas définie.  |
+| `format`      | `"with [$env_value]($style) "` | Format du module.                                                                    |
+| `description` | `"<env_var module>"`     | La description du module qui est affichée lors de l’exécution de `starship explain`. |
+| `disabled`    | `false`                        | Désactive le module `env_var`.                                                       |
 
 ### Variables
 
@@ -1399,6 +1410,44 @@ Le module `erlang` affiche la version de [Erlang/OTP](https://erlang.org/doc/) i
 format = 'via [e $version](bold red) '
 ```
 
+## Fennel
+
+The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+
+- The current directory contains a file with the `.fnl` extension
+
+### Options
+
+| Option                               | Défaut                               | Description                                                                                |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `'🧅 '`                               | The symbol used before displaying the version of fennel.                                   |
+| `style`                              | `'bold green'`                       | Le style pour le module.                                                                   |
+| `detect_extensionsdetect_extensions` | `[fnl]`                              | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `[]`                                 | Quels dossiers devraient activer ce module.                                                |
+| `disabled`                           | `false`                              | Disables the `fennel` module.                                                              |
+
+### Variables
+
+| Variable  | Exemple  | Description                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `v1.2.1` | The version of `fennel`                |
+| symbole   |          | Reflète la valeur de l'option `symbol` |
+| style\* |          | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[fennel]
+symbol = '⫰ '
+```
+
 ## Remplissage
 
 Le module `fill` remplit l’espace restant sur la ligne avec un symbole. Si plusieurs modules `fill` sont présents sur une ligne, ils divisent de manière égale l’espace entre eux. C’est utile pour aligner d’autres modules.
@@ -1426,6 +1475,42 @@ Produit une invite qui ressemble à :
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
+```
+
+## Fossil Branch
+
+The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
+
+### Options
+
+| Option              | Défaut                           | Description                                                                                          |
+| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `format`            | `'on [$symbol$branch]($style) '` | Format du module. Use `'$branch'` to refer to the current branch name.                               |
+| `symbole`           | `' '`                           | The symbol used before the branch name of the check-out in your current directory.                   |
+| `style`             | `'bold purple'`                  | Le style pour le module.                                                                             |
+| `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                                      |
+| `truncation_symbol` | `'…'`                            | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué. You can use `''` for no symbol. |
+| `disabled`          | `true`                           | Disables the `fossil_branch` module.                                                                 |
+
+### Variables
+
+| Variable  | Exemple | Description                            |
+| --------- | ------- | -------------------------------------- |
+| branch    | `trunk` | The active Fossil branch               |
+| symbole   |         | Reflète la valeur de l'option `symbol` |
+| style\* |         | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[fossil_branch]
+symbol = '🦎 '
+truncation_length = 4
+truncation_symbol = ''
 ```
 
 ## Google Cloud (`gcloud`)
@@ -1562,10 +1647,11 @@ Le module `git_commit` affiche le hash du commit courant et l’étiquette (s’
 
 ### Variables
 
-| Variable  | Exemple   | Description                           |
-| --------- | --------- | ------------------------------------- |
-| hash      | `b703eb3` | Le hash du commit git actuel          |
-| style\* |           | Reflète la valeur de l'option `style` |
+| Variable  | Exemple   | Description                                  |
+| --------- | --------- | -------------------------------------------- |
+| hash      | `b703eb3` | Le hash du commit git actuel                 |
+| tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
+| style\* |           | Reflète la valeur de l'option `style`        |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1840,6 +1926,41 @@ disabled = true
 format = 'via [🐂](yellow bold) '
 ```
 
+## Gradle
+
+The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
+
+Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+
+- The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
+- The current directory contains a file ending with `.gradle` or `.gradle.kts`.
+
+The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+
+### Options
+
+| Option                               | Défaut                               | Description                                                                                |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`                             | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`                     | `"v${raw}"`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `"🅶 "`                               | A format string representing the symbol of Gradle.                                         |
+| `detect_extensionsdetect_extensions` | `["gradle", "gradle.kts"]`           | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `["gradle"]`                         | Les dossiers qui activent ce module.                                                       |
+| `style`                              | `"bold bright-cyan"`                 | Le style pour le module.                                                                   |
+| `disabled`                           | `false`                              | Disables the `gradle` module.                                                              |
+| `recursive`                          | `false`                              | Enables recursive finding for the `gradle` directory.                                      |
+
+### Variables
+
+| Variable | Exemple  | Description                            |
+| -------- | -------- | -------------------------------------- |
+| version  | `v7.5.1` | The version of `gradle`                |
+| symbole  |          | Reflète la valeur de l'option `symbol` |
+| style*   |          | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
 ## Haskell
 
 Le module `haskell` affiche la version de GHC et/ou l’instantané Stack sélectionnée.
@@ -1993,21 +2114,21 @@ disabled = false
 
 Le module `java` affiche la version de [Java](https://www.oracle.com/java/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, or `build.boot` file
+- The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - Le dossier courant contient un fichier avec l’extension `.java`, `.class`, `.gradle`, `.jar`, `.clj` ou `.cljc`
 
 ### Options
 
-| Option                               | Défaut                                                                                                   | Description                                                                                |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [${symbol}(${version} )]($style)'`                                                                 | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                                              | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `detect_extensionsdetect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                     | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `[]`                                                                                                     | Quels dossiers devraient activer ce module.                                                |
-| `symbole`                            | `'☕ '`                                                                                                   | Une chaîne de caractères représentant le symbole de Java                                   |
-| `style`                              | `'red dimmed'`                                                                                           | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                                                  | Désactive le module `java`.                                                                |
+| Option                               | Défaut                                                                                                                | Description                                                                                |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [${symbol}(${version} )]($style)'`                                                                              | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                                                                                                           | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `detect_extensionsdetect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `[]`                                                                                                                  | Quels dossiers devraient activer ce module.                                                |
+| `symbole`                            | `'☕ '`                                                                                                                | Une chaîne de caractères représentant le symbole de Java                                   |
+| `style`                              | `'red dimmed'`                                                                                                        | Le style pour le module.                                                                   |
+| `disabled`                           | `false`                                                                                                               | Désactive le module `java`.                                                                |
 
 ### Variables
 
@@ -2222,7 +2343,7 @@ disabled = false
 [kubernetes.context_aliases]
 'dev.local.cluster.k8s' = 'dev'
 '.*/openshift-cluster/.*' = 'openshift'
-'gke_.*_(?P<var_cluster>[\\w-]+)' = 'gke-$var_cluster'
+'gke_.*_(?P<var_cluster>[\w-]+)' = 'gke-$var_cluster'
 [kubernetes.user_aliases]
 'dev.local.cluster.k8s' = 'dev'
 'root/.*' = 'root'
@@ -2251,12 +2372,12 @@ Les noms de cluster long ou générés automatiquement peuvent être identifiés
 # OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
 '.*/openshift-cluster/.*' = 'openshift'
 # Or better, to rename every OpenShift cluster at once:
-'.*/(?P<var_cluster>[\\w-]+)/.*' = '$var_cluster'
+'.*/(?P<var_cluster>[\w-]+)/.*' = '$var_cluster'
 
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-'gke_.*_(?P<var_cluster>[\\w-]+)' = 'gke-$var_cluster'
+'gke_.*_(?P<var_cluster>[\w-]+)' = 'gke-$var_cluster'
 ```
 
 ## Saut de ligne
@@ -2440,26 +2561,27 @@ style = 'bold dimmed green'
 
 ## Branche Mercurial
 
-Le module `hg_branch` affiche la branche active du dépôt dans le dossier courant.
+The `hg_branch` module shows the active branch and topic of the repo in your current directory.
 
 ### Options
 
-| Option              | Défaut                           | Description                                                                                                |
-| ------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `symbole`           | `' '`                           | Le symbole utilisé avant le marque-page hg ou le nom de la branche du dépôt dans votre répertoire courant. |
-| `style`             | `'bold purple'`                  | Le style pour le module.                                                                                   |
-| `format`            | `'on [$symbol$branch]($style) '` | Format du module.                                                                                          |
-| `truncation_length` | `2^63 - 1`                       | Tronque le nom de la branche hg à `N` graphèmes                                                            |
-| `truncation_symbol` | `'…'`                            | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué.                                       |
-| `disabled`          | `true`                           | Désactive le module `hg_branch`.                                                                           |
+| Option              | Défaut                                    | Description                                                                                                |
+| ------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `symbole`           | `' '`                                    | Le symbole utilisé avant le marque-page hg ou le nom de la branche du dépôt dans votre répertoire courant. |
+| `style`             | `'bold purple'`                           | Le style pour le module.                                                                                   |
+| `format`            | `'on [$symbol$branch(:$topic)]($style) '` | Format du module.                                                                                          |
+| `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                                      |
+| `truncation_symbol` | `'…'`                                     | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué.                                       |
+| `disabled`          | `true`                                    | Désactive le module `hg_branch`.                                                                           |
 
 ### Variables
 
-| Variable  | Exemple  | Description                            |
-| --------- | -------- | -------------------------------------- |
-| branch    | `master` | La branche mercuriale active           |
-| symbole   |          | Reflète la valeur de l'option `symbol` |
-| style\* |          | Reflète la valeur de l'option `style`  |
+| Variable  | Exemple   | Description                            |
+| --------- | --------- | -------------------------------------- |
+| branch    | `master`  | La branche mercuriale active           |
+| topic     | `feature` | The active mercurial topic             |
+| symbole   |           | Reflète la valeur de l'option `symbol` |
+| style\* |           | Reflète la valeur de l'option `style`  |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -2522,14 +2644,16 @@ Le module `nix_shell` affiche la version de l’environnement [nix-shell](https:
 
 ### Options
 
-| Option       | Défaut                                         | Description                                                |
-| ------------ | ---------------------------------------------- | ---------------------------------------------------------- |
-| `format`     | `'via [$symbol$state( \($name\))]($style) '` | Format du module.                                          |
-| `symbole`    | `'❄️ '`                                        | Une chaîne de format représentant le symbole de nix-shell. |
-| `style`      | `'bold blue'`                                  | Le style pour le module.                                   |
-| `impure_msg` | `'impure'`                                     | Une chaîne de format affichée lorsque le shell est impur.  |
-| `pure_msg`   | `'pure'`                                       | Une chaîne de format affichée lorsque le shell est pur.    |
-| `disabled`   | `false`                                        | Désactive le module `nix_shell`.                           |
+| Option        | Défaut                                         | Description                                                           |
+| ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
+| `format`      | `'via [$symbol$state( \($name\))]($style) '` | Format du module.                                                     |
+| `symbole`     | `'❄️ '`                                        | Une chaîne de format représentant le symbole de nix-shell.            |
+| `style`       | `'bold blue'`                                  | Le style pour le module.                                              |
+| `impure_msg`  | `'impure'`                                     | Une chaîne de format affichée lorsque le shell est impur.             |
+| `pure_msg`    | `'pure'`                                       | Une chaîne de format affichée lorsque le shell est pur.               |
+| `unknown_msg` | `''`                                           | A format string shown when it is unknown if the shell is pure/impure. |
+| `disabled`    | `false`                                        | Désactive le module `nix_shell`.                                      |
+| `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
 ### Variables
 
@@ -2551,6 +2675,7 @@ Le module `nix_shell` affiche la version de l’environnement [nix-shell](https:
 disabled = true
 impure_msg = '[impure shell](bold red)'
 pure_msg = '[pure shell](bold green)'
+unknown_msg = '[unknown shell](bold yellow)'
 format = 'via [☃️ $state( \($name\))](bold blue) '
 ```
 
@@ -2572,7 +2697,7 @@ Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) install�
 | `format`                             | `'via [$symbol($version )]($style)'`       | Format du module.                                                                                           |
 | `version_format`                     | `'v${raw}'`                                | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch`                  |
 | `symbole`                            | `' '`                                     | Une chaîne de caractères représentant le symbole de Node.js.                                                |
-| `detect_extensionsdetect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Les extensions qui activent ce module.                                                                      |
+| `detect_extensionsdetect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Les extensions qui déclenchent ce module.                                                                   |
 | `detect_files`                       | `['package.json', '.node-version']`        | Les fichiers qui activent ce module.                                                                        |
 | `detect_folders`                     | `['node_modules']`                         | Les dossiers qui activent ce module.                                                                        |
 | `style`                              | `'bold green'`                             | Le style pour le module.                                                                                    |
@@ -2770,6 +2895,8 @@ Mint = "🌿 "
 NetBSD = "🚩 "
 NixOS = "❄️ "
 OpenBSD = "🐡 "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
 openSUSE = "🦎 "
 OracleLinux = "🦴 "
 Pop = "🍭 "
@@ -2946,6 +3073,21 @@ Le module `php` affiche la version de [PHP](https://www.php.net/) installée. Pa
 [php]
 format = 'via [🔹 $version](147 bold) '
 ```
+
+## Pijul Channel
+
+The `pijul_channel` module shows the active channel of the repo in your current directory.
+
+### Options
+
+| Option              | Défaut                            | Description                                                                          |
+| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
+| `symbole`           | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
+| `style`             | `'bold purple'`                   | Le style pour le module.                                                             |
+| `format`            | `'on [$symbol$channel]($style) '` | Format du module.                                                                    |
+| `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
+| `truncation_symbol` | `'…'`                             | Le symbole utilisé pour indiquer qu'un nom de branche a été tronqué.                 |
+| `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
 
 ## Pulumi
 
@@ -3561,18 +3703,18 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Variables
 
-| Variable       | Exemple | Description                                                                                 |
-| -------------- | ------- | ------------------------------------------------------------------------------------------- |
-| statut         | `127`   | Le code de sortie de la dernière commande                                                   |
-| hex_status     | `0x7F`  | Le code de sortie de la dernière commande en hexa                                           |
-| int            | `127`   | Le code de sortie de la dernière commande                                                   |
-| common_meaning | `ERROR` | Signification du code si n’est pas un signal                                                |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                             |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                        |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                                |
-| pipestatus     |         | Rendering of in pipeline programs's exit codes, this is only available in pipestatus_format |
-| symbole        |         | Reflète la valeur de l'option `symbol`                                                      |
-| style\*      |         | Reflète la valeur de l'option `style`                                                       |
+| Variable       | Exemple | Description                                                                                |
+| -------------- | ------- | ------------------------------------------------------------------------------------------ |
+| statut         | `127`   | Le code de sortie de la dernière commande                                                  |
+| hex_status     | `0x7F`  | Le code de sortie de la dernière commande en hexa                                          |
+| int            | `127`   | Le code de sortie de la dernière commande                                                  |
+| common_meaning | `ERROR` | Signification du code si n’est pas un signal                                               |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
+| symbole        |         | Reflète la valeur de l'option `symbol`                                                     |
+| style\*      |         | Reflète la valeur de l'option `style`                                                      |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -3936,7 +4078,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-Le module `zig` affiche la version de [Zig](https://ziglang.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier `.zip`
 

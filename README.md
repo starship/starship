@@ -169,7 +169,7 @@
 
 ### Prerequisites
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Step 1. Install Starship
 
@@ -424,7 +424,6 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 **Supporter Tier**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">

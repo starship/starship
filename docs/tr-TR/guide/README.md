@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="GitHub Actions workflow status"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -169,7 +169,7 @@
 
 ### Ön koşullar
 
-- [Nerd Font](https://www.nerdfonts.com/) kurulu ve terminalinizde kullanılıyor olmalı (başlarken [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)'u deneyebilirsiniz).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### 1. Adım Starship'i Kur
 
@@ -331,7 +331,7 @@ Nushell env dosyanızın sonuna aşağıdakileri ekleyin (Nushell'de `$nu.env-pa
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşabilirsiniz) sonuna ekleyin:
@@ -340,7 +340,7 @@ Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşab
 source ~/.cache/starship/init.nu
 ```
 
-Not: Nushell v0.61'tan sonraki sürümler desteklenmektedir
+Not: Nushell v0.73'tan sonraki sürümler desteklenmektedir
 
 </details>
 
@@ -423,6 +423,7 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 **Supporter Tier**
 
 - [Dimension](https://dimension.dev/)
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

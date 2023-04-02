@@ -4,7 +4,7 @@ heroImage: /logo.svg
 heroText:
 tagline: シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！
 actionText: Get Started →
-actionLink: ./ja-JP/guide/
+actionLink: ./guide/
 features:
   - 
     title: 互換性優先
@@ -149,14 +149,14 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    ::: warning
 
-   これは将来的に変更される可能性があります。 Nushell v0.61+ のみサポートされています。
+   これは将来的に変更される可能性があります。 Nushell v0.73+ のみサポートされています。
 
    :::
 
-   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.env-path` を実行してください）:
+   Nushellの環境ファイルの最後に以下を追記してください ( `$nu.env-path` を実行してください):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):

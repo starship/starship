@@ -238,7 +238,7 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
         // workspace version string (`package.version.worspace = true`)
         // need to read the Cargo.toml file from the workspace root
         let mut version = None;
-        // disover the workspace root
+        // discover the workspace root
         for path in context.current_dir.ancestors().skip(1) {
             // Assume the workspace root is the first ancestor that contains a Cargo.toml file
             if let Ok(mut file) = fs::File::open(path.join("Cargo.toml")) {

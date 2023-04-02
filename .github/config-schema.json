@@ -475,7 +475,7 @@
     },
     "fennel": {
       "default": {
-        "detect_extentions": [
+        "detect_extensions": [
           "fnl"
         ],
         "detect_files": [],
@@ -823,7 +823,8 @@
           ".java-version",
           "deps.edn",
           "project.clj",
-          "build.boot"
+          "build.boot",
+          ".sdkmanrc"
         ],
         "detect_folders": [],
         "disabled": false,
@@ -1158,6 +1159,7 @@
           "NetBSD": "🚩 ",
           "NixOS": "❄️ ",
           "OpenBSD": "🐡 ",
+          "OpenCloudOS": "☁️ ",
           "OracleLinux": "🦴 ",
           "Pop": "🍭 ",
           "Raspbian": "🍓 ",
@@ -1169,6 +1171,7 @@
           "Ubuntu": "🎯 ",
           "Unknown": "❓ ",
           "Windows": "🪟 ",
+          "openEuler": "🦉 ",
           "openSUSE": "🦎 "
         }
       },
@@ -1786,7 +1789,7 @@
   "definitions": {
     "AwsConfig": {
       "title": "AWS",
-      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION` var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
       "type": "object",
       "properties": {
         "format": {
@@ -2966,7 +2969,7 @@
           "default": true,
           "type": "boolean"
         },
-        "detect_extentions": {
+        "detect_extensions": {
           "default": [
             "fnl"
           ],
@@ -3739,7 +3742,8 @@
             ".java-version",
             "deps.edn",
             "project.clj",
-            "build.boot"
+            "build.boot",
+            ".sdkmanrc"
           ],
           "type": "array",
           "items": {
@@ -4437,6 +4441,7 @@
             "NetBSD": "🚩 ",
             "NixOS": "❄️ ",
             "OpenBSD": "🐡 ",
+            "OpenCloudOS": "☁️ ",
             "OracleLinux": "🦴 ",
             "Pop": "🍭 ",
             "Raspbian": "🍓 ",
@@ -4448,6 +4453,7 @@
             "Ubuntu": "🎯 ",
             "Unknown": "❓ ",
             "Windows": "🪟 ",
+            "openEuler": "🦉 ",
             "openSUSE": "🦎 "
           },
           "type": "object",
@@ -5734,6 +5740,10 @@
               "$ref": "#/definitions/Either_for_Boolean_and_String"
             }
           ]
+        },
+        "require_repo": {
+          "default": false,
+          "type": "boolean"
         },
         "shell": {
           "default": [],
