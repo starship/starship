@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### Optionen
 
-| Option         | Standartwert                   | Beschreibung                                                                             |
-| -------------- | ------------------------------ | ---------------------------------------------------------------------------------------- |
-| `symbol`       | `""`                           | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
-| `variable`     |                                | Die anzuzeigende Umgebungsvariable.                                                      |
-| `default`      |                                | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
-| `format`       | `"with [$env_value]($style) "` | Das Format für das Modul.                                                                |
-| `beschreibung` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.             |
-| `disabled`     | `false`                        | Deaktiviert das `env_var`-Modul.                                                         |
+| Option        | Standartwert                   | Beschreibung                                                                             |
+| ------------- | ------------------------------ | ---------------------------------------------------------------------------------------- |
+| `symbol`      | `""`                           | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
+| `variable`    |                                | Die anzuzeigende Umgebungsvariable.                                                      |
+| `default`     |                                | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
+| `format`      | `"with [$env_value]($style) "` | Das Format für das Modul.                                                                |
+| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.             |
+| `disabled`    | `false`                        | Deaktiviert das `env_var`-Modul.                                                         |
 
 ### Variables
 
@@ -4157,8 +4157,9 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `beschreibung`      | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
