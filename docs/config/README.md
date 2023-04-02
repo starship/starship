@@ -311,12 +311,12 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
 $vagrant\
 $zig\
-$solidity\
 $buf\
 $nix_shell\
 $conda\
@@ -3802,6 +3802,45 @@ and `$SINGULARITY_NAME` is set.
 format = '[📦 \[$env\]]($style) '
 ```
 
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/)
+The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### Options
+
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                       |
+| `compiler           | ["solc"]                             | The default compilers for solidity.                                       |
+| `detect_extensions` | `["sol"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold blue"`                        | The style for the module.                                                 |
+| `disabled`          | `false`                              | Disables this module.                                                     |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v0.8.1` | The version of `solidity`            |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
+```
+
 ## Spack
 
 The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
@@ -3948,47 +3987,6 @@ disabled = false
 [sudo]
 allow_windows = true
 disabled = false
-```
-
-# Solidity
-
-The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/)
-The module will be shown if any of the following conditions are met:
-
-- The current directory contains a file with the `.sol` extension
-
-### Options
-
-| Option           | Default                                  | Description                                                               |
-| ---------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
-| `format`         | `"via [${symbol}(${version} )]($style)"` | The format for the module.                                                |
-| `version_format` | `"v${major}.${minor}.${patch}"`          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-
-| `compiler | ["solc"] | The default compilers for solidity.
-
-| `detect_extensions` | `["sol"]` | Which extensions should trigger this module. |
-| `detect_files` | `[]` | Which filenames should trigger this module. |
-| `detect_folders` | `[]` | Which folders should trigger this modules. |
-| `symbol` | `"S "` | A format string representing the symbol of solidity. |
-| `style` | `"bold blue "` | The style for the module. |
-| `disabled` | `false` | Disables the `solidity` module. |
-
-### Variables
-
-| Variable | Example  | Description                          |
-| -------- | -------- | ------------------------------------ |
-| version  | `v0.8.1` | The version of `solidity`            |
-| symbol   |          | Mirrors the value of option `symbol` |
-| style\*  |          | Mirrors the value of option `style`  |
-
-*: This variable can only be used as a part of a style string
-
-### Example
-
-````toml
-# ~/.config/starship.toml
-[solidity]
-format = "via [S $version](blue bold)"
 ```
 
 ## Swift
@@ -4388,6 +4386,7 @@ Format strings can also contain shell specific prompt sequences, e.g.
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
 | `description`       | `'<custom module>'`             | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
@@ -4479,4 +4478,3 @@ detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
-````
