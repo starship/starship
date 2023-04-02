@@ -318,6 +318,9 @@ fn get_editor_internal(visual: Option<String>, editor: Option<String>) -> String
 mod tests {
     use std::{fs::create_dir, io};
 
+    use tempfile::TempDir;
+    use toml_edit::Item;
+
     use crate::{
         context::{Shell, Target},
         context_env::Env,
@@ -579,6 +582,21 @@ mod tests {
             .unwrap())
     }
 
+    #[test]
+    fn write_and_get_configuration_test() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let context = setup_config(&dir, true, StarshipConfigEnvScenario::NotSpecified)?;
+        let mut doc = get_configuration_edit(&context);
+        doc["directory"]["format"] = Item::Value("myformat".into());
+        write_configuration(&context, &doc);
+        let doc_reloaded = get_configuration_edit(&context);
+        assert_eq!(
+            "myformat",
+            doc_reloaded["directory"]["format"].as_str().unwrap()
+        );
+        dir.close()
+    }
+
     const PRINT_CONFIG_DEFAULT: &str = "[custom]";
     const PRINT_CONFIG_HOME: &str = "[custom.home]";
     const PRINT_CONFIG_ENV: &str = "[custom.STARSHIP_CONFIG]";
@@ -625,6 +643,18 @@ mod tests {
         expected_first_line: &str,
     ) -> io::Result<()> {
         let dir = tempfile::tempdir()?;
+        let context = setup_config(&dir, home_file_exists, starship_config_env_scenario)?;
+        let config = print_configuration(&context, false, &["custom".to_string()]);
+        let first_line = config.split('\n').next().unwrap();
+        assert_eq!(expected_first_line, first_line, "{message}");
+        dir.close()
+    }
+
+    fn setup_config(
+        dir: &TempDir,
+        home_file_exists: bool,
+        starship_config_env_scenario: StarshipConfigEnvScenario,
+    ) -> io::Result<Context> {
         let config_path = dir.path().to_path_buf().join(".config");
         create_dir(&config_path)?;
         let home_starship_toml = config_path.join("starship.toml");
@@ -653,18 +683,13 @@ mod tests {
             dir.path().to_path_buf().to_string_lossy().to_string(),
         );
 
-        let context = Context::new_with_shell_and_path(
+        Ok(Context::new_with_shell_and_path(
             Default::default(),
             Shell::Unknown,
             Target::Main,
             Default::default(),
             Default::default(),
             env,
-        );
-        let config = print_configuration(&context, false, &["custom".to_string()]);
-        let first_line = config.split('\n').next().unwrap();
-        assert_eq!(expected_first_line, first_line, "{message}");
-
-        dir.close()
+        ))
     }
 }
