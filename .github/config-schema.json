@@ -5701,6 +5701,10 @@
             }
           ]
         },
+        "require_repo": {
+          "default": false,
+          "type": "boolean"
+        },
         "shell": {
           "default": [],
           "allOf": [
