@@ -3959,16 +3959,19 @@ The module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                                  | Description                                                               |
-| ------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `"via [${symbol}(${version} )]($style)"` | The format for the module.                                                |
-| `version_format`    | `"v${major}.${minor}.${patch}"`          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["sol"]`                                | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                     | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                     | Which folders should trigger this modules.                                |
-| `symbol`            | `"S "`                                   | A format string representing the symbol of solidity.                      |
-| `style`             | `"bold blue "`                           | The style for the module.                                                 |
-| `disabled`          | `false`                                  | Disables the `solidity` module.                                           |
+| Option           | Default                                  | Description                                                               |
+| ---------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `"via [${symbol}(${version} )]($style)"` | The format for the module.                                                |
+| `version_format` | `"v${major}.${minor}.${patch}"`          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+
+| `compiler | ["solc"] | The default compilers for solidity.
+
+| `detect_extensions` | `["sol"]` | Which extensions should trigger this module. |
+| `detect_files` | `[]` | Which filenames should trigger this module. |
+| `detect_folders` | `[]` | Which folders should trigger this modules. |
+| `symbol` | `"S "` | A format string representing the symbol of solidity. |
+| `style` | `"bold blue "` | The style for the module. |
+| `disabled` | `false` | Disables the `solidity` module. |
 
 ### Variables
 
