@@ -1,6 +1,5 @@
 use regex::Regex;
 
-use super::utils::path::PathExt;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::fossil_metrics::FossilMetricsConfig;
@@ -18,9 +17,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    if !is_checkout(context) {
-        return None;
-    }
+    let checkout_db = if cfg!(windows) {
+        "_FOSSIL_"
+    } else {
+        ".fslckout"
+    };
+    // See if we're in a check-out by scanning upwards for a directory containing the checkout_db file
+    context
+        .begin_ancestor_scan()
+        .set_files(&[checkout_db])
+        .scan()?;
 
     // Read the total number of added and deleted lines from "fossil diff --numstat"
     let output = context.exec_cmd("fossil", &["diff", "--numstat"])?.stdout;
@@ -50,19 +56,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-fn is_checkout(ctx: &Context) -> bool {
-    let dev_id = ctx.current_dir.device_id();
-    for dir in ctx.current_dir.as_path().ancestors() {
-        if dev_id != dir.device_id() {
-            break;
-        }
-        if dir.join(".fslckout").is_file() {
-            return true;
-        }
-    }
-    false
 }
 
 /// Represents the parsed output from a Fossil diff with the --numstat option enabled.
