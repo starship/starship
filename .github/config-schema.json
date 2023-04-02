@@ -1,0 +1,5856 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FullConfig",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "default": "https://starship.rs/config-schema.json",
+      "type": "string"
+    },
+    "aws": {
+      "default": {
+        "disabled": false,
+        "expiration_symbol": "X",
+        "force_display": false,
+        "format": "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",
+        "profile_aliases": {},
+        "region_aliases": {},
+        "style": "bold yellow",
+        "symbol": "☁️  "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/AwsConfig"
+        }
+      ]
+    },
+    "azure": {
+      "default": {
+        "disabled": true,
+        "format": "on [$symbol($subscription)]($style) ",
+        "style": "blue bold",
+        "symbol": "ﴃ "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/AzureConfig"
+        }
+      ]
+    },
+    "battery": {
+      "default": {
+        "charging_symbol": " ",
+        "disabled": false,
+        "discharging_symbol": " ",
+        "display": [
+          {
+            "charging_symbol": null,
+            "discharging_symbol": null,
+            "style": "red bold",
+            "threshold": 10
+          }
+        ],
+        "empty_symbol": " ",
+        "format": "[$symbol$percentage]($style) ",
+        "full_symbol": " ",
+        "unknown_symbol": " "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/BatteryConfig"
+        }
+      ]
+    },
+    "buf": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "buf.yaml",
+          "buf.gen.yaml",
+          "buf.work.yaml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "with [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "🐃 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/BufConfig"
+        }
+      ]
+    },
+    "bun": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "bun.lockb",
+          "bunfig.toml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold red",
+        "symbol": "🍞 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/BunConfig"
+        }
+      ]
+    },
+    "c": {
+      "default": {
+        "commands": [
+          [
+            "cc",
+            "--version"
+          ],
+          [
+            "gcc",
+            "--version"
+          ],
+          [
+            "clang",
+            "--version"
+          ]
+        ],
+        "detect_extensions": [
+          "c",
+          "h"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version(-$name) )]($style)",
+        "style": "149 bold",
+        "symbol": "C ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CConfig"
+        }
+      ]
+    },
+    "character": {
+      "default": {
+        "disabled": false,
+        "error_symbol": "[❯](bold red)",
+        "format": "$symbol ",
+        "success_symbol": "[❯](bold green)",
+        "vimcmd_replace_one_symbol": "[❮](bold purple)",
+        "vimcmd_replace_symbol": "[❮](bold purple)",
+        "vimcmd_symbol": "[❮](bold green)",
+        "vimcmd_visual_symbol": "[❮](bold yellow)"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CharacterConfig"
+        }
+      ]
+    },
+    "cmake": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "CMakeLists.txt",
+          "CMakeCache.txt"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "△ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CMakeConfig"
+        }
+      ]
+    },
+    "cmd_duration": {
+      "default": {
+        "disabled": false,
+        "format": "took [$duration]($style) ",
+        "min_time": 2000,
+        "min_time_to_notify": 45000,
+        "show_milliseconds": false,
+        "show_notifications": false,
+        "style": "yellow bold"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CmdDurationConfig"
+        }
+      ]
+    },
+    "cobol": {
+      "default": {
+        "detect_extensions": [
+          "cbl",
+          "cob",
+          "CBL",
+          "COB"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "⚙️ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CobolConfig"
+        }
+      ]
+    },
+    "conda": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$environment]($style) ",
+        "ignore_base": true,
+        "style": "green bold",
+        "symbol": "🅒 ",
+        "truncation_length": 1
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CondaConfig"
+        }
+      ]
+    },
+    "container": {
+      "default": {
+        "disabled": false,
+        "format": "[$symbol \\[$name\\]]($style) ",
+        "style": "red bold dimmed",
+        "symbol": "⬢"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ContainerConfig"
+        }
+      ]
+    },
+    "crystal": {
+      "default": {
+        "detect_extensions": [
+          "cr"
+        ],
+        "detect_files": [
+          "shard.yml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold red",
+        "symbol": "🔮 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CrystalConfig"
+        }
+      ]
+    },
+    "daml": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "daml.yaml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold cyan",
+        "symbol": "Λ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DamlConfig"
+        }
+      ]
+    },
+    "dart": {
+      "default": {
+        "detect_extensions": [
+          "dart"
+        ],
+        "detect_files": [
+          "pubspec.yaml",
+          "pubspec.yml",
+          "pubspec.lock"
+        ],
+        "detect_folders": [
+          ".dart_tool"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "🎯 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DartConfig"
+        }
+      ]
+    },
+    "deno": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "deno.json",
+          "deno.jsonc",
+          "mod.ts",
+          "deps.ts",
+          "mod.js",
+          "deps.js"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "green bold",
+        "symbol": "🦕 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DenoConfig"
+        }
+      ]
+    },
+    "directory": {
+      "default": {
+        "before_repo_root_style": null,
+        "disabled": false,
+        "fish_style_pwd_dir_length": 0,
+        "format": "[$path]($style)[$read_only]($read_only_style) ",
+        "home_symbol": "~",
+        "read_only": "🔒",
+        "read_only_style": "red",
+        "repo_root_format": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
+        "repo_root_style": null,
+        "style": "cyan bold",
+        "substitutions": {},
+        "truncate_to_repo": true,
+        "truncation_length": 3,
+        "truncation_symbol": "",
+        "use_logical_path": true,
+        "use_os_path_sep": true
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DirectoryConfig"
+        }
+      ]
+    },
+    "docker_context": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "docker-compose.yml",
+          "docker-compose.yaml",
+          "Dockerfile"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol$context]($style) ",
+        "only_with_files": true,
+        "style": "blue bold",
+        "symbol": "🐳 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DockerContextConfig"
+        }
+      ]
+    },
+    "dotnet": {
+      "default": {
+        "detect_extensions": [
+          "csproj",
+          "fsproj",
+          "xproj"
+        ],
+        "detect_files": [
+          "global.json",
+          "project.json",
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Packages.props"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )(🎯 $tfm )]($style)",
+        "heuristic": true,
+        "style": "blue bold",
+        "symbol": ".NET ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DotnetConfig"
+        }
+      ]
+    },
+    "elixir": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "mix.exs"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
+        "style": "bold purple",
+        "symbol": "💧 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ElixirConfig"
+        }
+      ]
+    },
+    "elm": {
+      "default": {
+        "detect_extensions": [
+          "elm"
+        ],
+        "detect_files": [
+          "elm.json",
+          "elm-package.json",
+          ".elm-version"
+        ],
+        "detect_folders": [
+          "elm-stuff"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "cyan bold",
+        "symbol": "🌳 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ElmConfig"
+        }
+      ]
+    },
+    "env_var": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/EnvVarConfig"
+      }
+    },
+    "erlang": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "rebar.config",
+          "erlang.mk"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold red",
+        "symbol": " ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ErlangConfig"
+        }
+      ]
+    },
+    "fennel": {
+      "default": {
+        "detect_extensions": [
+          "fnl"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": true,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold green",
+        "symbol": "🧅 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FennelConfig"
+        }
+      ]
+    },
+    "fill": {
+      "default": {
+        "disabled": false,
+        "style": "bold black",
+        "symbol": "."
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FillConfig"
+        }
+      ]
+    },
+    "fossil_branch": {
+      "default": {
+        "disabled": true,
+        "format": "on [$symbol$branch]($style) ",
+        "style": "bold purple",
+        "symbol": " ",
+        "truncation_length": 9223372036854775807,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FossilBranchConfig"
+        }
+      ]
+    },
+    "gcloud": {
+      "default": {
+        "disabled": false,
+        "format": "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
+        "project_aliases": {},
+        "region_aliases": {},
+        "style": "bold blue",
+        "symbol": "☁️  "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GcloudConfig"
+        }
+      ]
+    },
+    "git_branch": {
+      "default": {
+        "always_show_remote": false,
+        "disabled": false,
+        "format": "on [$symbol$branch(:$remote_branch)]($style) ",
+        "ignore_branches": [],
+        "only_attached": false,
+        "style": "bold purple",
+        "symbol": " ",
+        "truncation_length": 9223372036854775807,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GitBranchConfig"
+        }
+      ]
+    },
+    "git_commit": {
+      "default": {
+        "commit_hash_length": 7,
+        "disabled": false,
+        "format": "[\\($hash$tag\\)]($style) ",
+        "only_detached": true,
+        "style": "green bold",
+        "tag_disabled": true,
+        "tag_max_candidates": 0,
+        "tag_symbol": " 🏷  "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GitCommitConfig"
+        }
+      ]
+    },
+    "git_metrics": {
+      "default": {
+        "added_style": "bold green",
+        "deleted_style": "bold red",
+        "disabled": true,
+        "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "only_nonzero_diffs": true
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GitMetricsConfig"
+        }
+      ]
+    },
+    "git_state": {
+      "default": {
+        "am": "AM",
+        "am_or_rebase": "AM/REBASE",
+        "bisect": "BISECTING",
+        "cherry_pick": "CHERRY-PICKING",
+        "disabled": false,
+        "format": "\\([$state( $progress_current/$progress_total)]($style)\\) ",
+        "merge": "MERGING",
+        "rebase": "REBASING",
+        "revert": "REVERTING",
+        "style": "bold yellow"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GitStateConfig"
+        }
+      ]
+    },
+    "git_status": {
+      "default": {
+        "ahead": "⇡",
+        "behind": "⇣",
+        "conflicted": "=",
+        "deleted": "✘",
+        "disabled": false,
+        "diverged": "⇕",
+        "format": "([\\[$all_status$ahead_behind\\]]($style) )",
+        "ignore_submodules": false,
+        "modified": "!",
+        "renamed": "»",
+        "staged": "+",
+        "stashed": "\\$",
+        "style": "red bold",
+        "untracked": "?",
+        "up_to_date": ""
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GitStatusConfig"
+        }
+      ]
+    },
+    "golang": {
+      "default": {
+        "detect_extensions": [
+          "go"
+        ],
+        "detect_files": [
+          "go.mod",
+          "go.sum",
+          "go.work",
+          "glide.yaml",
+          "Gopkg.yml",
+          "Gopkg.lock",
+          ".go-version"
+        ],
+        "detect_folders": [
+          "Godeps"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold cyan",
+        "symbol": "🐹 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GoConfig"
+        }
+      ]
+    },
+    "gradle": {
+      "default": {
+        "detect_extensions": [
+          "gradle",
+          "gradle.kts"
+        ],
+        "detect_files": [],
+        "detect_folders": [
+          "gradle"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "recursive": false,
+        "style": "bold bright-cyan",
+        "symbol": "🅶 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GradleConfig"
+        }
+      ]
+    },
+    "guix_shell": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol]($style) ",
+        "style": "yellow bold",
+        "symbol": "🐃 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GuixShellConfig"
+        }
+      ]
+    },
+    "haskell": {
+      "default": {
+        "detect_extensions": [
+          "hs",
+          "cabal",
+          "hs-boot"
+        ],
+        "detect_files": [
+          "stack.yaml",
+          "cabal.project"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold purple",
+        "symbol": "λ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HaskellConfig"
+        }
+      ]
+    },
+    "haxe": {
+      "default": {
+        "detect_extensions": [
+          "hx",
+          "hxml"
+        ],
+        "detect_files": [
+          "haxelib.json",
+          "hxformat.json",
+          ".haxerc"
+        ],
+        "detect_folders": [
+          ".haxelib",
+          "haxe_libraries"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold fg:202",
+        "symbol": "⌘ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HaxeConfig"
+        }
+      ]
+    },
+    "helm": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "helmfile.yaml",
+          "Chart.yaml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold white",
+        "symbol": "⎈ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HelmConfig"
+        }
+      ]
+    },
+    "hg_branch": {
+      "default": {
+        "disabled": true,
+        "format": "on [$symbol$branch(:$topic)]($style) ",
+        "style": "bold purple",
+        "symbol": " ",
+        "truncation_length": 9223372036854775807,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HgBranchConfig"
+        }
+      ]
+    },
+    "hostname": {
+      "default": {
+        "disabled": false,
+        "format": "[$ssh_symbol$hostname]($style) in ",
+        "ssh_only": true,
+        "ssh_symbol": "🌐 ",
+        "style": "green dimmed bold",
+        "trim_at": "."
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HostnameConfig"
+        }
+      ]
+    },
+    "java": {
+      "default": {
+        "detect_extensions": [
+          "java",
+          "class",
+          "jar",
+          "gradle",
+          "clj",
+          "cljc"
+        ],
+        "detect_files": [
+          "pom.xml",
+          "build.gradle.kts",
+          "build.sbt",
+          ".java-version",
+          "deps.edn",
+          "project.clj",
+          "build.boot",
+          ".sdkmanrc"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "red dimmed",
+        "symbol": "☕ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/JavaConfig"
+        }
+      ]
+    },
+    "jobs": {
+      "default": {
+        "disabled": false,
+        "format": "[$symbol$number]($style) ",
+        "number_threshold": 2,
+        "style": "bold blue",
+        "symbol": "✦",
+        "symbol_threshold": 1,
+        "threshold": 1
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/JobsConfig"
+        }
+      ]
+    },
+    "julia": {
+      "default": {
+        "detect_extensions": [
+          "jl"
+        ],
+        "detect_files": [
+          "Project.toml",
+          "Manifest.toml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold purple",
+        "symbol": "ஃ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/JuliaConfig"
+        }
+      ]
+    },
+    "kotlin": {
+      "default": {
+        "detect_extensions": [
+          "kt",
+          "kts"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "kotlin_binary": "kotlin",
+        "style": "bold blue",
+        "symbol": "🅺 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/KotlinConfig"
+        }
+      ]
+    },
+    "kubernetes": {
+      "default": {
+        "context_aliases": {},
+        "detect_extensions": [],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": true,
+        "format": "[$symbol$context( \\($namespace\\))]($style) in ",
+        "style": "cyan bold",
+        "symbol": "☸ ",
+        "user_aliases": {}
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/KubernetesConfig"
+        }
+      ]
+    },
+    "line_break": {
+      "default": {
+        "disabled": false
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/LineBreakConfig"
+        }
+      ]
+    },
+    "localip": {
+      "default": {
+        "disabled": true,
+        "format": "[$localipv4]($style) ",
+        "ssh_only": true,
+        "style": "yellow bold"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/LocalipConfig"
+        }
+      ]
+    },
+    "lua": {
+      "default": {
+        "detect_extensions": [
+          "lua"
+        ],
+        "detect_files": [
+          ".lua-version"
+        ],
+        "detect_folders": [
+          "lua"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "lua_binary": "lua",
+        "style": "bold blue",
+        "symbol": "🌙 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/LuaConfig"
+        }
+      ]
+    },
+    "memory_usage": {
+      "default": {
+        "disabled": true,
+        "format": "via $symbol[$ram( | $swap)]($style) ",
+        "style": "white bold dimmed",
+        "symbol": "🐏 ",
+        "threshold": 75
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MemoryConfig"
+        }
+      ]
+    },
+    "meson": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$project]($style) ",
+        "style": "blue bold",
+        "symbol": "⬢ ",
+        "truncation_length": 4294967295,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/MesonConfig"
+        }
+      ]
+    },
+    "nim": {
+      "default": {
+        "detect_extensions": [
+          "nim",
+          "nims",
+          "nimble"
+        ],
+        "detect_files": [
+          "nim.cfg"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "yellow bold",
+        "symbol": "👑 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NimConfig"
+        }
+      ]
+    },
+    "nix_shell": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$state( \\($name\\))]($style) ",
+        "heuristic": false,
+        "impure_msg": "impure",
+        "pure_msg": "pure",
+        "style": "bold blue",
+        "symbol": "❄️  ",
+        "unknown_msg": ""
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NixShellConfig"
+        }
+      ]
+    },
+    "nodejs": {
+      "default": {
+        "detect_extensions": [
+          "js",
+          "mjs",
+          "cjs",
+          "ts",
+          "mts",
+          "cts"
+        ],
+        "detect_files": [
+          "package.json",
+          ".node-version",
+          ".nvmrc"
+        ],
+        "detect_folders": [
+          "node_modules"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "not_capable_style": "bold red",
+        "style": "bold green",
+        "symbol": " ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/NodejsConfig"
+        }
+      ]
+    },
+    "ocaml": {
+      "default": {
+        "detect_extensions": [
+          "opam",
+          "ml",
+          "mli",
+          "re",
+          "rei"
+        ],
+        "detect_files": [
+          "dune",
+          "dune-project",
+          "jbuild",
+          "jbuild-ignore",
+          ".merlin"
+        ],
+        "detect_folders": [
+          "_opam",
+          "esy.lock"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )(\\($switch_indicator$switch_name\\) )]($style)",
+        "global_switch_indicator": "",
+        "local_switch_indicator": "*",
+        "style": "bold yellow",
+        "symbol": "🐫 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OCamlConfig"
+        }
+      ]
+    },
+    "opa": {
+      "default": {
+        "detect_extensions": [
+          "rego"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold blue",
+        "symbol": "🪖  ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OpaConfig"
+        }
+      ]
+    },
+    "openstack": {
+      "default": {
+        "disabled": false,
+        "format": "on [$symbol$cloud(\\($project\\))]($style) ",
+        "style": "bold yellow",
+        "symbol": "☁️  "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OspConfig"
+        }
+      ]
+    },
+    "os": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol]($style)",
+        "style": "bold white",
+        "symbols": {
+          "Alpine": "🏔️ ",
+          "Amazon": "🙂 ",
+          "Android": "🤖 ",
+          "Arch": "🎗️ ",
+          "CentOS": "💠 ",
+          "Debian": "🌀 ",
+          "DragonFly": "🐉 ",
+          "Emscripten": "🔗 ",
+          "EndeavourOS": "🚀 ",
+          "Fedora": "🎩 ",
+          "FreeBSD": "😈 ",
+          "Garuda": "🦅 ",
+          "Gentoo": "🗜️ ",
+          "HardenedBSD": "🛡️ ",
+          "Illumos": "🐦 ",
+          "Linux": "🐧 ",
+          "Macos": "🍎 ",
+          "Manjaro": "🥭 ",
+          "Mariner": "🌊 ",
+          "MidnightBSD": "🌘 ",
+          "Mint": "🌿 ",
+          "NetBSD": "🚩 ",
+          "NixOS": "❄️ ",
+          "OpenBSD": "🐡 ",
+          "OpenCloudOS": "☁️ ",
+          "OracleLinux": "🦴 ",
+          "Pop": "🍭 ",
+          "Raspbian": "🍓 ",
+          "RedHatEnterprise": "🎩 ",
+          "Redhat": "🎩 ",
+          "Redox": "🧪 ",
+          "SUSE": "🦎 ",
+          "Solus": "⛵ ",
+          "Ubuntu": "🎯 ",
+          "Unknown": "❓ ",
+          "Windows": "🪟 ",
+          "openEuler": "🦉 ",
+          "openSUSE": "🦎 "
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/OSConfig"
+        }
+      ]
+    },
+    "package": {
+      "default": {
+        "disabled": false,
+        "display_private": false,
+        "format": "is [$symbol$version]($style) ",
+        "style": "208 bold",
+        "symbol": "📦 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PackageConfig"
+        }
+      ]
+    },
+    "perl": {
+      "default": {
+        "detect_extensions": [
+          "pl",
+          "pm",
+          "pod"
+        ],
+        "detect_files": [
+          "Makefile.PL",
+          "Build.PL",
+          "cpanfile",
+          "cpanfile.snapshot",
+          "META.json",
+          "META.yml",
+          ".perl-version"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "149 bold",
+        "symbol": "🐪 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PerlConfig"
+        }
+      ]
+    },
+    "php": {
+      "default": {
+        "detect_extensions": [
+          "php"
+        ],
+        "detect_files": [
+          "composer.json",
+          ".php-version"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "147 bold",
+        "symbol": "🐘 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PhpConfig"
+        }
+      ]
+    },
+    "pijul_channel": {
+      "default": {
+        "disabled": true,
+        "format": "on [$symbol$channel]($style) ",
+        "style": "bold purple",
+        "symbol": " ",
+        "truncation_length": 9223372036854775807,
+        "truncation_symbol": "…"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PijulConfig"
+        }
+      ]
+    },
+    "pulumi": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol($username@)$stack]($style) ",
+        "search_upwards": true,
+        "style": "bold 5",
+        "symbol": " ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PulumiConfig"
+        }
+      ]
+    },
+    "purescript": {
+      "default": {
+        "detect_extensions": [
+          "purs"
+        ],
+        "detect_files": [
+          "spago.dhall"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold white",
+        "symbol": "<=> ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PureScriptConfig"
+        }
+      ]
+    },
+    "python": {
+      "default": {
+        "detect_extensions": [
+          "py"
+        ],
+        "detect_files": [
+          "requirements.txt",
+          ".python-version",
+          "pyproject.toml",
+          "Pipfile",
+          "tox.ini",
+          "setup.py",
+          "__init__.py"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
+        "pyenv_prefix": "pyenv ",
+        "pyenv_version_name": false,
+        "python_binary": [
+          "python",
+          "python3",
+          "python2"
+        ],
+        "style": "yellow bold",
+        "symbol": "🐍 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/PythonConfig"
+        }
+      ]
+    },
+    "raku": {
+      "default": {
+        "detect_extensions": [
+          "p6",
+          "pm6",
+          "pod6",
+          "raku",
+          "rakumod"
+        ],
+        "detect_files": [
+          "META6.json"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version-$vm_version )]($style)",
+        "style": "149 bold",
+        "symbol": "🦋 ",
+        "version_format": "${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/RakuConfig"
+        }
+      ]
+    },
+    "red": {
+      "default": {
+        "detect_extensions": [
+          "red",
+          "reds"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "red bold",
+        "symbol": "🔺 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/RedConfig"
+        }
+      ]
+    },
+    "rlang": {
+      "default": {
+        "detect_extensions": [
+          "R",
+          "Rd",
+          "Rmd",
+          "Rproj",
+          "Rsx"
+        ],
+        "detect_files": [
+          ".Rprofile"
+        ],
+        "detect_folders": [
+          ".Rproj.user"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "blue bold",
+        "symbol": "📐 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/RLangConfig"
+        }
+      ]
+    },
+    "ruby": {
+      "default": {
+        "detect_extensions": [
+          "rb"
+        ],
+        "detect_files": [
+          "Gemfile",
+          ".ruby-version"
+        ],
+        "detect_folders": [],
+        "detect_variables": [
+          "RUBY_VERSION",
+          "RBENV_VERSION"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold red",
+        "symbol": "💎 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/RubyConfig"
+        }
+      ]
+    },
+    "rust": {
+      "default": {
+        "detect_extensions": [
+          "rs"
+        ],
+        "detect_files": [
+          "Cargo.toml"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold red",
+        "symbol": "🦀 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/RustConfig"
+        }
+      ]
+    },
+    "scala": {
+      "default": {
+        "detect_extensions": [
+          "sbt",
+          "scala"
+        ],
+        "detect_files": [
+          ".scalaenv",
+          ".sbtenv",
+          "build.sbt"
+        ],
+        "detect_folders": [
+          ".metals"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "red bold",
+        "symbol": "🆂 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ScalaConfig"
+        }
+      ]
+    },
+    "shell": {
+      "default": {
+        "bash_indicator": "bsh",
+        "cmd_indicator": "cmd",
+        "disabled": true,
+        "elvish_indicator": "esh",
+        "fish_indicator": "fsh",
+        "format": "[$indicator]($style) ",
+        "ion_indicator": "ion",
+        "nu_indicator": "nu",
+        "powershell_indicator": "psh",
+        "style": "white bold",
+        "tcsh_indicator": "tsh",
+        "unknown_indicator": "",
+        "xonsh_indicator": "xsh",
+        "zsh_indicator": "zsh"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ShellConfig"
+        }
+      ]
+    },
+    "shlvl": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol$shlvl]($style) ",
+        "repeat": false,
+        "style": "bold yellow",
+        "symbol": "↕️  ",
+        "threshold": 2
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ShLvlConfig"
+        }
+      ]
+    },
+    "singularity": {
+      "default": {
+        "disabled": false,
+        "format": "[$symbol\\[$env\\]]($style) ",
+        "style": "blue bold dimmed",
+        "symbol": ""
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SingularityConfig"
+        }
+      ]
+    },
+    "solidity": {
+      "default": {
+        "compiler": [
+          "solc"
+        ],
+        "detect_extensions": [
+          "sol"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version)]($style)",
+        "style": "bold blue",
+        "symbol": "S ",
+        "version_format": "v${major}.${minor}.${patch}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SolidityConfig"
+        }
+      ]
+    },
+    "spack": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol$environment]($style) ",
+        "style": "blue bold",
+        "symbol": "🅢 ",
+        "truncation_length": 1
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SpackConfig"
+        }
+      ]
+    },
+    "status": {
+      "default": {
+        "disabled": true,
+        "format": "[$symbol$status]($style) ",
+        "map_symbol": false,
+        "not_executable_symbol": "🚫",
+        "not_found_symbol": "🔍",
+        "pipestatus": false,
+        "pipestatus_format": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+        "pipestatus_separator": "|",
+        "recognize_signal_code": true,
+        "sigint_symbol": "🧱",
+        "signal_symbol": "⚡",
+        "style": "bold red",
+        "success_symbol": "",
+        "symbol": "❌"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/StatusConfig"
+        }
+      ]
+    },
+    "sudo": {
+      "default": {
+        "allow_windows": false,
+        "disabled": true,
+        "format": "[as $symbol]($style)",
+        "style": "bold blue",
+        "symbol": "🧙 "
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SudoConfig"
+        }
+      ]
+    },
+    "swift": {
+      "default": {
+        "detect_extensions": [
+          "swift"
+        ],
+        "detect_files": [
+          "Package.swift"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold 202",
+        "symbol": "🐦 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SwiftConfig"
+        }
+      ]
+    },
+    "terraform": {
+      "default": {
+        "detect_extensions": [
+          "tf",
+          "tfplan",
+          "tfstate"
+        ],
+        "detect_files": [],
+        "detect_folders": [
+          ".terraform"
+        ],
+        "disabled": false,
+        "format": "via [$symbol$workspace]($style) ",
+        "style": "bold 105",
+        "symbol": "💠 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/TerraformConfig"
+        }
+      ]
+    },
+    "time": {
+      "default": {
+        "disabled": true,
+        "format": "at [$time]($style) ",
+        "style": "bold yellow",
+        "time_range": "-",
+        "use_12hr": false,
+        "utc_time_offset": "local"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/TimeConfig"
+        }
+      ]
+    },
+    "username": {
+      "default": {
+        "disabled": false,
+        "format": "[$user]($style) in ",
+        "show_always": false,
+        "style_root": "red bold",
+        "style_user": "yellow bold"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/UsernameConfig"
+        }
+      ]
+    },
+    "vagrant": {
+      "default": {
+        "detect_extensions": [],
+        "detect_files": [
+          "Vagrantfile"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "cyan bold",
+        "symbol": "⍱ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/VagrantConfig"
+        }
+      ]
+    },
+    "vcsh": {
+      "default": {
+        "disabled": false,
+        "format": "vcsh [$symbol$repo]($style) ",
+        "style": "bold yellow",
+        "symbol": ""
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/VcshConfig"
+        }
+      ]
+    },
+    "vlang": {
+      "default": {
+        "detect_extensions": [
+          "v"
+        ],
+        "detect_files": [
+          "v.mod",
+          "vpkg.json",
+          ".vpkg-lock.json"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "blue bold",
+        "symbol": "V ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/VConfig"
+        }
+      ]
+    },
+    "zig": {
+      "default": {
+        "detect_extensions": [
+          "zig"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold yellow",
+        "symbol": "↯ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ZigConfig"
+        }
+      ]
+    },
+    "custom": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/CustomConfig"
+      }
+    },
+    "format": {
+      "default": "$all",
+      "type": "string"
+    },
+    "right_format": {
+      "default": "",
+      "type": "string"
+    },
+    "continuation_prompt": {
+      "default": "[∙](bright-black) ",
+      "type": "string"
+    },
+    "scan_timeout": {
+      "default": 30,
+      "type": "integer",
+      "format": "uint64",
+      "minimum": 0.0
+    },
+    "command_timeout": {
+      "default": 500,
+      "type": "integer",
+      "format": "uint64",
+      "minimum": 0.0
+    },
+    "add_newline": {
+      "default": true,
+      "type": "boolean"
+    },
+    "palette": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "palettes": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "profiles": {
+      "default": {},
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "AwsConfig": {
+      "title": "AWS",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION` var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
+      "type": "object",
+      "properties": {
+        "format": {
+          "description": "The format for the module.",
+          "default": "on [$symbol($profile )(\\($region\\) )(\\[$duration\\] )]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "description": "The symbol used before displaying the current AWS profile.",
+          "default": "☁️  ",
+          "type": "string"
+        },
+        "style": {
+          "description": "The style for the module.",
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "disabled": {
+          "description": "Disables the AWS module.",
+          "default": false,
+          "type": "boolean"
+        },
+        "region_aliases": {
+          "description": "Table of region aliases to display in addition to the AWS name.",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "profile_aliases": {
+          "description": "Table of profile aliases to display in addition to the AWS name.",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "expiration_symbol": {
+          "description": "The symbol displayed when the temporary credentials have expired.",
+          "default": "X",
+          "type": "string"
+        },
+        "force_display": {
+          "description": "If true displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup.",
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "AzureConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "on [$symbol($subscription)]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "ﴃ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "BatteryConfig": {
+      "type": "object",
+      "properties": {
+        "full_symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "charging_symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "discharging_symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "unknown_symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "empty_symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "display": {
+          "default": [
+            {
+              "charging_symbol": null,
+              "discharging_symbol": null,
+              "style": "red bold",
+              "threshold": 10
+            }
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BatteryDisplayConfig"
+          }
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "[$symbol$percentage]($style) ",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "BatteryDisplayConfig": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "default": 10,
+          "type": "integer",
+          "format": "int64"
+        },
+        "style": {
+          "default": "red bold",
+          "type": "string"
+        },
+        "charging_symbol": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "discharging_symbol": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "BufConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "with [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐃 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "buf.yaml",
+            "buf.gen.yaml",
+            "buf.work.yaml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "BunConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🍞 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "bun.lockb",
+            "bunfig.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version(-$name) )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "149 bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "C ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "c",
+            "h"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "commands": {
+          "default": [
+            [
+              "cc",
+              "--version"
+            ],
+            [
+              "gcc",
+              "--version"
+            ],
+            [
+              "clang",
+              "--version"
+            ]
+          ],
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CharacterConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "$symbol ",
+          "type": "string"
+        },
+        "success_symbol": {
+          "default": "[❯](bold green)",
+          "type": "string"
+        },
+        "error_symbol": {
+          "default": "[❯](bold red)",
+          "type": "string"
+        },
+        "vimcmd_symbol": {
+          "default": "[❮](bold green)",
+          "type": "string"
+        },
+        "vimcmd_visual_symbol": {
+          "default": "[❮](bold yellow)",
+          "type": "string"
+        },
+        "vimcmd_replace_symbol": {
+          "default": "[❮](bold purple)",
+          "type": "string"
+        },
+        "vimcmd_replace_one_symbol": {
+          "default": "[❮](bold purple)",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CMakeConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "△ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "CMakeLists.txt",
+            "CMakeCache.txt"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CmdDurationConfig": {
+      "type": "object",
+      "properties": {
+        "min_time": {
+          "default": 2000,
+          "type": "integer",
+          "format": "int64"
+        },
+        "format": {
+          "default": "took [$duration]($style) ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "show_milliseconds": {
+          "default": false,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "show_notifications": {
+          "default": false,
+          "type": "boolean"
+        },
+        "min_time_to_notify": {
+          "default": 45000,
+          "type": "integer",
+          "format": "int64"
+        },
+        "notification_timeout": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint32",
+          "minimum": 0.0
+        }
+      },
+      "additionalProperties": false
+    },
+    "CobolConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⚙️ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "cbl",
+            "cob",
+            "CBL",
+            "COB"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CondaConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 1,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        },
+        "format": {
+          "default": "via [$symbol$environment]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🅒 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "green bold",
+          "type": "string"
+        },
+        "ignore_base": {
+          "default": true,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ContainerConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol \\[$name\\]]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⬢",
+          "type": "string"
+        },
+        "style": {
+          "default": "red bold dimmed",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CrystalConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🔮 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "cr"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "shard.yml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DamlConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "Λ ",
+          "type": "string"
+        },
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold cyan",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "daml.yaml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DartConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🎯 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "dart"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "pubspec.yaml",
+            "pubspec.yml",
+            "pubspec.lock"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".dart_tool"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DenoConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🦕 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "green bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "deno.json",
+            "deno.jsonc",
+            "mod.ts",
+            "deps.ts",
+            "mod.js",
+            "deps.js"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DirectoryConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 3,
+          "type": "integer",
+          "format": "int64"
+        },
+        "truncate_to_repo": {
+          "default": true,
+          "type": "boolean"
+        },
+        "substitutions": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "fish_style_pwd_dir_length": {
+          "default": 0,
+          "type": "integer",
+          "format": "int64"
+        },
+        "use_logical_path": {
+          "default": true,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "[$path]($style)[$read_only]($read_only_style) ",
+          "type": "string"
+        },
+        "repo_root_format": {
+          "default": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
+          "type": "string"
+        },
+        "style": {
+          "default": "cyan bold",
+          "type": "string"
+        },
+        "repo_root_style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "before_repo_root_style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "read_only": {
+          "default": "🔒",
+          "type": "string"
+        },
+        "read_only_style": {
+          "default": "red",
+          "type": "string"
+        },
+        "truncation_symbol": {
+          "default": "",
+          "type": "string"
+        },
+        "home_symbol": {
+          "default": "~",
+          "type": "string"
+        },
+        "use_os_path_sep": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DockerContextConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "🐳 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "format": {
+          "default": "via [$symbol$context]($style) ",
+          "type": "string"
+        },
+        "only_with_files": {
+          "default": true,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "docker-compose.yml",
+            "docker-compose.yaml",
+            "Dockerfile"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DotnetConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )(🎯 $tfm )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": ".NET ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "heuristic": {
+          "default": true,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "csproj",
+            "fsproj",
+            "xproj"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "global.json",
+            "project.json",
+            "Directory.Build.props",
+            "Directory.Build.targets",
+            "Packages.props"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ElixirConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version \\(OTP $otp_version\\) )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "💧 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "mix.exs"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ElmConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🌳 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "cyan bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "elm"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "elm.json",
+            "elm-package.json",
+            ".elm-version"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            "elm-stuff"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "EnvVarConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "",
+          "type": "string"
+        },
+        "style": {
+          "default": "black bold dimmed",
+          "type": "string"
+        },
+        "variable": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "format": {
+          "default": "with [$env_value]($style) ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "description": {
+          "default": "<env_var module>",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ErlangConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "rebar.config",
+            "erlang.mk"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FennelConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🧅 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "fnl"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FillConfig": {
+      "type": "object",
+      "properties": {
+        "style": {
+          "default": "bold black",
+          "type": "string"
+        },
+        "symbol": {
+          "default": ".",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FossilBranchConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "on [$symbol$branch]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "truncation_length": {
+          "default": 9223372036854775807,
+          "type": "integer",
+          "format": "int64"
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "GcloudConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "☁️  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "region_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "project_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitBranchConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "on [$symbol$branch(:$remote_branch)]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "truncation_length": {
+          "default": 9223372036854775807,
+          "type": "integer",
+          "format": "int64"
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "only_attached": {
+          "default": false,
+          "type": "boolean"
+        },
+        "always_show_remote": {
+          "default": false,
+          "type": "boolean"
+        },
+        "ignore_branches": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitCommitConfig": {
+      "type": "object",
+      "properties": {
+        "commit_hash_length": {
+          "default": 7,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        },
+        "format": {
+          "default": "[\\($hash$tag\\)]($style) ",
+          "type": "string"
+        },
+        "style": {
+          "default": "green bold",
+          "type": "string"
+        },
+        "only_detached": {
+          "default": true,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "tag_symbol": {
+          "default": " 🏷  ",
+          "type": "string"
+        },
+        "tag_disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "tag_max_candidates": {
+          "default": 0,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitMetricsConfig": {
+      "type": "object",
+      "properties": {
+        "added_style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "deleted_style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "only_nonzero_diffs": {
+          "default": true,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitStateConfig": {
+      "type": "object",
+      "properties": {
+        "rebase": {
+          "default": "REBASING",
+          "type": "string"
+        },
+        "merge": {
+          "default": "MERGING",
+          "type": "string"
+        },
+        "revert": {
+          "default": "REVERTING",
+          "type": "string"
+        },
+        "cherry_pick": {
+          "default": "CHERRY-PICKING",
+          "type": "string"
+        },
+        "bisect": {
+          "default": "BISECTING",
+          "type": "string"
+        },
+        "am": {
+          "default": "AM",
+          "type": "string"
+        },
+        "am_or_rebase": {
+          "default": "AM/REBASE",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "format": {
+          "default": "\\([$state( $progress_current/$progress_total)]($style)\\) ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "GitStatusConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "([\\[$all_status$ahead_behind\\]]($style) )",
+          "type": "string"
+        },
+        "style": {
+          "default": "red bold",
+          "type": "string"
+        },
+        "stashed": {
+          "default": "\\$",
+          "type": "string"
+        },
+        "ahead": {
+          "default": "⇡",
+          "type": "string"
+        },
+        "behind": {
+          "default": "⇣",
+          "type": "string"
+        },
+        "up_to_date": {
+          "default": "",
+          "type": "string"
+        },
+        "diverged": {
+          "default": "⇕",
+          "type": "string"
+        },
+        "conflicted": {
+          "default": "=",
+          "type": "string"
+        },
+        "deleted": {
+          "default": "✘",
+          "type": "string"
+        },
+        "renamed": {
+          "default": "»",
+          "type": "string"
+        },
+        "modified": {
+          "default": "!",
+          "type": "string"
+        },
+        "staged": {
+          "default": "+",
+          "type": "string"
+        },
+        "untracked": {
+          "default": "?",
+          "type": "string"
+        },
+        "ignore_submodules": {
+          "default": false,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "windows_starship": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "GoConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐹 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold cyan",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "go"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "go.mod",
+            "go.sum",
+            "go.work",
+            "glide.yaml",
+            "Gopkg.yml",
+            "Gopkg.lock",
+            ".go-version"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            "Godeps"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GradleConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🅶 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold bright-cyan",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "recursive": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "gradle",
+            "gradle.kts"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            "gradle"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GuixShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐃 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "HaskellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "λ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "hs",
+            "cabal",
+            "hs-boot"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "stack.yaml",
+            "cabal.project"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "HaxeConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⌘ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold fg:202",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "hx",
+            "hxml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "haxelib.json",
+            "hxformat.json",
+            ".haxerc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".haxelib",
+            "haxe_libraries"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "HelmConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⎈ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "helmfile.yaml",
+            "Chart.yaml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "HgBranchConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "format": {
+          "default": "on [$symbol$branch(:$topic)]($style) ",
+          "type": "string"
+        },
+        "truncation_length": {
+          "default": 9223372036854775807,
+          "type": "integer",
+          "format": "int64"
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "HostnameConfig": {
+      "type": "object",
+      "properties": {
+        "ssh_only": {
+          "default": true,
+          "type": "boolean"
+        },
+        "ssh_symbol": {
+          "default": "🌐 ",
+          "type": "string"
+        },
+        "trim_at": {
+          "default": ".",
+          "type": "string"
+        },
+        "format": {
+          "default": "[$ssh_symbol$hostname]($style) in ",
+          "type": "string"
+        },
+        "style": {
+          "default": "green dimmed bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "JavaConfig": {
+      "type": "object",
+      "properties": {
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "red dimmed",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "☕ ",
+          "type": "string"
+        },
+        "detect_extensions": {
+          "default": [
+            "java",
+            "class",
+            "jar",
+            "gradle",
+            "clj",
+            "cljc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "pom.xml",
+            "build.gradle.kts",
+            "build.sbt",
+            ".java-version",
+            "deps.edn",
+            "project.clj",
+            "build.boot",
+            ".sdkmanrc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "JobsConfig": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "default": 1,
+          "type": "integer",
+          "format": "int64"
+        },
+        "symbol_threshold": {
+          "default": 1,
+          "type": "integer",
+          "format": "int64"
+        },
+        "number_threshold": {
+          "default": 2,
+          "type": "integer",
+          "format": "int64"
+        },
+        "format": {
+          "default": "[$symbol$number]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "✦",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "JuliaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "ஃ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "jl"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "Project.toml",
+            "Manifest.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "KotlinConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🅺 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "kotlin_binary": {
+          "default": "kotlin",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "kt",
+            "kts"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "KubernetesConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "☸ ",
+          "type": "string"
+        },
+        "format": {
+          "default": "[$symbol$context( \\($namespace\\))]($style) in ",
+          "type": "string"
+        },
+        "style": {
+          "default": "cyan bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "context_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "user_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "LineBreakConfig": {
+      "type": "object",
+      "properties": {
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "LocalipConfig": {
+      "type": "object",
+      "properties": {
+        "ssh_only": {
+          "default": true,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "[$localipv4]($style) ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "LuaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🌙 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "lua_binary": {
+          "default": "lua",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "lua"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            ".lua-version"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            "lua"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "MemoryConfig": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "default": 75,
+          "type": "integer",
+          "format": "int64"
+        },
+        "format": {
+          "default": "via $symbol[$ram( | $swap)]($style) ",
+          "type": "string"
+        },
+        "style": {
+          "default": "white bold dimmed",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐏 ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MesonConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 4294967295,
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0.0
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "format": {
+          "default": "via [$symbol$project]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⬢ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "NimConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "👑 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "nim",
+            "nims",
+            "nimble"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "nim.cfg"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "NixShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol$state( \\($name\\))]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "❄️  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "impure_msg": {
+          "default": "impure",
+          "type": "string"
+        },
+        "pure_msg": {
+          "default": "pure",
+          "type": "string"
+        },
+        "unknown_msg": {
+          "default": "",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "heuristic": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "NodejsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "not_capable_style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "detect_extensions": {
+          "default": [
+            "js",
+            "mjs",
+            "cjs",
+            "ts",
+            "mts",
+            "cts"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "package.json",
+            ".node-version",
+            ".nvmrc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            "node_modules"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "OCamlConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )(\\($switch_indicator$switch_name\\) )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "global_switch_indicator": {
+          "default": "",
+          "type": "string"
+        },
+        "local_switch_indicator": {
+          "default": "*",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐫 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "opam",
+            "ml",
+            "mli",
+            "re",
+            "rei"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "dune",
+            "dune-project",
+            "jbuild",
+            "jbuild-ignore",
+            ".merlin"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            "_opam",
+            "esy.lock"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "OpaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🪖  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "rego"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "OspConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "on [$symbol$cloud(\\($project\\))]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "☁️  ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "OSConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol]($style)",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "symbols": {
+          "default": {
+            "Alpine": "🏔️ ",
+            "Amazon": "🙂 ",
+            "Android": "🤖 ",
+            "Arch": "🎗️ ",
+            "CentOS": "💠 ",
+            "Debian": "🌀 ",
+            "DragonFly": "🐉 ",
+            "Emscripten": "🔗 ",
+            "EndeavourOS": "🚀 ",
+            "Fedora": "🎩 ",
+            "FreeBSD": "😈 ",
+            "Garuda": "🦅 ",
+            "Gentoo": "🗜️ ",
+            "HardenedBSD": "🛡️ ",
+            "Illumos": "🐦 ",
+            "Linux": "🐧 ",
+            "Macos": "🍎 ",
+            "Manjaro": "🥭 ",
+            "Mariner": "🌊 ",
+            "MidnightBSD": "🌘 ",
+            "Mint": "🌿 ",
+            "NetBSD": "🚩 ",
+            "NixOS": "❄️ ",
+            "OpenBSD": "🐡 ",
+            "OpenCloudOS": "☁️ ",
+            "OracleLinux": "🦴 ",
+            "Pop": "🍭 ",
+            "Raspbian": "🍓 ",
+            "RedHatEnterprise": "🎩 ",
+            "Redhat": "🎩 ",
+            "Redox": "🧪 ",
+            "SUSE": "🦎 ",
+            "Solus": "⛵ ",
+            "Ubuntu": "🎯 ",
+            "Unknown": "❓ ",
+            "Windows": "🪟 ",
+            "openEuler": "🦉 ",
+            "openSUSE": "🦎 "
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PackageConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "is [$symbol$version]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "📦 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "208 bold",
+          "type": "string"
+        },
+        "display_private": {
+          "default": false,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PerlConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐪 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "149 bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "pl",
+            "pm",
+            "pod"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "Makefile.PL",
+            "Build.PL",
+            "cpanfile",
+            "cpanfile.snapshot",
+            "META.json",
+            "META.yml",
+            ".perl-version"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "PhpConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐘 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "147 bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "php"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "composer.json",
+            ".php-version"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "PijulConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
+        },
+        "format": {
+          "default": "on [$symbol$channel]($style) ",
+          "type": "string"
+        },
+        "truncation_length": {
+          "default": 9223372036854775807,
+          "type": "integer",
+          "format": "int64"
+        },
+        "truncation_symbol": {
+          "default": "…",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PulumiConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($username@)$stack]($style) ",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": " ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold 5",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "search_upwards": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PureScriptConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "<=> ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold white",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "purs"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "spago.dhall"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "PythonConfig": {
+      "type": "object",
+      "properties": {
+        "pyenv_version_name": {
+          "default": false,
+          "type": "boolean"
+        },
+        "pyenv_prefix": {
+          "default": "pyenv ",
+          "type": "string"
+        },
+        "python_binary": {
+          "default": [
+            "python",
+            "python3",
+            "python2"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "format": {
+          "default": "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐍 ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "py"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "requirements.txt",
+            ".python-version",
+            "pyproject.toml",
+            "Pipfile",
+            "tox.ini",
+            "setup.py",
+            "__init__.py"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Either_for_String_and_Array_of_String": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "RakuConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version-$vm_version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🦋 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "149 bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "p6",
+            "pm6",
+            "pod6",
+            "raku",
+            "rakumod"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "META6.json"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "RedConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🔺 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "red bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "red",
+            "reds"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "RLangConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "📐 ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "R",
+            "Rd",
+            "Rmd",
+            "Rproj",
+            "Rsx"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            ".Rprofile"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".Rproj.user"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "RubyConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "💎 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "rb"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "Gemfile",
+            ".ruby-version"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_variables": {
+          "default": [
+            "RUBY_VERSION",
+            "RBENV_VERSION"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "RustConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🦀 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "rs"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "Cargo.toml"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ScalaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "red bold",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🆂 ",
+          "type": "string"
+        },
+        "detect_extensions": {
+          "default": [
+            "sbt",
+            "scala"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            ".scalaenv",
+            ".sbtenv",
+            "build.sbt"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".metals"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$indicator]($style) ",
+          "type": "string"
+        },
+        "bash_indicator": {
+          "default": "bsh",
+          "type": "string"
+        },
+        "fish_indicator": {
+          "default": "fsh",
+          "type": "string"
+        },
+        "zsh_indicator": {
+          "default": "zsh",
+          "type": "string"
+        },
+        "powershell_indicator": {
+          "default": "psh",
+          "type": "string"
+        },
+        "ion_indicator": {
+          "default": "ion",
+          "type": "string"
+        },
+        "elvish_indicator": {
+          "default": "esh",
+          "type": "string"
+        },
+        "tcsh_indicator": {
+          "default": "tsh",
+          "type": "string"
+        },
+        "nu_indicator": {
+          "default": "nu",
+          "type": "string"
+        },
+        "xonsh_indicator": {
+          "default": "xsh",
+          "type": "string"
+        },
+        "cmd_indicator": {
+          "default": "cmd",
+          "type": "string"
+        },
+        "unknown_indicator": {
+          "default": "",
+          "type": "string"
+        },
+        "style": {
+          "default": "white bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ShLvlConfig": {
+      "type": "object",
+      "properties": {
+        "threshold": {
+          "default": 2,
+          "type": "integer",
+          "format": "int64"
+        },
+        "format": {
+          "default": "[$symbol$shlvl]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "↕️  ",
+          "type": "string"
+        },
+        "repeat": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SingularityConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "",
+          "type": "string"
+        },
+        "format": {
+          "default": "[$symbol\\[$env\\]]($style) ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold dimmed",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SolidityConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version)]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${major}.${minor}.${patch}",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "S ",
+          "type": "string"
+        },
+        "compiler": {
+          "default": [
+            "solc"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "detect_extensions": {
+          "default": [
+            "sol"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "SpackConfig": {
+      "type": "object",
+      "properties": {
+        "truncation_length": {
+          "default": 1,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        },
+        "format": {
+          "default": "via [$symbol$environment]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🅢 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "StatusConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol$status]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "❌",
+          "type": "string"
+        },
+        "success_symbol": {
+          "default": "",
+          "type": "string"
+        },
+        "not_executable_symbol": {
+          "default": "🚫",
+          "type": "string"
+        },
+        "not_found_symbol": {
+          "default": "🔍",
+          "type": "string"
+        },
+        "sigint_symbol": {
+          "default": "🧱",
+          "type": "string"
+        },
+        "signal_symbol": {
+          "default": "⚡",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "map_symbol": {
+          "default": false,
+          "type": "boolean"
+        },
+        "recognize_signal_code": {
+          "default": true,
+          "type": "boolean"
+        },
+        "pipestatus": {
+          "default": false,
+          "type": "boolean"
+        },
+        "pipestatus_separator": {
+          "default": "|",
+          "type": "string"
+        },
+        "pipestatus_format": {
+          "default": "\\[$pipestatus\\] => [$symbol$common_meaning$signal_name$maybe_int]($style)",
+          "type": "string"
+        },
+        "pipestatus_segment_format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SudoConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[as $symbol]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🧙 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "allow_windows": {
+          "default": false,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SwiftConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐦 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold 202",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "swift"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "Package.swift"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TerraformConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol$workspace]($style) ",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "💠 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold 105",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "tf",
+            "tfplan",
+            "tfstate"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".terraform"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TimeConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "at [$time]($style) ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "use_12hr": {
+          "default": false,
+          "type": "boolean"
+        },
+        "time_format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "utc_time_offset": {
+          "default": "local",
+          "type": "string"
+        },
+        "time_range": {
+          "default": "-",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "UsernameConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$user]($style) in ",
+          "type": "string"
+        },
+        "style_root": {
+          "default": "red bold",
+          "type": "string"
+        },
+        "style_user": {
+          "default": "yellow bold",
+          "type": "string"
+        },
+        "show_always": {
+          "default": false,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "VagrantConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "⍱ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "cyan bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "Vagrantfile"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "VcshConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "format": {
+          "default": "vcsh [$symbol$repo]($style) ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "VConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "V ",
+          "type": "string"
+        },
+        "style": {
+          "default": "blue bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "v"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "v.mod",
+            "vpkg.json",
+            ".vpkg-lock.json"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ZigConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "↯ ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold yellow",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "zig"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CustomConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol($output )]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "",
+          "type": "string"
+        },
+        "command": {
+          "default": "",
+          "type": "string"
+        },
+        "when": {
+          "default": false,
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_Boolean_and_String"
+            }
+          ]
+        },
+        "shell": {
+          "default": [],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "description": {
+          "default": "<custom config>",
+          "type": "string"
+        },
+        "style": {
+          "default": "green bold",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "os": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "use_stdin": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "ignore_timeout": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Either_for_Boolean_and_String": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    }
+  }
+}
