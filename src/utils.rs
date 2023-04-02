@@ -644,6 +644,40 @@ pub fn encode_to_hex(slice: &[u8]) -> String {
     String::from_utf8(dst).unwrap()
 }
 
+pub trait PathExt {
+    /// Get device / volume info
+    fn device_id(&self) -> Option<u64>;
+}
+
+#[cfg(windows)]
+impl PathExt for Path {
+    fn device_id(&self) -> Option<u64> {
+        // Maybe it should use unimplemented!
+        Some(42u64)
+    }
+}
+
+#[cfg(not(windows))]
+impl PathExt for Path {
+    #[cfg(target_os = "linux")]
+    fn device_id(&self) -> Option<u64> {
+        use std::os::linux::fs::MetadataExt;
+        match self.metadata() {
+            Ok(m) => Some(m.st_dev()),
+            Err(_) => None,
+        }
+    }
+
+    #[cfg(all(unix, not(target_os = "linux")))]
+    fn device_id(&self) -> Option<u64> {
+        use std::os::unix::fs::MetadataExt;
+        match self.metadata() {
+            Ok(m) => Some(m.dev()),
+            Err(_) => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

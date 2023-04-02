@@ -1,4 +1,4 @@
-use std::io::{Error, ErrorKind};
+use std::io::Error;
 use std::path::Path;
 
 use super::utils::truncate::truncate_text;
@@ -6,7 +6,6 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::hg_branch::HgBranchConfig;
 use crate::formatter::StringFormatter;
-use crate::modules::utils::path::PathExt;
 use crate::utils::read_file;
 
 /// Creates a module with the Hg bookmark or branch in the current directory
@@ -32,7 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         config.truncation_length as usize
     };
 
-    let repo_root = get_hg_repo_root(context).ok()?;
+    let repo_root = context.begin_ancestor_scan().set_folders(&[".hg"]).scan()?;
     let branch_name = get_hg_current_bookmark(repo_root).unwrap_or_else(|_| {
         get_hg_branch_name(repo_root).unwrap_or_else(|_| String::from("default"))
     });
@@ -71,20 +70,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
-}
-
-fn get_hg_repo_root<'a>(ctx: &'a Context) -> Result<&'a Path, Error> {
-    let dir = ctx.current_dir.as_path();
-    let dev_id = dir.device_id();
-    for root_dir in dir.ancestors() {
-        if dev_id != root_dir.device_id() {
-            break;
-        }
-        if root_dir.join(".hg").is_dir() {
-            return Ok(root_dir);
-        }
-    }
-    Err(Error::new(ErrorKind::Other, "No .hg found!"))
 }
 
 fn get_hg_branch_name(hg_root: &Path) -> Result<String, Error> {
