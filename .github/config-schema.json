@@ -1517,8 +1517,7 @@
     "solidity": {
       "default": {
         "compiler": [
-          "solc",
-          "solcjs"
+          "solc"
         ],
         "detect_extensions": [
           "sol"
@@ -5265,8 +5264,7 @@
         },
         "compiler": {
           "default": [
-            "solc",
-            "solcjs"
+            "solc"
           ],
           "allOf": [
             {
