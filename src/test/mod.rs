@@ -182,6 +182,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 ".fslckout"
             };
             let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join("subdir"))?;
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
