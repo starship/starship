@@ -88,7 +88,7 @@ mod tests {
     #[test]
     fn test_parse_solc_version() {
         let input = "solc, the solidity compiler commandline interface
-        Version: 0.8.16+commit.07a7930e.Linux.g++";
+Version: 0.8.16+commit.07a7930e.Linux.g++";
         assert_eq!(parse_solidity_version(input), Some(String::from("0.8.16")));
     }
     #[test]
@@ -152,6 +152,32 @@ mod tests {
         // Assert that the actual and expected values are the same
         assert_eq!(actual, expected);
 
+        // Close the tempdir
+        tempdir.close()
+    }
+
+    #[test]
+    fn testing_sol_fallback() -> io::Result<()> {
+        let tempdir = tempfile::tempdir()?;
+        // Create some file needed to render the module
+        File::create(tempdir.path().join("main.sol"))?.sync_all()?;
+        // The output of the module
+        let actual = ModuleRenderer::new("solidity")
+            // For a custom path
+            .path(tempdir.path())
+            // Make regular solc unavailable
+            .cmd("solc --version", None)
+            // Custom Config
+            .config(toml::toml! {
+                      [solidity]
+                      compiler = ["solc", "solcjs"]
+            })
+            // Run the module and collect the output
+            .collect();
+        // The value that should be rendered by the module.
+        let expected = Some(format!("via {}", Color::Blue.bold().paint("S v0.8.15")));
+        // Assert that the actual and expected values are the same
+        assert_eq!(actual, expected);
         // Close the tempdir
         tempdir.close()
     }
