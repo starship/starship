@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### 配置项
 
-| 选项         | 默认值                            | 描述                                                                           |
-| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`   | `""`                           | 这个字段的内容会显示在环境变量值之前。                                                          |
-| `variable` |                                | 要显示的环境变量。                                                                    |
-| `default`  |                                | 所选变量未定义时显示的默认值。                                                              |
-| `format`   | `"with [$env_value]($style) "` | 组件格式化模板。                                                                     |
-| `描述`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled` | `false`                        | 禁用 `env_var` 组件。                                                             |
+| 选项            | 默认值                            | 描述                                                                           |
+| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`      | `""`                           | 这个字段的内容会显示在环境变量值之前。                                                          |
+| `variable`    |                                | 要显示的环境变量。                                                                    |
+| `default`     |                                | 所选变量未定义时显示的默认值。                                                              |
+| `format`      | `"with [$env_value]($style) "` | 组件格式化模板。                                                                     |
+| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `disabled`    | `false`                        | 禁用 `env_var` 组件。                                                             |
 
 ### Variables
 
@@ -4157,8 +4157,9 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `描述`                | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
