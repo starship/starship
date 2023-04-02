@@ -117,7 +117,6 @@ mod tests {
     use std::path::Path;
     use std::process::Stdio;
 
-    use log::debug;
     use nu_ansi_term::Color;
 
     use crate::test::ModuleRenderer;
