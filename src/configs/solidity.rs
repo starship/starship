@@ -28,7 +28,7 @@ impl<'a> Default for SolidityConfig<'a> {
             format: "via [$symbol($version)]($style)",
             symbol: "S ",
             style: "bold blue",
-            compiler: VecOr(vec!["solc", "solcjs"]),
+            compiler: VecOr(vec!["solc"]),
             version_format: "v${major}.${minor}.${patch}",
             disabled: false,
             detect_extensions: vec!["sol"],
