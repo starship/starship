@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### オプション
 
-| オプション         | デフォルト                          | 説明                                                                           |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | 環境変数を表示する前に使用される記号です。                                                        |
-| `variable`    |                                | 表示される環境変数です。                                                                 |
-| `default`     |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。                                        |
-| `format`      | `"with [$env_value]($style) "` | module のフォーマットです。                                                            |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | `env_var`モジュールを無効にします。                                                       |
+| オプション      | デフォルト                          | 説明                                                                           |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                           | 環境変数を表示する前に使用される記号です。                                                        |
+| `variable` |                                | 表示される環境変数です。                                                                 |
+| `default`  |                                | 上のvariableが定義されていない場合に表示されるデフォルトの値です。                                        |
+| `format`   | `"with [$env_value]($style) "` | module のフォーマットです。                                                            |
+| `説明`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                        | `env_var`モジュールを無効にします。                                                       |
 
 ### 変数
 
