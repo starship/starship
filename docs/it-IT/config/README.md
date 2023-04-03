@@ -1336,7 +1336,7 @@ default = 'unknown user'
 | `variable`    |                                | The environment variable to be displayed.                                    |
 | `default`     |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `descrizione` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled`    | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
