@@ -415,7 +415,7 @@ Built on MoarVM version 2021.12.\n",
         }),
         "solc --version" => Some(CommandOutput {
             stdout: String::from("solc, the solidity compiler commandline interface
-            Version: 0.8.16+commit.07a7930e.Linux.g++"),
+Version: 0.8.16+commit.07a7930e.Linux.g++"),
             stderr: String::default(),
         }),
         "solcjs --version" => Some(CommandOutput {
