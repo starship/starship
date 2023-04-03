@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### 選項
 
-| Option        | 預設                             | 說明                                                                           |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | 顯示在變數數值之前的符號。                                                                |
-| `variable`    |                                | 要顯示的環境變數。                                                                    |
-| `default`     |                                | 在選擇的變數值沒有定義時，顯示的預設值。                                                         |
-| `format`      | `"with [$env_value]($style) "` | The format for the module.                                                   |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | 停用 `env_var` 模組。                                                             |
+| Option     | 預設                             | 說明                                                                           |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                           | 顯示在變數數值之前的符號。                                                                |
+| `variable` |                                | 要顯示的環境變數。                                                                    |
+| `default`  |                                | 在選擇的變數值沒有定義時，顯示的預設值。                                                         |
+| `format`   | `"with [$env_value]($style) "` | The format for the module.                                                   |
+| `說明`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                        | 停用 `env_var` 模組。                                                             |
 
 ### Variables
 
