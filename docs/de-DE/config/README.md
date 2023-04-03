@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### Optionen
 
-| Option        | Standartwert                   | Beschreibung                                                                             |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
-| `variable`    |                                | Die anzuzeigende Umgebungsvariable.                                                      |
-| `default`     |                                | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
-| `format`      | `"with [$env_value]($style) "` | Das Format für das Modul.                                                                |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.             |
-| `disabled`    | `false`                        | Deaktiviert das `env_var`-Modul.                                                         |
+| Option         | Standartwert                   | Beschreibung                                                                             |
+| -------------- | ------------------------------ | ---------------------------------------------------------------------------------------- |
+| `symbol`       | `""`                           | Das Symbol, das vor der Anzeige der Variable verwendet wird.                             |
+| `variable`     |                                | Die anzuzeigende Umgebungsvariable.                                                      |
+| `default`      |                                | Der Standardwert, der angezeigt wird, wenn die ausgewählte Variable nicht definiert ist. |
+| `format`       | `"with [$env_value]($style) "` | Das Format für das Modul.                                                                |
+| `beschreibung` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.             |
+| `disabled`     | `false`                        | Deaktiviert das `env_var`-Modul.                                                         |
 
 ### Variables
 
