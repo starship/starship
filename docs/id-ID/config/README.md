@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### Opsi
 
-| Opsi          | Bawaan                         | Deskripsi                                                                             |
-| ------------- | ------------------------------ | ------------------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | Simbol yang digunakan sebelum menampilkan nilai dari variabel.                        |
-| `variabel`    |                                | Variabel environment yang akan ditampilkan.                                           |
-| `bawaan`      |                                | Nilai bawaan yang akan ditampilkan ketika variabel yang terpilih tidak didefinisikan. |
-| `format`      | `"with [$env_value]($style) "` | Format dari modul.                                                                    |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.          |
-| `disabled`    | `false`                        | Menonaktifkan modul `env_var`.                                                        |
+| Opsi        | Bawaan                         | Deskripsi                                                                             |
+| ----------- | ------------------------------ | ------------------------------------------------------------------------------------- |
+| `symbol`    | `""`                           | Simbol yang digunakan sebelum menampilkan nilai dari variabel.                        |
+| `variabel`  |                                | Variabel environment yang akan ditampilkan.                                           |
+| `bawaan`    |                                | Nilai bawaan yang akan ditampilkan ketika variabel yang terpilih tidak didefinisikan. |
+| `format`    | `"with [$env_value]($style) "` | Format dari modul.                                                                    |
+| `deskripsi` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.          |
+| `disabled`  | `false`                        | Menonaktifkan modul `env_var`.                                                        |
 
 ### Variabel
 
