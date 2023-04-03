@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### Options
 
-| Tuỳ chọn      | Mặc định                       | Mô tả                                                                        |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | Biểu tượng sử dụng để hiển thị trước giá trị của biến.                       |
-| `variable`    |                                | Biến môi trường được hiển thị.                                               |
-| `default`     |                                | Giá trị mặc định được hiển thị khi biến được chọn không được định nghĩa.     |
-| `format`      | `"with [$env_value]($style) "` | Định dạng cho module.                                                        |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | Vô hiệu `env_var`.                                                           |
+| Tuỳ chọn   | Mặc định                       | Mô tả                                                                        |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                           | Biểu tượng sử dụng để hiển thị trước giá trị của biến.                       |
+| `variable` |                                | Biến môi trường được hiển thị.                                               |
+| `default`  |                                | Giá trị mặc định được hiển thị khi biến được chọn không được định nghĩa.     |
+| `format`   | `"with [$env_value]($style) "` | Định dạng cho module.                                                        |
+| `mô tả`    | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                        | Vô hiệu `env_var`.                                                           |
 
 ### Các biến
 
