@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### Параметри
 
-| Параметр      | Стандартно                     | Опис                                                                         |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | The symbol used before displaying the variable value.                        |
-| `змінна`      |                                | The environment variable to be displayed.                                    |
-| `стандартно`  |                                | The default value to be displayed when the selected variable is not defined. |
-| `format`      | `"with [$env_value]($style) "` | Формат модуля.                                                               |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | Disables the `env_var` module.                                               |
+| Параметр     | Стандартно                     | Опис                                                                         |
+| ------------ | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`     | `""`                           | The symbol used before displaying the variable value.                        |
+| `змінна`     |                                | The environment variable to be displayed.                                    |
+| `стандартно` |                                | The default value to be displayed when the selected variable is not defined. |
+| `format`     | `"with [$env_value]($style) "` | Формат модуля.                                                               |
+| `опис`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `disabled`   | `false`                        | Disables the `env_var` module.                                               |
 
 ### Variables
 
