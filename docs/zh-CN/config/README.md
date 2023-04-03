@@ -1330,14 +1330,14 @@ default = 'unknown user'
 
 ### 配置项
 
-| 选项            | 默认值                            | 描述                                                                           |
-| ------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| `symbol`      | `""`                           | 这个字段的内容会显示在环境变量值之前。                                                          |
-| `variable`    |                                | 要显示的环境变量。                                                                    |
-| `default`     |                                | 所选变量未定义时显示的默认值。                                                              |
-| `format`      | `"with [$env_value]($style) "` | 组件格式化模板。                                                                     |
-| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`    | `false`                        | 禁用 `env_var` 组件。                                                             |
+| 选项         | 默认值                            | 描述                                                                           |
+| ---------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| `symbol`   | `""`                           | 这个字段的内容会显示在环境变量值之前。                                                          |
+| `variable` |                                | 要显示的环境变量。                                                                    |
+| `default`  |                                | 所选变量未定义时显示的默认值。                                                              |
+| `format`   | `"with [$env_value]($style) "` | 组件格式化模板。                                                                     |
+| `描述`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
+| `disabled` | `false`                        | 禁用 `env_var` 组件。                                                             |
 
 ### Variables
 
