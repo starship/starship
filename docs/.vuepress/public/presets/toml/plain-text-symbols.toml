@@ -16,6 +16,9 @@ deleted = "x"
 [aws]
 symbol = "aws "
 
+[azure]
+symbol = "az "
+
 [bun]
 symbol = "bun "
 
@@ -63,6 +66,9 @@ symbol = "fnl "
 
 [fossil_branch]
 symbol = "fossil "
+
+[gcloud]
+symbol = "gcp "
 
 [git_branch]
 symbol = "git "
