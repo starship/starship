@@ -74,27 +74,27 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 ### 字符串
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+在 TOML 语法中，[字符串](https://toml.io/en/v1.0.0#string) 以 `'`、`"`、`'''`、或 `"""` 来表示。
 
 下列 Starship 语法符号在格式字符串中具有特殊用途，必须转义才能以原字符显示： `$ [ ] ( )`。
 
-| Symbol | Type                      | Notes                                                  |
-| ------ | ------------------------- | ------------------------------------------------------ |
-| `'`    | literal string            | less escaping                                          |
-| `"`    | string                    | more escaping                                          |
-| `'''`  | multi-line literal string | less escaping                                          |
-| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
+| 符号    | 类型      | 备注        |
+| ----- | ------- | --------- |
+| `'`   | 字面字符串   | 较少转义      |
+| `"`   | 字符串     | 较多转义      |
+| `'''` | 多行字面字符串 | 较少转义      |
+| `"""` | 多行字符串   | 较多转义，无视换行 |
 
 例如：
 
 ```toml
-# literal string
+# 字面字符串
 format = '☺\☻ '
 
-# regular string
+# 常规字符串
 format = "☺\\☻ "
 
-# escaping Starship symbols
+# 转义 Starship 符号
 format = '\[\$\] '
 ```
 
@@ -4216,19 +4216,19 @@ Automatic detection of shells and proper parameters addition are currently imple
 # ~/.config/starship.toml
 
 [custom.foo]
-command = 'echo foo' # shows output of command
-detect_files = ['foo'] # can specify filters but wildcards are not supported
+command = 'echo foo' # 显示命令输出
+detect_files = ['foo'] # 支持过滤器，但不支持通配符
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
 [custom.time]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # 识别 *.pst 文件
 shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
 
 [custom.time-as-arg]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # 识别 *.pst 文件
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
