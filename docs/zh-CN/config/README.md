@@ -6,7 +6,7 @@
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-Starship 的所有配置都在此 [TOML](https://github.com/toml-lang/toml) 配置文件中完成：
+Starship 的所有配置都在此  [TOML](https://github.com/toml-lang/toml) 文件内：
 
 ```toml
 # Get editor completions based on the config schema
