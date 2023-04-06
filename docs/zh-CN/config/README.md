@@ -1,6 +1,6 @@
 # 配置
 
-您需要创建配置文件 `~/.config/starship.toml` 以供 Starship 使用。
+请为 Starship 创建配置文件 `~/.config/starship.toml`。
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
@@ -9,17 +9,17 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Starship 的所有配置都在此  [TOML](https://github.com/toml-lang/toml) 文件内：
 
 ```toml
-# Get editor completions based on the config schema
+# 根据 schema 提供自动补全
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# 在提示符之间插入空行
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# 将提示符中的 '❯' 替换为 '➜'
+[character] # 此模块名称为 'character'
+success_symbol = '[➜](bold green)' # 将 'success_symbol' 片段设置成颜色为 'bold green' 的 '➜'  
 
-# Disable the package module, hiding it from the prompt completely
+# 禁用 'package' 模块，将其隐藏
 [package]
 disabled = true
 ```
