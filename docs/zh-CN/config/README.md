@@ -19,7 +19,7 @@ add_newline = true
 [character] # 此模块名称为 'character'
 success_symbol = '[➜](bold green)' # 将 'success_symbol' 片段设置成颜色为 'bold green' 的 '➜'  
 
-# 禁用 'package' 模块，将其隐藏
+# 禁用 'package' 组件，将其隐藏
 [package]
 disabled = true
 ```
@@ -66,9 +66,9 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 ### 术语
 
-**组件（Module）**：提示符的组成部分，通过来自系统的上下文信息向用户显示各种信息。 例如，如果您当前的目录是 Node.js 项目，“nodejs” 模块会显示当前安装在您电脑上的 Node.js 的版本。
+**组件（Module）**：提示符中显示信息的部分，基于系统上下文信息。 例如，如果您当前的目录是 Node.js 项目，“nodejs” 组件会显示当前安装在您电脑上的 Node.js 的版本。
 
-**字段（Variable）**：更小的子模块，包含由组件提供的信息。 例如，“nodejs”组件里的“version”字段包含了现有 Node.js 的版本。
+**字段（Variable）**：组件中显示信息的部分。 例如，“nodejs”组件里的“version”字段包含了现有 Node.js 的版本。
 
 依惯例，大多组件都有一个带有默认终端颜色的前缀（例如“nodejs”的 `via`），以及一个空格作为后缀。
 
@@ -76,7 +76,7 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 在 TOML 语法中，[字符串](https://toml.io/en/v1.0.0#string) 以 `'`、`"`、`'''`、或 `"""` 来表示。
 
-下列 Starship 语法符号在格式字符串中具有特殊用途，必须转义才能以原字符显示： `$ [ ] ( )`。
+以下 Starship 语法符号在样式字符串中具有特殊用途，必须转义才能以原字符显示： `$ [ ] ( )`。
 
 | 符号    | 类型      | 备注        |
 | ----- | ------- | --------- |
@@ -98,24 +98,24 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+需要换行时，请使用多行字符串。 例如，以下 `format` 字段的值都会下一行输出 `$` 符号：
 
 ```toml
-# with literal string
+# 使用字面字符串
 format = '''
 
 \$'''
 
-# with multiline basic string
+# 使用多行字符串
 format = """
 
 \\$"""
 
-# with basic string
+# 使用基本字符串
 format = "\n\\$"
 ```
 
-In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+使用多行字符串时，可以转义换行符以忽略换行，从而实现格式化。
 
 ```toml
 format = """
@@ -128,19 +128,19 @@ line2
 """
 ```
 
-### 格式设定
+### 样式字符串
 
-组件会根据定义的格式输出它所有的字段。 大多数组件可以通过 `format` 项来配置它的显示格式。 格式设定内可以包含文本、字段以及文本组。
+组件将根据样式字符串输出其中字段。 大多数组件可以通过 `format` 项来配置它的显示格式。 格式设定内可以包含文本、字段以及文本组。
 
 #### 字段
 
-一个字段由 `$` 和字段名依序组成。 字段名只能包含字母、数字以及 `_`。
+字段由 `$` 和名称组成。 名称仅支持字母、数字和 `_`。
 
 例如：
 
-- `'$version'` is a format string with a variable named `version`.
-- `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
-- `'$git_branch $git_commit'` has the two variables separated with a space.
+- 样式字符串 `'$version'` 仅包含字段 `version`。
+- 样式字符串 `'$git_branch$git_commit'` 包含两个字段，`git_branch` 和 `git_commit`。
+- 样式字符串 `'$git_branch $git_commit'` 包含两个以空格分隔的字段。
 
 #### 文本组
 
@@ -181,7 +181,7 @@ Starship 中的大多数组件允许您为其设置显示样式。 显示样式�
 
 ### 错误匹配
 
-许多模块都有 detect_extensions, detect_files, 和 detect_folders 变量。 These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading '!' character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+许多组件都有  `detect_extensions`、`detect_files` 和  `detect_folders` 变量。 These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading '!' character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
 
 Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
 
@@ -1682,7 +1682,7 @@ tag_symbol = '🔖 '
 | `am_or_rebase` | `'AM/REBASE'`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `'bold yellow'`                                                 | 此组件的样式。                                                                                 |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | 组件格式化模板。                                                                                |
-| `disabled`     | `false`                                                         | 禁用 `git_state` 模块                                                                       |
+| `disabled`     | `false`                                                         | 禁用 `git_state` 组件。                                                                      |
 
 ### Variables
 
@@ -2493,7 +2493,7 @@ format = 'via [🌕 $version](bold blue) '
 | `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | 组件格式化模板。               |
 | `符号`        | `'🐏'`                                           | 这个字段的内容会显示在当前内存使用情况之前。 |
 | `style`     | `'bold dimmed white'`                           | 此组件的样式。                |
-| `disabled`  | `true`                                          | 禁用 `memory_usage` 模块   |
+| `disabled`  | `true`                                          | 禁用 `memory_usage` 组件。  |
 
 ### Variables
 
