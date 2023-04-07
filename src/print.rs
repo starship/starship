@@ -502,22 +502,24 @@ mod test {
 
     #[test]
     fn main_prompt() {
+        let context = main_prompt_context();
+        assert_eq!("~\n>", &get_prompt(context));
+    }
+
+    fn main_prompt_context() -> Context<'static> {
         let mut context = default_context();
         context.config = StarshipConfig {
             config: Some(toml::toml! {
                 add_newline=false
                 format="$character"
                 [character]
-                format=">\n>"
+                format="~\n>"
             }),
         };
         context.root_config.format = "$character".to_string();
         context.target = Target::Main;
         context.root_config.add_newline = false;
-
-        let expected = String::from(">\n>");
-        let actual = get_prompt(context);
-        assert_eq!(expected, actual);
+        context
     }
 
     #[test]
@@ -600,6 +602,21 @@ mod test {
         let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn add_newline_prompt() {
+        let mut context = main_prompt_context();
+        context.root_config.add_newline = true;
+        assert_eq!("\n~\n>", &get_prompt(context));
+    }
+
+    #[test]
+    fn add_newline_prompt_row_zero() {
+        let mut context = main_prompt_context();
+        context.row = Some(0);
+        context.root_config.add_newline = true;
+        assert_eq!("~\n>", &get_prompt(context)); // there is no newline before ~ since it is the top of the terminal
     }
 
     #[test]
