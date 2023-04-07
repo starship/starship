@@ -120,6 +120,7 @@ $null = New-Module starship {
             "--path=$($cwd.Path)",
             "--logical-path=$($cwd.LogicalPath)",
             "--terminal-width=$($Host.UI.RawUI.WindowSize.Width)",
+            "--terminal-row=$($Host.UI.RawUI.CursorPosition.Y)",
             "--jobs=$($jobs)"
         )
 

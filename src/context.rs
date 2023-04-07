@@ -59,6 +59,9 @@ pub struct Context<'a> {
     /// Width of terminal, or zero if width cannot be detected.
     pub width: usize,
 
+    /// Row of terminal, or None if unknown
+    pub row: Option<usize>,
+
     /// A HashMap of environment variable mocks
     #[cfg(test)]
     pub env: HashMap<&'a str, String>,
@@ -151,6 +154,7 @@ impl<'a> Context<'a> {
             .map_or_else(StarshipRootConfig::default, StarshipRootConfig::load);
 
         let width = properties.terminal_width;
+        let row = properties.terminal_row;
 
         Context {
             config,
@@ -162,6 +166,7 @@ impl<'a> Context<'a> {
             shell,
             target,
             width,
+            row,
             #[cfg(test)]
             root_dir: tempfile::TempDir::new().unwrap(),
             #[cfg(test)]
@@ -666,6 +671,8 @@ pub struct Properties {
     /// The width of the current interactive terminal.
     #[clap(short = 'w', long, default_value_t=default_width(), value_parser=parse_width)]
     terminal_width: usize,
+    #[clap(long)]
+    terminal_row: Option<usize>,
     /// The path that the prompt should render for.
     #[clap(short, long)]
     path: Option<PathBuf>,
@@ -694,6 +701,7 @@ impl Default for Properties {
             logical_path: None,
             cmd_duration: None,
             keymap: "viins".to_string(),
+            terminal_row: None,
             jobs: 0,
         }
     }

@@ -119,7 +119,10 @@ pub fn get_prompt(context: Context) -> String {
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
-        writeln!(buf).unwrap();
+        let should_print_newline = context.row != Some(0);
+        if should_print_newline {
+            writeln!(buf).unwrap();
+        }
     }
     write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
 
