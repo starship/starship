@@ -916,4 +916,13 @@ mod tests {
         // Test default behavior
         assert!(get_palette(&palettes, None).is_none());
     }
+
+    #[test]
+    fn read_config_no_config_file_path_provided() {
+        assert_eq!(
+            None,
+            StarshipConfig::read_config_content_as_str(&None),
+            "if the platform doesn't have utils::home_dir(), it should return None"
+        );
+    }
 }
