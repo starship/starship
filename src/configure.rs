@@ -1,4 +1,3 @@
-use std::io::ErrorKind;
 use std::process;
 use std::process::Stdio;
 use std::str::FromStr;
@@ -224,23 +223,8 @@ pub fn get_configuration(context: &Context) -> toml::Table {
 }
 
 pub fn get_configuration_edit(context: &Context) -> Document {
-    let file_path = context.get_config_path_os();
-    let toml_content = match utils::read_file(file_path) {
-        Ok(content) => {
-            log::trace!("Config file content: \"\n{}\"", &content);
-            Some(content)
-        }
-        Err(e) => {
-            let level = if e.kind() == ErrorKind::NotFound {
-                log::Level::Debug
-            } else {
-                log::Level::Error
-            };
-
-            log::log!(level, "Unable to read config file content: {}", &e);
-            None
-        }
-    };
+    let config_file_path = context.get_config_path_os();
+    let toml_content = StarshipConfig::read_config_content_as_str(&config_file_path);
 
     toml_content
         .unwrap_or_default()
@@ -249,7 +233,9 @@ pub fn get_configuration_edit(context: &Context) -> Document {
 }
 
 pub fn write_configuration(context: &Context, doc: &Document) {
-    let config_path = context.get_config_path_os();
+    let config_path = context
+        .get_config_path_os()
+        .expect("able to get config path");
 
     let config_str = doc.to_string();
 
@@ -264,7 +250,9 @@ pub fn edit_configuration(
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Argument currently only used for testing, but could be used to specify
     // an editor override on the command line.
-    let config_path = context.get_config_path_os();
+    let config_path = context
+        .get_config_path_os()
+        .expect("config path required to edit the config");
 
     let editor_cmd = shell_words::split(&get_editor(editor_override))?;
     let mut command = match utils::create_command(&editor_cmd[0]) {

@@ -5,7 +5,7 @@ use crate::module::Module;
 use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
 
 use crate::modules;
-use crate::utils::{self};
+use crate::utils;
 use clap::Parser;
 use gix::{
     sec::{self as git_sec, trust::DefaultForLevel},
@@ -381,7 +381,7 @@ impl<'a> Context<'a> {
         read_file(self.current_dir.join(file_name)).ok()
     }
 
-    pub fn get_config_path_os(&self) -> OsString {
+    pub fn get_config_path_os(&self) -> Option<OsString> {
         get_config_path_os(&self.env)
     }
 }
@@ -401,15 +401,11 @@ fn home_dir(env: &Env) -> Option<PathBuf> {
     utils::home_dir()
 }
 
-fn get_config_path_os(env: &Env) -> OsString {
+fn get_config_path_os(env: &Env) -> Option<OsString> {
     if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
-        return config_path;
+        return Some(config_path);
     }
-    home_dir(env)
-        .expect("couldn't find home directory")
-        .join(".config")
-        .join("starship.toml")
-        .into()
+    Some(home_dir(env)?.join(".config").join("starship.toml").into())
 }
 
 #[derive(Debug)]

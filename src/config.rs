@@ -123,7 +123,7 @@ pub struct StarshipConfig {
 
 impl StarshipConfig {
     /// Initialize the Config struct
-    pub fn initialize(config_file_path: &OsString) -> Self {
+    pub fn initialize(config_file_path: &Option<OsString>) -> Self {
         Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
@@ -132,8 +132,30 @@ impl StarshipConfig {
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file(config_file_path: &OsString) -> Option<toml::Table> {
-        let toml_content = match utils::read_file(config_file_path) {
+    fn config_from_file(config_file_path: &Option<OsString>) -> Option<toml::Table> {
+        let toml_content = Self::read_config_content_as_str(config_file_path)?;
+
+        match toml::from_str(&toml_content) {
+            Ok(parsed) => {
+                log::debug!("Config parsed: {:?}", &parsed);
+                Some(parsed)
+            }
+            Err(error) => {
+                log::error!("Unable to parse the config file: {}", error);
+                None
+            }
+        }
+    }
+
+    pub fn read_config_content_as_str(config_file_path: &Option<OsString>) -> Option<String> {
+        if config_file_path.is_none() {
+            log::debug!(
+                "Unable to determine `config_file_path`. Perhaps `utils::home_dir` is not defined on your platform?"
+            );
+            return None;
+        }
+        let config_file_path = config_file_path.as_ref().unwrap();
+        match utils::read_file(config_file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
@@ -146,17 +168,6 @@ impl StarshipConfig {
                 };
 
                 log::log!(level, "Unable to read config file content: {}", &e);
-                None
-            }
-        }?;
-
-        match toml::from_str(&toml_content) {
-            Ok(parsed) => {
-                log::debug!("Config parsed: {:?}", &parsed);
-                Some(parsed)
-            }
-            Err(error) => {
-                log::error!("Unable to parse the config file: {}", error);
                 None
             }
         }
