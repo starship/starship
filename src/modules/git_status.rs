@@ -433,8 +433,11 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 
     let out = match create_command(starship_exe)
         .map(|mut c| {
-            c.env("STARSHIP_CONFIG", context.get_config_path_os())
-                .env("WSLENV", wslenv)
+            let config_path_os = context.get_config_path_os();
+            if config_path_os.is_some() {
+                c.env("STARSHIP_CONFIG", config_path_os.unwrap());
+            }
+            c.env("WSLENV", wslenv)
                 .args(["module", "git_status", "--path", winpath]);
             c
         })
