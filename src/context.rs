@@ -2,7 +2,7 @@ use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
 use crate::context_env::Env;
 use crate::module::Module;
-use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
+use crate::utils::{create_command, exec_timeout, read_file, CommandOutput, PathExt};
 
 use crate::modules;
 use crate::utils;
@@ -235,6 +235,16 @@ impl<'a> Context<'a> {
             folders: &[],
             extensions: &[],
         })
+    }
+
+    /// Begins an ancestor scan at the current directory, see [`ScanAncestors`] for available
+    /// methods.
+    pub fn begin_ancestor_scan(&'a self) -> ScanAncestors<'a> {
+        ScanAncestors {
+            path: &self.current_dir,
+            files: &[],
+            folders: &[],
+        }
     }
 
     /// Will lazily get repo root and branch when a module requests it.
@@ -619,6 +629,48 @@ impl<'a> ScanDir<'a> {
                 .has_any_positive_extension(self.extensions)
                 || self.dir_contents.has_any_positive_file_name(self.files)
                 || self.dir_contents.has_any_positive_folder(self.folders))
+    }
+}
+
+/// Scans the ancestors of a given path until a directory containing one of the given files or
+/// folders is found.
+pub struct ScanAncestors<'a> {
+    path: &'a Path,
+    files: &'a [&'a str],
+    folders: &'a [&'a str],
+}
+
+impl<'a> ScanAncestors<'a> {
+    #[must_use]
+    pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
+        self.files = files;
+        self
+    }
+
+    #[must_use]
+    pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
+        self.folders = folders;
+        self
+    }
+
+    /// Scans upwards starting from the initial path until a directory containing one of the given
+    /// files or folders is found.
+    ///
+    /// The scan does not cross device boundaries.
+    pub fn scan(&self) -> Option<&'a Path> {
+        let initial_device_id = self.path.device_id();
+        for dir in self.path.ancestors() {
+            if initial_device_id != dir.device_id() {
+                break;
+            }
+
+            if self.files.iter().any(|name| dir.join(name).is_file())
+                || self.folders.iter().any(|name| dir.join(name).is_dir())
+            {
+                return Some(dir);
+            }
+        }
+        None
     }
 }
 
