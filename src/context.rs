@@ -175,6 +175,15 @@ impl<'a> Context<'a> {
         }
     }
 
+    // Sets the context config, overwriting the existing config
+    pub fn set_config(mut self, config: toml::Table) -> Context<'a> {
+        self.root_config = StarshipRootConfig::load(&config);
+        self.config = StarshipConfig {
+            config: Some(config),
+        };
+        self
+    }
+
     // Tries to retrieve home directory from a table in testing mode or else retrieves it from the os
     pub fn get_home(&self) -> Option<PathBuf> {
         if cfg!(test) {
@@ -938,6 +947,30 @@ mod tests {
 
         let expected_logical_dir = &test_path;
         assert_eq!(expected_logical_dir, &context.logical_dir);
+    }
+
+    #[test]
+    fn set_config_method_overwrites_constructor() {
+        let test_path = Path::new("/test_path").to_path_buf();
+        let context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            Target::Main,
+            test_path.clone(),
+            test_path.clone(),
+        );
+        let mod_context = Context::new_with_shell_and_path(
+            Default::default(),
+            Shell::Unknown,
+            Target::Main,
+            test_path.clone(),
+            test_path,
+        )
+        .set_config(toml::toml! {
+            add_newline = true
+        });
+
+        assert_ne!(context.config.config, mod_context.config.config);
     }
 
     #[test]
