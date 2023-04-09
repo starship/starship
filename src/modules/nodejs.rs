@@ -71,6 +71,26 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 }
                 _ => None,
             })
+            .map(|variable| match variable {
+                "expected_version" => {
+                    let version = nodejs_version.as_deref();
+                    let expected_version = get_engines_version(context);
+                    let versions_in_range = check_engines_version(version, get_engines_version(context));
+
+                    match (expected_version, versions_in_range) {
+                        (Some(ver), false) => {
+                            VersionFormatter::format_module_version(
+                                module.get_name(),
+                                &ver,
+                                config.version_format,
+                            )
+                            .map(Ok)
+                        }
+                        _ => None,
+                    }
+                }
+                _ => None,
+            })
             .parse(None, Some(context))
     });
 
@@ -269,6 +289,53 @@ mod tests {
         assert_eq!(expected, actual);
         dir.close()
     }
+
+    #[test]
+    fn show_expected_version_when_engines_does_not_match() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("package.json"))?;
+        file.write_all(
+            b"{
+            \"engines\":{
+                \"node\":\"11.0.0\"
+            }
+        }",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("nodejs").path(dir.path()).config(toml::toml! {
+            [nodejs]
+            format = "via [$symbol($version )($expected_version )]($style)"
+        }).collect();
+        let expected = Some(format!("via {}", Color::Red.bold().paint(" v12.0.0 v11.0.0 ")));
+    
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn do_not_show_expected_version_if_engines_match() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("package.json"))?;
+        file.write_all(
+            b"{
+            \"engines\":{
+                \"node\":\"12.0.0\"
+            }
+        }",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("nodejs").path(dir.path()).config(toml::toml! [
+            [nodejs]
+            format = "via [$symbol($version )($expected_version )]($style)"
+        ]).collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
     #[test]
     fn no_node_installed() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
