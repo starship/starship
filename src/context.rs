@@ -175,7 +175,7 @@ impl<'a> Context<'a> {
         }
     }
 
-    // Sets the context config, overwriting the existing config
+    /// Sets the context config, overwriting the existing config
     pub fn set_config(mut self, config: toml::Table) -> Context<'a> {
         self.root_config = StarshipRootConfig::load(&config);
         self.config = StarshipConfig {
