@@ -75,17 +75,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "expected_version" => {
                     let version = nodejs_version.as_deref();
                     let expected_version = get_engines_version(context);
-                    let versions_in_range = check_engines_version(version, get_engines_version(context));
+                    let versions_in_range =
+                        check_engines_version(version, get_engines_version(context));
 
                     match (expected_version, versions_in_range) {
-                        (Some(ver), false) => {
-                            VersionFormatter::format_module_version(
-                                module.get_name(),
-                                &ver,
-                                config.version_format,
-                            )
-                            .map(Ok)
-                        }
+                        (Some(ver), false) => Some(Ok(ver)),
                         _ => None,
                     }
                 }
@@ -297,18 +291,24 @@ mod tests {
         file.write_all(
             b"{
             \"engines\":{
-                \"node\":\"11.0.0\"
+                \"node\":\"<=11.0.0\"
             }
         }",
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).config(toml::toml! {
-            [nodejs]
-            format = "via [$symbol($version )($expected_version )]($style)"
-        }).collect();
-        let expected = Some(format!("via {}", Color::Red.bold().paint(" v12.0.0 v11.0.0 ")));
-    
+        let actual = ModuleRenderer::new("nodejs")
+            .path(dir.path())
+            .config(toml::toml! {
+                [nodejs]
+                format = "via [$symbol($version )($expected_version )]($style)"
+            })
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Red.bold().paint(" v12.0.0 <=11.0.0 ")
+        ));
+
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -320,16 +320,19 @@ mod tests {
         file.write_all(
             b"{
             \"engines\":{
-                \"node\":\"12.0.0\"
+                \"node\":\">=12.0.0\"
             }
         }",
         )?;
         file.sync_all()?;
 
-        let actual = ModuleRenderer::new("nodejs").path(dir.path()).config(toml::toml! [
-            [nodejs]
-            format = "via [$symbol($version )($expected_version )]($style)"
-        ]).collect();
+        let actual = ModuleRenderer::new("nodejs")
+            .path(dir.path())
+            .config(toml::toml! [
+                [nodejs]
+                format = "via [$symbol($version )($expected_version )]($style)"
+            ])
+            .collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
 
         assert_eq!(expected, actual);
