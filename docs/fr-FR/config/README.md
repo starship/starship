@@ -2871,10 +2871,12 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 ```toml
 # This is the default symbols table.
 [os.symbols]
+Alpaquita = "🔔 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
+Artix = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -2887,6 +2889,7 @@ Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
 Linux = "🐧 "
+Mabox = "📦 "
 Macos = "🍎 "
 Manjaro = "🥭 "
 Mariner = "🌊 "
