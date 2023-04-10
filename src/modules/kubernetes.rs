@@ -10,6 +10,7 @@ use crate::configs::kubernetes::KubernetesConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
 
+#[derive(Default)]
 struct KubeCtxComponents {
     user: Option<String>,
     namespace: Option<String>,
@@ -20,17 +21,11 @@ fn get_current_kube_context_name(filename: path::PathBuf) -> Option<String> {
     let contents = utils::read_file(filename).ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
-    if yaml_docs.is_empty() {
-        return None;
-    }
-    let conf = &yaml_docs[0];
-
-    let current_ctx = conf["current-context"].as_str()?;
-
-    if current_ctx.is_empty() {
-        return None;
-    }
-    Some(current_ctx.to_string())
+    let conf = yaml_docs.get(0)?;
+    conf["current-context"]
+        .as_str()
+        .filter(|s| !s.is_empty())
+        .map(String::from)
 }
 
 fn get_kube_ctx_components(
@@ -40,47 +35,29 @@ fn get_kube_ctx_components(
     let contents = utils::read_file(filename).ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
-    if yaml_docs.is_empty() {
-        return None;
-    }
-    let conf = &yaml_docs[0];
+    let conf = yaml_docs.get(0)?;
+    let contexts = conf["contexts"].as_vec()?;
 
-    let ctx_yaml = conf["contexts"].as_vec().and_then(|contexts| {
-        contexts
-            .iter()
-            .filter_map(|ctx| Some((ctx, ctx["name"].as_str()?)))
-            .find(|(_, name)| *name == current_ctx_name)
-    });
-
-    // If there is no context with that name we do not want to
-    // create and return an empty KubeCtxComponents struct
-    ctx_yaml?;
+    // Find the context with the name we're looking for
+    // or return None if we can't find it
+    let (ctx_yaml, _) = contexts
+        .iter()
+        .filter_map(|ctx| Some((ctx, ctx["name"].as_str()?)))
+        .find(|(_, name)| name == &current_ctx_name)?;
 
     let ctx_components = KubeCtxComponents {
-        user: ctx_yaml
-            .and_then(|(ctx, _)| ctx["context"]["user"].as_str())
-            .and_then(|s| {
-                if s.is_empty() {
-                    return None;
-                }
-                Some(s.to_owned())
-            }),
-        namespace: ctx_yaml
-            .and_then(|(ctx, _)| ctx["context"]["namespace"].as_str())
-            .and_then(|s| {
-                if s.is_empty() {
-                    return None;
-                }
-                Some(s.to_owned())
-            }),
-        cluster: ctx_yaml
-            .and_then(|(ctx, _)| ctx["context"]["cluster"].as_str())
-            .and_then(|s| {
-                if s.is_empty() {
-                    return None;
-                }
-                Some(s.to_owned())
-            }),
+        user: ctx_yaml["context"]["user"]
+            .as_str()
+            .filter(|s| !s.is_empty())
+            .map(String::from),
+        namespace: ctx_yaml["context"]["namespace"]
+            .as_str()
+            .filter(|s| !s.is_empty())
+            .map(String::from),
+        cluster: ctx_yaml["context"]["cluster"]
+            .as_str()
+            .filter(|s| !s.is_empty())
+            .map(String::from),
     };
 
     Some(ctx_components)
@@ -88,23 +65,17 @@ fn get_kube_ctx_components(
 
 fn get_aliased_name<'a>(
     pattern: Option<&'a str>,
-    current_value: Option<&String>,
+    current_value: Option<&str>,
     alias: Option<&'a str>,
 ) -> Option<String> {
-    let replacement = match (&alias, &current_value) {
-        (None, None) => return None,
-        (Some(alias_value), _) => (*alias_value).to_string(),
-        (None, Some(value)) => (*value).clone(),
-    };
+    let replacement = alias.or(current_value)?.to_string();
     let Some(pattern) = pattern else {
         // If user pattern not set, treat it as a match-all pattern
         return Some(replacement);
     };
-    let Some(value) = current_value else {
-        // If a pattern is set, but we have no value, there is no match
-        return None;
-    };
-    if value.as_str() == pattern {
+    // If a pattern is set, but we have no value, there is no match
+    let value = current_value?;
+    if value == pattern {
         return Some(replacement);
     }
     let re = match regex::Regex::new(&format!("^{pattern}$")) {
@@ -118,7 +89,7 @@ fn get_aliased_name<'a>(
             return None;
         }
     };
-    let replaced = re.replace(value.as_str(), replacement.as_str());
+    let replaced = re.replace(value, replacement.as_str());
     match replaced {
         Cow::Owned(replaced) => Some(replaced),
         // It didn't match...
@@ -138,18 +109,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // If we have some config for doing the directory scan then we use it but if we don't then we
     // assume we should treat it like the module is enabled to preserve backward compatibility.
-    let have_scan_config = !(config.detect_files.is_empty()
-        && config.detect_folders.is_empty()
-        && config.detect_extensions.is_empty());
+    let have_scan_config = [
+        &config.detect_files,
+        &config.detect_folders,
+        &config.detect_extensions,
+    ]
+    .into_iter()
+    .any(|v| !v.is_empty());
 
-    let is_kube_project = context
-        .try_begin_scan()?
-        .set_files(&config.detect_files)
-        .set_folders(&config.detect_folders)
-        .set_extensions(&config.detect_extensions)
-        .is_match();
+    let is_kube_project = have_scan_config.then(|| {
+        context
+            .try_begin_scan()
+            .map(|scanner| {
+                scanner
+                    .set_files(&config.detect_files)
+                    .set_folders(&config.detect_folders)
+                    .set_extensions(&config.detect_extensions)
+                    .is_match()
+            })
+            .unwrap_or(false)
+    });
 
-    if have_scan_config && !is_kube_project {
+    if !is_kube_project.unwrap_or(true) {
         return None;
     }
 
@@ -177,43 +158,47 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 &current_kube_ctx_name,
                 &kube_cfg
                 );
-            KubeCtxComponents {
-                user: None,
-                namespace: None,
-                cluster: None,
-            }
+            KubeCtxComponents::default()
         });
 
     // Select the first style that matches the context_pattern and,
     // if it is defined, the user_pattern
-    let (matched_context_config, display_context, display_user) = config.contexts.iter().find_map(|context_config| {
-        let Some(context_alias) = get_aliased_name(Some(context_config.context_pattern), Some(&current_kube_ctx_name), context_config.context_alias) else {
-            return None;
-        };
+    let (matched_context_config, display_context, display_user) = config
+        .contexts
+        .iter()
+        .find_map(|context_config| {
+            let context_alias = get_aliased_name(
+                Some(context_config.context_pattern),
+                Some(&current_kube_ctx_name),
+                context_config.context_alias,
+            )?;
 
-        let user_alias = get_aliased_name(context_config.user_pattern, ctx_components.user.as_ref(), context_config.user_alias);
+            let user_alias = get_aliased_name(
+                context_config.user_pattern,
+                ctx_components.user.as_deref(),
+                context_config.user_alias,
+            );
+            if matches!((context_config.user_pattern, &user_alias), (Some(_), None)) {
+                // defined pattern, but it didn't match
+                return None;
+            }
 
-        if context_config.user_pattern.is_some() && user_alias.is_none() {
-            // defined pattern, but it didn't match
-            return None;
-        }
-
-        Some((Some(context_config), context_alias, user_alias))
-    }).unwrap_or_else(|| (None, current_kube_ctx_name.clone(), ctx_components.user));
+            Some((Some(context_config), context_alias, user_alias))
+        })
+        .unwrap_or_else(|| (None, current_kube_ctx_name.clone(), ctx_components.user));
 
     // TODO: remove deprecated aliases after starship 2.0
     let display_context =
-        deprecated::get_alias(Some(display_context), &config.context_aliases, "context").unwrap();
-    let display_user = deprecated::get_alias(display_user, &config.user_aliases, "user");
+        deprecated::get_alias(display_context, &config.context_aliases, "context").unwrap();
+    let display_user =
+        display_user.and_then(|user| deprecated::get_alias(user, &config.user_aliases, "user"));
 
-    let display_style = match matched_context_config {
-        Some(ctx_cfg) => ctx_cfg.style.unwrap_or(config.style),
-        None => config.style,
-    };
-    let display_symbol = match matched_context_config {
-        Some(ctx_cfg) => ctx_cfg.symbol.unwrap_or(config.symbol),
-        None => config.symbol,
-    };
+    let display_style = matched_context_config
+        .and_then(|ctx_cfg| ctx_cfg.style)
+        .unwrap_or(config.style);
+    let display_symbol = matched_context_config
+        .and_then(|ctx_cfg| ctx_cfg.symbol)
+        .unwrap_or(config.symbol);
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -259,14 +244,10 @@ mod deprecated {
     use std::collections::HashMap;
 
     pub fn get_alias<'a>(
-        current_value: Option<String>,
+        current_value: String,
         aliases: &'a HashMap<String, &'a str>,
         name: &'a str,
     ) -> Option<String> {
-        let Some(current_value) = current_value else {
-            return None;
-        };
-
         let alias = if let Some(val) = aliases.get(current_value.as_str()) {
             // simple match without regex
             Some((*val).to_string())
@@ -276,6 +257,7 @@ mod deprecated {
                 let re = regex::Regex::new(&format!("^{k}$")).ok()?;
                 let replaced = re.replace(current_value.as_str(), *v);
                 match replaced {
+                    // We have a match if the replaced string is different from the original
                     Cow::Owned(replaced) => Some(replaced),
                     _ => None,
                 }
