@@ -331,10 +331,11 @@ mod tests {
         // - dosc/.vuepress/public/presets/toml/nerd-font-symbols.toml
         // - .github/config-schema.json
         let _ = |t: Type| match t {
+            Type::Alpaquita => "🔔 ",
             Type::Alpine => "🏔️ ",
             Type::Amazon => "🙂 ",
             Type::Android => "🤖 ",
-            Type::Arch => "🎗️ ",
+            Type::Arch | Type::Artix => "🎗️ ",
             Type::CentOS => "💠 ",
             Type::Debian => "🌀 ",
             Type::DragonFly => "🐉 ",
@@ -347,6 +348,7 @@ mod tests {
             Type::HardenedBSD => "🛡️ ",
             Type::Illumos => "🐦 ",
             Type::Linux => "🐧 ",
+            Type::Mabox => "📦 ",
             Type::Macos => "🍎 ",
             Type::Manjaro => "🥭 ",
             Type::Mariner => "🌊 ",
