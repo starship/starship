@@ -1,26 +1,26 @@
-# Presets
+# Шаблони
 
-Here is a collection of community-submitted configuration presets for Starship. If you have a preset to share, please [submit a PR](https://github.com/starship/starship/edit/master/docs/presets/README.md) updating this file! 😊
+Тут ви можете переглянути добірку шаблонів налаштувань, створених спільнотою Starship. Якщо у вас є шаблон, яким ви бажаєте поділитись з іншими, будь ласка, [зробіть Pull Request](https://github.com/starship/starship/edit/master/docs/presets/README.md) з оновленнями для цього файлу! 😊
 
-To get details on how to use a preset, simply click on the image.
+Щоб отримати додаткову інформацію про використання шаблону, просто натисніть на зображення.
 
 ## [Nerd Font Symbols](./nerd-font.md)
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Цей стиль змінює символи для кожного модуля на символи з Nerd Font.
 
 [![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
 
 ## [No Nerd Fonts](./no-nerd-font.md)
 
-This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+Цей стиль змінює символи для кількох модулів, щоб жодні символи Nerd Font не використовувалися в командному рядку.
 
 ::: tip
 
-This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+Цей шаблон стане стандартним в [майбутньому випуску starship](https://github.com/starship/starship/pull/3544).
 
 :::
 
-[Click to view No Nerd Font preset](./no-nerd-font)
+[Натисніть для перегляду шаблона No Nerd Font](./no-nerd-font)
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
@@ -60,6 +60,6 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 
 ## [Tokyo Night](./tokyo-night.md)
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Цей шаблон створений під враженням від [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[![Скріншот шаблону Tokyo Night](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
