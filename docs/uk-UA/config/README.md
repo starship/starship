@@ -796,7 +796,7 @@ vimcmd_symbol = '[V](bold green) '
 | `show_milliseconds`    | `false`                       | Показувати мілісекунди на додачу для секунд.                                                                                                                        |
 | `format`               | `'took [$duration]($style) '` | Формат модуля.                                                                                                                                                      |
 | `style`                | `'bold yellow'`               | Стиль модуля.                                                                                                                                                       |
-| `disabled`             | `false`                       | Вимкнути модуль `cmd_duration`.                                                                                                                                     |
+| `disabled`             | `false`                       | Вимикає модуль `cmd_duration`.                                                                                                                                      |
 | `show_notifications`   | `false`                       | Показувати сповіщення на робочому столі після закінчення команди.                                                                                                   |
 | `min_time_to_notify`   | `45_000`                      | Найменший час виконання для сповіщення (в мілісекундах).                                                                                                            |
 | `notification_timeout` |                               | Тривалість показу сповіщення (у мілісекундах). Якщо не налаштовано, час очікування сповіщень визначатиметься демоном. Не всі демони сповіщень підтримують цю опцію. |
@@ -822,30 +822,30 @@ format = 'underwent [$duration](bold yellow)'
 
 ## Conda
 
-The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
+Модуль `conda` показує інформацію про поточне оточення [Conda](https://docs.conda.io/en/latest/), якщо змінна `$CONDA_DEFAULT_ENV` встановлена.
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Це не призводить до придушення власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`.
 
 :::
 
 ### Параметри
 
-| Параметр            | Стандартно                             | Опис                                                                                                                                                                                                        |
-| ------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to, if the environment was created via `conda create -p [path]`. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `'🅒 '`                                 | The symbol used before the environment name.                                                                                                                                                                |
-| `style`             | `'bold green'`                         | Стиль модуля.                                                                                                                                                                                               |
-| `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                                                                              |
-| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
-| `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
+| Параметр            | Стандартно                             | Опис                                                                                                                                                                                                                 |
+| ------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | Кількість тек, на які повинен бути скорочений шлях середовища, якщо середовище було створено за допомогою `conda create -p [path]`. `0` – означає без скорочення. Також подивіться модуль [`directory`](#directory). |
+| `symbol`            | `'🅒 '`                                 | Символ що передує назві оточення.                                                                                                                                                                                    |
+| `style`             | `'bold green'`                         | Стиль модуля.                                                                                                                                                                                                        |
+| `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                                                                                       |
+| `ignore_base`       | `true`                                 | Ігнорувати середовище `base`.                                                                                                                                                                                        |
+| `disabled`          | `false`                                | Вимикає модуль `conda`.                                                                                                                                                                                              |
 
 ### Змінні
 
 | Змінна      | Приклад      | Опис                                     |
 | ----------- | ------------ | ---------------------------------------- |
-| environment | `astronauts` | The current conda environment            |
+| environment | `astronauts` | Поточне середовище conda                 |
 | symbol      |              | Віддзеркалює значення параметра `symbol` |
 | style\*   |              | Віддзеркалює значення параметра `style`  |
 
@@ -862,22 +862,22 @@ format = '[$symbol$environment](dimmed green) '
 
 ## Container
 
-The `container` module displays a symbol and container name, if inside a container.
+Модуль `container` показує символ та назву контейнера, коли ви перебуваєте в ньому.
 
 ### Параметри
 
-| Параметр   | Стандартно                         | Опис                                      |
-| ---------- | ---------------------------------- | ----------------------------------------- |
-| `symbol`   | `'⬢'`                              | The symbol shown, when inside a container |
-| `style`    | `'bold red dimmed'`                | Стиль модуля.                             |
-| `format`   | `'[$symbol \[$name\]]($style) '` | Формат модуля.                            |
-| `disabled` | `false`                            | Disables the `container` module.          |
+| Параметр   | Стандартно                         | Опис                                                    |
+| ---------- | ---------------------------------- | ------------------------------------------------------- |
+| `symbol`   | `'⬢'`                              | Символ, що показується під час перебування в контейнері |
+| `style`    | `'bold red dimmed'`                | Стиль модуля.                                           |
+| `format`   | `'[$symbol \[$name\]]($style) '` | Формат модуля.                                          |
+| `disabled` | `false`                            | Вимикає модуль `container`.                             |
 
 ### Змінні
 
 | Змінна    | Приклад             | Опис                                     |
 | --------- | ------------------- | ---------------------------------------- |
-| name      | `fedora-toolbox:35` | The name of the container                |
+| name      | `fedora-toolbox:35` | Назва контейнера                         |
 | symbol    |                     | Віддзеркалює значення параметра `symbol` |
 | style\* |                     | Віддзеркалює значення параметра `style`  |
 
@@ -894,29 +894,29 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `crystal` показує поточну встановлену версію [Crystal](https://crystal-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `shard.yml`
-- The current directory contains a `.cr` file
+- Поточна тека містить файл `.cr`
 
 ### Параметри
 
 | Параметр            | Стандартно                           | Опис                                                              |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
-| `symbol`            | `'🔮 '`                               | The symbol used before displaying the version of crystal.         |
+| `symbol`            | `'🔮 '`                               | Символ, який знаходиться перед версією crystal.                   |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
 | `style`             | `'bold red'`                         | Стиль модуля.                                                     |
 | `detect_extensions` | `['cr']`                             | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['shard.yml']`                      | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
-| `disabled`          | `false`                              | Disables the `crystal` module.                                    |
+| `disabled`          | `false`                              | Вимикає модуль `crystal`.                                         |
 
 ### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| version   | `v0.32.1` | The version of `crystal`                 |
+| version   | `v0.32.1` | Версія `crystal`                         |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -933,7 +933,7 @@ format = 'via [✨ $version](bold blue) '
 
 ## Daml
 
-The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `daml` показує поточну версію SDK  [Daml](https://www.digitalasset.com/developers), коли ви перебуваєте в кореневій теці проєкту Daml. `sdk-version` у файлі `daml.yaml` буде використовуватись, якщо значення не буде перевизначене змінною оточення `DAML_SDK_VERSION`. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `daml.yaml`
 
@@ -943,18 +943,18 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'Λ '`                               | A format string representing the symbol of Daml                   |
+| `symbol`            | `'Λ '`                               | Формат рядка, що представляє символ Daml                          |
 | `style`             | `'bold cyan'`                        | Стиль модуля.                                                     |
 | `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['daml.yaml']`                      | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
-| `disabled`          | `false`                              | Disables the `daml` module.                                       |
+| `disabled`          | `false`                              | Вимикає модуль `daml`.                                            |
 
 ### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v2.2.0` | The version of `daml`                    |
+| version   | `v2.2.0` | Версія `daml`                            |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -971,7 +971,7 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-The `dart` module shows the currently installed version of [Dart](https://dart.dev/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `dart` показує поточну встановлену версію [Dart](https://dart.dev/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - The current directory contains a file with `.dart` extension
 - The current directory contains a `.dart_tool` directory
@@ -988,7 +988,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['.dart_tool']`                                  | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold blue'`                                     | Стиль модуля.                                                     |
-| `disabled`          | `false`                                           | Disables the `dart` module.                                       |
+| `disabled`          | `false`                                           | Вимикає модуль `dart`.                                            |
 
 ### Змінні
 
@@ -1026,7 +1026,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                                                    | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'green bold'`                                                          | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                                 | Disables the `deno` module.                                       |
+| `disabled`          | `false`                                                                 | Вимикає модуль `deno`.                                            |
 
 ### Змінні
 
@@ -1061,7 +1061,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `truncate_to_repo`       | `true`                                                                                                                       | Whether or not to truncate to the root of the git repo that you're currently in.                           |
 | `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | Формат модуля.                                                                                             |
 | `style`                  | `'bold cyan'`                                                                                                                | Стиль модуля.                                                                                              |
-| `disabled`               | `false`                                                                                                                      | Disables the `directory` module.                                                                           |
+| `disabled`               | `false`                                                                                                                      | Вимикає модуль `directory`.                                                                                |
 | `read_only`              | `'🔒'`                                                                                                                        | The symbol indicating current directory is read only.                                                      |
 | `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                        |
 | `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                          |
@@ -1141,7 +1141,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
 | `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
 | `style`             | `'blue bold'`                                                 | Стиль модуля.                                                                     |
-| `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
+| `disabled`          | `false`                                                       | Вимикає модуль `docker_context`.                                                  |
 
 ### Змінні
 
@@ -1195,7 +1195,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                                                                                    | Які теки мають запускати цей модуль.                              |
 | `style`             | `'bold blue'`                                                                                           | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                     |
+| `disabled`          | `false`                                                                                                 | Вимикає модуль `dotnet`.                                          |
 
 ### Змінні
 
@@ -1236,7 +1236,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `detect_files`      | `['mix.exs']`                                               | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                                        | Які теки мають запускати цей модуль.                              |
 | `style`             | `'bold purple'`                                             | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                     | Вимкнути модуль `elixir`.                                         |
+| `disabled`          | `false`                                                     | Вимикає модуль `elixir`.                                          |
 
 ### Змінні
 
@@ -1279,7 +1279,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['elm-stuff']`                                    | Які теки мають запускати цей модуль.                              |
 | `style`             | `'cyan bold'`                                      | Стиль модуля.                                                     |
-| `disabled`          | `false`                                            | Disables the `elm` module.                                        |
+| `disabled`          | `false`                                            | Вимикає модуль`elm`.                                              |
 
 ### Змінні
 
@@ -1337,7 +1337,7 @@ default = 'unknown user'
 | `стандартно` |                                | The default value to be displayed when the selected variable is not defined. |
 | `format`     | `"with [$env_value]($style) "` | Формат модуля.                                                               |
 | `опис`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
-| `disabled`   | `false`                        | Disables the `env_var` module.                                               |
+| `disabled`   | `false`                        | Вимикає модуль `env_var`.                                                    |
 
 ### Змінні
 
@@ -1389,7 +1389,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['rebar.config', 'elang.mk']`       | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
-| `disabled`          | `false`                              | Disables the `erlang` module.                                     |
+| `disabled`          | `false`                              | Вимикає модуль `erlang`.                                          |
 
 ### Змінні
 
@@ -1427,7 +1427,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `detect_extensions` | `[fnl]`                              | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
-| `disabled`          | `false`                              | Disables the `fennel` module.                                     |
+| `disabled`          | `false`                              | Вимикає модуль `fennel`.                                          |
 
 ### Змінні
 
@@ -1458,7 +1458,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 | ---------- | -------------- | --------------------------------- |
 | `symbol`   | `'.'`          | The symbol used to fill the line. |
 | `style`    | `'bold black'` | Стиль модуля.                     |
-| `disabled` | `false`        | Disables the `fill` module        |
+| `disabled` | `false`        | Вимикає модуль `fill`             |
 
 ### Приклад
 
@@ -1490,7 +1490,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | `style`             | `'bold purple'`                  | Стиль модуля.                                                                            |
 | `truncation_length` | `2^63 - 1`                       | Truncates a Fossil branch name to `N` graphemes                                          |
 | `truncation_symbol` | `'…'`                            | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
-| `disabled`          | `true`                           | Disables the `fossil_branch` module.                                                     |
+| `disabled`          | `true`                           | Вимикає модуль `fossil_branch`.                                                          |
 
 ### Змінні
 
@@ -1526,7 +1526,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `region_aliases`  | `{}`                                                       | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name. |
 | `style`           | `'bold blue'`                                              | Стиль модуля.                                                    |
-| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
+| `disabled`        | `false`                                                    | Вимикає модуль `gcloud`.                                         |
 
 ### Змінні
 
@@ -1602,7 +1602,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `truncation_symbol`  | `'…'`                                             | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
 | `only_attached`      | `false`                                           | Only show the branch name when not in a detached `HEAD` state.                           |
 | `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for 'master' or 'main'.                      |
-| `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
+| `disabled`           | `false`                                           | Вимикає модуль `git_branch`.                                                             |
 
 ### Змінні
 
@@ -1643,7 +1643,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `tag_disabled`       | `true`                         | Disables showing tag info in `git_commit` module.                                    |
 | `tag_max_candidates` | `0`                            | How many commits to consider for tag display. The default only allows exact matches. |
 | `tag_symbol`         | `' 🏷 '`                        | Tag symbol prefixing the info shown                                                  |
-| `disabled`           | `false`                        | Disables the `git_commit` module.                                                    |
+| `disabled`           | `false`                        | Вимикає модуль `git_commit`.                                                         |
 
 ### Змінні
 
@@ -1682,7 +1682,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `am_or_rebase` | `'AM/REBASE'`                                                   | A format string displayed when an ambiguous `apply-mailbox` or `rebase` is in progress. |
 | `style`        | `'bold yellow'`                                                 | Стиль модуля.                                                                           |
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | Формат модуля.                                                                          |
-| `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
+| `disabled`     | `false`                                                         | Вимикає модуль `git_state`.                                                             |
 
 ### Змінні
 
@@ -1723,7 +1723,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Формат модуля.                        |
-| `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `disabled`           | `true`                                                       | Вимикає модуль `git_metrics`.         |
 
 ### Змінні
 
@@ -1774,7 +1774,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
 | `style`             | `'bold red'`                                    | Стиль модуля.                                                                                               |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
+| `disabled`          | `false`                                         | Вимикає модуль `git_status`.                                                                                |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Змінні
@@ -1873,7 +1873,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['Godeps']`                                                                              | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold cyan'`                                                                             | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                     |
+| `disabled`          | `false`                                                                                   | Вимикає модуль `golang`.                                          |
 
 ### Змінні
 
@@ -1905,7 +1905,7 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | `format`   | `'via [$symbol]($style) '` | Формат модуля.                                         |
 | `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
 | `style`    | `"yellow bold"`            | Стиль модуля.                                          |
-| `disabled` | `false`                    | Disables the `guix_shell` module.                      |
+| `disabled` | `false`                    | Вимикає модуль `guix_shell`.                           |
 
 ### Змінні
 
@@ -1948,7 +1948,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `["gradle"]`                         | В яких теках цей модуль має запускатись.                          |
 | `style`             | `"bold bright-cyan"`                 | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `gradle` module.                                     |
+| `disabled`          | `false`                              | Вимикає модуль `gradle`.                                          |
 | `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.             |
 
 ### Змінні
@@ -1980,7 +1980,7 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 | `detect_files`      | `['stack.yaml', 'cabal.project']`    | Які імена файлів мають запускати цей модуль.       |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.           |
 | `style`             | `'bold purple'`                      | Стиль модуля.                                      |
-| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+| `disabled`          | `false`                              | Вимикає модуль `haskell`.                          |
 
 ### Змінні
 
@@ -2013,7 +2013,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | Які теки мають запускати цей модуль.                              |
 | `symbol`            | `"⌘ "`                                                                                          | A format string representing the symbol of Helm.                  |
 | `style`             | `"bold fg:202"`                                                                                 | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                       |
+| `disabled`          | `false`                                                                                         | Вимикає модуль `haxe`.                                            |
 
 ### Змінні
 
@@ -2052,7 +2052,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
 | `symbol`            | `'⎈ '`                               | A format string representing the symbol of Helm.                  |
 | `style`             | `'bold white'`                       | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `helm` module.                                       |
+| `disabled`          | `false`                              | Вимикає модуль `helm`.                                            |
 
 ### Змінні
 
@@ -2086,7 +2086,7 @@ The `hostname` module shows the system hostname.
 | `trim_at`    | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation |
 | `format`     | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                       |
 | `style`      | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                        |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| `disabled`   | `false`                                | Вимикає модуль `hostname`.                                                                                                           |
 
 ### Змінні
 
@@ -2128,7 +2128,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `detect_folders`    | `[]`                                                                                                                  | Які теки мають запускати цей модуль.                              |
 | `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java                   |
 | `style`             | `'red dimmed'`                                                                                                        | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                                                                               | Disables the `java` module.                                       |
+| `disabled`          | `false`                                                                                                               | Вимикає модуль `java`.                                            |
 
 ### Змінні
 
@@ -2181,7 +2181,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `format`           | `'[$symbol$number]($style) '` | Формат модуля.                                                           |
 | `symbol`           | `'✦'`                         | The string used to represent the `symbol` variable.                      |
 | `style`            | `'bold blue'`                 | Стиль модуля.                                                            |
-| `disabled`         | `false`                       | Disables the `jobs` module.                                              |
+| `disabled`         | `false`                       | Вимикає модуль `jobs`.                                                   |
 
 *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
@@ -2225,7 +2225,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
 | `symbol`            | `'ஃ '`                               | A format string representing the symbol of Julia.                 |
 | `style`             | `'bold purple'`                      | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `julia` module.                                      |
+| `disabled`          | `false`                              | Вимикає модуль `julia`.                                           |
 
 ### Змінні
 
@@ -2264,7 +2264,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `symbol`            | `'🅺 '`                               | A format string representing the symbol of Kotlin.                            |
 | `style`             | `'bold blue'`                        | Стиль модуля.                                                                 |
 | `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
+| `disabled`          | `false`                              | Вимикає модуль `kotlin`.                                                      |
 
 ### Змінні
 
@@ -2317,7 +2317,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `detect_extensions` | `[]`                                                 | Які розширення повинні запускати цей модуль.                          |
 | `detect_files`      | `[]`                                                 | Які імена файлів мають запускати цей модуль.                          |
 | `detect_folders`    | `[]`                                                 | Які теки мають запускати цей модуль.                                  |
-| `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
+| `disabled`          | `true`                                               | Вимикає модуль `kubernetes`.                                          |
 
 ### Змінні
 
@@ -2386,9 +2386,9 @@ The `line_break` module separates the prompt into two lines.
 
 ### Параметри
 
-| Параметр   | Стандартно | Опис                                                               |
-| ---------- | ---------- | ------------------------------------------------------------------ |
-| `disabled` | `false`    | Disables the `line_break` module, making the prompt a single line. |
+| Параметр   | Стандартно | Опис                                                       |
+| ---------- | ---------- | ---------------------------------------------------------- |
+| `disabled` | `false`    | Вимикає модуль `line_break`, перемикає вивід в один рядок. |
 
 ### Приклад
 
@@ -2410,7 +2410,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
 | `format`   | `'[$localipv4]($style) '` | Формат модуля.                                         |
 | `style`    | `'bold yellow'`           | Стиль модуля.                                          |
-| `disabled` | `true`                    | Disables the `localip` module.                         |
+| `disabled` | `true`                    | Вимикає модуль `localip`.                              |
 
 ### Змінні
 
@@ -2452,7 +2452,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | `detect_folders`    | `['lua']`                            | В яких теках цей модуль має запускатись.                                   |
 | `style`             | `'bold blue'`                        | Стиль модуля.                                                              |
 | `lua_binary`        | `'lua'`                              | Configures the lua binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Disables the `lua` module.                                                 |
+| `disabled`          | `false`                              | Вимикає модуль `lua`.                                                      |
 
 ### Змінні
 
@@ -2493,7 +2493,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | Формат модуля.                                           |
 | `symbol`    | `'🐏'`                                           | The symbol used before displaying the memory usage.      |
 | `style`     | `'bold dimmed white'`                           | Стиль модуля.                                            |
-| `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
+| `disabled`  | `true`                                          | Вимикає модуль `memory_usage`.                           |
 
 ### Змінні
 
@@ -2535,7 +2535,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | `format`            | `'via [$symbol$project]($style) '` | Формат модуля.                                                                            |
 | `symbol`            | `'⬢ '`                             | The symbol used before displaying the project name.                                       |
 | `style`             | `'blue bold'`                      | Стиль модуля.                                                                             |
-| `disabled`          | `false`                            | Disables the `meson` module.                                                              |
+| `disabled`          | `false`                            | Вимкнути модуль `meson`.                                                                  |
 
 ### Змінні
 
@@ -2572,7 +2572,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | `format`            | `'on [$symbol$branch(:$topic)]($style) '` | Формат модуля.                                                                               |
 | `truncation_length` | `2^63 - 1`                                | Truncates the hg branch / topic name to `N` graphemes                                        |
 | `truncation_symbol` | `'…'`                                     | The symbol used to indicate a branch name was truncated.                                     |
-| `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
+| `disabled`          | `true`                                    | Вимикає модуль `hg_branch`.                                                                  |
 
 ### Змінні
 
@@ -2616,7 +2616,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | `detect_files`      | `['nim.cfg']`                        | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold yellow'`                      | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `nim` module.                                        |
+| `disabled`          | `false`                              | Вимикає модуль `nim`.                                             |
 
 ### Змінні
 
@@ -2652,7 +2652,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | `impure_msg`  | `'impure'`                                     | A format string shown when the shell is impure.                       |
 | `pure_msg`    | `'pure'`                                       | A format string shown when the shell is pure.                         |
 | `unknown_msg` | `''`                                           | A format string shown when it is unknown if the shell is pure/impure. |
-| `disabled`    | `false`                                        | Disables the `nix_shell` module.                                      |
+| `disabled`    | `false`                                        | Вимикає модуль `nix_shell`.                                           |
 | `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
 ### Змінні
@@ -2701,7 +2701,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | `detect_files`      | `['package.json', '.node-version']`        | Які імена файлів мають запускати цей модуль.                                                          |
 | `detect_folders`    | `['node_modules']`                         | В яких теках цей модуль має запускатись.                                                              |
 | `style`             | `'bold green'`                             | Стиль модуля.                                                                                         |
-| `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
+| `disabled`          | `false`                                    | Вимикає модуль `nodejs`.                                                                              |
 | `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Змінні
@@ -2747,7 +2747,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`          | `['_opam', 'esy.lock']`                                                    | В яких теках цей модуль має запускатись.                          |
 | `style`                   | `'bold yellow'`                                                            | Стиль модуля.                                                     |
-| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                      |
+| `disabled`                | `false`                                                                    | Вимикає модуль `ocaml`.                                           |
 
 ### Змінні
 
@@ -2785,7 +2785,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold blue'`                        | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `opa` module.                                        |
+| `disabled`          | `false`                              | Вимикає модуль `opa`.                                             |
 
 ### Змінні
 
@@ -2817,7 +2817,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | Формат модуля.                                                 |
 | `symbol`   | `'☁️ '`                                         | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `'bold yellow'`                                 | Стиль модуля.                                                  |
-| `disabled` | `false`                                         | Disables the `openstack` module.                               |
+| `disabled` | `false`                                         | Вимикає модуль `openstack`.                                    |
 
 ### Змінні
 
@@ -2863,7 +2863,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | ---------- | --------------------- | ------------------------------------------------------ |
 | `format`   | `"[$symbol]($style)"` | Формат модуля.                                         |
 | `style`    | `"bold white"`        | Стиль модуля.                                          |
-| `disabled` | `true`                | Disables the `os` module.                              |
+| `disabled` | `true`                | Вимикає модуль `os`.                                   |
 | `symbols`  |                       | A table that maps each operating system to its symbol. |
 
 `symbols` allows you to define arbitrary symbols to display for each operating system type. Operating system types not defined by your configuration use the default symbols table below. All operating systems currently supported by the module are listed below. If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
@@ -2976,7 +2976,7 @@ The `package` module is shown when the current directory is the repository for a
 | `version_format`  | `'v${raw}'`                       | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
 | `style`           | `'bold 208'`                      | Стиль модуля.                                                     |
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.         |
-| `disabled`        | `false`                           | Disables the `package` module.                                    |
+| `disabled`        | `false`                           | Вимикає модуль `package`.                                         |
 
 ### Змінні
 
@@ -3018,7 +3018,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 | `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                                                                                     | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold 149'`                                                                                             | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                       |
+| `disabled`          | `false`                                                                                                  | Вимикає модуль `perl`.                                            |
 
 ### Змінні
 
@@ -3056,7 +3056,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | `detect_files`      | `['composer.json', '.php-version']`  | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'147 bold'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `php` module.                                        |
+| `disabled`          | `false`                              | Вимикає модуль `php`.                                             |
 
 ### Змінні
 
@@ -3090,7 +3090,7 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 | `format`            | `'on [$symbol$channel]($style) '` | Формат модуля.                                                                       |
 | `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
 | `truncation_symbol` | `'…'`                             | The symbol used to indicate a branch name was truncated.                             |
-| `disabled`          | `true`                            | Disables the `pijul` module.                                                         |
+| `disabled`          | `true`                            | Вимикає модуль `pijul`.                                                              |
 
 ## Pulumi
 
@@ -3116,7 +3116,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 | `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                    |
 | `style`          | `'bold 5'`                                   | Стиль модуля.                                                     |
 | `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.    |
-| `disabled`       | `false`                                      | Disables the `pulumi` module.                                     |
+| `disabled`       | `false`                                      | Вимикає модуль `pulumi`.                                          |
 
 ### Змінні
 
@@ -3168,7 +3168,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | `detect_files`      | `['spago.dhall']`                    | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold white'`                       | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                 |
+| `disabled`          | `false`                              | Вимикає модуль `purescript`.                                      |
 
 ### Змінні
 
@@ -3221,7 +3221,7 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | `detect_extensions`  | `['py']`                                                                                                     | Які розширення повинні запускати цей модуль                                            |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                     |
 | `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                         |
-| `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
+| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                               |
 
 ::: tip
 
@@ -3301,7 +3301,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Які розширення повинні запускати цей модуль                       |
 | `detect_files`      | `['.Rprofile']`                      | Назви файлів, які активують модуль                                |
 | `detect_folders`    | `['.Rproj.user']`                    | Назви тек, що активують модуль                                    |
-| `disabled`          | `false`                              | Disables the `r` module.                                          |
+| `disabled`          | `false`                              | Вимикає модуль `r`.                                               |
 
 ### Змінні
 
@@ -3338,7 +3338,7 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 | `detect_files`      | `['META6.json']`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                             | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold 149'`                                     | Стиль модуля.                                                     |
-| `disabled`          | `false`                                          | Disables the `raku` module.                                       |
+| `disabled`          | `false`                                          | Вимикає модуль `raku`.                                            |
 
 ### Змінні
 
@@ -3375,7 +3375,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'red bold'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `red` module.                                        |
+| `disabled`          | `false`                              | Вимикає модуль `red`.                                             |
 
 ### Змінні
 
@@ -3419,7 +3419,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Which environment variables should trigger this module.           |
 | `style`             | `'bold red'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                       |
+| `disabled`          | `false`                              | Вимикає модуль `ruby`.                                            |
 
 ### Змінні
 
@@ -3458,7 +3458,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `detect_files`      | `['Cargo.toml']`                     | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold red'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `rust` module.                                       |
+| `disabled`          | `false`                              | Вимикає модуль `rust`.                                            |
 
 ### Змінні
 
@@ -3500,7 +3500,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `detect_folders`    | `['.metals']`                            | Які теки мають запускати цей модуль.                              |
 | `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                 |
 | `style`             | `'red dimmed'`                           | Стиль модуля.                                                     |
-| `disabled`          | `false`                                  | Disables the `scala` module.                                      |
+| `disabled`          | `false`                                  | Вимикає модуль `scala`.                                           |
 
 ### Змінні
 
@@ -3548,7 +3548,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown. |
 | `format`               | `'[$indicator]($style) '` | Формат модуля.                                               |
 | `style`                | `'white bold'`            | Стиль модуля.                                                |
-| `disabled`             | `true`                    | Disables the `shell` module.                                 |
+| `disabled`             | `true`                    | Вимикає модуль `shell`.                                      |
 
 ### Змінні
 
@@ -3585,7 +3585,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | `symbol`    | `'↕️  '`                     | The symbol used to represent the `SHLVL`.                     |
 | `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
 | `style`     | `'bold yellow'`              | Стиль модуля.                                                 |
-| `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
+| `disabled`  | `true`                       | Вимикає модуль `shlvl`.                                       |
 
 ### Змінні
 
@@ -3619,7 +3619,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | `format`   | `'[$symbol\[$env\]]($style) '` | Формат модуля.                                   |
 | `symbol`   | `''`                             | A format string displayed before the image name. |
 | `style`    | `'bold dimmed blue'`             | Стиль модуля.                                    |
-| `disabled` | `false`                          | Disables the `singularity` module.               |
+| `disabled` | `false`                          | Вимикає модуль `singularity`.                    |
 
 ### Змінні
 
@@ -3646,13 +3646,13 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 ### Параметри
 
-| Параметр            | Стандартно                             | Опис                                                                                                                                           |
-| ------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` means no truncation. Also see the [`directory`](#directory) module. |
-| `symbol`            | `'🅢  '`                                | The symbol used before the environment name.                                                                                                   |
-| `style`             | `'bold blue'`                          | Стиль модуля.                                                                                                                                  |
-| `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                 |
-| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                   |
+| Параметр            | Стандартно                             | Опис                                                                                                                                                    |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` – означає без скорочення. Також подивіться модуль [`directory`](#directory). |
+| `symbol`            | `'🅢  '`                                | Символ що передує назві оточення.                                                                                                                       |
+| `style`             | `'bold blue'`                          | Стиль модуля.                                                                                                                                           |
+| `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                          |
+| `disabled`          | `false`                                | Вимикає модуль `spack`.                                                                                                                                 |
 
 ### Змінні
 
@@ -3701,7 +3701,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
 | `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
 | `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
+| `disabled`                  | `true`                                                                             | Вимикає модуль `status`.                                              |
 
 ### Змінні
 
@@ -3752,7 +3752,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `symbol`        | `'🧙 '`                   | The symbol displayed when credentials are cached        |
 | `style`         | `'bold blue'`            | Стиль модуля.                                           |
 | `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                   | Disables the `sudo` module.                             |
+| `disabled`      | `true`                   | Вимикає модуль `sudo`.                                  |
 
 ### Змінні
 
@@ -3801,7 +3801,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | `detect_files`      | `['Package.swift']`                  | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold 202'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `swift` module.                                      |
+| `disabled`          | `false`                              | Вимикає модуль `swift`.                                           |
 
 ### Змінні
 
@@ -3848,7 +3848,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['.terraform']`                     | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold 105'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                  |
+| `disabled`          | `false`                              | Вимикає модуль `terraform`.                                       |
 
 ### Змінні
 
@@ -3900,7 +3900,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
 | `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `disabled`        | `true`                  | Вимикає модуль `time`.                                                                                                             |
 | `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
@@ -3950,7 +3950,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
 | `format`      | `'[$user]($style) in '` | Формат модуля.                              |
 | `show_always` | `false`                 | Always shows the `username` module.         |
-| `disabled`    | `false`                 | Disables the `username` module.             |
+| `disabled`    | `false`                 | Вимикає модуль `username`.                  |
 
 ### Змінні
 
@@ -3989,7 +3989,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | `detect_files`      | `['Vagrantfile']`                    | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'cyan bold'`                        | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                    |
+| `disabled`          | `false`                              | Вимикає модуль `vagrant`.                                         |
 
 ### Змінні
 
@@ -4028,7 +4028,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                         | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'blue bold'`                                | Стиль модуля.                                                     |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                      |
+| `disabled`          | `false`                                      | Вимикає модуль `vlang`.                                           |
 
 ### Змінні
 
@@ -4057,7 +4057,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | `symbol`   | `''`                             | The symbol used before displaying the repository name. |
 | `style`    | `'bold yellow'`                  | Стиль модуля.                                          |
 | `format`   | `'vcsh [$symbol$repo]($style) '` | Формат модуля.                                         |
-| `disabled` | `false`                          | Disables the `vcsh` module.                            |
+| `disabled` | `false`                          | Вимикає модуль `vcsh`.                                 |
 
 ### Змінні
 
@@ -4092,7 +4092,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
 | `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.             |
 | `style`             | `'bold yellow'`                      | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables the `zig` module.                                        |
+| `disabled`          | `false`                              | Вимикає модуль `zig`.                                             |
 | `detect_extensions` | `['zig']`                            | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
