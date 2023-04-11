@@ -973,9 +973,9 @@ format = 'via [D $version](bold bright-green) '
 
 Модуль `dart` показує поточну встановлену версію [Dart](https://dart.dev/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a file with `.dart` extension
-- The current directory contains a `.dart_tool` directory
-- The current directory contains a `pubspec.yaml`, `pubspec.yml` or `pubspec.lock` file
+- Поточна тека містить файл `.dart`
+- Поточна тека містить файл `.dart_tool`
+- Поточна тека містить файли `pubspec.yaml`, `pubspec.yml` або `pubspec.lock`
 
 ### Параметри
 
@@ -983,7 +983,7 @@ format = 'via [D $version](bold bright-green) '
 | ------------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`              | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                                       | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🎯 '`                                            | A format string representing the symbol of Dart                   |
+| `symbol`            | `'🎯 '`                                            | Формат рядка, що представляє символ Dart                          |
 | `detect_extensions` | `['dart']`                                        | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['.dart_tool']`                                  | В яких теках цей модуль має запускатись.                          |
@@ -994,7 +994,7 @@ format = 'via [D $version](bold bright-green) '
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v2.8.4` | The version of `dart`                    |
+| version   | `v2.8.4` | Версія `dart`                            |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -1011,9 +1011,9 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `deno` показує поточну встановлену версію [Deno](https://deno.land/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js` file
+- Поточна тека містить файли `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` чи  `deps.js`
 
 ### Параметри
 
@@ -1021,7 +1021,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | ------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`                                    | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                                                             | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🦕 '`                                                                  | A format string representing the symbol of Deno                   |
+| `symbol`            | `'🦕 '`                                                                  | Формат рядка, що представляє символ Deno                          |
 | `detect_extensions` | `[]`                                                                    | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                                                    | В яких теках цей модуль має запускатись.                          |
@@ -1032,7 +1032,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v1.8.3` | The version of `deno`                    |
+| version   | `v1.8.3` | Версія `deno`                            |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -1047,40 +1047,40 @@ format = 'via [🦕 $version](green bold) '
 
 ## Directory
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Модуль `directory` показує шлях до поточної теки, урізаючи його до трьох останніх батьківських тек. Шлях до теки також буде скорочений до кореня git-репозиторію, якому ви перебуваєте.
 
-When using the fish style pwd option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Якщо використовується параметр pwd у стилі fish, замість того, щоб приховувати скорочений шлях, ви побачите скорочену назву кожної теки в залежності від числа, яке ви вказали для цього параметра.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Наприклад, маємо `~/Dev/Nix/nixpkgs/pkgs` де `nixpkgs` є коренем репозиторію, а параметр — `1`. Ви побачите `~/D/N/nixpkgs/pkgs`, тоді як до цього було `nixpkgs/pkg`.
 
 ### Параметри
 
-| Параметр                 | Стандартно                                                                                                                   | Опис                                                                                                       |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `truncation_length`      | `3`                                                                                                                          | The number of parent folders that the current directory should be truncated to.                            |
-| `truncate_to_repo`       | `true`                                                                                                                       | Whether or not to truncate to the root of the git repo that you're currently in.                           |
-| `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | Формат модуля.                                                                                             |
-| `style`                  | `'bold cyan'`                                                                                                                | Стиль модуля.                                                                                              |
-| `disabled`               | `false`                                                                                                                      | Вимикає модуль `directory`.                                                                                |
-| `read_only`              | `'🔒'`                                                                                                                        | The symbol indicating current directory is read only.                                                      |
-| `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                        |
-| `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                          |
-| `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`. |
-| `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                        |
-| `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | The format of a git repo when `before_repo_root_style` and `repo_root_style` is defined.                   |
-| `home_symbol`            | `'~'`                                                                                                                        | The symbol indicating home directory.                                                                      |
-| `use_os_path_sep`        | `true`                                                                                                                       | Use the OS specific path separator instead of always using `/` (e.g. `\` on Windows)                    |
+| Параметр                 | Стандартно                                                                                                                   | Опис                                                                                                                             |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length`      | `3`                                                                                                                          | Кількість батьківських тек, до яких слід скоротити шлях до поточної теку.                                                        |
+| `truncate_to_repo`       | `true`                                                                                                                       | Скорочувати чи ні шлях до кореня git-репозиторію, коли ви перебуваєте в ньому.                                                   |
+| `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | Формат модуля.                                                                                                                   |
+| `style`                  | `'bold cyan'`                                                                                                                | Стиль модуля.                                                                                                                    |
+| `disabled`               | `false`                                                                                                                      | Вимикає модуль `directory`.                                                                                                      |
+| `read_only`              | `'🔒'`                                                                                                                        | Символ, який вказує, що поточна тека доступна лише для читання.                                                                  |
+| `read_only_style`        | `'red'`                                                                                                                      | Стиль символу для елементів read only.                                                                                           |
+| `truncation_symbol`      | `''`                                                                                                                         | Символ на початку урізаних шляхів. напр: '…/'                                                                                    |
+| `before_repo_root_style` |                                                                                                                              | Стиль частини  шляху, що передує кореню git-репозиторію. Стандартне значення дорівнює `style`.                                   |
+| `repo_root_style`        |                                                                                                                              | Стиль кореня git-репозиторію. Стандартне значення дорівнює `style`.                                                              |
+| `repo_root_format`       | `'[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '` | Формат git-репозиторію, коли задані `before_repo_root_style` та `repo_root_style`.                                               |
+| `home_symbol`            | `'~'`                                                                                                                        | Символ, що позначає домашню теку.                                                                                                |
+| `use_os_path_sep`        | `true`                                                                                                                       | Використовувати розділювач шляхів, що притаманній вашій OS, замість того, щоб завжди використовувати `/` (напр `\` у Windows) |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Цей модуль має декілька додаткових опцій, які контролюють показ шляхів до тек.</summary>
 
-| Advanced Option             | Стандартно | Опис                                                                                                                                                                   |
-| --------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `substitutions`             |            | A table of substitutions to be made to the path.                                                                                                                       |
-| `fish_style_pwd_dir_length` | `0`        | The number of characters to use when applying fish shell pwd path logic.                                                                                               |
-| `use_logical_path`          | `true`     | If `true` render the logical path sourced from the shell via `PWD` or `--logical-path`. If `false` instead render the physical filesystem path with symlinks resolved. |
+| Додатковий параметр         | Стандартно | Опис                                                                                                                                                                                     |
+| --------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `substitutions`             |            | Таблиця підстановок, які буде зроблена у шляху теки.                                                                                                                                     |
+| `fish_style_pwd_dir_length` | `0`        | Кількість символів, які використовуються при застосуванні логіки шляху fish shell pwd.                                                                                                   |
+| `use_logical_path`          | `true`     | Якщо `true` показувати логічний шлях оболонки через `PWD` або `--logical-path`. Якщо `false` – показувати шлях фізичної файлової системи з розвʼязанням шляхів для символічних посилань. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+`substitutions` дозволяє визначити довільні заміни літер рядків, що зустрічаються в шляху, наприклад, довга префікси мережа або теки розробки (в Java). Зауважте, що це відключить стиль fish у PWD.
 
 ```toml
 [directory.substitutions]
@@ -1088,7 +1088,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` взаємодіє зі стандартними опціями скорочення, по-перше, що може бути дивним, якщо значення не нуль, замість цього будуть показуватись компоненти шляху, які звичайно скорочені, зі вказаною кількістю символів. Наприклад, шлях `/built/this/on/on/rock/and/roll`, який зазвичай показуватиметься як `rock/and/roll`, буде показаний як `/b/t/c/o/rock/and/roll` з `fish_style_pwd_dir_length = 1` — шлях компонентів, які зазвичай вилучаються, показуються одним символом. Для `fish_style_pwd_dir_length = 2` це буде `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1096,23 +1096,23 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 | Змінна    | Приклад               | Опис                                    |
 | --------- | --------------------- | --------------------------------------- |
-| path      | `'D:/Projects'`       | The current directory path              |
+| path      | `'D:/Projects'`       | Поточний шлях до теки                   |
 | style\* | `'black bold dimmed'` | Віддзеркалює значення параметра `style` |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>Git-репозиторії мають додаткові змінні.</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+Розгляньмо шлях `/path/to/home/git_repo/src/lib`
 
 | Змінна             | Приклад               | Опис                                    |
 | ------------------ | --------------------- | --------------------------------------- |
-| before_root_path | `'/path/to/home/'`    | The path before git root directory path |
-| repo_root          | `'git_repo'`          | The git root directory name             |
-| path               | `'/src/lib'`          | The remaining path                      |
+| before_root_path | `≠`                   | Шлях до кореневої теки git              |
+| repo_root          | `'git_repo'`          | Назва кореневої теки git                |
+| path               | `'/src/lib'`          | Залишок шляху                           |
 | style              | `'black bold dimmed'` | Віддзеркалює значення параметра `style` |
-| repo_root_style  | `'underline white'`   | Style for git root directory name       |
+| repo_root_style  | `'underline white'`   | Стиль кореневої теки git                |
 
 </details>
 
