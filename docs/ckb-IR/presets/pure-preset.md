@@ -9,7 +9,7 @@
 ### ڕێکخستن
 
 ```sh
-starship preset pure-preset > ~/.config/starship.toml
+starship preset pure-preset -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/pure-preset.toml)

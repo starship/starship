@@ -24,7 +24,7 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 disabled = true
 ```
 
-### Config File Location
+### 設定ファイルの場所
 
 `STARSHIP_CONFIG` 環境変数を使用することによって、デフォルトの設定ファイルの場所を変更できます。
 
@@ -72,11 +72,11 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 慣例により、ほとんどのモジュールにはデフォルトの端末色の接頭辞（"nodejs" の `via` など）と接尾辞として空のスペースがあります。
 
-### Strings
+### 文字列
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+TOML記法では、[文字列](https://toml.io/en/v1.0.0#string)は`'`、`"`、`'''`、`"""`で宣言されます。
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+これらのStarship記法の記号は文字列のフォーマットにおいて特別な用途があり、文字として表示するためにはエスケープしなければなりません: `$ [ ] ( )`.
 
 | Symbol | Type                      | Notes                                                  |
 | ------ | ------------------------- | ------------------------------------------------------ |
@@ -713,7 +713,7 @@ error_symbol = '[➜](bold red) '
 # ~/.config/starship.toml
 
 [character]
-vicmd_symbol = '[V](bold green) '
+vimcmd_symbol = '[V](bold green) '
 ```
 
 ## CMake
@@ -2871,10 +2871,12 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 ```toml
 # This is the default symbols table.
 [os.symbols]
+Alpaquita = "🔔 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
+Artix = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -2887,6 +2889,7 @@ Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
 Linux = "🐧 "
+Mabox = "📦 "
 Macos = "🍎 "
 Manjaro = "🥭 "
 Mariner = "🌊 "
@@ -4157,8 +4160,9 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
-| `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                                                                                                                                       |
-| `説明`                | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
+| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |

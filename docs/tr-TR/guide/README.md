@@ -169,7 +169,7 @@
 
 ### Ön koşullar
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- [Nerd Font](https://www.nerdfonts.com/) kurulu ve terminalinizde kullanılıyor olmalı (örnek: [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)'u deneyebilirsiniz).
 
 ### 1. Adım Starship'i Kur
 
@@ -422,7 +422,6 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 **Supporter Tier**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">

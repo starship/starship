@@ -30,7 +30,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
 ### 先決要求
 
-- 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用。
+- 安裝 [Nerd Font](https://www.nerdfonts.com/) 字型，並在終端機中啟用。
 
 ### 快速安裝
 

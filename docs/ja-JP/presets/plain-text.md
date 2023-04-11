@@ -9,7 +9,7 @@
 ### 設定
 
 ```sh
-starship preset plain-text-symbols > ~/.config/starship.toml
+starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
 [クリックしてTOMLをダウンロード](/presets/toml/plain-text-symbols.toml)

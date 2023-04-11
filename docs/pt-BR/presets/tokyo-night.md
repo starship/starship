@@ -13,7 +13,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 ### Configuração
 
 ```sh
-starship preset tokyo-night > ~/.config/starship.toml
+starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
 [Clique para baixar o TOML](/presets/toml/tokyo-night.toml)

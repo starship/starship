@@ -9,7 +9,7 @@ If toolset files are identified the toolset icon is displayed. If the toolset is
 ### 設定
 
 ```sh
-starship preset no-empty-icons > ~/.config/starship.toml
+starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
 [クリックしてTOMLをダウンロード](/presets/toml/no-empty-icons.toml)

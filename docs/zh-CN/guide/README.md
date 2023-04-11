@@ -173,7 +173,7 @@
 
 ### 步骤 1. 安装 Starship
 
-从下面的列表中选择您的操作系统以查看安装指令：
+请选择你的操作系统以查看合适的安装教程：
 
 <details>
 <summary>Android</summary>
@@ -400,11 +400,11 @@ eval "$(starship init zsh)"
 
 ## 🤝 贡献
 
-我们期待着 **所有技能等级** 的参与者！ 如果你想让自己参与项目的路径轻松一些，可以先试试某个 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们欢迎  **任何水平** 的参与者！ 如果想练手，可以试着解决某个标记为  [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) 的议题。
 
-如果你熟练掌握某个非英语语言，我们非常感谢任何帮助翻译与同步文档到其他语言的贡献。 如果你想要帮忙，可以在 [Starship Crowdin](https://translate.starship.rs/) 上参与。
+如果你精通非英语语言，请协助我们翻译并更新文档，非常感谢！ 你可以在 [Starship Crowdin](https://translate.starship.rs/) 上参与翻译。
 
-如果你有兴趣贡献 Starship 这个项目，请先看看我们的 [贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 也欢迎加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 和大家打个招呼。 👋
+如果你想参与 Starship 项目，请查看我们的 [贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 也欢迎加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 和大家打个招呼。 👋
 
 ## 💭 该项目受以下项目启发
 
@@ -422,7 +422,6 @@ eval "$(starship init zsh)"
 
 **支持者级别**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">
