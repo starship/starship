@@ -24,9 +24,8 @@ jobs:
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          command: manifest
+          release-type: rust
           draft: true
-          default-branch: master
 
   # Build sources for every OS
   github_build:
