@@ -8,7 +8,7 @@
 
 Цей стиль змінює символи для кожного модуля на символи з Nerd Font.
 
-[![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png "Click to view Nerd Font Symbols preset")](./nerd-font)
+[![Скріншот шаблона Nerd Font Symbols](/presets/img/nerd-font-symbols.png "Натисніть для перегляду шаблона No Nerd Font")](./nerd-font)
 
 ## [No Nerd Fonts](./no-nerd-font.md)
 
@@ -24,42 +24,42 @@
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Шаблон змінює формат всіх вбудованих модулів для показу їх частин в дужках замість використання стандартних в Starship слів ("via", "on", і т.д.).
 
-[![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
+[![Скріншот шаблона Bracketed Segments](/presets/img/bracketed-segments.png "Натисніть, щоб переглянути шаблон Bracketed Segments")](./bracketed-segments)
 
 ## [Plain Text Symbols](./plain-text.md)
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Цей шаблон замінює символи в кожному модулі звичайним текстом. Це ваш вибір, якщо у вас немає доступу до символів Unicode.
 
-[![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png "Click to view Plain Text Symbols preset")](./plain-text)
+[![Скріншот шаблона Plain Text Symbols](/presets/img/plain-text-symbols.png "Натисніть для перегляду шаблона Plain Text Symbols")](./plain-text)
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Шаблон приховує версію поточного інтерпретатора для мов программування. Якщо ви працюєте в контейнерах або віртуалізованих середовищах, то це для вас!
 
-[![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
+[![Скріншот шаблона Hide Runtime Versions](/presets/img/no-runtime-versions.png "Натисніть, щоб переглянути шаблон No Runtime Versions")](./no-runtimes)
 
 ## [No Empty Icons](./no-empty-icons.md)
 
-This preset does not show icons if the toolset is not found.
+Цей шаблон не показує іконок, якщо інструмент не знайдено.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+[![Скріншот шаблона No Empty Icons](/presets/img/no-empty-icons.png "Натисніть, щоб переглянути шаблон No Runtime Versions")](./no-empty-icons.md)
 
 ## [Pure Prompt](./pure-preset.md)
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Цей шаблон імітує зовнішній вигляд і поведінку [Pure](https://github.com/sindresorhus/pure).
 
-[![Screenshot of Pure preset](/presets/img/pure-preset.png "Click to view Pure Prompt preset")](./pure-preset)
+[![Скріншот шаблона Pure Prompt](/presets/img/pure-preset.png "Натисніть для перегляду шаблона Pure Prompt")](./pure-preset)
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+Шаблон створений під враженням від [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Він також показу працює шлях підстановки в starship.
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Скріншот шаблона Pastel Powerline](/presets/img/pastel-powerline.png "Натисніть для перегляду шаблона Pastel Powerline")](./pastel-powerline)
 
 ## [Tokyo Night](./tokyo-night.md)
 
 Цей шаблон створений під враженням від [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-[![Скріншот шаблону Tokyo Night](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[![Скріншот шаблона Tokyo Night](/presets/img/tokyo-night.png "Натисніть, щоб переглянути шаблон Токіо Night")](./tokyo-night)
