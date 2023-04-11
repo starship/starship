@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.14.1](https://github.com/starship/starship/compare/v1.14.0...v1.14.1) (2023-04-11)
+
+
+### Bug Fixes
+
+* bootstrap manifest for release-please ([#5087](https://github.com/starship/starship/issues/5087)) ([e392d14](https://github.com/starship/starship/commit/e392d14f4eb65d8761ea8bafb498d2a0d966dcef))
+* trigger release ([8bdb953](https://github.com/starship/starship/commit/8bdb953ad85068e182878c3295a94559a608ee31))
+* update the release-please manifest ([cd501ec](https://github.com/starship/starship/commit/cd501ecd9fb4b898d6d4472b46471a05a42b6052))
+
 ## [1.14.0](https://github.com/starship/starship/compare/v1.13.1...v1.14.0) (2023-04-10)
 
 
