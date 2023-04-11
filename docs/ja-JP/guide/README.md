@@ -422,7 +422,6 @@ Starshipのさらなるカスタマイズを目指すなら以下を参考にし
 
 **スポンサーティア**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">
