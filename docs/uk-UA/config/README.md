@@ -1128,26 +1128,26 @@ truncation_symbol = '…/'
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+Модуль `docker_context` показує поточний [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) якщо його не встановлено у `default`, або якщо `DOCKER_MACHINE_NAME` `DOCKER_HOST` або `DOCKER_CONTEXT` змінні середовища встановлені (оскільки вони призначені для перевизначення контексту).
 
 ### Параметри
 
-| Параметр            | Стандартно                                                    | Опис                                                                              |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$context]($style) '`                            | Формат модуля.                                                                    |
-| `symbol`            | `'🐳 '`                                                        | The symbol used before displaying the Docker context.                             |
-| `only_with_files`   | `true`                                                        | Only show when there's a match                                                    |
-| `detect_extensions` | `[]`                                                          | Which extensions should trigger this module (needs `only_with_files` to be true). |
-| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Which filenames should trigger this module (needs `only_with_files` to be true).  |
-| `detect_folders`    | `[]`                                                          | Which folders should trigger this module (needs `only_with_files` to be true).    |
-| `style`             | `'blue bold'`                                                 | Стиль модуля.                                                                     |
-| `disabled`          | `false`                                                       | Вимикає модуль `docker_context`.                                                  |
+| Параметр            | Стандартно                                                    | Опис                                                                                      |
+| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol$context]($style) '`                            | Формат модуля.                                                                            |
+| `symbol`            | `'🐳 '`                                                        | Символ, який знаходиться перед Docker context.                                            |
+| `only_with_files`   | `true`                                                        | Показувати, лише коли є збіг                                                              |
+| `detect_extensions` | `[]`                                                          | Які розширення мають запускати цей модуль (потрібно щоб в `only_with_files` було true).   |
+| `detect_files`      | `['docker-compose.yml', 'docker-compose.yaml', 'Dockerfile']` | Які імена файлів мають запускати цей модуль (потрібно щоб в `only_with_files` було true). |
+| `detect_folders`    | `[]`                                                          | Які теки мають запускати цей модуль (потрібно щоб в `only_with_files` було true).         |
+| `style`             | `'blue bold'`                                                 | Стиль модуля.                                                                             |
+| `disabled`          | `false`                                                       | Вимикає модуль `docker_context`.                                                          |
 
 ### Змінні
 
 | Змінна    | Приклад        | Опис                                     |
 | --------- | -------------- | ---------------------------------------- |
-| context   | `test_context` | The current docker context               |
+| context   | `test_context` | Поточний docker context                  |
 | symbol    |                | Віддзеркалює значення параметра `symbol` |
 | style\* |                | Віддзеркалює значення параметра `style`  |
 
@@ -1164,9 +1164,9 @@ format = 'via [🐋 $context](blue bold)'
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+Модуль `dotnet` показує відповідну версію [.NET Core SDK](https://dotnet.microsoft.com/) для поточної теки. Якщо SDK закріплена в поточній теці, показується закріплена версія. В іншому випадку модуль покаже останню встановлену версію SDK.
 
-By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
+Стандартно модуль буде показаний в командному рядку, коли один чи більше з наступних файлів є в теці:
 
 - `global.json`
 - `project.json`
@@ -1177,34 +1177,34 @@ By default this module will only be shown in your prompt when one or more of the
 - `*.fsproj`
 - `*.xproj`
 
-You'll also need the .NET Core SDK installed in order to use it correctly.
+Вам також знадобиться .NET Core SDK, встановлений для того, щоб використовувати його правильно.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Всередині, цей модуль використовує власний механізм для виявлення версій. Як правило, він удвічі швидший ніж запуск `dotnet --version`, але він може показувати некоректну версію, якщо ваш проєкт .NET має не звичайне розташування тек. Якщо точність важливіша за швидкість, ви можете вимкнути механізм встановивши `heuristic = false` в налаштуваннях модуля.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
+Модуль також показуватиме Target Framework Monamework ([https://docs.microsoft. om/en-us/dotnet/standard/frameworks#supported-target-frameworks](https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks)), коли у поточній теці є файл `.csproj`.
 
 ### Параметри
 
-| Параметр            | Стандартно                                                                                              | Опис                                                              |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                           | Формат модуля.                                                    |
-| `version_format`    | `'v${raw}'`                                                                                             | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'.NET '`                                                                                               | The symbol used before displaying the version of dotnet.          |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.             |
-| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Які розширення повинні запускати цей модуль.                      |
-| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Які імена файлів мають запускати цей модуль.                      |
-| `detect_folders`    | `[]`                                                                                                    | Які теки мають запускати цей модуль.                              |
-| `style`             | `'bold blue'`                                                                                           | Стиль модуля.                                                     |
-| `disabled`          | `false`                                                                                                 | Вимикає модуль `dotnet`.                                          |
+| Параметр            | Стандартно                                                                                              | Опис                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                           | Формат модуля.                                                                          |
+| `version_format`    | `'v${raw}'`                                                                                             | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                       |
+| `symbol`            | `'.NET '`                                                                                               | Символ, який знаходиться перед версією dotnet.                                          |
+| `heuristic`         | `true`                                                                                                  | Використовувати швидший алгоритм визначення версії, щоб ваш starship залишався швидким. |
+| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Які розширення повинні запускати цей модуль.                                            |
+| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Які імена файлів мають запускати цей модуль.                                            |
+| `detect_folders`    | `[]`                                                                                                    | Які теки мають запускати цей модуль.                                                    |
+| `style`             | `'bold blue'`                                                                                           | Стиль модуля.                                                                           |
+| `disabled`          | `false`                                                                                                 | Вимикає модуль `dotnet`.                                                                |
 
 ### Змінні
 
-| Змінна    | Приклад          | Опис                                                               |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
-| tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
-| symbol    |                  | Віддзеркалює значення параметра `symbol`                           |
-| style\* |                  | Віддзеркалює значення параметра `style`                            |
+| Змінна    | Приклад          | Опис                                                         |
+| --------- | ---------------- | ------------------------------------------------------------ |
+| version   | `v3.1.201`       | Версія `dotnet` sdk                                          |
+| tfm       | `netstandard2.0` | Псевдонім Target Framework, на який націлено поточний проєкт |
+| symbol    |                  | Віддзеркалює значення параметра `symbol`                     |
+| style\* |                  | Віддзеркалює значення параметра `style`                      |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -1221,7 +1221,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `elixir` показує поточну встановлену версію [Elixir](https://elixir-lang.org/) та [Erlang/OTP](https://erlang.org/doc/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `mix.exs`.
 
@@ -1229,9 +1229,9 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 | Параметр            | Стандартно                                                  | Опис                                                              |
 | ------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                 |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                                                 | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'💧 '`                                                      | The symbol used before displaying the version of Elixir/Erlang.   |
+| `symbol`            | `'💧 '`                                                      | Символ, який знаходиться перед версією Elixir/Erlang.             |
 | `detect_extensions` | `[]`                                                        | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['mix.exs']`                                               | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                                        | Які теки мають запускати цей модуль.                              |
@@ -1242,8 +1242,8 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 | Змінна      | Приклад | Опис                                     |
 | ----------- | ------- | ---------------------------------------- |
-| version     | `v1.10` | The version of `elixir`                  |
-| otp_version |         | The otp version of `elixir`              |
+| version     | `v1.10` | Версія `elixir`                          |
+| otp_version |         | Версія otp `elixir`                      |
 | symbol      |         | Віддзеркалює значення параметра `symbol` |
 | style\*   |         | Віддзеркалює значення параметра `style`  |
 
@@ -1260,13 +1260,13 @@ symbol = '🔮 '
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `elm` показує поточну встановлену версію [Elm](https://elm-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `elm.json`
 - Поточна тека містить файл `elm-package.json`
-- The current directory contains a `.elm-version` file
-- The current directory contains a `elm-stuff` folder
-- The current directory contains `*.elm` files
+- Поточна тека містить файл `.elm-version`
+- Поточна тека містить файл `elm-stuff`
+- The current directory contains `.elm` files
 
 ### Параметри
 
@@ -1274,18 +1274,18 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | ------------------- | -------------------------------------------------- | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`               | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                                        | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🌳 '`                                             | A format string representing the symbol of Elm.                   |
+| `symbol`            | `'🌳 '`                                             | Формат рядка, що представляє символ Elm.                          |
 | `detect_extensions` | `['elm']`                                          | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['elm-stuff']`                                    | Які теки мають запускати цей модуль.                              |
 | `style`             | `'cyan bold'`                                      | Стиль модуля.                                                     |
-| `disabled`          | `false`                                            | Вимикає модуль`elm`.                                              |
+| `disabled`          | `false`                                            | Вимикає модуль `elm`.                                             |
 
 ### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| version   | `v0.19.1` | The version of `elm`                     |
+| version   | `v0.19.1` | Версія `elm`                             |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -1302,20 +1302,20 @@ format = 'via [ $version](cyan bold) '
 
 ## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
+Модуль `env_var` показує поточне значення обраних змінних середовища. Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The `variable` configuration option matches an existing environment variable
-- The `variable` configuration option is not defined, but the `default` configuration option is
+- Параметр `variable` відповідає наявній змінній середовища
+- Параметр `variable` не визначено, але є параметр `default`
 
 ::: tip
 
-The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+Порядок в якому модуль env_var показується може встановлюватись індивідуально додавання `${env_var.foo}` в `format` верхнього рівня (через те, що використовуються крапки, потрібно використовувати `${...}`). Типово, модуль `env_var` покаже усі модулі env_var, в тому порядку того, як вони були визначені.
 
 :::
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+Кілька змінних оточення можуть бути показані за допомоги `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
 Example: following configuration will display value of USER environment variable
 
