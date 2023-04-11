@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.13.1"
+version = "1.14.1"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
@@ -60,10 +60,10 @@ nu-ansi-term = "0.47.0"
 once_cell = "1.17.1"
 open = "4.0.1"
 # update os module config and tests when upgrading os_info
-os_info = "3.6.0"
+os_info = "3.7.0"
 path-slash = "0.2.1"
-pest = "2.5.6"
-pest_derive = "2.5.6"
+pest = "2.5.7"
+pest_derive = "2.5.7"
 quick-xml = "0.28.1"
 rand = "0.8.5"
 rayon = "1.7.0"
@@ -79,7 +79,7 @@ shadow-rs = { version = "0.21.0", default-features = false }
 starship-battery = { version = "0.7.9", optional = true }
 strsim = "0.10.0"
 systemstat = "=0.2.3"
-terminal_size = "0.2.5"
+terminal_size = "0.2.6"
 toml = { version = "0.7.3", features = ["preserve_order"] }
 toml_edit = "0.19.8"
 unicode-segmentation = "1.10.1"
@@ -89,7 +89,7 @@ versions = "4.1.0"
 which = "4.4.0"
 yaml-rust = "0.4.5"
 
-process_control = { version = "4.0.2", features = ["crossbeam-channel"] }
+process_control = { version = "4.0.3", features = ["crossbeam-channel"] }
 
 guess_host_triple = "0.1.3"
 home = "0.5.4"

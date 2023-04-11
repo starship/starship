@@ -10,10 +10,10 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
 
-### Configuration
+### Налаштування
 
 ```sh
-starship preset nerd-font-symbols > ~/.config/starship.toml
+starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/nerd-font-symbols.toml)

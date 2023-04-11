@@ -85,7 +85,7 @@ format = "took [$duration]($style) "
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [character]
@@ -117,7 +117,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | ---------------- | ----------- |
 | `prefix`         | `format`    |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [cmd_duration]
@@ -131,7 +131,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | ---------------- | ----------- |
 | `prefix`         | `format`    |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [directory]
@@ -146,7 +146,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | `prefix`         | `format`    |
 | `suffix`         | `format`    |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [env_var]
@@ -162,7 +162,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | `prefix`         | `format`    |
 | `suffix`         | `format`    |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [git_commit]
@@ -179,7 +179,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | `suffix`          | `format`    |
 | `show_sync_count` | `format`    |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [git_status]
@@ -209,7 +209,7 @@ behind = "⇣${count}"
 | `prefix`         | `format`    |
 | `suffix`         | `format`    |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [hostname]
@@ -226,7 +226,7 @@ behind = "⇣${count}"
 | `prefix`         | `format`    |
 | `suffix`         | `format`    |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [singularity]
@@ -241,7 +241,7 @@ behind = "⇣${count}"
 | ---------------- | ------------- |
 | `format`         | `time_format` |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [time]
@@ -257,7 +257,7 @@ behind = "⇣${count}"
 | `prefix`         | `format`    |
 | `suffix`         | `format`    |
 
-**Changes to the Default Configuration**
+**Änderungen an der Standardkonfiguration**
 
 ```diff
 [custom.example]

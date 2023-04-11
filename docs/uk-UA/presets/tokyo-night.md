@@ -8,12 +8,12 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 ### Передумови
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- A Встановлений та увімкнений шрифт [Nerd Font](https://www.nerdfonts.com/) у вашому терміналі
 
-### Configuration
+### Налаштування
 
 ```sh
-starship preset tokyo-night > ~/.config/starship.toml
+starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/tokyo-night.toml)

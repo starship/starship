@@ -13,7 +13,7 @@
 ### 配置
 
 ```sh
-starship preset tokyo-night > ~/.config/starship.toml
+starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
 [点击下载 TOML 文件](/presets/toml/tokyo-night.toml)

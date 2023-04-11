@@ -1,6 +1,6 @@
 # Розширені налаштування
 
-Хоч Starship і універсальна оболонка, іноді необхідно зробити більше ніж просто відредагувати `star.toml`, щоб можна було робити певні речі. Ця сторінка містить деякі з найбільш просунутих методів конфігурації, які використовуються у starship.
+Хоч Starship і універсальна оболонка, іноді необхідно зробити більше ніж просто відредагувати `star.toml`, щоб можна було робити певні речі. Ця сторінка містить деякі з найбільш докладних методів налаштувань, які використовуються у starship.
 
 ::: warning
 
@@ -10,9 +10,9 @@
 
 ## TransientPrompt у PowerShell
 
-Можна замінити попередню підказку на власний рядок. Це корисно у випадках, коли вся інформація з підказки не завжди потрібна. Щоб увімкнути це, запустіть `Enable-TransientPrompt` в сеансі консолі. Щоб зробити цю зміну постійною, додайте цю команду у ваш `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
+Можна замінити попередній командний рядок на власний. Це корисно у випадках, коли вся інформація у ньому не завжди потрібна. Щоб увімкнути це, запустіть `Enable-TransientPrompt` в сеансі оболонки. Щоб зробити цю зміну постійною, додайте цю команду у ваш `$PROFILE`. Перехідність можна вимкнути на льоту за допомогою `Disable-TransientPrompt`.
 
-By default, the left side of input gets replaced with `>`. To customize this, define a new function called `Invoke-Starship-TransientFunction`. For example, to display Starship's `character` module here, you would do
+Типово, ліва частина вводу буде замінена на `>`. Щоб налаштувати це, створіть нову функцію з назвою `Invoke-Starship-TransientFunction`. Наприклад, щоб показати тут `символ` Starship, вам потрібно
 
 ```powershell
 function Invoke-Starship-TransientFunction {
@@ -24,17 +24,17 @@ Invoke-Expression (&starship init powershell)
 Enable-TransientPrompt
 ```
 
-## TransientPrompt and TransientRightPrompt in Cmd
+## TransientPrompt та TransientRightPrompt в Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. Це корисно у випадках, коли вся інформація з підказки не завжди потрібна. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink дозволяє замінювати попередньо надрукований командний рядок іншим рядком. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Щоб увімкнути це, виконайте `clink set prompt.transient <value>`, де \<value\> може бути одним з:
 
-- `always`: always replace the previous prompt
-- `same_dir`: replace the previous prompt only if the working directory is same
-- `off`: do not replace the prompt (i.e. turn off transience)
+- `always`: завжди замінює попередній командний рядок
+- `same_dir`: замінює попередній командний рядок тільки якщо робоча тека не змінювалась
+- `off`: не змінює командний рядок (тобто функцію вимкнено)
 
-You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+Це треба виконати лише один раз. Зробіть наступні зміни на `starship.lua`, щоб налаштувати, що показується ліворуч і праворуч:
 
-- By default, the left side of input gets replaced with `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display Starship's `character` module here, you would do
+- Типово, ліва частина вводу буде замінена на `>`. Щоб налаштувати це, створіть нову функцію з назвою `starship_transient_prompt_func`. Ця функція отримує поточний текст командного рядка, з яким ви зможете працювати. Наприклад, щоб показати тут `символ` Starship, вам потрібно
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -45,7 +45,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- Типово, права частина вводу є порожньою. Щоб налаштувати це, створіть нову функцію з назвою `starship_transient_rprompt_func`. Ця функція отримує поточний текст командного рядка, з яким ви зможете працювати. Наприклад, щоб показати час, коли була запущена остання команда, ви можете зробити
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -54,13 +54,13 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## TransientPrompt and TransientRightPrompt in Fish
+## TransientPrompt та TransientRightPrompt у Fish
 
-Можна замінити попередню підказку на власний рядок. Це корисно у випадках, коли вся інформація з підказки не завжди потрібна. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Можна замінити попередній командний рядок на власний. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Щоб увімкнути це, запустіть `enable_transience` в сеансі оболонки. Щоб зробити цю змінну постійною, додайте цей вираз до ваших налаштувань `~/.config/fish/config.fish`. Перехідність може бути відключена за допомогою `disable_transience`.
 
-Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+Зверніть увагу, що у випадку Fish, тимчасовий командний рядок буде надруковано лише тоді, коли командний рядок не порожній та синтаксично правильний.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. For example, to display Starship's `character` module here, you would do
+- Типово, ліва частина вводу буде замінена на зелений символ `❯`. Щоб налаштувати це, створіть нову функцію з назвою `starship_transient_prompt_func`. Наприклад, щоб показати тут `символ` Starship, вам потрібно
 
 ```fish
 function starship_transient_prompt_func
@@ -70,7 +70,7 @@ starship init fish | source
 enable_transience
 ```
 
-- By default, the right side of input is empty. To customize this, define a new function called `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- Типово, права частина вводу є порожньою. Щоб налаштувати це, створіть нову функцію з назвою `starship_transient_rprompt_func`. Наприклад, щоб показати час, коли була запущена остання команда, ви можете зробити
 
 ```fish
 function starship_transient_rprompt_func
@@ -207,7 +207,7 @@ Note: The right prompt is a single line following the input location. To right a
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -239,7 +239,7 @@ Note: Continuation prompts are only available in the following shells:
 - `zsh`
 - `PowerShell`
 
-### Example
+### Приклад
 
 ```toml
 # ~/.config/starship.toml
@@ -248,7 +248,7 @@ Note: Continuation prompts are only available in the following shells:
 continuation_prompt = '▶▶ '
 ```
 
-## Style Strings
+## Стилі рядків
 
 Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
 
