@@ -573,22 +573,22 @@ symbol = '🦬 '
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.                      |
-| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'bold red'`                         | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `bun` module.                                           |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🍞 '`                               | Формат рядка, що представляє символ Bun.                          |
+| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold red'`                         | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Вимикає модуль `bun`.                                             |
 
 ### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v0.1.4` | The version of `bun`                     |
+| version   | `v0.1.4` | Версія `bun`                             |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -605,40 +605,40 @@ format = 'via [🍔 $version](bold green) '
 
 ## C
 
-The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+Модуль `c` показує інформацію про ваш C компілятор. Стандартно модуль буде показаний, якщо поточна тека містить файли `.c` чи `.h`.
 
 ### Параметри
 
-| Параметр            | Стандартно                                                                  | Опис                                                                 |
-| ------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                | The format string for the module.                                    |
-| `version_format`    | `'v${raw}'`                                                                 | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'C '`                                                                      | The symbol used before displaying the compiler details               |
-| `detect_extensions` | `['c', 'h']`                                                                | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `[]`                                                                        | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                                                        | Which folders should trigger this module.                            |
-| `commands`          | [ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ] | How to detect what the compiler is                                   |
-| `style`             | `'bold 149'`                                                                | Стиль модуля.                                                        |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                                             |
+| Параметр            | Стандартно                                                                  | Опис                                                              |
+| ------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                | Формат рядка модуля.                                              |
+| `version_format`    | `'v${raw}'`                                                                 | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'C '`                                                                      | Символ, який знаходиться перед інформацією про компілятор         |
+| `detect_extensions` | `['c', 'h']`                                                                | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                                                        | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                                                        | В яких теках цей модуль має запускатись.                          |
+| `commands`          | [ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ] | Як виявити компілятор                                             |
+| `style`             | `'bold 149'`                                                                | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                     | Вимикає модуль `c`.                                               |
 
 ### Змінні
 
 | Змінна  | Приклад | Опис                                     |
 | ------- | ------- | ---------------------------------------- |
-| name    | clang   | The name of the compiler                 |
-| version | 13.0.0  | The version of the compiler              |
+| name    | clang   | Назва компілятора                        |
+| version | 13.0.0  | Версія компілятора                       |
 | symbol  |         | Віддзеркалює значення параметра `symbol` |
 | style   |         | Віддзеркалює значення параметра `style`  |
 
-NB that `version` is not in the default format.
+NB `версія` не має стандартного формату.
 
 ### Commands
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+Параметр `commands` отримує список команд для визначення версії та назви компілятора.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+Кожна команда представлена списком з назви виконавчого файлу та аргументів, зазвичай `['myc', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+Якщо C-компілятор не підтримується цим модулем, ви можете зробити [запит на GitHub](https://github.com/starship/starship/).
 
 ### Приклад
 
@@ -651,43 +651,43 @@ format = 'via [$name $version]($style)'
 
 ## Character
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Модуль `character` показує символ (зазвичай стрілку) поруч з текстом, який вводиться в терміналі.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Символ підкаже вам, чи була остання команда успішною, чи ні. Це можна зробити двома способами:
 
-- changing color (`red`/`green`)
-- changing shape (`❯`/`✖`)
+- зміною кольору (`red`/`green`)
+- зміною символу (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Стандартно відбувається зміна кольору. Якщо ви також хочете змінювати й символ, подивитися на [цей приклад](#with-custom-error-shape).
 
 ::: warning
 
-`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` працює лише з cmd, fish та zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` працює лише з fish через [проблемою визначення режиму роботи в  zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
 ### Параметри
 
-| Параметр                    | Стандартно           | Опис                                                                                    |
-| --------------------------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `format`                    | `'$symbol '`         | The format string used before the text input.                                           |
-| `success_symbol`            | `'[❯](bold green)'`  | The format string used before the text input if the previous command succeeded.         |
-| `error_symbol`              | `'[❯](bold red)'`    | The format string used before the text input if the previous command failed.            |
-| `vimcmd_symbol`             | `'[❮](bold green)'`  | The format string used before the text input if the shell is in vim normal mode.        |
-| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim `replace_one` mode. |
-| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | The format string used before the text input if the shell is in vim replace mode.       |
-| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.        |
-| `disabled`                  | `false`              | Disables the `character` module.                                                        |
+| Параметр                    | Стандартно           | Опис                                                                                                     |
+| --------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------- |
+| `format`                    | `'$symbol '`         | Формат рядка, що знаходиться перед введенням тексту.                                                     |
+| `success_symbol`            | `'[❯](bold green)'`  | Формат рядка, що знаходиться перед введенням тексту, якщо попередня команда була успішно виконана.       |
+| `error_symbol`              | `'[❯](bold red)'`    | Формат рядка, що знаходиться перед введенням тексту, якщо попередня команда не була успішно виконана.    |
+| `vimcmd_symbol`             | `'[❮](bold green)'`  | Формат рядка, що знаходиться перед введенням тексту, якщо оболонка перебуває у звичайному режимі vim.    |
+| `vimcmd_replace_one_symbol` | `'[❮](bold purple)'` | Формат рядка, що знаходиться перед введенням тексту, якщо оболонка перебуває у режимі vim `replace_one`. |
+| `vimcmd_replace_symbol`     | `'[❮](bold purple)'` | Формат рядка, що знаходиться перед введенням тексту, якщо оболонка перебуває у режимі заміни vim.        |
+| `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | Формат рядка, що знаходиться перед введенням тексту, якщо оболонка перебуває у візуальному режимі vim.   |
+| `disabled`                  | `false`              | Вимикає модуль `character`.                                                                              |
 
 ### Змінні
 
-| Змінна | Приклад | Опис                                                                                                     |
-| ------ | ------- | -------------------------------------------------------------------------------------------------------- |
-| symbol |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
+| Змінна | Приклад | Опис                                                                                                               |
+| ------ | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| symbol |         | Віддзеркалює значення `success_symbol`, `error_symbol`, `vimcmd_symbol` або `vimcmd_replace_one_symbol` і подібне. |
 
 ### Приклади
 
-#### With custom error shape
+#### З власним значком помилки
 
 ```toml
 # ~/.config/starship.toml
@@ -697,7 +697,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### Без власного значка помилки
 
 ```toml
 # ~/.config/starship.toml
@@ -707,7 +707,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### Значок vim
 
 ```toml
 # ~/.config/starship.toml
@@ -718,29 +718,29 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+Модуль `cmake` показує поточну встановлену версію [CMake](https://cmake.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `CMakeLists.txt` file
-- The current directory contains a `CMakeCache.txt` file
+- Поточна тека містить файл `CMakeLists.txt`
+- Поточна тека містить файл `CMakeCache.txt`
 
 ### Параметри
 
-| Параметр            | Стандартно                             | Опис                                                                 |
-| ------------------- | -------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`   | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                            | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'△ '`                                 | The symbol used before the version of cmake.                         |
-| `detect_extensions` | `[]`                                   | Які розширення повинні запускати цей модуль                          |
-| `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | Які імена файлів мають запускати цей модуль                          |
-| `detect_folders`    | `[]`                                   | Which folders should trigger this module                             |
-| `style`             | `'bold blue'`                          | Стиль модуля.                                                        |
-| `disabled`          | `false`                                | Disables the `cmake` module.                                         |
+| Параметр            | Стандартно                             | Опис                                                              |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`   | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                            | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'△ '`                                 | Символ, який йде перед версією cmak.                              |
+| `detect_extensions` | `[]`                                   | Які розширення повинні запускати цей модуль                       |
+| `detect_files`      | `['CMakeLists.txt', 'CMakeCache.txt']` | Назви файлів, які активують модуль                                |
+| `detect_folders`    | `[]`                                   | Назви тек, що активують модуль                                    |
+| `style`             | `'bold blue'`                          | Стиль модуля.                                                     |
+| `disabled`          | `false`                                | Вимикає модуль `cmake`.                                           |
 
 ### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| version   | `v3.17.3` | The version of cmake                     |
+| version   | `v3.17.3` | Версія cmake                             |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -748,29 +748,29 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+Модуль `cobol` показує встановлену версію COBOL. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains any files ending in `.cob` or `.COB`
-- The current directory contains any files ending in `.cbl` or `.CBL`
+- Поточна тека містить файли `.cob` або `.COB`
+- Поточна тека містить файли  `.cbl` або `.CBL`
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `symbol`            | `'⚙️ '`                              | The symbol used before displaying the version of COBOL.              |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`             | `'bold blue'`                        | Стиль модуля.                                                        |
-| `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `disabled`          | `false`                              | Disables the `cobol` module.                                         |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `symbol`            | `'⚙️ '`                              | Символ, який знаходиться перед версією COBOL.                     |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `style`             | `'bold blue'`                        | Стиль модуля.                                                     |
+| `detect_extensions` | `['cbl', 'cob', 'CBL', 'COB']`       | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `disabled`          | `false`                              | Вимикає модуль `cobol`.                                           |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад    | Опис                                     |
 | --------- | ---------- | ---------------------------------------- |
-| version   | `v3.1.2.0` | The version of `cobol`                   |
+| version   | `v3.1.2.0` | Версія `cobol`                           |
 | symbol    |            | Віддзеркалює значення параметра `symbol` |
 | style\* |            | Віддзеркалює значення параметра `style`  |
 
@@ -801,7 +801,7 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 | `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
 | `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                    |
 | --------- | -------- | --------------------------------------- |
@@ -841,7 +841,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 | `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                                                                                                                  |
 | `disabled`          | `false`                                | Disables the `conda` module.                                                                                                                                                                                |
 
-### Variables
+### Змінні
 
 | Змінна      | Приклад      | Опис                                     |
 | ----------- | ------------ | ---------------------------------------- |
@@ -873,7 +873,7 @@ The `container` module displays a symbol and container name, if inside a contain
 | `format`   | `'[$symbol \[$name\]]($style) '` | Формат модуля.                            |
 | `disabled` | `false`                            | Disables the `container` module.          |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад             | Опис                                     |
 | --------- | ------------------- | ---------------------------------------- |
@@ -901,18 +901,18 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `symbol`            | `'🔮 '`                               | The symbol used before displaying the version of crystal.            |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`             | `'bold red'`                         | Стиль модуля.                                                        |
-| `detect_extensions` | `['cr']`                             | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['shard.yml']`                      | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `disabled`          | `false`                              | Disables the `crystal` module.                                       |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `symbol`            | `'🔮 '`                               | The symbol used before displaying the version of crystal.         |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `style`             | `'bold red'`                         | Стиль модуля.                                                     |
+| `detect_extensions` | `['cr']`                             | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['shard.yml']`                      | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `disabled`          | `false`                              | Disables the `crystal` module.                                    |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
@@ -939,18 +939,18 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'Λ '`                               | A format string representing the symbol of Daml                      |
-| `style`             | `'bold cyan'`                        | Стиль модуля.                                                        |
-| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['daml.yaml']`                      | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `disabled`          | `false`                              | Disables the `daml` module.                                          |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'Λ '`                               | A format string representing the symbol of Daml                   |
+| `style`             | `'bold cyan'`                        | Стиль модуля.                                                     |
+| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['daml.yaml']`                      | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `disabled`          | `false`                              | Disables the `daml` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -979,18 +979,18 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Параметри
 
-| Параметр            | Стандартно                                        | Опис                                                                 |
-| ------------------- | ------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`              | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                                       | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🎯 '`                                            | A format string representing the symbol of Dart                      |
-| `detect_extensions` | `['dart']`                                        | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `['.dart_tool']`                                  | Which folders should trigger this module.                            |
-| `style`             | `'bold blue'`                                     | Стиль модуля.                                                        |
-| `disabled`          | `false`                                           | Disables the `dart` module.                                          |
+| Параметр            | Стандартно                                        | Опис                                                              |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`              | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                                       | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🎯 '`                                            | A format string representing the symbol of Dart                   |
+| `detect_extensions` | `['dart']`                                        | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['pubspec.yaml', 'pubspec.yml', 'pubspec.lock']` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `['.dart_tool']`                                  | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold blue'`                                     | Стиль модуля.                                                     |
+| `disabled`          | `false`                                           | Disables the `dart` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -1017,18 +1017,18 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Параметри
 
-| Параметр            | Стандартно                                                              | Опис                                                                 |
-| ------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                    | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                                                             | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦕 '`                                                                  | A format string representing the symbol of Deno                      |
-| `detect_extensions` | `[]`                                                                    | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                                                    | Which folders should trigger this module.                            |
-| `style`             | `'green bold'`                                                          | Стиль модуля.                                                        |
-| `disabled`          | `false`                                                                 | Disables the `deno` module.                                          |
+| Параметр            | Стандартно                                                              | Опис                                                              |
+| ------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                    | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                                                             | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🦕 '`                                                                  | A format string representing the symbol of Deno                   |
+| `detect_extensions` | `[]`                                                                    | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['deno.json', 'deno.jsonc', 'mod.ts', 'mod.js', 'deps.ts', 'deps.js']` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                                                    | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'green bold'`                                                          | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                 | Disables the `deno` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -1092,7 +1092,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 </details>
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад               | Опис                                    |
 | --------- | --------------------- | --------------------------------------- |
@@ -1143,7 +1143,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `style`             | `'blue bold'`                                                 | Стиль модуля.                                                                     |
 | `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад        | Опис                                     |
 | --------- | -------------- | ---------------------------------------- |
@@ -1185,19 +1185,19 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Параметри
 
-| Параметр            | Стандартно                                                                                              | Опис                                                                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                           | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                                                                                             | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'.NET '`                                                                                               | The symbol used before displaying the version of dotnet.             |
-| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.                |
-| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                                                                                    | Які теки мають запускати цей модуль.                                 |
-| `style`             | `'bold blue'`                                                                                           | Стиль модуля.                                                        |
-| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                        |
+| Параметр            | Стандартно                                                                                              | Опис                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )(🎯 $tfm )]($style)'`                                                           | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                                                                                             | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'.NET '`                                                                                               | The symbol used before displaying the version of dotnet.          |
+| `heuristic`         | `true`                                                                                                  | Use faster version detection to keep starship snappy.             |
+| `detect_extensions` | `['csproj', 'fsproj', 'xproj']`                                                                         | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['global.json', 'project.json', 'Directory.Build.props', 'Directory.Build.targets', 'Packages.props']` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                                                                                    | Які теки мають запускати цей модуль.                              |
+| `style`             | `'bold blue'`                                                                                           | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                                                 | Disables the `dotnet` module.                                     |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад          | Опис                                                               |
 | --------- | ---------------- | ------------------------------------------------------------------ |
@@ -1227,18 +1227,18 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Параметри
 
-| Параметр            | Стандартно                                                  | Опис                                                                 |
-| ------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                    |
-| `version_format`    | `'v${raw}'`                                                 | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💧 '`                                                      | The symbol used before displaying the version of Elixir/Erlang.      |
-| `detect_extensions` | `[]`                                                        | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['mix.exs']`                                               | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                                        | Які теки мають запускати цей модуль.                                 |
-| `style`             | `'bold purple'`                                             | Стиль модуля.                                                        |
-| `disabled`          | `false`                                                     | Вимкнути модуль `elixir`.                                            |
+| Параметр            | Стандартно                                                  | Опис                                                              |
+| ------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version \(OTP $otp_version\) )]($style)'` | The format for the module elixir.                                 |
+| `version_format`    | `'v${raw}'`                                                 | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'💧 '`                                                      | The symbol used before displaying the version of Elixir/Erlang.   |
+| `detect_extensions` | `[]`                                                        | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['mix.exs']`                                               | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                                        | Які теки мають запускати цей модуль.                              |
+| `style`             | `'bold purple'`                                             | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                     | Вимкнути модуль `elixir`.                                         |
 
-### Variables
+### Змінні
 
 | Змінна      | Приклад | Опис                                     |
 | ----------- | ------- | ---------------------------------------- |
@@ -1270,18 +1270,18 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Параметри
 
-| Параметр            | Стандартно                                         | Опис                                                                 |
-| ------------------- | -------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`               | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                                        | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🌳 '`                                             | A format string representing the symbol of Elm.                      |
-| `detect_extensions` | `['elm']`                                          | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `['elm-stuff']`                                    | Які теки мають запускати цей модуль.                                 |
-| `style`             | `'cyan bold'`                                      | Стиль модуля.                                                        |
-| `disabled`          | `false`                                            | Disables the `elm` module.                                           |
+| Параметр            | Стандартно                                         | Опис                                                              |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`               | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                                        | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🌳 '`                                             | A format string representing the symbol of Elm.                   |
+| `detect_extensions` | `['elm']`                                          | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['elm.json', 'elm-package.json', '.elm-version']` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `['elm-stuff']`                                    | Які теки мають запускати цей модуль.                              |
+| `style`             | `'cyan bold'`                                      | Стиль модуля.                                                     |
+| `disabled`          | `false`                                            | Disables the `elm` module.                                        |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
@@ -1339,7 +1339,7 @@ default = 'unknown user'
 | `опис`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled`   | `false`                        | Disables the `env_var` module.                                               |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад                                     | Опис                                       |
 | --------- | ------------------------------------------- | ------------------------------------------ |
@@ -1380,18 +1380,18 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `' '`                               | The symbol used before displaying the version of erlang.             |
-| `style`             | `'bold red'`                         | Стиль модуля.                                                        |
-| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['rebar.config', 'elang.mk']`       | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                                 |
-| `disabled`          | `false`                              | Disables the `erlang` module.                                        |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `' '`                               | The symbol used before displaying the version of erlang.          |
+| `style`             | `'bold red'`                         | Стиль модуля.                                                     |
+| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['rebar.config', 'elang.mk']`       | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
+| `disabled`          | `false`                              | Disables the `erlang` module.                                     |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
@@ -1418,18 +1418,18 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel.             |
-| `style`             | `'bold green'`                       | Стиль модуля.                                                        |
-| `detect_extensions` | `[fnl]`                              | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                                 |
-| `disabled`          | `false`                              | Disables the `fennel` module.                                        |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel.          |
+| `style`             | `'bold green'`                       | Стиль модуля.                                                     |
+| `detect_extensions` | `[fnl]`                              | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
+| `disabled`          | `false`                              | Disables the `fennel` module.                                     |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -1492,7 +1492,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | `truncation_symbol` | `'…'`                            | The symbol used to indicate a branch name was truncated. You can use `''` for no symbol. |
 | `disabled`          | `true`                           | Disables the `fossil_branch` module.                                                     |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -1528,7 +1528,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `style`           | `'bold blue'`                                              | Стиль модуля.                                                    |
 | `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад       | Опис                                                               |
 | --------- | ------------- | ------------------------------------------------------------------ |
@@ -1604,7 +1604,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 | `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for 'master' or 'main'.                      |
 | `disabled`           | `false`                                           | Disables the `git_branch` module.                                                        |
 
-### Variables
+### Змінні
 
 | Змінна        | Приклад  | Опис                                                                                                   |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
@@ -1645,7 +1645,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `tag_symbol`         | `' 🏷 '`                        | Tag symbol prefixing the info shown                                                  |
 | `disabled`           | `false`                        | Disables the `git_commit` module.                                                    |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                         |
 | --------- | --------- | -------------------------------------------- |
@@ -1684,7 +1684,7 @@ The `git_state` module will show in directories which are part of a git reposito
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | Формат модуля.                                                                          |
 | `disabled`     | `false`                                                         | Disables the `git_state` module.                                                        |
 
-### Variables
+### Змінні
 
 | Змінна           | Приклад    | Опис                                    |
 | ---------------- | ---------- | --------------------------------------- |
@@ -1725,7 +1725,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Формат модуля.                        |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 
-### Variables
+### Змінні
 
 | Змінна            | Приклад | Опис                                        |
 | ----------------- | ------- | ------------------------------------------- |
@@ -1777,7 +1777,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
-### Variables
+### Змінні
 
 The following variables can be used in `format`:
 
@@ -1864,18 +1864,18 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Параметри
 
-| Параметр            | Стандартно                                                                                | Опис                                                                 |
-| ------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                                                                               | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                       |
-| `detect_extensions` | `['go']`                                                                                  | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                            |
-| `style`             | `'bold cyan'`                                                                             | Стиль модуля.                                                        |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                        |
+| Параметр            | Стандартно                                                                                | Опис                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                                                                               | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                    |
+| `detect_extensions` | `['go']`                                                                                  | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `['Godeps']`                                                                              | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold cyan'`                                                                             | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                     |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
@@ -1907,7 +1907,7 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | `style`    | `"yellow bold"`            | Стиль модуля.                                          |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -1939,19 +1939,19 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                       |
-| `version_format`    | `"v${raw}"`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                   |
-| `detect_extensions` | `["gradle", "gradle.kts"]`           | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `["gradle"]`                         | Which folders should trigger this module.                            |
-| `style`             | `"bold bright-cyan"`                 | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `gradle` module.                                        |
-| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                    |
+| `version_format`    | `"v${raw}"`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                |
+| `detect_extensions` | `["gradle", "gradle.kts"]`           | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `["gradle"]`                         | В яких теках цей модуль має запускатись.                          |
+| `style`             | `"bold bright-cyan"`                 | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `gradle` module.                                     |
+| `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.             |
 
-### Variables
+### Змінні
 
 | Змінна  | Приклад  | Опис                                     |
 | ------- | -------- | ---------------------------------------- |
@@ -1978,11 +1978,11 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 | `symbol`            | `'λ '`                               | A format string representing the symbol of Haskell |
 | `detect_extensions` | `['hs', 'cabal', 'hs-boot']`         | Які розширення повинні запускати цей модуль.       |
 | `detect_files`      | `['stack.yaml', 'cabal.project']`    | Які імена файлів мають запускати цей модуль.       |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.           |
 | `style`             | `'bold purple'`                      | Стиль модуля.                                      |
 | `disabled`          | `false`                              | Disables the `haskell` module.                     |
 
-### Variables
+### Змінні
 
 | Змінна         | Приклад     | Опис                                                                                    |
 | -------------- | ----------- | --------------------------------------------------------------------------------------- |
@@ -2004,18 +2004,18 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 ### Параметри
 
-| Параметр            | Стандартно                                                                                      | Опис                                                                 |
-| ------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                                            | Формат модуля.                                                       |
-| `version_format`    | `"v${raw}"`                                                                                     | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["hx", "hxml"]`                                                                                | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"]` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | Які теки мають запускати цей модуль.                                 |
-| `symbol`            | `"⌘ "`                                                                                          | A format string representing the symbol of Helm.                     |
-| `style`             | `"bold fg:202"`                                                                                 | Стиль модуля.                                                        |
-| `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                          |
+| Параметр            | Стандартно                                                                                      | Опис                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"`                                                            | Формат модуля.                                                    |
+| `version_format`    | `"v${raw}"`                                                                                     | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `detect_extensions` | `["hx", "hxml"]`                                                                                | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"]` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | Які теки мають запускати цей модуль.                              |
+| `symbol`            | `"⌘ "`                                                                                          | A format string representing the symbol of Helm.                  |
+| `style`             | `"bold fg:202"`                                                                                 | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -2043,18 +2043,18 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                                 |
-| `symbol`            | `'⎈ '`                               | A format string representing the symbol of Helm.                     |
-| `style`             | `'bold white'`                       | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `helm` module.                                          |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['helmfile.yaml', 'Chart.yaml']`    | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
+| `symbol`            | `'⎈ '`                               | A format string representing the symbol of Helm.                  |
+| `style`             | `'bold white'`                       | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `helm` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -2088,7 +2088,7 @@ The `hostname` module shows the system hostname.
 | `style`      | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                        |
 | `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
 
-### Variables
+### Змінні
 
 | Змінна     | Приклад    | Опис                                                  |
 | ---------- | ---------- | ----------------------------------------------------- |
@@ -2119,18 +2119,18 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### Параметри
 
-| Параметр            | Стандартно                                                                                                            | Опис                                                                 |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                                                                                                           | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                                                                                                  | Які теки мають запускати цей модуль.                                 |
-| `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java                      |
-| `style`             | `'red dimmed'`                                                                                                        | Стиль модуля.                                                        |
-| `disabled`          | `false`                                                                                                               | Disables the `java` module.                                          |
+| Параметр            | Стандартно                                                                                                            | Опис                                                              |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [${symbol}(${version} )]($style)'`                                                                              | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                                                                                                           | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `detect_extensions` | `['java', 'class', 'gradle', 'jar', 'cljs', 'cljc']`                                                                  | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['pom.xml', 'build.gradle.kts', 'build.sbt', '.java-version', 'deps.edn', 'project.clj', 'build.boot', '.sdkmanrc']` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                                                                                                  | Які теки мають запускати цей модуль.                              |
+| `symbol`            | `'☕ '`                                                                                                                | A format string representing the symbol of Java                   |
+| `style`             | `'red dimmed'`                                                                                                        | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                                                               | Disables the `java` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -2185,7 +2185,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -2216,18 +2216,18 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['jl']`                             | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                                 |
-| `symbol`            | `'ஃ '`                               | A format string representing the symbol of Julia.                    |
-| `style`             | `'bold purple'`                      | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `julia` module.                                         |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `detect_extensions` | `['jl']`                             | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
+| `symbol`            | `'ஃ '`                               | A format string representing the symbol of Julia.                 |
+| `style`             | `'bold purple'`                      | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `julia` module.                                      |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -2257,7 +2257,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | Параметр            | Стандартно                           | Опис                                                                          |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                                |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch`          |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`             |
 | `detect_extensions` | `['kt', 'kts']`                      | Які розширення повинні запускати цей модуль.                                  |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                                  |
 | `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                                          |
@@ -2266,7 +2266,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
@@ -2319,7 +2319,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `detect_folders`    | `[]`                                                 | Які теки мають запускати цей модуль.                                  |
 | `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад              | Опис                                     |
 | --------- | -------------------- | ---------------------------------------- |
@@ -2412,7 +2412,7 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | `style`    | `'bold yellow'`           | Стиль модуля.                                          |
 | `disabled` | `true`                    | Disables the `localip` module.                         |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад      | Опис                                    |
 | --------- | ------------ | --------------------------------------- |
@@ -2445,16 +2445,16 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | Параметр            | Стандартно                           | Опис                                                                       |
 | ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                             |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch`       |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`          |
 | `symbol`            | `'🌙 '`                               | A format string representing the symbol of Lua.                            |
 | `detect_extensions` | `['lua']`                            | Які розширення повинні запускати цей модуль.                               |
 | `detect_files`      | `['.lua-version']`                   | Які імена файлів мають запускати цей модуль.                               |
-| `detect_folders`    | `['lua']`                            | Which folders should trigger this module.                                  |
+| `detect_folders`    | `['lua']`                            | В яких теках цей модуль має запускатись.                                   |
 | `style`             | `'bold blue'`                        | Стиль модуля.                                                              |
 | `lua_binary`        | `'lua'`                              | Configures the lua binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -2495,7 +2495,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`     | `'bold dimmed white'`                           | Стиль модуля.                                            |
 | `disabled`  | `true`                                          | Disables the `memory_usage` module.                      |
 
-### Variables
+### Змінні
 
 | Змінна           | Приклад       | Опис                                                               |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
@@ -2537,7 +2537,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | `style`             | `'blue bold'`                      | Стиль модуля.                                                                             |
 | `disabled`          | `false`                            | Disables the `meson` module.                                                              |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад    | Опис                                     |
 | --------- | ---------- | ---------------------------------------- |
@@ -2574,7 +2574,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | `truncation_symbol` | `'…'`                                     | The symbol used to indicate a branch name was truncated.                                     |
 | `disabled`          | `true`                                    | Disables the `hg_branch` module.                                                             |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
@@ -2607,18 +2607,18 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля                                                        |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'👑 '`                               | The symbol used before displaying the version of Nim.                |
-| `detect_extensions` | `['nim', 'nims', 'nimble']`          | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['nim.cfg']`                        | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'bold yellow'`                      | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `nim` module.                                           |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля                                                     |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'👑 '`                               | The symbol used before displaying the version of Nim.             |
+| `detect_extensions` | `['nim', 'nims', 'nimble']`          | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['nim.cfg']`                        | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold yellow'`                      | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `nim` module.                                        |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -2655,7 +2655,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | `disabled`    | `false`                                        | Disables the `nix_shell` module.                                      |
 | `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -2695,16 +2695,16 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | Параметр            | Стандартно                                 | Опис                                                                                                  |
 | ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`       | Формат модуля.                                                                                        |
-| `version_format`    | `'v${raw}'`                                | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `version_format`    | `'v${raw}'`                                | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                                     |
 | `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
 | `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Які розширення повинні запускати цей модуль.                                                          |
 | `detect_files`      | `['package.json', '.node-version']`        | Які імена файлів мають запускати цей модуль.                                                          |
-| `detect_folders`    | `['node_modules']`                         | Which folders should trigger this module.                                                             |
+| `detect_folders`    | `['node_modules']`                         | В яких теках цей модуль має запускатись.                                                              |
 | `style`             | `'bold green'`                             | Стиль модуля.                                                                                         |
 | `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
 | `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад    | Опис                                     |
 | --------- | ---------- | ---------------------------------------- |
@@ -2736,20 +2736,20 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Параметри
 
-| Параметр                  | Стандартно                                                                 | Опис                                                                 |
-| ------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | The format string for the module.                                    |
-| `version_format`          | `'v${raw}'`                                                                | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`                  | `'🐫 '`                                                                     | The symbol used before displaying the version of OCaml.              |
-| `global_switch_indicator` | `''`                                                                       | The format string used to represent global OPAM switch.              |
-| `local_switch_indicator`  | `'*'`                                                                      | The format string used to represent local OPAM switch.               |
-| `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`          | `['_opam', 'esy.lock']`                                                    | Which folders should trigger this module.                            |
-| `style`                   | `'bold yellow'`                                                            | Стиль модуля.                                                        |
-| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                         |
+| Параметр                  | Стандартно                                                                 | Опис                                                              |
+| ------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | Формат рядка модуля.                                              |
+| `version_format`          | `'v${raw}'`                                                                | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`                  | `'🐫 '`                                                                     | The symbol used before displaying the version of OCaml.           |
+| `global_switch_indicator` | `''`                                                                       | The format string used to represent global OPAM switch.           |
+| `local_switch_indicator`  | `'*'`                                                                      | The format string used to represent local OPAM switch.            |
+| `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`          | `['_opam', 'esy.lock']`                                                    | В яких теках цей модуль має запускатись.                          |
+| `style`                   | `'bold yellow'`                                                            | Стиль модуля.                                                     |
+| `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                      |
 
-### Variables
+### Змінні
 
 | Змінна           | Приклад      | Опис                                                              |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
@@ -2776,18 +2776,18 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🪖  '`                              | A format string representing the symbol of OPA.                      |
-| `detect_extensions` | `['rego']`                           | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'bold blue'`                        | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `opa` module.                                           |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🪖  '`                              | A format string representing the symbol of OPA.                   |
+| `detect_extensions` | `['rego']`                           | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold blue'`                        | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `opa` module.                                        |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
@@ -2819,7 +2819,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `style`    | `'bold yellow'`                                 | Стиль модуля.                                                  |
 | `disabled` | `false`                                         | Disables the `openstack` module.                               |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -2914,7 +2914,7 @@ Unknown = "❓ "
 Windows = "🪟 "
 ```
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад      | Опис                                                               |
 | --------- | ------------ | ------------------------------------------------------------------ |
@@ -2969,16 +2969,16 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Параметри
 
-| Параметр          | Стандартно                        | Опис                                                                 |
-| ----------------- | --------------------------------- | -------------------------------------------------------------------- |
-| `format`          | `'is [$symbol$version]($style) '` | Формат модуля.                                                       |
-| `symbol`          | `'📦 '`                            | The symbol used before displaying the version the package.           |
-| `version_format`  | `'v${raw}'`                       | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `style`           | `'bold 208'`                      | Стиль модуля.                                                        |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.            |
-| `disabled`        | `false`                           | Disables the `package` module.                                       |
+| Параметр          | Стандартно                        | Опис                                                              |
+| ----------------- | --------------------------------- | ----------------------------------------------------------------- |
+| `format`          | `'is [$symbol$version]($style) '` | Формат модуля.                                                    |
+| `symbol`          | `'📦 '`                            | The symbol used before displaying the version the package.        |
+| `version_format`  | `'v${raw}'`                       | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `style`           | `'bold 208'`                      | Стиль модуля.                                                     |
+| `display_private` | `false`                           | Enable displaying version for packages marked as private.         |
+| `disabled`        | `false`                           | Disables the `package` module.                                    |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -3009,18 +3009,18 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Параметри
 
-| Параметр            | Стандартно                                                                                               | Опис                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                    |
-| `version_format`    | `'v${raw}'`                                                                                              | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl                |
-| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                                                                                     | Which folders should trigger this module.                            |
-| `style`             | `'bold 149'`                                                                                             | Стиль модуля.                                                        |
-| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                          |
+| Параметр            | Стандартно                                                                                               | Опис                                                              |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                                     | Формат рядка модуля.                                              |
+| `version_format`    | `'v${raw}'`                                                                                              | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl             |
+| `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                                                                                     | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold 149'`                                                                                             | Стиль модуля.                                                     |
+| `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
@@ -3047,18 +3047,18 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐘 '`                               | The symbol used before displaying the version of PHP.                |
-| `detect_extensions` | `['php']`                            | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['composer.json', '.php-version']`  | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'147 bold'`                         | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `php` module.                                           |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🐘 '`                               | The symbol used before displaying the version of PHP.             |
+| `detect_extensions` | `['php']`                            | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['composer.json', '.php-version']`  | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'147 bold'`                         | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `php` module.                                        |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -3109,16 +3109,16 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 ### Параметри
 
-| Параметр         | Стандартно                                   | Опис                                                                 |
-| ---------------- | -------------------------------------------- | -------------------------------------------------------------------- |
-| `format`         | `'via [$symbol($username@)$stack]($style) '` | The format string for the module.                                    |
-| `version_format` | `'v${raw}'`                                  | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                       |
-| `style`          | `'bold 5'`                                   | Стиль модуля.                                                        |
-| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.       |
-| `disabled`       | `false`                                      | Disables the `pulumi` module.                                        |
+| Параметр         | Стандартно                                   | Опис                                                              |
+| ---------------- | -------------------------------------------- | ----------------------------------------------------------------- |
+| `format`         | `'via [$symbol($username@)$stack]($style) '` | Формат рядка модуля.                                              |
+| `version_format` | `'v${raw}'`                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                    |
+| `style`          | `'bold 5'`                                   | Стиль модуля.                                                     |
+| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.    |
+| `disabled`       | `false`                                      | Disables the `pulumi` module.                                     |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад    | Опис                                     |
 | --------- | ---------- | ---------------------------------------- |
@@ -3159,18 +3159,18 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript.         |
-| `detect_extensions` | `['purs']`                           | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['spago.dhall']`                    | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'bold white'`                       | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `purescript` module.                                    |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript.      |
+| `detect_extensions` | `['purs']`                           | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['spago.dhall']`                    | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold white'`                       | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `purescript` module.                                 |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -3212,15 +3212,15 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 | Параметр             | Стандартно                                                                                                   | Опис                                                                                   |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                         |
-| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch`                   |
+| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                      |
 | `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                          |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
 | `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `['py']`                                                                                                     | Які розширення повинні запускати цей модуль                                            |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Які імена файлів мають запускати цей модуль                                            |
-| `detect_folders`     | `[]`                                                                                                         | Which folders should trigger this module                                               |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                     |
+| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                         |
 | `disabled`           | `false`                                                                                                      | Disables the `python` module.                                                          |
 
 ::: tip
@@ -3231,7 +3231,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 :::
 
-### Variables
+### Змінні
 
 | Змінна       | Приклад         | Опис                                       |
 | ------------ | --------------- | ------------------------------------------ |
@@ -3292,18 +3292,18 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'📐'`                                | A format string representing the symbol of R.                        |
-| `style`             | `'blue bold'`                        | Стиль модуля.                                                        |
-| `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Які розширення повинні запускати цей модуль                          |
-| `detect_files`      | `['.Rprofile']`                      | Які імена файлів мають запускати цей модуль                          |
-| `detect_folders`    | `['.Rproj.user']`                    | Which folders should trigger this module                             |
-| `disabled`          | `false`                              | Disables the `r` module.                                             |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'📐'`                                | A format string representing the symbol of R.                     |
+| `style`             | `'blue bold'`                        | Стиль модуля.                                                     |
+| `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Які розширення повинні запускати цей модуль                       |
+| `detect_files`      | `['.Rprofile']`                      | Назви файлів, які активують модуль                                |
+| `detect_folders`    | `['.Rproj.user']`                    | Назви тек, що активують модуль                                    |
+| `disabled`          | `false`                              | Disables the `r` module.                                          |
 
-### Variables
+### Змінні
 
 | Змінна  | Приклад       | Опис                                     |
 | ------- | ------------- | ---------------------------------------- |
@@ -3329,18 +3329,18 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 
 ### Параметри
 
-| Параметр            | Стандартно                                       | Опис                                                                 |
-| ------------------- | ------------------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version-$vm_version )]($style)'` | The format string for the module.                                    |
-| `version_format`    | `'v${raw}'`                                      | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦋 '`                                           | The symbol used before displaying the version of Raku                |
-| `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['META6.json']`                                 | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                             | Which folders should trigger this module.                            |
-| `style`             | `'bold 149'`                                     | Стиль модуля.                                                        |
-| `disabled`          | `false`                                          | Disables the `raku` module.                                          |
+| Параметр            | Стандартно                                       | Опис                                                              |
+| ------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version-$vm_version )]($style)'` | Формат рядка модуля.                                              |
+| `version_format`    | `'v${raw}'`                                      | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🦋 '`                                           | The symbol used before displaying the version of Raku             |
+| `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['META6.json']`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                             | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold 149'`                                     | Стиль модуля.                                                     |
+| `disabled`          | `false`                                          | Disables the `raku` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна     | Приклад | Опис                                     |
 | ---------- | ------- | ---------------------------------------- |
@@ -3366,18 +3366,18 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🔺 '`                               | A format string representing the symbol of Red.                      |
-| `detect_extensions` | `['red']`                            | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'red bold'`                         | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `red` module.                                           |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🔺 '`                               | A format string representing the symbol of Red.                   |
+| `detect_extensions` | `['red']`                            | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'red bold'`                         | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `red` module.                                        |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -3409,19 +3409,19 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💎 '`                               | A format string representing the symbol of Ruby.                     |
-| `detect_extensions` | `['rb']`                             | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['Gemfile', '.ruby-version']`       | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Which environment variables should trigger this module.              |
-| `style`             | `'bold red'`                         | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `ruby` module.                                          |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'💎 '`                               | A format string representing the symbol of Ruby.                  |
+| `detect_extensions` | `['rb']`                             | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['Gemfile', '.ruby-version']`       | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Which environment variables should trigger this module.           |
+| `style`             | `'bold red'`                         | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `ruby` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -3449,18 +3449,18 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🦀 '`                               | A format string representing the symbol of Rust                      |
-| `detect_extensions` | `['rs']`                             | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['Cargo.toml']`                     | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'bold red'`                         | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `rust` module.                                          |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🦀 '`                               | A format string representing the symbol of Rust                   |
+| `detect_extensions` | `['rs']`                             | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['Cargo.toml']`                     | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold red'`                         | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `rust` module.                                       |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад           | Опис                                         |
 | --------- | ----------------- | -------------------------------------------- |
@@ -3491,18 +3491,18 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Параметри
 
-| Параметр            | Стандартно                               | Опис                                                                 |
-| ------------------- | ---------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [${symbol}(${version} )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                              | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `['sbt', 'scala']`                       | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `['.metals']`                            | Які теки мають запускати цей модуль.                                 |
-| `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                    |
-| `style`             | `'red dimmed'`                           | Стиль модуля.                                                        |
-| `disabled`          | `false`                                  | Disables the `scala` module.                                         |
+| Параметр            | Стандартно                               | Опис                                                              |
+| ------------------- | ---------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [${symbol}(${version} )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                              | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `detect_extensions` | `['sbt', 'scala']`                       | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `['.metals']`                            | Які теки мають запускати цей модуль.                              |
+| `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                 |
+| `style`             | `'red dimmed'`                           | Стиль модуля.                                                     |
+| `disabled`          | `false`                                  | Disables the `scala` module.                                      |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -3550,7 +3550,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `style`                | `'white bold'`            | Стиль модуля.                                                |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
-### Variables
+### Змінні
 
 | Змінна    | Стандартно | Опис                                                       |
 | --------- | ---------- | ---------------------------------------------------------- |
@@ -3587,7 +3587,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | `style`     | `'bold yellow'`              | Стиль модуля.                                                 |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -3621,7 +3621,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | `style`    | `'bold dimmed blue'`             | Стиль модуля.                                    |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад      | Опис                                     |
 | --------- | ------------ | ---------------------------------------- |
@@ -3654,7 +3654,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 | `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                 |
 | `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                   |
 
-### Variables
+### Змінні
 
 | Змінна      | Приклад      | Опис                                     |
 | ----------- | ------------ | ---------------------------------------- |
@@ -3703,7 +3703,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
 | `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
 
-### Variables
+### Змінні
 
 | Змінна         | Приклад | Опис                                                                                       |
 | -------------- | ------- | ------------------------------------------------------------------------------------------ |
@@ -3754,7 +3754,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
 | `disabled`      | `true`                   | Disables the `sudo` module.                             |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -3792,18 +3792,18 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐦 '`                               | A format string representing the symbol of Swift                     |
-| `detect_extensions` | `['swift']`                          | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['Package.swift']`                  | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'bold 202'`                         | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `swift` module.                                         |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'🐦 '`                               | A format string representing the symbol of Swift                  |
+| `detect_extensions` | `['swift']`                          | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['Package.swift']`                  | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold 202'`                         | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `swift` module.                                      |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -3839,18 +3839,18 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol$workspace]($style) '` | The format string for the module.                                    |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'💠'`                                | A format string shown before the terraform workspace.                |
-| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `['.terraform']`                     | Which folders should trigger this module.                            |
-| `style`             | `'bold 105'`                         | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                     |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol$workspace]($style) '` | Формат рядка модуля.                                              |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'💠'`                                | A format string shown before the terraform workspace.             |
+| `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `['.terraform']`                     | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'bold 105'`                         | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                  |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад      | Опис                                     |
 | --------- | ------------ | ---------------------------------------- |
@@ -3895,7 +3895,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Параметр          | Стандартно              | Опис                                                                                                                               |
 | ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                  |
+| `format`          | `'at [$time]($style) '` | Формат рядка модуля.                                                                                                               |
 | `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
 | `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
 | `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
@@ -3905,7 +3905,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад    | Опис                                    |
 | --------- | ---------- | --------------------------------------- |
@@ -3952,7 +3952,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `show_always` | `false`                 | Always shows the `username` module.         |
 | `disabled`    | `false`                 | Disables the `username` module.             |
 
-### Variables
+### Змінні
 
 | Змінна  | Приклад      | Опис                                                                                        |
 | ------- | ------------ | ------------------------------------------------------------------------------------------- |
@@ -3980,18 +3980,18 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'⍱ '`                               | A format string representing the symbol of Vagrant.                  |
-| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['Vagrantfile']`                    | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
-| `style`             | `'cyan bold'`                        | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `vagrant` module.                                       |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'⍱ '`                               | A format string representing the symbol of Vagrant.               |
+| `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['Vagrantfile']`                    | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'cyan bold'`                        | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                    |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад          | Опис                                     |
 | --------- | ---------------- | ---------------------------------------- |
@@ -4019,18 +4019,18 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 ### Параметри
 
-| Параметр            | Стандартно                                   | Опис                                                                 |
-| ------------------- | -------------------------------------------- | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`         | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                                  | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'V '`                                       | A format string representing the symbol of V                         |
-| `detect_extensions` | `['v']`                                      | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                         | Which folders should trigger this module.                            |
-| `style`             | `'blue bold'`                                | Стиль модуля.                                                        |
-| `disabled`          | `false`                                      | Disables the `vlang` module.                                         |
+| Параметр            | Стандартно                                   | Опис                                                              |
+| ------------------- | -------------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`         | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'V '`                                       | A format string representing the symbol of V                      |
+| `detect_extensions` | `['v']`                                      | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                         | В яких теках цей модуль має запускатись.                          |
+| `style`             | `'blue bold'`                                | Стиль модуля.                                                     |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                      |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
@@ -4059,7 +4059,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | `format`   | `'vcsh [$symbol$repo]($style) '` | Формат модуля.                                         |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад                                     | Опис                                     |
 | --------- | ------------------------------------------- | ---------------------------------------- |
@@ -4086,18 +4086,18 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                 |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                       |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.                |
-| `style`             | `'bold yellow'`                      | Стиль модуля.                                                        |
-| `disabled`          | `false`                              | Disables the `zig` module.                                           |
-| `detect_extensions` | `['zig']`                            | Які розширення повинні запускати цей модуль.                         |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                         |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                            |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.             |
+| `style`             | `'bold yellow'`                      | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables the `zig` module.                                        |
+| `detect_extensions` | `['zig']`                            | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 
-### Variables
+### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
@@ -4174,7 +4174,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
 | `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
 
-### Variables
+### Змінні
 
 | Змінна    | Опис                                     |
 | --------- | ---------------------------------------- |
