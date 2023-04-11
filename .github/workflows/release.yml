@@ -23,9 +23,10 @@ jobs:
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
-          command: manifest
-          default-branch: master
           token: ${{ secrets.GITHUB_TOKEN }}
+          command: manifest
+          draft: true
+          default-branch: master
 
   # Build sources for every OS
   github_build:
