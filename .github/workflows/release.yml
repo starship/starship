@@ -357,3 +357,5 @@ jobs:
     steps:
       - name: Trigger workflow dispatch
         run: gh workflow run publish-docs.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
