@@ -2157,39 +2157,39 @@ symbol = '🌟 '
 
 - 0 завдань -> нічого не показується.
 - 1 завдання -> показується `symbol`.
-- 2 jobs or more -> `symbol` + `number` are shown.
+- 2 чи більше завдань -> показується `symbol` + `число`.
 
 ::: warning
 
-This module is not supported on tcsh and nu.
+Модуль не підтримується в tcsh та nu.
 
 :::
 
 ::: warning
 
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+Параметр `threshold` є застарілим, але якщо ви бажаєте його використовувати, модуль буде показувати кількість запущених завдань, якщо у вас більше одного фонового завдання, або завдань більше за `threshold`. Якщо `threshold` встановлено у 0, то модуль також показуватиметься, коли немає запущених завдань.
 
 :::
 
 ### Параметри
 
-| Параметр           | Стандартно                    | Опис                                                                     |
-| ------------------ | ----------------------------- | ------------------------------------------------------------------------ |
-| `threshold`*       | `1`                           | Show number of jobs if exceeded.                                         |
-| `symbol_threshold` | `1`                           | Show `symbol` if the job count is at least `symbol_threshold`.           |
-| `number_threshold` | `2`                           | Show the number of jobs if the job count is at least `number_threshold`. |
-| `format`           | `'[$symbol$number]($style) '` | Формат модуля.                                                           |
-| `symbol`           | `'✦'`                         | The string used to represent the `symbol` variable.                      |
-| `style`            | `'bold blue'`                 | Стиль модуля.                                                            |
-| `disabled`         | `false`                       | Вимикає модуль `jobs`.                                                   |
+| Параметр           | Стандартно                    | Опис                                                                            |
+| ------------------ | ----------------------------- | ------------------------------------------------------------------------------- |
+| `threshold`*       | `1`                           | Показувати кількість завдань, якщо вони перевищують значення.                   |
+| `symbol_threshold` | `1`                           | Показувати символ `symbol`, якщо кількість завдань не менше `symbol_threshold`. |
+| `number_threshold` | `2`                           | Показувати кількість завдань, якщо їх кількість не менша за `number_threshold`. |
+| `format`           | `'[$symbol$number]($style) '` | Формат модуля.                                                                  |
+| `symbol`           | `'✦'`                         | Змінна для визначення символу `symbol`.                                         |
+| `style`            | `'bold blue'`                 | Стиль модуля.                                                                   |
+| `disabled`         | `false`                       | Вимикає модуль `jobs`.                                                          |
 
-*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
+*: Цей параметр застарів, використовуйте параметри `number_threshold` і `symbol_threshold` замість цього.
 
 ### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
-| number    | `1`     | The number of jobs                       |
+| number    | `1`     | Кількість завдань                        |
 | symbol    |         | Віддзеркалює значення параметра `symbol` |
 | style\* |         | Віддзеркалює значення параметра `style`  |
 
@@ -2201,18 +2201,18 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 # ~/.config/starship.toml
 
 [jobs]
-symbol = '+ '
+символ = '+ '
 number_threshold = 4
 symbol_threshold = 0
 ```
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `julia` показує поточну встановлену версію [Julia](https://julialang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `Project.toml` file
-- The current directory contains a `Manifest.toml` file
-- The current directory contains a file with the `.jl` extension
+- Поточна тека містить файл `Project.toml`
+- Поточна тека містить файл `Manifest.toml`
+- Поточна тека містить файл `.jl`
 
 ### Параметри
 
@@ -2223,7 +2223,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `detect_extensions` | `['jl']`                             | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['Project.toml', 'Manifest.toml']`  | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                              |
-| `symbol`            | `'ஃ '`                               | A format string representing the symbol of Julia.                 |
+| `symbol`            | `'ஃ '`                               | Формат рядка, що представляє символ Julia.                        |
 | `style`             | `'bold purple'`                      | Стиль модуля.                                                     |
 | `disabled`          | `false`                              | Вимикає модуль `julia`.                                           |
 
@@ -2231,7 +2231,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v1.4.0` | The version of `julia`                   |
+| version   | `v1.4.0` | Версія `julia`                           |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -2248,29 +2248,29 @@ symbol = '∴ '
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `kotlin` показує поточну встановлену версію [Kotlin](https://kotlinlang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `.kt` or a `.kts` file
+- Поточна тека містить файли, `.kt` або `.kts`
 
 ### Параметри
 
-| Параметр            | Стандартно                           | Опис                                                                          |
-| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                                |
-| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`             |
-| `detect_extensions` | `['kt', 'kts']`                      | Які розширення повинні запускати цей модуль.                                  |
-| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                                  |
-| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                                          |
-| `symbol`            | `'🅺 '`                               | A format string representing the symbol of Kotlin.                            |
-| `style`             | `'bold blue'`                        | Стиль модуля.                                                                 |
-| `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
-| `disabled`          | `false`                              | Вимикає модуль `kotlin`.                                                      |
+| Параметр            | Стандартно                           | Опис                                                                                   |
+| ------------------- | ------------------------------------ | -------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                                         |
+| `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                      |
+| `detect_extensions` | `['kt', 'kts']`                      | Які розширення повинні запускати цей модуль.                                           |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                                           |
+| `detect_folders`    | `[]`                                 | Які теки мають запускати цей модуль.                                                   |
+| `symbol`            | `'🅺 '`                               | Формат рядка, що представляє символ Kotlin.                                            |
+| `style`             | `'bold blue'`                        | Стиль модуля.                                                                          |
+| `kotlin_binary`     | `'kotlin'`                           | Налаштовує бінарний файл kotlin, який Starship буде виконуватися для отримання версії. |
+| `disabled`          | `false`                              | Вимикає модуль `kotlin`.                                                               |
 
 ### Змінні
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| version   | `v1.4.21` | The version of `kotlin`                  |
+| version   | `v1.4.21` | Версія `kotlin`                          |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -2295,40 +2295,40 @@ kotlin_binary = 'kotlinc'
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Показує поточну назву [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) та, якщо встановлено, простір імен, користувача та кластер з файлу kubeconfig. Простір імен повинен бути встановлений у файлі kubeconfig файл, це можна зробити через `kubectl config set-context starship-context --namespace astronaut`. Так само можна встановити користувача та  кластер за допомогою `kubectl config set-context starship-context --user starship-user` та `kubectl config set-context context context context --cluster starship-cluster`, відповідно. Якщо параметр `$KUBECONFIG` встановлено, то модуль буде використовувати його, якщо ні — `~/.kube/config`.
 
 ::: tip
 
 Цей модуль типово є вимкненим. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
-When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
+Коли модуль увімкнено, він завжди буде активним, якщо будь-який з параметрів `detect_extensions`, `detect_files` або `detect_folders` встановлені,  модуль буде активним тільки в теках, що відповідають умовам.
 
 :::
 
 ### Параметри
 
-| Параметр            | Стандартно                                           | Опис                                                                  |
-| ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `symbol`            | `'☸ '`                                               | A format string representing the symbol displayed before the Cluster. |
-| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Формат модуля.                                                        |
-| `style`             | `'cyan bold'`                                        | Стиль модуля.                                                         |
-| `context_aliases`   | `{}`                                                 | Table of context aliases to display.                                  |
-| `user_aliases`      | `{}`                                                 | Table of user aliases to display.                                     |
-| `detect_extensions` | `[]`                                                 | Які розширення повинні запускати цей модуль.                          |
-| `detect_files`      | `[]`                                                 | Які імена файлів мають запускати цей модуль.                          |
-| `detect_folders`    | `[]`                                                 | Які теки мають запускати цей модуль.                                  |
-| `disabled`          | `true`                                               | Вимикає модуль `kubernetes`.                                          |
+| Параметр            | Стандартно                                           | Опис                                         |
+| ------------------- | ---------------------------------------------------- | -------------------------------------------- |
+| `symbol`            | `'☸ '`                                               | Символ, що показується перед Кластером.      |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Формат модуля.                               |
+| `style`             | `'cyan bold'`                                        | Стиль модуля.                                |
+| `context_aliases`   | `{}`                                                 | Таблиця контекстних псевдонімів.             |
+| `user_aliases`      | `{}`                                                 | Таблиця псевдонімів користувача.             |
+| `detect_extensions` | `[]`                                                 | Які розширення повинні запускати цей модуль. |
+| `detect_files`      | `[]`                                                 | Які імена файлів мають запускати цей модуль. |
+| `detect_folders`    | `[]`                                                 | Які теки мають запускати цей модуль.         |
+| `disabled`          | `true`                                               | Вимикає модуль `kubernetes`.                 |
 
 ### Змінні
 
-| Змінна    | Приклад              | Опис                                     |
-| --------- | -------------------- | ---------------------------------------- |
-| context   | `starship-context`   | The current kubernetes context name      |
-| namespace | `starship-namespace` | If set, the current kubernetes namespace |
-| user      | `starship-user`      | If set, the current kubernetes user      |
-| cluster   | `starship-cluster`   | If set, the current kubernetes cluster   |
-| symbol    |                      | Віддзеркалює значення параметра `symbol` |
-| style\* |                      | Віддзеркалює значення параметра `style`  |
+| Змінна    | Приклад              | Опис                                               |
+| --------- | -------------------- | -------------------------------------------------- |
+| context   | `starship-context`   | Поточна назва kubernetes context                   |
+| namespace | `starship-namespace` | Якщо встановлено, поточний простір імен kubernetes |
+| user      | `starship-user`      | Якщо встановлено, поточний користувач kubernetes   |
+| cluster   | `starship-cluster`   | Якщо встановлено, поточний кластер kubernetes      |
+| symbol    |                      | Віддзеркалює значення параметра `symbol`           |
+| style\* |                      | Віддзеркалює значення параметра `style`            |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -2349,7 +2349,7 @@ disabled = false
 'root/.*' = 'root'
 ```
 
-Only show the module in directories that contain a `k8s` file.
+Показує модуль лише у теках, що містять файл `k8s`.
 
 ```toml
 # ~/.config/starship.toml
@@ -2359,13 +2359,13 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Regex Matching
+#### Регулярні вирази
 
-Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
+Крім простого псевдоніма, `context_aliases` і `user_aliases` також підтримують розширене зіставлення та перейменування за допомогою регулярних виразів.
 
-The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+Регулярний вираз має збігатися в усьому kube context, на групи захоплення можна посилатися за допомогою `$name` і `$N` при заміні. Трохи більше пояснень в документації [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace).
 
-Long and automatically generated cluster names can be identified and shortened using regular expressions:
+Довгі автоматично згенеровані назви кластерів можуть бути визначені та скорочені за допомогою регулярних виразів:
 
 ```toml
 [kubernetes.context_aliases]
@@ -2382,7 +2382,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Line Break
 
-The `line_break` module separates the prompt into two lines.
+Модуль `line_break` розділяє командний рядок на два рядки.
 
 ### Параметри
 
@@ -2401,22 +2401,22 @@ disabled = true
 
 ## Local IP
 
-The `localip` module shows the IPv4 address of the primary network interface.
+Модуль `localip` показує IPv4 адресу основного мережевого інтерфейсу.
 
 ### Параметри
 
-| Параметр   | Стандартно                | Опис                                                   |
-| ---------- | ------------------------- | ------------------------------------------------------ |
-| `ssh_only` | `true`                    | Only show IP address when connected to an SSH session. |
-| `format`   | `'[$localipv4]($style) '` | Формат модуля.                                         |
-| `style`    | `'bold yellow'`           | Стиль модуля.                                          |
-| `disabled` | `true`                    | Вимикає модуль `localip`.                              |
+| Параметр   | Стандартно                | Опис                                                 |
+| ---------- | ------------------------- | ---------------------------------------------------- |
+| `ssh_only` | `true`                    | Показувати IP адресу лише при підключенні через SSH. |
+| `format`   | `'[$localipv4]($style) '` | Формат модуля.                                       |
+| `style`    | `'bold yellow'`           | Стиль модуля.                                        |
+| `disabled` | `true`                    | Вимикає модуль `localip`.                            |
 
 ### Змінні
 
 | Змінна    | Приклад      | Опис                                    |
 | --------- | ------------ | --------------------------------------- |
-| localipv4 | 192.168.1.13 | Contains the primary IPv4 address       |
+| localipv4 | 192.168.1.13 | Містить основну адресу IPv4             |
 | style\* |              | Віддзеркалює значення параметра `style` |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
