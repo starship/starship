@@ -422,7 +422,6 @@ Wspomóż ten projekt [stając się sponsorem](https://github.com/sponsors/stars
 
 **Poziom Supporter**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">
