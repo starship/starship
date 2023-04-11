@@ -776,36 +776,36 @@ vimcmd_symbol = '[V](bold green) '
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
-## Command Duration
+## Command Duration – час виконання
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Модуль `cmd_duration` показує, скільки часу виконувалась  остання команда. Модуль буде показаний лише в тому випадку, якщо на виконання команди пішло  понад дві секунди або більше, ніж значення змінної `min_time`, якщо воно задане.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: warning Не вмикайте DEBUG trap в Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Якщо ви запускаєте Starship у `bash`, не вмикайте `DEBUG` trap після запуску `eval $(starship init $0)`, або цей модуль **** не працюватиме.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Користувачі Bash, яким потрібна функція preexec, можуть використовувати [фреймворк bash_preexec від rcaloras](https://github.com/rcaloras/bash-preexec). Просто визначте масиви `preexec_function` і `precmd_functions` перед запуском `eval $(starship init $0)`, а потім продовжуй як зазвичай.
 
 ### Параметри
 
-| Параметр               | Стандартно                    | Опис                                                                                                                                                              |
-| ---------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `min_time`             | `2_000`                       | Shortest duration to show time for (in milliseconds).                                                                                                             |
-| `show_milliseconds`    | `false`                       | Show milliseconds in addition to seconds for the duration.                                                                                                        |
-| `format`               | `'took [$duration]($style) '` | Формат модуля.                                                                                                                                                    |
-| `style`                | `'bold yellow'`               | Стиль модуля.                                                                                                                                                     |
-| `disabled`             | `false`                       | Disables the `cmd_duration` module.                                                                                                                               |
-| `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
-| `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
-| `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| Параметр               | Стандартно                    | Опис                                                                                                                                                                |
+| ---------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `min_time`             | `2_000`                       | Найменший час виконання для показу (в мілісекундах).                                                                                                                |
+| `show_milliseconds`    | `false`                       | Показувати мілісекунди на додачу для секунд.                                                                                                                        |
+| `format`               | `'took [$duration]($style) '` | Формат модуля.                                                                                                                                                      |
+| `style`                | `'bold yellow'`               | Стиль модуля.                                                                                                                                                       |
+| `disabled`             | `false`                       | Вимкнути модуль `cmd_duration`.                                                                                                                                     |
+| `show_notifications`   | `false`                       | Показувати сповіщення на робочому столі після закінчення команди.                                                                                                   |
+| `min_time_to_notify`   | `45_000`                      | Найменший час виконання для сповіщення (в мілісекундах).                                                                                                            |
+| `notification_timeout` |                               | Тривалість показу сповіщення (у мілісекундах). Якщо не налаштовано, час очікування сповіщень визначатиметься демоном. Не всі демони сповіщень підтримують цю опцію. |
 
 ### Змінні
 
 | Змінна    | Приклад  | Опис                                    |
 | --------- | -------- | --------------------------------------- |
-| duration  | `16m40s` | The time it took to execute the command |
+| duration  | `16m40s` | Час, витрачений на виконання команди    |
 | style\* |          | Віддзеркалює значення параметра `style` |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
