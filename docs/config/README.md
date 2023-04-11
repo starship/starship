@@ -1596,7 +1596,7 @@ truncation_symbol = ''
 
 ## Fossil Metrics
 
-The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory.
+The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
 
 ### Options
 
