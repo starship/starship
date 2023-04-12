@@ -267,18 +267,18 @@ continuation_prompt = '▶▶ '
 
 де `<color>` є специфікацією кольору (обговорюється нижче). `fg:<color>` та `<color>` на цей час роблять те саме, хоча це може змінитися в майбутньому. `inverted` замінює кольори тла і тексту. Порядок слів у рядку не має значення.
 
-Токен `none` перевизначає всі інші токени у рядку, якщо він не є частиною `bg:`, так `fg:red none fg:blue` все одно створить рядок без стилізування. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+Токен `none` перевизначає всі інші токени у рядку, якщо він не є частиною `bg:`, так `fg:red none fg:blue` все одно створить рядок без стилізування. `bg:none` встановлює типовий колір фону, таким чином, `fg:red bg:none` еквівалентно `red` або `fg:red`, а `bg:green fg:red fg:none` також еквівалентно `fg:red` або `red`. Використання `none` у поєднанні з іншими токенами в майбутньому може стати помилкою.
 
-A color specifier can be one of the following:
+Визначення кольору може бути одним з наступних:
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
-- A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
-- A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+- Один за стандартних кольорів термінала: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. Ви можете опціонально додавати префікс `bright-`, щоб отримати яскраву версію (наприклад, `bright-white`).
+- `#` за яким йде шестизначний шістнадцятковий код кольору. Цей код вказує на [шістнадцятковий код RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
+- Число від 0-255. Число визначає [8-бітний код кольору ANSI](https://i.stack.imgur.com/KTSQa.png).
 
-If multiple colors are specified for foreground/background, the last one in the string will take priority.
+Якщо для тексту та фону задано кілька кольорів, останній в рядку буде мати вищий пріоритет.
 
-Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+Не кожен рядок стилю буде правильно показуватись у кожному терміналі. Зокрема, існують такі відомі примхи:
 
-- Many terminals disable support for `blink` by default
-- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app
+- Багато терміналів стандартно вмикають підтримку `blink`
+- `hidden` [не підтримується в iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` не підтримується стандартно в macOS Terminal.app
