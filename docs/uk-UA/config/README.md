@@ -3273,22 +3273,22 @@ detect_extensions = []
 [python]
 # Показувати версію python з venv.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Зауважте, що це працюватиме лише тоді, коли venv знаходиться всередині проєкту, і він працюватиме
+# лише в теці, яка містить теку venv, якщо це нормально?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+Модуль `rlang` показує поточну встановлену версію [R](https://www.r-project.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a file with the `.R` extension.
-- The current directory contains a file with the `.Rd` extension.
-- The current directory contains a file with the `.Rmd` extension.
-- The current directory contains a file with the `.Rproj` extension.
-- The current directory contains a file with the `.Rsx` extension.
-- The current directory contains a `.Rprofile` file
-- The current directory contains a `.Rproj.user` folder
+- Поточна тека містить файли з розширенням `.R`.
+- Поточна тека містить файли з розширенням `.Rd`.
+- Поточна тека містить файли з розширенням `.Rmd`.
+- Поточна тека містить файли з розширенням `.Rproj`.
+- Поточна тека містить файли з розширенням `.Rsx`.
+- Поточна тека містить файл `.Rprofile`
+- Поточна тека містить файл `.Rproj.user`
 
 ### Параметри
 
@@ -3296,7 +3296,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'📐'`                                | A format string representing the symbol of R.                     |
+| `symbol`            | `'📐'`                                | Формат рядка, що представляє символ R.                            |
 | `style`             | `'blue bold'`                        | Стиль модуля.                                                     |
 | `detect_extensions` | `['R', 'Rd', 'Rmd', 'Rproj', 'Rsx']` | Які розширення повинні запускати цей модуль                       |
 | `detect_files`      | `['.Rprofile']`                      | Назви файлів, які активують модуль                                |
@@ -3307,7 +3307,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 | Змінна  | Приклад       | Опис                                     |
 | ------- | ------------- | ---------------------------------------- |
-| version | `v4.0.5`      | The version of `R`                       |
+| version | `v4.0.5`      | Версія `R`                               |
 | symbol  |               | Віддзеркалює значення параметра `symbol` |
 | style   | `'blue bold'` | Віддзеркалює значення параметра `style`  |
 
@@ -3322,10 +3322,10 @@ format = 'with [📐 $version](blue bold) '
 
 ## Raku
 
-The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `raku` показує поточну встановлену версію [Raku](https://www.raku.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `META6.json` file
-- The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
+- Поточна тека містить файл `META6.json`
+- Поточна тека містить файли `.p6`, `.pm6`, `.raku`, `.rakumod` або `.pod6`
 
 ### Параметри
 
@@ -3333,7 +3333,7 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 | ------------------- | ------------------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version-$vm_version )]($style)'` | Формат рядка модуля.                                              |
 | `version_format`    | `'v${raw}'`                                      | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🦋 '`                                           | The symbol used before displaying the version of Raku             |
+| `symbol`            | `'🦋 '`                                           | Символ, який знаходиться перед версією Raku                       |
 | `detect_extensions` | `['p6', 'pm6', 'pod6', 'raku', 'rakumod']`       | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['META6.json']`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                             | В яких теках цей модуль має запускатись.                          |
@@ -3344,8 +3344,8 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 
 | Змінна     | Приклад | Опис                                     |
 | ---------- | ------- | ---------------------------------------- |
-| version    | `v6.d`  | The version of `raku`                    |
-| vm_version | `moar`  | The version of VM `raku` is built on     |
+| version    | `v6.d`  | Версія `raku`                            |
+| vm_version | `moar`  | Версія VM `raku`                         |
 | symbol     |         | Віддзеркалює значення параметра `symbol` |
 | style\*  |         | Віддзеркалює значення параметра `style`  |
 
@@ -3360,9 +3360,9 @@ format = 'via [🦪 $version]($style) '
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+Модуль `red` показує поточну встановлену версію [Red](https://www.red-lang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a file with `.red` or `.reds` extension
+- Поточна тека містить файли `.red` або `.reds`
 
 ### Параметри
 
@@ -3370,7 +3370,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🔺 '`                               | A format string representing the symbol of Red.                   |
+| `symbol`            | `'🔺 '`                               | Формат рядка, що представляє символ Red.                          |
 | `detect_extensions` | `['red']`                            | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
@@ -3381,7 +3381,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v2.5.1` | The version of `red`                     |
+| version   | `v2.5.1` | Версія `red`                             |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -3398,14 +3398,14 @@ symbol = '🔴 '
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+Модуль `ruby` показує поточну встановлену версію [Ruby](https://www.ruby-lang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `Gemfile` file
-- The current directory contains a `.ruby-version` file
-- The current directory contains a `.rb` file
-- The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+- Поточна тека містить файл `Gemfile`
+- Поточна тека містить файл `.ruby-version`
+- Поточна тека містить файл `.rb`
+- Встановлено змінні середовища `RUBY_VERSION` або `RBENV_VERSION`
 
-Starship gets the current Ruby version by running `ruby -v`.
+Starship отримує поточну версію Ruby командою `ruby -v`.
 
 ### Параметри
 
@@ -3413,11 +3413,11 @@ Starship gets the current Ruby version by running `ruby -v`.
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'💎 '`                               | A format string representing the symbol of Ruby.                  |
+| `symbol`            | `'💎 '`                               | Формат рядка, що представляє символ Ruby.                         |
 | `detect_extensions` | `['rb']`                             | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['Gemfile', '.ruby-version']`       | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
-| `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Which environment variables should trigger this module.           |
+| `detect_variables`  | `['RUBY_VERSION', 'RBENV_VERSION']`  | Які змінні середовища повинні запускати цей модуль.               |
 | `style`             | `'bold red'`                         | Стиль модуля.                                                     |
 | `disabled`          | `false`                              | Вимикає модуль `ruby`.                                            |
 
@@ -3425,7 +3425,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v2.5.1` | The version of `ruby`                    |
+| version   | `v2.5.1` | Версія `ruby`                            |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -3442,10 +3442,10 @@ symbol = '🔺 '
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+Модуль `rust` показує поточну встановлену версію [Rust](https://www.rust-lang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `Cargo.toml` file
-- The current directory contains a file with the `.rs` extension
+- Поточна тека містить файл `Cargo.toml`
+- Поточна тека містить файли з розширенням `.rs`
 
 ### Параметри
 
@@ -3453,7 +3453,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🦀 '`                               | A format string representing the symbol of Rust                   |
+| `symbol`            | `'🦀 '`                               | Формат рядка, що представляє символ Rust                          |
 | `detect_extensions` | `['rs']`                             | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['Cargo.toml']`                     | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
@@ -3462,13 +3462,13 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Змінні
 
-| Змінна    | Приклад           | Опис                                         |
-| --------- | ----------------- | -------------------------------------------- |
-| version   | `v1.43.0-nightly` | The version of `rustc`                       |
-| numver    | `1.51.0`          | The numeric component of the `rustc` version |
-| toolchain | `beta`            | The toolchain version                        |
-| symbol    |                   | Віддзеркалює значення параметра `symbol`     |
-| style\* |                   | Віддзеркалює значення параметра `style`      |
+| Змінна    | Приклад           | Опис                                     |
+| --------- | ----------------- | ---------------------------------------- |
+| version   | `v1.43.0-nightly` | Версія `rustc`                           |
+| numver    | `1.51.0`          | Числовий компонент версії `rustc`        |
+| toolchain | `beta`            | Версія toolchain                         |
+| symbol    |                   | Віддзеркалює значення параметра `symbol` |
+| style\* |                   | Віддзеркалює значення параметра `style`  |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -3483,11 +3483,11 @@ format = 'via [⚙️ $version](red bold)'
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `scala` показує поточну встановлену версію [Scala](https://www.scala-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `build.sbt`, `.scalaenv` or `.sbtenv` file
-- The current directory contains a file with the `.scala` or `.sbt` extension
-- The current directory contains a directory named `.metals`
+- Поточна тека містить файли `build.sbt`, `.scalaenv` або `.sbtenv`
+- Поточна тека містить файли `.scala` або `.sbt`
+- В поточній теці є тека `.metals`
 
 ### Параметри
 
@@ -3498,7 +3498,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `detect_extensions` | `['sbt', 'scala']`                       | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['.scalaenv', '.sbtenv', 'build.sbt']`  | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['.metals']`                            | Які теки мають запускати цей модуль.                              |
-| `symbol`            | `'🆂 '`                                   | A format string representing the symbol of Scala.                 |
+| `symbol`            | `'🆂 '`                                   | Формат рядка, що представляє символ Scala.                        |
 | `style`             | `'red dimmed'`                           | Стиль модуля.                                                     |
 | `disabled`          | `false`                                  | Вимикає модуль `scala`.                                           |
 
@@ -3506,7 +3506,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `2.13.5` | The version of `scala`                   |
+| version   | `2.13.5` | Версія `scala`                           |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -3523,7 +3523,7 @@ symbol = '🌟 '
 
 ## Shell
 
-The `shell` module shows an indicator for currently used shell.
+Модуль `shell` показує індикатор поточної оболонки.
 
 ::: tip
 
@@ -3533,29 +3533,29 @@ The `shell` module shows an indicator for currently used shell.
 
 ### Параметри
 
-| Параметр               | Стандартно                | Опис                                                         |
-| ---------------------- | ------------------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `'bsh'`                   | A format string used to represent bash.                      |
-| `fish_indicator`       | `'fsh'`                   | A format string used to represent fish.                      |
-| `zsh_indicator`        | `'zsh'`                   | A format string used to represent zsh.                       |
-| `powershell_indicator` | `'psh'`                   | A format string used to represent powershell.                |
-| `ion_indicator`        | `'ion'`                   | A format string used to represent ion.                       |
-| `elvish_indicator`     | `'esh'`                   | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `'xsh'`                   | A format string used to represent xonsh.                     |
-| `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                       |
-| `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                        |
-| `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown. |
-| `format`               | `'[$indicator]($style) '` | Формат модуля.                                               |
-| `style`                | `'white bold'`            | Стиль модуля.                                                |
-| `disabled`             | `true`                    | Вимикає модуль `shell`.                                      |
+| Параметр               | Стандартно                | Опис                                                           |
+| ---------------------- | ------------------------- | -------------------------------------------------------------- |
+| `bash_indicator`       | `'bsh'`                   | Формат рядка, що використовується для bash.                    |
+| `fish_indicator`       | `'fsh'`                   | Формат рядка, що використовується для fish.                    |
+| `zsh_indicator`        | `'zsh'`                   | Формат рядка, що використовується для zsh.                     |
+| `powershell_indicator` | `'psh'`                   | Формат рядка, що використовується для powershell.              |
+| `ion_indicator`        | `'ion'`                   | Формат рядка, що використовується для ion.                     |
+| `elvish_indicator`     | `'esh'`                   | Формат рядка, що використовується для elvish.                  |
+| `tcsh_indicator`       | `'tsh'`                   | Формат рядка, що використовується для tcsh.                    |
+| `xonsh_indicator`      | `'xsh'`                   | Формат рядка, що використовується для xonsh.                   |
+| `cmd_indicator`        | `'cmd'`                   | Формат рядка, що використовується для cmd.                     |
+| `nu_indicator`         | `'nu'`                    | Формат рядка, що використовується для nu.                      |
+| `unknown_indicator`    | `''`                      | Типове значення, що буде показане, якщо оболонка не визначена. |
+| `format`               | `'[$indicator]($style) '` | Формат модуля.                                                 |
+| `style`                | `'white bold'`            | Стиль модуля.                                                  |
+| `disabled`             | `true`                    | Вимикає модуль `shell`.                                        |
 
 ### Змінні
 
-| Змінна    | Стандартно | Опис                                                       |
-| --------- | ---------- | ---------------------------------------------------------- |
-| indicator |            | Mirrors the value of `indicator` for currently used shell. |
-| style\* |            | Віддзеркалює значення параметра `style`.                   |
+| Змінна    | Стандартно | Опис                                                     |
+| --------- | ---------- | -------------------------------------------------------- |
+| indicator |            | Віддзеркалює значення `indicator` для поточної оболонки. |
+| style\* |            | Віддзеркалює значення параметра `style`.                 |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -3574,24 +3574,24 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
+Модуль `shlvl` показує поточний [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') змінну оточення, якщо він встановлений на число і збігається або перевищує вказаний поріг.
 
 ### Параметри
 
-| Параметр    | Стандартно                   | Опис                                                          |
-| ----------- | ---------------------------- | ------------------------------------------------------------- |
-| `threshold` | `2`                          | Display threshold.                                            |
-| `format`    | `'[$symbol$shlvl]($style) '` | Формат модуля.                                                |
-| `symbol`    | `'↕️  '`                     | The symbol used to represent the `SHLVL`.                     |
-| `repeat`    | `false`                      | Causes `symbol` to be repeated by the current `SHLVL` amount. |
-| `style`     | `'bold yellow'`              | Стиль модуля.                                                 |
-| `disabled`  | `true`                       | Вимикає модуль `shlvl`.                                       |
+| Параметр    | Стандартно                   | Опис                                                        |
+| ----------- | ---------------------------- | ----------------------------------------------------------- |
+| `threshold` | `2`                          | Граничне значення для показу.                               |
+| `format`    | `'[$symbol$shlvl]($style) '` | Формат модуля.                                              |
+| `symbol`    | `'↕️  '`                     | Символ, який використовується для показу `SHLVL`.           |
+| `repeat`    | `false`                      | Повторно показує `symbol` в кількості зазначеній у `SHLVL`. |
+| `style`     | `'bold yellow'`              | Стиль модуля.                                               |
+| `disabled`  | `true`                       | Вимикає модуль `shlvl`.                                     |
 
 ### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
-| shlvl     | `3`     | The current value of `SHLVL`             |
+| shlvl     | `3`     | Поточне значення `SHLVL`                 |
 | symbol    |         | Віддзеркалює значення параметра `symbol` |
 | style\* |         | Віддзеркалює значення параметра `style`  |
 
@@ -3610,22 +3610,22 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
+Модуль `singularity` показує поточний образ [Singularity](https://sylabs.io/singularity/), якщо ви всередині контейнера і `$SINGULARITY_NAME` встановлено.
 
 ### Параметри
 
-| Параметр   | Стандартно                       | Опис                                             |
-| ---------- | -------------------------------- | ------------------------------------------------ |
-| `format`   | `'[$symbol\[$env\]]($style) '` | Формат модуля.                                   |
-| `symbol`   | `''`                             | A format string displayed before the image name. |
-| `style`    | `'bold dimmed blue'`             | Стиль модуля.                                    |
-| `disabled` | `false`                          | Вимикає модуль `singularity`.                    |
+| Параметр   | Стандартно                       | Опис                                              |
+| ---------- | -------------------------------- | ------------------------------------------------- |
+| `format`   | `'[$symbol\[$env\]]($style) '` | Формат модуля.                                    |
+| `symbol`   | `''`                             | Формат рядка, що показується перед назвою образу. |
+| `style`    | `'bold dimmed blue'`             | Стиль модуля.                                     |
+| `disabled` | `false`                          | Вимикає модуль `singularity`.                     |
 
 ### Змінні
 
 | Змінна    | Приклад      | Опис                                     |
 | --------- | ------------ | ---------------------------------------- |
-| env       | `centos.img` | The current Singularity image            |
+| env       | `centos.img` | Поточний образ Singularity               |
 | symbol    |              | Віддзеркалює значення параметра `symbol` |
 | style\* |              | Віддзеркалює значення параметра `style`  |
 
@@ -3642,23 +3642,23 @@ format = '[📦 \[$env\]]($style) '
 
 ## Spack
 
-The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+Модуль `spack` показує інформацію про поточне оточення [Spack](https://spack.readthedocs.io/en/latest/), якщо змінна `$SPACK_ENV` встановлена.
 
 ### Параметри
 
-| Параметр            | Стандартно                             | Опис                                                                                                                                                    |
-| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` – означає без скорочення. Також подивіться модуль [`directory`](#directory). |
-| `symbol`            | `'🅢  '`                                | Символ що передує назві оточення.                                                                                                                       |
-| `style`             | `'bold blue'`                          | Стиль модуля.                                                                                                                                           |
-| `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                          |
-| `disabled`          | `false`                                | Вимикає модуль `spack`.                                                                                                                                 |
+| Параметр            | Стандартно                             | Опис                                                                                                                                                     |
+| ------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | Кількість тек, до яких має бути скорочений шлях до середовища оточення. `0` – означає без скорочення. Також подивіться модуль [`directory`](#directory). |
+| `symbol`            | `'🅢  '`                                | Символ що передує назві оточення.                                                                                                                        |
+| `style`             | `'bold blue'`                          | Стиль модуля.                                                                                                                                            |
+| `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                           |
+| `disabled`          | `false`                                | Вимикає модуль `spack`.                                                                                                                                  |
 
 ### Змінні
 
 | Змінна      | Приклад      | Опис                                     |
 | ----------- | ------------ | ---------------------------------------- |
-| environment | `astronauts` | The current spack environment            |
+| environment | `astronauts` | Поточне середовище spack                 |
 | symbol      |              | Віддзеркалює значення параметра `symbol` |
 | style\*   |              | Віддзеркалює значення параметра `style`  |
 
@@ -3675,7 +3675,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
+Модуль `status` показує код завершення роботи попередньої команди. Якщо $success_symbol пустий (типово), модуль буде показаний тільки якщо код виходу не `0`. Код status може бути перетворений у 32-бітне ціле число.
 
 ::: tip
 
@@ -3685,38 +3685,38 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ### Параметри
 
-| Параметр                    | Стандартно                                                                         | Опис                                                                  |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | The format of the module                                              |
-| `symbol`                    | `'❌'`                                                                              | The symbol displayed on program error                                 |
-| `success_symbol`            | `''`                                                                               | The symbol displayed on program success                               |
-| `not_executable_symbol`     | `'🚫'`                                                                              | The symbol displayed when file isn't executable                       |
-| `not_found_symbol`          | `'🔍'`                                                                              | The symbol displayed when the command can't be found                  |
-| `sigint_symbol`             | `'🧱'`                                                                              | The symbol displayed on SIGINT (Ctrl + c)                             |
-| `signal_symbol`             | `'⚡'`                                                                              | The symbol displayed on any signal                                    |
-| `style`                     | `'bold red'`                                                                       | Стиль модуля.                                                         |
-| `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
-| `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
-| `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
-| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                             | Вимикає модуль `status`.                                              |
+| Параметр                    | Стандартно                                                                         | Опис                                                                                   |
+| --------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                      | Формат модуля                                                                          |
+| `symbol`                    | `'❌'`                                                                              | Символ, що показується у випадку помилки                                               |
+| `success_symbol`            | `''`                                                                               | Символ, що показується після успішного завершення попередньої команди                  |
+| `not_executable_symbol`     | `'🚫'`                                                                              | Символ, що показується у випадку виконати файл, який не є виконуваним                  |
+| `not_found_symbol`          | `'🔍'`                                                                              | Символ, що показується, коли команду не знайдено                                       |
+| `sigint_symbol`             | `'🧱'`                                                                              | Символ, що показується для SIGINT (Ctrl + c)                                           |
+| `signal_symbol`             | `'⚡'`                                                                              | Символ для будь-якого сигналу                                                          |
+| `style`                     | `'bold red'`                                                                       | Стиль модуля.                                                                          |
+| `recognize_signal_code`     | `true`                                                                             | Вмикає сигнал на код виходу                                                            |
+| `map_symbol`                | `false`                                                                            | Вмикає символ на код виходу                                                            |
+| `pipestatus`                | `false`                                                                            | Вмикає звітування про pipestatus                                                       |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | Символ, що використовується для розділення сегментів конвеєра (підтримує форматування) |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | Формат модуля, коли команда є конвеєром                                                |
+| `pipestatus_segment_format` |                                                                                    | Якщо вказано, замінює `format` під час форматування сегментів конвеєра                 |
+| `disabled`                  | `true`                                                                             | Вимикає модуль `status`.                                                               |
 
 ### Змінні
 
-| Змінна         | Приклад | Опис                                                                                       |
-| -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| status         | `127`   | The exit code of the last command                                                          |
-| hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
-| int            | `127`   | The exit code of the last command                                                          |
-| common_meaning | `ERROR` | Meaning of the code if not a signal                                                        |
-| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
-| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
-| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
-| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| symbol         |         | Віддзеркалює значення параметра `symbol`                                                   |
-| style\*      |         | Віддзеркалює значення параметра `style`                                                    |
+| Змінна         | Приклад | Опис                                                                             |
+| -------------- | ------- | -------------------------------------------------------------------------------- |
+| status         | `127`   | Код виходу останньої команди                                                     |
+| hex_status     | `0x7F`  | Код виходу останньої команди в hex                                               |
+| int            | `127`   | Код виходу останньої команди                                                     |
+| common_meaning | `ERROR` | Значення коду, якщо не сигнал                                                    |
+| signal_number  | `9`     | Номер сигналу, що відповідає коду завершення, за наявності                       |
+| signal_name    | `KILL`  | Назва сигналу, що відповідає коду виходу лише в тому випадку, якщо його записано |
+| maybe_int      | `7`     | Містить номер коду виходу, коли значення не знайдено                             |
+| pipestatus     |         | Показує коду виходу конвеєра, доступно тільки в форматі pipestatus_format        |
+| symbol         |         | Віддзеркалює значення параметра `symbol`                                         |
+| style\*      |         | Віддзеркалює значення параметра `style`                                          |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -3736,7 +3736,7 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+Модуль `sudo` показує, чи облікові дані sudo зараз є в кеші. Модуль показується лише за наявності даних в кеші.
 
 ::: tip
 
@@ -3746,13 +3746,13 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ### Параметри
 
-| Параметр        | Стандартно               | Опис                                                    |
-| --------------- | ------------------------ | ------------------------------------------------------- |
-| `format`        | `'[as $symbol]($style)'` | The format of the module                                |
-| `symbol`        | `'🧙 '`                   | The symbol displayed when credentials are cached        |
-| `style`         | `'bold blue'`            | Стиль модуля.                                           |
-| `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
-| `disabled`      | `true`                   | Вимикає модуль `sudo`.                                  |
+| Параметр        | Стандартно               | Опис                                                              |
+| --------------- | ------------------------ | ----------------------------------------------------------------- |
+| `format`        | `'[as $symbol]($style)'` | Формат модуля                                                     |
+| `symbol`        | `'🧙 '`                   | Символ, що показується, коли облікові дані є в кеші               |
+| `style`         | `'bold blue'`            | Стиль модуля.                                                     |
+| `allow_windows` | `false`                  | Оскільки Windows не має sudo, для цієї Ос модуль типово вимкнено. |
+| `disabled`      | `true`                   | Вимикає модуль `sudo`.                                            |
 
 ### Змінні
 
@@ -3785,10 +3785,10 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+Модуль `swift` показує поточну встановлену версію [Swift](https://swift.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `Package.swift` file
-- The current directory contains a file with the `.swift` extension
+- Поточна тека містить файл `Package.swift`
+- Поточна тека містить файли з розширенням `.swift`
 
 ### Параметри
 
@@ -3796,7 +3796,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🐦 '`                               | A format string representing the symbol of Swift                  |
+| `symbol`            | `'🐦 '`                               | Формат рядка, що представляє символ Swift                         |
 | `detect_extensions` | `['swift']`                          | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['Package.swift']`                  | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
@@ -3807,7 +3807,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v5.2.4` | The version of `swift`                   |
+| version   | `v5.2.4` | Версія `swift`                           |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -3824,18 +3824,18 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію.
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+Стандартно версія Terraform не показується, оскільки це повільно для поточних версій Terraform, особливо коли використовується багато втулків. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
 
 :::
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `.terraform` folder
-- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
+- Поточна тека містить файл `.terraform`
+- Поточна тека містить файли з розширеннями`.tf`, `.tfplan` або `.tfstate`
 
 ### Параметри
 
@@ -3843,7 +3843,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol$workspace]($style) '` | Формат рядка модуля.                                              |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'💠'`                                | A format string shown before the terraform workspace.             |
+| `symbol`            | `'💠'`                                | Формат рядка, що відображається перед робочою областю terraform.  |
 | `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['.terraform']`                     | В яких теках цей модуль має запускатись.                          |
@@ -3854,8 +3854,8 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 | Змінна    | Приклад    | Опис                                     |
 | --------- | ---------- | ---------------------------------------- |
-| version   | `v0.12.24` | The version of `terraform`               |
-| workspace | `default`  | The current Terraform workspace          |
+| version   | `v0.12.24` | Версія `terraform`                       |
+| workspace | `default`  | Поточна робоча область Terraform         |
 | symbol    |            | Віддзеркалює значення параметра `symbol` |
 | style\* |            | Віддзеркалює значення параметра `style`  |
 
@@ -3863,7 +3863,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 ### Приклад
 
-#### With Terraform Version
+#### За версією Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -3872,7 +3872,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Без версії Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -3883,7 +3883,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показує поточний **місцевий** час. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3929,7 +3929,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+The `username` module shows active user's username. Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - The current user is root/admin
 - The current user isn't the same as the one that is logged in
@@ -4080,7 +4080,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - The current directory contains a `.zig` file
 
