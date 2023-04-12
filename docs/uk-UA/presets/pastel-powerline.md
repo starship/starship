@@ -1,14 +1,14 @@
-[Return to Presets](./README.md#pastel-powerline)
+[Повернутися до Шаблонів](./README.md#pastel-powerline)
 
-# Pastel Powerline Preset
+# Pastel Powerline
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+Шаблон створений під враженням від [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Він також показує як працює шлях підстановки в starship.
 
-![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png)
+![Скріншот шаблона Pastel Powerline](/presets/img/pastel-powerline.png)
 
 ### Передумови
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
+- Встановлений та увімкнений у Вашому терміналі набір шрифтів [Nerd Font (для прикладу, спробуйте Caskaydia Cove Nerd Font](https://www.nerdfonts.com/))
 
 ### Налаштування
 
@@ -16,6 +16,6 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pastel-powerline.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/pastel-powerline.toml)
 
 <<< @/.vuepress/public/presets/toml/pastel-powerline.toml
