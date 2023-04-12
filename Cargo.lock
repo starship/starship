@@ -2771,7 +2771,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "1.14.1"
+version = "1.14.2"
 dependencies = [
  "chrono",
  "clap",

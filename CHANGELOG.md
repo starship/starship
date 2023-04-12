@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.2](https://github.com/starship/starship/compare/v1.14.1...v1.14.2) (2023-04-12)
+
+
+### Bug Fixes
+
+* **git_commit:** resolve panic on 32-bit targets ([#5095](https://github.com/starship/starship/issues/5095)) ([5ef90a6](https://github.com/starship/starship/commit/5ef90a615f73a9f240a3c63ab601db1302adb01d))
+
 ## [1.14.1](https://github.com/starship/starship/compare/v1.14.0...v1.14.1) (2023-04-11)
 
 
