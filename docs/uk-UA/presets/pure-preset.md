@@ -1,6 +1,6 @@
 [Повернутися до Шаблонів](./README.md#pure)
 
-# Pure Preset
+# Pure Prompt
 
 Цей шаблон імітує зовнішній вигляд і поведінку [Pure](https://github.com/sindresorhus/pure).
 
