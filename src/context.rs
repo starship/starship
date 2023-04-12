@@ -697,6 +697,24 @@ pub enum Shell {
     Unknown,
 }
 
+impl Shell {
+    /// Returns `true` if starship should use the universal rprompt fallback.
+    /// If the shell natively supports rprompt or if the universal fallback is
+    /// not supported by the shell, returns `false`.
+    pub fn use_universal_prompt(&self) -> bool {
+        match self {
+            // Supported via universal fallback
+            Shell::PowerShell => true,
+            // Broken with universal fallback
+            Shell::Bash | Shell::Tcsh | Shell::Ion | Shell::Unknown => false,
+            // Supported natively
+            Shell::Elvish | Shell::Fish | Shell::Zsh | Shell::Xonsh | Shell::Cmd | Shell::Nu => {
+                false
+            }
+        }
+    }
+}
+
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Target {

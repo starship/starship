@@ -174,6 +174,11 @@ impl<'a> Module<'a> {
             _ => ansi_strings,
         }
     }
+
+    /// Add a segment to the module
+    pub fn push_segment(&mut self, segment: Segment) {
+        self.segments.push(segment);
+    }
 }
 
 impl<'a> fmt::Display for Module<'a> {

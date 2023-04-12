@@ -1,6 +1,5 @@
 use clap::{builder::PossibleValue, ValueEnum};
 use nu_ansi_term::AnsiStrings;
-use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
@@ -84,29 +83,7 @@ pub fn get_prompt(context: Context) -> String {
     }
 
     let (formatter, modules) = load_formatter_and_modules(&context);
-
-    let formatter = formatter.map_variables_to_segments(|module| {
-        // Make $all display all modules not explicitly referenced
-        if module == "all" {
-            Some(Ok(all_modules_uniq(&modules)
-                .par_iter()
-                .flat_map(|module| {
-                    handle_module(module, &context, &modules)
-                        .into_iter()
-                        .flat_map(|module| module.segments)
-                        .collect::<Vec<Segment>>()
-                })
-                .collect::<Vec<_>>()))
-        } else if context.is_module_disabled_in_config(module) {
-            None
-        } else {
-            // Get segments from module
-            Some(Ok(handle_module(module, &context, &modules)
-                .into_iter()
-                .flat_map(|module| module.segments)
-                .collect::<Vec<Segment>>()))
-        }
-    });
+    let formatter = formatter.map_to_modules(&context, &modules);
 
     // Creates a root module and prints it.
     let mut root_module = Module::new("Starship Root", "The root module", None);
@@ -115,6 +92,8 @@ pub fn get_prompt(context: Context) -> String {
             .parse(None, Some(&context))
             .expect("Unexpected error returned in root format variables"),
     );
+
+    handle_universal_rprompt(&context, &mut root_module, &modules);
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
@@ -136,6 +115,75 @@ pub fn get_prompt(context: Context) -> String {
     }
 
     buf
+}
+
+/// Adds a universal rprompt to the root module if it prints the main prompt and
+/// rprompt is not natively supported.
+/// It is implement with a fill segments and ANSI sequences to save and restore the cursor.
+/// The rprompt is not printed if it does not fit into the last prompt line.
+fn handle_universal_rprompt(
+    context: &Context,
+    root_module: &mut Module,
+    modules: &BTreeSet<String>,
+) {
+    if context.target != Target::Main || !context.shell.use_universal_prompt() {
+        return;
+    }
+    let rf = match StringFormatter::new(&context.root_config.right_format) {
+        Ok(formatter) => formatter,
+        Err(e) => {
+            log::error!("Error parsing right format: {}", e);
+            return;
+        }
+    };
+
+    let rsegments = match rf
+        .map_to_modules(context, modules)
+        .parse(None, Some(context))
+    {
+        Ok(segments) => segments,
+        Err(e) => {
+            log::error!("Error mapping segments right format: {}", e);
+            return;
+        }
+    };
+
+    if rsegments.is_empty() {
+        log::trace!("rprompt is empty");
+        return;
+    }
+
+    // Only print the rprompt if it fits on the screen
+    let last_prompt_line_len: usize = root_module
+        .segments
+        .iter()
+        .rev()
+        .take_while(|s| !matches!(s, &Segment::LineTerm))
+        .map(|s| s.width_graphemes())
+        .sum();
+    let rprompt_len: usize = rsegments.iter().map(|s| s.value().width_graphemes()).sum();
+    if last_prompt_line_len + rprompt_len > context.width {
+        log::trace!(
+            "rprompt is too long: {last_prompt_line_len} + {rprompt_len} > {width}",
+            width = context.width
+        );
+        return;
+    }
+
+    root_module.segments.reserve(3 + rsegments.len());
+    // Save cursor position
+    root_module.push_segment(Segment::control("\x1B7"));
+    // Fill with spaces
+    root_module.push_segment(Segment::fill(None, " "));
+    // Add rprompt segments
+    for segment in rsegments {
+        if matches!(segment, Segment::LineTerm) {
+            continue;
+        }
+        root_module.push_segment(segment);
+    }
+    // Restore cursor position
+    root_module.push_segment(Segment::control("\x1B8"));
 }
 
 pub fn module(module_name: &str, args: Properties) {
@@ -310,7 +358,7 @@ fn compute_modules<'a>(context: &'a Context) -> Vec<Module<'a>> {
     prompt_order
 }
 
-fn handle_module<'a>(
+pub(crate) fn handle_module<'a>(
     module: &str,
     context: &'a Context,
     module_list: &BTreeSet<String>,
@@ -390,7 +438,7 @@ pub fn format_duration(duration: &Duration) -> String {
 }
 
 /// Return the modules from $all that are not already in the list
-fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
+pub(crate) fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
     let mut prompt_order: Vec<String> = Vec::new();
     for module in PROMPT_ORDER.iter() {
         if !module_list.contains(*module) {
@@ -629,6 +677,119 @@ mod test {
     #[cfg(feature = "config-schema")]
     fn print_schema_does_not_panic() {
         print_schema();
+    }
+
+    #[test]
+    fn universal_right_prompt() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                right_format =" $character"
+                add_newline = false
+                format = "format:"
+                [character]
+                format = ">\n>"
+            }),
+        };
+        context.root_config.format = "format:".to_string();
+        context.root_config.right_format = "$character".to_string();
+        context.root_config.add_newline = false;
+        context.width = 20;
+        context.shell = Shell::PowerShell;
+        context.target = Target::Main;
+
+        // rprompt is printed and newline is stripped
+        let expected = String::from("format:\u{1b}7           >>\u{1b}8");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual, "rprompt renders as expected");
+        // 20 for the prompt + 2 for the control sequences
+        assert_eq!(
+            actual.width_graphemes(),
+            20 + 2,
+            "prompt line uses all available space"
+        );
+    }
+
+    #[test]
+    fn no_universal_right_prompt_zsh() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                right_format =" $character"
+                add_newline = false
+                format = "format:"
+                [character]
+                format = ">\n>"
+            }),
+        };
+        context.root_config.format = "format:".to_string();
+        context.root_config.right_format = "$character".to_string();
+        context.root_config.add_newline = false;
+        context.width = 20;
+        context.shell = Shell::Zsh;
+
+        context.target = Target::Main;
+
+        // rprompt is printed and newline is stripped
+        let expected = String::from("format:");
+        let actual = get_prompt(context);
+        assert_eq!(
+            expected, actual,
+            "rprompt is not added in shells with native support (zsh)"
+        );
+    }
+
+    #[test]
+    fn long_universal_right_prompt() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                right_format =" $character"
+                add_newline = false
+                format = "format:"
+                [character]
+                format = ">\n>"
+            }),
+        };
+        context.root_config.format = "format:".to_string();
+        context.root_config.right_format = "$character".to_string();
+        context.root_config.add_newline = false;
+        context.target = Target::Main;
+        context.width = 1;
+
+        // rprompt is printed and newline is stripped
+        let expected = String::from("format:");
+        let actual = get_prompt(context);
+        assert_eq!(
+            expected, actual,
+            "rprompt is not added if prompt is too long"
+        );
+    }
+
+    #[test]
+    fn universal_right_prompt_empty() {
+        let mut context = default_context();
+        context.config = StarshipConfig {
+            config: Some(toml::toml! {
+                right_format = ""
+                add_newline = false
+                format = "format:"
+            }),
+        };
+        context.root_config.format = "format:".to_string();
+        context.root_config.right_format = "".to_string();
+        context.root_config.add_newline = false;
+        context.width = 20;
+
+        context.target = Target::Main;
+
+        // rprompt is printed and newline is stripped
+        let expected = String::from("format:");
+        let actual = get_prompt(context);
+        assert_eq!(
+            expected, actual,
+            "No ANSI escape sequences are added to the prompt"
+        );
     }
 
     #[test]

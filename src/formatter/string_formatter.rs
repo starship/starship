@@ -8,6 +8,7 @@ use std::fmt;
 
 use crate::config::parse_style_string;
 use crate::context::{Context, Shell};
+use crate::print;
 use crate::segment::Segment;
 
 use super::model::*;
@@ -56,7 +57,7 @@ impl From<String> for StringFormatterError {
 }
 
 pub struct StringFormatter<'a> {
-    format: Vec<FormatElement<'a>>,
+    pub(crate) format: Vec<FormatElement<'a>>,
     variables: VariableMapType<'a>,
     style_variables: StyleVariableMapType<'a>,
 }
@@ -409,6 +410,32 @@ impl<'a> StringFormatter<'a> {
             &self.style_variables,
             context,
         )
+    }
+
+    /// Map the variables in the format string to module segments.
+    pub(crate) fn map_to_modules(self, context: &Context, modules: &BTreeSet<String>) -> Self {
+        self.map_variables_to_segments(|module| {
+            // Make $all display all modules not explicitly referenced
+            if module == "all" {
+                Some(Ok(print::all_modules_uniq(modules)
+                    .par_iter()
+                    .flat_map(|module| {
+                        print::handle_module(module, context, modules)
+                            .into_iter()
+                            .flat_map(|module| module.segments)
+                            .collect::<Vec<Segment>>()
+                    })
+                    .collect::<Vec<_>>()))
+            } else if context.is_module_disabled_in_config(module) {
+                None
+            } else {
+                // Get segments from module
+                Some(Ok(print::handle_module(module, context, modules)
+                    .into_iter()
+                    .flat_map(|module| module.segments)
+                    .collect::<Vec<Segment>>()))
+            }
+        })
     }
 }
 
