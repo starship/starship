@@ -1,16 +1,16 @@
-# Migrating to v0.45.0
+# Міграція на v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0 — це реліз, що містить останні зміни, на шляху до версії v1.0.0. Ми внесли кілька суттєвих змін у те, як виконується налаштування командного рядка, щоб забезпечити більший ступінь налаштувань.
 
-This guide is intended to walk you through the breaking changes.
+Цей посібник має на меті ознайомити вас із критичними змінами.
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order` було замінено на `format` кореневого рівня
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Раніше до версії 0.45.0 `prompt_order` приймав масив імен модулів у порядку, в якому їх мав показувати Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Натомість Starship v0.45.0 приймає значення `format`, що дозволяє налаштувати командний рядок поза межами самих модулів.
 
-**Example pre-v0.45.0 configuration**
+**Приклад налаштувань pre-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Приклад налаштувань v0.45.0**
 
 ```toml
 format = """\
@@ -52,20 +52,20 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Модулі `prefix` та `suffix` були замінені на  `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+До версії 0.45.0 деякі модулі приймали `prefix` та/або `suffix`, щоб стилізувати спосіб показу модулів.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Натомість Starship v0.45.0 приймає значення `format`, що дозволяє додатково налаштовувати спосіб показу модулів. Замість визначення префікса та суфікса для контекстних змінних тепер змінні можна замінити з рядка формату, який представляє вихідні дані модуля.
 
-**Example pre-v0.45.0 configuration**
+**Приклад налаштувань pre-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Приклад налаштувань v0.45.0**
 
 ```toml
 [cmd_duration]
@@ -74,11 +74,11 @@ prefix = "took "
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Вражені модулі
 
 #### Character
 
-| Removed Property        | Replacement      |
+| Вилучено                | Заміна           |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
@@ -113,9 +113,9 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Command Duration – час виконання
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
 
 **Changes to the Default Configuration**
 
@@ -127,9 +127,9 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Directory
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
 
 **Changes to the Default Configuration**
 
@@ -141,10 +141,10 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Environment Variable
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **Changes to the Default Configuration**
 
@@ -157,10 +157,10 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Git Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **Changes to the Default Configuration**
 
@@ -173,11 +173,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Git Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Вилучено          | Заміна   |
+| ----------------- | -------- |
+| `prefix`          | `format` |
+| `suffix`          | `format` |
+| `show_sync_count` | `format` |
 
 **Changes to the Default Configuration**
 
@@ -204,10 +204,10 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **Changes to the Default Configuration**
 
@@ -220,11 +220,11 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `label`  | `format` |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **Changes to the Default Configuration**
 
@@ -237,9 +237,9 @@ behind = "⇣${count}"
 
 #### Time
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Вилучено | Заміна        |
+| -------- | ------------- |
+| `format` | `time_format` |
 
 **Changes to the Default Configuration**
 
@@ -252,10 +252,10 @@ behind = "⇣${count}"
 
 #### Custom Commands
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
 **Changes to the Default Configuration**
 
