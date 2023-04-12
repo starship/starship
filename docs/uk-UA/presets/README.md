@@ -36,7 +36,7 @@
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-Шаблон приховує версію поточного інтерпретатора для мов программування. Якщо ви працюєте в контейнерах або віртуалізованих середовищах, то це для вас!
+Шаблон приховує версію поточного інтерпретатора для мов програмування. Якщо ви працюєте в контейнерах або віртуалізованих середовищах, то це для вас!
 
 [![Скріншот шаблона Hide Runtime Versions](/presets/img/no-runtime-versions.png "Натисніть, щоб переглянути шаблон No Runtime Versions")](./no-runtimes)
 
@@ -54,7 +54,7 @@
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-Шаблон створений під враженням від [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Він також показу працює шлях підстановки в starship.
+Шаблон створений під враженням від [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Він також показує як працює шлях підстановки в starship.
 
 [![Скріншот шаблона Pastel Powerline](/presets/img/pastel-powerline.png "Натисніть для перегляду шаблона Pastel Powerline")](./pastel-powerline)
 
