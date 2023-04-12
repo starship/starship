@@ -4156,58 +4156,58 @@ symbol = '⚡️ '
 
 ### Параметри
 
-| Параметр            | Стандартно                      | Опис                                                                                                                                                                                                                                                                                          |
-| ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`           | `''`                            | Команда, вивід якої потрібно показувати. Команду буде передано до оболонки через stdin.                                                                                                                                                                                                       |
-| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
-| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
-| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | Опис модуля, який показується під час запуску `starship explain`.                                                                                                                                                                                                                             |
-| `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
-| `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
-| `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
-| `symbol`            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
-| `style`             | `'bold green'`                  | Стиль модуля.                                                                                                                                                                                                                                                                                 |
-| `format`            | `'[$symbol($output )]($style)'` | Формат модуля.                                                                                                                                                                                                                                                                                |
-| `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
-| `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
-| `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
-| `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
+| Параметр            | Стандартно                      | Опис                                                                                                                                                                                                                                                                                                                             |
+| ------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `''`                            | Команда, вивід якої потрібно показувати. Команду буде передано до оболонки через stdin.                                                                                                                                                                                                                                          |
+| `when`              | `false`                         | Або булеве значення (`true` чи `false`, без лапок) або команди shell, що використовуються як умова для показу модуля. У випадку рядка команди, модуль буде показаний, якщо команда повертає код завершення `0`.                                                                                                                  |
+| `require_repo`      | `false`                         | Якщо `true`, модуль буде показано лише в шляхах, що містять репозиторій (git). Цей параметр сам по собі не є достатньою умовою для показу модуля за відсутності інших варіантів.                                                                                                                                                 |
+| `shell`             |                                 | [Дивіться нижче](#custom-command-shell)                                                                                                                                                                                                                                                                                          |
+| `description`       | `'<custom module>'`       | Опис модуля, який показується під час запуску `starship explain`.                                                                                                                                                                                                                                                                |
+| `detect_files`      | `[]`                            | Файли, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                                      |
+| `detect_folders`    | `[]`                            | Теки, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                                       |
+| `detect_extensions` | `[]`                            | Розширення файлів, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                          |
+| `symbol`            | `''`                            | Символ, який йде перед виводом команди.                                                                                                                                                                                                                                                                                          |
+| `style`             | `'bold green'`                  | Стиль модуля.                                                                                                                                                                                                                                                                                                                    |
+| `format`            | `'[$symbol($output )]($style)'` | Формат модуля.                                                                                                                                                                                                                                                                                                                   |
+| `disabled`          | `false`                         | Вимикає показ модулі `custom`.                                                                                                                                                                                                                                                                                                   |
+| `os`                |                                 | Назва операційної системи, на якій буде показано модуль (unix, linux, macos, windows, … ) [Переглянути можливі значення](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                                             |
+| `use_stdin`         |                                 | Необов’язкове логічне значення, яке перевизначає, чи команди слід пересилати в оболонку через стандартний ввід чи як аргумент. Якщо не встановлено, типово використовується  стандартний ввід, якщо оболонка не підтримує його (cmd, nushell). Встановлення цього параметра вимикає обробку специфічних для оболонки аргументів. |
+| `ignore_timeout`    | `false`                         | Ігнорує глобальне налаштування `command_timeout` і продовжує виконувати зовнішні команди, незалежно від того, скільки часу вони вимагають.                                                                                                                                                                                       |
 
 ### Змінні
 
 | Змінна    | Опис                                     |
 | --------- | ---------------------------------------- |
-| output    | The output of shell command in `shell`   |
+| output    | Вивід команд в `shell`                   |
 | symbol    | Віддзеркалює значення параметра `symbol` |
 | style\* | Віддзеркалює значення параметра `style`  |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
-#### Custom command shell
+#### Власні команди shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` приймає непустий список рядків, де:
 
-- The first string is the path to the shell to use to execute the command.
-- Other following arguments are passed to the shell.
+- Перший рядок — це шлях до оболонки для виконання команди.
+- Наступні — інші аргументи, що передаються до оболонки.
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+Якщо не налаштовано, модуль повертатиметься до STARSHIP_SHELL, а потім до «sh» у Linux і «cmd /C» у Windows.
 
-The `command` will be passed in on stdin.
+Команда `command` буде передана до stdin.
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+Якщо `shell` не вказано або містить тільки один елемент і Starship виявить, що буде використано PowerShell, наступні аргументи будуть автоматично додані: `-Noprofile -Command -`. Якщо `shell` не вказано або міститься лише один елемент і Starship виявить, що буде використано Cmd, аргумент`/C`  буде автоматично додано, а `stdin` буде встановлено у `false`. Якщо `shell` не вказано або міститься лише один елемент і Starship виявить, що буде використано Nushell, аргумент`c` буде автоматично додано, а `stdin` буде встановлено у `false`. Такої поведінки можна уникнути шляхом явного передавання аргументів до оболонки, наприклад,
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning Переконайтеся, що ваша оболонка завершує процеси правильно
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+Якщо ви вказуєте власну команду, переконайтеся, що стандартний Shell, який використовується starship, буде виконувати команді з чистим (graceful) завершенням, за допомогою параметра `shell`.
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+Наприклад, PowerShell потребує параметр `-Command` для виконання однорядкової команди. Пропуск цього параметра може призвести до рекурсивного циклу starship, де оболонка може спробувати знову завантажити середовище повного профілю з самим starship і, отже, повторно виконати спеціальну команду, потрапивши в нескінченний цикл.
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+Параметри, подібні до `-NoProfile` у PowerShell, також рекомендовані для інших оболонок, щоб уникнути додаткового часу завантаження власного профілю під час кожного виклику Starship.
 
 Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
