@@ -1,12 +1,12 @@
-[Return to Presets](./README.md#no-nerd-fonts)
+[Повернутися до Шаблонів](./README.md#no-nerd-fonts)
 
-# No Nerd Fonts Preset
+# No Nerd Fonts
 
-This preset restricts the use of symbols to those from emoji and powerline sets.
+Шаблон обмежує використання символів символами емодзі та powerline.
 
-This means that even without a Nerd Font installed, you should be able to view all module symbols.
+Це означає, що навіть без встановленого шрифту Nerd Font, ви можете побачити всі символи модуля.
 
-This preset will become the default preset in a future release of starship.
+Цей шаблон стане стандартною схемою в наступному випуску starship.
 
 ### Налаштування
 
@@ -14,6 +14,6 @@ This preset will become the default preset in a future release of starship.
 starship preset no-nerd-font -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-nerd-font.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/no-nerd-font.toml)
 
 <<< @/.vuepress/public/presets/toml/no-nerd-font.toml
