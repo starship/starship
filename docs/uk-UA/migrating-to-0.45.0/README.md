@@ -85,7 +85,7 @@ format = "took [$duration]($style) "
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [character]
@@ -98,18 +98,18 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Раніше параметр `use_symbol_for_status` використовувався для налаштування запиту на показ `error_symbol`, коли остання команда призводила до ненульового коду стану.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+З випуском версії 0.45.0 ми тепер завжди використовуємо `error_symbol` після ненульових кодів стану, об’єднуючи параметри `use_symbol_for_status` і `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Щоб налаштувати запит на використання старішої конфігурації `use_symbol_for_status = true`, додайте наступне до свого файлу налаштувань:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-_Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+_Примітка:_ Елемент `character` автоматично додає пробіл після, тому, на відміну від інших рядків `format`, ми спеціально не додаємо його в наведених вище прикладах.
 
 #### Command Duration – час виконання
 
@@ -117,7 +117,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | -------- | -------- |
 | `prefix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [cmd_duration]
@@ -131,7 +131,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | -------- | -------- |
 | `prefix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [directory]
@@ -146,7 +146,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | `prefix` | `format` |
 | `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [env_var]
@@ -162,7 +162,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | `prefix` | `format` |
 | `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [git_commit]
@@ -179,7 +179,7 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 | `suffix`          | `format` |
 | `show_sync_count` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [git_status]
@@ -189,11 +189,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Раніше параметр `show_sync_count` використовувався для налаштування запиту на показ кількості комітів, на які гілка була попереду або позаду віддаленої гілки.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+З випуском версії 0.45.0 це було замінено трьома окремими параметрами: `ahead`, `behind` і `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Щоб налаштувати командний рядок на використання старішої конфігурації `show_sync_count = true`, встановіть у файлі налаштувань таке:
 
 ```toml
 [git_status]
@@ -209,7 +209,7 @@ behind = "⇣${count}"
 | `prefix` | `format` |
 | `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [hostname]
@@ -226,7 +226,7 @@ behind = "⇣${count}"
 | `prefix` | `format` |
 | `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [singularity]
@@ -241,7 +241,7 @@ behind = "⇣${count}"
 | -------- | ------------- |
 | `format` | `time_format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [time]
@@ -250,14 +250,14 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### Власні команди
 
 | Вилучено | Заміна   |
 | -------- | -------- |
 | `prefix` | `format` |
 | `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [custom.example]
