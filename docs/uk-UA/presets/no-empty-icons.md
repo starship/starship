@@ -1,8 +1,8 @@
 [Повернутися до Шаблонів](./README.md#no-empty-icons)
 
-# No Empty Icons Preset
+# No Empty Icons
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+Якщо файли набору інструмента ідентифіковано — буде показано його іконку. Якщо інструмент не знайдено, щоб визначити номер його версії, він не показується. Цей шаблон змінює поведінку показу значків. Показуються значки лише для інструментів, інформацію про які вдалося визначити.
 
 ![Скріншот шаблона No Empty Icons](/presets/img/no-empty-icons.png)
 
