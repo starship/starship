@@ -1,12 +1,12 @@
 [Повернутися до Шаблонів](./README.md#no-nerd-fonts)
 
-# No Nerd Fonts Preset
+# No Nerd Fonts
 
-This preset restricts the use of symbols to those from emoji and powerline sets.
+Шаблон обмежує використання символів символами емодзі та powerline.
 
-This means that even without a Nerd Font installed, you should be able to view all module symbols.
+Це означає, що навіть без встановленого шрифту Nerd Font, ви можете побачити всі символи модуля.
 
-This preset will become the default preset in a future release of starship.
+Цей шаблон стане стандартною схемою в наступному випуску starship.
 
 ### Налаштування
 
