@@ -1,6 +1,6 @@
 [Повернутися до Шаблонів](./README.md#plain-text-symbols)
 
-## Plain Text Symbols Preset
+## Plain Text Symbols
 
 Цей шаблон замінює символи в кожному модулі звичайним текстом. Це ваш вибір, якщо у вас немає доступу до символів Unicode.
 
