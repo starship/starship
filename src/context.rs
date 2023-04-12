@@ -784,6 +784,7 @@ fn parse_width(width: &str) -> Result<usize, ParseIntError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::default_context;
     use std::io;
 
     fn testdir(paths: &[&str]) -> Result<tempfile::TempDir, std::io::Error> {
@@ -951,22 +952,8 @@ mod tests {
 
     #[test]
     fn set_config_method_overwrites_constructor() {
-        let test_path = Path::new("/test_path").to_path_buf();
-        let context = Context::new_with_shell_and_path(
-            Default::default(),
-            Shell::Unknown,
-            Target::Main,
-            test_path.clone(),
-            test_path.clone(),
-        );
-        let mod_context = Context::new_with_shell_and_path(
-            Default::default(),
-            Shell::Unknown,
-            Target::Main,
-            test_path.clone(),
-            test_path,
-        )
-        .set_config(toml::toml! {
+        let context = default_context();
+        let mod_context = default_context().set_config(toml::toml! {
             add_newline = true
         });
 
