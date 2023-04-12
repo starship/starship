@@ -3883,7 +3883,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Time
 
-Модуль `time` показує поточний **місцевий** час. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показує поточний **місцевий** час. Значення `format` використовується в [`chrono`](https://crates.io/crates/chrono) для керування показу часу. Перегляньте [документацію chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), щоб побачити, які параметри доступні.
 
 ::: tip
 
@@ -3893,23 +3893,23 @@ format = '[🏎💨 $workspace]($style) '
 
 ### Параметри
 
-| Параметр          | Стандартно              | Опис                                                                                                                               |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | Формат рядка модуля.                                                                                                               |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Вимикає модуль `time`.                                                                                                             |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| Параметр          | Стандартно              | Опис                                                                                                                    |
+| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | Формат рядка модуля.                                                                                                    |
+| `use_12hr`        | `false`                 | Вмикає 12-годинний формат                                                                                               |
+| `time_format`     | дивіться нижче          | Формат [chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) використовується для форматування часу. |
+| `style`           | `'bold yellow'`         | Стиль модуля time                                                                                                       |
+| `utc_time_offset` | `'local'`               | Встановлює зсув від UTC. Діапазон від -24 &lt; x &lt; 24. Дозволяє часові пояси із сувом 30/45 хвилин.      |
+| `disabled`        | `true`                  | Вимикає модуль `time`.                                                                                                  |
+| `time_range`      | `'-'`                   | Встановлює діапазон часу, протягом якого модуль показується. Час має бути зазначений у 24-годинному форматі             |
 
-If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
+Якщо `use_12hr` є `true`, то стандартно `time_format` — `'%r'`. В іншому випадку стандартне значення — `'%T'`. Налаштований вручну `time_format` має перевагу над параметром `use_12hr`.
 
 ### Змінні
 
 | Змінна    | Приклад    | Опис                                    |
 | --------- | ---------- | --------------------------------------- |
-| time      | `13:08:10` | The current time.                       |
+| time      | `13:08:10` | Поточний час.                           |
 | style\* |            | Віддзеркалює значення параметра `style` |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
@@ -3929,35 +3929,35 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-The `username` module shows active user's username. Модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `username` показує імʼя активного користувача. Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current user is root/admin
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- Поточний користувач має права суперкористувача
+- Поточний користувач не є таким же, як той, який увійшов до системи
+- Користувач зараз підключений через SSH
+- Змінна `show_always` встановлена в true
 
 ::: tip
 
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+Підключення SSH виявляється шляхом перевірки змінних середовища `SSH_CONNECTION`, `SSH_CLIENT` і `SSH_TTY`. Якщо ваш хост SSH не налаштував ці змінні, одним зі способів розвʼязання проблеми є встановлення для однієї з них фіктивного значення.
 
 :::
 
 ### Параметри
 
-| Параметр      | Стандартно              | Опис                                        |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
-| `format`      | `'[$user]($style) in '` | Формат модуля.                              |
-| `show_always` | `false`                 | Always shows the `username` module.         |
-| `disabled`    | `false`                 | Вимикає модуль `username`.                  |
+| Параметр      | Стандартно              | Опис                                                       |
+| ------------- | ----------------------- | ---------------------------------------------------------- |
+| `style_root`  | `'bold red'`            | Стиль, який використовується коли користувач є root/admin. |
+| `style_user`  | `'bold yellow'`         | Стиль для звичайних користувачів.                          |
+| `format`      | `'[$user]($style) in '` | Формат модуля.                                             |
+| `show_always` | `false`                 | Завжди показувати модуль `username`.                       |
+| `disabled`    | `false`                 | Вимикає модуль `username`.                                 |
 
 ### Змінні
 
-| Змінна  | Приклад      | Опис                                                                                        |
-| ------- | ------------ | ------------------------------------------------------------------------------------------- |
-| `style` | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`  | `'matchai'`  | The currently logged-in user ID.                                                            |
+| Змінна  | Приклад      | Опис                                                                                                |
+| ------- | ------------ | --------------------------------------------------------------------------------------------------- |
+| `style` | `'red bold'` | Віддзеркалює значення параметра `style_root` коли користувач root, і `style_user` в іншому випадку. |
+| `user`  | `'matchai'`  | Поточний користувач.                                                                                |
 
 ### Приклад
 
@@ -3974,9 +3974,9 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `vagrant` показує поточну встановлену версію [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `Vagrantfile` file
+- Поточна тека містить файл `Vagrantfile`
 
 ### Параметри
 
@@ -3984,7 +3984,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'⍱ '`                               | A format string representing the symbol of Vagrant.               |
+| `symbol`            | `'⍱ '`                               | Формат рядка, що представляє символ Vagrant.                      |
 | `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['Vagrantfile']`                    | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
@@ -3995,7 +3995,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 | Змінна    | Приклад          | Опис                                     |
 | --------- | ---------------- | ---------------------------------------- |
-| version   | `Vagrant 2.2.10` | The version of `Vagrant`                 |
+| version   | `Vagrant 2.2.10` | Версія `Vagrant`                         |
 | symbol    |                  | Віддзеркалює значення параметра `symbol` |
 | style\* |                  | Віддзеркалює значення параметра `style`  |
 
@@ -4012,10 +4012,10 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `vlang` показує поточну встановлену версію [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a file with `.v` extension
-- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
+- Поточна тека містить файли з розширенням `.v`
+- Поточна тека містить файли `v.mod`, `vpkg.json` або `.vpkg-lock.json`
 
 ### Параметри
 
@@ -4023,7 +4023,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`         | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'V '`                                       | A format string representing the symbol of V                      |
+| `symbol`            | `'V '`                                       | Формат рядка, що представляє символ V                             |
 | `detect_extensions` | `['v']`                                      | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                         | В яких теках цей модуль має запускатись.                          |
@@ -4034,7 +4034,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
-| version   | `v0.2`  | The version of `v`                       |
+| version   | `v0.2`  | Версія `v`                               |
 | symbol    |         | Віддзеркалює значення параметра `symbol` |
 | style\* |         | Віддзеркалює значення параметра `style`  |
 
@@ -4048,24 +4048,24 @@ format = 'via [V $version](blue bold) '
 
 ## VCSH
 
-The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
+Модуль `vcsh` показує поточний репозиторій [VCSH](https://github.com/RichiH/vcsh). Модуль показується лише в тому випадку, якщо репозиторій використовується.
 
 ### Параметри
 
-| Параметр   | Стандартно                       | Опис                                                   |
-| ---------- | -------------------------------- | ------------------------------------------------------ |
-| `symbol`   | `''`                             | The symbol used before displaying the repository name. |
-| `style`    | `'bold yellow'`                  | Стиль модуля.                                          |
-| `format`   | `'vcsh [$symbol$repo]($style) '` | Формат модуля.                                         |
-| `disabled` | `false`                          | Вимикає модуль `vcsh`.                                 |
+| Параметр   | Стандартно                       | Опис                                               |
+| ---------- | -------------------------------- | -------------------------------------------------- |
+| `symbol`   | `''`                             | Символ, який знаходиться перед назвою репозиторію. |
+| `style`    | `'bold yellow'`                  | Стиль модуля.                                      |
+| `format`   | `'vcsh [$symbol$repo]($style) '` | Формат модуля.                                     |
+| `disabled` | `false`                          | Вимикає модуль `vcsh`.                             |
 
 ### Змінні
 
-| Змінна    | Приклад                                     | Опис                                     |
-| --------- | ------------------------------------------- | ---------------------------------------- |
-| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name               |
-| symbol    |                                             | Віддзеркалює значення параметра `symbol` |
-| style\* | `black bold dimmed`                         | Віддзеркалює значення параметра `style`  |
+| Змінна    | Приклад                                       | Опис                                     |
+| --------- | --------------------------------------------- | ---------------------------------------- |
+| repo      | `dotfiles` якщо в VCSH repo з іменем dotfiles | Назва поточного репозиторію              |
+| symbol    |                                               | Віддзеркалює значення параметра `symbol` |
+| style\* | `black bold dimmed`                           | Віддзеркалює значення параметра `style`  |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -4080,9 +4080,9 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `zig` показує поточну встановлену версію [Zig](https://ziglang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `.zig` file
+- Поточна тека містить файл `.zig`
 
 ### Параметри
 
@@ -4090,7 +4090,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.             |
+| `symbol`            | `'↯ '`                               | Символ, який знаходиться перед версією Zig.                       |
 | `style`             | `'bold yellow'`                      | Стиль модуля.                                                     |
 | `disabled`          | `false`                              | Вимикає модуль `zig`.                                             |
 | `detect_extensions` | `['zig']`                            | Які розширення повинні запускати цей модуль.                      |
@@ -4101,7 +4101,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v0.6.0` | The version of `zig`                     |
+| version   | `v0.6.0` | Версія `zig`                             |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -4116,41 +4116,41 @@ By default the `zig` module shows the currently installed version of [Zig](https
 symbol = '⚡️ '
 ```
 
-## Custom commands
+## Власні команди
 
-The `custom` modules show the output of some arbitrary commands.
+Модулі `custom` показують результат виконання певних довільних команд.
 
-These modules will be shown if any of the following conditions are met:
+Модулі показуються, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a file whose name is in `detect_files`
-- The current directory contains a directory whose name is in `detect_folders`
-- The current directory contains a file whose extension is in `detect_extensions`
-- The `when` command returns 0
-- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
+- Поточна тека містить файл, ім'я якого є в `detect_files`
+- Поточна тека містить теки, ім'я яких вказано в `detect_folders`
+- Поточна тека містить файл, розширення якого є в `detect_extensions`
+- Команда `when` повертає 0
+- Поточна операційна система (std::env::consts::OS) збігається з полем `os`, якщо визначено.
 
 ::: tip
 
-Multiple custom modules can be defined by using a `.`.
+Кілька власних модулів можна визначити за допомогою символу "`.`".
 
 :::
 
 ::: tip
 
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
+Порядок в якому власні модулі будуть показуватись може бути встановлений індивідуально додаванням `${custom.foo}` до змінної `format` верхнього рівня (через те, що назви містять точки вам треба використовувати`${...}`). Типово, модуль `custom` покаже усі модулі custom, в тому порядку, в якому вони були визначені.
 
 :::
 
 ::: tip
 
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
+[Квиток #1252](https://github.com/starship/starship/discussions/1252) містить приклади власних модулів. Якщо у вас є цікавий приклад ще не розкритий там, не соромтеся, поділитися ним!
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning Вихідні дані команди друкуються без екранування
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+Незалежно від результату, який генерує команда, він виводиться в командний рядок у незміненому вигляді. Це означає, що якщо вивід містить спеціальні послідовності, які інтерпретуються оболонкою, вони будуть оброблені та перетворені оболонкою при виводі. Ці спеціальні послідовності є специфічними для оболонки, напр. ви можете написати модуль, який записує послідовності bash, наприклад. `\h`, але цей модуль не працюватиме в оболонці fish або zsh.
 
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+Рядок формату також може містити специфічні послідовності командного рядка, наприклад [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 
@@ -4158,7 +4158,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 | Параметр            | Стандартно                      | Опис                                                                                                                                                                                                                                                                                          |
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
+| `command`           | `''`                            | Команда, вивід якої потрібно показувати. Команду буде передано до оболонки через stdin.                                                                                                                                                                                                       |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
