@@ -1,6 +1,6 @@
 [Повернутися до Шаблонів](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Nerd Font Symbols
 
 Цей стиль змінює символи для кожного модуля на символи з Nerd Font.
 
@@ -8,7 +8,7 @@
 
 ### Передумови
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- Встановлений та увімкнений у Вашому терміналі набір шрифтів [Nerd Font (для прикладу, спробуйте Fira Code Nerd Font](https://www.nerdfonts.com/))
 
 ### Налаштування
 
