@@ -1,14 +1,14 @@
 [Повернутися до Шаблонів](./README.md#pastel-powerline)
 
-# Pastel Powerline Preset
+# Pastel Powerline
 
-Шаблон створений під враженням від [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Він також показу працює шлях підстановки в starship.
+Шаблон створений під враженням від [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Він також показує як працює шлях підстановки в starship.
 
 ![Скріншот шаблона Pastel Powerline](/presets/img/pastel-powerline.png)
 
 ### Передумови
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
+- Встановлений та увімкнений у Вашому терміналі набір шрифтів [Nerd Font (для прикладу, спробуйте Caskaydia Cove Nerd Font](https://www.nerdfonts.com/))
 
 ### Налаштування
 
