@@ -1,10 +1,10 @@
-[Return to Presets](./README.md#nerd-font-symbols)
+[Повернутися до Шаблонів](./README.md#nerd-font-symbols)
 
 # Nerd Font Symbols Preset
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Цей стиль змінює символи для кожного модуля на символи з Nerd Font.
 
-![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png)
+![Скріншот шаблона Nerd Font Symbols](/presets/img/nerd-font-symbols.png)
 
 ### Передумови
 
@@ -16,6 +16,6 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
