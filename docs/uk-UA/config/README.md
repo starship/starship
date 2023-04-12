@@ -1488,7 +1488,7 @@ AA -------------------------------------------- BB -----------------------------
 | `format`            | `'on [$symbol$branch]($style) '` | Формат модуля. Використовуйте `'$branch` для посилання на поточну гілку.                                                              |
 | `symbol`            | `' '`                           | Символ, що використовується перед назвою гілки у вашій поточній теці.                                                                 |
 | `style`             | `'bold purple'`                  | Стиль модуля.                                                                                                                         |
-| `truncation_length` | `2^63 - 1`                       | Скорочує назву гілки Fossil на `N` графем                                                                                             |
+| `truncation_length` | `2^63 - 1`                       | Скорочує назву гілки Fossil до `N` графем                                                                                             |
 | `truncation_symbol` | `'…'`                            | Символ, що використовується для позначення назви гілки, яка була скорочена. Ви можете використовувати `''`, щоб нічого не показувати. |
 | `disabled`          | `true`                           | Вимикає модуль `fossil_branch`.                                                                                                       |
 
@@ -1598,7 +1598,7 @@ very-long-project-name = 'vlpn'
 | `format`             | `'on [$symbol$branch(:$remote_branch)]($style) '` | Формат модуля. Використовуйте `'$branch` для посилання на поточну гілку.                                                              |
 | `symbol`             | `' '`                                            | Формат рядка, що представляє символ гілки git.                                                                                        |
 | `style`              | `'bold purple'`                                   | Стиль модуля.                                                                                                                         |
-| `truncation_length`  | `2^63 - 1`                                        | Скорочує назву гілки git на `N` графем.                                                                                               |
+| `truncation_length`  | `2^63 - 1`                                        | Скорочує назву гілки git до `N` графем.                                                                                               |
 | `truncation_symbol`  | `'…'`                                             | Символ, що використовується для позначення назви гілки, яка була скорочена. Ви можете використовувати `''`, щоб нічого не показувати. |
 | `only_attached`      | `false`                                           | Показувати назву гілки тільки коли вона не у відʼєднаному від `HEAD` стані.                                                           |
 | `ignore_branches`    | `[]`                                              | Перелік назв, які не треба показувати. Корисно для 'master' або 'main'.                                                               |
@@ -2530,7 +2530,7 @@ style = 'bold dimmed green'
 
 | Параметр            | Стандартно                         | Опис                                                                                                                                     |
 | ------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `2^32 - 1`                         | Скорочує назву проєкту на `N` графем.                                                                                                    |
+| `truncation_length` | `2^32 - 1`                         | Скорочує назву проєкту до `N` графем.                                                                                                    |
 | `truncation_symbol` | `'…'`                              | Символ, що використовується для позначення назви проєкту, який було скорочено. Ви можете використовувати `''`, щоб нічого не показувати. |
 | `format`            | `'via [$symbol$project]($style) '` | Формат модуля.                                                                                                                           |
 | `symbol`            | `'⬢ '`                             | Символ, який знаходиться перед назвою проєкту.                                                                                           |
@@ -2570,7 +2570,7 @@ style = 'bold dimmed green'
 | `symbol`            | `' '`                                    | Символ, що використовується перед закладкою hg чи назвою гілки у вашій поточній теці. |
 | `style`             | `'bold purple'`                           | Стиль модуля.                                                                         |
 | `format`            | `'on [$symbol$branch(:$topic)]($style) '` | Формат модуля.                                                                        |
-| `truncation_length` | `2^63 - 1`                                | Скорочує назву гілки/вершини на `N` графем                                            |
+| `truncation_length` | `2^63 - 1`                                | Скорочує назву гілки/вершини до `N` графем                                            |
 | `truncation_symbol` | `'…'`                                     | Символ, що використовується для позначення назви гілки, яка була скорочена.           |
 | `disabled`          | `true`                                    | Вимикає модуль `hg_branch`.                                                           |
 
@@ -2708,7 +2708,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 | Змінна    | Приклад    | Опис                                     |
 | --------- | ---------- | ---------------------------------------- |
-| version   | `v13.12.0` | The version of `node`                    |
+| version   | `v13.12.0` | Версія `node`                            |
 | symbol    |            | Віддзеркалює значення параметра `symbol` |
 | style\* |            | Віддзеркалює значення параметра `style`  |
 
@@ -2725,14 +2725,14 @@ format = 'via [🤖 $version](bold green) '
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `ocaml` показує поточну встановлену версію [OCaml](https://ocaml.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a file with `.opam` extension or `_opam` directory
-- The current directory contains a `esy.lock` directory
-- The current directory contains a `dune` or `dune-project` file
-- The current directory contains a `jbuild` or `jbuild-ignore` file
-- The current directory contains a `.merlin` file
-- The current directory contains a file with `.ml`, `.mli`, `.re` or `.rei` extension
+- Поточна тека містить файли з розширенням `.opam` або теку `_opam`
+- Поточна тека містить теку `esy.lock`
+- Поточна тека містить файли `dune` або `dune-project`
+- Поточна тека містить файли `jbuild` чи `jbuild-ignore`
+- Поточна тека містить файл `.merlin`
+- Поточна тека містить файли з розширеннями `.ml`, `.mli`, `.re` або `.rei`
 
 ### Параметри
 
@@ -2740,9 +2740,9 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | ------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | Формат рядка модуля.                                              |
 | `version_format`          | `'v${raw}'`                                                                | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`                  | `'🐫 '`                                                                     | The symbol used before displaying the version of OCaml.           |
-| `global_switch_indicator` | `''`                                                                       | The format string used to represent global OPAM switch.           |
-| `local_switch_indicator`  | `'*'`                                                                      | The format string used to represent local OPAM switch.            |
+| `symbol`                  | `'🐫 '`                                                                     | Символ, який знаходиться перед версією OCaml.                     |
+| `global_switch_indicator` | `''`                                                                       | Формат рядка для глобального перемикача OPAM.                     |
+| `local_switch_indicator`  | `'*'`                                                                      | Формат рядка для локального перемикача OPAM.                      |
 | `detect_extensions`       | `['opam', 'ml', 'mli', 're', 'rei']`                                       | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`            | `['dune', 'dune-project', 'jbuild', 'jbuild-ignore', '.merlin']`           | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`          | `['_opam', 'esy.lock']`                                                    | В яких теках цей модуль має запускатись.                          |
@@ -2751,13 +2751,13 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Змінні
 
-| Змінна           | Приклад      | Опис                                                              |
-| ---------------- | ------------ | ----------------------------------------------------------------- |
-| version          | `v4.10.0`    | The version of `ocaml`                                            |
-| switch_name      | `my-project` | The active OPAM switch                                            |
-| switch_indicator |              | Mirrors the value of `indicator` for currently active OPAM switch |
-| symbol           |              | Віддзеркалює значення параметра `symbol`                          |
-| style\*        |              | Віддзеркалює значення параметра `style`                           |
+| Змінна           | Приклад      | Опис                                                            |
+| ---------------- | ------------ | --------------------------------------------------------------- |
+| version          | `v4.10.0`    | Версія `ocaml`                                                  |
+| switch_name      | `my-project` | Поточний перемикач OPAM                                         |
+| switch_indicator |              | Віддзеркалює значення `indicator` для поточного перемикача OPAM |
+| symbol           |              | Віддзеркалює значення параметра `symbol`                        |
+| style\*        |              | Віддзеркалює значення параметра `style`                         |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -2772,7 +2772,7 @@ format = 'via [🐪 $version]($style) '
 
 ## Open Policy Agent
 
-The `opa` module shows the currently installed version of the OPA tool. By default the module will be shown if the current directory contains a `.rego` file.
+Модуль `opa` показує поточну встановлену версію OPA. Стандартно модуль буде показаний, якщо поточна тека містить файли `.rego`.
 
 ### Параметри
 
@@ -2780,7 +2780,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🪖  '`                              | A format string representing the symbol of OPA.                   |
+| `symbol`            | `'🪖  '`                              | Формат рядка, що представляє символ OPA.                          |
 | `detect_extensions` | `['rego']`                           | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
@@ -2791,7 +2791,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| version   | `v0.44.0` | The version of `opa`                     |
+| version   | `v0.44.0` | Версія `opa`                             |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -2808,23 +2808,23 @@ format = 'via [⛑️  $version](bold red) '
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+Модуль `openstack` показує поточну хмару OpenStack і проєкт. Модуль активний лише тоді, коли встановлено змінну оточення `OS_CLOUD`, і в цьому випадку він читатиме файл `clouds.yaml` із будь-якого з [стандартного розташування](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files), щоб отримати поточний проєкт для використання.
 
 ### Параметри
 
-| Параметр   | Стандартно                                      | Опис                                                           |
-| ---------- | ----------------------------------------------- | -------------------------------------------------------------- |
-| `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | Формат модуля.                                                 |
-| `symbol`   | `'☁️ '`                                         | The symbol used before displaying the current OpenStack cloud. |
-| `style`    | `'bold yellow'`                                 | Стиль модуля.                                                  |
-| `disabled` | `false`                                         | Вимикає модуль `openstack`.                                    |
+| Параметр   | Стандартно                                      | Опис                                                                          |
+| ---------- | ----------------------------------------------- | ----------------------------------------------------------------------------- |
+| `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | Формат модуля.                                                                |
+| `symbol`   | `'☁️ '`                                         | Символ, який використовується під час показу перед поточною хмарою OpenStack. |
+| `style`    | `'bold yellow'`                                 | Стиль модуля.                                                                 |
+| `disabled` | `false`                                         | Вимикає модуль `openstack`.                                                   |
 
 ### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
-| cloud     | `corp`  | The current OpenStack cloud              |
-| project   | `dev`   | The current OpenStack project            |
+| cloud     | `corp`  | Поточна хмара OpenStack                  |
+| project   | `dev`   | Поточний проєкт OpenStack                |
 | symbol    |         | Віддзеркалює значення параметра `symbol` |
 | style\* |         | Віддзеркалює значення параметра `style`  |
 
@@ -2843,11 +2843,11 @@ symbol = '☁️ '
 
 ## OS
 
-The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
+Модуль `os` показує поточну операційну систему. Інформація про ОС отримується через [os_info](https://lib.rs/crates/os_info).
 
 ::: warning
 
-The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
+[os_info](https://lib.rs/crates/os_info), що використовується в цьому модулі, може бути неточним для деяких систем.
 
 :::
 
@@ -2859,17 +2859,17 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 
 ### Параметри
 
-| Параметр   | Стандартно            | Опис                                                   |
-| ---------- | --------------------- | ------------------------------------------------------ |
-| `format`   | `"[$symbol]($style)"` | Формат модуля.                                         |
-| `style`    | `"bold white"`        | Стиль модуля.                                          |
-| `disabled` | `true`                | Вимикає модуль `os`.                                   |
-| `symbols`  |                       | A table that maps each operating system to its symbol. |
+| Параметр   | Стандартно            | Опис                                             |
+| ---------- | --------------------- | ------------------------------------------------ |
+| `format`   | `"[$symbol]($style)"` | Формат модуля.                                   |
+| `style`    | `"bold white"`        | Стиль модуля.                                    |
+| `disabled` | `true`                | Вимикає модуль `os`.                             |
+| `symbols`  |                       | Таблиця символів для кожної операційної системи. |
 
-`symbols` allows you to define arbitrary symbols to display for each operating system type. Operating system types not defined by your configuration use the default symbols table below. All operating systems currently supported by the module are listed below. If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
+`symbols` дозволяє визначити довільні символи для кожного типу операційної системи. Типи операційних систем не визначені вашою конфігурацією, використовують стандартну таблицю символів, дивись нижче. На цю мить усі операційні системи, що підтримуються модулем, перераховані нижче. Якщо ви бажаєте додати операційну систему, то можете створити [запит на функцію](https://github.com/starship/starship/issues/new/choose).
 
 ```toml
-# This is the default symbols table.
+# Це таблиця стандартних символів.
 [os.symbols]
 Alpaquita = "🔔 "
 Alpine = "🏔️ "
@@ -2916,15 +2916,15 @@ Windows = "🪟 "
 
 ### Змінні
 
-| Змінна    | Приклад      | Опис                                                               |
-| --------- | ------------ | ------------------------------------------------------------------ |
-| symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
-| name      | `Arch Linux` | The current operating system name                                  |
-| тип       | `Arch`       | The current operating system type                                  |
-| codename  |              | The current operating system codename, if applicable               |
-| edition   |              | The current operating system edition, if applicable                |
-| version   |              | The current operating system version, if applicable                |
-| style\* |              | Віддзеркалює значення параметра `style`                            |
+| Змінна    | Приклад      | Опис                                                                  |
+| --------- | ------------ | --------------------------------------------------------------------- |
+| symbol    | `🎗️`         | Поточний символ операційної системи з розширеного параметра `symbols` |
+| name      | `Arch Linux` | Назва поточної операційної системи                                    |
+| type      | `Arch`       | Тип поточної операційної системи                                      |
+| codename  |              | Поточна кодова назва операційної системи, за наявності                |
+| edition   |              | Поточна редакція операційної системи, за наявності                    |
+| version   |              | Поточна версія операційної системи, за наявності                      |
+| style\* |              | Віддзеркалює значення параметра `style`                               |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -2945,44 +2945,44 @@ Arch = "Arch is the best! "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+Модуль `package` показується, коли поточна тека є сховищем для пакунка, і показує його поточну версію. Наразі модуль підтримує наступні пакунки `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` та `dart`.
 
-- [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
-- [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
-- [**Nimble**](https://github.com/nim-lang/nimble) - The `nimble` package version is extracted from the `*.nimble` file present in the current directory with the `nimble dump` command
-- [**Poetry**](https://python-poetry.org/) – The `poetry` package version is extracted from the `pyproject.toml` present in the current directory
-- [**Python**](https://www.python.org) - The `python` package version is extracted from a [PEP 621](https://peps.python.org/pep-0621/) compliant `pyproject.toml` or a `setup.cfg` present in the current directory
-- [**Composer**](https://getcomposer.org/) – The `composer` package version is extracted from the `composer.json` present in the current directory
-- [**Gradle**](https://gradle.org/) – The `gradle` package version is extracted from the `build.gradle` present in the current directory
-- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) - The package version is extracted from the `Project.toml` present in the current directory
-- [**Mix**](https://hexdocs.pm/mix/) - The `mix` package version is extracted from the `mix.exs` present in the current directory
-- [**Helm**](https://helm.sh/docs/helm/helm_package/) - The `helm` chart version is extracted from the `Chart.yaml` present in the current directory
-- [**Maven**](https://maven.apache.org/) - The `maven` package version is extracted from the `pom.xml` present in the current directory
-- [**Meson**](https://mesonbuild.com/) - The `meson` package version is extracted from the `meson.build` present in the current directory
-- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) - The `shards` package version is extracted from the `shard.yml` present in the current directory
-- [**V**](https://vlang.io) - The `vlang` package version is extracted from the `v.mod` present in the current directory
-- [**SBT**](https://scala-sbt.org) - The `sbt` package version is extracted from the `build.sbt` present in the current directory
-- [**Daml**](https://www.digitalasset.com/developers) - The `daml` package version is extracted from the `daml.yaml` present in the current directory
-- [**Dart**](https://pub.dev/) - The `dart` package version is extracted from the `pubspec.yaml` present in the current directory
+- [**npm**](https://docs.npmjs.com/cli/commands/npm) — версія пакунка `npm` отримується з `package.json` з поточної теки
+- [**Cargo**](https://doc.rust-lang.org/cargo/) — версія пакунка `cargo` отримується з `Cargo.toml` з поточної теки
+- [**Nimble**](https://github.com/nim-lang/nimble) — версія пакунка `nimble` з файлу `*.nimble` з поточної теки, отримана командою `nimble dump`
+- [**Poetry**](https://python-poetry.org/) — версія пакунка  `poetry` отримується з `pyproject.toml` з поточної теки
+- [**Python**](https://www.python.org) — версія пакунка `python` отримана із [PEP 621](https://peps.python.org/pep-0621/) сумісних файлів `pyproject.toml` чи `setup.cfg` у поточній теці
+- [**Composer**](https://getcomposer.org/) — версія пакунка `composer` отримується з `composer.json` з поточної теки
+- [**Gradle**](https://gradle.org/) — версія пакунка `gradle` отримується з `build.gradle` з поточної теки
+- [**Julia**](https://docs.julialang.org/en/v1/stdlib/Pkg/) — версія пакунка отримується з `Project.toml` з поточної теки
+- [**Mix**](https://hexdocs.pm/mix/) — версія пакунка `mix` отримується з `mix.exs` з поточної теки
+- [**Helm**](https://helm.sh/docs/helm/helm_package/) — версія чарту `helm` отримується з `Chart.yaml` з поточної теки
+- [**Maven**](https://maven.apache.org/) — версія пакунка `maven` отримується з `pom.xml` з поточної теки
+- [**Meson**](https://mesonbuild.com/) — версія пакунка `meson` отримується з `meson.build` з поточної теки
+- [**Shards**](https://crystal-lang.org/reference/the_shards_command/index.html) — версія пакунка `shards` отримується з `shard.yml` з поточної теки
+- [**V**](https://vlang.io) — версія пакунка `vlang` отримується з `v.mod` з поточної теки
+- [**SBT**](https://scala-sbt.org) — версія пакунка `sbt` отримується з `build.sbt` з поточної теки
+- [**Daml**](https://www.digitalasset.com/developers) — версія пакунка `daml` отримується з `daml.yaml` з поточної теки
+- [**Dart**](https://pub.dev/) — версія пакунка `dart` отримується з `pubspec.yaml` з поточної теки
 
-> ⚠️ The version being shown is that of the package whose source code is in your current directory, not your package manager.
+> ⚠️ Показується версія пакунка, сирці якого знаходяться у вашій поточній теці, а не у вашому менеджері пакунків.
 
 ### Параметри
 
 | Параметр          | Стандартно                        | Опис                                                              |
 | ----------------- | --------------------------------- | ----------------------------------------------------------------- |
 | `format`          | `'is [$symbol$version]($style) '` | Формат модуля.                                                    |
-| `symbol`          | `'📦 '`                            | The symbol used before displaying the version the package.        |
+| `symbol`          | `'📦 '`                            | Символ, який знаходиться перед версією пакунка.                   |
 | `version_format`  | `'v${raw}'`                       | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
 | `style`           | `'bold 208'`                      | Стиль модуля.                                                     |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.         |
+| `display_private` | `false`                           | Вмикає показ версій для приватних пакунків.                       |
 | `disabled`        | `false`                           | Вимикає модуль `package`.                                         |
 
 ### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v1.0.0` | The version of your package              |
+| version   | `v1.0.0` | Версія вашого пакунка                    |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -2999,13 +2999,13 @@ format = 'via [🎁 $version](208 bold) '
 
 ## Perl
 
-The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `perl` показує поточну встановлену версію [Perl](https://www.perl.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `Makefile.PL` or `Build.PL` file
-- The current directory contains a `cpanfile` or `cpanfile.snapshot` file
-- The current directory contains a `META.json` file or `META.yml` file
-- The current directory contains a `.perl-version` file
-- The current directory contains a `.pl`, `.pm` or `.pod`
+- Поточна тека містить файли `Makefile.PL` чи `Build.PL`
+- Поточна тека містить файли `cpanfile` або `cpanfile.snapshot`
+- Поточна тека містить файли, `META.json` або `META.yml`
+- Поточна тека містить файл `.perl-version`
+- Поточна тека містить файли `.pl`, `.pm` або `.pod`
 
 ### Параметри
 
@@ -3013,7 +3013,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`                                                                     | Формат рядка модуля.                                              |
 | `version_format`    | `'v${raw}'`                                                                                              | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl             |
+| `symbol`            | `'🐪 '`                                                                                                   | Символ, який знаходиться перед версією Perl                       |
 | `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['Makefile.PL', 'Build.PL', 'cpanfile', 'cpanfile.snapshot', 'META.json', 'META.yml', '.perl-version']` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                                                                                     | В яких теках цей модуль має запускатись.                          |
@@ -3024,7 +3024,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 | Змінна    | Приклад   | Опис                                     |
 | --------- | --------- | ---------------------------------------- |
-| version   | `v5.26.1` | The version of `perl`                    |
+| version   | `v5.26.1` | Версія `perl`                            |
 | symbol    |           | Віддзеркалює значення параметра `symbol` |
 | style\* |           | Віддзеркалює значення параметра `style`  |
 
@@ -3039,11 +3039,11 @@ format = 'via [🦪 $version]($style) '
 
 ## PHP
 
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `php` показує поточну встановлену версію [PHP](https://www.php.net/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `composer.json`
-- The current directory contains a `.php-version` file
-- The current directory contains a `.php` extension
+- Поточна тека містить файл `.php-version`
+- Поточна тека містить файл `.php`
 
 ### Параметри
 
@@ -3051,7 +3051,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🐘 '`                               | The symbol used before displaying the version of PHP.             |
+| `symbol`            | `'🐘 '`                               | Символ, який знаходиться перед версією PHP.                       |
 | `detect_extensions` | `['php']`                            | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['composer.json', '.php-version']`  | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
@@ -3062,7 +3062,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v7.3.8` | The version of `php`                     |
+| version   | `v7.3.8` | Версія `php`                             |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -3079,33 +3079,33 @@ format = 'via [🔹 $version](147 bold) '
 
 ## Pijul Channel
 
-The `pijul_channel` module shows the active channel of the repo in your current directory.
+Модуль `pijul_channel` показує активний канал репозиторію у вашій поточній теці.
 
 ### Параметри
 
-| Параметр            | Стандартно                        | Опис                                                                                 |
-| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
-| `symbol`            | `' '`                            | The symbol used before the pijul channel name of the repo in your current directory. |
-| `style`             | `'bold purple'`                   | Стиль модуля.                                                                        |
-| `format`            | `'on [$symbol$channel]($style) '` | Формат модуля.                                                                       |
-| `truncation_length` | `2^63 - 1`                        | Truncates the pijul channel name to `N` graphemes                                    |
-| `truncation_symbol` | `'…'`                             | Символ, що використовується для позначення назви гілки, яка була скорочена.          |
-| `disabled`          | `true`                            | Вимикає модуль `pijul`.                                                              |
+| Параметр            | Стандартно                        | Опис                                                                        |
+| ------------------- | --------------------------------- | --------------------------------------------------------------------------- |
+| `symbol`            | `' '`                            | Символ, що використовується перед каналом pijul у вашій поточній теці.      |
+| `style`             | `'bold purple'`                   | Стиль модуля.                                                               |
+| `format`            | `'on [$symbol$channel]($style) '` | Формат модуля.                                                              |
+| `truncation_length` | `2^63 - 1`                        | Скорочує назву каналу pijul до `N` графем                                   |
+| `truncation_symbol` | `'…'`                             | Символ, що використовується для позначення назви гілки, яка була скорочена. |
+| `disabled`          | `true`                            | Вимикає модуль `pijul`.                                                     |
 
 ## Pulumi
 
-The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
+Модуль `pulumi` показує імʼя поточного користувача та версію обраного [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/).
 
 ::: tip
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+Стандартно версія Pulumi не показується, через те що для цього потрібно набагато більше часу ніж на завантаження більшості втулків (~70ms). Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-pulumi-version).
 
 :::
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains either `Pulumi.yaml` or `Pulumi.yml`
-- A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
+- У поточній теці є або `Pulumi.yaml` або `Pulumi.yml`
+- Батьківська тека містить або `Pulumi.yaml` або `Pulumi.yml`, якщо для `search_upwards` не встановлено значення `false`
 
 ### Параметри
 
@@ -3113,18 +3113,18 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 | ---------------- | -------------------------------------------- | ----------------------------------------------------------------- |
 | `format`         | `'via [$symbol($username@)$stack]($style) '` | Формат рядка модуля.                                              |
 | `version_format` | `'v${raw}'`                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`         | `' '`                                       | A format string shown before the Pulumi stack.                    |
+| `symbol`         | `' '`                                       | Формат рядка перед стеком Pulumi.                                 |
 | `style`          | `'bold 5'`                                   | Стиль модуля.                                                     |
-| `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.    |
+| `search_upwards` | `true`                                       | Дозволяє шукати файли налаштування pulumi у батьківських теках.   |
 | `disabled`       | `false`                                      | Вимикає модуль `pulumi`.                                          |
 
 ### Змінні
 
 | Змінна    | Приклад    | Опис                                     |
 | --------- | ---------- | ---------------------------------------- |
-| version   | `v0.12.24` | The version of `pulumi`                  |
-| stack     | `dev`      | The current Pulumi stack                 |
-| username  | `alice`    | The current Pulumi username              |
+| version   | `v0.12.24` | Версія `pulumi`                          |
+| stack     | `dev`      | Поточний стек Pulumi                     |
+| username  | `alice`    | Поточне імʼя користувача Pulumi          |
 | symbol    |            | Віддзеркалює значення параметра `symbol` |
 | style\* |            | Віддзеркалює значення параметра `style`  |
 
@@ -3132,7 +3132,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 ### Приклад
 
-#### With Pulumi Version
+#### З версією Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3141,7 +3141,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Without Pulumi version
+#### Без версії Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3152,10 +3152,10 @@ format = '[$symbol$stack]($style) '
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `purescript` показує поточну встановлену версію [PureScript](https://www.purescript.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `spago.dhall`
-- The current directory contains a file with the `.purs` extension
+- Поточна тека містить файли з розширенням `.purs`
 
 ### Параметри
 
@@ -3163,7 +3163,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'<=> '`                       | The symbol used before displaying the version of PureScript.      |
+| `symbol`            | `'<=> '`                       | Символ, який знаходиться перед версією PureScript.                |
 | `detect_extensions` | `['purs']`                           | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['spago.dhall']`                    | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
@@ -3174,7 +3174,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `0.13.5` | The version of `purescript`              |
+| version   | `0.13.5` | Версія `purescript`                      |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -3191,55 +3191,55 @@ format = 'via [$symbol$version](bold white)'
 
 ## Python
 
-The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
+Модуль `python` показує поточну встановлену версію [Python](https://www.python.org/) і поточне [віртуальне середовище Python](https://docs.python.org/tutorial/venv.html), якщо воно активоване.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+Якщо `pyenv_version_name` має значення `true`, показуватиметься назва версії pyenv. В іншому випадку буде показано номер версії з `python --version`.
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `.python-version` file
-- The current directory contains a `Pipfile` file
-- The current directory contains a `__init__.py` file
+- Поточна тека містить файл `.python-version`
+- Поточна тека містить файл `Pipfile`
+- Поточна тека містить файл `__init__.py`
 - Поточна тека містить файл `pyproject.toml`
 - Поточна тека містить файл `requirements.txt`
 - Поточна тека містить файл `setup.py`
 - Поточна тека містить файл `tox.ini`
-- The current directory contains a file with the `.py` extension.
-- A virtual environment is currently activated
+- Поточна тека містить файл `.py`.
+- Віртуальне середовище активовано
 
 ### Параметри
 
-| Параметр             | Стандартно                                                                                                   | Опис                                                                                   |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                         |
-| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                      |
-| `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                      |
-| `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                          |
-| `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
-| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
-| `detect_extensions`  | `['py']`                                                                                                     | Які розширення повинні запускати цей модуль                                            |
-| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                     |
-| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                         |
-| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                               |
+| Параметр             | Стандартно                                                                                                   | Опис                                                                                      |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `format`             | `'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'`                                  | Формат модуля.                                                                            |
+| `version_format`     | `'v${raw}'`                                                                                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch`                         |
+| `symbol`             | `'🐍 '`                                                                                                       | Формат рядка, що представляє символ Python                                                |
+| `style`              | `'yellow bold'`                                                                                              | Стиль модуля.                                                                             |
+| `pyenv_version_name` | `false`                                                                                                      | Використовувати pyenv для отримання версії Python                                         |
+| `pyenv_prefix`       | `pyenv`                                                                                                      | Префікс перед версією pyenv, показується якщо pyenv використовується                      |
+| `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Налаштовує бінарні файли python, який Starship буде використовувати для отримання версії. |
+| `detect_extensions`  | `['py']`                                                                                                     | Які розширення повинні запускати цей модуль                                               |
+| `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Назви файлів, які активують модуль                                                        |
+| `detect_folders`     | `[]`                                                                                                         | Назви тек, що активують модуль                                                            |
+| `disabled`           | `false`                                                                                                      | Вимикає модуль `python`.                                                                  |
 
 ::: tip
 
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+Змінна `python_binary` приймає як рядок, так список рядків. Starship спробує запустити кожен бінарний файл, поки це не дасть результат. Зауважте, що можна змінити двійковий файл, який використовується Starship, щоб отримати версію Python, а не параметрів, які використовуються.
 
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
+Стандартні значення та порядок для `python_binary` було вибрано так, щоб спочатку ідентифікувати версію Python у середовищах virtualenv/conda (які наразі все ще додають `python`, незалежно від того, чи вказує він на `python3` чи на `python2`). Це може мати побічний ефект: якщо у вас все ще встановлено системний Python 2, він може бути обраний перед будь-яким Python 3 (принаймні в дистрибутивах Linux, які завжди містять символічне посилання `/usr/bin/python` на Python 2). Якщо ви більше не працюєте з Python 2, але не можете видалити системний Python 2, змінивши його на `'python3'`, ви приховаєте будь-яку версію Python 2, див. приклад нижче.
 
 :::
 
 ### Змінні
 
-| Змінна       | Приклад         | Опис                                       |
-| ------------ | --------------- | ------------------------------------------ |
-| version      | `'v3.8.1'`      | The version of `python`                    |
-| symbol       | `'🐍 '`          | Віддзеркалює значення параметра `symbol`   |
-| style        | `'yellow bold'` | Віддзеркалює значення параметра `style`    |
-| pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
-| virtualenv   | `'venv'`        | The current `virtualenv` name              |
+| Змінна       | Приклад         | Опис                                           |
+| ------------ | --------------- | ---------------------------------------------- |
+| version      | `'v3.8.1'`      | Версія `python`                                |
+| symbol       | `'🐍 '`          | Віддзеркалює значення параметра `symbol`       |
+| style        | `'yellow bold'` | Віддзеркалює значення параметра `style`        |
+| pyenv_prefix | `'pyenv '`      | Віддзеркалює значення параметра `pyenv_prefix` |
+| virtualenv   | `'venv'`        | Назва `virtualenv`                             |
 
 ### Приклад
 
@@ -3255,7 +3255,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Використання лише двійкового файлу `python3` для отримання версії.
 python_binary = 'python3'
 ```
 
@@ -3263,7 +3263,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Не запускати файли з розширенням py
 detect_extensions = []
 ```
 
@@ -3271,7 +3271,7 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Показувати версію python з venv.
 #
 # Note this will only work when the venv is inside the project and it will only
 # work in the directory that contains the venv dir but maybe this is ok?
