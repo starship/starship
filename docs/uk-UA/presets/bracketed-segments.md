@@ -1,6 +1,6 @@
 [Повернутися до Шаблонів](./README.md#bracketed-segments)
 
-# Bracketed Segments Preset
+# Bracketed Segments
 
 Шаблон змінює формат всіх вбудованих модулів для показу їх частин в дужках замість використання стандартних в Starship слів ("via", "on", і т.д.).
 
