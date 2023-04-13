@@ -37,10 +37,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             .or(Some(config.discharging_symbol)),
                         battery::State::Unknown => Some(config.unknown_symbol),
                         battery::State::Empty => Some(config.empty_symbol),
-                        _ => {
-                            log::debug!("Unhandled battery state `{}`", state);
-                            None
-                        }
                     },
                     _ => None,
                 })
