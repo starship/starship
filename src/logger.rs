@@ -19,6 +19,10 @@ pub struct StarshipLogger {
     log_level: Level,
 }
 
+struct StarshipStderrLogger {
+    log_level: Level,
+}
+
 /// Returns the path to the log directory.
 pub fn get_log_dir() -> PathBuf {
     env::var_os("STARSHIP_CACHE")
@@ -30,6 +34,36 @@ pub fn get_log_dir() -> PathBuf {
                 .unwrap_or_else(std::env::temp_dir)
                 .join("starship")
         })
+}
+
+/// Return the log level.
+fn get_log_level() -> Level {
+    env::var("STARSHIP_LOG")
+        .map(|level| match level.to_ascii_lowercase().as_str() {
+            "trace" => Level::Trace,
+            "debug" => Level::Debug,
+            "info" => Level::Info,
+            "warn" => Level::Warn,
+            "error" => Level::Error,
+            _ => Level::Warn,
+        })
+        .unwrap_or_else(|_| Level::Warn)
+}
+
+/// Print a record to standard error.
+fn eprint_record(record: &Record) {
+    eprintln!(
+        "[{}] - ({}): {}",
+        match record.level() {
+            Level::Trace => Color::Blue.dimmed().paint(format!("{}", record.level())),
+            Level::Debug => Color::Cyan.paint(format!("{}", record.level())),
+            Level::Info => Color::White.paint(format!("{}", record.level())),
+            Level::Warn => Color::Yellow.paint(format!("{}", record.level())),
+            Level::Error => Color::Red.paint(format!("{}", record.level())),
+        },
+        record.module_path().unwrap_or_default(),
+        record.args()
+    );
 }
 
 /// Deletes all log files in the log directory that were modified more than 24 hours ago.
@@ -103,16 +137,7 @@ impl Default for StarshipLogger {
             ),
             log_file: OnceCell::new(),
             log_file_path: session_log_file,
-            log_level: env::var("STARSHIP_LOG")
-                .map(|level| match level.to_ascii_lowercase().as_str() {
-                    "trace" => Level::Trace,
-                    "debug" => Level::Debug,
-                    "info" => Level::Info,
-                    "warn" => Level::Warn,
-                    "error" => Level::Error,
-                    _ => Level::Warn,
-                })
-                .unwrap_or_else(|_| Level::Warn),
+            log_level: get_log_level(),
         }
     }
 }
@@ -204,18 +229,7 @@ impl log::Log for StarshipLogger {
         }
 
         // Print messages to stderr
-        eprintln!(
-            "[{}] - ({}): {}",
-            match record.level() {
-                Level::Trace => Color::Blue.dimmed().paint(format!("{}", record.level())),
-                Level::Debug => Color::Cyan.paint(format!("{}", record.level())),
-                Level::Info => Color::White.paint(format!("{}", record.level())),
-                Level::Warn => Color::Yellow.paint(format!("{}", record.level())),
-                Level::Error => Color::Red.paint(format!("{}", record.level())),
-            },
-            record.module_path().unwrap_or_default(),
-            record.args()
-        );
+        eprint_record(record);
 
         // Add to duplicate detection set
         if let Ok(mut c) = self.log_file_content.write() {
@@ -236,8 +250,40 @@ impl log::Log for StarshipLogger {
     }
 }
 
+impl Default for StarshipStderrLogger {
+    fn default() -> Self {
+        Self {
+            log_level: get_log_level(),
+        }
+    }
+}
+
+impl log::Log for StarshipStderrLogger {
+    fn enabled(&self, metadata: &Metadata) -> bool {
+        metadata.level() <= self.log_level
+    }
+
+    fn log(&self, record: &Record) {
+        // Early return if the log level is not enabled
+        if !self.enabled(record.metadata()) {
+            return;
+        }
+
+        // Print messages to stderr
+        eprint_record(record);
+    }
+
+    fn flush(&self) {
+        std::io::stderr().flush().unwrap();
+    }
+}
+
 pub fn init() {
-    log::set_boxed_logger(Box::<StarshipLogger>::default()).unwrap();
+    if env::var_os("STARSHIP_DISABLE_LOG_FILE").is_some() {
+        log::set_boxed_logger(Box::<StarshipStderrLogger>::default()).unwrap();
+    } else {
+        log::set_boxed_logger(Box::<StarshipLogger>::default()).unwrap();
+    }
     log::set_max_level(LevelFilter::Trace);
 }
 
