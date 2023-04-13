@@ -197,6 +197,9 @@ symbol = "scala "
 [spack]
 symbol = "spack "
 
+[solidity]
+symbol = "solidity "
+
 [status]
 symbol = "[x](bold red) "
 
