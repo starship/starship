@@ -493,21 +493,18 @@ fn preset_list() -> String {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::config::StarshipConfig;
     use crate::test::default_context;
     use crate::utils;
 
     #[test]
     fn main_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 add_newline=false
                 format="$character"
                 [character]
                 format=">\n>"
-            }),
-        };
+        });
+
         context.root_config.format = "$character".to_string();
         context.target = Target::Main;
         context.root_config.add_newline = false;
@@ -519,14 +516,12 @@ mod test {
 
     #[test]
     fn right_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 right_format="$character"
                 [character]
                 format=">\n>"
-            }),
-        };
+        });
+
         context.root_config.right_format = "$character".to_string();
         context.target = Target::Right;
 
@@ -537,16 +532,14 @@ mod test {
 
     #[test]
     fn custom_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 add_newline = false
                 [profiles]
                 test="0_0$character"
                 [character]
                 format=">>"
-            }),
-        };
+        });
+
         context
             .root_config
             .profiles
@@ -561,16 +554,14 @@ mod test {
 
     #[test]
     fn custom_prompt_fallback() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 add_newline=false
                 [profiles]
                 test="0_0$character"
                 [character]
                 format=">>"
-            }),
-        };
+        });
+
         context
             .root_config
             .profiles
@@ -585,12 +576,10 @@ mod test {
 
     #[test]
     fn continuation_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 continuation_prompt="><>"
-            }),
-        };
+        });
+
         context.root_config.continuation_prompt = "><>".to_string();
         context.target = Target::Continuation;
 
@@ -634,10 +623,7 @@ mod test {
     #[test]
     fn custom_expands() -> std::io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let mut context = default_context();
-        context.current_dir = dir.path().to_path_buf();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="$custom"
                 [custom.a]
                 when=true
@@ -645,8 +631,9 @@ mod test {
                 [custom.b]
                 when=true
                 format="b"
-            }),
-        };
+        });
+        context.current_dir = dir.path().to_path_buf();
+
         context.root_config.format = "$custom".to_string();
 
         let expected = String::from("\nab");
@@ -657,9 +644,7 @@ mod test {
 
     #[test]
     fn env_expands() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="$env_var"
                 [env_var]
                 format="$env_value"
@@ -668,8 +653,8 @@ mod test {
                 format="$env_value"
                 [env_var.c]
                 format="$env_value"
-            }),
-        };
+        });
+
         context.root_config.format = "$env_var".to_string();
         context.env.insert("a", "a".to_string());
         context.env.insert("b", "b".to_string());
@@ -683,10 +668,7 @@ mod test {
     #[test]
     fn custom_mixed() -> std::io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let mut context = default_context();
-        context.current_dir = dir.path().to_path_buf();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="${custom.c}$custom${custom.b}"
                 [custom.a]
                 when=true
@@ -697,8 +679,9 @@ mod test {
                 [custom.c]
                 when=true
                 format="c"
-            }),
-        };
+        });
+
+        context.current_dir = dir.path().to_path_buf();
         context.root_config.format = "${custom.c}$custom${custom.b}".to_string();
 
         let expected = String::from("\ncab");
@@ -709,9 +692,7 @@ mod test {
 
     #[test]
     fn env_mixed() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="${env_var.c}$env_var${env_var.b}"
                 [env_var]
                 format="$env_value"
@@ -722,8 +703,8 @@ mod test {
                 format="$env_value"
                 [env_var.c]
                 format="$env_value"
-            }),
-        };
+        });
+
         context.root_config.format = "${env_var.c}$env_var${env_var.b}".to_string();
         context.env.insert("a", "a".to_string());
         context.env.insert("b", "b".to_string());
@@ -738,10 +719,7 @@ mod test {
     #[test]
     fn custom_subset() -> std::io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let mut context = default_context();
-        context.current_dir = dir.path().to_path_buf();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="${custom.b}"
                 [custom.a]
                 when=true
@@ -749,8 +727,9 @@ mod test {
                 [custom.b]
                 when=true
                 format="b"
-            }),
-        };
+        });
+
+        context.current_dir = dir.path().to_path_buf();
         context.root_config.format = "${custom.b}".to_string();
 
         let expected = String::from("\nb");
@@ -762,16 +741,14 @@ mod test {
     #[test]
     fn custom_missing() -> std::io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let mut context = default_context();
-        context.current_dir = dir.path().to_path_buf();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="${custom.b}"
                 [custom.a]
                 when=true
                 format="a"
-            }),
-        };
+        });
+
+        context.current_dir = dir.path().to_path_buf();
         context.root_config.format = "${custom.b}".to_string();
 
         let expected = String::from("\n");
