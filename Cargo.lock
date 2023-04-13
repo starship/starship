@@ -944,12 +944,12 @@ dependencies = [
 
 [[package]]
 name = "gethostname"
-version = "0.4.1"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a329e22866dd78b35d2c639a4a23d7b950aeae300dfd79f4fb19f74055c2404"
+checksum = "199523ba70af2b447640715e8c4bd2b5360313a71d2d69361ae4dd1dc31487dd"
 dependencies = [
  "libc",
- "windows 0.43.0",
+ "windows 0.48.0",
 ]
 
 [[package]]
