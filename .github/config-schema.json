@@ -1520,6 +1520,28 @@
         }
       ]
     },
+    "solidity": {
+      "default": {
+        "compiler": [
+          "solc"
+        ],
+        "detect_extensions": [
+          "sol"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version)]($style)",
+        "style": "bold blue",
+        "symbol": "S ",
+        "version_format": "v${major}.${minor}.${patch}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SolidityConfig"
+        }
+      ]
+    },
     "spack": {
       "default": {
         "disabled": false,
@@ -5237,6 +5259,65 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SolidityConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version)]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${major}.${minor}.${patch}",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "S ",
+          "type": "string"
+        },
+        "compiler": {
+          "default": [
+            "solc"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "detect_extensions": {
+          "default": [
+            "sol"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
