@@ -576,6 +576,7 @@
         "deleted_style": "bold red",
         "disabled": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "ignore_submodules": false,
         "only_nonzero_diffs": true
       },
       "allOf": [
@@ -3187,6 +3188,10 @@
         },
         "disabled": {
           "default": true,
+          "type": "boolean"
+        },
+        "ignore_submodules": {
+          "default": false,
           "type": "boolean"
         }
       },
