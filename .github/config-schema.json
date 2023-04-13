@@ -617,6 +617,7 @@
         "staged": "+",
         "stashed": "\\$",
         "style": "red bold",
+        "typechanged": "",
         "untracked": "?",
         "up_to_date": ""
       },
@@ -3282,6 +3283,10 @@
         },
         "untracked": {
           "default": "?",
+          "type": "string"
+        },
+        "typechanged": {
+          "default": "",
           "type": "string"
         },
         "ignore_submodules": {
