@@ -367,6 +367,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     use crate::utils::create_command;
     use nix::sys::utsname::uname;
     use std::env;
+    use std::ffi::OsString;
     use std::io::ErrorKind;
 
     let starship_exe = conf.windows_starship?;
@@ -433,11 +434,14 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 
     let out = match create_command(starship_exe)
         .map(|mut c| {
-            if let Some(config_path_os) = context.get_config_path_os() {
-                c.env("STARSHIP_CONFIG", config_path_os);
-            }
-            c.env("WSLENV", wslenv)
-                .args(["module", "git_status", "--path", winpath]);
+            c.env(
+                "STARSHIP_CONFIG",
+                context
+                    .get_config_path_os()
+                    .unwrap_or_else(|| OsString::from("/dev/null")),
+            )
+            .env("WSLENV", wslenv)
+            .args(["module", "git_status", "--path", winpath]);
             c
         })
         .and_then(|mut c| c.output())
