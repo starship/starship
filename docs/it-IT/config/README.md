@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -426,12 +427,13 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Opzioni
 
-| Variable   | Default                                  | Descrizione                                |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
-| `symbol`   | `'ﴃ '`                                   | The symbol used in the format.             |
-| `style`    | `'blu grassetto'`                        | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| Variable               | Default                                  | Descrizione                                                                           |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blu grassetto'`                        | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Examples
 
@@ -457,6 +459,15 @@ disabled = false
 format = "on [$symbol($username)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Battery
@@ -1724,6 +1735,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### Variables
 
@@ -1772,6 +1784,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Lo stile per il modulo.                                                                                     |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
@@ -1792,6 +1805,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | Mirrors the value of option `style`                                                                           |
 
 *: This variable can only be used as a part of a style string
@@ -3640,6 +3654,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 format = '[📦 \[$env\]]($style) '
 ```
 
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### Opzioni
+
+| Opzione             | Default                              | Descrizione                                                                                 |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                                  |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                                         |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                                          |
+| `detect_extensions` | `["sol"]`                            | Quali estensioni dovrebbero attivare questo modulo.                                         |
+| `detect_files`      | `[]`                                 | Quali nomi di file dovrebbero attivare questo modulo.                                       |
+| `detect_folders`    | `[]`                                 | Quali cartelle dovrebbero attivare questo modulo.                                           |
+| `style`             | `"bold blue"`                        | Lo stile per il modulo.                                                                     |
+| `disabled`          | `false`                              | Disables this module.                                                                       |
+
+### Variables
+
+| Variable  | Esempio  | Descrizione                          |
+| --------- | -------- | ------------------------------------ |
+| version   | `v0.8.1` | The version of `solidity`            |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Esempio
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
+```
+
 ## Spack
 
 The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
@@ -3909,7 +3961,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Variable  | Esempio    | Descrizione                         |
 | --------- | ---------- | ----------------------------------- |
-| ora       | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -4023,12 +4075,12 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | ------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`         | The format for the module.                                                                  |
 | `version_format`    | `'v${raw}'`                                  | Il formato della versione. Le variabili disponibili sono `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'V '`                                       | Una stringa di formato che rappresenta il simbolo di V                                      |
+| `symbol`            | `'V '`                                       | A format string representing the symbol of V                                                |
 | `detect_extensions` | `['v']`                                      | Quali estensioni dovrebbero attivare questo modulo.                                         |
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Quali nomi di file dovrebbero attivare questo modulo.                                       |
 | `detect_folders`    | `[]`                                         | Quali cartelle dovrebbero attivare questo modulo.                                           |
 | `style`             | `'blu grassetto'`                            | Lo stile per il modulo.                                                                     |
-| `disabled`          | `false`                                      | Disabilita il modulo `vlang`.                                                               |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                                                |
 
 ### Variables
 
