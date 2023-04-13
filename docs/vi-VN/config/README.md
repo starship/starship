@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -426,12 +427,13 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Các tuỳ chọn
 
-| Biến       | Mặc định                                 | Mô tả                                      |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
-| `symbol`   | `'ﴃ '`                                   | The symbol used in the format.             |
-| `style`    | `'blue bold'`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| Biến                   | Mặc định                                 | Mô tả                                                                                 |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Các ví dụ
 
@@ -457,6 +459,15 @@ disabled = false
 format = "on [$symbol($username)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Battery
@@ -499,7 +510,7 @@ style = 'bold red'
 
 The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
 
-#### Options
+#### Các tuỳ chọn
 
 Tuỳ chọn `display` là một mảng của của bảng sau.
 
@@ -687,7 +698,7 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ### Các ví dụ
 
-#### Có tuỳ chỉnh hình dạng lỗi
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -697,7 +708,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Không có tuỳ chỉnh hình dạng lỗi
+#### Without custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -707,7 +718,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### Có tuỳ chỉnh hình dạng vim
+#### With custom vim shape
 
 ```toml
 # ~/.config/starship.toml
@@ -1544,7 +1555,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 
 ### Các ví dụ
 
-#### Hiển thị tài khoản và dự án
+#### Display account and project
 
 ```toml
 # ~/.config/starship.toml
@@ -1553,7 +1564,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Chỉ hiển thị tên cấu hình hiệu lực
+#### Display active config name only
 
 ```toml
 # ~/.config/starship.toml
@@ -1563,7 +1574,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Hiển thị tài khoản và bí danh khu vực
+#### Display account and aliased region
 
 ```toml
 # ~/.config/starship.toml
@@ -1724,6 +1735,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Định dạng cho module.                 |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### Các biến
 
@@ -1772,9 +1784,10 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`            | `'+'`                                           | Định dạng của `modified`                                                                                    |
 | `renamed`           | `'»'`                                           | Định dạng của `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Kiểu cho module.                                                                                            |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | Vô hiệu `git_status` module.                                                                                |
+| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Các biến
@@ -1792,6 +1805,7 @@ Các biến dưới đây có thể được sử dụng trong `format`:
 | `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                                             |
 | `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                                     |
 | `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                                      |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | Giá trị ghi đè của `style`                                                                                    |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
@@ -3640,6 +3654,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 format = '[📦 \[$env\]]($style) '
 ```
 
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                       |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                        |
+| `detect_extensions` | `["sol"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `[]`                                 | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold blue"`                        | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables this module.                                                     |
+
+### Các biến
+
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v0.8.1` | The version of `solidity`        |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
+```
+
 ## Spack
 
 The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
@@ -3909,7 +3961,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Biến      | Ví dụ      | Mô tả                      |
 | --------- | ---------- | -------------------------- |
-| thời gian | `13:08:10` | The current time.          |
+| time      | `13:08:10` | The current time.          |
 | style\* |            | Giá trị ghi đè của `style` |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
