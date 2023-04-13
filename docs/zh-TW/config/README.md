@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -426,12 +427,13 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### 選項
 
-| 變數         | 預設                                       | 說明                                         |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
-| `symbol`   | `'ﴃ '`                                   | The symbol used in the format.             |
-| `style`    | `'blue bold'`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| 變數                     | 預設                                       | 說明                                                                                    |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Examples
 
@@ -457,6 +459,15 @@ disabled = false
 format = "on [$symbol($username)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## 電池
@@ -1724,6 +1735,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### Variables
 
@@ -1772,9 +1784,10 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | 這個模組的風格。                                                                                                    |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | 停用 `git_status` 模組。                                                                                         |
+| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Variables
@@ -1792,6 +1805,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | Mirrors the value of option `style`                                                                           |
 
 *: This variable can only be used as a part of a style string
@@ -3640,6 +3654,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 format = '[📦 \[$env\]]($style) '
 ```
 
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### 選項
+
+| Option              | 預設                                   | 說明                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | The format for the module.                                                |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                       |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                        |
+| `detect_extensions` | `["sol"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold blue"`                        | 這個模組的風格。                                                                  |
+| `disabled`          | `false`                              | Disables this module.                                                     |
+
+### Variables
+
+| 變數        | 範例       | 說明                                   |
+| --------- | -------- | ------------------------------------ |
+| version   | `v0.8.1` | The version of `solidity`            |
+| symbol    |          | Mirrors the value of option `symbol` |
+| style\* |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### 範例
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
+```
+
 ## Spack
 
 The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
@@ -3883,7 +3935,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## 時間
 
-`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3893,15 +3945,15 @@ format = '[🏎💨 $workspace]($style) '
 
 ### 選項
 
-| Option            | 預設                      | 說明                                                                                                    |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                     |
-| `use_12hr`        | `false`                 | 啟用 12 小時格式。                                                                                           |
-| `time_format`     | 請看下列                    | 用來顯示時間的 [chrono 格式字串](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)。                |
-| `style`           | `'bold yellow'`         | 這個模組的時間的風格。                                                                                           |
-| `utc_time_offset` | `'local'`               | 設定相對於 UTC 的時差。 Range from -24 &lt; x &lt; 24. 允許使用浮點數來表示 30/45 分鐘時差的時區。                   |
-| `disabled`        | `true`                  | 停用 `time` 模組。                                                                                         |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| Option            | 預設                      | 說明                                                                                                                                 |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3909,7 +3961,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | 變數        | 範例         | 說明                                  |
 | --------- | ---------- | ----------------------------------- |
-| 時間        | `13:08:10` | The current time.                   |
+| time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3927,14 +3979,14 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
-## 使用者名稱
+## Username
 
-`username` 模組顯示現在使用中的使用者名稱。 這個模組將在下列其中一個條件滿足時顯示：
+The `username` module shows active user's username. 這個模組將在下列其中一個條件滿足時顯示：
 
 - The current user is root/admin
-- 目前使用者並非登入時的使用者
-- 使用者透過 SSH session 進行連線
-- 變數 `show_always` 被設為 true
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -3947,10 +3999,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | Option        | 預設                      | 說明                                          |
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | 非 root 使用者時使用的風格。                           |
+| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
 | `format`      | `'[$user]($style) in '` | The format for the module.                  |
-| `show_always` | `false`                 | 總是顯示 `username` 模組。                         |
-| `disabled`    | `false`                 | 停用 `username` 模組。                           |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### Variables
 
