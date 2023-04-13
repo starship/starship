@@ -951,16 +951,6 @@ mod tests {
     }
 
     #[test]
-    fn set_config_method_overwrites_constructor() {
-        let context = default_context();
-        let mod_context = default_context().set_config(toml::toml! {
-            add_newline = true
-        });
-
-        assert_ne!(context.config.config, mod_context.config.config);
-    }
-
-    #[test]
     fn context_constructor_should_fall_back_to_tilde_replacement_when_canonicalization_fails() {
         use utils::home_dir;
 
@@ -981,6 +971,16 @@ mod tests {
 
         let expected_logical_dir = test_path;
         assert_eq!(expected_logical_dir, context.logical_dir);
+    }
+
+    #[test]
+    fn set_config_method_overwrites_constructor() {
+        let context = default_context();
+        let mod_context = default_context().set_config(toml::toml! {
+            add_newline = true
+        });
+
+        assert_ne!(context.config.config, mod_context.config.config);
     }
 
     #[cfg(windows)]

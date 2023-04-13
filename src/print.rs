@@ -504,10 +504,7 @@ mod test {
                 [character]
                 format=">\n>"
         });
-
-        context.root_config.format = "$character".to_string();
         context.target = Target::Main;
-        context.root_config.add_newline = false;
 
         let expected = String::from(">\n>");
         let actual = get_prompt(context);
@@ -521,8 +518,6 @@ mod test {
                 [character]
                 format=">\n>"
         });
-
-        context.root_config.right_format = "$character".to_string();
         context.target = Target::Right;
 
         let expected = String::from(">>"); // should strip new lines
@@ -539,13 +534,7 @@ mod test {
                 [character]
                 format=">>"
         });
-
-        context
-            .root_config
-            .profiles
-            .insert("test".to_string(), "0_0$character".to_string());
         context.target = Target::Profile("test".to_string());
-        context.root_config.add_newline = false;
 
         let expected = String::from("0_0>>");
         let actual = get_prompt(context);
@@ -561,13 +550,7 @@ mod test {
                 [character]
                 format=">>"
         });
-
-        context
-            .root_config
-            .profiles
-            .insert("test".to_string(), "0_0$character".to_string());
         context.target = Target::Profile("wrong_prompt".to_string());
-        context.root_config.add_newline = false;
 
         let expected = String::from(">");
         let actual = get_prompt(context);
@@ -579,8 +562,6 @@ mod test {
         let mut context = default_context().set_config(toml::toml! {
                 continuation_prompt="><>"
         });
-
-        context.root_config.continuation_prompt = "><>".to_string();
         context.target = Target::Continuation;
 
         let expected = String::from("><>");
@@ -634,8 +615,6 @@ mod test {
         });
         context.current_dir = dir.path().to_path_buf();
 
-        context.root_config.format = "$custom".to_string();
-
         let expected = String::from("\nab");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
@@ -654,8 +633,6 @@ mod test {
                 [env_var.c]
                 format="$env_value"
         });
-
-        context.root_config.format = "$env_var".to_string();
         context.env.insert("a", "a".to_string());
         context.env.insert("b", "b".to_string());
         context.env.insert("c", "c".to_string());
@@ -680,9 +657,7 @@ mod test {
                 when=true
                 format="c"
         });
-
         context.current_dir = dir.path().to_path_buf();
-        context.root_config.format = "${custom.c}$custom${custom.b}".to_string();
 
         let expected = String::from("\ncab");
         let actual = get_prompt(context);
@@ -704,8 +679,6 @@ mod test {
                 [env_var.c]
                 format="$env_value"
         });
-
-        context.root_config.format = "${env_var.c}$env_var${env_var.b}".to_string();
         context.env.insert("a", "a".to_string());
         context.env.insert("b", "b".to_string());
         context.env.insert("c", "c".to_string());
@@ -728,9 +701,7 @@ mod test {
                 when=true
                 format="b"
         });
-
         context.current_dir = dir.path().to_path_buf();
-        context.root_config.format = "${custom.b}".to_string();
 
         let expected = String::from("\nb");
         let actual = get_prompt(context);
@@ -747,9 +718,7 @@ mod test {
                 when=true
                 format="a"
         });
-
         context.current_dir = dir.path().to_path_buf();
-        context.root_config.format = "${custom.b}".to_string();
 
         let expected = String::from("\n");
         let actual = get_prompt(context);
