@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -426,12 +427,13 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Opsi
 
-| Variabel   | Bawaan                                   | Deskripsi                                  |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
-| `symbol`   | `'ﴃ '`                                   | The symbol used in the format.             |
-| `style`    | `'blue bold'`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| Variabel               | Bawaan                                   | Deskripsi                                                                             |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Contoh
 
@@ -457,6 +459,15 @@ disabled = false
 format = "on [$symbol($username)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Baterai
@@ -687,7 +698,7 @@ Secara bawaan karakter hanya dapat mengganti warna. Jika kamu juga ingin menggan
 
 ### Contoh
 
-#### Dengan menggunakan corak eror yang dikustomisasi
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -697,7 +708,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Tanpa menggunakan corak eror yang dikustomisasi
+#### Without custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -707,7 +718,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### Dengan menggunakan corak vim yang dikustomisasi
+#### With custom vim shape
 
 ```toml
 # ~/.config/starship.toml
@@ -1724,6 +1735,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `fromat`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format dari modul.                    |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### Variabel
 
@@ -1772,6 +1784,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Gaya penataan untuk modul.                                                                                  |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
@@ -1792,6 +1805,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | Menyalin nilai dari opsi `style`                                                                              |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
@@ -3638,6 +3652,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 [singularity]
 format = '[📦 \[$env\]]($style) '
+```
+
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### Opsi
+
+| Opsi                | Bawaan                               | Deskripsi                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `fromat`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                  |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                                 |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                                  |
+| `detect_extensions` | `["sol"]`                            | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `"bold blue"`                        | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                              | Disables this module.                                                               |
+
+### Variabel
+
+| Variabel  | Contoh   | Deskripsi                         |
+| --------- | -------- | --------------------------------- |
+| version   | `v0.8.1` | The version of `solidity`         |
+| symbol    |          | Menyalin nilai dari opsi `symbol` |
+| style\* |          | Menyalin nilai dari opsi `style`  |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
 ```
 
 ## Spack
