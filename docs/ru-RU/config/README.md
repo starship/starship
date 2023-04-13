@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -426,12 +427,13 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Опции
 
-| Переменная | По умолчанию                             | Описание                                   |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
-| `symbol`   | `'ﴃ '`                                   | The symbol used in the format.             |
-| `style`    | `'blue bold'`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| Переменная             | По умолчанию                             | Описание                                                                              |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Примеры
 
@@ -457,6 +459,15 @@ disabled = false
 format = "on [$symbol($username)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Батарея
@@ -1724,6 +1735,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Формат модуля.                        |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### Переменные
 
@@ -1772,9 +1784,10 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Стиль модуля.                                                                                               |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | Отключает модуль `git_status`.                                                                              |
+| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Переменные
@@ -1792,6 +1805,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | Отражает значение параметра `style`                                                                           |
 
 *: Эта переменная может использоваться только в качестве части строки style
@@ -3640,6 +3654,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 format = '[📦 \[$env\]]($style) '
 ```
 
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### Опции
+
+| Параметр            | По умолчанию                         | Описание                                                                  |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                            |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                       |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                        |
+| `detect_extensions` | `["sol"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold blue"`                        | Стиль модуля.                                                             |
+| `disabled`          | `false`                              | Disables this module.                                                     |
+
+### Переменные
+
+| Переменная | Пример   | Описание                             |
+| ---------- | -------- | ------------------------------------ |
+| version    | `v0.8.1` | The version of `solidity`            |
+| symbol     |          | Отражает значение параметра `symbol` |
+| style\*  |          | Отражает значение параметра `style`  |
+
+*: Эта переменная может использоваться только в качестве части строки style
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
+```
+
 ## Spack
 
 The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
@@ -3834,7 +3886,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- Текущий каталог содержит папку `.terraform`
+- The current directory contains a `.terraform` folder
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Опции
@@ -3848,7 +3900,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `['.terraform']`                     | Which folders should trigger this module.                                 |
 | `style`             | `'bold 105'`                         | Стиль модуля.                                                             |
-| `disabled`          | `false`                              | Отключает модуль `terraform`.                                             |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
 
 ### Переменные
 
@@ -3883,7 +3935,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Время
 
-Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3893,15 +3945,15 @@ format = '[🏎💨 $workspace]($style) '
 
 ### Опции
 
-| Параметр          | По умолчанию            | Описание                                                                                                                                                      |
-| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                                             |
-| `use_12hr`        | `false`                 | Включить 12-часовое форматирование                                                                                                                            |
-| `time_format`     | см. ниже                | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени.                             |
-| `style`           | `'bold yellow'`         | Стиль модуля времени                                                                                                                                          |
-| `utc_time_offset` | `'local'`               | Устанавливает смещение UTC. Range from -24 &lt; x &lt; 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
-| `disabled`        | `true`                  | Отключает модуль `time`.                                                                                                                                      |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                         |
+| Параметр          | По умолчанию            | Описание                                                                                                                           |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                  |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3909,7 +3961,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Переменная | Пример     | Описание                            |
 | ---------- | ---------- | ----------------------------------- |
-| время      | `13:08:10` | The current time.                   |
+| time       | `13:08:10` | The current time.                   |
 | style\*  |            | Отражает значение параметра `style` |
 
 *: Эта переменная может использоваться только в качестве части строки style
@@ -3927,14 +3979,14 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
-## Имя пользователя
+## Username
 
-Модуль `username` показывает имя текущего пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
+The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current user is root/admin
-- Текущий пользователь отличается от залогиненного
-- Пользователь подключен к SSH-сессии
-- Переменная `show_always` равна true
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -3944,13 +3996,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Опции
 
-| Параметр      | По умолчанию            | Описание                                                |
-| ------------- | ----------------------- | ------------------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin.             |
-| `style_user`  | `'bold yellow'`         | Стиль, используемый для всех пользователей, кроме root. |
-| `format`      | `'[$user]($style) in '` | Формат модуля.                                          |
-| `show_always` | `false`                 | Всегда показывать модуль `username`.                    |
-| `disabled`    | `false`                 | Отключает модуль `username`.                            |
+| Параметр      | По умолчанию            | Описание                                    |
+| ------------- | ----------------------- | ------------------------------------------- |
+| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
+| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
+| `format`      | `'[$user]($style) in '` | Формат модуля.                              |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### Переменные
 
