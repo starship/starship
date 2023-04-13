@@ -233,9 +233,10 @@ pub fn get_configuration_edit(context: &Context) -> Document {
 }
 
 pub fn write_configuration(context: &Context, doc: &Document) {
-    let config_path = context
-        .get_config_path_os()
-        .expect("able to get config path");
+    let config_path = context.get_config_path_os().unwrap_or_else(|| {
+        eprintln!("config path required to write configuration");
+        process::exit(1);
+    });
 
     let config_str = doc.to_string();
 
@@ -250,9 +251,10 @@ pub fn edit_configuration(
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Argument currently only used for testing, but could be used to specify
     // an editor override on the command line.
-    let config_path = context
-        .get_config_path_os()
-        .expect("config path required to edit the config");
+    let config_path = context.get_config_path_os().unwrap_or_else(|| {
+        eprintln!("config path required to edit configuration");
+        process::exit(1);
+    });
 
     let editor_cmd = shell_words::split(&get_editor(editor_override))?;
     let mut command = match utils::create_command(&editor_cmd[0]) {
