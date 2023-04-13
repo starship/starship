@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -426,12 +427,13 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ### オプション
 
-| 変数         | デフォルト                                    | 説明                      |
-| ---------- | ---------------------------------------- | ----------------------- |
-| `format`   | `'on [$symbol($subscription)]($style) '` | Azure module のフォーマットです。 |
-| `symbol`   | `'ﴃ '`                                   | フォーマットで使用される記号です。       |
-| `style`    | `'blue bold'`                            | フォーマットで使用されるスタイルです。     |
-| `disabled` | `true`                                   | `azure`モジュールを無効にします。    |
+| 変数                     | デフォルト                                    | 説明                                                                                    |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | Azure module のフォーマットです。                                                               |
+| `symbol`               | `'ﴃ '`                                   | フォーマットで使用される記号です。                                                                     |
+| `style`                | `'blue bold'`                            | フォーマットで使用されるスタイルです。                                                                   |
+| `disabled`             | `true`                                   | `azure`モジュールを無効にします。                                                                  |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### 設定例
 
@@ -457,6 +459,15 @@ disabled = false
 format = "on [$symbol($username)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## バッテリー
@@ -687,7 +698,7 @@ characterは、最後のコマンドが成功したかどうかを示します�
 
 ### 設定例
 
-#### エラーの形状をカスタムする
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -697,7 +708,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### エラーの形状をカスタムしない
+#### Without custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -707,7 +718,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### vimの形状をカスタムする
+#### With custom vim shape
 
 ```toml
 # ~/.config/starship.toml
@@ -1544,7 +1555,7 @@ truncation_symbol = ''
 
 ### 設定例
 
-#### アカウントとプロジェクトを表示
+#### Display account and project
 
 ```toml
 # ~/.config/starship.toml
@@ -1553,7 +1564,7 @@ truncation_symbol = ''
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### アクティブな設定名のみ表示
+#### Display active config name only
 
 ```toml
 # ~/.config/starship.toml
@@ -1563,7 +1574,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### アカウントとエイリアスされたリージョンを表示する
+#### Display account and aliased region
 
 ```toml
 # ~/.config/starship.toml
@@ -1575,7 +1586,7 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### アカウントとエイリアスされたプロジェクトを表示
+#### Display account and aliased project
 
 ```toml
 # ~/.config/starship.toml
@@ -1724,6 +1735,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | module のフォーマットです。                     |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### 変数
 
@@ -1758,24 +1770,25 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 
 ### オプション
 
-| オプション               | デフォルト                                           | 説明                                                                     |
-| ------------------- | ----------------------------------------------- | ---------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット                                              |
-| `conflicted`        | `'='`                                           | このブランチにはマージの競合があります。                                                   |
-| `ahead`             | `'⇡'`                                           | `ahead`のフォーマット                                                         |
-| `behind`            | `'⇣'`                                           | `behind`のフォーマット                                                        |
-| `diverged`          | `'⇕'`                                           | `diverged`のフォーマット                                                      |
-| `up_to_date`        | `''`                                            | `up_to_date`のフォーマット                                                    |
-| `untracked`         | `'?'`                                           | `untracked`のフォーマット                                                     |
-| `stashed`           | `'$'`                                           | `stashed`のフォーマット                                                       |
-| `modified`          | `'!'`                                           | `modified`のフォーマット                                                      |
-| `staged`            | `'+'`                                           | `staged`のフォーマット                                                        |
-| `renamed`           | `'»'`                                           | `renamed`のフォーマット                                                       |
-| `deleted`           | `'✘'`                                           | `deleted`のフォーマット                                                       |
-| `style`             | `'bold red'`                                    | モジュールのスタイルです。                                                          |
-| `ignore_submodules` | `false`                                         | サブモジュールの変更を無視します。                                                      |
-| `disabled`          | `false`                                         | `git_status`モジュールを無効にします。                                              |
-| `windows_starship`  |                                                 | WSLでWindowsディレクトリの`git_status`で使用するWindows Starshipの実行ファイルのLinux上でのパス。 |
+| オプション               | デフォルト                                           | 説明                                                                                                          |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | `git_status` のデフォルトフォーマット                                                                                   |
+| `conflicted`        | `'='`                                           | このブランチにはマージの競合があります。                                                                                        |
+| `ahead`             | `'⇡'`                                           | `ahead`のフォーマット                                                                                              |
+| `behind`            | `'⇣'`                                           | `behind`のフォーマット                                                                                             |
+| `diverged`          | `'⇕'`                                           | `diverged`のフォーマット                                                                                           |
+| `up_to_date`        | `''`                                            | `up_to_date`のフォーマット                                                                                         |
+| `untracked`         | `'?'`                                           | `untracked`のフォーマット                                                                                          |
+| `stashed`           | `'$'`                                           | `stashed`のフォーマット                                                                                            |
+| `modified`          | `'!'`                                           | `modified`のフォーマット                                                                                           |
+| `staged`            | `'+'`                                           | `staged`のフォーマット                                                                                             |
+| `renamed`           | `'»'`                                           | `renamed`のフォーマット                                                                                            |
+| `deleted`           | `'✘'`                                           | `deleted`のフォーマット                                                                                            |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
+| `style`             | `'bold red'`                                    | モジュールのスタイルです。                                                                                               |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
+| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
+| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### 変数
 
@@ -1792,6 +1805,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | オプション `style` の値をミラーする                                                                                        |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
@@ -3640,6 +3654,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 format = '[📦 \[$env\]]($style) '
 ```
 
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity    |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                     |
+| `detect_extensions` | `["sol"]`                            | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                              | Disables this module.                                  |
+
+### 変数
+
+| 変数        | 設定例      | 説明                        |
+| --------- | -------- | ------------------------- |
+| version   | `v0.8.1` | The version of `solidity` |
+| symbol    |          | オプション `symbol` の値をミラーする   |
+| style\* |          | オプション `style` の値をミラーする    |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
+```
+
 ## Spack
 
 The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
@@ -3785,10 +3837,10 @@ disabled = false
 
 ## Swift
 
-デフォルトでは`swift` モジュールは、現在インストールされている[Swift](https://swift.org/)のバージョンを表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- カレントディレクトリに`Package.swift`ファイルが含まれている
-- カレントディレクトリに拡張子が`.swift`のファイルが含まれている
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
 
 ### オプション
 
@@ -3824,18 +3876,18 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-`terraform` モジュールは、現在選択されている[Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) とバージョンを表示します。
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
-Terraformのバージョンはデフォルトでは表示されません。多くのプラグインが使用されている場合、現在のTerraformのバージョンでは遅くなるからです。 それでも有効にしたい場合は、 [以下の例に従ってください](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`.terraform`フォルダが含まれている
-- 現在のディレクトリに `.tf`, `.tfplan` または `.tfstate` のいずれかの拡張子を持つファイルがある。
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### オプション
 
@@ -3843,27 +3895,27 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
 | `format`            | `'via [$symbol$workspace]($style) '` | モジュールのフォーマット文字列。                                       |
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'💠'`                                | ワークスペースの前に表示されるフォーマット文字列。                              |
+| `symbol`            | `'💠'`                                | A format string shown before the terraform workspace.  |
 | `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `['.terraform']`                     | どのフォルダーがこのモジュールをアクティブにするか                              |
 | `style`             | `'bold 105'`                         | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                              | `terraform` モジュールを無効にします。                              |
+| `disabled`          | `false`                              | Disables the `terraform` module.                       |
 
 ### 変数
 
-| 変数        | 設定例        | 説明                      |
-| --------- | ---------- | ----------------------- |
-| version   | `v0.12.24` | `terraform` のバージョン      |
-| workspace | `default`  | 現在のTerraformワークスペース     |
-| symbol    |            | オプション `symbol` の値をミラーする |
-| style\* |            | オプション `style` の値をミラーする  |
+| 変数        | 設定例        | 説明                              |
+| --------- | ---------- | ------------------------------- |
+| version   | `v0.12.24` | The version of `terraform`      |
+| workspace | `default`  | The current Terraform workspace |
+| symbol    |            | オプション `symbol` の値をミラーする         |
+| style\* |            | オプション `style` の値をミラーする          |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
 ### 設定例
 
-#### Terraform バージョン表示あり
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3872,7 +3924,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Terraform バージョン表示なし
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
@@ -3883,7 +3935,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## 時刻
 
-`time`モジュールは、現在の**現地**時間を示します。 `format`設定は、時間の表示方法を制御するために[`chrono`](https://crates.io/crates/chrono)クレートによって使用されます。 使用可能なオプションを確認するには、[chrono strftimeのドキュメント](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)をご覧ください。
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3893,15 +3945,15 @@ format = '[🏎💨 $workspace]($style) '
 
 ### オプション
 
-| オプション             | デフォルト                   | 説明                                                                                                    |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | モジュールのフォーマット文字列。                                                                                      |
-| `use_12hr`        | `false`                 | 12時間のフォーマットを有効にします。                                                                                   |
-| `time_format`     | この表の下を参照してください          | 時刻のフォーマットに使用される[クロノフォーマット文字列](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) です。     |
-| `style`           | `'bold yellow'`         | モジュールのスタイルです。                                                                                         |
-| `utc_time_offset` | `'local'`               | 使用するUTCオフセットを設定します。 Range from -24 &lt; x &lt; 24. フロートが30/45分のタイムゾーンオフセットに対応できるようにします。   |
-| `disabled`        | `true`                  | `time`モジュールを無効にします。                                                                                   |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format |
+| オプション             | デフォルト                   | 説明                                                                                                                                 |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | モジュールのフォーマット文字列。                                                                                                                   |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3927,14 +3979,14 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
-## ユーザー名
+## Username
 
-`username`モジュールはアクティブなユーザーのユーザー名を表示します。 次の条件のいずれかが満たされると、モジュールが表示されます:
+The `username` module shows active user's username. 次の条件のいずれかが満たされると、モジュールが表示されます:
 
 - The current user is root/admin
-- カレントユーザーが、ログインしているユーザーとは異なる
-- ユーザーがSSHセッションとして接続されている
-- `show_always`変数がtrueに設定されている
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -3947,10 +3999,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | オプション         | デフォルト                   | 説明                                          |
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | 非rootユーザーに使用されるスタイルです。                      |
+| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
 | `format`      | `'[$user]($style) in '` | module のフォーマットです。                           |
-| `show_always` | `false`                 | `username` モジュールを常に表示します。                   |
-| `disabled`    | `false`                 | `username` モジュールを無効にします。                    |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### 変数
 
@@ -3974,9 +4026,9 @@ show_always = true
 
 ## Vagrant
 
-`vagrant`モジュールは、現在インストールされている[Vagrant](https://www.vagrantup.com/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに`Vagrantfile`ファイルが含まれている
+- The current directory contains a `Vagrantfile` file
 
 ### オプション
 
@@ -4012,10 +4064,10 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-`vlang`モジュールは、現在インストールされている[V](https://vlang.io/)のバージョンを表示します。 デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). デフォルトでは次の条件のいずれかが満たされると、モジュールが表示されます。
 
-- カレントディレクトリに拡張子が`.v`のファイルが含まれている
-- カレントディレクトリに`v.mod`、`vpkg.json`または`.vpkg-lock.json`ファイルが含まれている
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### オプション
 
@@ -4082,7 +4134,7 @@ format = '[🆅 $repo](bold blue) '
 
 By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 次の条件のいずれかが満たされると、モジュールが表示されます:
 
-- カレントディレクトリに拡張子が`.zig`のファイルが含まれている
+- The current directory contains a `.zig` file
 
 ### オプション
 
