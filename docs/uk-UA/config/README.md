@@ -242,7 +242,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Є еквівалентом
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -426,12 +427,13 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ### Параметри
 
-| Змінна     | Стандартно                               | Опис                           |
-| ---------- | ---------------------------------------- | ------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | Формат для модуля Azure.       |
-| `symbol`   | `'ﴃ '`                                   | Символ, який використовується. |
-| `style`    | `'blue bold'`                            | Стиль, який використовується.  |
-| `disabled` | `true`                                   | Вимикає модуль `azure`.        |
+| Змінна                 | Стандартно                               | Опис                                                                                  |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | Формат для модуля Azure.                                                              |
+| `symbol`               | `'ﴃ '`                                   | Символ, який використовується.                                                        |
+| `style`                | `'blue bold'`                            | Стиль, який використовується.                                                         |
+| `disabled`             | `true`                                   | Вимикає модуль `azure`.                                                               |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Приклади
 
@@ -457,6 +459,15 @@ disabled = false
 format = "on [$symbol($username)]($style) "
 symbol = "ﴃ "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Battery
@@ -513,16 +524,16 @@ style = 'bold red'
 #### Приклад
 
 ```toml
-[[battery.display]] # стиль 'bold red' та discharging_symbol, якщо заряд між 0% та 10%
+[[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = 'bold red'
 
-[[battery.display]] # стиль 'bold yellow' та символ 💦, якщо заряд між 10% та 30%
+[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = 'bold yellow'
 discharging_symbol = '💦'
 
-# якщо рівень заряду понад 30%, індикатор заряду не показується
+# when capacity is over 30%, the battery indicator will not be displayed
 ```
 
 ## Buf
@@ -687,7 +698,7 @@ format = 'via [$name $version]($style)'
 
 ### Приклади
 
-#### З власним значком помилки
+#### With custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -697,7 +708,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Без власного значка помилки
+#### Without custom error shape
 
 ```toml
 # ~/.config/starship.toml
@@ -707,7 +718,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### Значок vim
+#### With custom vim shape
 
 ```toml
 # ~/.config/starship.toml
@@ -1544,7 +1555,7 @@ truncation_symbol = ''
 
 ### Приклади
 
-#### Показувати обліковий запис та проєкт
+#### Display account and project
 
 ```toml
 # ~/.config/starship.toml
@@ -1553,7 +1564,7 @@ truncation_symbol = ''
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Показувати тільки назву активної конфігурації
+#### Display active config name only
 
 ```toml
 # ~/.config/starship.toml
@@ -1563,7 +1574,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Показувати обліковий запис та псевдо регіону
+#### Display account and aliased region
 
 ```toml
 # ~/.config/starship.toml
@@ -1575,7 +1586,7 @@ us-central1 = 'uc1'
 asia-northeast1 = 'an1'
 ```
 
-#### Показувати обліковий запис та псевдо проєкту
+#### Display account and aliased project
 
 ```toml
 # ~/.config/starship.toml
@@ -1724,6 +1735,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 | `only_nonzero_diffs` | `true`                                                       | Показувати стан лише для змінених елементів. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Формат модуля.                               |
 | `disabled`           | `true`                                                       | Вимикає модуль `git_metrics`.                |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules                 |
 
 ### Змінні
 
@@ -1758,24 +1770,25 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### Параметри
 
-| Параметр            | Стандартно                                      | Опис                                                                                                                    |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                                         |
-| `conflicted`        | `'='`                                           | Ця гілка конфлікт злиття.                                                                                               |
-| `ahead`             | `'⇡'`                                           | Формат `ahead`                                                                                                          |
-| `behind`            | `'⇣'`                                           | Формат `behind`                                                                                                         |
-| `diverged`          | `'⇕'`                                           | Формат `diverged`                                                                                                       |
-| `up_to_date`        | `''`                                            | Формат `up_to_date`                                                                                                     |
-| `untracked`         | `'?'`                                           | Формат `untracked`                                                                                                      |
-| `stashed`           | `'$'`                                           | Формат `stashed`                                                                                                        |
-| `modified`          | `'!'`                                           | Формат `modified`                                                                                                       |
-| `staged`            | `'+'`                                           | Формат `staged`                                                                                                         |
-| `renamed`           | `'»'`                                           | Формат `renamed`                                                                                                        |
-| `deleted`           | `'✘'`                                           | Формат `deleted`                                                                                                        |
-| `style`             | `'bold red'`                                    | Стиль модуля.                                                                                                           |
-| `ignore_submodules` | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
-| `disabled`          | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
-| `windows_starship`  |                                                 | Використовуйте цей (Linux) шлях до виконуваного файлу у Windows для показу `git_status` у випадку шляхів Windows у WSL. |
+| Параметр            | Стандартно                                      | Опис                                                                                                        |
+| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | Стандартний формат `git_status`                                                                             |
+| `conflicted`        | `'='`                                           | Ця гілка конфлікт злиття.                                                                                   |
+| `ahead`             | `'⇡'`                                           | Формат `ahead`                                                                                              |
+| `behind`            | `'⇣'`                                           | Формат `behind`                                                                                             |
+| `diverged`          | `'⇕'`                                           | Формат `diverged`                                                                                           |
+| `up_to_date`        | `''`                                            | Формат `up_to_date`                                                                                         |
+| `untracked`         | `'?'`                                           | Формат `untracked`                                                                                          |
+| `stashed`           | `'$'`                                           | Формат `stashed`                                                                                            |
+| `modified`          | `'!'`                                           | Формат `modified`                                                                                           |
+| `staged`            | `'+'`                                           | Формат `staged`                                                                                             |
+| `renamed`           | `'»'`                                           | Формат `renamed`                                                                                            |
+| `deleted`           | `'✘'`                                           | Формат `deleted`                                                                                            |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
+| `style`             | `'bold red'`                                    | Стиль модуля.                                                                                               |
+| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
+| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
+| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Змінні
 
@@ -1792,6 +1805,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `staged`       | Показує `staged`, коли нові фали були додані до простору staging.                                   |
 | `renamed`      | Показує `renamed` коли перейменовані файли було додано до простору staging.                         |
 | `deleted`      | Показує `deleted` коли інформація про видалення файлів була додана до простору staging.             |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                      |
 | style\*      | Віддзеркалює значення параметра `style`                                                             |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
@@ -2201,7 +2215,7 @@ symbol = '🌟 '
 # ~/.config/starship.toml
 
 [jobs]
-символ = '+ '
+symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
 ```
@@ -2359,7 +2373,7 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Регулярні вирази
+#### Regex Matching
 
 Крім простого псевдоніма, `context_aliases` і `user_aliases` також підтримують розширене зіставлення та перейменування за допомогою регулярних виразів.
 
@@ -2869,7 +2883,7 @@ symbol = '☁️ '
 `symbols` дозволяє визначити довільні символи для кожного типу операційної системи. Типи операційних систем не визначені вашою конфігурацією, використовують стандартну таблицю символів, дивись нижче. На цю мить усі операційні системи, що підтримуються модулем, перераховані нижче. Якщо ви бажаєте додати операційну систему, то можете створити [запит на функцію](https://github.com/starship/starship/issues/new/choose).
 
 ```toml
-# Це таблиця стандартних символів.
+# This is the default symbols table.
 [os.symbols]
 Alpaquita = "🔔 "
 Alpine = "🏔️ "
@@ -3132,7 +3146,7 @@ format = 'via [🔹 $version](147 bold) '
 
 ### Приклад
 
-#### З версією Pulumi
+#### With Pulumi Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3141,7 +3155,7 @@ format = 'via [🔹 $version](147 bold) '
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Без версії Pulumi
+#### Without Pulumi version
 
 ```toml
 # ~/.config/starship.toml
@@ -3255,7 +3269,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Використання лише двійкового файлу `python3` для отримання версії.
+# Only use the `python3` binary to get the version.
 python_binary = 'python3'
 ```
 
@@ -3263,7 +3277,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Не запускати файли з розширенням py
+# Don't trigger for files with the py extension
 detect_extensions = []
 ```
 
@@ -3271,10 +3285,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Показувати версію python з venv.
+# Display the version of python from inside a local venv.
 #
-# Зауважте, що це працюватиме лише тоді, коли venv знаходиться всередині проєкту, і він працюватиме
-# лише в теці, яка містить теку venv, якщо це нормально?
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3640,25 +3654,63 @@ threshold = 3
 format = '[📦 \[$env\]]($style) '
 ```
 
-## Spack
+## Solidity
 
-Модуль `spack` показує інформацію про поточне оточення [Spack](https://spack.readthedocs.io/en/latest/), якщо змінна `$SPACK_ENV` встановлена.
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
 
 ### Параметри
 
-| Параметр            | Стандартно                             | Опис                                                                                                                                                     |
-| ------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `truncation_length` | `1`                                    | Кількість тек, до яких має бути скорочений шлях до середовища оточення. `0` – означає без скорочення. Також подивіться модуль [`directory`](#directory). |
-| `symbol`            | `'🅢  '`                                | Символ що передує назві оточення.                                                                                                                        |
-| `style`             | `'bold blue'`                          | Стиль модуля.                                                                                                                                            |
-| `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                           |
-| `disabled`          | `false`                                | Вимикає модуль `spack`.                                                                                                                                  |
+| Параметр            | Стандартно                           | Опис                                                              |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                    |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity               |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                |
+| `detect_extensions` | `["sol"]`                            | Які розширення повинні запускати цей модуль.                      |
+| `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
+| `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
+| `style`             | `"bold blue"`                        | Стиль модуля.                                                     |
+| `disabled`          | `false`                              | Disables this module.                                             |
+
+### Змінні
+
+| Змінна    | Приклад  | Опис                                     |
+| --------- | -------- | ---------------------------------------- |
+| version   | `v0.8.1` | The version of `solidity`                |
+| symbol    |          | Віддзеркалює значення параметра `symbol` |
+| style\* |          | Віддзеркалює значення параметра `style`  |
+
+*: Ця змінна може бути використана лише як частина стилю рядка
+
+### Приклад
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
+```
+
+## Spack
+
+The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+
+### Параметри
+
+| Параметр            | Стандартно                             | Опис                                                                                                                                                    |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `truncation_length` | `1`                                    | The number of directories the environment path should be truncated to. `0` – означає без скорочення. Також подивіться модуль [`directory`](#directory). |
+| `symbol`            | `'🅢  '`                                | Символ що передує назві оточення.                                                                                                                       |
+| `style`             | `'bold blue'`                          | Стиль модуля.                                                                                                                                           |
+| `format`            | `'via [$symbol$environment]($style) '` | Формат модуля.                                                                                                                                          |
+| `disabled`          | `false`                                | Disables the `spack` module.                                                                                                                            |
 
 ### Змінні
 
 | Змінна      | Приклад      | Опис                                     |
 | ----------- | ------------ | ---------------------------------------- |
-| environment | `astronauts` | Поточне середовище spack                 |
+| environment | `astronauts` | The current spack environment            |
 | symbol      |              | Віддзеркалює значення параметра `symbol` |
 | style\*   |              | Віддзеркалює значення параметра `style`  |
 
@@ -3675,7 +3727,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 ## Status
 
-Модуль `status` показує код завершення роботи попередньої команди. Якщо $success_symbol пустий (типово), модуль буде показаний тільки якщо код виходу не `0`. Код status може бути перетворений у 32-бітне ціле число.
+The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
 ::: tip
 
@@ -3685,38 +3737,38 @@ format = '[$symbol$environment](dimmed blue) '
 
 ### Параметри
 
-| Параметр                    | Стандартно                                                                         | Опис                                                                                   |
-| --------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | Формат модуля                                                                          |
-| `symbol`                    | `'❌'`                                                                              | Символ, що показується у випадку помилки                                               |
-| `success_symbol`            | `''`                                                                               | Символ, що показується після успішного завершення попередньої команди                  |
-| `not_executable_symbol`     | `'🚫'`                                                                              | Символ, що показується у випадку виконати файл, який не є виконуваним                  |
-| `not_found_symbol`          | `'🔍'`                                                                              | Символ, що показується, коли команду не знайдено                                       |
-| `sigint_symbol`             | `'🧱'`                                                                              | Символ, що показується для SIGINT (Ctrl + c)                                           |
-| `signal_symbol`             | `'⚡'`                                                                              | Символ для будь-якого сигналу                                                          |
-| `style`                     | `'bold red'`                                                                       | Стиль модуля.                                                                          |
-| `recognize_signal_code`     | `true`                                                                             | Вмикає сигнал на код виходу                                                            |
-| `map_symbol`                | `false`                                                                            | Вмикає символ на код виходу                                                            |
-| `pipestatus`                | `false`                                                                            | Вмикає звітування про pipestatus                                                       |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | Символ, що використовується для розділення сегментів конвеєра (підтримує форматування) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | Формат модуля, коли команда є конвеєром                                                |
-| `pipestatus_segment_format` |                                                                                    | Якщо вказано, замінює `format` під час форматування сегментів конвеєра                 |
-| `disabled`                  | `true`                                                                             | Вимикає модуль `status`.                                                               |
+| Параметр                    | Стандартно                                                                         | Опис                                                                  |
+| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                      | Формат модуля                                                         |
+| `symbol`                    | `'❌'`                                                                              | The symbol displayed on program error                                 |
+| `success_symbol`            | `''`                                                                               | The symbol displayed on program success                               |
+| `not_executable_symbol`     | `'🚫'`                                                                              | The symbol displayed when file isn't executable                       |
+| `not_found_symbol`          | `'🔍'`                                                                              | The symbol displayed when the command can't be found                  |
+| `sigint_symbol`             | `'🧱'`                                                                              | The symbol displayed on SIGINT (Ctrl + c)                             |
+| `signal_symbol`             | `'⚡'`                                                                              | The symbol displayed on any signal                                    |
+| `style`                     | `'bold red'`                                                                       | Стиль модуля.                                                         |
+| `recognize_signal_code`     | `true`                                                                             | Enable signal mapping from exit code                                  |
+| `map_symbol`                | `false`                                                                            | Enable symbols mapping from exit code                                 |
+| `pipestatus`                | `false`                                                                            | Enable pipestatus reporting                                           |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | The format of the module when the command is a pipeline               |
+| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
+| `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
 
 ### Змінні
 
-| Змінна         | Приклад | Опис                                                                             |
-| -------------- | ------- | -------------------------------------------------------------------------------- |
-| status         | `127`   | Код виходу останньої команди                                                     |
-| hex_status     | `0x7F`  | Код виходу останньої команди в hex                                               |
-| int            | `127`   | Код виходу останньої команди                                                     |
-| common_meaning | `ERROR` | Значення коду, якщо не сигнал                                                    |
-| signal_number  | `9`     | Номер сигналу, що відповідає коду завершення, за наявності                       |
-| signal_name    | `KILL`  | Назва сигналу, що відповідає коду виходу лише в тому випадку, якщо його записано |
-| maybe_int      | `7`     | Містить номер коду виходу, коли значення не знайдено                             |
-| pipestatus     |         | Показує коду виходу конвеєра, доступно тільки в форматі pipestatus_format        |
-| symbol         |         | Віддзеркалює значення параметра `symbol`                                         |
-| style\*      |         | Віддзеркалює значення параметра `style`                                          |
+| Змінна         | Приклад | Опис                                                                                       |
+| -------------- | ------- | ------------------------------------------------------------------------------------------ |
+| status         | `127`   | The exit code of the last command                                                          |
+| hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
+| int            | `127`   | The exit code of the last command                                                          |
+| common_meaning | `ERROR` | Meaning of the code if not a signal                                                        |
+| signal_number  | `9`     | Signal number corresponding to the exit code, only if signalled                            |
+| signal_name    | `KILL`  | Name of the signal corresponding to the exit code, only if signalled                       |
+| maybe_int      | `7`     | Contains the exit code number when no meaning has been found                               |
+| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
+| symbol         |         | Віддзеркалює значення параметра `symbol`                                                   |
+| style\*      |         | Віддзеркалює значення параметра `style`                                                    |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -3736,7 +3788,7 @@ disabled = false
 
 ## Sudo
 
-Модуль `sudo` показує, чи облікові дані sudo зараз є в кеші. Модуль показується лише за наявності даних в кеші.
+The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
 
 ::: tip
 
@@ -3746,13 +3798,13 @@ disabled = false
 
 ### Параметри
 
-| Параметр        | Стандартно               | Опис                                                              |
-| --------------- | ------------------------ | ----------------------------------------------------------------- |
-| `format`        | `'[as $symbol]($style)'` | Формат модуля                                                     |
-| `symbol`        | `'🧙 '`                   | Символ, що показується, коли облікові дані є в кеші               |
-| `style`         | `'bold blue'`            | Стиль модуля.                                                     |
-| `allow_windows` | `false`                  | Оскільки Windows не має sudo, для цієї Ос модуль типово вимкнено. |
-| `disabled`      | `true`                   | Вимикає модуль `sudo`.                                            |
+| Параметр        | Стандартно               | Опис                                                    |
+| --------------- | ------------------------ | ------------------------------------------------------- |
+| `format`        | `'[as $symbol]($style)'` | Формат модуля                                           |
+| `symbol`        | `'🧙 '`                   | The symbol displayed when credentials are cached        |
+| `style`         | `'bold blue'`            | Стиль модуля.                                           |
+| `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
+| `disabled`      | `true`                   | Disables the `sudo` module.                             |
 
 ### Змінні
 
@@ -3785,10 +3837,10 @@ disabled = false
 
 ## Swift
 
-Модуль `swift` показує поточну встановлену версію [Swift](https://swift.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- Поточна тека містить файл `Package.swift`
-- Поточна тека містить файли з розширенням `.swift`
+- The current directory contains a `Package.swift` file
+- The current directory contains a file with the `.swift` extension
 
 ### Параметри
 
@@ -3796,18 +3848,18 @@ disabled = false
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'🐦 '`                               | Формат рядка, що представляє символ Swift                         |
+| `symbol`            | `'🐦 '`                               | A format string representing the symbol of Swift                  |
 | `detect_extensions` | `['swift']`                          | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['Package.swift']`                  | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold 202'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Вимикає модуль `swift`.                                           |
+| `disabled`          | `false`                              | Disables the `swift` module.                                      |
 
 ### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v5.2.4` | Версія `swift`                           |
+| version   | `v5.2.4` | The version of `swift`                   |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -3824,18 +3876,18 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію.
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
-Стандартно версія Terraform не показується, оскільки це повільно для поточних версій Terraform, особливо коли використовується багато втулків. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- Поточна тека містить файл `.terraform`
-- Поточна тека містить файли з розширеннями`.tf`, `.tfplan` або `.tfstate`
+- The current directory contains a `.terraform` folder
+- Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Параметри
 
@@ -3843,19 +3895,19 @@ format = 'via [🏎  $version](red bold)'
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol$workspace]($style) '` | Формат рядка модуля.                                              |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'💠'`                                | Формат рядка, що відображається перед робочою областю terraform.  |
+| `symbol`            | `'💠'`                                | A format string shown before the terraform workspace.             |
 | `detect_extensions` | `['tf', 'tfplan', 'tfstate']`        | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `['.terraform']`                     | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'bold 105'`                         | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Вимикає модуль `terraform`.                                       |
+| `disabled`          | `false`                              | Disables the `terraform` module.                                  |
 
 ### Змінні
 
 | Змінна    | Приклад    | Опис                                     |
 | --------- | ---------- | ---------------------------------------- |
-| version   | `v0.12.24` | Версія `terraform`                       |
-| workspace | `default`  | Поточна робоча область Terraform         |
+| version   | `v0.12.24` | The version of `terraform`               |
+| workspace | `default`  | The current Terraform workspace          |
 | symbol    |            | Віддзеркалює значення параметра `symbol` |
 | style\* |            | Віддзеркалює значення параметра `style`  |
 
@@ -3863,7 +3915,7 @@ format = 'via [🏎  $version](red bold)'
 
 ### Приклад
 
-#### За версією Terraform
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3872,7 +3924,7 @@ format = 'via [🏎  $version](red bold)'
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Без версії Terraform
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
@@ -3883,7 +3935,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Time
 
-Модуль `time` показує поточний **місцевий** час. Значення `format` використовується в [`chrono`](https://crates.io/crates/chrono) для керування показу часу. Перегляньте [документацію chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), щоб побачити, які параметри доступні.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3893,23 +3945,23 @@ format = '[🏎💨 $workspace]($style) '
 
 ### Параметри
 
-| Параметр          | Стандартно              | Опис                                                                                                                    |
-| ----------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | Формат рядка модуля.                                                                                                    |
-| `use_12hr`        | `false`                 | Вмикає 12-годинний формат                                                                                               |
-| `time_format`     | дивіться нижче          | Формат [chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) використовується для форматування часу. |
-| `style`           | `'bold yellow'`         | Стиль модуля time                                                                                                       |
-| `utc_time_offset` | `'local'`               | Встановлює зсув від UTC. Діапазон від -24 &lt; x &lt; 24. Дозволяє часові пояси із сувом 30/45 хвилин.      |
-| `disabled`        | `true`                  | Вимикає модуль `time`.                                                                                                  |
-| `time_range`      | `'-'`                   | Встановлює діапазон часу, протягом якого модуль показується. Час має бути зазначений у 24-годинному форматі             |
+| Параметр          | Стандартно              | Опис                                                                                                                               |
+| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | Формат рядка модуля.                                                                                                               |
+| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
+| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
+| `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
+| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
+| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
 
-Якщо `use_12hr` є `true`, то стандартно `time_format` — `'%r'`. В іншому випадку стандартне значення — `'%T'`. Налаштований вручну `time_format` має перевагу над параметром `use_12hr`.
+If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Змінні
 
 | Змінна    | Приклад    | Опис                                    |
 | --------- | ---------- | --------------------------------------- |
-| time      | `13:08:10` | Поточний час.                           |
+| time      | `13:08:10` | The current time.                       |
 | style\* |            | Віддзеркалює значення параметра `style` |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
@@ -3929,35 +3981,35 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-Модуль `username` показує імʼя активного користувача. Модуль показується, якщо виконується будь-яка з наступних умов:
+The `username` module shows active user's username. Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- Поточний користувач має права суперкористувача
-- Поточний користувач не є таким же, як той, який увійшов до системи
-- Користувач зараз підключений через SSH
-- Змінна `show_always` встановлена в true
+- The current user is root/admin
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
-Підключення SSH виявляється шляхом перевірки змінних середовища `SSH_CONNECTION`, `SSH_CLIENT` і `SSH_TTY`. Якщо ваш хост SSH не налаштував ці змінні, одним зі способів розвʼязання проблеми є встановлення для однієї з них фіктивного значення.
+SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
 :::
 
 ### Параметри
 
-| Параметр      | Стандартно              | Опис                                                       |
-| ------------- | ----------------------- | ---------------------------------------------------------- |
-| `style_root`  | `'bold red'`            | Стиль, який використовується коли користувач є root/admin. |
-| `style_user`  | `'bold yellow'`         | Стиль для звичайних користувачів.                          |
-| `format`      | `'[$user]($style) in '` | Формат модуля.                                             |
-| `show_always` | `false`                 | Завжди показувати модуль `username`.                       |
-| `disabled`    | `false`                 | Вимикає модуль `username`.                                 |
+| Параметр      | Стандартно              | Опис                                        |
+| ------------- | ----------------------- | ------------------------------------------- |
+| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
+| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
+| `format`      | `'[$user]($style) in '` | Формат модуля.                              |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### Змінні
 
-| Змінна  | Приклад      | Опис                                                                                                |
-| ------- | ------------ | --------------------------------------------------------------------------------------------------- |
-| `style` | `'red bold'` | Віддзеркалює значення параметра `style_root` коли користувач root, і `style_user` в іншому випадку. |
-| `user`  | `'matchai'`  | Поточний користувач.                                                                                |
+| Змінна  | Приклад      | Опис                                                                                        |
+| ------- | ------------ | ------------------------------------------------------------------------------------------- |
+| `style` | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
+| `user`  | `'matchai'`  | The currently logged-in user ID.                                                            |
 
 ### Приклад
 
@@ -3974,9 +4026,9 @@ show_always = true
 
 ## Vagrant
 
-Модуль `vagrant` показує поточну встановлену версію [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- Поточна тека містить файл `Vagrantfile`
+- The current directory contains a `Vagrantfile` file
 
 ### Параметри
 
@@ -3984,18 +4036,18 @@ show_always = true
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'⍱ '`                               | Формат рядка, що представляє символ Vagrant.                      |
+| `symbol`            | `'⍱ '`                               | A format string representing the symbol of Vagrant.               |
 | `detect_extensions` | `[]`                                 | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['Vagrantfile']`                    | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'cyan bold'`                        | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Вимикає модуль `vagrant`.                                         |
+| `disabled`          | `false`                              | Disables the `vagrant` module.                                    |
 
 ### Змінні
 
 | Змінна    | Приклад          | Опис                                     |
 | --------- | ---------------- | ---------------------------------------- |
-| version   | `Vagrant 2.2.10` | Версія `Vagrant`                         |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`                 |
 | symbol    |                  | Віддзеркалює значення параметра `symbol` |
 | style\* |                  | Віддзеркалює значення параметра `style`  |
 
@@ -4012,10 +4064,10 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-Модуль `vlang` показує поточну встановлену версію [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- Поточна тека містить файли з розширенням `.v`
-- Поточна тека містить файли `v.mod`, `vpkg.json` або `.vpkg-lock.json`
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### Параметри
 
@@ -4023,18 +4075,18 @@ format = 'via [⍱ $version](bold white) '
 | ------------------- | -------------------------------------------- | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'`         | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                                  | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'V '`                                       | Формат рядка, що представляє символ V                             |
+| `symbol`            | `'V '`                                       | A format string representing the symbol of V                      |
 | `detect_extensions` | `['v']`                                      | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                         | В яких теках цей модуль має запускатись.                          |
 | `style`             | `'blue bold'`                                | Стиль модуля.                                                     |
-| `disabled`          | `false`                                      | Вимикає модуль `vlang`.                                           |
+| `disabled`          | `false`                                      | Disables the `vlang` module.                                      |
 
 ### Змінні
 
 | Змінна    | Приклад | Опис                                     |
 | --------- | ------- | ---------------------------------------- |
-| version   | `v0.2`  | Версія `v`                               |
+| version   | `v0.2`  | The version of `v`                       |
 | symbol    |         | Віддзеркалює значення параметра `symbol` |
 | style\* |         | Віддзеркалює значення параметра `style`  |
 
@@ -4048,24 +4100,24 @@ format = 'via [V $version](blue bold) '
 
 ## VCSH
 
-Модуль `vcsh` показує поточний репозиторій [VCSH](https://github.com/RichiH/vcsh). Модуль показується лише в тому випадку, якщо репозиторій використовується.
+The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
 
 ### Параметри
 
-| Параметр   | Стандартно                       | Опис                                               |
-| ---------- | -------------------------------- | -------------------------------------------------- |
-| `symbol`   | `''`                             | Символ, який знаходиться перед назвою репозиторію. |
-| `style`    | `'bold yellow'`                  | Стиль модуля.                                      |
-| `format`   | `'vcsh [$symbol$repo]($style) '` | Формат модуля.                                     |
-| `disabled` | `false`                          | Вимикає модуль `vcsh`.                             |
+| Параметр   | Стандартно                       | Опис                                                   |
+| ---------- | -------------------------------- | ------------------------------------------------------ |
+| `symbol`   | `''`                             | The symbol used before displaying the repository name. |
+| `style`    | `'bold yellow'`                  | Стиль модуля.                                          |
+| `format`   | `'vcsh [$symbol$repo]($style) '` | Формат модуля.                                         |
+| `disabled` | `false`                          | Disables the `vcsh` module.                            |
 
 ### Змінні
 
-| Змінна    | Приклад                                       | Опис                                     |
-| --------- | --------------------------------------------- | ---------------------------------------- |
-| repo      | `dotfiles` якщо в VCSH repo з іменем dotfiles | Назва поточного репозиторію              |
-| symbol    |                                               | Віддзеркалює значення параметра `symbol` |
-| style\* | `black bold dimmed`                           | Віддзеркалює значення параметра `style`  |
+| Змінна    | Приклад                                     | Опис                                     |
+| --------- | ------------------------------------------- | ---------------------------------------- |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name               |
+| symbol    |                                             | Віддзеркалює значення параметра `symbol` |
+| style\* | `black bold dimmed`                         | Віддзеркалює значення параметра `style`  |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
@@ -4080,9 +4132,9 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-Модуль `zig` показує поточну встановлену версію [Zig](https://ziglang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
-- Поточна тека містить файл `.zig`
+- The current directory contains a `.zig` file
 
 ### Параметри
 
@@ -4090,9 +4142,9 @@ format = '[🆅 $repo](bold blue) '
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | Формат модуля.                                                    |
 | `version_format`    | `'v${raw}'`                          | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `'↯ '`                               | Символ, який знаходиться перед версією Zig.                       |
+| `symbol`            | `'↯ '`                               | The symbol used before displaying the version of Zig.             |
 | `style`             | `'bold yellow'`                      | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Вимикає модуль `zig`.                                             |
+| `disabled`          | `false`                              | Disables the `zig` module.                                        |
 | `detect_extensions` | `['zig']`                            | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
@@ -4101,7 +4153,7 @@ format = '[🆅 $repo](bold blue) '
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v0.6.0` | Версія `zig`                             |
+| version   | `v0.6.0` | The version of `zig`                     |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
@@ -4116,100 +4168,100 @@ format = '[🆅 $repo](bold blue) '
 symbol = '⚡️ '
 ```
 
-## Власні команди
+## Custom commands
 
-Модулі `custom` показують результат виконання певних довільних команд.
+The `custom` modules show the output of some arbitrary commands.
 
-Модулі показуються, якщо виконується будь-яка з наступних умов:
+These modules will be shown if any of the following conditions are met:
 
-- Поточна тека містить файл, ім'я якого є в `detect_files`
-- Поточна тека містить теки, ім'я яких вказано в `detect_folders`
-- Поточна тека містить файл, розширення якого є в `detect_extensions`
-- Команда `when` повертає 0
-- Поточна операційна система (std::env::consts::OS) збігається з полем `os`, якщо визначено.
+- The current directory contains a file whose name is in `detect_files`
+- The current directory contains a directory whose name is in `detect_folders`
+- The current directory contains a file whose extension is in `detect_extensions`
+- The `when` command returns 0
+- The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 
-Кілька власних модулів можна визначити за допомогою символу "`.`".
+Multiple custom modules can be defined by using a `.`.
 
 :::
 
 ::: tip
 
-Порядок в якому власні модулі будуть показуватись може бути встановлений індивідуально додаванням `${custom.foo}` до змінної `format` верхнього рівня (через те, що назви містять точки вам треба використовувати`${...}`). Типово, модуль `custom` покаже усі модулі custom, в тому порядку, в якому вони були визначені.
+The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
 ::: tip
 
-[Квиток #1252](https://github.com/starship/starship/discussions/1252) містить приклади власних модулів. Якщо у вас є цікавий приклад ще не розкритий там, не соромтеся, поділитися ним!
+[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
 :::
 
-::: warning Вихідні дані команди друкуються без екранування
+::: warning Command output is printed unescaped to the prompt
 
-Незалежно від результату, який генерує команда, він виводиться в командний рядок у незміненому вигляді. Це означає, що якщо вивід містить спеціальні послідовності, які інтерпретуються оболонкою, вони будуть оброблені та перетворені оболонкою при виводі. Ці спеціальні послідовності є специфічними для оболонки, напр. ви можете написати модуль, який записує послідовності bash, наприклад. `\h`, але цей модуль не працюватиме в оболонці fish або zsh.
+Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
 
-Рядок формату також може містити специфічні послідовності командного рядка, наприклад [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 
 ### Параметри
 
-| Параметр            | Стандартно                      | Опис                                                                                                                                                                                                                                                                                                                             |
-| ------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`           | `''`                            | Команда, вивід якої потрібно показувати. Команду буде передано до оболонки через stdin.                                                                                                                                                                                                                                          |
-| `when`              | `false`                         | Або булеве значення (`true` чи `false`, без лапок) або команди shell, що використовуються як умова для показу модуля. У випадку рядка команди, модуль буде показаний, якщо команда повертає код завершення `0`.                                                                                                                  |
-| `require_repo`      | `false`                         | Якщо `true`, модуль буде показано лише в шляхах, що містять репозиторій (git). Цей параметр сам по собі не є достатньою умовою для показу модуля за відсутності інших варіантів.                                                                                                                                                 |
-| `shell`             |                                 | [Дивіться нижче](#custom-command-shell)                                                                                                                                                                                                                                                                                          |
-| `description`       | `'<custom module>'`       | Опис модуля, який показується під час запуску `starship explain`.                                                                                                                                                                                                                                                                |
-| `detect_files`      | `[]`                            | Файли, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                                      |
-| `detect_folders`    | `[]`                            | Теки, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                                       |
-| `detect_extensions` | `[]`                            | Розширення файлів, які треба шукати у робочій теці для отримання збігу.                                                                                                                                                                                                                                                          |
-| `symbol`            | `''`                            | Символ, який йде перед виводом команди.                                                                                                                                                                                                                                                                                          |
-| `style`             | `'bold green'`                  | Стиль модуля.                                                                                                                                                                                                                                                                                                                    |
-| `format`            | `'[$symbol($output )]($style)'` | Формат модуля.                                                                                                                                                                                                                                                                                                                   |
-| `disabled`          | `false`                         | Вимикає показ модулі `custom`.                                                                                                                                                                                                                                                                                                   |
-| `os`                |                                 | Назва операційної системи, на якій буде показано модуль (unix, linux, macos, windows, … ) [Переглянути можливі значення](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                                             |
-| `use_stdin`         |                                 | Необов’язкове логічне значення, яке перевизначає, чи команди слід пересилати в оболонку через стандартний ввід чи як аргумент. Якщо не встановлено, типово використовується  стандартний ввід, якщо оболонка не підтримує його (cmd, nushell). Встановлення цього параметра вимикає обробку специфічних для оболонки аргументів. |
-| `ignore_timeout`    | `false`                         | Ігнорує глобальне налаштування `command_timeout` і продовжує виконувати зовнішні команди, незалежно від того, скільки часу вони вимагають.                                                                                                                                                                                       |
+| Параметр            | Стандартно                      | Опис                                                                                                                                                                                                                                                                                          |
+| ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
+| `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
+| `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
+| `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
+| `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
+| `symbol`            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
+| `style`             | `'bold green'`                  | Стиль модуля.                                                                                                                                                                                                                                                                                 |
+| `format`            | `'[$symbol($output )]($style)'` | Формат модуля.                                                                                                                                                                                                                                                                                |
+| `disabled`          | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
+| `os`                |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
+| `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
+| `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
 
 ### Змінні
 
 | Змінна    | Опис                                     |
 | --------- | ---------------------------------------- |
-| output    | Вивід команд в `shell`                   |
+| output    | The output of shell command in `shell`   |
 | symbol    | Віддзеркалює значення параметра `symbol` |
 | style\* | Віддзеркалює значення параметра `style`  |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
-#### Власні команди shell
+#### Custom command shell
 
-`shell` приймає непустий список рядків, де:
+`shell` accepts a non-empty list of strings, where:
 
-- Перший рядок — це шлях до оболонки для виконання команди.
-- Наступні — інші аргументи, що передаються до оболонки.
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
 
-Якщо не налаштовано, модуль повертатиметься до STARSHIP_SHELL, а потім до «sh» у Linux і «cmd /C» у Windows.
+If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
 
-Команда `command` буде передана до stdin.
+The `command` will be passed in on stdin.
 
-Якщо `shell` не вказано або містить тільки один елемент і Starship виявить, що буде використано PowerShell, наступні аргументи будуть автоматично додані: `-Noprofile -Command -`. Якщо `shell` не вказано або міститься лише один елемент і Starship виявить, що буде використано Cmd, аргумент`/C`  буде автоматично додано, а `stdin` буде встановлено у `false`. Якщо `shell` не вказано або міститься лише один елемент і Starship виявить, що буде використано Nushell, аргумент`c` буде автоматично додано, а `stdin` буде встановлено у `false`. Такої поведінки можна уникнути шляхом явного передавання аргументів до оболонки, наприклад,
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Переконайтеся, що ваша оболонка завершує процеси правильно
+::: warning Make sure your custom shell configuration exits gracefully
 
-Якщо ви вказуєте власну команду, переконайтеся, що стандартний Shell, який використовується starship, буде виконувати команді з чистим (graceful) завершенням, за допомогою параметра `shell`.
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
 
-Наприклад, PowerShell потребує параметр `-Command` для виконання однорядкової команди. Пропуск цього параметра може призвести до рекурсивного циклу starship, де оболонка може спробувати знову завантажити повний профіль середовища з самим starship і, отже, повторно виконати власну команду, потрапивши в нескінченний цикл.
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
 
-Параметри, подібні до `-NoProfile` у PowerShell, також рекомендовані для інших оболонок, щоб уникнути додаткового часу завантаження власного профілю під час кожного виклику Starship.
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
 
-Наразі реалізовано автоматичне виявлення оболонок і правильне додавання параметрів, але можливо, що охоплено не всі оболонки. [Будь ласка, сповістіть про проблему](https://github.com/starship/starship/issues/new/choose) з подробицями про термінал та конфігурацію автозапуску, якщо ви зіткнулись з таким сценарій.
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
 :::
 
