@@ -1787,7 +1787,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Stil für dieses Modul.                                                                                      |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
+| `disabled`          | `false`                                         | Deaktiviert das `git_status`-Modul.                                                                         |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Variables
@@ -3886,7 +3886,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.terraform` folder
+- Das aktuelle Verzeichnis enthält eine `.terraform`-Datei
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Optionen
@@ -3900,7 +3900,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `['.terraform']`                     | Which folders should trigger this module.                                 |
 | `style`             | `'bold 105'`                         | Stil für dieses Modul.                                                    |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
+| `disabled`          | `false`                              | Deaktiviert das `terraform` Modul.                                        |
 
 ### Variables
 
@@ -3935,7 +3935,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Uhrzeit
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
 
 ::: tip
 
@@ -3945,15 +3945,15 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 
 ### Optionen
 
-| Option            | Standartwert            | Beschreibung                                                                                                                       |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                  |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| Option            | Standartwert            | Beschreibung                                                                                                                         |
+| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                    |
+| `use_12hr`        | `false`                 | Aktiviert 12-Stunden-Format                                                                                                          |
+| `time_format`     | siehe unten             | Das Format zum Anzeigen der Uhrzeit in [chrono-Formatierung](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html).        |
+| `style`           | `'bold yellow'`         | Stil für dieses Modul                                                                                                                |
+| `utc_time_offset` | `'local'`               | Verwendetes Zeitzonen-Offset. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
+| `disabled`        | `true`                  | Deaktiviert das `time`-Modul.                                                                                                        |
+| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3961,7 +3961,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Variable  | Beispiel   | Beschreibung                         |
 | --------- | ---------- | ------------------------------------ |
-| time      | `13:08:10` | The current time.                    |
+| zeit      | `13:08:10` | The current time.                    |
 | style\* |            | Spiegelt den Wert der Option `style` |
 
 *: This variable can only be used as a part of a style string
@@ -3981,12 +3981,12 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-The `username` module shows active user's username. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
 
 - The current user is root/admin
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
+- Der Benutzer ist aktuell via SSH verbunden
+- Die Variable `show_always` ist auf true gesetzt
 
 ::: tip
 
@@ -3996,13 +3996,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Optionen
 
-| Option        | Standartwert            | Beschreibung                                |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
-| `format`      | `'[$user]($style) in '` | Das Format für das Modul.                   |
-| `show_always` | `false`                 | Always shows the `username` module.         |
-| `disabled`    | `false`                 | Disables the `username` module.             |
+| Option        | Standartwert            | Beschreibung                                   |
+| ------------- | ----------------------- | ---------------------------------------------- |
+| `style_root`  | `'bold red'`            | The style used when the user is root/admin.    |
+| `style_user`  | `'bold yellow'`         | Stil wenn der Benutzer nicht unter root läuft. |
+| `format`      | `'[$user]($style) in '` | Das Format für das Modul.                      |
+| `show_always` | `false`                 | Immer das `username` Modul anzeigen.           |
+| `disabled`    | `false`                 | Deavktiviert das `username` Modul.             |
 
 ### Variables
 
@@ -4214,7 +4214,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `beschreibung`      | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
