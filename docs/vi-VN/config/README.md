@@ -698,7 +698,7 @@ Mặc định, nó chỉ thay đổi màu. If you also want to change its shape 
 
 ### Các ví dụ
 
-#### With custom error shape
+#### Có tuỳ chỉnh hình dạng lỗi
 
 ```toml
 # ~/.config/starship.toml
@@ -708,7 +708,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[✗](bold red) '
 ```
 
-#### Without custom error shape
+#### Không có tuỳ chỉnh hình dạng lỗi
 
 ```toml
 # ~/.config/starship.toml
@@ -718,7 +718,7 @@ success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 ```
 
-#### With custom vim shape
+#### Có tuỳ chỉnh hình dạng vim
 
 ```toml
 # ~/.config/starship.toml
@@ -1555,7 +1555,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 
 ### Các ví dụ
 
-#### Display account and project
+#### Hiển thị tài khoản và dự án
 
 ```toml
 # ~/.config/starship.toml
@@ -1564,7 +1564,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
 ```
 
-#### Display active config name only
+#### Chỉ hiển thị tên cấu hình hiệu lực
 
 ```toml
 # ~/.config/starship.toml
@@ -1574,7 +1574,7 @@ format = '[$symbol$active]($style) '
 style = 'bold yellow'
 ```
 
-#### Display account and aliased region
+#### Hiển thị tài khoản và bí danh khu vực
 
 ```toml
 # ~/.config/starship.toml
@@ -1787,7 +1787,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Kiểu cho module.                                                                                            |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
+| `disabled`          | `false`                                         | Vô hiệu `git_status` module.                                                                                |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Các biến
@@ -3961,7 +3961,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Biến      | Ví dụ      | Mô tả                      |
 | --------- | ---------- | -------------------------- |
-| time      | `13:08:10` | The current time.          |
+| thời gian | `13:08:10` | The current time.          |
 | style\* |            | Giá trị ghi đè của `style` |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
@@ -4214,7 +4214,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `mô tả`             | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
