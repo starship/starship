@@ -10,7 +10,7 @@ use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell as CompletionShell};
 use rand::distributions::Alphanumeric;
 use rand::Rng;
-use starship::context::{Properties, Target};
+use starship::context::{Context, Properties, Target};
 use starship::module::ALL_MODULES;
 use starship::*;
 
@@ -208,17 +208,22 @@ fn main() {
         }
         Commands::Preset { name, list, output } => print::preset_command(name, output, list),
         Commands::Config { name, value } => {
+            let context = Context::default();
             if let Some(name) = name {
                 if let Some(value) = value {
-                    configure::update_configuration(&name, &value)
+                    configure::update_configuration(&context, &name, &value)
                 }
-            } else if let Err(reason) = configure::edit_configuration(None) {
+            } else if let Err(reason) = configure::edit_configuration(&context, None) {
                 eprintln!("Could not edit configuration: {reason}");
                 std::process::exit(1);
             }
         }
-        Commands::PrintConfig { default, name } => configure::print_configuration(default, &name),
-        Commands::Toggle { name, value } => configure::toggle_configuration(&name, &value),
+        Commands::PrintConfig { default, name } => {
+            configure::print_configuration(&Context::default(), default, &name);
+        }
+        Commands::Toggle { name, value } => {
+            configure::toggle_configuration(&Context::default(), &name, &value)
+        }
         Commands::BugReport => bug_report::create(),
         Commands::Time => {
             match SystemTime::now()
