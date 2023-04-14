@@ -1787,7 +1787,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Стиль модуля.                                                                                               |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | Disables the `git_status` module.                                                                           |
+| `disabled`          | `false`                                         | Отключает модуль `git_status`.                                                                              |
 | `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Переменные
@@ -3886,7 +3886,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 By default the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `.terraform` folder
+- Текущий каталог содержит папку `.terraform`
 - Current directory contains a file with the `.tf`, `.tfplan` or `.tfstate` extensions
 
 ### Опции
@@ -3900,7 +3900,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `['.terraform']`                     | Which folders should trigger this module.                                 |
 | `style`             | `'bold 105'`                         | Стиль модуля.                                                             |
-| `disabled`          | `false`                              | Disables the `terraform` module.                                          |
+| `disabled`          | `false`                              | Отключает модуль `terraform`.                                             |
 
 ### Переменные
 
@@ -3935,7 +3935,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Время
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
 
 ::: tip
 
@@ -3945,15 +3945,15 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ### Опции
 
-| Параметр          | По умолчанию            | Описание                                                                                                                           |
-| ----------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                  |
-| `use_12hr`        | `false`                 | Enables 12 hour formatting                                                                                                         |
-| `time_format`     | see below               | The [chrono format string](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) used to format the time.                |
-| `style`           | `'bold yellow'`         | The style for the module time                                                                                                      |
-| `utc_time_offset` | `'local'`               | Sets the UTC offset to use. Range from -24 &lt; x &lt; 24. Allows floats to accommodate 30/45 minute timezone offsets. |
-| `disabled`        | `true`                  | Disables the `time` module.                                                                                                        |
-| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                              |
+| Параметр          | По умолчанию            | Описание                                                                                                                                                      |
+| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | `'at [$time]($style) '` | The format string for the module.                                                                                                                             |
+| `use_12hr`        | `false`                 | Включить 12-часовое форматирование                                                                                                                            |
+| `time_format`     | см. ниже                | [Строка формата chrono](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), используемая для форматирования времени.                             |
+| `style`           | `'bold yellow'`         | Стиль модуля времени                                                                                                                                          |
+| `utc_time_offset` | `'local'`               | Устанавливает смещение UTC. Range from -24 &lt; x &lt; 24. Разрешает числам с плавающей точкой встраивать 30/45-минутное смещение временной зоны. |
+| `disabled`        | `true`                  | Отключает модуль `time`.                                                                                                                                      |
+| `time_range`      | `'-'`                   | Sets the time range during which the module will be shown. Times must be specified in 24-hours format                                                         |
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
@@ -3961,7 +3961,7 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 | Переменная | Пример     | Описание                            |
 | ---------- | ---------- | ----------------------------------- |
-| time       | `13:08:10` | The current time.                   |
+| время      | `13:08:10` | The current time.                   |
 | style\*  |            | Отражает значение параметра `style` |
 
 *: Эта переменная может использоваться только в качестве части строки style
@@ -3979,14 +3979,14 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
-## Username
+## Имя пользователя
 
-The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `username` показывает имя текущего пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current user is root/admin
-- The current user isn't the same as the one that is logged in
-- The user is currently connected as an SSH session
-- The variable `show_always` is set to true
+- Текущий пользователь отличается от залогиненного
+- Пользователь подключен к SSH-сессии
+- Переменная `show_always` равна true
 
 ::: tip
 
@@ -3996,13 +3996,13 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Опции
 
-| Параметр      | По умолчанию            | Описание                                    |
-| ------------- | ----------------------- | ------------------------------------------- |
-| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
-| `format`      | `'[$user]($style) in '` | Формат модуля.                              |
-| `show_always` | `false`                 | Always shows the `username` module.         |
-| `disabled`    | `false`                 | Disables the `username` module.             |
+| Параметр      | По умолчанию            | Описание                                                |
+| ------------- | ----------------------- | ------------------------------------------------------- |
+| `style_root`  | `'bold red'`            | The style used when the user is root/admin.             |
+| `style_user`  | `'bold yellow'`         | Стиль, используемый для всех пользователей, кроме root. |
+| `format`      | `'[$user]($style) in '` | Формат модуля.                                          |
+| `show_always` | `false`                 | Всегда показывать модуль `username`.                    |
+| `disabled`    | `false`                 | Отключает модуль `username`.                            |
 
 ### Переменные
 
@@ -4214,7 +4214,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `описание`          | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
