@@ -1735,7 +1735,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | 组件格式化模板。                              |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
-| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
+| `忽略子模块`              | `false`                                                      | 忽略子模块的更改                              |
 
 ### Variables
 
@@ -1770,25 +1770,25 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 ### 配置项
 
-| 选项                  | 默认值                                             | 描述                                                                                                          |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`        | `'='`                                           | 这个分支有合并冲突。                                                                                                  |
-| `ahead`             | `'⇡'`                                           | The format of `ahead`                                                                                       |
-| `behind`            | `'⇣'`                                           | The format of `behind`                                                                                      |
-| `diverged`          | `'⇕'`                                           | The format of `diverged`                                                                                    |
-| `up_to_date`        | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`         | `'?'`                                           | The format of `untracked`                                                                                   |
-| `stashed`           | `'$'`                                           | The format of `stashed`                                                                                     |
-| `modified`          | `'!'`                                           | The format of `modified`                                                                                    |
-| `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
-| `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
-| `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
-| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
-| `style`             | `'bold red'`                                    | 此组件的样式。                                                                                                     |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | 禁用 `git_status` 组件。                                                                                         |
-| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| 选项                 | 默认值                                             | 描述                                                                                                          |
+| ------------------ | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`           | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`       | `'='`                                           | 这个分支有合并冲突。                                                                                                  |
+| `ahead`            | `'⇡'`                                           | The format of `ahead`                                                                                       |
+| `behind`           | `'⇣'`                                           | The format of `behind`                                                                                      |
+| `diverged`         | `'⇕'`                                           | The format of `diverged`                                                                                    |
+| `up_to_date`       | `''`                                            | The format of `up_to_date`                                                                                  |
+| `untracked`        | `'?'`                                           | The format of `untracked`                                                                                   |
+| `stashed`          | `'$'`                                           | The format of `stashed`                                                                                     |
+| `modified`         | `'!'`                                           | The format of `modified`                                                                                    |
+| `staged`           | `'+'`                                           | The format of `staged`                                                                                      |
+| `renamed`          | `'»'`                                           | The format of `renamed`                                                                                     |
+| `deleted`          | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `typechanged`      | `""`                                            | The format of `typechange`                                                                                  |
+| `style`            | `'bold red'`                                    | 此组件的样式。                                                                                                     |
+| `忽略子模块`            | `false`                                         | Ignore changes to submodules.                                                                               |
+| `disabled`         | `false`                                         | 禁用 `git_status` 组件。                                                                                         |
+| `windows_starship` |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
 ### Variables
 
@@ -4253,9 +4253,9 @@ If `shell` is not given or only contains one element and Starship detects PowerS
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning 请确保您的自定义 shell 配置正常退出
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+如果您设置了一个自定义命令， 请确保 starship 使用的默认 shell (在 `shell` 选项设置) 执行命令后会正常退出。
 
 For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
 
