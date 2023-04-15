@@ -9,7 +9,8 @@ def starship_prompt():
     jobs = sum(1 for job in __xonsh__.all_jobs.values() if job['obj'] and job['obj'].poll() is None)
     duration = round((last_cmd.ts[1] - last_cmd.ts[0]) * 1000) if last_cmd else 0
     # The `| cat` is a workaround for https://github.com/xonsh/xonsh/issues/3786. See https://github.com/starship/starship/pull/2807#discussion_r667316323.
-    return $(::STARSHIP:: prompt --status=@(status) --jobs=@(jobs) --cmd-duration=@(duration) | cat)
+    # The ::TYPECAT:: is in place to correctly choose between cat or type based on platform. https://github.com/starship/starship/issues/4900.
+    return $(::STARSHIP:: prompt --status=@(status) --jobs=@(jobs) --cmd-duration=@(duration) | ::TYPECAT::)
 
 def starship_rprompt():
     last_cmd = __xonsh__.history[-1] if __xonsh__.history else None
@@ -19,7 +20,8 @@ def starship_rprompt():
     jobs = sum(1 for job in __xonsh__.all_jobs.values() if job['obj'] and job['obj'].poll() is None)
     duration = round((last_cmd.ts[1] - last_cmd.ts[0]) * 1000) if last_cmd else 0
     # The `| cat` is a workaround for https://github.com/xonsh/xonsh/issues/3786. See https://github.com/starship/starship/pull/2807#discussion_r667316323.
-    return $(::STARSHIP:: prompt --status=@(status) --jobs=@(jobs) --cmd-duration=@(duration) --right | cat)
+    # The ::TYPECAT:: is in place to correctly choose between cat or type based on platform. https://github.com/starship/starship/issues/4900.
+    return $(::STARSHIP:: prompt --status=@(status) --jobs=@(jobs) --cmd-duration=@(duration) --right | ::TYPECAT::)
 
 
 $PROMPT = starship_prompt
