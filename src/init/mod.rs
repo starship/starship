@@ -235,9 +235,13 @@ fn print_script(script: &str, path: &str) {
     since the cat command is not found so it is replaced with the Windows equivalent type 
     https://github.com/starship/starship/issues/4900 */
     #[cfg(windows)]
-    let script = script.replace("::STARSHIP::", path).replace("::TYPECAT::", "type");
+    let script = script
+        .replace("::STARSHIP::", path)
+        .replace("::TYPECAT::", "type");
     #[cfg(not(windows))]
-    let script: String = script.replace("::STARSHIP::", path).replace("::TYPECAT::", "cat");
+    let script: String = script
+        .replace("::STARSHIP::", path)
+        .replace("::TYPECAT::", "cat");
 
     print!("{script}");
 }
