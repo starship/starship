@@ -1,4 +1,5 @@
 use crate::utils::create_command;
+use io::Write;
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::{env, io};
@@ -175,12 +176,16 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
-        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
+        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?, io::stdout()),
         "xonsh" => print!(
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?
         ),
-        "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
+        "cmd" => print_script(
+            CMDEXE_INIT,
+            &StarshipPath::init()?.sprint_cmdexe()?,
+            io::stdout(),
+        ),
         _ => {
             eprintln!(
                 "{shell_basename} is not yet supported by starship.\n\
@@ -211,14 +216,14 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
     let starship_path = StarshipPath::init()?;
 
     match shell_name {
-        "bash" => print_script(BASH_INIT, &starship_path.sprint_posix()?),
-        "zsh" => print_script(ZSH_INIT, &starship_path.sprint_posix()?),
-        "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?),
-        "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?),
-        "ion" => print_script(ION_INIT, &starship_path.sprint()?),
-        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?),
-        "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?),
-        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?),
+        "bash" => print_script(BASH_INIT, &starship_path.sprint_posix()?, io::stdout()),
+        "zsh" => print_script(ZSH_INIT, &starship_path.sprint_posix()?, io::stdout()),
+        "fish" => print_script(FISH_INIT, &starship_path.sprint_posix()?, io::stdout()),
+        "powershell" => print_script(PWSH_INIT, &starship_path.sprint_pwsh()?, io::stdout()),
+        "ion" => print_script(ION_INIT, &starship_path.sprint()?, io::stdout()),
+        "elvish" => print_script(ELVISH_INIT, &starship_path.sprint_posix()?, io::stdout()),
+        "tcsh" => print_script(TCSH_INIT, &starship_path.sprint_posix()?, io::stdout()),
+        "xonsh" => print_script(XONSH_INIT, &starship_path.sprint_posix()?, io::stdout()),
         _ => {
             println!(
                 "printf \"Shell name detection failed on phase two init.\\n\
@@ -230,7 +235,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
     Ok(())
 }
 
-fn print_script(script: &str, path: &str) {
+fn print_script(script: &str, path: &str, mut out: impl Write) {
     /* Due to a workaround using |cat inside starship.xsh the XONSH script causes errors on Windows
     since the cat command is not found so it is replaced with the Windows equivalent type
     https://github.com/starship/starship/issues/4900 */
@@ -243,7 +248,7 @@ fn print_script(script: &str, path: &str) {
         .replace("::STARSHIP::", path)
         .replace("::TYPECAT::", "cat");
 
-    print!("{script}");
+    write!(out, "{script}").unwrap();
 }
 
 /* GENERAL INIT SCRIPT NOTES
@@ -320,6 +325,27 @@ mod tests {
             starship_path.sprint_cmdexe()?,
             r#""C:\Cool Tools\starship.exe""#
         );
+        Ok(())
+    }
+
+    #[test]
+    fn test_print_script() -> io::Result<()> {
+        use std::string::String;
+
+        let mut output = Vec::new();
+
+        print_script(
+            "::TYPECAT:: ::STARSHIP:: test2 test3 test4",
+            "test1",
+            &mut output,
+        );
+
+        let message = String::from_utf8(output).unwrap();
+        #[cfg(windows)]
+        assert_eq!(message, "type test1 test2 test3 test4");
+
+        #[cfg(not(windows))]
+        assert_eq!(message, "cat test1 test2 test3 test4");
         Ok(())
     }
 }
