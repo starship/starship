@@ -237,7 +237,7 @@ fn print_script(script: &str, path: &str) {
     #[cfg(windows)]
     let script = script.replace("::STARSHIP::", path).replace("::TYPECAT::", "type");
     #[cfg(not(windows))]
-    let script: String = script.replace("::STARSHIP::", path).replalce("::TYPECAT::", "cat");
+    let script: String = script.replace("::STARSHIP::", path).replace("::TYPECAT::", "cat");
 
     print!("{script}");
 }
