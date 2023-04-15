@@ -130,7 +130,6 @@ struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
     config: GitStatusConfig<'a>,
     repo_status: OnceCell<Option<RepoStatus>>,
-    stashed_count: OnceCell<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -139,12 +138,15 @@ impl<'a> GitStatusInfo<'a> {
             context,
             config,
             repo_status: OnceCell::new(),
-            stashed_count: OnceCell::new(),
         }
     }
 
     pub fn get_ahead_behind(&self) -> Option<(Option<usize>, Option<usize>)> {
         self.get_repo_status().map(|data| (data.ahead, data.behind))
+    }
+
+    pub fn get_stashed(&self) -> Option<usize> {
+        self.get_repo_status().and_then(|data| data.stashed)
     }
 
     pub fn get_repo_status(&self) -> &Option<RepoStatus> {
@@ -153,17 +155,6 @@ impl<'a> GitStatusInfo<'a> {
                 Some(repo_status) => Some(repo_status),
                 None => {
                     log::debug!("get_repo_status: git status execution failed");
-                    None
-                }
-            })
-    }
-
-    pub fn get_stashed(&self) -> &Option<usize> {
-        self.stashed_count
-            .get_or_init(|| match get_stashed_count(self.context) {
-                Some(stashed_count) => Some(stashed_count),
-                None => {
-                    log::debug!("get_stashed_count: git stash execution failed");
                     None
                 }
             })
@@ -229,33 +220,25 @@ fn get_repo_status(context: &Context, config: &GitStatusConfig) -> Option<RepoSt
         args.push(OsStr::new("--ignore-submodules=untracked"));
     }
 
+    let has_stashed = !config.stashed.is_empty();
+    if has_stashed {
+        args.push(OsStr::new("--show-stash"));
+    }
+
     let status_output = context.exec_cmd("git", &args)?;
     let statuses = status_output.stdout.lines();
 
     statuses.for_each(|status| {
         if status.starts_with("# branch.ab ") {
             repo_status.set_ahead_behind(status);
+        } else if status.starts_with("# stash") {
+            repo_status.set_stashed(status);
         } else if !status.starts_with('#') {
             repo_status.add(status);
         }
     });
 
     Some(repo_status)
-}
-
-fn get_stashed_count(context: &Context) -> Option<usize> {
-    let stash_output = context.exec_cmd(
-        "git",
-        &[
-            OsStr::new("-C"),
-            context.current_dir.as_os_str(),
-            OsStr::new("--no-optional-locks"),
-            OsStr::new("stash"),
-            OsStr::new("list"),
-        ],
-    )?;
-
-    Some(stash_output.stdout.trim().lines().count())
 }
 
 #[derive(Default, Debug, Copy, Clone)]
@@ -269,6 +252,7 @@ struct RepoStatus {
     staged: usize,
     typechanged: usize,
     untracked: usize,
+    stashed: Option<usize>,
 }
 
 impl RepoStatus {
@@ -332,6 +316,13 @@ impl RepoStatus {
         if let Some(caps) = re.captures(s) {
             self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().ok();
             self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
+        }
+    }
+
+    fn set_stashed(&mut self, s: &str) {
+        let re = Regex::new(r"stash (\d+)").unwrap();
+        if let Some(caps) = re.captures(s) {
+            self.stashed = caps.get(1).unwrap().as_str().parse::<usize>().ok();
         }
     }
 }
