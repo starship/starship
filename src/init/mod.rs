@@ -231,9 +231,11 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 }
 
 fn print_script(script: &str, path: &str) {
-    /* Due to a workaround using |cat inside starship.xsh the XONSH script causes errors on Windows
-    since the cat command is not found so it is replaced with the Windows equivalent type 
-    https://github.com/starship/starship/issues/4900 */
+    /* 
+     * Due to a workaround using |cat inside starship.xsh the XONSH script causes errors on Windows
+     * since the cat command is not found so it is replaced with the Windows equivalent type 
+     * https://github.com/starship/starship/issues/4900 
+     */
     #[cfg(windows)]
     let script = script
         .replace("::STARSHIP::", path)
