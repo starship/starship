@@ -2829,12 +2829,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable         | Example    | Description                                                              |
-| ---------------- | ---------- | ------------------------------------------------------------------------ |
-| version          | `v13.12.0` | The version of `node`                                                    |
-| expected_version | `>=12.0.0` | Optional `node` version as set in the engines property of `package.json` |
-| symbol           |            | Mirrors the value of option `symbol`                                     |
-| style\*          |            | Mirrors the value of option `style`                                      |
+| Variable        | Example    | Description                                                                                                                                                             |
+| --------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0` | The version of `node`                                                                                                                                                   |
+| engines_version | `>=12.0.0` | `node` version as set in the engines property of `package.json`. Will show if installed node version does not match with the set engines value, is otherwise invisible. |
+| symbol          |            | Mirrors the value of option `symbol`                                                                                                                                    |
+| style\*         |            | Mirrors the value of option `style`                                                                                                                                     |
 
 *: This variable can only be used as a part of a style string
 
