@@ -15,13 +15,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
     let git_repo = repo.open();
     let git_head = git_repo.head().ok()?;
-
     let is_detached = git_head.is_detached();
-    if config.only_detached && !is_detached && config.tag_max_candidates == 0 {
-        return None;
-    };
-
     let should_show_hash = !config.only_detached || is_detached;
+    let should_show_tag = !config.tag_disabled && (should_show_hash || config.tag_max_candidates != 0);
+
+    if !should_show_hash && !should_show_tag {
+        return None
+    }
+
     let tag_symbol = if !should_show_hash && !config.tag_symbol.trim().is_empty() {
         config.tag_symbol.trim_start()
     } else {
@@ -38,7 +39,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "hash" if should_show_hash => {
                     Some(Ok(git_hash(context.get_repo().ok()?, &config)?))
                 }
-                "tag" if !config.tag_disabled => Some(Ok(format!(
+                "tag" if should_show_tag => Some(Ok(format!(
                     "{}{}",
                     tag_symbol,
                     git_tag(context.get_repo().ok()?, &config)?
