@@ -17,10 +17,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let git_head = git_repo.head().ok()?;
     let is_detached = git_head.is_detached();
     let should_show_hash = !config.only_detached || is_detached;
-    let should_show_tag = !config.tag_disabled && (should_show_hash || config.tag_max_candidates != 0);
+    let should_show_tag =
+        !config.tag_disabled && (should_show_hash || config.tag_max_candidates != 0);
 
     if !should_show_hash && !should_show_tag {
-        return None
+        return None;
     }
 
     let tag_symbol = if !should_show_hash && !config.tag_symbol.trim().is_empty() {
