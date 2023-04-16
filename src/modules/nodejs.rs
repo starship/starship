@@ -35,6 +35,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .exec_cmd("node", &["--version"])
             .map(|cmd| cmd.stdout)
     });
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -56,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map(|variable| match variable {
                 "version" => {
-                    let version = nodejs_version
+                    let node_ver = nodejs_version
                         .deref()
                         .as_ref()?
                         .trim_start_matches('v')
@@ -64,21 +65,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        version,
+                        node_ver,
                         config.version_format,
                     )
                     .map(Ok)
                 }
-                _ => None,
-            })
-            .map(|variable| match variable {
-                "expected_version" => {
-                    let version = nodejs_version.as_deref();
-                    let expected_version = get_engines_version(context);
-                    let versions_in_range =
-                        check_engines_version(version, get_engines_version(context));
+                "engines_version" => {
+                    let node_ver = nodejs_version.as_deref();
+                    let eng_ver = get_engines_version(context);
+                    let in_engines_range = check_engines_version(node_ver, eng_ver.clone());
 
-                    match (expected_version, versions_in_range) {
+                    match (eng_ver, in_engines_range) {
                         (Some(ver), false) => Some(Ok(ver)),
                         _ => None,
                     }
@@ -103,6 +100,7 @@ fn get_engines_version(context: &Context) -> Option<String> {
     let json_str = context.read_file_from_pwd("package.json")?;
     let package_json: json::Value = json::from_str(&json_str).ok()?;
     let raw_version = package_json.get("engines")?.get("node")?.as_str()?;
+
     Some(raw_version.to_string())
 }
 
@@ -110,9 +108,11 @@ fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<S
     let (Some(nodejs_version), Some(engines_version)) = (nodejs_version, engines_version) else {
         return true;
     };
+
     let Ok(r) = VersionReq::parse(&engines_version) else {
         return true;
     };
+
     let re = Regex::new(r"\d+\.\d+\.\d+").unwrap();
     let version = re
         .captures(nodejs_version)
@@ -120,6 +120,7 @@ fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<S
         .get(0)
         .unwrap()
         .as_str();
+
     let v = match Version::parse(version) {
         Ok(v) => v,
         Err(_e) => return true,
@@ -301,7 +302,7 @@ mod tests {
             .path(dir.path())
             .config(toml::toml! {
                 [nodejs]
-                format = "via [$symbol($version )($expected_version )]($style)"
+                format = "via [$symbol($version )($engines_version )]($style)"
             })
             .collect();
         let expected = Some(format!(
@@ -330,7 +331,7 @@ mod tests {
             .path(dir.path())
             .config(toml::toml! [
                 [nodejs]
-                format = "via [$symbol($version )($expected_version )]($style)"
+                format = "via [$symbol($version )($engines_version )]($style)"
             ])
             .collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
@@ -348,7 +349,7 @@ mod tests {
             .path(dir.path())
             .config(toml::toml! {
                 [nodejs]
-                format = "via [$symbol($version )($expected_version )]($style)"
+                format = "via [$symbol($version )($engines_version )]($style)"
             })
             .collect();
         let expected = Some(format!("via {}", Color::Green.bold().paint(" v12.0.0 ")));
