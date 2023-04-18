@@ -23,7 +23,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let versions = Lazy::new(|| get_elixir_version(context, &config));
+    let versions = Lazy::new(|| match config.format.contains("$otp_version") {
+        true => get_elixir_version(context),
+        false => get_elixir_version_short(context),
+    });
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -52,8 +55,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .deref()
                     .as_ref()
                     .map(|(otp_version, _)| match otp_version {
-                        None => "".to_string(),
                         Some(version) => version.to_string(),
+                        None => "".to_string(),
                     })
                     .map(Ok),
                 _ => None,
@@ -72,35 +75,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_elixir_version(
-    context: &Context,
-    config: &ElixirConfig,
-) -> Option<(Option<String>, String)> {
-    let output = match config.format.contains("$otp_version") {
-        true => context.exec_cmd("elixir", &["--version"])?.stdout,
-        false => context.exec_cmd("elixir", &["--short-version"])?.stdout,
-    };
+fn get_elixir_version_short(context: &Context) -> Option<(Option<String>, String)> {
+    context
+        .exec_cmd("elixir", &["--short-version"])
+        .map(|cmd| (None, cmd.stdout.to_string()))
+}
+
+fn get_elixir_version(context: &Context) -> Option<(Option<String>, String)> {
+    let output = context.exec_cmd("elixir", &["--version"])?.stdout;
     parse_elixir_version(&output)
 }
 
 fn parse_elixir_version(version: &str) -> Option<(Option<String>, String)> {
-    // requires a separate variable for flag since `count` consumes the iterator
-    let check = version.lines();
     let mut lines = version.lines();
 
-    if check.count() == 1 {
-        let elixir_version = lines.next()?;
-        Some((None, elixir_version.to_string()))
-    } else {
-        // split line into ["Erlang/OTP", "22", "[erts-10.5]", ...], take "22"
-        let otp_version = lines.next()?.split_whitespace().nth(1)?;
-        // skip empty line
-        let _ = lines.next()?;
-        // split line into ["Elixir", "1.10", "(compiled", ...], take "1.10"
-        let elixir_version = lines.next()?.split_whitespace().nth(1)?;
+    // split line into ["Erlang/OTP", "22", "[erts-10.5]", ...], take "22"
+    let otp_version = lines.next()?.split_whitespace().nth(1)?;
+    // skip empty line
+    let _ = lines.next()?;
+    // split line into ["Elixir", "1.10", "(compiled", ...], take "1.10"
+    let elixir_version = lines.next()?.split_whitespace().nth(1)?;
 
-        Some((Some(otp_version.to_string()), elixir_version.to_string()))
-    }
+    Some((Some(otp_version.to_string()), elixir_version.to_string()))
 }
 
 #[cfg(test)]
