@@ -1302,7 +1302,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/).
+The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/) if `$otp_version` variable is set on format.
 By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `mix.exs` file.
