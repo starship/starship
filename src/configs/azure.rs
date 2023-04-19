@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
@@ -12,6 +13,7 @@ pub struct AzureConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub subscription_aliases: HashMap<String, &'a str>,
 }
 
 impl<'a> Default for AzureConfig<'a> {
@@ -21,6 +23,7 @@ impl<'a> Default for AzureConfig<'a> {
             symbol: "ﴃ ",
             style: "blue bold",
             disabled: true,
+            subscription_aliases: HashMap::new(),
         }
     }
 }

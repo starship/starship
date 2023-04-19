@@ -119,10 +119,12 @@ symbol = "ml "
 symbol = "opa "
 
 [os.symbols]
+Alpaquita = "alq "
 Alpine = "alp "
 Amazon = "amz "
 Android = "andr "
 Arch = "rch "
+Artix = "atx "
 CentOS = "cent "
 Debian = "deb "
 DragonFly = "dfbsd "
@@ -135,6 +137,7 @@ Gentoo = "gent "
 HardenedBSD = "hbsd "
 Illumos = "lum "
 Linux = "lnx "
+Mabox = "mbox "
 Macos = "mac "
 Manjaro = "mjo "
 Mariner = "mrn "
@@ -193,6 +196,9 @@ symbol = "scala "
 
 [spack]
 symbol = "spack "
+
+[solidity]
+symbol = "solidity "
 
 [status]
 symbol = "[x](bold red) "

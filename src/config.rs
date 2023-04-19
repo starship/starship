@@ -1,5 +1,6 @@
 use crate::configs::Palette;
 use crate::context::Context;
+
 use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
 use nu_ansi_term::Color;
@@ -10,9 +11,9 @@ use serde::{
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
+use std::ffi::OsString;
 use std::io::ErrorKind;
 
-use std::env;
 use toml::Value;
 
 /// Root config of a module.
@@ -120,25 +121,10 @@ pub struct StarshipConfig {
     pub config: Option<toml::Table>,
 }
 
-pub fn get_config_path() -> Option<String> {
-    if let Ok(path) = env::var("STARSHIP_CONFIG") {
-        // Use $STARSHIP_CONFIG as the config path if available
-        log::debug!("STARSHIP_CONFIG is set: {}", &path);
-        Some(path)
-    } else {
-        // Default to using ~/.config/starship.toml
-        log::debug!("STARSHIP_CONFIG is not set");
-        let config_path = utils::home_dir()?.join(".config/starship.toml");
-        let config_path_str = config_path.to_str()?.to_owned();
-        log::debug!("Using default config path: {}", config_path_str);
-        Some(config_path_str)
-    }
-}
-
 impl StarshipConfig {
     /// Initialize the Config struct
-    pub fn initialize() -> Self {
-        Self::config_from_file()
+    pub fn initialize(config_file_path: &Option<OsString>) -> Self {
+        Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
             })
@@ -146,10 +132,30 @@ impl StarshipConfig {
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<toml::Table> {
-        let file_path = get_config_path()?;
+    fn config_from_file(config_file_path: &Option<OsString>) -> Option<toml::Table> {
+        let toml_content = Self::read_config_content_as_str(config_file_path)?;
 
-        let toml_content = match utils::read_file(file_path) {
+        match toml::from_str(&toml_content) {
+            Ok(parsed) => {
+                log::debug!("Config parsed: {:?}", &parsed);
+                Some(parsed)
+            }
+            Err(error) => {
+                log::error!("Unable to parse the config file: {}", error);
+                None
+            }
+        }
+    }
+
+    pub fn read_config_content_as_str(config_file_path: &Option<OsString>) -> Option<String> {
+        if config_file_path.is_none() {
+            log::debug!(
+                "Unable to determine `config_file_path`. Perhaps `utils::home_dir` is not defined on your platform?"
+            );
+            return None;
+        }
+        let config_file_path = config_file_path.as_ref().unwrap();
+        match utils::read_file(config_file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
@@ -162,17 +168,6 @@ impl StarshipConfig {
                 };
 
                 log::log!(level, "Unable to read config file content: {}", &e);
-                None
-            }
-        }?;
-
-        match toml::from_str(&toml_content) {
-            Ok(parsed) => {
-                log::debug!("Config parsed: {:?}", &parsed);
-                Some(parsed)
-            }
-            Err(error) => {
-                log::error!("Unable to parse the config file: {}", error);
                 None
             }
         }
@@ -920,5 +915,14 @@ mod tests {
 
         // Test default behavior
         assert!(get_palette(&palettes, None).is_none());
+    }
+
+    #[test]
+    fn read_config_no_config_file_path_provided() {
+        assert_eq!(
+            None,
+            StarshipConfig::read_config_content_as_str(&None),
+            "if the platform doesn't have utils::home_dir(), it should return None"
+        );
     }
 }

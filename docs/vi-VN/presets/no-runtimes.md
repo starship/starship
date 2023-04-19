@@ -9,7 +9,7 @@ This preset hides the version of language runtimes. If you work in containers or
 ### Cấu hình
 
 ```sh
-starship preset no-runtime-versions > ~/.config/starship.toml
+starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/no-runtime-versions.toml)

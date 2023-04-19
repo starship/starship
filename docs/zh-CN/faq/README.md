@@ -80,7 +80,7 @@ env STARSHIP_LOG=trace starship timings
 
 它会输出日志，并且记录有输出的组件、运行时长超过 1 毫秒的组件。
 
-Finally if you find a bug you can use the `bug-report` command to create a GitHub issue.
+最后，如果发现了 bug，请使用 `bug-report` 命令创建 GitHub 议题。
 
 ```sh
 starship bug-report

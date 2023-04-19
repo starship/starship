@@ -29,6 +29,7 @@
         "disabled": true,
         "format": "on [$symbol($subscription)]($style) ",
         "style": "blue bold",
+        "subscription_aliases": {},
         "symbol": "ﴃ "
       },
       "allOf": [
@@ -582,6 +583,7 @@
         "deleted_style": "bold red",
         "disabled": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "ignore_submodules": false,
         "only_nonzero_diffs": true
       },
       "allOf": [
@@ -624,6 +626,7 @@
         "staged": "+",
         "stashed": "\\$",
         "style": "red bold",
+        "typechanged": "",
         "untracked": "?",
         "up_to_date": ""
       },
@@ -1128,10 +1131,12 @@
         "format": "[$symbol]($style)",
         "style": "bold white",
         "symbols": {
+          "Alpaquita": "🔔 ",
           "Alpine": "🏔️ ",
           "Amazon": "🙂 ",
           "Android": "🤖 ",
           "Arch": "🎗️ ",
+          "Artix": "🎗️ ",
           "CentOS": "💠 ",
           "Debian": "🌀 ",
           "DragonFly": "🐉 ",
@@ -1144,6 +1149,7 @@
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
           "Linux": "🐧 ",
+          "Mabox": "📦 ",
           "Macos": "🍎 ",
           "Manjaro": "🥭 ",
           "Mariner": "🌊 ",
@@ -1521,6 +1527,28 @@
         }
       ]
     },
+    "solidity": {
+      "default": {
+        "compiler": [
+          "solc"
+        ],
+        "detect_extensions": [
+          "sol"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version)]($style)",
+        "style": "bold blue",
+        "symbol": "S ",
+        "version_format": "v${major}.${minor}.${patch}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SolidityConfig"
+        }
+      ]
+    },
     "spack": {
       "default": {
         "disabled": false,
@@ -1852,6 +1880,13 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "subscription_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -3258,6 +3293,10 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "ignore_submodules": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
@@ -3361,6 +3400,10 @@
         },
         "untracked": {
           "default": "?",
+          "type": "string"
+        },
+        "typechanged": {
+          "default": "",
           "type": "string"
         },
         "ignore_submodules": {
@@ -4459,10 +4502,12 @@
         },
         "symbols": {
           "default": {
+            "Alpaquita": "🔔 ",
             "Alpine": "🏔️ ",
             "Amazon": "🙂 ",
             "Android": "🤖 ",
             "Arch": "🎗️ ",
+            "Artix": "🎗️ ",
             "CentOS": "💠 ",
             "Debian": "🌀 ",
             "DragonFly": "🐉 ",
@@ -4475,6 +4520,7 @@
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
             "Linux": "🐧 ",
+            "Mabox": "📦 ",
             "Macos": "🍎 ",
             "Manjaro": "🥭 ",
             "Mariner": "🌊 ",
@@ -5295,6 +5341,65 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SolidityConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version)]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${major}.${minor}.${patch}",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "S ",
+          "type": "string"
+        },
+        "compiler": {
+          "default": [
+            "solc"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "detect_extensions": {
+          "default": [
+            "sol"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
