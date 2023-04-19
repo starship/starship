@@ -133,6 +133,7 @@ pub fn get_conditional_style<'a>(
 mod tests {
     use super::*;
     use crate::context::{Context, Shell, Target};
+    use crate::context_env::Env;
     use crate::serde_utils::ValueDeserializer;
     use std::path::PathBuf;
 
@@ -143,6 +144,7 @@ mod tests {
             Target::Main,
             PathBuf::new(),
             PathBuf::new(),
+            Env::default()
         )
     }
 
