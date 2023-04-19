@@ -1,3 +1,4 @@
+use log::debug;
 use once_cell::sync::OnceCell;
 use regex::Regex;
 
@@ -34,7 +35,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let info = Arc::new(GitStatusInfo::load(context, config.clone()));
 
     //Return None if not in git repository
+    debug!("waiting for get_repo");
     context.get_repo().ok()?;
+    debug!("get_repo OK");
 
     if let Some(git_status) = git_status_wsl(context, &config) {
         if git_status.is_empty() {
@@ -130,6 +133,7 @@ struct GitStatusInfo<'a> {
     context: &'a Context<'a>,
     config: GitStatusConfig<'a>,
     repo_status: OnceCell<Option<RepoStatus>>,
+    stashed_count: OnceCell<Option<usize>>,
 }
 
 impl<'a> GitStatusInfo<'a> {
@@ -138,15 +142,12 @@ impl<'a> GitStatusInfo<'a> {
             context,
             config,
             repo_status: OnceCell::new(),
+            stashed_count: OnceCell::new(),
         }
     }
 
     pub fn get_ahead_behind(&self) -> Option<(Option<usize>, Option<usize>)> {
         self.get_repo_status().map(|data| (data.ahead, data.behind))
-    }
-
-    pub fn get_stashed(&self) -> Option<usize> {
-        self.get_repo_status().and_then(|data| data.stashed)
     }
 
     pub fn get_repo_status(&self) -> &Option<RepoStatus> {
@@ -158,6 +159,22 @@ impl<'a> GitStatusInfo<'a> {
                     None
                 }
             })
+    }
+
+    pub fn get_stashed(&self) -> Option<usize> {
+        if self.supports_show_stash_option() {
+            self.get_repo_status().and_then(|data| data.stashed)
+        } else {
+            self.stashed_count
+                .get_or_init(|| match get_stashed_count(self.context) {
+                    Some(stashed_count) => Some(stashed_count),
+                    None => {
+                        log::debug!("get_stashed_count: git stash execution failed");
+                        None
+                    }
+                })
+                .clone()
+        }
     }
 
     pub fn get_conflicted(&self) -> Option<usize> {
@@ -187,12 +204,18 @@ impl<'a> GitStatusInfo<'a> {
     pub fn get_typechanged(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.typechanged)
     }
+
+    fn supports_show_stash_option(&self) -> bool {
+        let mut components = self.config.git_version.split('.');
+        let major: u32 = components.next().unwrap_or("0").parse().unwrap_or(0);
+        let minor: u32 = components.next().unwrap_or("0").parse().unwrap_or(0);
+        let patch: u32 = components.next().unwrap_or("0").parse().unwrap_or(0);
+        (major, minor, patch) >= (2, 35, 0)
+    }
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
 fn get_repo_status(context: &Context, config: &GitStatusConfig) -> Option<RepoStatus> {
-    log::debug!("New repo status created");
-
     let mut repo_status = RepoStatus::default();
     let mut args = vec![
         OsStr::new("-C"),
@@ -225,20 +248,39 @@ fn get_repo_status(context: &Context, config: &GitStatusConfig) -> Option<RepoSt
         args.push(OsStr::new("--show-stash"));
     }
 
+    debug!("git status start");
     let status_output = context.exec_cmd("git", &args)?;
+    debug!("git status end");
     let statuses = status_output.stdout.lines();
 
     statuses.for_each(|status| {
         if status.starts_with("# branch.ab ") {
             repo_status.set_ahead_behind(status);
         } else if status.starts_with("# stash") {
-            repo_status.set_stashed(status);
+            repo_status.set_stashed_from_git_status(status);
         } else if !status.starts_with('#') {
             repo_status.add(status);
         }
     });
 
     Some(repo_status)
+}
+
+fn get_stashed_count(context: &Context) -> Option<usize> {
+    debug!("git stash list start");
+    let stash_output = context.exec_cmd(
+        "git",
+        &[
+            OsStr::new("-C"),
+            context.current_dir.as_os_str(),
+            OsStr::new("--no-optional-locks"),
+            OsStr::new("stash"),
+            OsStr::new("list"),
+        ],
+    )?;
+    debug!("git stash list end");
+
+    Some(stash_output.stdout.trim().lines().count())
 }
 
 #[derive(Default, Debug, Copy, Clone)]
@@ -319,7 +361,7 @@ impl RepoStatus {
         }
     }
 
-    fn set_stashed(&mut self, s: &str) {
+    fn set_stashed_from_git_status(&mut self, s: &str) {
         let re = Regex::new(r"stash (\d+)").unwrap();
         if let Some(caps) = re.captures(s) {
             self.stashed = caps.get(1).unwrap().as_str().parse::<usize>().ok();
@@ -481,7 +523,6 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String> {
     None
 }
-
 #[cfg(test)]
 mod tests {
     use nu_ansi_term::{AnsiStrings, Color};

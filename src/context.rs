@@ -11,6 +11,7 @@ use gix::{
     sec::{self as git_sec, trust::DefaultForLevel},
     state as git_state, Repository, ThreadSafeRepository,
 };
+use log::debug;
 use once_cell::sync::OnceCell;
 #[cfg(test)]
 use std::collections::HashMap;
@@ -251,6 +252,7 @@ impl<'a> Context<'a> {
     pub fn get_repo(&self) -> Result<&Repo, Box<gix::discover::Error>> {
         self.repo
             .get_or_try_init(|| -> Result<Repo, Box<gix::discover::Error>> {
+                debug!("get_repo start");
                 // custom open options
                 let mut git_open_opts_map =
                     git_sec::trust::Mapping::<gix::open::Options>::default();
@@ -297,6 +299,7 @@ impl<'a> Context<'a> {
                 let branch = get_current_branch(&repository);
                 let remote = get_remote_repository_info(&repository, branch.as_deref());
                 let path = repository.path().to_path_buf();
+                debug!("get_repo end");
                 Ok(Repo {
                     repo: shared_repo,
                     branch,

@@ -26,6 +26,7 @@ pub struct GitStatusConfig<'a> {
     pub disabled: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub windows_starship: Option<&'a str>,
+    pub git_version: &'a str,
 }
 
 impl<'a> Default for GitStatusConfig<'a> {
@@ -48,6 +49,7 @@ impl<'a> Default for GitStatusConfig<'a> {
             ignore_submodules: false,
             disabled: false,
             windows_starship: None,
+            git_version: "2.11",
         }
     }
 }

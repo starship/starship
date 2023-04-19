@@ -10,6 +10,7 @@ use std::{
     io::Write,
     path::{Path, PathBuf},
     sync::{Mutex, RwLock},
+    time::Instant,
 };
 
 pub struct StarshipLogger {
@@ -17,6 +18,8 @@ pub struct StarshipLogger {
     log_file_path: PathBuf,
     log_file_content: RwLock<HashSet<String>>,
     log_level: Level,
+    log_timings_enabled: bool,
+    start_time: Instant,
 }
 
 /// Returns the path to the log directory.
@@ -103,6 +106,7 @@ impl Default for StarshipLogger {
             ),
             log_file: OnceCell::new(),
             log_file_path: session_log_file,
+            log_timings_enabled: env::var("STARSHIP_TIMINGS").is_ok(),
             log_level: env::var("STARSHIP_LOG")
                 .map(|level| match level.to_ascii_lowercase().as_str() {
                     "trace" => Level::Trace,
@@ -113,6 +117,7 @@ impl Default for StarshipLogger {
                     _ => Level::Warn,
                 })
                 .unwrap_or_else(|_| Level::Warn),
+            start_time: std::time::Instant::now(),
         }
     }
 }
@@ -134,6 +139,17 @@ impl StarshipLogger {
         self.log_file_content = RwLock::new(contents);
         self.log_file_path = path;
     }
+
+    pub fn get_formatted_since(&self) -> String {
+        if self.log_timings_enabled {
+            let duration = std::time::Instant::now().duration_since(self.start_time);
+            let micros = duration.subsec_nanos() / 1000;
+            let secs = duration.as_secs();
+            format!("{:3}.{:06}", secs, micros)
+        } else {
+            "".to_string()
+        }
+    }
 }
 
 impl log::Log for StarshipLogger {
@@ -148,8 +164,9 @@ impl log::Log for StarshipLogger {
         }
 
         let to_print = format!(
-            "[{}] - ({}): {}",
+            "[{:5}{}] - ({}): {}",
             record.level(),
+            self.get_formatted_since(),
             record.module_path().unwrap_or_default(),
             record.args()
         );
@@ -205,14 +222,15 @@ impl log::Log for StarshipLogger {
 
         // Print messages to stderr
         eprintln!(
-            "[{}] - ({}): {}",
+            "[{}{}] - ({}): {}",
             match record.level() {
-                Level::Trace => Color::Blue.dimmed().paint(format!("{}", record.level())),
-                Level::Debug => Color::Cyan.paint(format!("{}", record.level())),
-                Level::Info => Color::White.paint(format!("{}", record.level())),
-                Level::Warn => Color::Yellow.paint(format!("{}", record.level())),
-                Level::Error => Color::Red.paint(format!("{}", record.level())),
+                Level::Trace => Color::Blue.dimmed().paint(format!("{:5}", record.level())),
+                Level::Debug => Color::Cyan.paint(format!("{:5}", record.level())),
+                Level::Info => Color::White.paint(format!("{:5}", record.level())),
+                Level::Warn => Color::Yellow.paint(format!("{:5}", record.level())),
+                Level::Error => Color::Red.paint(format!("{:5}", record.level())),
             },
+            self.get_formatted_since(),
             record.module_path().unwrap_or_default(),
             record.args()
         );

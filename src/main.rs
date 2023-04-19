@@ -1,6 +1,7 @@
 #![warn(clippy::disallowed_methods)]
 
 use clap::crate_authors;
+use log::debug;
 use std::io;
 use std::path::PathBuf;
 use std::thread::available_parallelism;
@@ -265,6 +266,7 @@ fn init_global_threadpool() {
         // but restrict the number of threads to 8
         .unwrap_or_else(|| available_parallelism().map(usize::from).unwrap_or(1).min(8));
 
+    debug!("running with {num_threads} threads");
     rayon::ThreadPoolBuilder::new()
         .num_threads(num_threads)
         .build_global()

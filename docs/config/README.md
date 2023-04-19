@@ -1877,6 +1877,7 @@ You can disable the module or use the `windows_starship` option to use a Windows
 | `ignore_submodules` | `false`                                       | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                       | Disables the `git_status` module.                                                                           |
 | `windows_starship`  |                                               | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| `git_version`       | `'2.11.0'`                                      | The assumed git version. This module uses `git status --porcelain=2`, introduced in `2.11.0`. Git `2.35.0` has `git status --show-stash`, which is a bit faster. |
 
 ### Variables
 
