@@ -43,6 +43,7 @@ pub fn default_context() -> Context<'static> {
         Target::Main,
         PathBuf::new(),
         PathBuf::new(),
+        Default::default(),
     );
     context.config = StarshipConfig { config: None };
     context
@@ -182,6 +183,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 ".fslckout"
             };
             let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join("subdir"))?;
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
