@@ -24,7 +24,7 @@ impl<'a> Default for KubernetesConfig<'a> {
     fn default() -> Self {
         KubernetesConfig {
             symbol: "☸ ",
-            format: "[$symbol$context( \\($namespace\\))]($style) in ",
+            format: "[$symbol$context( \\($namespace\\))]($style) ",
             style: "cyan bold",
             disabled: true,
             context_aliases: HashMap::new(),

@@ -260,10 +260,10 @@ format = """
 $username\
 $hostname\
 $localip\
+$directory\
 $shlvl\
 $singularity\
 $kubernetes\
-$directory\
 $vcsh\
 $fossil_branch\
 $git_branch\
