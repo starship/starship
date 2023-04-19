@@ -46,7 +46,7 @@ chrono = { version = "0.4.24", default-features = false, features = ["clock", "s
 clap = { version = "4.2.4", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.2.0"
 dirs-next = "2.0.0"
-dunce = "1.0.3"
+dunce = "1.0.4"
 gethostname = "0.4.2"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
 gix = { version = "0.43.1", default-features = false, features = ["max-performance-safe"] }
@@ -118,7 +118,7 @@ nix = { version = "0.26.2", default-features = false, features = ["feature", "fs
 
 [build-dependencies]
 shadow-rs = { version = "0.21.0", default-features = false }
-dunce = "1.0.3"
+dunce = "1.0.4"
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "0.1.12"
