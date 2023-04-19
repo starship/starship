@@ -739,6 +739,7 @@ pub struct Properties {
     #[clap(short = 'w', long, default_value_t=default_width(), value_parser=parse_width)]
     terminal_width: usize,
     #[clap(long)]
+    /// The row of the cursor position of the terminal. 0 is the top row of the terminal.
     terminal_row: Option<usize>,
     /// The path that the prompt should render for.
     #[clap(short, long)]
