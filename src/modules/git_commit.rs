@@ -18,7 +18,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let is_detached = git_head.is_detached();
     let should_show_hash = !config.only_detached || is_detached;
     let should_show_tag =
-        !config.tag_disabled && (should_show_hash || config.tag_max_candidates != 0);
+        (!is_detached && !config.tag_disabled) || (is_detached && !config.tag_disabled_on_detached);
 
     if !should_show_hash && !should_show_tag {
         return None;
