@@ -2829,12 +2829,12 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable        | Example    | Description                                                                                                                                                             |
-| --------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| version         | `v13.12.0` | The version of `node`                                                                                                                                                   |
+| Variable        | Example    | Description                                                                                                                                               |
+| --------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0` | The version of `node`                                                                                                                                     |
 | engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
-| symbol          |            | Mirrors the value of option `symbol`                                                                                                                                    |
-| style\*         |            | Mirrors the value of option `style`                                                                                                                                     |
+| symbol          |            | Mirrors the value of option `symbol`                                                                                                                      |
+| style\*         |            | Mirrors the value of option `style`                                                                                                                       |
 
 *: This variable can only be used as a part of a style string
 

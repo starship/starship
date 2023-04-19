@@ -44,9 +44,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map_style(|variable| match variable {
                 "style" => {
-                    let engines_version = get_engines_version(context);
-                    let in_engines_range =
-                        check_engines_version(nodejs_version.as_deref(), engines_version);
+                    let node_ver = nodejs_version.as_deref();
+                    let eng_ver = get_engines_version(context);
+                    let in_engines_range = check_engines_version(node_ver, eng_ver.as_deref());
+
                     if in_engines_range {
                         Some(Ok(config.style))
                     } else {
@@ -72,13 +73,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 }
                 "engines_version" => {
                     let node_ver = nodejs_version.as_deref();
-                    let eng_ver = get_engines_version(context);
-                    let in_engines_range = check_engines_version(node_ver, eng_ver.clone());
+                    let eng_ver = get_engines_version(context)?;
+                    let in_engines_range = check_engines_version(node_ver, Some(&eng_ver));
 
-                    match (eng_ver, in_engines_range) {
-                        (Some(ver), false) => Some(Ok(ver)),
-                        _ => None,
-                    }
+                    (!in_engines_range).then_some(Ok(eng_ver))
                 }
                 _ => None,
             })
@@ -104,12 +102,12 @@ fn get_engines_version(context: &Context) -> Option<String> {
     Some(raw_version.to_string())
 }
 
-fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<String>) -> bool {
+fn check_engines_version(nodejs_version: Option<&str>, engines_version: Option<&str>) -> bool {
     let (Some(nodejs_version), Some(engines_version)) = (nodejs_version, engines_version) else {
         return true;
     };
 
-    let Ok(r) = VersionReq::parse(&engines_version) else {
+    let Ok(r) = VersionReq::parse(engines_version) else {
         return true;
     };
 
