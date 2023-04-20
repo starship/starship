@@ -71,12 +71,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .map(Ok)
                 }
                 "engines_version" => {
-                    let eng_ver = engines_version.deref();
-
-                    match (eng_ver, in_engines_range) {
-                        (Some(ver), false) => Some(Ok(ver.to_string())),
-                        _ => None,
-                    }
+                    let eng_ver = engines_version.as_deref()?.to_string();
+                    (!in_engines_range).then_some(Ok(eng_ver))
                 }
                 _ => None,
             })
