@@ -117,7 +117,8 @@ pub fn get_prompt(context: Context) -> String {
     );
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
-    if config.add_newline && context.target != Target::Continuation && !&context.disable_add_newline {
+    if config.add_newline && context.target != Target::Continuation && !&context.disable_add_newline
+    {
         writeln!(buf).unwrap();
     }
     write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
