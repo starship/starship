@@ -120,9 +120,12 @@ $null = New-Module starship {
             "--path=$($cwd.Path)",
             "--logical-path=$($cwd.LogicalPath)",
             "--terminal-width=$($Host.UI.RawUI.WindowSize.Width)",
-            "--terminal-row=$($Host.UI.RawUI.CursorPosition.Y)",
             "--jobs=$($jobs)"
         )
+
+        if ($Host.UI.RawUI.CursorPosition.Y -eq 0) {
+            $arguments += "--disable-add-newline"
+        }
 
         # We start from the premise that the command executed correctly, which covers also the fresh console.
         $lastExitCodeForPrompt = 0

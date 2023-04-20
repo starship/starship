@@ -56,12 +56,22 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        PS1="$(::STARSHIP:: prompt --disable-add-newline --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
+        PS1="$(::STARSHIP:: prompt --disable-add-newline --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
+
+    conditionally_print_newline
+}
+
+conditionally_print_newline() {
+    # add a newline if `add_newline` is true
+    local ADD_NEWLINE_OUTPUT=$(::STARSHIP:: print-config add_newline)
+    if [[ $ADD_NEWLINE_OUTPUT == *"true"* ]]; then
+        echo ""
+    fi
 }
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
@@ -112,5 +122,5 @@ STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ c
 export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
 
 # Set the continuation prompt
-PS2="$(::STARSHIP:: prompt --continuation)"
+PS2="$(::STARSHIP:: prompt --disable-add-newline --continuation)"
 

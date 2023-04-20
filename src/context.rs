@@ -60,8 +60,8 @@ pub struct Context<'a> {
     /// Width of terminal, or zero if width cannot be detected.
     pub width: usize,
 
-    /// Row of terminal, or None if unknown
-    pub row: Option<usize>,
+    /// Disable `add_newline`, even if it is set to true in the config
+    pub disable_add_newline: bool,
 
     /// A HashMap of environment variable mocks
     pub env: Env<'a>,
@@ -162,7 +162,7 @@ impl<'a> Context<'a> {
             .map_or_else(StarshipRootConfig::default, StarshipRootConfig::load);
 
         let width = properties.terminal_width;
-        let row = properties.terminal_row;
+        let disable_add_newline = properties.disable_add_newline;
 
         Context {
             config,
@@ -174,7 +174,7 @@ impl<'a> Context<'a> {
             shell,
             target,
             width,
-            row,
+            disable_add_newline,
             env,
             #[cfg(test)]
             root_dir: tempfile::TempDir::new().unwrap(),
@@ -739,8 +739,8 @@ pub struct Properties {
     #[clap(short = 'w', long, default_value_t=default_width(), value_parser=parse_width)]
     terminal_width: usize,
     #[clap(long)]
-    /// The row of the cursor position of the terminal. 0 is the top row of the terminal.
-    terminal_row: Option<usize>,
+    /// Disable `add_newline`, even if it is set in the config file.
+    disable_add_newline: bool,
     /// The path that the prompt should render for.
     #[clap(short, long)]
     path: Option<PathBuf>,
@@ -769,7 +769,7 @@ impl Default for Properties {
             logical_path: None,
             cmd_duration: None,
             keymap: "viins".to_string(),
-            terminal_row: None,
+            disable_add_newline: false,
             jobs: 0,
         }
     }

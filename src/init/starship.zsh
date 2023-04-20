@@ -23,9 +23,6 @@ else
     }
 fi
 
-ADD_NEWLINE_OUTPUT=$(::STARSHIP:: print-config add_newline)
-STARSHIP_ADD_NEWLINE=$(( ${ADD_NEWLINE_OUTPUT/*true*/1} ))
-
 # The two functions below follow the naming convention `prompt_<theme>_<hook>`
 # for compatibility with Zsh's prompt system. See
 # https://github.com/zsh-users/zsh/blob/2876c25a28b8052d6683027998cc118fc9b50157/Functions/Prompts/promptinit#L155
@@ -48,7 +45,13 @@ prompt_starship_precmd() {
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
 
-    # echo a newline
+    conditionally_print_newline
+}
+
+conditionally_print_newline() {
+    # add a newline if `add_newline` is true
+    ADD_NEWLINE_OUTPUT=$(::STARSHIP:: print-config add_newline)
+    STARSHIP_ADD_NEWLINE=$(( ${ADD_NEWLINE_OUTPUT/*true*/1} ))
     if (( ${STARSHIP_ADD_NEWLINE} )); then
         echo ""
     fi
@@ -96,7 +99,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-PROMPT2="$(::STARSHIP:: prompt --continuation)"
+PROMPT='$(::STARSHIP:: prompt --disable-add-newline --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$(::STARSHIP:: prompt --disable-add-newline --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT2="$(::STARSHIP:: prompt --disable-add-newline --continuation)"
 

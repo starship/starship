@@ -117,13 +117,8 @@ pub fn get_prompt(context: Context) -> String {
     );
 
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
-    if config.add_newline && context.target != Target::Continuation {
-        // continuation prompts normally do not include newlines, but they can
-        let is_first_row_of_terminal = context.row == Some(0);
-        let handled_by_preexec_hook = context.shell == Shell::Zsh;
-        if !is_first_row_of_terminal && !handled_by_preexec_hook {
-            writeln!(buf).unwrap();
-        }
+    if config.add_newline && context.target != Target::Continuation && !&context.disable_add_newline {
+        writeln!(buf).unwrap();
     }
     write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
 
@@ -613,9 +608,9 @@ mod test {
     }
 
     #[test]
-    fn add_newline_prompt_row_zero() {
+    fn add_newline_prompt_with_disable_add_newline() {
         let mut context = main_prompt_context();
-        context.row = Some(0);
+        context.disable_add_newline = true;
         context.root_config.add_newline = true;
         assert_eq!("~\n>", &get_prompt(context)); // there is no newline before ~ since it is the top of the terminal
     }
