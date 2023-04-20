@@ -23,6 +23,9 @@ else
     }
 fi
 
+ADD_NEWLINE_OUTPUT=$(::STARSHIP:: print-config add_newline)
+STARSHIP_ADD_NEWLINE=$(( ${ADD_NEWLINE_OUTPUT/*true*/1} ))
+
 # The two functions below follow the naming convention `prompt_<theme>_<hook>`
 # for compatibility with Zsh's prompt system. See
 # https://github.com/zsh-users/zsh/blob/2876c25a28b8052d6683027998cc118fc9b50157/Functions/Prompts/promptinit#L155
@@ -44,6 +47,11 @@ prompt_starship_precmd() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
+
+    # echo a newline
+    if (( ${STARSHIP_ADD_NEWLINE} )); then
+        echo ""
+    fi
 }
 
 # Runs after the user submits the command line, but before it is executed.
@@ -59,14 +67,6 @@ add-zsh-hook preexec prompt_starship_preexec
 # Set up a function to redraw the prompt if the user switches vi modes
 starship_zle-keymap-select() {
     zle reset-prompt
-}
-
-starship_get_terminal_row() {
-    echo -ne "\033[6n" > /dev/tty
-    read -t 1 -s -d 'R' row < /dev/tty
-    row="${row##*\[}"
-    row="${row%;*}"
-    echo $row
 }
 
 ## Check for existing keymap-select widget.
@@ -96,7 +96,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt promptsubst
 
-PROMPT='$(::STARSHIP:: prompt --terminal-row="`starship_get_terminal_row`" --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$(::STARSHIP:: prompt --terminal-row="$(starship_get_terminal_row)" --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-PROMPT2="$(::STARSHIP:: prompt --terminal-row="$(starship_get_terminal_row)" --continuation)"
+PROMPT='$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT2="$(::STARSHIP:: prompt --continuation)"
 

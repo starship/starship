@@ -120,8 +120,8 @@ pub fn get_prompt(context: Context) -> String {
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
         let is_first_row_of_terminal = context.row == Some(0);
-        println!("row: {:?}", context.row);
-        if !is_first_row_of_terminal {
+        let handled_by_preexec_hook = context.shell == Shell::Zsh;
+        if !is_first_row_of_terminal && !handled_by_preexec_hook {
             writeln!(buf).unwrap();
         }
     }
