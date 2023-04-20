@@ -23,6 +23,8 @@ else
     }
 fi
 
+ADD_NEWLINE_OUTPUT=$(::STARSHIP:: print-config add_newline)
+STARSHIP_ADD_NEWLINE=$(( ${ADD_NEWLINE_OUTPUT/*true*/1} ))
 
 # The two functions below follow the naming convention `prompt_<theme>_<hook>`
 # for compatibility with Zsh's prompt system. See
@@ -45,6 +47,11 @@ prompt_starship_precmd() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
+
+    # echo a newline
+    if (( ${STARSHIP_ADD_NEWLINE} )); then
+        echo ""
+    fi
 }
 
 # Runs after the user submits the command line, but before it is executed.

@@ -119,8 +119,9 @@ pub fn get_prompt(context: Context) -> String {
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
-        let should_print_newline = context.row != Some(0);
-        if should_print_newline {
+        let is_first_row_of_terminal = context.row == Some(0);
+        let handled_by_preexec_hook = context.shell == Shell::Zsh;
+        if !is_first_row_of_terminal && !handled_by_preexec_hook {
             writeln!(buf).unwrap();
         }
     }
