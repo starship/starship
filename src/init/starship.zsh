@@ -45,16 +45,13 @@ prompt_starship_precmd() {
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
 
-    conditionally_print_newline
+    STARSHIP_ADD_NEWLINE_FLAGS=()
 }
 
-conditionally_print_newline() {
-    # add a newline if `add_newline` is true
-    ADD_NEWLINE_OUTPUT=$(::STARSHIP:: print-config add_newline)
-    STARSHIP_ADD_NEWLINE=$(( ${ADD_NEWLINE_OUTPUT/*true*/1} ))
-    if (( ${STARSHIP_ADD_NEWLINE} )); then
-        echo ""
-    fi
+prompt_starship_clear_screen() {
+    STARSHIP_ADD_NEWLINE_FLAGS=("--disable-add-newline")
+    # reset the prompt to expand the variables. By default, ctrl+l uses the evaluated $PROMPT without
+    zle reset-prompt
 }
 
 # Runs after the user submits the command line, but before it is executed.
@@ -89,6 +86,7 @@ fi
 __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
 
 export STARSHIP_SHELL="zsh"
+export STARSHIP_ADD_NEWLINE_FLAGS=()
 
 # Set up the session key that will be used to store logs
 STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
@@ -97,9 +95,18 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
+# hook into ctrl+l clear-screen. Destructive if user has already overriden method
+# an alternative might be to add a binding for ctrl+l
+clear-screen() {
+    echoti clear;
+    prompt_starship_clear_screen
+    zle redisplay;
+}
+zle -N clear-screen
+
 setopt promptsubst
 
-PROMPT='$(::STARSHIP:: prompt --disable-add-newline --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$(::STARSHIP:: prompt --disable-add-newline --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-PROMPT2="$(::STARSHIP:: prompt --disable-add-newline --continuation)"
+PROMPT='$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT2="$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --continuation)"
 
