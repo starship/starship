@@ -2620,13 +2620,14 @@ To enable it, set `disabled` to `false` in your configuration file.
 
 ### Options
 
-| Option      | Default                                        | Description                                              |
-| ----------- | ---------------------------------------------- | -------------------------------------------------------- |
-| `threshold` | `75`                                           | Hide the memory usage unless it exceeds this percentage. |
-| `format`    | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                               |
-| `symbol`    | `'🐏'`                                         | The symbol used before displaying the memory usage.      |
-| `style`     | `'bold dimmed white'`                          | The style for the module.                                |
-| `disabled`  | `true`                                         | Disables the `memory_usage` module.                      |
+| Option                  | Default                                        | Description                                                      |
+| ----------------------- | ---------------------------------------------- | ---------------------------------------------------------------- |
+| `threshold`             | `75`                                           | Hide the memory usage unless it exceeds this percentage.         |
+| `format`                | `'via $symbol [${ram}( \| ${swap})]($style) '` | The format for the module.                                       |
+| `symbol`                | `'🐏'`                                         | The symbol used before displaying the memory usage.              |
+| `style`                 | `'bold dimmed white'`                          | The style for the module.                                        |
+| `disabled`              | `true`                                         | Disables the `memory_usage` module.                              |
+| `single_unit_fractions` | `false`                                        | Represents fractions using single units when possible (`1/1GB`). |
 
 ### Variables
 
