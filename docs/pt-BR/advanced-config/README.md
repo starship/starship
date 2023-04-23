@@ -191,12 +191,12 @@ load(io.popen('starship init cmd'):read("*a"))()
 Você também pode definir uma saída semelhante com o PowerShell criando uma função chamada `Invoke-Starship-PreCommand`.
 
 ```powershell
-# editar $PROFILE
+# edit $PROFILE
 function Invoke-Starship-PreCommand {
-   $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+  $host.ui.RawUI.WindowTitle = "$env:USERNAME@$env:COMPUTERNAME`: $pwd `a"
 }
 
-Invoke-Expression (& starship init powershell)
+Invoke-Expression (&starship init powershell)
 ```
 
 ## Ativando o Prompt Direito
