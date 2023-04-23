@@ -28,7 +28,7 @@ fn init_logger() {
     let nul = if cfg!(windows) { "nul" } else { "/dev/null" };
     let nul = PathBuf::from(nul);
 
-    // Maxmimum log level
+    // Maximum log level
     log::set_max_level(LevelFilter::Trace);
     logger.set_log_level(Level::Trace);
     logger.set_log_file_path(nul);
@@ -43,6 +43,7 @@ pub fn default_context() -> Context<'static> {
         Target::Main,
         PathBuf::new(),
         PathBuf::new(),
+        Default::default(),
     );
     context.config = StarshipConfig { config: None };
     context
@@ -176,11 +177,17 @@ pub enum FixtureProvider {
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
         FixtureProvider::Fossil => {
+            let checkout_db = if cfg!(windows) {
+                "_FOSSIL_"
+            } else {
+                ".fslckout"
+            };
             let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join("subdir"))?;
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
-                .open(path.path().join(".fslckout"))?
+                .open(path.path().join(checkout_db))?
                 .sync_all()?;
             Ok(path)
         }

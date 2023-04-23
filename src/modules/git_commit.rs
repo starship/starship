@@ -1,5 +1,5 @@
 use super::{Context, Module, ModuleConfig};
-use git_repository::commit::describe::SelectRef::AllTags;
+use gix::commit::describe::SelectRef::AllTags;
 
 use crate::configs::git_commit::GitCommitConfig;
 use crate::context::Repo;

@@ -1,16 +1,16 @@
-# Migrating to v0.45.0
+# Міграція на v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0 — це реліз, що містить останні зміни, на шляху до версії v1.0.0. Ми внесли кілька суттєвих змін у те, як виконується налаштування командного рядка, щоб забезпечити більший ступінь налаштувань.
 
-This guide is intended to walk you through the breaking changes.
+Цей посібник має на меті ознайомити вас із критичними змінами.
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order` було замінено на `format` кореневого рівня
 
-Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
+Раніше до версії 0.45.0 `prompt_order` приймав масив імен модулів у порядку, в якому їх мав показувати Starship.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for customization of the prompt outside of the modules themselves.
+Натомість Starship v0.45.0 приймає значення `format`, що дозволяє налаштувати командний рядок поза межами самих модулів.
 
-**Example pre-v0.45.0 configuration**
+**Приклад налаштувань pre-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Example v0.45.0 configuration**
+**Приклад налаштувань v0.45.0**
 
 ```toml
 format = """\
@@ -52,20 +52,20 @@ format = """\
   """
 ```
 
-## Module `prefix` and `suffix` have been replaced by `format`
+## Модулі `prefix` та `suffix` були замінені на  `format`
 
-Previously to v0.45.0, some modules would accept `prefix` and/or `suffix` in order to stylize the way that modules are rendered.
+До версії 0.45.0 деякі модулі приймали `prefix` та/або `suffix`, щоб стилізувати спосіб показу модулів.
 
-Starship v0.45.0 instead accepts a `format` value, allowing for further customization of how modules are rendered. Instead of defining a prefix and suffix for the context-based variables, the variables can now be substituted from within a format string, which represents the module's output.
+Натомість Starship v0.45.0 приймає значення `format`, що дозволяє додатково налаштовувати спосіб показу модулів. Замість визначення префікса та суфікса для контекстних змінних тепер змінні можна замінити з рядка формату, який представляє вихідні дані модуля.
 
-**Example pre-v0.45.0 configuration**
+**Приклад налаштувань pre-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Example v0.45.0 configuration**
+**Приклад налаштувань v0.45.0**
 
 ```toml
 [cmd_duration]
@@ -74,18 +74,18 @@ prefix = "took "
 format = "took [$duration]($style) "
 ```
 
-### Affected Modules
+### Вражені модулі
 
 #### Character
 
-| Removed Property        | Replacement      |
+| Вилучено                | Заміна           |
 | ----------------------- | ---------------- |
 | `symbol`                | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [character]
@@ -98,26 +98,26 @@ format = "took [$duration]($style) "
 ++ vicmd_symbol = "[❮](bold green)"
 ```
 
-Previously, the `use_symbol_for_status` property was used to configure the prompt to show the `error_symbol` when the last command resulted in a non-zero status code.
+Раніше параметр `use_symbol_for_status` використовувався для налаштування запиту на показ `error_symbol`, коли остання команда призводила до ненульового коду стану.
 
-With the release of v0.45.0, we now always use `error_symbol` after non-zero status codes, unifying `use_symbol_for_status` and `error_symbol` properties.
+З випуском версії 0.45.0 ми тепер завжди використовуємо `error_symbol` після ненульових кодів стану, об’єднуючи параметри `use_symbol_for_status` і `error_symbol`.
 
-To configure the prompt to use the older `use_symbol_for_status = true` configuration, add the following to your config file:
+Щоб налаштувати запит на використання старішої конфігурації `use_symbol_for_status = true`, додайте наступне до свого файлу налаштувань:
 
 ```toml
 [character]
 error_symbol = "[✖](bold red)"
 ```
 
-_Note:_ The `character` element automatically adds a space after, so unlike the other `format` strings, we specifically do not add one in the above examples.
+_Примітка:_ Елемент `character` автоматично додає пробіл після, тому, на відміну від інших рядків `format`, ми спеціально не додаємо його в наведених вище прикладах.
 
-#### Command Duration
+#### Command Duration – час виконання
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [cmd_duration]
@@ -127,11 +127,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Directory
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [directory]
@@ -141,12 +141,12 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Environment Variable
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [env_var]
@@ -157,12 +157,12 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Git Commit
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [git_commit]
@@ -173,13 +173,13 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 
 #### Git Status
 
-| Removed Property  | Replacement |
-| ----------------- | ----------- |
-| `prefix`          | `format`    |
-| `suffix`          | `format`    |
-| `show_sync_count` | `format`    |
+| Вилучено          | Заміна   |
+| ----------------- | -------- |
+| `prefix`          | `format` |
+| `suffix`          | `format` |
+| `show_sync_count` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [git_status]
@@ -189,11 +189,11 @@ _Note:_ The `character` element automatically adds a space after, so unlike the 
 ++ format = '([\[$all_status$ahead_behind\]]($style) )'
 ```
 
-Previously, the `show_sync_count` property was used to configure the prompt to show the number of commits the branch was ahead or behind the remote branch.
+Раніше параметр `show_sync_count` використовувався для налаштування запиту на показ кількості комітів, на які гілка була попереду або позаду віддаленої гілки.
 
-With the release of v0.45.0, this has been replaced with three separate properties, `ahead`, `behind`, and `diverged`.
+З випуском версії 0.45.0 це було замінено трьома окремими параметрами: `ahead`, `behind` і `diverged`.
 
-To configure the prompt to use the older `show_sync_count = true` configuration, set the following to your config file:
+Щоб налаштувати командний рядок на використання старішої конфігурації `show_sync_count = true`, встановіть у файлі налаштувань таке:
 
 ```toml
 [git_status]
@@ -204,12 +204,12 @@ behind = "⇣${count}"
 
 #### Hostname
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [hostname]
@@ -220,13 +220,13 @@ behind = "⇣${count}"
 
 #### Singularity
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `label`          | `format`    |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `label`  | `format` |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [singularity]
@@ -237,11 +237,11 @@ behind = "⇣${count}"
 
 #### Time
 
-| Removed Property | Replacement   |
-| ---------------- | ------------- |
-| `format`         | `time_format` |
+| Вилучено | Заміна        |
+| -------- | ------------- |
+| `format` | `time_format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [time]
@@ -250,14 +250,14 @@ behind = "⇣${count}"
 ++ format = "at 🕙[$time]($style) "
 ```
 
-#### Custom Commands
+#### Власні команди
 
-| Removed Property | Replacement |
-| ---------------- | ----------- |
-| `prefix`         | `format`    |
-| `suffix`         | `format`    |
+| Вилучено | Заміна   |
+| -------- | -------- |
+| `prefix` | `format` |
+| `suffix` | `format` |
 
-**Changes to the Default Configuration**
+**Зміни до стандартної конфігурації**
 
 ```diff
 [custom.example]

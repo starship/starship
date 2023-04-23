@@ -1,8 +1,6 @@
 name: Main workflow
 on:
   push:
-    branches:
-      - master
     paths-ignore:
       - "docs/**"
       - "**.md"
@@ -137,6 +135,10 @@ jobs:
     name: Check if config schema is up to date
     needs: cargo_check
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
@@ -155,7 +157,11 @@ jobs:
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
 
       - name: Check | Detect Changes
-        run: git diff --exit-code .github/config-schema.json
+        uses: reviewdog/action-suggester@v1.6.0
+        with:
+          tool_name: starship config-schema
+          filter_mode: nofilter
+          fail_on_error: 'true'
 
   # Run tests on Linux, macOS, and Windows
   # On both Rust stable and Rust nightly
@@ -232,10 +238,12 @@ jobs:
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
         run: |
           # Setup dummy release artifacts
-          New-Item -ItemType Directory -Path ./starship-x86_64-pc-windows-msvc
-          New-Item -ItemType Directory -Path ./starship-i686-pc-windows-msvc
-          New-Item -ItemType File -Path ./starship-x86_64-pc-windows-msvc/starship-x86_64-pc-windows-msvc.zip
-          New-Item -ItemType File -Path ./starship-i686-pc-windows-msvc/starship-i686-pc-windows-msvc.zip
+          foreach ($arch in @("aarch64", "i686", "x86_64")) {
+            foreach ($ext in @("zip", "msi")) {
+              New-Item -ItemType Directory -Path ./starship-$arch-pc-windows-msvc.$ext
+              New-Item -ItemType File -Path ./starship-$arch-pc-windows-msvc.$ext/starship-$arch-pc-windows-msvc.$ext
+            }
+          }
           # Build package
           pwsh ./install/windows/choco/update.ps1
         env:

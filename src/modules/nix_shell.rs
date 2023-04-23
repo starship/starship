@@ -29,7 +29,7 @@ impl NixShellType {
         }
     }
 
-    // Hack to detect if we're in a `nix shell` (in constrast to a `nix-shell`).
+    // Hack to detect if we're in a `nix shell` (in contrast to a `nix-shell`).
     // A better way to do this will be enabled by https://github.com/NixOS/nix/issues/6677.
     fn in_new_nix_shell(context: &Context) -> Option<()> {
         let path = context.get_env("PATH")?;
@@ -45,7 +45,7 @@ impl NixShellType {
 /// The module will use the `$IN_NIX_SHELL` and `$name` environment variable to
 /// determine if it's inside a nix-shell and the name of it.
 ///
-/// The following options are availables:
+/// The following options are available:
 ///     - `impure_msg` (string)  // change the impure msg
 ///     - `pure_msg` (string)    // change the pure msg
 ///     - `unknown_msg` (string) // change the unknown message

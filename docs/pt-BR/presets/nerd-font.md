@@ -13,7 +13,7 @@ Essa personalização altera os símbolos para cada módulo usar Nerd Font.
 ### Configuração
 
 ```sh
-starship preset nerd-font-symbols > ~/.config/starship.toml
+starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
 [Clique para baixar o TOML](/presets/toml/nerd-font-symbols.toml)
