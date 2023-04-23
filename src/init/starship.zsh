@@ -97,8 +97,8 @@ prompt_starship_clear_screen() {
 }
 
 # hook into ctrl+l clear-screen. If it has already been defined, wrap it
-__starship_preserved_clear_screen=${widgets[clear-screen]#user:}
-if [[ -z $__starship_preserved_clear_screen ]]; then
+__starship_preserved_clear_screen=${widgets[clear-screen]}
+if [[ $__starship_preserved_clear_screen == "builtin" ]]; then
     starship_clear-screen() {
         echoti clear
         prompt_starship_clear_screen
