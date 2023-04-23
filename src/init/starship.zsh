@@ -48,12 +48,6 @@ prompt_starship_precmd() {
     STARSHIP_ADD_NEWLINE_FLAGS=()
 }
 
-prompt_starship_clear_screen() {
-    STARSHIP_ADD_NEWLINE_FLAGS=("--disable-add-newline")
-    # reset the prompt to expand the variables. By default, ctrl+l uses the evaluated $PROMPT without
-    zle reset-prompt
-}
-
 # Runs after the user submits the command line, but before it is executed.
 prompt_starship_preexec() {
     __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
@@ -95,14 +89,30 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
-# hook into ctrl+l clear-screen. Destructive if user has already overriden method
-# an alternative might be to add a binding for ctrl+l
-clear-screen() {
-    echoti clear;
-    prompt_starship_clear_screen
-    zle redisplay;
+prompt_starship_clear_screen() {
+    STARSHIP_ADD_NEWLINE_FLAGS=("--disable-add-newline")
+    # reset the prompt to expand the variables
+    # By default, ctrl+l uses the existing $PROMPT without expanding the variables
+    zle reset-prompt
 }
-zle -N clear-screen
+
+# hook into ctrl+l clear-screen. If it has already been defined, wrap it
+__starship_preserved_clear_screen=${widgets[clear-screen]#user:}
+if [[ -z $__starship_preserved_clear_screen ]]; then
+    starship_clear-screen() {
+        echoti clear
+        prompt_starship_clear_screen
+        zle redisplay
+    }
+    zle -N clear-screen starship_clear-screen
+else
+    # Call starship's clear-screen and assume the wrapped method will clear the screen
+    starship_clear-screen-wrapped() {
+        prompt_starship_clear_screen
+        $__starship_preserved_clear_screen
+    }
+    zle -N clear-screen starship_clear-screen-wrapped
+fi
 
 setopt promptsubst
 
