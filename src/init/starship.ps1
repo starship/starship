@@ -123,7 +123,7 @@ $null = New-Module starship {
             "--jobs=$($jobs)"
         )
 
-        if ($Host.UI.RawUI.CursorPosition.Y -eq 0) {
+        if ($Host.UI.RawUI.CursorPosition.Y -eq 0 -or $script:firstRender) {
             $arguments += "--disable-add-newline"
         }
 
@@ -185,6 +185,7 @@ $null = New-Module starship {
             }
         }
 
+        $script:FirstRender = $false
     }
 
     # Disable virtualenv prompt, it breaks starship
@@ -192,6 +193,7 @@ $null = New-Module starship {
 
     $script:TransientPrompt = $false
     $script:DoesUseLists = (Get-PSReadLineOption).PredictionViewStyle -eq 'ListView'
+    $script:FirstRender = $true
 
     if ($PSVersionTable.PSVersion.Major -gt 5) {
         $ENV:STARSHIP_SHELL = "pwsh"
