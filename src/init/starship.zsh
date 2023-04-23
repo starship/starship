@@ -45,7 +45,11 @@ prompt_starship_precmd() {
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
 
-    STARSHIP_ADD_NEWLINE_FLAGS=()
+    # First render we also don't want a newline
+    if [[ STARSHIP_FIRST_PRECMD == 0 ]]; then
+        STARSHIP_ADD_NEWLINE_FLAGS=()
+    fi
+    STARSHIP_FIRST_PRECMD=0
 }
 
 # Runs after the user submits the command line, but before it is executed.
@@ -80,7 +84,7 @@ fi
 __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
 
 export STARSHIP_SHELL="zsh"
-export STARSHIP_ADD_NEWLINE_FLAGS=()
+export STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
 
 # Set up the session key that will be used to store logs
 STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
