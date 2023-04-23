@@ -104,9 +104,8 @@ prompt_starship_clear_screen() {
 __starship_preserved_clear_screen=${widgets[clear-screen]}
 if [[ $__starship_preserved_clear_screen == "builtin" ]]; then
     starship_clear-screen() {
-        echoti clear
+        zle .clear-screen
         prompt_starship_clear_screen
-        zle redisplay
     }
     zle -N clear-screen starship_clear-screen
 else
