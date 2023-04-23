@@ -46,6 +46,7 @@ function fish_right_prompt
     else
         ::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
+    set -g STARSHIP_ADD_NEWLINE_FLAGS
 end
 
 # Disable virtualenv prompt, it breaks starship
