@@ -56,19 +56,23 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        set_ps1 "--cmd-duration=$STARSHIP_DURATION"
+        starship_set_ps1 "--cmd-duration=$STARSHIP_DURATION"
         unset STARSHIP_START_TIME
     else
-        set_ps1
+        starship_set_ps1
     fi
 
     STARSHIP_ADD_NEWLINE_FLAGS=()
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
-set_ps1() {
+starship_set_ps1() {
+    PS1="$(starship_get_ps1 $@)"
+}
+
+starship_get_ps1() {
     local additional_args=("$@")
-    PS1="$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" $additional_args)"
+    ::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" $additional_args
 }
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
@@ -120,14 +124,15 @@ STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a
 STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
 export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
 
-# Check if the version is 4.4 or above, required for @P expansion
-# Bash 3.2 is also different because it prints the entire PS1 after clear, bash 5 only prints the last line
+# Bash 3.2 is different because it prints the entire PS1 after clear, bash 5 only prints the last line after `starship_clear` exits
+# Needs more testing
 if [[ "$BASH_VERSION" > "4.4" && $(bind -q clear-screen) == 'clear-screen can be invoked via "\C-l".' ]]; then
     function starship_clear() {
         STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
         clear
-        set_ps1
-        printf '%s\r' "${PS1@P}"
+        STARSHIP_SHELL=pwsh starship_get_ps1
+        printf '\r'
+        STARSHIP_ADD_NEWLINE_FLAGS=()
     }
     bind -x '"\C-l": starship_clear'
 fi
