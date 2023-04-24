@@ -4,7 +4,6 @@ $c\
 $elixir\
 $elm\
 $golang\
-$gradle\
 $haskell\
 $java\
 $julia\
@@ -17,7 +16,6 @@ $scala\
 
 format = """
 [](user_os_hex)\
-$os\
 $username\
 [](bg:path_hex fg:user_os_hex)\
 $directory\
@@ -77,12 +75,6 @@ style_root = "bg:user_os_hex"
 format = '[$user ]($style)'
 disabled = false
 
-# An alternative to the username module which displays a symbol that
-# represents the current operating system
-[os]
-style = "bg:user_os_hex"
-disabled = true
-
 [directory]
 style = "bg:path_hex"
 format = "[ $path ]($style)"
@@ -134,10 +126,6 @@ format = '[$all_status$ahead_behind ]($style)'
 
 [golang]
 symbol = " "
-style = "bg:tooling_hex"
-format = '[ $symbol ($version) ]($style)'
-
-[gradle]
 style = "bg:tooling_hex"
 format = '[ $symbol ($version) ]($style)'
 
