@@ -9,7 +9,7 @@ Ta konfiguracja zmienia format wyświetlania wbudowanych modułów - zamiast dom
 ### Konfiguracja
 
 ```sh
-starship preset bracketed-segments > ~/.config/starship.toml
+starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/bracketed-segments.toml)

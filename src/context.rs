@@ -1,10 +1,11 @@
 use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
+use crate::context_env::Env;
 use crate::module::Module;
-use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
+use crate::utils::{create_command, exec_timeout, read_file, CommandOutput, PathExt};
 
 use crate::modules;
-use crate::utils::{self, home_dir};
+use crate::utils;
 use clap::Parser;
 use gix::{
     sec::{self as git_sec, trust::DefaultForLevel},
@@ -60,8 +61,7 @@ pub struct Context<'a> {
     pub width: usize,
 
     /// A HashMap of environment variable mocks
-    #[cfg(test)]
-    pub env: HashMap<&'a str, String>,
+    pub env: Env<'a>,
 
     /// A HashMap of command mocks
     #[cfg(test)]
@@ -107,7 +107,14 @@ impl<'a> Context<'a> {
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
             .unwrap_or_else(|| path.clone());
 
-        Context::new_with_shell_and_path(arguments, shell, target, path, logical_path)
+        Context::new_with_shell_and_path(
+            arguments,
+            shell,
+            target,
+            path,
+            logical_path,
+            Default::default(),
+        )
     }
 
     /// Create a new instance of Context for the provided directory
@@ -117,8 +124,9 @@ impl<'a> Context<'a> {
         target: Target,
         path: PathBuf,
         logical_path: PathBuf,
+        env: Env<'a>,
     ) -> Context<'a> {
-        let config = StarshipConfig::initialize();
+        let config = StarshipConfig::initialize(&get_config_path_os(&env));
 
         // If the vector is zero-length, we should pretend that we didn't get a
         // pipestatus at all (since this is the input `--pipestatus=""`)
@@ -162,10 +170,9 @@ impl<'a> Context<'a> {
             shell,
             target,
             width,
+            env,
             #[cfg(test)]
             root_dir: tempfile::TempDir::new().unwrap(),
-            #[cfg(test)]
-            env: HashMap::new(),
             #[cfg(test)]
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
@@ -175,39 +182,30 @@ impl<'a> Context<'a> {
         }
     }
 
+    /// Sets the context config, overwriting the existing config
+    pub fn set_config(mut self, config: toml::Table) -> Context<'a> {
+        self.root_config = StarshipRootConfig::load(&config);
+        self.config = StarshipConfig {
+            config: Some(config),
+        };
+        self
+    }
+
     // Tries to retrieve home directory from a table in testing mode or else retrieves it from the os
     pub fn get_home(&self) -> Option<PathBuf> {
-        if cfg!(test) {
-            return self.get_env("HOME").map(PathBuf::from).or_else(home_dir);
-        }
-
-        home_dir()
+        home_dir(&self.env)
     }
 
     // Retrieves a environment variable from the os or from a table if in testing mode
-    #[cfg(test)]
-    pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        self.env
-            .get(key.as_ref())
-            .map(std::string::ToString::to_string)
-    }
-
-    #[cfg(not(test))]
     #[inline]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        env::var(key.as_ref()).ok()
+        self.env.get_env(key)
     }
 
     // Retrieves a environment variable from the os or from a table if in testing mode (os version)
-    #[cfg(test)]
-    pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
-        self.env.get(key.as_ref()).map(OsString::from)
-    }
-
-    #[cfg(not(test))]
     #[inline]
     pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
-        env::var_os(key.as_ref())
+        self.env.get_env_os(key)
     }
 
     /// Convert a `~` in a path to the home directory
@@ -246,6 +244,16 @@ impl<'a> Context<'a> {
             folders: &[],
             extensions: &[],
         })
+    }
+
+    /// Begins an ancestor scan at the current directory, see [`ScanAncestors`] for available
+    /// methods.
+    pub fn begin_ancestor_scan(&'a self) -> ScanAncestors<'a> {
+        ScanAncestors {
+            path: &self.current_dir,
+            files: &[],
+            folders: &[],
+        }
     }
 
     /// Will lazily get repo root and branch when a module requests it.
@@ -391,6 +399,32 @@ impl<'a> Context<'a> {
 
         read_file(self.current_dir.join(file_name)).ok()
     }
+
+    pub fn get_config_path_os(&self) -> Option<OsString> {
+        get_config_path_os(&self.env)
+    }
+}
+
+impl Default for Context<'_> {
+    fn default() -> Self {
+        Context::new(Default::default(), Target::Main)
+    }
+}
+
+fn home_dir(env: &Env) -> Option<PathBuf> {
+    if cfg!(test) {
+        if let Some(home) = env.get_env("HOME") {
+            return Some(PathBuf::from(home));
+        }
+    }
+    utils::home_dir()
+}
+
+fn get_config_path_os(env: &Env) -> Option<OsString> {
+    if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
+        return Some(config_path);
+    }
+    Some(home_dir(env)?.join(".config").join("starship.toml").into())
 }
 
 #[derive(Debug)]
@@ -607,6 +641,48 @@ impl<'a> ScanDir<'a> {
     }
 }
 
+/// Scans the ancestors of a given path until a directory containing one of the given files or
+/// folders is found.
+pub struct ScanAncestors<'a> {
+    path: &'a Path,
+    files: &'a [&'a str],
+    folders: &'a [&'a str],
+}
+
+impl<'a> ScanAncestors<'a> {
+    #[must_use]
+    pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
+        self.files = files;
+        self
+    }
+
+    #[must_use]
+    pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
+        self.folders = folders;
+        self
+    }
+
+    /// Scans upwards starting from the initial path until a directory containing one of the given
+    /// files or folders is found.
+    ///
+    /// The scan does not cross device boundaries.
+    pub fn scan(&self) -> Option<&'a Path> {
+        let initial_device_id = self.path.device_id();
+        for dir in self.path.ancestors() {
+            if initial_device_id != dir.device_id() {
+                break;
+            }
+
+            if self.files.iter().any(|name| dir.join(name).is_file())
+                || self.folders.iter().any(|name| dir.join(name).is_dir())
+            {
+                return Some(dir);
+            }
+        }
+        None
+    }
+}
+
 fn get_current_branch(repository: &Repository) -> Option<String> {
     let name = repository.head_name().ok()??;
     let shorthand = name.shorten();
@@ -723,6 +799,7 @@ fn parse_width(width: &str) -> Result<usize, ParseIntError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::default_context;
     use std::io;
 
     fn testdir(paths: &[&str]) -> Result<tempfile::TempDir, std::io::Error> {
@@ -855,6 +932,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
+            Default::default(),
         );
 
         assert_ne!(context.current_dir, context.logical_dir);
@@ -879,6 +957,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
+            Default::default(),
         );
 
         let expected_current_dir = &test_path;
@@ -900,6 +979,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
+            Default::default(),
         );
 
         let expected_current_dir = home_dir()
@@ -909,6 +989,16 @@ mod tests {
 
         let expected_logical_dir = test_path;
         assert_eq!(expected_logical_dir, context.logical_dir);
+    }
+
+    #[test]
+    fn set_config_method_overwrites_constructor() {
+        let context = default_context();
+        let mod_context = default_context().set_config(toml::toml! {
+            add_newline = true
+        });
+
+        assert_ne!(context.config.config, mod_context.config.config);
     }
 
     #[cfg(windows)]
@@ -921,6 +1011,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path,
+            Default::default(),
         );
 
         let expected_path = Path::new(r"C:\");

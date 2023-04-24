@@ -13,8 +13,6 @@ pub trait PathExt {
     /// E.g. `\\?\UNC\server\share\foo` => `\foo`
     /// E.g. `/foo/bar` => `/foo/bar`
     fn without_prefix(&self) -> &Path;
-    /// Get device / volume info
-    fn device_id(&self) -> Option<u64>;
 }
 
 #[cfg(windows)]
@@ -82,11 +80,6 @@ impl PathExt for Path {
         let (_, path) = normalize::normalize_path(self);
         path
     }
-
-    fn device_id(&self) -> Option<u64> {
-        // Maybe it should use unimplemented!
-        Some(42u64)
-    }
 }
 
 // NOTE: Windows path prefixes are only parsed on Windows.
@@ -106,24 +99,6 @@ impl PathExt for Path {
     #[inline]
     fn without_prefix(&self) -> &Path {
         self
-    }
-
-    #[cfg(target_os = "linux")]
-    fn device_id(&self) -> Option<u64> {
-        use std::os::linux::fs::MetadataExt;
-        match self.metadata() {
-            Ok(m) => Some(m.st_dev()),
-            Err(_) => None,
-        }
-    }
-
-    #[cfg(all(unix, not(target_os = "linux")))]
-    fn device_id(&self) -> Option<u64> {
-        use std::os::unix::fs::MetadataExt;
-        match self.metadata() {
-            Ok(m) => Some(m.dev()),
-            Err(_) => None,
-        }
     }
 }
 

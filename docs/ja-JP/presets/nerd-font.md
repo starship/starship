@@ -13,7 +13,7 @@
 ### 設定
 
 ```sh
-starship preset nerd-font-symbols > ~/.config/starship.toml
+starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
 [クリックしてTOMLをダウンロード](/presets/toml/nerd-font-symbols.toml)

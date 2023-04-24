@@ -713,7 +713,7 @@ error_symbol = '[➜](bold red) '
 # ~/.config/starship.toml
 
 [character]
-vicmd_symbol = '[V](bold green) '
+vimcmd_symbol = '[V](bold green) '
 ```
 
 ## CMake
@@ -2871,10 +2871,12 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 ```toml
 # This is the default symbols table.
 [os.symbols]
+Alpaquita = "🔔 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
+Artix = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -2887,6 +2889,7 @@ Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
 Linux = "🐧 "
+Mabox = "📦 "
 Macos = "🍎 "
 Manjaro = "🥭 "
 Mariner = "🌊 "
@@ -4157,6 +4160,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 | ------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | O comando cuja a saída deve ser exibida. O comando será passado no stdin para o shell.                                                                                                                                                                                                                                           |
 | `when`              | `false`                         | Ou um valor booleano (`true` ou `false`, sem aspas) ou um comando shell de string usado como condição para mostrar o módulo. No caso de uma string, o módulo será mostrado se o comando retornar um código de status `0`.                                                                                                        |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                                                              |
 | `shell`             |                                 | [Veja abaixo](#custom-command-shell)                                                                                                                                                                                                                                                                                             |
 | `description`       | `'<custom module>'`       | A descrição do módulo, isto será exibido quando executar `starship explain`.                                                                                                                                                                                                                                                     |
 | `detect_files`      | `[]`                            | Os arquivos que serão buscados por correspondência no diretório atual.                                                                                                                                                                                                                                                           |

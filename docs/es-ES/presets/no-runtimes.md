@@ -9,7 +9,7 @@ Este preajuste oculta la versión de los tiempos de ejecución del idioma. Si tr
 ### Configuración
 
 ```sh
-starship preset no-runtime-versions > ~/.config/starship.toml
+starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
 [Clic para descargar TOML](/presets/toml/no-runtime-versions.toml)
