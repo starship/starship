@@ -14,7 +14,6 @@
 
 # A way to set '$?', since bash does not allow assigning to '$?' directly
 function _starship_set_return() { return "${1:-0}"; }
-
 # Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
@@ -61,6 +60,7 @@ starship_precmd() {
     else
         PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
     fi
+    STARSHIP_ADD_NEWLINE_FLAGS=()
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
@@ -106,10 +106,28 @@ shopt -s checkwinsize
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="bash"
 
+export STARSHIP_ADD_NEWLINE_FLAGS=()
+
 # Set up the session key that will be used to store logs
 STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
 STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
 export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
+
+bash_version=$(bash --version | grep "version" | head -n1 | awk '{print $4}')
+
+# Check if the version is 4.4 or above
+if [ "$(echo -e "$bash_version\n4.4" | sort -V | head -n1)" == "4.4" ]; then
+    if [[ $(bind -q clear-screen) == 'clear-screen can be invoked via "\C-l".' ]]; then
+        function starship_clear() {
+            STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
+            clear
+            PS1="$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
+            printf '%s\r' "${PS1@P}"
+        }
+        bind -x '"\C-l": starship_clear'
+    fi
+fi
+
 
 # Set the continuation prompt
 PS2="$(::STARSHIP:: prompt --continuation)"
