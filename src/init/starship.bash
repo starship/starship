@@ -14,6 +14,7 @@
 
 # A way to set '$?', since bash does not allow assigning to '$?' directly
 function _starship_set_return() { return "${1:-0}"; }
+
 # Will be run before *every* command (even ones in pipes!)
 starship_preexec() {
     # Save previous command's last argument, otherwise it will be set to "starship_preexec"
@@ -55,13 +56,19 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        set_ps1 "--cmd-duration=$STARSHIP_DURATION"
         unset STARSHIP_START_TIME
     else
-        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
+        set_ps1
     fi
+
     STARSHIP_ADD_NEWLINE_FLAGS=()
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
+}
+
+set_ps1() {
+    local additional_args=("$@")
+    PS1="$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" $additional_args)"
 }
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
@@ -106,29 +113,24 @@ shopt -s checkwinsize
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="bash"
 
-export STARSHIP_ADD_NEWLINE_FLAGS=()
+export STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
 
 # Set up the session key that will be used to store logs
 STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
 STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
 export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
 
-bash_version=$(bash --version | grep "version" | head -n1 | awk '{print $4}')
-
-# Check if the version is 4.4 or above
-if [ "$(echo -e "$bash_version\n4.4" | sort -V | head -n1)" == "4.4" ]; then
-    if [[ $(bind -q clear-screen) == 'clear-screen can be invoked via "\C-l".' ]]; then
-        function starship_clear() {
-            STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
-            clear
-            PS1="$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
-            printf '%s\r' "${PS1@P}"
-        }
-        bind -x '"\C-l": starship_clear'
-    fi
+# Check if the version is 4.4 or above, required for @P expansion
+# Bash 3.2 is also different because it prints the entire PS1 after clear, bash 5 only prints the last line
+if [[ "$BASH_VERSION" > "4.4" && $(bind -q clear-screen) == 'clear-screen can be invoked via "\C-l".' ]]; then
+    function starship_clear() {
+        STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
+        clear
+        set_ps1
+        printf '%s\r' "${PS1@P}"
+    }
+    bind -x '"\C-l": starship_clear'
 fi
-
 
 # Set the continuation prompt
 PS2="$(::STARSHIP:: prompt --continuation)"
-
