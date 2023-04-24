@@ -1,8 +1,7 @@
 use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
-    config::{ModuleConfig, StarshipConfig},
-    configs::StarshipRootConfig,
+    config::StarshipConfig,
     utils::{create_command, CommandOutput},
 };
 use log::{Level, LevelFilter};
@@ -89,10 +88,7 @@ impl<'a> ModuleRenderer<'a> {
 
     /// Sets the config of the underlying context
     pub fn config(mut self, config: toml::Table) -> Self {
-        self.context.root_config = StarshipRootConfig::load(&config);
-        self.context.config = StarshipConfig {
-            config: Some(config),
-        };
+        self.context = self.context.set_config(config);
         self
     }
 
