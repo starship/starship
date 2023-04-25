@@ -8,6 +8,7 @@
     "@vuepress/plugin-docsearch": "^2.0.0-beta.61",
     "@vuepress/plugin-google-analytics": "^2.0.0-beta.61",
     "vuepress": "^2.0.0-beta.61",
+    "vuepress-plugin-sitemap2": "^2.0.0-beta.206",
     "vuepress-theme-default-prefers-color-scheme": "^2.0.0"
   }
 }

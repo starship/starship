@@ -1,6 +1,7 @@
 import { defineUserConfig, SidebarConfigArray } from "vuepress";
 import { defaultTheme } from "@vuepress/theme-default";
 import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
+import { sitemapPlugin } from "vuepress-plugin-sitemap2";
 import codeCopyPlugin from "@snippetors/vuepress-plugin-code-copy";
 import { docsearchPlugin } from "@vuepress/plugin-docsearch";
 
@@ -319,6 +320,9 @@ export default defineUserConfig({
     plugins: [
         googleAnalyticsPlugin({
             id: "UA-71160903-4",
+        }),
+        sitemapPlugin({
+            hostname: "https://starship.rs",
         }),
         codeCopyPlugin(),
         docsearchPlugin({
