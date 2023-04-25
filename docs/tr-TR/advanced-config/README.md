@@ -112,12 +112,13 @@ Bash, çoğu diğer kabuklar gibi resmi bir preexec/precmd çerçevesine sahip d
 - Özel bir işlemi başlatmak için çizimin bitmesinden önce yeni bir işlev oluşturup adlandırmanız gerekmektedir.`starship_precmd_user_func`. Örneğin komut isteminden önce bir roket çizmek isterseniz
 
 ```bash
-echo "🚀"
+function blastoff(){
+    echo "🚀"
 }
-starship_precmd_user_func="fırlatıldı"
+starship_precmd_user_func="blastoff"
 ```
 
-- Özel bir işlemi başlatmadan hemen önce komut istemini çalıştırıp, [`DEBUG`filtreleme mekanizmasını](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/) kullanabilirsiniz. Bununla birlikte, Starship başlatılmadan hemen _önce_, </strong>DEBUG sinyalini filtrelemek<1>**zorundasınız.</0>! Starship, DEBUG filtrelemesinin ardından bazı değerleri içerisinde barındırabilir ancak filtreleme işlemi starship başlatıldıktan sonra yazılırsa bazı fonksiyonlar devre dışı kalabilir.</li> </ul>
+- Özel bir işlemi başlatmadan hemen önce komut istemini çalıştırıp, [`DEBUG` filtreleme mekanizmasını](https://jichu4n.com/posts/debug-trap-and-prompt_command-in-bash/) kullanabilirsiniz. Bununla birlikte, Starship başlatılmadan hemen _önce_, DEBUG sinyalini filtrelemek **zorundasınız**! Starship, DEBUG filtrelemesinin ardından bazı değerleri içerisinde barındırabilir ancak filtreleme işlemi starship başlatıldıktan sonra yazılırsa bazı fonksiyonlar devre dışı kalabilir.
 
 ```bash
 function blastoff(){

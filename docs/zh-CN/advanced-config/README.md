@@ -60,7 +60,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 请注意，对于Fish，命令行提示只在命令行非空 和语法正确的情况下才会显示。
 
-- 默认情况下，输入的左侧是 粗体绿色的❯</code>符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要 在这里显示Starship的 `character` 模块，您需要如下操作：
+- 默认情况下，输入的左侧是 粗体绿色的 `❯` 符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要 在这里显示Starship的 `character` 模块，您需要如下操作：
 
 ```fish
 function starship_transent_rmpt_func
