@@ -1,9 +1,9 @@
-import { defineUserConfig, SidebarConfigArray } from "vuepress";
-import { defaultTheme } from "@vuepress/theme-default";
-import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
-import { sitemapPlugin } from "vuepress-plugin-sitemap2";
 import codeCopyPlugin from "@snippetors/vuepress-plugin-code-copy";
 import { docsearchPlugin } from "@vuepress/plugin-docsearch";
+import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
+import { defaultTheme } from "@vuepress/theme-default";
+import { defineUserConfig, SidebarConfigArray } from "vuepress";
+import { sitemapPlugin } from "vuepress-plugin-sitemap2";
 
 const sidebar = (lang, override = {}): SidebarConfigArray =>
     [
