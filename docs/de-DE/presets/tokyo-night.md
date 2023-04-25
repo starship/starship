@@ -18,4 +18,4 @@ starship preset tokyo-night -o ~/.config/starship.toml
 
 [Zum Herunterladen der TOML Datei klicken](/presets/toml/tokyo-night.toml)
 
-<<< @/.vuepress/public/presets/toml/tokyo-night.toml
+@[code](../../.vuepress/public/presets/toml/tokyo-night.toml)

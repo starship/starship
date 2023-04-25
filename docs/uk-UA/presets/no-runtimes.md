@@ -14,4 +14,4 @@ starship preset no-runtime-versions -o ~/.config/starship.toml
 
 [Натисніть, щоб завантажити TOML](/presets/toml/no-runtime-versions.toml)
 
-<<< @/.vuepress/public/presets/toml/no-runtime-versions.toml
+@[code](../../.vuepress/public/presets/toml/no-runtime-versions.toml)

@@ -18,4 +18,4 @@ starship preset pastel-powerline -o ~/.config/starship.toml
 
 [Click to download TOML](/presets/toml/pastel-powerline.toml)
 
-<<< @/.vuepress/public/presets/toml/pastel-powerline.toml
+@[code](../../.vuepress/public/presets/toml/pastel-powerline.toml)

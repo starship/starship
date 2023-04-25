@@ -14,4 +14,4 @@ starship preset no-empty-icons -o ~/.config/starship.toml
 
 [点击下载 TOML 文件](/presets/toml/no-empty-icons.toml)
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+@[code](../../.vuepress/public/presets/toml/no-empty-icons.toml)

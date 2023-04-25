@@ -14,4 +14,4 @@ starship preset bracketed-segments -o ~/.config/starship.toml
 
 [点击下载 TOML 文件](/presets/toml/bracketed-segments.toml)
 
-<<< @/.vuepress/public/presets/toml/bracketed-segments.toml
+@[code](../../.vuepress/public/presets/toml/bracketed-segments.toml)

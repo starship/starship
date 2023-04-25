@@ -14,4 +14,4 @@ starship preset plain-text-symbols -o ~/.config/starship.toml
 
 [クリックしてTOMLをダウンロード](/presets/toml/plain-text-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
+@[code](../../.vuepress/public/presets/toml/plain-text-symbols.toml)

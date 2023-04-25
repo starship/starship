@@ -14,4 +14,4 @@ starship preset pure-preset -o ~/.config/starship.toml
 
 [Cliquez pour télécharger le TOML](/presets/toml/pure-preset.toml)
 
-<<< @/.vuepress/public/presets/toml/pure-preset.toml
+@[code](../../.vuepress/public/presets/toml/pure-preset.toml)

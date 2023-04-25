@@ -16,4 +16,4 @@ starship preset no-nerd-font -o ~/.config/starship.toml
 
 [Clic para descargar TOML](/presets/toml/no-nerd-font.toml)
 
-<<< @/.vuepress/public/presets/toml/no-nerd-font.toml
+@[code](../../.vuepress/public/presets/toml/no-nerd-font.toml)

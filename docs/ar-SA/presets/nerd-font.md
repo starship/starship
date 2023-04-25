@@ -18,4 +18,4 @@ starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 [Click to download TOML](/presets/toml/nerd-font-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
+@[code](../../.vuepress/public/presets/toml/nerd-font-symbols.toml)
