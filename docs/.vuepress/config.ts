@@ -1,6 +1,7 @@
 import { defineUserConfig, SidebarConfigArray } from "vuepress";
 import { defaultTheme } from "@vuepress/theme-default";
 import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
+import codeCopyPlugin from "@snippetors/vuepress-plugin-code-copy";
 import { docsearchPlugin } from "@vuepress/plugin-docsearch";
 
 const sidebar = (lang, override = {}): SidebarConfigArray =>
@@ -319,6 +320,7 @@ export default defineUserConfig({
         googleAnalyticsPlugin({
             id: "UA-71160903-4",
         }),
+        codeCopyPlugin(),
         docsearchPlugin({
             apiKey: "44118471f56286dcda7db941a043370d",
             indexName: "starship",
