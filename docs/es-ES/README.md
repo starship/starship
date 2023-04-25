@@ -3,16 +3,18 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: '¡El prompt minimalista, ultrarápido e infinitamente personalizable para cualquier intérprete de comandos!'
-actionText: Comenzar →
-actionLink: ./guide/
+actions:
+  - text: Comenzar →
+    link: ./guide/
+    type: primary
 features:
-  - 
+  -
     title: Compatibilidad primero
     details: Funciona en los intérprete de comandos más comunes de los sistemas operativos más comunes. ¡Úsalo en todas partes!
-  - 
+  -
     title: Desarrollado en Rust
     details: Obtén la mayor velocidad y seguridad de Rust, para hacer tu prompt lo más rápida y segura posible.
-  - 
+  -
     title: Personalizable
     details: Puedes personalizar cada pequeño detalle a tu gusto, de manera que puedes tener un prompt minimalista o rico en funcionalidades.
 footer: Bajo una licencia ISC | Derechos de autor © 2019-presente Colaboradores de Starship

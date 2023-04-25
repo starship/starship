@@ -3,16 +3,18 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: 간결하고 화끈하게 빠르며 무제한으로 커스터마이징이 가능한 프롬프트. 어떤 쉘에서든 사용할 수 있습니다!
-actionText: Get Started →
-actionLink: ./guide/
+actions:
+  - text: Get Started →
+    link: ./guide/
+    type: primary
 features:
-  - 
+  -
     title: Compatibility First
     details: Works on the most common shells on the most common operating systems. Use it everywhere!
-  - 
+  -
     title: Rust-Powered
     details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
-  - 
+  -
     title: Customizable
     details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors

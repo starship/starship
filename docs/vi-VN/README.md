@@ -3,16 +3,18 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: Nhỏ gọn, cực nhanh, và khả năng tuỳ chỉnh vô hạn prompt cho bất kì shell nào!
-actionText: Bắt đầu →
-actionLink: ./guide/
+actions:
+  - text: Bắt đầu →
+    link: ./guide/
+    type: primary
 features:
-  - 
+  -
     title: Khả năng tương thích
     details: Những công việc trên đa số các shell phổ biến trên đa số các hệ điều hành phổ biến. Sử dụng nó ở mọi nơi!
-  - 
+  -
     title: Sức mạnh của Rust
     details: Mang lại tốc độ và độ an toàn tốt nhất của Rust, giúp prompt của bạn thực thi nhanh chóng và đáng tin cậy nhất có thể.
-  - 
+  -
     title: Khả năng tuỳ biến
     details: Mọi chi tiết nhỏ được tuỳ biến theo ý thích của bạn, giúp prompt này nhỏ nhất có thể hoặc phong phú về tính năng như bạn muốn.
 footer: Cấp phép bởi ISC | Bản quyền © 2019-nay Starship Contributors

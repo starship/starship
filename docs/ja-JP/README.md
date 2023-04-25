@@ -3,16 +3,18 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: シェル用の最小限の、非常に高速で、無限にカスタマイズ可能なプロンプトです！
-actionText: Get Started →
-actionLink: ./guide/
+actions:
+  - text: Get Started →
+    link: ./guide/
+    type: primary
 features:
-  - 
+  -
     title: 互換性優先
     details: 一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！
-  - 
+  -
     title: Rust製
     details: Rustの最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。
-  - 
+  -
     title: カスタマイズ可能
     details: それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors

@@ -3,8 +3,10 @@ home: true
 heroImage: /logo.svg
 heroText: null
 tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
-actionLink: ./guide/
+actions:
+  - text: Get Started →
+    link: ./guide/
+    type: primary
 features:
   - title: Compatibility First
     details: Works on the most common shells on the most common operating systems. Use it everywhere!

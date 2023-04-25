@@ -3,16 +3,18 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: التخصيص البسيط و السريع و الغير محدود لي ال"shell"!
-actionText: البدء مع Starship ←
-actionLink: ./guide/
+actions:
+  - text: البدء مع Starship ←
+    link: ./guide/
+    type: primary
 features:
-  - 
+  -
     title: التوافق أولاً
     details: يعمل على أكثر موجهات الأوامر شيوعاً في أكثر نظم التشغيل شيوعاً. استخدمه في كل مكان!
-  - 
+  -
     title: Rust-Powered
     details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
-  - 
+  -
     title: قابل للتخصيص
     details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors

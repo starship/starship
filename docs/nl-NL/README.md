@@ -3,16 +3,18 @@ home: true
 heroImage: /logo.svg
 heroText:
 tagline: De minimalistische, razend snelle en oneindig aanpasbare prompt voor elke shell!
-actionText: Get Started →
-actionLink: ./guide/
+actions:
+  - text: Get Started →
+    link: ./guide/
+    type: primary
 features:
-  - 
+  -
     title: Compatibility First
     details: Works on the most common shells on the most common operating systems. Use it everywhere!
-  - 
+  -
     title: Rust-Powered
     details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
-  - 
+  -
     title: Customizable
     details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
