@@ -1,0 +1,44 @@
+.home .hero img {
+  max-width: 500px !important;
+  min-width: 300px;
+  width: 100%;
+  height: 100%;
+}
+
+.center {
+  margin: 0 auto;
+  width: 80%;
+  .demo-video {
+    width: 100%;
+    margin: 50px 0;
+    border-radius: 6px;
+  }
+}
+
+.hero {
+  margin: 150px 25px 70px;
+}
+
+.action-button {
+  background-color: #dd0b78 !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+@font-face {
+  font-family: 'Nerd Font';
+  src: url("/nerd-font.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --c-brand: #DD0B78;
+  --c-brand-light: #DD0B78CC;
+  --font-family-code: 'Nerd Font', source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+html.dark {
+  --c-brand: #ff33b8;
+  --c-brand-light: #ff33b8cc;
+}
