@@ -1,8 +1,10 @@
-import { defineConfig, SidebarConfigArray } from "vuepress/config";
+import { defineUserConfig, SidebarConfigArray } from "vuepress";
+import { defaultTheme } from "@vuepress/theme-default";
+import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
+import { docsearchPlugin } from "@vuepress/plugin-docsearch";
 
 const sidebar = (lang, override = {}): SidebarConfigArray =>
     [
-        "", // "Home", which should always have a override
         "guide", // README, which should always have a override
         // Overrides for any page below is an inconsistency between the sidebar title and page title
         "installing",
@@ -22,10 +24,10 @@ const sidebar = (lang, override = {}): SidebarConfigArray =>
         }
 
         // If no override is set for current page, let VuePress fallback to page title
-        return page in override ? [path, override[page]] : path;
+        return page in override ? { link: path, text: override[page] } : path;
     });
 
-module.exports = defineConfig({
+export default defineUserConfig({
     locales: {
         "/": {
             lang: "en-US",
@@ -112,34 +114,22 @@ module.exports = defineConfig({
         ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png" }],
         ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt" }],
     ],
-    evergreen: true,
-    theme: "default-prefers-color-scheme",
-    themeConfig: {
+    theme: defaultTheme({
         logo: "/icon.png",
         // the GitHub repo path
         repo: "starship/starship",
-        // the label linking to the repo
-        repoLabel: "GitHub",
         // if your docs are not at the root of the repo:
         docsDir: "docs",
-        // defaults to false, set to true to enable
-        editLinks: true,
-        // enables Algolia DocSearch
-        algolia: {
-            apiKey: "44118471f56286dcda7db941a043370d",
-            indexName: "starship",
-            appId: "M3XUO3SQOR",
-        },
         locales: {
             "/": {
                 // text for the language dropdown
-                selectText: "Languages",
+                selectLanguageText: "Languages",
                 // label for this locale in the language dropdown
-                label: "English",
+                selectLanguageName: "English",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Edit this page on GitHub",
                 // Custom navbar values
-                nav: [{ text: "Configuration", link: "/config/" }],
+                navbar: [{ text: "Configuration", link: "/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("", {
                     guide: "Guide",
@@ -147,13 +137,13 @@ module.exports = defineConfig({
             },
             "/de-DE/": {
                 // text for the language dropdown
-                selectText: "Sprachen",
+                selectLanguageText: "Sprachen",
                 // label for this locale in the language dropdown
-                label: "Deutsch",
+                selectLanguageName: "Deutsch",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Bearbeite diese Seite auf GitHub",
                 // Custom navbar values
-                nav: [{ text: "Konfiguration", link: "/de-DE/config/" }],
+                navbar: [{ text: "Konfiguration", link: "/de-DE/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("de-DE", {
                     guide: "Anleitung",
@@ -164,13 +154,13 @@ module.exports = defineConfig({
             },
             "/es-ES/": {
                 // text for the language dropdown
-                selectText: "Idiomas",
+                selectLanguageText: "Idiomas",
                 // label for this locale in the language dropdown
-                label: "Español",
+                selectLanguageName: "Español",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Edita esta página en GitHub",
                 // Custom navbar values
-                nav: [{ text: "Configuración", link: "/es-ES/config/" }],
+                navbar: [{ text: "Configuración", link: "/es-ES/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("es-ES", {
                     guide: "Guía",
@@ -181,13 +171,13 @@ module.exports = defineConfig({
             },
             "/fr-FR/": {
                 // text for the language dropdown
-                selectText: "Langues",
+                selectLanguageText: "Langues",
                 // label for this locale in the language dropdown
-                label: "Français",
+                selectLanguageName: "Français",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Éditez cette page sur GitHub",
                 // Custom navbar values
-                nav: [{ text: "Configuration", link: "/fr-FR/config/" }],
+                navbar: [{ text: "Configuration", link: "/fr-FR/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("fr-FR", {
                     guide: "Guide",
@@ -196,13 +186,13 @@ module.exports = defineConfig({
             },
             "/id-ID/": {
                 // text for the language dropdown
-                selectText: "Languages",
+                selectLanguageText: "Languages",
                 // label for this locale in the language dropdown
-                label: "Bahasa Indonesia",
+                selectLanguageName: "Bahasa Indonesia",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Sunting halaman ini di Github",
                 // Custom navbar values
-                nav: [{ text: "Konfigurasi", link: "/id-ID/config/" }],
+                navbar: [{ text: "Konfigurasi", link: "/id-ID/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("id-ID", {
                     guide: "Petunjuk",
@@ -213,13 +203,13 @@ module.exports = defineConfig({
             },
             "/it-IT/": {
                 // text for the language dropdown
-                selectText: "Languages",
+                selectLanguageText: "Languages",
                 // label for this locale in the language dropdown
-                label: "Italiano",
+                selectLanguageName: "Italiano",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Modifica questa pagina in Github",
                 // Custom navbar values
-                nav: [{ text: "Configuration", link: "/it-IT/config/" }],
+                navbar: [{ text: "Configuration", link: "/it-IT/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("it-IT", {
                     guide: "Guide",
@@ -228,13 +218,13 @@ module.exports = defineConfig({
             },
             "/ja-JP/": {
                 // text for the language dropdown
-                selectText: "言語",
+                selectLanguageText: "言語",
                 // label for this locale in the language dropdown
-                label: "日本語",
+                selectLanguageName: "日本語",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "GitHub で編集する",
                 // Custom navbar values
-                nav: [{ text: "設定", link: "/ja-JP/config/" }],
+                navbar: [{ text: "設定", link: "/ja-JP/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("ja-JP", {
                     guide: "ガイド",
@@ -243,13 +233,13 @@ module.exports = defineConfig({
             },
             "/pt-BR/": {
                 // text for the language dropdown
-                selectText: "Languages",
+                selectLanguageText: "Languages",
                 // label for this locale in the language dropdown
-                label: "Português do Brasil",
+                selectLanguageName: "Português do Brasil",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Edite esta página no Github",
                 // Custom navbar values
-                nav: [{ text: "Configuração", link: "/pt-BR/config/" }],
+                navbar: [{ text: "Configuração", link: "/pt-BR/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("pt-BR", {
                     guide: "Guia",
@@ -260,13 +250,13 @@ module.exports = defineConfig({
             },
             "/ru-RU/": {
                 // text for the language dropdown
-                selectText: "Языки",
+                selectLanguageText: "Языки",
                 // label for this locale in the language dropdown
-                label: "Русский",
+                selectLanguageName: "Русский",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Редактировать эту страницу на GitHub",
                 // Custom navbar values
-                nav: [{ text: "Настройка", link: "/ru-RU/config/" }],
+                navbar: [{ text: "Настройка", link: "/ru-RU/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("ru-RU", {
                     guide: "Руководство",
@@ -278,13 +268,13 @@ module.exports = defineConfig({
             },
             "/vi-VN/": {
                 // text for the language dropdown
-                selectText: "Ngôn ngữ",
+                selectLanguageText: "Ngôn ngữ",
                 // label for this locale in the language dropdown
-                label: "Tiếng Việt",
+                selectLanguageName: "Tiếng Việt",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "Chỉnh sửa trang này trên GitHub",
                 // Custom navbar values
-                nav: [{ text: "Cấu hình", link: "/vi-VN/config/" }],
+                navbar: [{ text: "Cấu hình", link: "/vi-VN/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("vi-VN", {
                     guide: "Hướng dẫn",
@@ -294,13 +284,13 @@ module.exports = defineConfig({
             },
             "/zh-TW/": {
                 // text for the language dropdown
-                selectText: "語言",
+                selectLanguageText: "語言",
                 // label for this locale in the language dropdown
-                label: "繁體中文",
+                selectLanguageName: "繁體中文",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "在 GitHub 上修改此頁面",
                 // Custom navbar values
-                nav: [{ text: "設定", link: "/zh-TW/config/" }],
+                navbar: [{ text: "設定", link: "/zh-TW/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("zh-TW", {
                     guide: "指引",
@@ -309,13 +299,13 @@ module.exports = defineConfig({
             },
             "/zh-CN/": {
                 // text for the language dropdown
-                selectText: "语言",
+                selectLanguageText: "语言",
                 // label for this locale in the language dropdown
-                label: "简体中文",
+                selectLanguageName: "简体中文",
                 // Custom text for edit link. Defaults to "Edit this page"
                 editLinkText: "在 GitHub 上修改此页",
                 // Custom navbar values
-                nav: [{ text: "配置", link: "/zh-CN/config/" }],
+                navbar: [{ text: "配置", link: "/zh-CN/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("zh-CN", {
                     guide: "指南",
@@ -324,20 +314,15 @@ module.exports = defineConfig({
                 }),
             },
         },
-    },
+    }),
     plugins: [
-        [
-            "@vuepress/google-analytics",
-            {
-                ga: "UA-71160903-4",
-            },
-        ],
-        [
-            "vuepress-plugin-sitemap",
-            {
-                hostname: "https://starship.rs",
-            },
-        ],
-        ["vuepress-plugin-code-copy", true],
+        googleAnalyticsPlugin({
+            id: "UA-71160903-4",
+        }),
+        docsearchPlugin({
+            apiKey: "44118471f56286dcda7db941a043370d",
+            indexName: "starship",
+            appId: "M3XUO3SQOR",
+        }),
     ],
 });
