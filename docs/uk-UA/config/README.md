@@ -242,7 +242,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Which is equivalent to
+# Є тотожним
 format = """
 $username\
 $hostname\
@@ -427,13 +427,13 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ### Параметри
 
-| Змінна                 | Стандартно                               | Опис                                                                                  |
-| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
-| `format`               | `'on [$symbol($subscription)]($style) '` | Формат для модуля Azure.                                                              |
-| `symbol`               | `'ﴃ '`                                   | Символ, який використовується.                                                        |
-| `style`                | `'blue bold'`                            | Стиль, який використовується.                                                         |
-| `disabled`             | `true`                                   | Вимикає модуль `azure`.                                                               |
-| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
+| Змінна                 | Стандартно                               | Опис                                                                       |
+| ---------------------- | ---------------------------------------- | -------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | Формат для модуля Azure.                                                   |
+| `symbol`               | `'ﴃ '`                                   | Символ, який використовується.                                             |
+| `style`                | `'blue bold'`                            | Стиль, який використовується.                                              |
+| `disabled`             | `true`                                   | Вимикає модуль `azure`.                                                    |
+| `subscription_aliases` | `{}`                                     | Таблиця псевдонімів підписки для показу на додачу до назви підписки Azure. |
 
 ### Приклади
 
@@ -461,7 +461,7 @@ symbol = "ﴃ "
 style = "blue bold"
 ```
 
-#### Display Subscription Name Alias
+#### Показ псевдонімів підписки
 
 ```toml
 # ~/.config/starship.toml
@@ -1784,7 +1784,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `staged`            | `'+'`                                           | Формат `staged`                                                                                                         |
 | `renamed`           | `'»'`                                           | Формат `renamed`                                                                                                        |
 | `deleted`           | `'✘'`                                           | Формат `deleted`                                                                                                        |
-| `typechanged`       | `""`                                            | The format of `typechange`                                                                                              |
+| `typechanged`       | `""`                                            | Формат `typechange`                                                                                                     |
 | `style`             | `'bold red'`                                    | Стиль модуля.                                                                                                           |
 | `ignore_submodules` | `false`                                         | Ігнорувати зміни в субмодулях.                                                                                          |
 | `disabled`          | `false`                                         | Вимикає модуль `git_status`.                                                                                            |
@@ -1805,7 +1805,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 | `staged`       | Показує `staged`, коли нові фали були додані до простору staging.                                   |
 | `renamed`      | Показує `renamed` коли перейменовані файли було додано до простору staging.                         |
 | `deleted`      | Показує `deleted` коли інформація про видалення файлів була додана до простору staging.             |
-| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                      |
+| `typechanged`  | Показує `typechange` коли інформація про файл була змінена у просторі staging.                      |
 | style\*      | Віддзеркалює значення параметра `style`                                                             |
 
 *: Ця змінна може бути використана лише як частина стилю рядка
@@ -3656,9 +3656,9 @@ format = '[📦 \[$env\]]($style) '
 
 ## Solidity
 
-The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+Модуль `solidity` показує поточну версію [Solidity](https://soliditylang.org/) Модуль буде показано, якщо буде вказано якісь з наступних умов:
 
-- The current directory contains a file with the `.sol` extension
+- Поточна тека містить файл `.sol`
 
 ### Параметри
 
@@ -3666,19 +3666,19 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------- |
 | `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                    |
 | `version_format`    | `"v${major}.${minor}.${patch}"`      | Формат версії. Доступні змінні `raw`, `major`, `minor` та `patch` |
-| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity               |
-| `compiler          | ["solc"]                             | The default compiler for Solidity.                                |
+| `symbol`            | `"S "`                               | Формат рядка, що представляє символ Solidity                      |
+| `compiler          | ["solc"]                             | Стандартний компілятор Solidity.                                  |
 | `detect_extensions` | `["sol"]`                            | Які розширення повинні запускати цей модуль.                      |
 | `detect_files`      | `[]`                                 | Які імена файлів мають запускати цей модуль.                      |
 | `detect_folders`    | `[]`                                 | В яких теках цей модуль має запускатись.                          |
 | `style`             | `"bold blue"`                        | Стиль модуля.                                                     |
-| `disabled`          | `false`                              | Disables this module.                                             |
+| `disabled`          | `false`                              | Вмикає цей модуль.                                                |
 
 ### Змінні
 
 | Змінна    | Приклад  | Опис                                     |
 | --------- | -------- | ---------------------------------------- |
-| version   | `v0.8.1` | The version of `solidity`                |
+| version   | `v0.8.1` | Версія `solidity`                        |
 | symbol    |          | Віддзеркалює значення параметра `symbol` |
 | style\* |          | Віддзеркалює значення параметра `style`  |
 
