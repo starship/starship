@@ -92,7 +92,7 @@ yaml-rust = "0.4.5"
 process_control = { version = "4.0.3", features = ["crossbeam-channel"] }
 
 guess_host_triple = "0.1.3"
-home = "0.5.4"
+home = "0.5.5"
 shell-words = "1.1.0"
 
 [dependencies.schemars]
