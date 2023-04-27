@@ -265,7 +265,7 @@ impl<'a> Context<'a> {
                     git_sec::trust::Mapping::<gix::open::Options>::default();
 
                 // don't use the global git configs
-                let config = gix::permissions::Config {
+                let config = gix::open::permissions::Config {
                     git_binary: false,
                     system: false,
                     git: false,
@@ -275,14 +275,17 @@ impl<'a> Context<'a> {
                 };
                 // change options for config permissions without touching anything else
                 git_open_opts_map.reduced =
-                    git_open_opts_map.reduced.permissions(gix::Permissions {
+                    git_open_opts_map
+                        .reduced
+                        .permissions(gix::open::Permissions {
+                            config,
+                            ..gix::open::Permissions::default_for_level(git_sec::Trust::Reduced)
+                        });
+                git_open_opts_map.full =
+                    git_open_opts_map.full.permissions(gix::open::Permissions {
                         config,
-                        ..gix::Permissions::default_for_level(git_sec::Trust::Reduced)
+                        ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
                     });
-                git_open_opts_map.full = git_open_opts_map.full.permissions(gix::Permissions {
-                    config,
-                    ..gix::Permissions::default_for_level(git_sec::Trust::Full)
-                });
 
                 let shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(
