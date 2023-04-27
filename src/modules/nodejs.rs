@@ -36,8 +36,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             .map(|cmd| cmd.stdout)
     });
     let engines_version = Lazy::new(|| get_engines_version(context));
-    let in_engines_range =
-        check_engines_version(nodejs_version.as_deref(), engines_version.as_deref());
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -47,6 +45,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             })
             .map_style(|variable| match variable {
                 "style" => {
+                    let in_engines_range = check_engines_version(
+                        nodejs_version.as_deref(),
+                        engines_version.as_deref(),
+                    );
+
                     if in_engines_range {
                         Some(Ok(config.style))
                     } else {
@@ -71,7 +74,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     .map(Ok)
                 }
                 "engines_version" => {
+                    let in_engines_range = check_engines_version(
+                        nodejs_version.as_deref(),
+                        engines_version.as_deref(),
+                    );
                     let eng_ver = engines_version.as_deref()?.to_string();
+
                     (!in_engines_range).then_some(Ok(eng_ver))
                 }
                 _ => None,
