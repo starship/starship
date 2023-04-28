@@ -292,7 +292,7 @@ module.exports = defineConfig({
                 nav: [{ text: "Налаштування", link: "/uk-UA/config/" }],
                 // Custom sidebar values
                 sidebar: sidebar("uk-UA", {
-                    guide: "Guide",
+                    guide: "Керівництво",
                     installing: "Розширене встановлення",
                     config: "Налаштування",
                     "advanced-config": "Розширені налаштування",
