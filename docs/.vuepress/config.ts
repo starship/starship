@@ -297,6 +297,7 @@ module.exports = defineConfig({
                     config: "Налаштування",
                     "advanced-config": "Розширені налаштування",
                     faq: "Часті питання",
+                    presets: "Шаблони",
                 }),
             },
             "/vi-VN/": {
