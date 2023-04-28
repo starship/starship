@@ -74,6 +74,11 @@ module.exports = defineConfig({
             title: "Starship",
             description: "Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!",
         },
+        "/uk-UA/": {
+            lang: "uk-UA",
+            title: "Starship",
+            description: "Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!",
+        },
         "/vi-VN/": {
             lang: "vi-VN",
             title: "Starship",
@@ -274,6 +279,25 @@ module.exports = defineConfig({
                     config: "Настройка",
                     "advanced-config": "Расширенная Настройка",
                     faq: "Часто Задаваемые Вопросы",
+                }),
+            },
+            "/uk-UA/": {
+                // text for the language dropdown
+                selectText: "Мови",
+                // label for this locale in the language dropdown
+                label: "Українська",
+                // Custom text for edit link. Defaults to "Edit this page"
+                editLinkText: "Редагувати цю сторінку на GitHub",
+                // Custom navbar values
+                nav: [{ text: "Налаштування", link: "/uk-UA/config/" }],
+                // Custom sidebar values
+                sidebar: sidebar("uk-UA", {
+                    guide: "Керівництво",
+                    installing: "Розширене встановлення",
+                    config: "Налаштування",
+                    "advanced-config": "Розширені налаштування",
+                    faq: "Часті питання",
+                    presets: "Шаблони",
                 }),
             },
             "/vi-VN/": {
