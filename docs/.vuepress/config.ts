@@ -287,7 +287,7 @@ module.exports = defineConfig({
                 // label for this locale in the language dropdown
                 label: "Українська",
                 // Custom text for edit link. Defaults to "Edit this page"
-                editLinkText: "Edit this page on GitHub",
+                editLinkText: "Редагувати цю сторінку на GitHub",
                 // Custom navbar values
                 nav: [{ text: "Налаштування", link: "/uk-UA/config/" }],
                 // Custom sidebar values
