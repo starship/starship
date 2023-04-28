@@ -283,7 +283,7 @@ module.exports = defineConfig({
             },
             "/uk-UA/": {
                 // text for the language dropdown
-                selectText: "Переклади",
+                selectText: "Мови",
                 // label for this locale in the language dropdown
                 label: "Українська",
                 // Custom text for edit link. Defaults to "Edit this page"
