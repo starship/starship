@@ -135,7 +135,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
+      alt="Tiếng Trung giản thể"
  /></a>
   &nbsp;
   <a
@@ -143,7 +143,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
+      alt="Tiếng Trung hiện đại"
  /></a>
 </p>
 
