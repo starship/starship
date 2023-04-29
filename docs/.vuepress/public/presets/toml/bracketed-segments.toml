@@ -164,7 +164,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol$environment]($style)\]'
 
 [sudo]
-format = '\[[as $symbol($style)]\]'
+format = '\[[as $symbol]($style)\]'
 
 [swift]
 format = '\[[$symbol($version)]($style)\]'
