@@ -27,11 +27,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          profile: minimal
           components: rustfmt
 
       - name: Build | Format
@@ -49,21 +46,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          profile: minimal
           components: clippy
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
 
       - name: Build | Lint
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: clippy
-          args: --workspace --locked --all-targets --all-features -- -D clippy::all
+        uses: giraffate/clippy-action@871cc4173f2594435c7ea6b0bce499cf6c2164a1
 
   # Ensure that the project could be successfully compiled
   cargo_check:
@@ -74,11 +65,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -96,11 +83,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -118,11 +101,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -144,11 +123,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -185,12 +160,10 @@ jobs:
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.rust }}
           components: llvm-tools-preview
-          profile: minimal
-          override: true
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -228,10 +201,7 @@ jobs:
       - name: Build | Installer [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: wix
-          args: --dbg-build -v --nocapture -I install/windows/main.wxs
+        run: cargo wix --dbg-build -v --nocapture -I install/windows/main.wxs
 
       - name: Build | Chocolatey Package [Windows]
         continue-on-error: true
