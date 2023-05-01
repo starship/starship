@@ -19,6 +19,7 @@ pub mod daml;
 pub mod dart;
 pub mod deno;
 pub mod directory;
+pub mod direnv;
 pub mod docker_context;
 pub mod dotnet;
 pub mod elixir;
@@ -140,6 +141,8 @@ pub struct FullConfig<'a> {
     deno: deno::DenoConfig<'a>,
     #[serde(borrow)]
     directory: directory::DirectoryConfig<'a>,
+    #[serde(borrow)]
+    direnv: direnv::DirenvConfig<'a>,
     #[serde(borrow)]
     docker_context: docker_context::DockerContextConfig<'a>,
     #[serde(borrow)]

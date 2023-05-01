@@ -354,6 +354,28 @@
         }
       ]
     },
+    "direnv": {
+      "default": {
+        "allowed_msg": "allowed",
+        "denied_msg": "denied",
+        "detect_extensions": [],
+        "detect_files": [
+          ".envrc"
+        ],
+        "detect_folders": [],
+        "disabled": true,
+        "format": "[$symbol$loaded/$allowed]($style) ",
+        "loaded_msg": "loaded",
+        "style": "bold orange",
+        "symbol": "direnv ",
+        "unloaded_msg": "not loaded"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DirenvConfig"
+        }
+      ]
+    },
     "docker_context": {
       "default": {
         "detect_extensions": [],
@@ -2662,6 +2684,67 @@
         "use_os_path_sep": {
           "default": true,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "DirenvConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol$loaded/$allowed]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "direnv ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold orange",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            ".envrc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_msg": {
+          "default": "allowed",
+          "type": "string"
+        },
+        "denied_msg": {
+          "default": "denied",
+          "type": "string"
+        },
+        "loaded_msg": {
+          "default": "loaded",
+          "type": "string"
+        },
+        "unloaded_msg": {
+          "default": "not loaded",
+          "type": "string"
         }
       },
       "additionalProperties": false

@@ -27,6 +27,7 @@ pub const ALL_MODULES: &[&str] = &[
     "dart",
     "deno",
     "directory",
+    "direnv",
     "docker_context",
     "dotnet",
     "elixir",
