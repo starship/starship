@@ -1,6 +1,52 @@
 # Changelog
 
-## [1.13.0](https://github.com/starship/starship/compare/v1.12.0...v1.13.0) (2023-02-11)
+## [1.14.2](https://github.com/starship/starship/compare/v1.14.1...v1.14.2) (2023-04-12)
+
+
+### Bug Fixes
+
+* **git_commit:** resolve panic on 32-bit targets ([#5095](https://github.com/starship/starship/issues/5095)) ([5ef90a6](https://github.com/starship/starship/commit/5ef90a615f73a9f240a3c63ab601db1302adb01d))
+
+## [1.14.1](https://github.com/starship/starship/compare/v1.14.0...v1.14.1) (2023-04-11)
+
+
+### Bug Fixes
+
+* bootstrap manifest for release-please ([#5087](https://github.com/starship/starship/issues/5087)) ([e392d14](https://github.com/starship/starship/commit/e392d14f4eb65d8761ea8bafb498d2a0d966dcef))
+* trigger release ([8bdb953](https://github.com/starship/starship/commit/8bdb953ad85068e182878c3295a94559a608ee31))
+* update the release-please manifest ([cd501ec](https://github.com/starship/starship/commit/cd501ecd9fb4b898d6d4472b46471a05a42b6052))
+
+## [1.14.0](https://github.com/starship/starship/compare/v1.13.1...v1.14.0) (2023-04-10)
+
+
+### Features
+
+* **aws:** add support for source_profile ([#3834](https://github.com/starship/starship/issues/3834)) ([d2801ac](https://github.com/starship/starship/commit/d2801ac44301dcef1f87ab5fd26abee36997f71d))
+* **aws:** add support for source_profile ([#4859](https://github.com/starship/starship/issues/4859)) ([d2801ac](https://github.com/starship/starship/commit/d2801ac44301dcef1f87ab5fd26abee36997f71d))
+* **aws:** Adds support for AWS_CREDENTIAL_EXPIRATION environment variable ([#5002](https://github.com/starship/starship/issues/5002)) ([74ce7fd](https://github.com/starship/starship/commit/74ce7fdbee071c28c77fd148d4ba02515f272d10))
+* **custom:** add option to check if pwd is in a repo ([#4822](https://github.com/starship/starship/issues/4822)) ([d29ce7c](https://github.com/starship/starship/commit/d29ce7c45d4ea21a6e14ad308bd50cb0e61d1ef8))
+* **fossil:** detection of Fossil check-outs in subdirectories ([#4910](https://github.com/starship/starship/issues/4910)) ([4bca74e](https://github.com/starship/starship/commit/4bca74eca29e159f0d6f27db432927012848408c))
+* **release:** handle chocolatey starship.portable and starship.install pkg publishing ([#4723](https://github.com/starship/starship/issues/4723)) ([b55774d](https://github.com/starship/starship/commit/b55774d3a68b32c0ed17983adeb6355e75c65f6b))
+
+
+### Bug Fixes
+
+* **fossil_branch:** fossil checkout database file name on windows ([#4978](https://github.com/starship/starship/issues/4978)) ([c07a21d](https://github.com/starship/starship/commit/c07a21d48abe4e01a96a2d1b641876207e8d02fb))
+* **fossil_branch:** use proper fossil checkout database file name on windows ([c07a21d](https://github.com/starship/starship/commit/c07a21d48abe4e01a96a2d1b641876207e8d02fb))
+* **gradle:** add support for unstable Gradle versions ([#5021](https://github.com/starship/starship/issues/5021)) ([f7fe41f](https://github.com/starship/starship/commit/f7fe41f9c6c455e8ced284ad2d55d2a51a5da748))
+* **init:** avoid cygpath for starship binary path ([#4970](https://github.com/starship/starship/issues/4970)) ([0ad0465](https://github.com/starship/starship/commit/0ad0465a7a3296b3223693c655f370b7aae0d441))
+* **java:** wrong version number when using Android Studio JDK ([#4966](https://github.com/starship/starship/issues/4966)) ([de7e948](https://github.com/starship/starship/commit/de7e94884bc309814f6af79d68d664efb513e093))
+* **preset:** add output-flag to avoid encoding issues ([#4926](https://github.com/starship/starship/issues/4926)) ([5e78226](https://github.com/starship/starship/commit/5e78226a3fbe722331f6f0a1d352bbc48d38247f))
+* **pulumi:** Fix formatting on pulumi module when using version ([#5038](https://github.com/starship/starship/issues/5038)) ([aef799b](https://github.com/starship/starship/commit/aef799bfb089c5d259354208a6bcd5a0b639888f))
+
+## [1.13.1](https://github.com/starship/starship/compare/v1.13.0...v1.13.1) (2023-02-26)
+
+
+### Bug Fixes
+
+* trigger release ([ff82fb9](https://github.com/starship/starship/commit/ff82fb99af88c007a18c7655fb0150c4415bb5db))
+
+## [1.13.0](https://github.com/starship/starship/compare/v1.12.0...v1.13.0) (2023-02-24)
 
 
 ### Features

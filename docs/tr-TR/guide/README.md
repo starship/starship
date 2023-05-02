@@ -169,7 +169,7 @@
 
 ### Ön koşullar
 
-- [Nerd Font](https://www.nerdfonts.com/) kurulu ve terminalinizde kullanılıyor olmalı (başlarken [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)'u deneyebilirsiniz).
+- [Nerd Font](https://www.nerdfonts.com/) kurulu ve terminalinizde kullanılıyor olmalı (örnek: [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)'u deneyebilirsiniz).
 
 ### 1. Adım Starship'i Kur
 
@@ -215,7 +215,7 @@ Alternatif olarak aşağıdaki paket yöneticileri ile de Starship'i yükleyebil
 | **_Herhangi bir dağıtım_** | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Herhangi bir dağıtım_     | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _Herhangi bir dağıtım_     | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Herhangi bir dağıtım_     | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
+| _Herhangi bir dağıtım_     | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install --edge starship`                                                 |
 | Alpine Linux 3.13+         | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux                 | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+                  | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -422,7 +422,6 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 **Supporter Tier**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">

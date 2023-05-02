@@ -115,6 +115,14 @@
   /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+  /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -215,7 +223,7 @@ Alternatively, install Starship using any of the following package managers:
 | **_Any_**          | **[crates.io]**         | `cargo install starship --locked`                             |
 | _Any_              | [conda-forge]           | `conda install -c conda-forge starship`                       |
 | _Any_              | [Linuxbrew]             | `brew install starship`                                       |
-| _Any_              | [Snapcraft]             | `snap install starship`                                       |
+| _Any_              | [Snapcraft]             | `snap install --edge starship`                                |
 | Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
 | Arch Linux         | [Arch Linux Community]  | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -424,7 +432,6 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 **Supporter Tier**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">

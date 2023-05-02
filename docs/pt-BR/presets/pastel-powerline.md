@@ -13,7 +13,7 @@ Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDob
 ### Configuração
 
 ```sh
-starship preset pastel-powerline > ~/.config/starship.toml
+starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
 [Clique para baixar o TOML](/presets/toml/pastel-powerline.toml)

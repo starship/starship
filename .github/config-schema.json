@@ -29,6 +29,7 @@
         "disabled": true,
         "format": "on [$symbol($subscription)]($style) ",
         "style": "blue bold",
+        "subscription_aliases": {},
         "symbol": "ﴃ "
       },
       "allOf": [
@@ -475,7 +476,7 @@
     },
     "fennel": {
       "default": {
-        "detect_extentions": [
+        "detect_extensions": [
           "fnl"
         ],
         "detect_files": [],
@@ -575,6 +576,7 @@
         "deleted_style": "bold red",
         "disabled": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "ignore_submodules": false,
         "only_nonzero_diffs": true
       },
       "allOf": [
@@ -617,6 +619,7 @@
         "staged": "+",
         "stashed": "\\$",
         "style": "red bold",
+        "typechanged": "",
         "untracked": "?",
         "up_to_date": ""
       },
@@ -1121,10 +1124,12 @@
         "format": "[$symbol]($style)",
         "style": "bold white",
         "symbols": {
+          "Alpaquita": "🔔 ",
           "Alpine": "🏔️ ",
           "Amazon": "🙂 ",
           "Android": "🤖 ",
           "Arch": "🎗️ ",
+          "Artix": "🎗️ ",
           "CentOS": "💠 ",
           "Debian": "🌀 ",
           "DragonFly": "🐉 ",
@@ -1137,6 +1142,7 @@
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
           "Linux": "🐧 ",
+          "Mabox": "📦 ",
           "Macos": "🍎 ",
           "Manjaro": "🥭 ",
           "Mariner": "🌊 ",
@@ -1514,6 +1520,28 @@
         }
       ]
     },
+    "solidity": {
+      "default": {
+        "compiler": [
+          "solc"
+        ],
+        "detect_extensions": [
+          "sol"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version)]($style)",
+        "style": "bold blue",
+        "symbol": "S ",
+        "version_format": "v${major}.${minor}.${patch}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SolidityConfig"
+        }
+      ]
+    },
     "spack": {
       "default": {
         "disabled": false,
@@ -1775,7 +1803,7 @@
   "definitions": {
     "AwsConfig": {
       "title": "AWS",
-      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION` var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
       "type": "object",
       "properties": {
         "format": {
@@ -1845,6 +1873,13 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "subscription_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -2955,7 +2990,7 @@
           "default": true,
           "type": "boolean"
         },
-        "detect_extentions": {
+        "detect_extensions": {
           "default": [
             "fnl"
           ],
@@ -3176,6 +3211,10 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "ignore_submodules": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
@@ -3279,6 +3318,10 @@
         },
         "untracked": {
           "default": "?",
+          "type": "string"
+        },
+        "typechanged": {
+          "default": "",
           "type": "string"
         },
         "ignore_submodules": {
@@ -4377,10 +4420,12 @@
         },
         "symbols": {
           "default": {
+            "Alpaquita": "🔔 ",
             "Alpine": "🏔️ ",
             "Amazon": "🙂 ",
             "Android": "🤖 ",
             "Arch": "🎗️ ",
+            "Artix": "🎗️ ",
             "CentOS": "💠 ",
             "Debian": "🌀 ",
             "DragonFly": "🐉 ",
@@ -4393,6 +4438,7 @@
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
             "Linux": "🐧 ",
+            "Mabox": "📦 ",
             "Macos": "🍎 ",
             "Manjaro": "🥭 ",
             "Mariner": "🌊 ",
@@ -5217,6 +5263,65 @@
       },
       "additionalProperties": false
     },
+    "SolidityConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version)]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${major}.${minor}.${patch}",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "S ",
+          "type": "string"
+        },
+        "compiler": {
+          "default": [
+            "solc"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "detect_extensions": {
+          "default": [
+            "sol"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "SpackConfig": {
       "type": "object",
       "properties": {
@@ -5700,6 +5805,10 @@
               "$ref": "#/definitions/Either_for_Boolean_and_String"
             }
           ]
+        },
+        "require_repo": {
+          "default": false,
+          "type": "boolean"
         },
         "shell": {
           "default": [],

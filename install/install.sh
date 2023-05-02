@@ -342,7 +342,7 @@ print_install() {
         source ~/.cache/starship/init.nu"
         warning="${warning} This will change in the future.
   Only Nushell v0.73 or higher is supported.
-  Add the following to the end of ${BOLD}your Nushell env file${NO_COLOR} (find it by running ${BOLD}\$nu.env-path${NO_COLOR} in Nushell): \"mkdir ~/.cache/starship; starship init nu | save ~/.cache/starship/init.nu\""
+  Add the following to the end of ${BOLD}your Nushell env file${NO_COLOR} (find it by running ${BOLD}\$nu.env-path${NO_COLOR} in Nushell): \"mkdir ~/.cache/starship; starship init nu | save -f ~/.cache/starship/init.nu\""
         ;;
     esac
     printf "  %s\n  %s\n  And add the following to the end of %s:\n\n\t%s\n\n" \

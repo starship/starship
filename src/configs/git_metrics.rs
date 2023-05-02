@@ -13,6 +13,7 @@ pub struct GitMetricsConfig<'a> {
     pub only_nonzero_diffs: bool,
     pub format: &'a str,
     pub disabled: bool,
+    pub ignore_submodules: bool,
 }
 
 impl<'a> Default for GitMetricsConfig<'a> {
@@ -23,6 +24,7 @@ impl<'a> Default for GitMetricsConfig<'a> {
             only_nonzero_diffs: true,
             format: "([+$added]($added_style) )([-$deleted]($deleted_style) )",
             disabled: true,
+            ignore_submodules: false,
         }
     }
 }
