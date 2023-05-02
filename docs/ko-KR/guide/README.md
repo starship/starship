@@ -177,7 +177,7 @@
 
 ### 준비 사항
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다. (ex. [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads))
 
 ### 1단계. Starship 설치하기
 
@@ -210,13 +210,13 @@
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+사용중인 시스템에서 최신버전을 설치해주세요.
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+다음의 패키지 관리자를 사용해서 Starship을 설치할 수도 있습니다.
 
 | Distribution       | Repository                                                                                      | Instructions                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -237,13 +237,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+사용중인 시스템에서 최신버전을 설치해주세요.
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+다음의 패키지 관리자를 사용해서 Starship을 설치할 수도 있습니다.
 
 | Repository                                               | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
