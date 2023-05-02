@@ -74,12 +74,20 @@ parts:
       snapcraftctl build
       snapcraftctl set-version $(git -C ../src describe --tags  | sed 's/v//')
 
+plugs:
+  starship-config:
+    interfaces: personal-files
+    write:
+      - $HOME/.config/starship.toml
+      - $HOME/.cache/starship
+
 apps:
   starship:
     command: bin/starship
     plugs:
       - home
       - removable-media
+      - starship-config
 
 architectures:
   - build-on: amd64

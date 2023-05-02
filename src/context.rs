@@ -182,6 +182,15 @@ impl<'a> Context<'a> {
         }
     }
 
+    /// Sets the context config, overwriting the existing config
+    pub fn set_config(mut self, config: toml::Table) -> Context<'a> {
+        self.root_config = StarshipRootConfig::load(&config);
+        self.config = StarshipConfig {
+            config: Some(config),
+        };
+        self
+    }
+
     // Tries to retrieve home directory from a table in testing mode or else retrieves it from the os
     pub fn get_home(&self) -> Option<PathBuf> {
         home_dir(&self.env)
@@ -256,7 +265,7 @@ impl<'a> Context<'a> {
                     git_sec::trust::Mapping::<gix::open::Options>::default();
 
                 // don't use the global git configs
-                let config = gix::permissions::Config {
+                let config = gix::open::permissions::Config {
                     git_binary: false,
                     system: false,
                     git: false,
@@ -266,14 +275,17 @@ impl<'a> Context<'a> {
                 };
                 // change options for config permissions without touching anything else
                 git_open_opts_map.reduced =
-                    git_open_opts_map.reduced.permissions(gix::Permissions {
+                    git_open_opts_map
+                        .reduced
+                        .permissions(gix::open::Permissions {
+                            config,
+                            ..gix::open::Permissions::default_for_level(git_sec::Trust::Reduced)
+                        });
+                git_open_opts_map.full =
+                    git_open_opts_map.full.permissions(gix::open::Permissions {
                         config,
-                        ..gix::Permissions::default_for_level(git_sec::Trust::Reduced)
+                        ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
                     });
-                git_open_opts_map.full = git_open_opts_map.full.permissions(gix::Permissions {
-                    config,
-                    ..gix::Permissions::default_for_level(git_sec::Trust::Full)
-                });
 
                 let shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(
@@ -790,6 +802,7 @@ fn parse_width(width: &str) -> Result<usize, ParseIntError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::default_context;
     use std::io;
 
     fn testdir(paths: &[&str]) -> Result<tempfile::TempDir, std::io::Error> {
@@ -979,6 +992,16 @@ mod tests {
 
         let expected_logical_dir = test_path;
         assert_eq!(expected_logical_dir, context.logical_dir);
+    }
+
+    #[test]
+    fn set_config_method_overwrites_constructor() {
+        let context = default_context();
+        let mod_context = default_context().set_config(toml::toml! {
+            add_newline = true
+        });
+
+        assert_ne!(context.config.config, mod_context.config.config);
     }
 
     #[cfg(windows)]
