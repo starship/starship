@@ -189,10 +189,10 @@ mod tests {
             EndeavourOS = " "
             Fedora = " "
             FreeBSD = " "
-            Garuda = "﯑ "
+            Garuda = "󰛓 "
             Gentoo = " "
-            HardenedBSD = "ﲊ "
-            Illumos = " "
+            HardenedBSD = "󰞌 "
+            Illumos = "󰈸 "
             Linux = " "
             Macos = " "
             Manjaro = " "
@@ -201,19 +201,19 @@ mod tests {
             Mint = " "
             NetBSD = " "
             NixOS = " "
-            OpenBSD = " "
+            OpenBSD = "󰈺 "
             SUSE = " "
-            OracleLinux = " "
+            OracleLinux = "󰌷 "
             Pop = " "
             Raspbian = " "
             Redhat = " "
             RedHatEnterprise = " "
-            Redox = " "
-            Solus = "ﴱ "
+            Redox = "󰀘 "
+            Solus = "󰠳 "
             openSUSE = " "
             Ubuntu = " "
             Unknown = " "
-            Windows = " "
+            Windows = "󰍲 "
         };
 
         let config = OSConfig::load(&config_toml);
@@ -230,10 +230,10 @@ mod tests {
             (Type::EndeavourOS, Some(" ")),
             (Type::Fedora, Some(" ")),
             (Type::FreeBSD, Some(" ")),
-            (Type::Garuda, Some("﯑ ")),
+            (Type::Garuda, Some("󰛓 ")),
             (Type::Gentoo, Some(" ")),
-            (Type::HardenedBSD, Some("ﲊ ")),
-            (Type::Illumos, Some(" ")),
+            (Type::HardenedBSD, Some("󰞌 ")),
+            (Type::Illumos, Some("󰈸 ")),
             (Type::Linux, Some(" ")),
             (Type::Macos, Some(" ")),
             (Type::Manjaro, Some(" ")),
@@ -242,19 +242,19 @@ mod tests {
             (Type::Mint, Some(" ")),
             (Type::NetBSD, Some(" ")),
             (Type::NixOS, Some(" ")),
-            (Type::OpenBSD, Some(" ")),
+            (Type::OpenBSD, Some("󰈺 ")),
             (Type::SUSE, Some(" ")),
-            (Type::OracleLinux, Some(" ")),
+            (Type::OracleLinux, Some("󰌷 ")),
             (Type::Pop, Some(" ")),
             (Type::Raspbian, Some(" ")),
             (Type::Redhat, Some(" ")),
             (Type::RedHatEnterprise, Some(" ")),
-            (Type::Redox, Some(" ")),
-            (Type::Solus, Some("ﴱ ")),
+            (Type::Redox, Some("󰀘 ")),
+            (Type::Solus, Some("󰠳 ")),
             (Type::openSUSE, Some(" ")),
             (Type::Ubuntu, Some(" ")),
             (Type::Unknown, Some(" ")),
-            (Type::Windows, Some(" ")),
+            (Type::Windows, Some("󰍲 ")),
         ];
 
         for (t, e) in type_expected_pairs {
