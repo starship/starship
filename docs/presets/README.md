@@ -68,3 +68,9 @@ It also shows how path substitution works in starship.
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
 [![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+
+## [DevMode](./DevMode.md)
+
+This preset is to assist development mode of programmers.
+
+[![Screenshot of DevMode preset](/presets/img/DevMode.png "Click to view DevMode preset")](./DevMode)
