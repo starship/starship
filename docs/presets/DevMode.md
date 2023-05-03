@@ -2,8 +2,7 @@
 
 # DevMode Preset
 
-- This present displays most of the necessary information.
-	- so the devs needn't search for it.
+- This present includes infos necessary for development.
 - Most suitable for git devs 😄
 
 ![Screenshot of Dev Mode preset](/presets/img/DevMode.png)
