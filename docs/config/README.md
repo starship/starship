@@ -1609,6 +1609,10 @@ truncation_symbol = ''
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
 This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
+When the module is enabled it will always be active, unless `detect_env_vars` has
+been set in which case the module will only be active be active when one of the
+environment variables has been set.
+
 ### Options
 
 | Option            | Default                                                  | Description                                                      |
@@ -1617,6 +1621,7 @@ This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gc
 | `symbol`          | `'☁️  '`                                                  | The symbol used before displaying the current GCP profile.       |
 | `region_aliases`  | `{}`                                                     | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` | `{}`                                                     | Table of project aliases to display in addition to the GCP name. |
+| `detect_env_vars` | `[]`                                                     | Which environmental variables should trigger this module         |
 | `style`           | `'bold blue'`                                            | The style for the module.                                        |
 | `disabled`        | `false`                                                  | Disables the `gcloud` module.                                    |
 
