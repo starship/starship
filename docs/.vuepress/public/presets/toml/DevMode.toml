@@ -10,7 +10,6 @@ $time\
 $line_break\
 $character"""
 
-
 [directory]
 truncation_length = 4
 truncation_symbol = '../'
