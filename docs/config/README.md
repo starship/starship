@@ -210,16 +210,17 @@ This is the list of prompt-wide configuration options.
 
 ### Options
 
-| Option            | Default                        | Description                                                                                                                                                                        |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                                |
-| `right_format`    | `''`                           | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
-| `scan_timeout`    | `30`                           | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
-| `command_timeout` | `500`                          | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
-| `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                          |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                   |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| Option            | Default                                   | Description                                                                                                                                                                        |
+| ----------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format)            | Configure the format of the prompt.                                                                                                                                                |
+| `right_format`    | `''`                                      | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
+| `scan_timeout`    | `30`                                      | Timeout for starship to scan files (in milliseconds).                                                                                                                              |
+| `command_timeout` | `500`                                     | Timeout for commands executed by starship (in milliseconds).                                                                                                                       |
+| `add_newline`     | `true`                                    | Inserts blank line between shell prompts.                                                                                                                                          |
+| `palette`         | `''`                                      | Sets which color palette from `palettes` to use.                                                                                                                                   |
+| `palettes`        | `{}`                                      | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks` | `true`                                    | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                     |
+| `profiles`        | `{ transient: { format: "$character" } }` | Collection of prompt strings that can be used instead of the main `format` and `right_format`. For more information please consult the profile section below.                      |
 
 ::: tip
 
@@ -363,6 +364,29 @@ modules you explicitly add to the format will not be duplicated. Eg.
 ```toml
 # Move the directory to the second line
 format = '$all$directory$character'
+```
+
+### Profiles
+
+Profiles can be used to set a key-value-map with alternate versions of the top-level `format` (the main prompt format string) and `right_format` (the same for the `right_prompt`). To quickly switch to a different profile of the current prompt, you can set the `STARSHIP_PROFILE` environment variable to the name of the profile, for instance by running `export STARSHIP_PROFILE=my_profile` or `$ENV:STARSHIP_PROFILE="my_profile"` in PowerShell. Alternatively, it can also be set via an `--profile=my_profile` flag for commands like `starship prompt` and `starship explain`.
+
+| Option         | Default | Description                                                                             |
+| -------------- | ------- | --------------------------------------------------------------------------------------- |
+| `format`       | `''`    | Configure the format of the prompt profile.                                             |
+| `right_format` | `''`    | [Enable the right prompt of the prompt profile.](/advanced-config/#enable-right-prompt) |
+
+#### Examples
+
+```toml
+# Define custom profiles
+[profiles]
+# Instead of a map you can also set a profile to a simple string instead
+# Starship includes the definition below for use with transient prompts
+transient = "$character"
+
+[profiles.as_map_with_right_format]
+format = "$character"
+right_format = "$git_branch"
 ```
 
 ## AWS
