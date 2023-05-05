@@ -174,6 +174,7 @@ fn has_credential_process_or_sso(
 
     Some(
         config_section.contains_key("credential_process")
+            || config_section.contains_key("sso_session")
             || config_section.contains_key("sso_start_url")
             || credential_section?.contains_key("credential_process")
             || credential_section?.contains_key("sso_start_url"),
@@ -996,7 +997,7 @@ credential_process = /opt/bin/awscreds-for-tests
     }
 
     #[test]
-    fn sso_set() -> io::Result<()> {
+    fn sso_legacy_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("config");
         let mut file = File::create(&config_path)?;
@@ -1020,6 +1021,40 @@ sso_role_name = <AWS-ROLE-NAME>
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn sso_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut config = File::create(&config_path)?;
+        config.write_all(
+            "[profile astronauts]
+sso_session = my-sso
+sso_account_id = 123456789011
+sso_role_name = readOnly
+region = us-west-2
+output = json
+
+[sso-session my-sso]
+sso_region = us-east-1
+sso_start_url = https://starship.rs/sso
+sso_registration_scopes = sso:account:access
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts (us-west-2) ")
         ));
 
         assert_eq!(expected, actual);
