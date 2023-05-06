@@ -522,11 +522,11 @@
     },
     "gcloud": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
         "project_aliases": {},
         "region_aliases": {},
-        "detect_env_vars": [],
         "style": "bold blue",
         "symbol": "☁️  "
       },
