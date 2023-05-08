@@ -45,7 +45,7 @@ prompt_starship_precmd() {
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
 
-    # First render we also don't want a newline
+    # For first render, we don't want a newline so we leave the disable newline flag
     if [[ $STARSHIP_FIRST_PRECMD == 0 ]]; then
         STARSHIP_ADD_NEWLINE_FLAGS=()
     fi
