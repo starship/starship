@@ -522,6 +522,7 @@
     },
     "gcloud": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
         "project_aliases": {},
@@ -3095,6 +3096,13 @@
           "default": {},
           "type": "object",
           "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
             "type": "string"
           }
         }
