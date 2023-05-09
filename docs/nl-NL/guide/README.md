@@ -271,7 +271,7 @@ Installeer Starship met één van de volgende pakketbeheerders:
 
 </details>
 
-### Stap 2. Setup your shell to use Starship
+### Stap 2. Set up your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
 
