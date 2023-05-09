@@ -271,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### الخطوة الثانية. قم بإعداد ال shell الخاص بك
+### الخطوة الثانية. Set up your shell to use Starship
 
 لإعداد ال starship قم بإعداد ال shell الخاص بك. اختر ما يناسبك من هذه القائمة:
 
