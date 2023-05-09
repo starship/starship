@@ -271,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### 步骤 2. 设置你的终端以使用 Starship
+### 步骤 2. Set up your shell to use Starship
 
 配置你的终端来初始化 starship。 请从下面列表选择你的终端：
 
