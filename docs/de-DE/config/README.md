@@ -341,7 +341,7 @@ format = '$all$directory$character'
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -1528,6 +1528,8 @@ truncation_symbol = ''
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+
 ### Optionen
 
 | Option            | Standartwert                                               | Beschreibung                                                     |
@@ -1536,6 +1538,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `symbol`          | `'☁️  '`                                                   | The symbol used before displaying the current GCP profile.       |
 | `region_aliases`  | `{}`                                                       | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name. |
+| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module         |
 | `style`           | `'bold blue'`                                              | Stil für dieses Modul.                                           |
 | `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
@@ -1599,7 +1602,7 @@ very-long-project-name = 'vlpn'
 
 ## Git-Branch
 
-Das `git_branch`-Modul zeigt den aktiven Git-Branch des Repositories im aktuellen Verzeichnis an.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Optionen
 
@@ -1722,7 +1725,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2089,7 +2092,7 @@ format = 'via [⎈ $version](bold white) '
 
 ## Hostname
 
-Das `hostname`-Modul zeigt den Hostnamen des Systems an.
+The `hostname` module shows the system hostname.
 
 ### Optionen
 
@@ -2313,7 +2316,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
 
@@ -2396,7 +2399,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Zeilenumbruch
 
-Das `line_break`-Modul unterteilt den Prompt in zwei Zeilen.
+The `line_break` module separates the prompt into two lines.
 
 ### Optionen
 
@@ -2489,13 +2492,13 @@ format = 'via [🌕 $version](bold blue) '
 
 ## Speicherauslastung
 
-Das `memory_usage` Modul zeigt den aktuellen Systemspeicher und die swap-Nutzung an.
+The `memory_usage` module shows current system memory and swap usage.
 
-Standardmäßig wird die swap-Nutzung angezeigt, wenn der gesamte System-swap nicht Null ist.
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2654,7 +2657,7 @@ symbol = '🎣 '
 
 ## Nix-Shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. Das Modul wird angezeigt, wenn es sich in einer nix-Shell-Umgebung befindet.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
 ### Optionen
 
@@ -2867,7 +2870,7 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2959,7 +2962,7 @@ Arch = "Arch is the best! "
 
 ## Paketversion
 
-Das `Package` Modul wird angezeigt, wenn das aktuelle Verzeichnis das Repository für ein Paket ist, und zeigt dessen aktuelle Version an. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -3374,7 +3377,7 @@ format = 'via [🦪 $version]($style) '
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -3412,7 +3415,7 @@ symbol = '🔴 '
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `Gemfile`-Datei
 - The current directory contains a `.ruby-version` file
@@ -3456,7 +3459,7 @@ symbol = '🔺 '
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
 - Das aktuelle Verzeichnis enthält eine `Cargo.toml`-Datei
 - Das aktuelle Verzeichnis enthält eine Datei mit der `.rs`-Erweiterung
@@ -3541,7 +3544,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3731,7 +3734,7 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3792,7 +3795,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3837,7 +3840,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3935,11 +3938,11 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Uhrzeit
 
-Das `time` Modul zeigt die aktuelle **lokale** Zeit an. Der `format` Wert wird von der crate [`chrono`](https://crates.io/crates/chrono) benutzt um die Zeit zu formatieren. Schau dir [die chrono strftime Dokumentation](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) an, um die möglichen Optionen zu sehen.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `disabled` auf `false` um es zu aktivieren.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3981,7 +3984,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-Das `username` Modul zeigt den Namen des aktiven Benutzers. Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root/admin
 - Der aktuelle Benutzer ist nicht der eingeloggte Benutzer
@@ -4132,7 +4135,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Das Modul wird gezeigt, wenn mindestens einer der folgenden Punkte erfüllt ist:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
