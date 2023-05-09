@@ -271,7 +271,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Schritt 2. Richte deine Shell für die Nutzung von Starship ein
+### Schritt 2. Set up your shell to use Starship
 
 Konfigurieren deine Shell um Starship zu initialisieren. Wähle dafür deine Shell aus der Liste aus:
 
