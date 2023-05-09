@@ -271,7 +271,7 @@ Starship'i herhangi bir paket yöneticisi ile yükleyin:
 
 </details>
 
-### 2. Adım Shell'inizi Starship kullanmaya hazır hale getirin
+### 2. Adım Set up your shell to use Starship
 
 Shell'ı starshiple çalışması için ayarla. Aşağıdaki listeden shell'inizi seçin:
 
