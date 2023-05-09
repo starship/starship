@@ -1602,7 +1602,7 @@ very-long-project-name = 'vlpn'
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Модуль `git_branch` показує активну гілку репозиторію у вашій поточній теці.
 
 ### Параметри
 
@@ -1644,7 +1644,7 @@ ignore_branches = ['master', 'main']
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+Модуль `git_commit` показує поточний хеш коміту, а також теґ (якщо він є) репозиторію у вашій поточній теці.
 
 ### Параметри
 
@@ -1681,7 +1681,7 @@ tag_symbol = '🔖 '
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+Модуль `git_state` показується в теках, які є частиною репозиторію git, під час виконання операцій на зразок _REBASING_, _BISECTING</1 > тощо. Інформація про прогрес операції (наприклад, REBASING 3/10), також буде показана якщо вона доступна.</p>
 
 ### Параметри
 
@@ -1725,7 +1725,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 :::
 
@@ -1763,11 +1763,11 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+Модуль `git_status` показує символ, що описує стан репозиторію в поточній теці.
 
 ::: tip
 
-The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+Модуль Git Status дуже повільно працює в теках Windows у середовищі WSL (наприклад, під `/mnt/c/`). You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
 :::
 
@@ -2316,7 +2316,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
 
@@ -2498,7 +2498,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 :::
 
@@ -2870,7 +2870,7 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 :::
 
@@ -2962,7 +2962,7 @@ Arch = "Arch is the best! "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+Модуль `package` показується, коли поточна тека є сховищем для пакунка, і показує його поточну версію. Наразі модуль підтримує такі пакунки: `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart`.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) — версія пакунка `npm` отримується з `package.json` з поточної теки
 - [**Cargo**](https://doc.rust-lang.org/cargo/) — версія пакунка `cargo` отримується з `Cargo.toml` з поточної теки
@@ -3111,11 +3111,11 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 ## Pulumi
 
-The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
+Модуль `pulumi` показує імʼя поточного користувача та версію обраного [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/).
 
 ::: tip
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+За замовчуванням, версія Pulumi не показана, тому що отримання версії потребує на порядок більше часу, ніж потрібно іншим плагінам (близько 70мc). Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-pulumi-version).
 
 :::
 
@@ -3459,7 +3459,7 @@ symbol = '🔺 '
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+Модуль `rust` показує поточну встановлену версію [Rust](https://www.rust-lang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Cargo.toml`
 - Поточна тека містить файли з розширенням `.rs`
@@ -3500,7 +3500,7 @@ format = 'via [⚙️ $version](red bold)'
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `scala` показує поточну встановлену версію [Scala](https://www.scala-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `build.sbt`, `.scalaenv` або `.sbtenv`
 - Поточна тека містить файли `.scala` або `.sbt`
@@ -3540,11 +3540,11 @@ symbol = '🌟 '
 
 ## Shell
 
-The `shell` module shows an indicator for currently used shell.
+Модуль `shell` показує індикатор поточної оболонки.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 :::
 
@@ -3730,11 +3730,11 @@ format = '[$symbol$environment](dimmed blue) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
+Модуль `status` показує код завершення роботи попередньої команди. Якщо $success_symbol пустий (типово), модуль буде показаний тільки якщо код виходу не `0`. Код status буде перетворений у 32-бітне ціле число.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 :::
 
@@ -3795,7 +3795,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 :::
 
@@ -3840,7 +3840,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+Модуль `swift` показує поточну встановлену версію [Swift](https://swift.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Package.swift`
 - Поточна тека містить файли з розширенням `.swift`
@@ -3938,11 +3938,11 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показує поточний **місцевий** час. Значення `format` використовується крейтом [`chrono`](https://crates.io/crates/chrono) для визначення формату показу часу. Перегляньте [документацію chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), щоб побачити, які параметри доступні.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
 :::
 
@@ -3984,7 +3984,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+Модуль `username` показує імʼя активного користувача. Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточний користувач має права суперкористувача
 - Поточний користувач не є таким же, як той, який увійшов до системи
@@ -3993,7 +3993,7 @@ The `username` module shows active user's username. The module will be shown if 
 
 ::: tip
 
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+Модуль виявляє підключення SSH перевіряючи змінні середовища `SSH_CONNECTION`, `SSH_CLIENT` і `SSH_TTY`. Якщо ваш хост SSH не налаштував ці змінні, одним зі способів розвʼязання проблеми є встановлення для однієї з них фіктивного значення.
 
 :::
 
@@ -4029,7 +4029,7 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `vagrant` показує поточну встановлену версію [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Vagrantfile`
 
@@ -4067,7 +4067,7 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `vlang` показує поточну встановлену версію [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли з розширенням `.v`
 - Поточна тека містить файли `v.mod`, `vpkg.json` або `.vpkg-lock.json`
@@ -4135,7 +4135,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+Модуль `zig` показує поточну встановлену версію [Zig](https://ziglang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `.zig`
 
