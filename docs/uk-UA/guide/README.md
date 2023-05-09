@@ -179,7 +179,7 @@
 
 - Встановлений та увімкнений у Вашому терміналі набір шрифтів [Nerd Font](https://www.nerdfonts.com/) (для прикладу, спробуйте [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Крок 1. Встановлення starship
+### Крок 1. Встановіть Starship
 
 Оберіть Вашу операційну систему зі списку нижче, щоб переглянути інструкцію зі встановлення:
 
@@ -271,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Крок 2. Set up your shell to use Starship
+### Крок 2. Налаштуйте оболонку для використання Starship
 
 Налаштуйте свою оболонку, щоб ініціалізувати starship. Виберіть ваш варіант зі списку:
 
