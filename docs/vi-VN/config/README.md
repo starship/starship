@@ -341,7 +341,7 @@ format = '$all$directory$character'
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -1528,6 +1528,8 @@ truncation_symbol = ''
 
 Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Cái này dựa trên tập tin `~/.config/gcloud/active_config`, `~/.config/gcloud/configurations/config_{CONFIG NAME}` và biến môi trường `CLOUDSDK_CONFIG`.
 
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+
 ### Options
 
 | Tuỳ chọn          | Mặc định                                                   | Mô tả                                                             |
@@ -1536,8 +1538,9 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 | `symbol`          | `'☁️  '`                                                   | Kí hiệu sử dụng hiển thị trước profile GCP hiện tại.              |
 | `region_aliases`  | `{}`                                                       | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
 | `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name.  |
+| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module          |
 | `style`           | `'bold blue'`                                              | Kiểu cho module.                                                  |
-| `disabled`        | `false`                                                    | Vô hiệu mô đun `gcloud`.                                          |
+| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                     |
 
 ### Các biến
 
@@ -1599,7 +1602,7 @@ very-long-project-name = 'vlpn'
 
 ## Git Branch
 
-Mô đun `git_branch` hiển thị nhánh hiệu lực của repo trong thư mục hiện tại của bạn.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Options
 
@@ -1641,7 +1644,7 @@ ignore_branches = ['master', 'main']
 
 ## Git Commit
 
-Mô đun `git_commit` hiển thị hash commit hiện tại và tag (nếu có) của repo trong thư mục hiện tại của bạn.
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
 ### Options
 
@@ -1678,7 +1681,7 @@ tag_symbol = '🔖 '
 
 ## Git State
 
-Mô đun `git_state` sẽ hiển hiển thị trong các thư mục là một phần của gt repository và những nơi tồn tại một hoạt động trong tiến trình như _REBASING_, _BISECTING_. Nếu có thông tin tiến trình (ví dụ, REBASING 3/10), thông tin đó cũng sẽ được hiển thị.
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### Options
 
@@ -1722,7 +1725,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: tip
 
-Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1760,7 +1763,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Git Status
 
-Mô đun `git_status` hiển thị các biểu tượng đại diện cho trạng thái của repo trong thư mục hiện tại của bạn.
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ::: tip
 
@@ -1792,7 +1795,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 ### Các biến
 
-Các biến dưới đây có thể được sử dụng trong `format`:
+The following variables can be used in `format`:
 
 | Biến           | Mô tả                                                                                                         |
 | -------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -1810,14 +1813,14 @@ Các biến dưới đây có thể được sử dụng trong `format`:
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
-Các biến sau có thể được sử dụng trong `diverged`:
+The following variables can be used in `diverged`:
 
 | Biến           | Mô tả                                         |
 | -------------- | --------------------------------------------- |
 | `ahead_count`  | Số lượng commit phía trước của nhánh tracking |
 | `behind_count` | Số lượng commit phía sau nhánh tracking       |
 
-Các biến sau có thể được sử dụng trong `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
 | Biến    | Mô tả                         |
 | ------- | ----------------------------- |
@@ -1842,7 +1845,7 @@ renamed = '👅'
 deleted = '🗑'
 ```
 
-Hiển thị tổng số nhánh phía trước/phía sau của nhánh được track
+Show ahead/behind count of the branch being tracked
 
 ```toml
 # ~/.config/starship.toml
@@ -2089,7 +2092,7 @@ format = 'via [⎈ $version](bold white) '
 
 ## Hostname
 
-Mô đun `hostname` hiển thị hostnam hệ thống.
+The `hostname` module shows the system hostname.
 
 ### Các tuỳ chọn
 
@@ -2165,7 +2168,7 @@ symbol = '🌟 '
 
 ## Jobs
 
-`jobs` module cho biết số lượng các jobs đang chạy. Mô đun sẽ được hiển thị chỉ khi có background jobs đang chạy. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -2309,11 +2312,11 @@ kotlin_binary = 'kotlinc'
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Nếu biến môi trường `$KUBECONFIG` được thiết lập, mô đun sẽ sử dụng cái đó nếu nó không sử dụng `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
-Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
 
@@ -2495,7 +2498,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2867,7 +2870,7 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 
 ::: tip
 
-Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3374,7 +3377,7 @@ format = 'via [🦪 $version]($style) '
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -3412,7 +3415,7 @@ symbol = '🔴 '
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Gemfile` file
 - The current directory contains a `.ruby-version` file
@@ -3456,7 +3459,7 @@ symbol = '🔺 '
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Cargo.toml` file
 - The current directory contains a file with the `.rs` extension
@@ -3541,7 +3544,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3731,7 +3734,7 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ::: tip
 
-Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3792,7 +3795,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ::: tip
 
-Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3837,7 +3840,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3939,7 +3942,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 
 ::: tip
 
-Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiết lập `disabled` sang `false` trong tập tin cấu hình của bạn.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3981,7 +3984,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-The `username` module shows active user's username. Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - The current user is root/admin
 - The current user isn't the same as the one that is logged in
@@ -4132,7 +4135,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Module cho sẽ được hiện nếu bất kì điều kiện nào dưới đây thoả mãn:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - The current directory contains a `.zig` file
 
