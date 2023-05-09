@@ -271,7 +271,7 @@ Zainstaluj Starship używając dowolnego z następujących menedżerów pakietó
 
 </details>
 
-### Krok 2. Skonfiguruj swoją powłokę, aby używała Starship
+### Krok 2. Set up your shell to use Starship
 
 Skonfiguruj swoją powłokę, aby inicjowała Starship. Wybierz swoją z poniższej listy:
 
