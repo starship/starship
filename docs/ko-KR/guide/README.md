@@ -271,7 +271,7 @@ Install the latest version for your system with the MSI-installers from the [rel
 
 </details>
 
-### 2단계. 쉘에 Starship 적용하기
+### 2단계. Set up your shell to use Starship
 
 쉘에 Starship 초기 설정을 합니다. 아래의 리스트 중에 해당하는 것을 고르세요:
 
