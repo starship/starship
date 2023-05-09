@@ -9,22 +9,22 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Todas as configurações do starship são feitas neste arquivo [TOML](https://github.com/toml-lang/toml):
 
 ```toml
-# Get editor completions based on the config schema
+# Obtém o preenchimento do editor baseado no esquema de configuração
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# Insere uma linha branca entre os prompts do shell
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# Substitui o símbolo '❯' no prompt por  '➜'
+[character] # O nome do módulo que estamos configurando é  'character'
+success_symbol = '[➜](bold green)' # O 'success_symbol' é definido para  '➜' com a cor 'bold green'
 
-# Disable the package module, hiding it from the prompt completely
+# Desabilita o módulo package, escondendo completamente ele do prompt
 [package]
 disabled = true
 ```
 
-### Config File Location
+### Configuração do Local do Arquivo
 
 Você pode alterar o caminho padrão do arquivo de configuração com a variável de ambiente `STARSHIP_CONFIG`:
 
@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logging
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Isto, no entanto pode ser alterado usando a variável de ambiente `STARSHIP_CACHE`:
+Por padrão os logs de avisos e erros do starship estão em um arquivo chamado `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, onde a session key é correspondente a uma instancia do terminal. Isto, no entanto pode ser alterado usando a variável de ambiente `STARSHIP_CACHE`:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -74,16 +74,16 @@ Por convenção, a maioria dos módulos tem um prefixo de cor (e.x. `via` no "no
 
 ### Strings
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+Na sintaxe TOML, [valores de texto](https://toml.io/en/v1.0.0#string) são declarados com `'`, `"`, `'''`, ou `"""`.
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+Os seguintes símbolos de sintaxe do Starship têm uso especial em uma string de formatação e devem ser escapados para exibir como este caractere: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
-| ------ | ------------------------- | ------------------------------------------------------ |
-| `'`    | literal string            | less escaping                                          |
-| `"`    | string                    | more escaping                                          |
-| `'''`  | multi-line literal string | less escaping                                          |
-| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
+| Símbolo | Tipo                      | Notas                                                  |
+| ------- | ------------------------- | ------------------------------------------------------ |
+| `'`     | string literal            | less escaping                                          |
+| `"`     | string                    | more escaping                                          |
+| `'''`   | multi-line literal string | less escaping                                          |
+| `"""`   | multi-line string         | more escaping, newlines in declarations can be ignored |
 
 Por exemplo:
 
@@ -101,17 +101,17 @@ format = '\[\$\] '
 When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
 
 ```toml
-# with literal string
+# com string literal
 format = '''
 
 \$'''
 
-# with multiline basic string
+# com string básica multilinha 
 format = """
 
 \\$"""
 
-# with basic string
+# com string básica
 format = "\n\\$"
 ```
 
@@ -440,8 +440,6 @@ O módulo `azure` exibe a assinatura Azure atual. This is based on showing the n
 #### Display Subscription Name
 
 ```toml
-# ~/.config/starship.toml
-
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
@@ -545,16 +543,16 @@ O módulo `buf` mostra a versão instalada do [Buf](https://buf.build). Por padr
 
 ### Opções
 
-| Opções              | Padrão                                          | Descrição                                         |
-| ------------------- | ----------------------------------------------- | ------------------------------------------------- |
-| `format`            | `'with [$symbol($version )]($style)'`           | O formato do módulo `buf`.                        |
-| `version_format`    | `'v${raw}'`                                     | A versão formatada.                               |
-| `symbol`            | `'🐃 '`                                          | O símbolo usado antes de exibir a versão do Buf.  |
-| `detect_extensions` | `[]`                                            | Quais extensões devem ativar este módulo.         |
-| `detect_files`      | `['buf.yaml', 'buf.gen.yaml', 'buf.work.yaml']` | Quais nomes de arquivos devem ativar este módulo. |
-| `detect_folders`    | `[]`                                            | Quais pastas devem ativar este módulo.            |
-| `style`             | `'bold blue'`                                   | O estilo do módulo.                               |
-| `disabled`          | `false`                                         | Desabilita o módulo `elixir`.                     |
+| Opções              | Padrão                                | Descrição                                         |
+| ------------------- | ------------------------------------- | ------------------------------------------------- |
+| `format`            | `'with [$symbol($version )]($style)'` | O formato do módulo `buf`.                        |
+| `version_format`    | `'v${raw}'`                           | A versão formatada.                               |
+| `symbol`            | `'🐃 '`                                | O símbolo usado antes de exibir a versão do Buf.  |
+| `detect_extensions` | `[]`                                  | Quais extensões devem ativar este módulo.         |
+| `detect_files`      | `[]`                                  | Quais nomes de arquivos devem ativar este módulo. |
+| `detect_folders`    | `[]`                                  | Quais pastas devem ativar este módulo.            |
+| `style`             | `'bold blue'`                         | O estilo do módulo.                               |
+| `disabled`          | `false`                               | Desabilita o módulo `elixir`.                     |
 
 ### Variáveis
 
