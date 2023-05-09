@@ -271,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Крок 2. Налаштуйте Вашу оболонку для використання starship
+### Крок 2. Set up your shell to use Starship
 
 Налаштуйте свою оболонку, щоб ініціалізувати starship. Виберіть ваш варіант зі списку:
 
