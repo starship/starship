@@ -144,7 +144,7 @@ mod tests {
             Target::Main,
             PathBuf::new(),
             PathBuf::new(),
-            Env::default()
+            Env::default(),
         )
     }
 
