@@ -648,6 +648,7 @@
         ],
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
+        "not_capable_style": "bold red",
         "style": "bold cyan",
         "symbol": "🐹 ",
         "version_format": "v${raw}"
@@ -3363,6 +3364,10 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "not_capable_style": {
+          "default": "bold red",
+          "type": "string"
         },
         "detect_extensions": {
           "default": [
