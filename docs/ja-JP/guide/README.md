@@ -271,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Step 2. Starshipをシェルにセットアップ
+### Step 2. Set up your shell to use Starship
 
 Starshipを初期化するためのシェルの設定。 以下のリストからお使いのシェルを選択してください。
 
