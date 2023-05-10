@@ -341,7 +341,7 @@ format = '$all$directory$character'
 
 Модуль `aws` показує поточний регіон AWS і профіль, а також час, що залишився до кінця сесії при використанні тимчасових облікових даних. Для виводу модуль використовує змінні `AWS_REGION`, `AWS_DEFAULT_REGION` і `AWS_PROFILE` та файли `~/.aws/config` і `~/.aws/credentials`, коли треба.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Крім того, достатньо буде визначити будь-яку змінну `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` або `AWS_SESSION_TOKEN`. Якщо для параметра `force_display` встановлено значення `true`, уся доступна інформація буде показуватись, навіть якщо не буде виявлено жодних облікових даних відповідно до наведених вище умов.
+Модуль показуватиме профіль якщо облікові дані знаходяться в `~/.aws/credentials`  або коли `credential_process`, `sso_start_url`, чи `sso_session` визначені в `~/.aws/config`. Крім того, достатньо буде визначити будь-яку змінну `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` або `AWS_SESSION_TOKEN`. Якщо для параметра `force_display` встановлено значення `true`, уся доступна інформація буде показуватись, навіть якщо не буде виявлено жодних облікових даних відповідно до наведених вище умов.
 
 Під час використання [aws-vault](https://github.com/99designs/aws-vault) профіль зчитується зі змінної `AWS_VAULT`, а дата закінчення терміну дії облікових даних зчитується зі змінної `AWS_SESSION_EXPIRATION`.
 
