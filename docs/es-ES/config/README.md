@@ -430,7 +430,7 @@ El módulo `azure` muestra la suscripción Azure actual. This is based on showin
 | Variable               | Predeterminado                           | Descripción                                                                           |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | El formato para renderizar el módulo Azure.                                           |
-| `symbol`               | `'ﴃ '`                                   | El símbolo utilizado en el formato.                                                   |
+| `symbol`               | `'󰠅 '`                                   | El símbolo utilizado en el formato.                                                   |
 | `style`                | `'blue bold'`                            | El estilo utilizado en el formato.                                                    |
 | `disabled`             | `true`                                   | Deshabilita el módulo `azure`.                                                        |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -445,7 +445,7 @@ El módulo `azure` muestra la suscripción Azure actual. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -457,7 +457,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -478,11 +478,11 @@ El módulo `battery` muestra la cantidad de batería y si se está cargando o no
 
 | Opción               | Predeterminado                    | Descripción                                                              |
 | -------------------- | --------------------------------- | ------------------------------------------------------------------------ |
-| `full_symbol`        | `' '`                            | Se muestra cuando la batería está cargada.                               |
-| `charging_symbol`    | `' '`                            | Se muestra cuando la batería se está cargando.                           |
-| `discharging_symbol` | `' '`                            | Se muestra cuando la batería se está descargando.                        |
-| `unknown_symbol`     | `' '`                            | El símbolo que se muestra cuando el estado de la batería es desconocido. |
-| `empty_symbol`       | `' '`                            | El símbolo que se muestra cuando el estado de la batería está vacío.     |
+| `full_symbol`        | `'󰁹 '`                            | Se muestra cuando la batería está cargada.                               |
+| `charging_symbol`    | `'󰂄 '`                            | Se muestra cuando la batería se está cargando.                           |
+| `discharging_symbol` | `'󰂃 '`                            | Se muestra cuando la batería se está descargando.                        |
+| `unknown_symbol`     | `'󰁽 '`                            | El símbolo que se muestra cuando el estado de la batería es desconocido. |
+| `empty_symbol`       | `'󰂎 '`                            | El símbolo que se muestra cuando el estado de la batería está vacío.     |
 | `format`             | `'[$symbol$percentage]($style) '` | El formato del módulo.                                                   |
 | `display`            | [ver aquí](#battery-display)      | Define cuándo mostrar el indicador y el estilo.                          |
 | `disabled`           | `false`                           | Desactiva el módulo `battery`.                                           |
@@ -3582,7 +3582,7 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
