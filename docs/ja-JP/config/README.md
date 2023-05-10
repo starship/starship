@@ -430,7 +430,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 | 変数                     | デフォルト                                    | 説明                                                                                    |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | Azure module のフォーマットです。                                                               |
-| `symbol`               | `'ﴃ '`                                   | フォーマットで使用される記号です。                                                                     |
+| `symbol`               | `'󰠅 '`                                   | フォーマットで使用される記号です。                                                                     |
 | `style`                | `'blue bold'`                            | フォーマットで使用されるスタイルです。                                                                   |
 | `disabled`             | `true`                                   | `azure`モジュールを無効にします。                                                                  |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -445,7 +445,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -457,7 +457,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -478,11 +478,11 @@ very-long-subscription-name = 'vlsn'
 
 | オプション                | デフォルト                             | 説明                        |
 | -------------------- | --------------------------------- | ------------------------- |
-| `full_symbol`        | `' '`                            | バッテリーが満タンのときに表示される記号です。   |
-| `charging_symbol`    | `' '`                            | バッテリーの充電中に表示される記号です。      |
-| `discharging_symbol` | `' '`                            | バッテリーが放電しているときに表示される記号です。 |
-| `unknown_symbol`     | `' '`                            | バッテリー状態が不明なときに表示される記号です。  |
-| `empty_symbol`       | `' '`                            | バッテリーが空のときに表示される記号です。     |
+| `full_symbol`        | `'󰁹 '`                            | バッテリーが満タンのときに表示される記号です。   |
+| `charging_symbol`    | `'󰂄 '`                            | バッテリーの充電中に表示される記号です。      |
+| `discharging_symbol` | `'󰂃 '`                            | バッテリーが放電しているときに表示される記号です。 |
+| `unknown_symbol`     | `'󰁽 '`                            | バッテリー状態が不明なときに表示される記号です。  |
+| `empty_symbol`       | `'󰂎 '`                            | バッテリーが空のときに表示される記号です。     |
 | `format`             | `'[$symbol$percentage]($style) '` | module のフォーマットです。         |
 | `display`            | [link](#battery-display)          | モジュールの閾値とスタイルを表示します。      |
 | `disabled`           | `false`                           | `battery`モジュールを無効にします。    |
@@ -3582,7 +3582,7 @@ The `shell` module shows an indicator for currently used shell.
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
