@@ -430,7 +430,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | Переменная             | По умолчанию                             | Описание                                                                              |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
 | `style`                | `'blue bold'`                            | The style used in the format.                                                         |
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -445,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -457,7 +457,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -478,11 +478,11 @@ very-long-subscription-name = 'vlsn'
 
 | Параметр             | По умолчанию                      | Описание                                                |
 | -------------------- | --------------------------------- | ------------------------------------------------------- |
-| `full_symbol`        | `' '`                            | Символ, отображаемый при полной батарее.                |
-| `charging_symbol`    | `' '`                            | Символ, показываемый при зарядке аккумулятора.          |
-| `discharging_symbol` | `' '`                            | Символ, показываемый при разрядке аккумулятора.         |
-| `unknown_symbol`     | `' '`                            | Символ, отображаемый при неизвестном состоянии батареи. |
-| `empty_symbol`       | `' '`                            | Символ, отображаемый при пустом состоянии батареи.      |
+| `full_symbol`        | `'󰁹 '`                            | Символ, отображаемый при полной батарее.                |
+| `charging_symbol`    | `'󰂄 '`                            | Символ, показываемый при зарядке аккумулятора.          |
+| `discharging_symbol` | `'󰂃 '`                            | Символ, показываемый при разрядке аккумулятора.         |
+| `unknown_symbol`     | `'󰁽 '`                            | Символ, отображаемый при неизвестном состоянии батареи. |
+| `empty_symbol`       | `'󰂎 '`                            | Символ, отображаемый при пустом состоянии батареи.      |
 | `format`             | `'[$symbol$percentage]($style) '` | Формат модуля.                                          |
 | `display`            | [ссылка](#battery-display)        | Порог отображения и стиль для модуля.                   |
 | `disabled`           | `false`                           | Отключает модуль `battery`.                             |
@@ -3582,7 +3582,7 @@ The `shell` module shows an indicator for currently used shell.
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
