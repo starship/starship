@@ -1540,7 +1540,7 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 | `project_aliases` | `{}`                                                       | Таблиця псевдонімів проєкту для показу на додачу до назви GCP.            |
 | `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module                  |
 | `style`           | `'bold blue'`                                              | Стиль модуля.                                                             |
-| `disabled`        | `false`                                                    | Disables the `gcloud` module.                                             |
+| `disabled`        | `false`                                                    | Вимикає модуль `gcloud`.                                                  |
 
 ### Змінні
 
@@ -1721,7 +1721,7 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 ## Git Metrics
 
-The `git_metrics` module will show the number of added and deleted lines in the current git repository.
+Модуль `git_metrics` покаже кількість доданих та видалених рядків у поточному репозиторії git.
 
 ::: tip
 
@@ -1767,7 +1767,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ::: tip
 
-Модуль Git Status дуже повільно працює в теках Windows у середовищі WSL (наприклад, під `/mnt/c/`). You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
+Модуль Git Status дуже повільно працює в теках Windows у середовищі WSL (наприклад, під `/mnt/c/`). Ви можете вимкнути модуль або використати `windows_starship` для використання Windows-native Starship `git_status` для цих шляхів.
 
 :::
 
@@ -1795,7 +1795,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ### Змінні
 
-The following variables can be used in `format`:
+Наступні змінні можуть бути використані у `format`:
 
 | Змінна         | Опис                                                                                                |
 | -------------- | --------------------------------------------------------------------------------------------------- |
@@ -1813,14 +1813,14 @@ The following variables can be used in `format`:
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
-The following variables can be used in `diverged`:
+Наступні змінні можуть бути використані у `diverged`:
 
 | Змінна         | Опис                                                             |
 | -------------- | ---------------------------------------------------------------- |
 | `ahead_count`  | Кількість комітів на яку поточна гілка випереджає відстежувану   |
 | `behind_count` | Кількість комітів на яку поточна гілка відстає від відстежуваної |
 
-The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
+Наступні змінні можуть використовуватись у  `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` та `deleted`:
 
 | Змінна  | Опис                     |
 | ------- | ------------------------ |
@@ -1845,7 +1845,7 @@ renamed = '👅'
 deleted = '🗑'
 ```
 
-Show ahead/behind count of the branch being tracked
+Показує кількість комітів ahead/behind
 
 ```toml
 # ~/.config/starship.toml
@@ -1856,7 +1856,7 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 behind = '⇣${count}'
 ```
 
-Use Windows Starship executable on Windows paths in WSL
+Використання виконавчого файлу Windows Starship у Windows у шляхах WSL
 
 ```toml
 # ~/.config/starship.toml
@@ -1867,7 +1867,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `golang` показує поточну встановлену версію [Go](https://golang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `go.mod`
 - Поточна тека містить файл `go.sum`
@@ -1913,7 +1913,7 @@ format = 'via [🏎💨 $version](bold cyan) '
 
 ## Guix-shell
 
-The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html) environment. The module will be shown when inside a guix-shell environment.
+Модуль `guix_shell` показує середовище [guix-shell](https://guix.gnu.org/manual/devel/en/html_node/Invoking-guix-shell.html). Модуль буде показано, коли ви перебуваєте в середовищі guix-shell.
 
 ### Параметри
 
@@ -1945,14 +1945,14 @@ format = 'via [🐂](yellow bold) '
 
 ## Gradle
 
-The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
+Модуль `gradle` показує версію [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) що використовується в теці проєкту.
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить теку `gradle/wrapper/gradle-wrapper.properties`.
 - Поточна тека містить файли `.gradle` або `.gradle.kts`.
 
-The `gradle` module is only able to read your Gradle Wrapper version from your config file, we don't execute your wrapper, because of the security concerns.
+Модуль `gradle` може лише зчитувати версію Gradle Wrapper з вашого файлу налаштувань, ми не запускаємо на виконання вашу обгортку з міркувань безпеки.
 
 ### Параметри
 
@@ -1980,7 +1980,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ## Haskell
 
-The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
+Модуль `haskell` знаходить поточну версію GHC та/або Stack snapshot.
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
@@ -2013,7 +2013,7 @@ The `haskell` module finds the current selected GHC version and/or the selected 
 
 ## Haxe
 
-The `haxe` module shows the currently installed version of [Haxe](https://haxe.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `haxe` показує поточну встановлену версію [Haxe](https://haxe.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `project.xml`, `Project.xml`, `додаток. ml`, `haxelib.json`, `hxformat.json` або `.haxerc`
 - Поточна тека містить теку `.haxelib` або `haxe_libraries`
@@ -2053,7 +2053,7 @@ format = "via [⌘ $version](bold fg:202) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `helm` показує поточну встановлену версію [Helm](https://helm.sh/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `helmfile.yaml`
 - Поточна тека містить файл `Chart.yaml`
@@ -2092,7 +2092,7 @@ format = 'via [⎈ $version](bold white) '
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+Модуль `hostname` показує назву хосту.
 
 ### Параметри
 
@@ -2129,7 +2129,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `java` показує поточну встановлену версію [Java](https://www.oracle.com/java/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - В поточній теці містяться файли `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot` або `.sdkmanrc`
 - Поточна тека містить файли з розширеннями `.java`, `.class`, `.gradle`, `.jar`, `.clj` або `.cljc`
@@ -2168,9 +2168,9 @@ symbol = '🌟 '
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+Модуль `jobs` показує поточну кількість завдань, що виконуються зараз. Модуль показуватиметься лише у випадку наявності фонових завдань. Модуль покаже кількість запущених завдань, якщо є хоча б 2 завдання, або більше за значення в `number_threshold`, за наявності. Модуль покаже символ, якщо є принаймні одне, чи більше за значення `symbol_threshold`, фонове завдання. Ви можете встановити обидва значення в 0, щоб _завжди_ показувати символ і кількість завдань, навіть якщо виконується 0 завдань.
 
-The default functionality is:
+Стандартний функціонал:
 
 - 0 завдань -> нічого не показується.
 - 1 завдання -> показується `symbol`.
@@ -2178,13 +2178,13 @@ The default functionality is:
 
 ::: warning
 
-This module is not supported on tcsh and nu.
+Модуль не підтримується в tcsh та nu.
 
 :::
 
 ::: warning
 
-The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
+Параметр `threshold` є застарілим, але якщо ви бажаєте його використовувати, модуль буде показувати кількість запущених завдань, якщо у вас більше одного фонового завдання, або завдань більше за `threshold`. Якщо `threshold` встановлено у 0, то модуль також показуватиметься, коли немає запущених завдань.
 
 :::
 
@@ -2200,7 +2200,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | `style`            | `'bold blue'`                 | Стиль модуля.                                                                   |
 | `disabled`         | `false`                       | Вимикає модуль `jobs`.                                                          |
 
-*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
+*: Цей параметр застарів, використовуйте параметри `number_threshold` і `symbol_threshold` замість цього.
 
 ### Змінні
 
@@ -2225,7 +2225,7 @@ symbol_threshold = 0
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `julia` показує поточну встановлену версію [Julia](https://julialang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Project.toml`
 - Поточна тека містить файл `Manifest.toml`
@@ -2265,7 +2265,7 @@ symbol = '∴ '
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `kotlin` показує поточну встановлену версію [Kotlin](https://kotlinlang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли, `.kt` або `.kts`
 
@@ -2312,13 +2312,13 @@ kotlin_binary = 'kotlinc'
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Показує поточну назву [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) та, якщо встановлено, простір імен, користувача та кластер з файлу kubeconfig. Простір імен повинен бути встановлений у файлі kubeconfig файл, це можна зробити через `kubectl config set-context starship-context --namespace astronaut`. Так само можна встановити користувача та  кластер за допомогою `kubectl config set-context starship-context --user starship-user` та `kubectl config set-context context context context --cluster starship-cluster`, відповідно. Якщо параметр `$KUBECONFIG` встановлено, то модуль буде використовувати його, якщо ні — `~/.kube/config`.
 
 ::: tip
 
 За замовчуванням цей модуль вимкнутий. Щоб його увімкнути, встановіть значення параметра `disabled` в `false` у вашому файлі налаштувань.
 
-When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
+Коли модуль увімкнено, він завжди буде активним, якщо будь-який з параметрів `detect_extensions`, `detect_files` або `detect_folders` встановлені,  модуль буде активним тільки в теках, що відповідають умовам.
 
 :::
 
@@ -2366,7 +2366,7 @@ disabled = false
 'root/.*' = 'root'
 ```
 
-Only show the module in directories that contain a `k8s` file.
+Показує модуль лише у теках, що містять файл `k8s`.
 
 ```toml
 # ~/.config/starship.toml
@@ -2378,11 +2378,11 @@ detect_files = ['k8s']
 
 #### Регулярні вирази
 
-Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
+Крім простого псевдоніма, `context_aliases` і `user_aliases` також підтримують розширене зіставлення та перейменування за допомогою регулярних виразів.
 
-The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
+Регулярний вираз має збігатися в усьому kube context, на групи захоплення можна посилатися за допомогою `$name` і `$N` при заміні. Трохи більше пояснень в документації [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace).
 
-Long and automatically generated cluster names can be identified and shortened using regular expressions:
+Довгі автоматично згенеровані назви кластерів можуть бути визначені та скорочені за допомогою регулярних виразів:
 
 ```toml
 [kubernetes.context_aliases]
@@ -2399,7 +2399,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Line Break
 
-The `line_break` module separates the prompt into two lines.
+Модуль `line_break` розділяє командний рядок на два рядки.
 
 ### Параметри
 
@@ -2418,7 +2418,7 @@ disabled = true
 
 ## Local IP
 
-The `localip` module shows the IPv4 address of the primary network interface.
+Модуль `localip` показує IPv4 адресу основного мережевого інтерфейсу.
 
 ### Параметри
 
@@ -2451,7 +2451,7 @@ disabled = false
 
 ## Lua
 
-The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `lua` показує поточну встановлену версію [Lua](http://www.lua.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `.lua-version`
 - Поточна тека містить теку `lua`
@@ -2492,9 +2492,9 @@ format = 'via [🌕 $version](bold blue) '
 
 ## Memory Usage
 
-The `memory_usage` module shows current system memory and swap usage.
+Модуль `memory_usage` показує поточне використання оперативної памʼяті та памʼяті файлу підкачки.
 
-By default the swap usage is displayed if the total system swap is non-zero.
+Стандартно використання файлу підкачки показується якщо його розмір не є нульовим.
 
 ::: tip
 
@@ -2523,7 +2523,7 @@ By default the swap usage is displayed if the total system swap is non-zero.
 | symbol           | `🐏`           | Віддзеркалює значення параметра `symbol` |
 | style\*        |               | Віддзеркалює значення параметра `style`  |
 
-*: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
+*: Цю змінну можна використовувати лише як частину стилю рядка *\*: Інформація щодо файлів SWAP показується лише у разі наявності в поточній системі
 
 ### Приклад
 
@@ -2539,9 +2539,9 @@ style = 'bold dimmed green'
 
 ## Meson
 
-The `meson` module shows the current Meson developer environment status.
+Модуль `meson` показує поточний стан оточення розробки Meson.
 
-By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
+Стандартно показується назва проєкту Meson, якщо встановлено `$MESON_DEVENV`.
 
 ### Параметри
 
@@ -2578,7 +2578,7 @@ style = 'bold dimmed green'
 
 ## Mercurial Branch
 
-The `hg_branch` module shows the active branch and topic of the repo in your current directory.
+Модуль `hg_branch` показує активну гілку та вершину репозиторію у вашій поточній теці.
 
 ### Параметри
 
@@ -2615,7 +2615,7 @@ truncation_symbol = ''
 
 ## Nim
 
-The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `nim` показує поточну встановлену версію [Nim](https://nim-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `nim.cfg`
 - Поточна тека містить файли з розширенням `.nim`
@@ -2657,7 +2657,7 @@ symbol = '🎣 '
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+Модуль `nix_shell` показує середовище [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). Модуль буде показано, коли ви перебуваєте в середовищі nix-shell.
 
 ### Параметри
 
@@ -2698,7 +2698,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `nodejs` показує поточну встановлену версію [Node.js](https://nodejs.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `package.json`
 - Поточна тека містить файл `.node-version`
@@ -2742,7 +2742,7 @@ format = 'via [🤖 $version](bold green) '
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `ocaml` показує поточну встановлену версію [OCaml](https://ocaml.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли з розширенням `.opam` або теку `_opam`
 - Поточна тека містить теку `esy.lock`
@@ -2789,7 +2789,7 @@ format = 'via [🐪 $version]($style) '
 
 ## Open Policy Agent
 
-The `opa` module shows the currently installed version of the OPA tool. By default the module will be shown if the current directory contains a `.rego` file.
+Модуль `opa` показує поточну встановлену версію OPA. Стандартно модуль буде показаний, якщо поточна тека містить файли `.rego`.
 
 ### Параметри
 
@@ -2825,7 +2825,7 @@ format = 'via [⛑️  $version](bold red) '
 
 ## OpenStack
 
-The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
+Модуль `openstack` показує поточну хмару OpenStack і проєкт. Модуль активний лише тоді, коли встановлено змінну оточення `OS_CLOUD`, і в цьому випадку він читатиме файл `clouds.yaml` із будь-якого з [стандартного розташування](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files), щоб отримати поточний проєкт для використання.
 
 ### Параметри
 
@@ -2860,11 +2860,11 @@ symbol = '☁️ '
 
 ## OS
 
-The `os` module shows the current operating system. OS information is detected via the [os_info](https://lib.rs/crates/os_info) crate.
+Модуль `os` показує поточну операційну систему. Інформація про ОС отримується через [os_info](https://lib.rs/crates/os_info).
 
 ::: warning
 
-The [os_info](https://lib.rs/crates/os_info) crate used by this module is known to be inaccurate on some systems.
+[os_info](https://lib.rs/crates/os_info), що використовується в цьому модулі, може бути неточним для деяких систем.
 
 :::
 
@@ -2883,7 +2883,7 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 | `disabled` | `true`                | Вимикає модуль `os`.                             |
 | `symbols`  |                       | Таблиця символів для кожної операційної системи. |
 
-`symbols` allows you to define arbitrary symbols to display for each operating system type. Operating system types not defined by your configuration use the default symbols table below. All operating systems currently supported by the module are listed below. If you would like an operating system to be added, feel free to open a [feature request](https://github.com/starship/starship/issues/new/choose).
+`symbols` дозволяє визначити довільні символи для кожного типу операційної системи. Типи операційних систем не визначені вашою конфігурацією, використовують стандартну таблицю символів, дивись нижче. На цю мить усі операційні системи, що підтримуються модулем, перераховані нижче. Якщо ви бажаєте додати операційну систему, то можете створити [запит на функцію](https://github.com/starship/starship/issues/new/choose).
 
 ```toml
 # Це таблиця стандартних символів.
@@ -3016,7 +3016,7 @@ format = 'via [🎁 $version](208 bold) '
 
 ## Perl
 
-The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `perl` показує поточну встановлену версію [Perl](https://www.perl.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `Makefile.PL` чи `Build.PL`
 - Поточна тека містить файли `cpanfile` або `cpanfile.snapshot`
@@ -3056,7 +3056,7 @@ format = 'via [🦪 $version]($style) '
 
 ## PHP
 
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `php` показує поточну встановлену версію [PHP](https://www.php.net/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `composer.json`
 - Поточна тека містить файл `.php-version`
@@ -3096,7 +3096,7 @@ format = 'via [🔹 $version](147 bold) '
 
 ## Pijul Channel
 
-The `pijul_channel` module shows the active channel of the repo in your current directory.
+Модуль `pijul_channel` показує активний канал репозиторію у вашій поточній теці.
 
 ### Параметри
 
@@ -3169,7 +3169,7 @@ format = '[$symbol$stack]($style) '
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `purescript` показує поточну встановлену версію [PureScript](https://www.purescript.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `spago.dhall`
 - Поточна тека містить файли з розширенням `.purs`
@@ -3208,9 +3208,9 @@ format = 'via [$symbol$version](bold white)'
 
 ## Python
 
-The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
+Модуль `python` показує поточну встановлену версію [Python](https://www.python.org/) і поточне [віртуальне середовище Python](https://docs.python.org/tutorial/venv.html), якщо воно активоване.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+Якщо `pyenv_version_name` має значення `true`, показуватиметься назва версії pyenv. В іншому випадку буде показано номер версії з `python --version`.
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
@@ -3242,9 +3242,9 @@ If `pyenv_version_name` is set to `true`, it will display the pyenv version name
 
 ::: tip
 
-The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
+Змінна `python_binary` приймає як рядок, так список рядків. Starship спробує запустити кожен бінарний файл, поки це не дасть результат. Зауважте, що можна змінити двійковий файл, який використовується Starship, щоб отримати версію Python, а не параметрів, які використовуються.
 
-The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
+Стандартні значення та порядок для `python_binary` було вибрано так, щоб спочатку ідентифікувати версію Python у середовищах virtualenv/conda (які наразі все ще додають `python`, незалежно від того, чи вказує він на `python3` чи на `python2`). Це може мати побічний ефект: якщо у вас все ще встановлено системний Python 2, він може бути обраний перед будь-яким Python 3 (принаймні в дистрибутивах Linux, які завжди містять символічне посилання `/usr/bin/python` на Python 2). Якщо ви більше не працюєте з Python 2, але не можете видалити системний Python 2, змінивши його на `'python3'`, ви приховаєте будь-яку версію Python 2, див. приклад нижче.
 
 :::
 
@@ -3297,7 +3297,7 @@ python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 
 ## R
 
-The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
+Модуль `rlang` показує поточну встановлену версію [R](https://www.r-project.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли з розширенням `.R`.
 - Поточна тека містить файли з розширенням `.Rd`.
@@ -3339,7 +3339,7 @@ format = 'with [📐 $version](blue bold) '
 
 ## Raku
 
-The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `raku` показує поточну встановлену версію [Raku](https://www.raku.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `META6.json`
 - Поточна тека містить файли `.p6`, `.pm6`, `.raku`, `.rakumod` або `.pod6`
@@ -3377,7 +3377,7 @@ format = 'via [🦪 $version]($style) '
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+Модуль `red` показує поточну встановлену версію [Red](https://www.red-lang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `.red` або `.reds`
 
@@ -3415,14 +3415,14 @@ symbol = '🔴 '
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+Модуль `ruby` показує поточну встановлену версію [Ruby](https://www.ruby-lang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Gemfile`
 - Поточна тека містить файл `.ruby-version`
 - Поточна тека містить файл `.rb`
 - Встановлено змінні середовища `RUBY_VERSION` або `RBENV_VERSION`
 
-Starship gets the current Ruby version by running `ruby -v`.
+Starship отримує поточну версію Ruby командою `ruby -v`.
 
 ### Параметри
 
@@ -3591,7 +3591,7 @@ disabled = false
 
 ## SHLVL
 
-The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') environment variable, if it is set to a number and meets or exceeds the specified threshold.
+Модуль `shlvl` показує поточний [`SHLVL`](https://tldp.org/LDP/abs/html/internalvariables.html#SHLVLREF) ('shell level') змінну оточення, якщо він встановлений на число і збігається або перевищує вказаний поріг.
 
 ### Параметри
 
@@ -3627,7 +3627,7 @@ threshold = 3
 
 ## Singularity
 
-The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
+Модуль `singularity` показує поточний образ [Singularity](https://sylabs.io/singularity/), якщо ви всередині контейнера і `$SINGULARITY_NAME` встановлено.
 
 ### Параметри
 
@@ -3659,7 +3659,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Solidity
 
-The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+Модуль `solidity` показує поточну версію [Solidity](https://soliditylang.org/) Модуль буде показано, якщо буде вказано якісь з наступних умов:
 
 - Поточна тека містить файл `.sol`
 
@@ -3697,7 +3697,7 @@ format = "via [S $version](blue bold)"
 
 ## Spack
 
-The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+Модуль `spack` показує інформацію про поточне оточення [Spack](https://spack.readthedocs.io/en/latest/), якщо змінна `$SPACK_ENV` встановлена.
 
 ### Параметри
 
@@ -3791,7 +3791,7 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+Модуль `sudo` показує, чи облікові дані sudo зараз є в кеші. Модуль показується лише за наявності даних в кеші.
 
 ::: tip
 
@@ -3879,11 +3879,11 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію.
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+Стандартно версія Terraform не показується, оскільки це повільно для поточних версій Terraform, особливо коли використовується багато втулків. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
 
 :::
 
@@ -3958,7 +3958,7 @@ format = '[🏎💨 $workspace]($style) '
 | `disabled`        | `true`                  | Вимикає модуль `time`.                                                                                                  |
 | `time_range`      | `'-'`                   | Встановлює діапазон часу, протягом якого модуль показується. Час має бути зазначений у 24-годинному форматі             |
 
-If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
+Якщо `use_12hr` є `true`, то стандартно `time_format` — `'%r'`. В іншому випадку стандартне значення — `'%T'`. Налаштований вручну `time_format` має перевагу над параметром `use_12hr`.
 
 ### Змінні
 
@@ -4103,7 +4103,7 @@ format = 'via [V $version](blue bold) '
 
 ## VCSH
 
-The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
+Модуль `vcsh` показує поточний репозиторій [VCSH](https://github.com/RichiH/vcsh). Модуль показується лише в тому випадку, якщо репозиторій використовується.
 
 ### Параметри
 
@@ -4173,9 +4173,9 @@ symbol = '⚡️ '
 
 ## Власні команди
 
-The `custom` modules show the output of some arbitrary commands.
+Модулі `custom` показують результат виконання певних довільних команд.
 
-These modules will be shown if any of the following conditions are met:
+Модулі показуються, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл, ім'я якого є в `detect_files`
 - Поточна тека містить теки, ім'я яких вказано в `detect_folders`
@@ -4185,27 +4185,27 @@ These modules will be shown if any of the following conditions are met:
 
 ::: tip
 
-Multiple custom modules can be defined by using a `.`.
+Кілька власних модулів можна визначити за допомогою символу "`.`".
 
 :::
 
 ::: tip
 
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
+Порядок в якому власні модулі будуть показуватись може бути встановлений індивідуально додаванням `${custom.foo}` до змінної `format` верхнього рівня (через те, що назви містять точки вам треба використовувати`${...}`). Типово, модуль `custom` покаже усі модулі custom, в тому порядку, в якому вони були визначені.
 
 :::
 
 ::: tip
 
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
+[Квиток #1252](https://github.com/starship/starship/discussions/1252) містить приклади власних модулів. Якщо у вас є цікавий приклад ще не розкритий там, не соромтеся, поділитися ним!
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning Вихідні дані команди друкуються без екранування
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+Незалежно від результату, який генерує команда, він виводиться в командний рядок у незміненому вигляді. Це означає, що якщо вивід містить спеціальні послідовності, які інтерпретуються оболонкою, вони будуть оброблені та перетворені оболонкою при виводі. Ці спеціальні послідовності є специфічними для оболонки, напр. ви можете написати модуль, який записує послідовності bash, наприклад. `\h`, але цей модуль не працюватиме в оболонці fish або zsh.
 
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+Рядок формату також може містити специфічні послідовності командного рядка, наприклад [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 
@@ -4241,30 +4241,30 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 #### Власні команди shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` приймає непустий список рядків, де:
 
 - Перший рядок — це шлях до оболонки для виконання команди.
 - Наступні — інші аргументи, що передаються до оболонки.
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+Якщо не налаштовано, модуль повертатиметься до STARSHIP_SHELL, а потім до «sh» у Linux і «cmd /C» у Windows.
 
-The `command` will be passed in on stdin.
+Команда `command` буде передана до stdin.
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+Якщо `shell` не вказано або містить тільки один елемент і Starship виявить, що буде використано PowerShell, наступні аргументи будуть автоматично додані: `-Noprofile -Command -`. Якщо `shell` не вказано або міститься лише один елемент і Starship виявить, що буде використано Cmd, аргумент`/C`  буде автоматично додано, а `stdin` буде встановлено у `false`. Якщо `shell` не вказано або міститься лише один елемент і Starship виявить, що буде використано Nushell, аргумент`c` буде автоматично додано, а `stdin` буде встановлено у `false`. Такої поведінки можна уникнути шляхом явного передавання аргументів до оболонки, наприклад,
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning Переконайтеся, що ваша оболонка завершує процеси правильно
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+Якщо ви вказуєте власну команду, переконайтеся, що стандартний Shell, який використовується starship, буде виконувати команді з чистим (graceful) завершенням, за допомогою параметра `shell`.
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+Наприклад, PowerShell потребує параметр `-Command` для виконання однорядкової команди. Пропуск цього параметра може призвести до рекурсивного циклу starship, де оболонка може спробувати знову завантажити повний профіль середовища з самим starship і, отже, повторно виконати власну команду, потрапивши в нескінченний цикл.
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+Параметри, подібні до `-NoProfile` у PowerShell, також рекомендовані для інших оболонок, щоб уникнути додаткового часу завантаження власного профілю під час кожного виклику Starship.
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+Наразі реалізовано автоматичне виявлення оболонок і правильне додавання параметрів, але можливо, що охоплено не всі оболонки. [Будь ласка, сповістіть про проблему](https://github.com/starship/starship/issues/new/choose) з подробицями про термінал та конфігурацію автозапуску, якщо ви зіткнулись з таким сценарій.
 
 :::
 
