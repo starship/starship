@@ -430,7 +430,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | Variable               | Standartwert                             | Beschreibung                                                                          |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
 | `style`                | `'blue bold'`                            | The style used in the format.                                                         |
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -445,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -457,7 +457,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -478,11 +478,11 @@ Das `battery` Modul zeigt, wie hoch der Akku des Geräts geladen ist und den akt
 
 | Option               | Standardwert                      | Beschreibung                                                                        |
 | -------------------- | --------------------------------- | ----------------------------------------------------------------------------------- |
-| `full_symbol`        | `' '`                            | Das Symbol das angezeigt wird wenn der Akku voll geladen ist.                       |
-| `charging_symbol`    | `' '`                            | Das Symbol das angezeigt wird wenn der Akku aufgeladen wird.                        |
-| `discharging_symbol` | `' '`                            | Das Symbol, das angezeigt wird, wenn die Batterie entladen wird.                    |
-| `unknown_symbol`     | `' '`                            | Das Symbol, das angezeigt wird, wenn der Batteriezustand unbekannt ist.             |
-| `empty_symbol`       | `' '`                            | Das Symbol, das angezeigt wird, wenn die Batterie leer ist.                         |
+| `full_symbol`        | `'󰁹 '`                            | Das Symbol das angezeigt wird wenn der Akku voll geladen ist.                       |
+| `charging_symbol`    | `'󰂄 '`                            | Das Symbol das angezeigt wird wenn der Akku aufgeladen wird.                        |
+| `discharging_symbol` | `'󰂃 '`                            | Das Symbol, das angezeigt wird, wenn die Batterie entladen wird.                    |
+| `unknown_symbol`     | `'󰁽 '`                            | Das Symbol, das angezeigt wird, wenn der Batteriezustand unbekannt ist.             |
+| `empty_symbol`       | `'󰂎 '`                            | Das Symbol, das angezeigt wird, wenn die Batterie leer ist.                         |
 | `format`             | `'[$symbol$percentage]($style) '` | Das Format für das Modul.                                                           |
 | `display`            | [link](#battery-display)          | Stellt den Grenzwert ein ab dem der Ladezustand (das battery-Modul) angezeigt wird. |
 | `disabled`           | `false`                           | Wenn der Wert auf `true` steht, wird das Akkustand-Modul deaktiviert.               |
@@ -3582,7 +3582,7 @@ Dieses Modul ist standardmäßig deaktiviert. Setze in deiner Konfiguration `dis
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
