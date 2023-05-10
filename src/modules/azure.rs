@@ -196,7 +196,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("ﴃ Subscription 1")
+            Color::Blue.bold().paint("󰠅 Subscription 1")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -267,7 +267,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ user@domain.com")
+            Color::Blue.bold().paint("󰠅 user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -338,7 +338,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ :user@domain.com")
+            Color::Blue.bold().paint("󰠅 :user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -409,7 +409,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ Subscription 1:")
+            Color::Blue.bold().paint("󰠅 Subscription 1:")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -614,7 +614,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ Subscription 1:user@domain.com")
+            Color::Blue.bold().paint("󰠅 Subscription 1:user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -689,7 +689,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ tllsn:user@domain.com")
+            Color::Blue.bold().paint("󰠅 tllsn:user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()
