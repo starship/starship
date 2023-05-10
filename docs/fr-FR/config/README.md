@@ -430,7 +430,7 @@ Le module `azure` affiche l'abonnement Azure actuel. This is based on showing th
 | Variable               | Défaut                                   | Description                                                                           |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | Le format pour le rendu du module Azure.                                              |
-| `symbole`              | `'ﴃ '`                                   | Le symbole utilisé dans le format.                                                    |
+| `symbole`              | `'󰠅 '`                                   | Le symbole utilisé dans le format.                                                    |
 | `style`                | `'blue bold'`                            | Le style utilisé dans le format.                                                      |
 | `disabled`             | `true`                                   | Désactive le module `azure`.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -445,7 +445,7 @@ Le module `azure` affiche l'abonnement Azure actuel. This is based on showing th
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -457,7 +457,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -478,11 +478,11 @@ Le module `battery` montre à quel point la batterie de l'appareil est chargée 
 
 | Option               | Défaut                            | Description                                                   |
 | -------------------- | --------------------------------- | ------------------------------------------------------------- |
-| `full_symbol`        | `' '`                            | Le symbole affiché lorsque la batterie est pleine.            |
-| `charging_symbol`    | `' '`                            | Le symbole affiché lorsque la batterie se charge.             |
-| `discharging_symbol` | `' '`                            | Le symbole affiché lorsque la batterie se décharge.           |
-| `unknown_symbol`     | `' '`                            | Le symbole affiché lorsque l'état de la batterie est inconnu. |
-| `empty_symbol`       | `' '`                            | Le symbole affiché lorsque la batterie est vide.              |
+| `full_symbol`        | `'󰁹 '`                            | Le symbole affiché lorsque la batterie est pleine.            |
+| `charging_symbol`    | `'󰂄 '`                            | Le symbole affiché lorsque la batterie se charge.             |
+| `discharging_symbol` | `'󰂃 '`                            | Le symbole affiché lorsque la batterie se décharge.           |
+| `unknown_symbol`     | `'󰁽 '`                            | Le symbole affiché lorsque l'état de la batterie est inconnu. |
+| `empty_symbol`       | `'󰂎 '`                            | Le symbole affiché lorsque la batterie est vide.              |
 | `format`             | `'[$symbol$percentage]($style) '` | Format du module.                                             |
 | `display`            | [lien](#battery-display)          | Affiche le seuil et le style du module.                       |
 | `disabled`           | `false`                           | Désactive le module `battery`.                                |
@@ -3583,7 +3583,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
