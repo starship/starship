@@ -430,7 +430,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | 變數                     | 預設                                       | 說明                                                                                    |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
 | `style`                | `'blue bold'`                            | The style used in the format.                                                         |
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -445,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -457,7 +457,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -478,11 +478,11 @@ very-long-subscription-name = 'vlsn'
 
 | Option               | 預設                                | 說明                         |
 | -------------------- | --------------------------------- | -------------------------- |
-| `full_symbol`        | `' '`                            | 當電池充飽時顯示的符號。               |
-| `charging_symbol`    | `' '`                            | 當電池正在充電時顯示的符號。             |
-| `discharging_symbol` | `' '`                            | 當電池正在放電時顯示的符號。             |
-| `unknown_symbol`     | `' '`                            | 當電池狀態不明時顯示的符號。             |
-| `empty_symbol`       | `' '`                            | 當電池沒電時顯示的符號。               |
+| `full_symbol`        | `'󰁹 '`                            | 當電池充飽時顯示的符號。               |
+| `charging_symbol`    | `'󰂄 '`                            | 當電池正在充電時顯示的符號。             |
+| `discharging_symbol` | `'󰂃 '`                            | 當電池正在放電時顯示的符號。             |
+| `unknown_symbol`     | `'󰁽 '`                            | 當電池狀態不明時顯示的符號。             |
+| `empty_symbol`       | `'󰂎 '`                            | 當電池沒電時顯示的符號。               |
 | `format`             | `'[$symbol$percentage]($style) '` | The format for the module. |
 | `display`            | [連結](#battery-display)            | 顯示的門檻與模組的風格。               |
 | `disabled`           | `false`                           | 停用 `battery` 模組。           |
@@ -3582,7 +3582,7 @@ The `shell` module shows an indicator for currently used shell.
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
