@@ -430,7 +430,7 @@ O módulo `azure` exibe a assinatura Azure atual. This is based on showing the n
 | Variável               | Padrão                                   | Descrição                                                                             |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | O formato que o módulo Azure será renderizado.                                        |
-| `symbol`               | `'ﴃ '`                                   | O símbolo usado no formato.                                                           |
+| `symbol`               | `'󰠅 '`                                   | O símbolo usado no formato.                                                           |
 | `style`                | `'blue bold'`                            | O estilo usado no formato.                                                            |
 | `disabled`             | `true`                                   | Desabilita o módulo `azure`.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -440,10 +440,12 @@ O módulo `azure` exibe a assinatura Azure atual. This is based on showing the n
 #### Display Subscription Name
 
 ```toml
+# ~/.config/starship.toml
+
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -454,8 +456,8 @@ style = 'blue bold'
 
 [azure]
 disabled = false
-format = "em [$symbol($username)]($style) "
-symbol = "ﴃ "
+format = "on [$symbol($username)]($style) "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -476,11 +478,11 @@ O módulo `battery` exibe o quanto a bateria do dispositivo está carregada e o 
 
 | Opções               | Padrão                            | Descrição                                                    |
 | -------------------- | --------------------------------- | ------------------------------------------------------------ |
-| `full_symbol`        | `' '`                            | O simbolo exibido quando a bateria estiver cheia.            |
-| `charging_symbol`    | `' '`                            | O simbolo exibido quando a bateria está carregando.          |
-| `discharging_symbol` | `' '`                            | O simbolo exibido quando a bateria está descarregando.       |
-| `unknown_symbol`     | `' '`                            | O simbolo exibido quando o estado da bateria é desconhecido. |
-| `empty_symbol`       | `' '`                            | O simbolo exibido quando o estado da bateria é vazio.        |
+| `full_symbol`        | `'󰁹 '`                            | O simbolo exibido quando a bateria estiver cheia.            |
+| `charging_symbol`    | `'󰂄 '`                            | O simbolo exibido quando a bateria está carregando.          |
+| `discharging_symbol` | `'󰂃 '`                            | O simbolo exibido quando a bateria está descarregando.       |
+| `unknown_symbol`     | `'󰁽 '`                            | O simbolo exibido quando o estado da bateria é desconhecido. |
+| `empty_symbol`       | `'󰂎 '`                            | O simbolo exibido quando o estado da bateria é vazio.        |
 | `format`             | `'[$symbol$percentage]($style) '` | O formato do módulo.                                         |
 | `display`            | [link](#battery-display)          | Limite de exibição e estilo para o módulo.                   |
 | `disabled`           | `false`                           | Desabilita o módulo `battery`.                               |
@@ -3580,7 +3582,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
