@@ -430,7 +430,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | Biến                   | Mặc định                                 | Mô tả                                                                                 |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
 | `style`                | `'blue bold'`                            | The style used in the format.                                                         |
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -445,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -457,7 +457,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -478,11 +478,11 @@ very-long-subscription-name = 'vlsn'
 
 | Tuỳ chọn             | Mặc định                          | Mô tả                                                    |
 | -------------------- | --------------------------------- | -------------------------------------------------------- |
-| `full_symbol`        | `' '`                            | Kí hiệu cho biết khi pin đầy.                            |
-| `charging_symbol`    | `' '`                            | Kí hiệu cho biết khi ping đang sạc.                      |
-| `discharging_symbol` | `' '`                            | Kí hiệu cho biết khi pin đang không sạc.                 |
-| `unknown_symbol`     | `' '`                            | Kí hiệu cho biết khi trạng thái pin không được xác định. |
-| `empty_symbol`       | `' '`                            | Kí hiệu cho biết khi hết pin.                            |
+| `full_symbol`        | `'󰁹 '`                            | Kí hiệu cho biết khi pin đầy.                            |
+| `charging_symbol`    | `'󰂄 '`                            | Kí hiệu cho biết khi ping đang sạc.                      |
+| `discharging_symbol` | `'󰂃 '`                            | Kí hiệu cho biết khi pin đang không sạc.                 |
+| `unknown_symbol`     | `'󰁽 '`                            | Kí hiệu cho biết khi trạng thái pin không được xác định. |
+| `empty_symbol`       | `'󰂎 '`                            | Kí hiệu cho biết khi hết pin.                            |
 | `format`             | `'[$symbol$percentage]($style) '` | Định dạng cho module.                                    |
 | `display`            | [link](#battery-display)          | Ngưỡng hiển thị và kiểu cho module.                      |
 | `disabled`           | `false`                           | Vô hiệu `battery` module.                                |
@@ -3582,7 +3582,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
