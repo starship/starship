@@ -1602,7 +1602,7 @@ very-long-project-name = 'vlpn'
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+`git_branch` 组件显示当前目录的 git 仓库的活动分支。
 
 ### 配置项
 
@@ -1681,7 +1681,7 @@ tag_symbol = '🔖 '
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+`git_state` 组件会显示当前目录在哪个 git 仓库中，以及正在进行的操作，例如：_REBASING_，_BISECTING_ 等。 进度信息（例如 REBASING 3/10）如果存在则也会被显示。
 
 ### 配置项
 
@@ -1725,7 +1725,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -1763,7 +1763,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Git Status
 
-The `git_status` module shows symbols representing the state of the repo in your current directory.
+`git_status`组件通过相应的符号显示您当前目录中 git 仓库的状态。
 
 ::: tip
 
@@ -2092,7 +2092,7 @@ format = 'via [⎈ $version](bold white) '
 
 ## Hostname
 
-The `hostname` module shows the system hostname.
+`hostname` 组件显示系统主机名。
 
 ### 配置项
 
@@ -2168,7 +2168,7 @@ symbol = '🌟 '
 
 ## Jobs
 
-The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+`jobs` 组件显示当前正在运行的任务数量。 仅当有后台任务运行时，此组件才会显示。 The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
 The default functionality is:
 
@@ -2316,7 +2316,7 @@ Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/co
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
 
@@ -2399,7 +2399,7 @@ Long and automatically generated cluster names can be identified and shortened u
 
 ## Line Break
 
-The `line_break` module separates the prompt into two lines.
+`line_break` 组件将提示分隔为两行。
 
 ### 配置项
 
@@ -2492,13 +2492,13 @@ format = 'via [🌕 $version](bold blue) '
 
 ## Memory Usage
 
-The `memory_usage` module shows current system memory and swap usage.
+`memory_usage` 组件显示当前系统内存和交换区使用情况。
 
-By default the swap usage is displayed if the total system swap is non-zero.
+默认情况下，如果系统交换区使用不为 0，则会显示交换区使用情况。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -2657,7 +2657,7 @@ symbol = '🎣 '
 
 ## Nix-shell
 
-The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. 当处于一个 nix-shell 环境中时，此组件会被显示。
 
 ### 配置项
 
@@ -2870,7 +2870,7 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -2962,7 +2962,7 @@ Arch = "Arch is the best! "
 
 ## Package Version
 
-The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+当前目录是软件包的代码仓库时，将显示 `package` 组件，并显示软件包当前版本。 The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – The `npm` package version is extracted from the `package.json` present in the current directory
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – The `cargo` package version is extracted from the `Cargo.toml` present in the current directory
@@ -3210,7 +3210,7 @@ format = 'via [$symbol$version](bold white)'
 
 The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
 
-If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
+如果`pyenv_version_name`被设置为`true`, 本组件将会展示pyenv版本名。 否则则显示通过`python --version`获得的版本号
 
 By default the module will be shown if any of the following conditions are met:
 
@@ -3377,7 +3377,7 @@ format = 'via [🦪 $version]($style) '
 
 ## Red
 
-By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). 此组件将在符合以下任意条件时显示：
 
 - The current directory contains a file with `.red` or `.reds` extension
 
@@ -3415,7 +3415,7 @@ symbol = '🔴 '
 
 ## Ruby
 
-By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). 此组件将在符合以下任意条件时显示：
 
 - 当前目录包含 `Gemfile` 文件
 - The current directory contains a `.ruby-version` file
@@ -3459,7 +3459,7 @@ symbol = '🔺 '
 
 ## Rust
 
-By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). 此组件将在符合以下任意条件时显示：
 
 - 当前目录包含 `Cargo.toml` 文件
 - 当前目录包含一个使用 `.rs` 扩展名的文件
@@ -3544,7 +3544,7 @@ The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -3734,7 +3734,7 @@ The `status` module displays the exit code of the previous command. If $success_
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -3795,7 +3795,7 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -3840,7 +3840,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). 此组件将在符合以下任意条件时显示：
 
 - The current directory contains a `Package.swift` file
 - The current directory contains a file with the `.swift` extension
@@ -3938,11 +3938,11 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 组件显示当前的 **本地** 时间。 `format` 字段值会提供给 [`chrono`](https://crates.io/crates/chrono) crate 用来控制时间显示方式。 请参阅 [chrono strftime 文档](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) 以了解可用格式选项。
 
 ::: tip
 
-This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
+此组件默认被禁用。 若要启用此组件，请在配置文件中设置 `disable` 字段为 `false`。
 
 :::
 
@@ -3984,7 +3984,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
+`username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件时显示：
 
 - The current user is root/admin
 - 当前用户与登录用户不相同
@@ -4135,7 +4135,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). 此组件将在符合以下任意条件时显示：
 
 - The current directory contains a `.zig` file
 
@@ -4241,30 +4241,30 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 #### 自定义命令 shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` 接受一个非空字符串列表：
 
 - 第一个字符串是用于执行命令的 shell 路径。
 - 剩下的将作为参数传递给 shell。
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+如果未设置，它将回退到 STARSHIP_SHELL，然后回退到 Linux 上的 "sh" 命令，在 Windows 上则是 "cmd /C"。
 
-The `command` will be passed in on stdin.
+`command` 将会被传递给标准输入。
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 PowerShell，则会自动添加 `-NoProfile -Command -` 参数。 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 Cmd，则会自动添加 `/C` 参数，并且将 `stdin` 设置为 `false`。 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 Cmd，则会自动添加 `-C` 参数，并且将 `stdin` 设置为 `false`。 可以通过将参数显式传递给 shell 来避免这种行为，例如：
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning 请确保您的自定义 shell 配置正常退出
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+如果您设置了一个自定义命令， 请确保 starship 使用的默认 shell (在 `shell` 选项设置) 执行命令后会正常退出。
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+例如，PowerShell 需要 `-Command` 参数来执行单行命令。 忽略此参数可能导致 starship 无尽递归：shell 可能会尝试加载带有 starship 的完整配置并重新执行自定义命令，导致无尽循环。
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+建议使用类似于 PowerShell 中 `-NoProfile` 的启动参数，这样还能避免额外的配置加载时间。
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+自动检测 shell 和添加适当的参数的功能已被实现，但包含的 shell 支持可能有缺漏。 遇到这种情况，请[提交一个带有 shell 信息和 starship 配置的 issue](https://github.com/starship/starship/issues/new/choose)。
 
 :::
 
