@@ -430,7 +430,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | Variabel               | Bawaan                                   | Deskripsi                                                                             |
 | ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
 | `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
-| `symbol`               | `'ﴃ '`                                   | The symbol used in the format.                                                        |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
 | `style`                | `'blue bold'`                            | The style used in the format.                                                         |
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
@@ -445,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -457,7 +457,7 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
 ```
 
@@ -478,11 +478,11 @@ Modul `battery` menampilkan seberapa penuh baterai perangkat terisi dan status p
 
 | Opsi                 | Bawaan                            | Deskripsi                                                 |
 | -------------------- | --------------------------------- | --------------------------------------------------------- |
-| `full_symbol`        | `' '`                            | Simbol dimunculkan ketika baterai penuh.                  |
-| `charging_symbol`    | `' '`                            | Simbol dimunculkan ketika baterai mengisi.                |
-| `discharging_symbol` | `' '`                            | Simbol dimunculkan ketika baterai terpakai.               |
-| `unknown_symbol`     | `' '`                            | Simbol dimunculkan ketika keadaan baterai tidak dikenali. |
-| `empty_symbol`       | `' '`                            | Simbol dimunculkan ketika keadaan baterai kosong.         |
+| `full_symbol`        | `'󰁹 '`                            | Simbol dimunculkan ketika baterai penuh.                  |
+| `charging_symbol`    | `'󰂄 '`                            | Simbol dimunculkan ketika baterai mengisi.                |
+| `discharging_symbol` | `'󰂃 '`                            | Simbol dimunculkan ketika baterai terpakai.               |
+| `unknown_symbol`     | `'󰁽 '`                            | Simbol dimunculkan ketika keadaan baterai tidak dikenali. |
+| `empty_symbol`       | `'󰂎 '`                            | Simbol dimunculkan ketika keadaan baterai kosong.         |
 | `format`             | `'[$symbol$percentage]($style) '` | Format dari modul.                                        |
 | `display`            | [link](#battery-display)          | Menampilkan ambang dan gaya dari modul.                   |
 | `disabled`           | `false`                           | Menonaktifkan modul `baterai`.                            |
@@ -3582,7 +3582,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
