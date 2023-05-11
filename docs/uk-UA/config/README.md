@@ -1528,7 +1528,7 @@ truncation_symbol = ''
 
 Модуль `gcloud` показує поточну конфігурацію [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Він базується на файлі `~/.config/gcloud/active_config` та на `~/.config/gcloud/configurations/config_{CONFIG NAME}` і на змінній оточення  `CLOUDSDK_CONFIG`.
 
-When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+Коли модуль увімкнено, він завжди буде активним, якщо не встановлено параметр `detect_env_vars`, в такому випадку модуль буде активним лише коли буде встановлено одну зі змінних середовища.
 
 ### Параметри
 
@@ -1538,7 +1538,7 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 | `symbol`          | `'☁️  '`                                                   | Символ, який використовується під час показу перед поточним профілем GCP. |
 | `region_aliases`  | `{}`                                                       | Таблиця псевдонімів регіону для показу на додачу до назви GCP.            |
 | `project_aliases` | `{}`                                                       | Таблиця псевдонімів проєкту для показу на додачу до назви GCP.            |
-| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module                  |
+| `detect_env_vars` | `[]`                                                       | Які змінні середовища повинні запускати цей модуль                        |
 | `style`           | `'bold blue'`                                              | Стиль модуля.                                                             |
 | `disabled`        | `false`                                                    | Вимикає модуль `gcloud`.                                                  |
 
