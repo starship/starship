@@ -78,12 +78,12 @@ Na sintaxe TOML, [valores de texto](https://toml.io/en/v1.0.0#string) são decla
 
 Os seguintes símbolos de sintaxe do Starship têm uso especial em uma string de formatação e devem ser escapados para exibir como este caractere: `$ [ ] ( )`.
 
-| Símbolo | Tipo                       | Notas                                                  |
-| ------- | -------------------------- | ------------------------------------------------------ |
-| `'`     | string literal             | menos escapando                                        |
-| `"`     | string                     | mais escapando                                         |
-| `'''`   | string literal multi-linha | menos escapando                                        |
-| `"""`   | multi-line string          | more escaping, newlines in declarations can be ignored |
+| Símbolo | Tipo                       | Notas                                                            |
+| ------- | -------------------------- | ---------------------------------------------------------------- |
+| `'`     | string literal             | menos escapando                                                  |
+| `"`     | string                     | mais escapando                                                   |
+| `'''`   | string literal multi-linha | menos escapando                                                  |
+| `"""`   | string multi-linha         | mais escapantes, novas linhas em declarações podem ser ignoradas |
 
 Por exemplo:
 
@@ -98,7 +98,7 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+Ao usar quebras de linha, declarações de várias linhas podem ser usadas. Por exemplo, se você quiser imprimir um símbolo `$` em uma nova linha, os seguintes valores para o `format` são equivalentes:
 
 ```toml
 # com string literal
@@ -115,7 +115,7 @@ format = """
 format = "\n\\$"
 ```
 
-In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+Em strings básicas de várias linhas, newlines podem ser usadas para formatação sem estarem presentes no valor escapado delas.
 
 ```toml
 format = """
@@ -138,9 +138,9 @@ Uma variável contém um símbolo `$` seguido pelo nome da variável. O nome de 
 
 Por exemplo:
 
-- `'$version'` is a format string with a variable named `version`.
-- `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
-- `'$git_branch $git_commit'` has the two variables separated with a space.
+- `'$version'` é uma string de formato com uma variável chamada `version`.
+- `'$git_branch$git_commit'` é uma string de formato com duas variáveis chamadas `git_branch` e `git_commit`.
+- `'$git_branch $git_commit'` tem as duas variáveis separadas por um espaço.
 
 #### Grupo de Texto
 
@@ -152,9 +152,9 @@ Na segunda parte, que está dentro de um `()`, está uma [string de estilo](#sty
 
 Por exemplo:
 
-- `'[on](red bold)'` will print a string `on` with bold text colored red.
-- `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
+- `'[on](red bold)'` irá imprimir uma string `em` com texto em negrito vermelho.
+- `'[⌘ $version](bold green)'` imprimirá um símbolo  `⌘` seguido pelo conteúdo da `version`, com texto negrito verde.
+- `'[a [b](red) c](green)'` imprimirá  `a b c`  com `b` vermelhor, `a` e `c` verdes.
 
 #### Estilo dos textos
 
@@ -179,9 +179,9 @@ Por exemplo:
 - `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
 - When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`. This works the same as `'(\[$a$b\] )'`.
 
-### Negative matching
+### Correspondência negativa
 
-Many modules have `detect_extensions`, `detect_files`, and `detect_folders` variables. These take lists of strings to match or not match. "Negative" options, those which should not be matched, are indicated with a leading '!' character. The presence of _any_ negative indicator in the directory will result in the module not being matched.
+Muitos módulos têm variáveis `detect_extensions`,  `detect_files`, e `detect_folders`. Estas receberão listas de strings para coresponder ou não. Opções "negativas", aquelas que não tem correspondencia, são indicadas com um caractere  '!'. A presença de _varios_ indicadores negativos no diretório resultara que o módulo não sera correspondido.
 
 Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
 
@@ -333,7 +333,7 @@ $character"""
 Se você quiser apenas estender o formato padrão, você pode usar `$all`; os módulos que você adicionar explicitamente ao formato não serão duplicados. Ex.
 
 ```toml
-# Move the directory to the second line
+# Mova o diretório para a segunda linha
 format = '$all$directory$character'
 ```
 
@@ -437,7 +437,7 @@ O módulo `azure` exibe a assinatura Azure atual. This is based on showing the n
 
 ### Exemplos
 
-#### Display Subscription Name
+#### Exibir Nome da Assinatura
 
 ```toml
 # ~/.config/starship.toml
@@ -449,7 +449,7 @@ symbol = '󰠅 '
 style = 'blue bold'
 ```
 
-#### Display Username
+#### Exibir Usuário
 
 ```toml
 # ~/.config/starship.toml
@@ -461,7 +461,7 @@ symbol = "󰠅 "
 style = "blue bold"
 ```
 
-#### Display Subscription Name Alias
+#### Exibir Alias do Nome da Assinatura
 
 ```toml
 # ~/.config/starship.toml
@@ -524,16 +524,16 @@ A opção `display` é um array da seguinte tabela.
 #### Exemplo
 
 ```toml
-[[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # ''bold red' e discharging_symbol é exibido quando a capacidade está entre 0% e 10%
 threshold = 10
 style = 'bold red'
 
-[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # 'yellow' style e o símbolo 💦  é exibido quando a capacidade está entre 10% e 30%
 threshold = 30
 style = 'bold yellow'
 discharging_symbol = '💦'
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# quando a capacidade estiver acima de 30%, o indicador de bateria não será exibido
 ```
 
 ## Buf
@@ -577,7 +577,7 @@ symbol = '🦬 '
 
 ## Bun
 
-The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+O módulo `bun` mostra a versão atualmente instalada do [bun](https://bun.sh) runtime do JavaScript. Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 - O diretório atual conter um arquivo `bun.lockb`
 - O diretório atual conter um arquivo `bunfig.toml`
@@ -588,18 +588,18 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
 | `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
 | `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🍞 '`                               | A format string representing the symbol of Bun.                                     |
+| `symbol`            | `'🍞 '`                               | Uma string de formato que representa o símbolo do Bun.                              |
 | `detect_extensions` | `[]`                                 | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `['bun.lockb', 'bunfig.toml']`       | Quais nomes de arquivos devem ativar este módulo.                                   |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                              |
 | `style`             | `'bold red'`                         | O estilo do módulo.                                                                 |
-| `disabled`          | `false`                              | Disables the `bun` module.                                                          |
+| `disabled`          | `false`                              | Desativa o módulo `bun`.                                                            |
 
 ### Variáveis
 
 | Variável  | Exemplo  | Descrição                         |
 | --------- | -------- | --------------------------------- |
-| version   | `v0.1.4` | The version of `bun`              |
+| version   | `v0.1.4` | A versão do `bun`                 |
 | symbol    |          | Espelha o valor da opção `symbol` |
 | style\* |          | Espelha o valor da opção `style`  |
 
@@ -692,9 +692,9 @@ Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olh
 
 ### Variáveis
 
-| Variável | Exemplo | Descrição                                                                                                |
-| -------- | ------- | -------------------------------------------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
+| Variável | Exemplo | Descrição                                                                                           |
+| -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| symbol   |         | Um espelho de `success_symbol`, `error_symbol`, `vimcmd_symbol` ou `vimcmd_replace_one_symbol` etc. |
 
 ### Exemplos
 
