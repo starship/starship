@@ -78,7 +78,7 @@ In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared wit
 
 The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
+| Symbol | Tipo                      | Notas                                                  |
 | ------ | ------------------------- | ------------------------------------------------------ |
 | `'`    | literal string            | less escaping                                          |
 | `"`    | string                    | more escaping                                          |
