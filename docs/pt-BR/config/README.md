@@ -78,12 +78,12 @@ Na sintaxe TOML, [valores de texto](https://toml.io/en/v1.0.0#string) são decla
 
 Os seguintes símbolos de sintaxe do Starship têm uso especial em uma string de formatação e devem ser escapados para exibir como este caractere: `$ [ ] ( )`.
 
-| Símbolo | Tipo                      | Notas                                                  |
-| ------- | ------------------------- | ------------------------------------------------------ |
-| `'`     | string literal            | less escaping                                          |
-| `"`     | string                    | more escaping                                          |
-| `'''`   | multi-line literal string | less escaping                                          |
-| `"""`   | multi-line string         | more escaping, newlines in declarations can be ignored |
+| Símbolo | Tipo                       | Notas                                                  |
+| ------- | -------------------------- | ------------------------------------------------------ |
+| `'`     | string literal             | menos escapando                                        |
+| `"`     | string                     | mais escapando                                         |
+| `'''`   | string literal multi-linha | menos escapando                                        |
+| `"""`   | multi-line string          | more escaping, newlines in declarations can be ignored |
 
 Por exemplo:
 
