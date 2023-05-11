@@ -68,3 +68,10 @@ It also shows how path substitution works in starship.
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
 [![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+
+## [Flamer](https://github.com/atahabaki/startover/blob/dev/.config/starship.toml)
+
+This preset is heavily inspired from Pastel Powerline, above.
+
+![ss](https://github.com/atahabaki/starship/assets/54471918/2531267a-355e-47a1-94f4-fe87c3832d4d)
+
