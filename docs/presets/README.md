@@ -73,5 +73,4 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 This preset is heavily inspired from Pastel Powerline, above.
 
-![ss](https://github.com/atahabaki/starship/assets/54471918/2531267a-355e-47a1-94f4-fe87c3832d4d)
-
+[![Screenshot of Flamer preset](https://github.com/atahabaki/starship/assets/54471918/2531267a-355e-47a1-94f4-fe87c3832d4d)](./flamer)
