@@ -152,9 +152,9 @@ line2
 
 例如：
 
-- `'[on](red bold)'` will print a string `on` with bold text colored red.
-- `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
+- `'[on](red bold)'` 会以红色粗体输出字符串 `on`。
+- `'[⌘ $version](bold green)'` 会以绿色粗体输出符号 `⌘` 以及字段 `version` 的内容。
+- `'[a [b](red) c](green)'` 会输出 `a b c`，其中 `b` 为红色，`a` 与 `c` 为绿色。
 
 #### 样式字符串
 
@@ -849,16 +849,16 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 | `符号`                | `'🅒 '`                                 | 在环境名之前显示的符号。                                                                                                     |
 | `style`             | `'bold green'`                         | 此组件的样式。                                                                                                          |
 | `format`            | `'via [$symbol$environment]($style) '` | 组件格式化模板。                                                                                                         |
-| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                       |
+| `ignore_base`       | `true`                                 | 激活时忽略 `base` 环境。                                                                                                 |
 | `disabled`          | `false`                                | 禁用 `conda` 组件。                                                                                                   |
 
 ### 变量
 
-| 字段          | 示例           | 描述                            |
-| ----------- | ------------ | ----------------------------- |
-| environment | `astronauts` | The current conda environment |
-| 符号          |              | `symbol`对应值                   |
-| style\*   |              | `style`对应值                    |
+| 字段          | 示例           | 描述          |
+| ----------- | ------------ | ----------- |
+| environment | `astronauts` | 当前 conda 环境 |
+| 符号          |              | `symbol`对应值 |
+| style\*   |              | `style`对应值  |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -1073,8 +1073,8 @@ format = 'via [🦕 $version](green bold) '
 | `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | 组件格式化模板。                                                                                                   |
 | `style`                  | `'bold cyan'`                                                                                                                | 此组件的样式。                                                                                                    |
 | `disabled`               | `false`                                                                                                                      | 禁用 `directory` 组件。                                                                                         |
-| `read_only`              | `'🔒'`                                                                                                                        | The symbol indicating current directory is read only.                                                      |
-| `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                        |
+| `read_only`              | `'🔒'`                                                                                                                        | 表明当前目录只读的符号。                                                                                               |
+| `read_only_style`        | `'red'`                                                                                                                      | 只读符号的样式。                                                                                                   |
 | `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                          |
 | `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`. |
 | `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                        |
