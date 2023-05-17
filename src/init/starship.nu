@@ -12,9 +12,9 @@ let-env PROMPT_COMMAND = {||
     # jobs are not supported
     (
         ^::STARSHIP:: prompt
-            $"--cmd-duration=($env.CMD_DURATION_MS)"
+            --cmd-duration $env.CMD_DURATION_MS
             $"--status=($env.LAST_EXIT_CODE)"
-            $"--terminal-width=((term size).columns)"
+            --terminal-width (term size).columns
     )
 }
 
@@ -31,8 +31,8 @@ let-env PROMPT_COMMAND_RIGHT = {||
     (
         ^::STARSHIP:: prompt
             --right
-            $"--cmd-duration=($env.CMD_DURATION_MS)"
+            --cmd-duration $env.CMD_DURATION_MS
             $"--status=($env.LAST_EXIT_CODE)"
-            $"--terminal-width=((term size).columns)"
+            --terminal-width (term size).columns
     )
 }
