@@ -8,7 +8,7 @@ let-env PROMPT_MULTILINE_INDICATOR = (
 # TODO: Also Use starship vi mode indicators?
 let-env PROMPT_INDICATOR = ""
 
-let-env PROMPT_COMMAND = { ||
+let-env PROMPT_COMMAND = {||
     # jobs are not supported
     (
         ^::STARSHIP:: prompt
@@ -27,7 +27,7 @@ let-env config = if $has_config_items {
     {render_right_prompt_on_last_line: true}
 }
 
-let-env PROMPT_COMMAND_RIGHT = { ||
+let-env PROMPT_COMMAND_RIGHT = {||
     (
         ^::STARSHIP:: prompt
             --right
