@@ -36,15 +36,15 @@ This preset changes the symbols for each module into plain text. Great if you do
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Ten zestaw ustawień ukrywa wersję środowiska wykonawczego.  Jeśli pracujesz w kontenerach lub wirtualnych środowiskach, to jest to dla Ciebie!
 
-[![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
+[![Zrzut ekranu No Runtime Versions](/presets/img/no-runtime-versions.png "Click to view No Runtime Versions preset")](./no-runtimes)
 
 ## [No Empty Icons](./no-empty-icons.md)
 
 This preset does not show icons if the toolset is not found.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
+[![Zrzut ekranu ustawień No Empty Icons](/presets/img/no-empty-icons.png "Click to view No Runtime Versions preset")](./no-empty-icons.md)
 
 ## [Pure Prompt](./pure-preset.md)
 
@@ -54,9 +54,9 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 
 ## [Pastel Powerline](./pastel-powerline.md)
 
-This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). It also shows how path substitution works in starship.
+Ten zestaw ustawień jest inspirowany  [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). Pokazuje ono również, jak działa zastępowanie ścieżek w starship.
 
-[![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
+[![Zrzut ekranu ustawień Pastel Powerline](/presets/img/pastel-powerline.png "Click to view Pure Prompt preset")](./pastel-powerline)
 
 ## [Tokyo Night](./tokyo-night.md)
 
