@@ -1,10 +1,10 @@
 [Powrót do ustawień predefiniowanych](./README.md#pastel-powerline)
 
-# Tokyo Night Preset
+# Ustawienia Tokyo Night
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Ten zestaw ustawień jest inspirowany [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png)
+![Zrzut ekranu ustawień Tokio Night](/presets/img/tokyo-night.png)
 
 ### Wymagania wstępne
 
