@@ -1,10 +1,10 @@
 [Powrót do ustawień predefiniowanych](./README.md#pure)
 
-# Pure Preset
+# Ustawienia Pure
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Ten zestaw ustawień naśladuje wygląd i zachowanie  [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Pure preset](/presets/img/pure-preset.png)
+![Zrzut ekranu ustawień Pure](/presets/img/pure-preset.png)
 
 ### Konfiguracja
 
