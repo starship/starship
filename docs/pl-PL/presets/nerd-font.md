@@ -1,6 +1,6 @@
 [Powrót do ustawień predefiniowanych](./README.md#nerd-font-symbols)
 
-# Ustawienia symboli czcionki Nerd Font
+# Ustawienia symboli Nerd Font
 
 Ten zestaw ustawień zmienia symbole dla każdego modułu tak, by wykorzystywały symbole czcionki Nerd Font.
 
