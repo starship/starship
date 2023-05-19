@@ -177,7 +177,7 @@
 
 ### Wymagania wstępne
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Czcionka [Nerd Font](https://www.nerdfonts.com/) zainstalowana i włączona w Twoim terminalu (na przykład spróbuj [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Krok 1. Zainstaluj Starship
 
@@ -271,7 +271,7 @@ Zainstaluj Starship używając dowolnego z następujących menedżerów pakietó
 
 </details>
 
-### Krok 2. Set up your shell to use Starship
+### Krok 2. Skonfiguruj swoją powłokę, aby używała Starship
 
 Skonfiguruj swoją powłokę, aby inicjowała Starship. Wybierz swoją z poniższej listy:
 
