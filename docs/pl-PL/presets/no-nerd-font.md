@@ -1,12 +1,12 @@
 [Powrót do ustawień predefiniowanych](./README.md#no-nerd-fonts)
 
-# No Nerd Fonts Preset
+# Ustawienia No Nerd Fonts
 
-This preset restricts the use of symbols to those from emoji and powerline sets.
+Ustawiania te ograniczają użycie symboli do tych z zestawów emoji oraz powerline.
 
-This means that even without a Nerd Font installed, you should be able to view all module symbols.
+Oznacza to, że nawet bez zainstalowanej czcionki Nerd Font powinno być możliwe wyświetlenie wszystkich symboli modułu.
 
-This preset will become the default preset in a future release of starship.
+Ten zestaw ustawień stanie się domyślny w przyszłych wersjach starship.
 
 ### Konfiguracja
 
