@@ -1,10 +1,10 @@
 [Powrót do ustawień predefiniowanych](./README.md#no-empty-icons)
 
-# No Empty Icons Preset
+# Ustawienia No Empty Icons
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+Ikony zestawów narzędzi będą wyświetlane dla zidentyfikowanych plików zestawów narzędzi. Jeżeli zestaw narzedzi nie dysponuje numerem wersji, to nie jest on wyświetlany. Ustawienia te sprawiają, że ikona zostanie wyświetlona tylko wtedy, gdy można określić informacje o zestawie narzędzi.
 
-![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
+![Zrzut ekranu ustawień No Empty Icons](/presets/img/no-empty-icons.png)
 
 ### Konfiguracja
 
