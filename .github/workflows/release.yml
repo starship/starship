@@ -92,42 +92,44 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
-          override: true
-          profile: minimal
           target: ${{ matrix.target }}
 
       - name: Setup | Install cargo-wix [Windows]
         continue-on-error: true
         # aarch64 is only supported in wix 4.0 development builds
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        run: cargo install --version 0.3.2 cargo-wix
+        run: cargo install --version 0.3.4 cargo-wix
         env:
           # cargo-wix does not require static crt
-          RUSTFLAGS: ''
+          RUSTFLAGS: ""
 
-      - name: Build | Build
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: build
-          args: --release --locked --target ${{ matrix.target }}
-          use-cross: ${{ matrix.os == 'ubuntu-latest' }}
+      - name: Setup | Install cross [Linux]
+        if: matrix.os == 'ubuntu-latest'
+        uses: taiki-e/install-action@cross
+
+      - name: Build | Build [Cargo]
+        if: matrix.os != 'ubuntu-latest'
+        run: cargo build --release --locked --target ${{ matrix.target }}
+
+      - name: Build | Build [Cross]
+        if: matrix.os == 'ubuntu-latest'
+        run: cross build --release --locked --target ${{ matrix.target }}
 
       - name: Build | Installer [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: wix
-          args: -v --no-build --nocapture -I install/windows/main.wxs --target ${{ matrix.target }} --output target/wix/starship-${{ matrix.target }}.msi
+        run: >
+          cargo wix -v --no-build --nocapture -I install/windows/main.wxs
+          --target ${{ matrix.target }}
+          --output target/wix/starship-${{ matrix.target }}.msi
 
       - name: Post Build | Prepare artifacts [Windows]
         if: matrix.os == 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          strip starship.exe
           7z a ../../../${{ matrix.name }} starship.exe
           cd -
 
@@ -135,8 +137,6 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: |
           cd target/${{ matrix.target }}/release
-          # TODO: investigate better cross platform stripping
-          strip starship || true
           tar czvf ../../../${{ matrix.name }} starship
           cd -
 
@@ -280,18 +280,14 @@ jobs:
   cargo_publish:
     name: Publish Cargo Package
     runs-on: ubuntu-latest
-    needs: release_please
+    needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Build | Publish
         run: cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
@@ -299,10 +295,10 @@ jobs:
   update_brew_formula:
     name: Update Brew Formula
     runs-on: ubuntu-latest
-    needs: release_please
+    needs: [release_please, upload_artifacts]
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v2.1
+      - uses: mislav/bump-homebrew-formula-action@v2.2
         with:
           formula-name: starship
           tag-name: ${{ needs.release_please.outputs.tag_name }}
@@ -326,6 +322,21 @@ jobs:
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           ./wingetcreate.exe update Starship.Starship -s -v $version -u $env:URL_64 $env:URL_32 -t ${{ secrets.GH_PAT }}
 
+  choco_update:
+    name: Update Chocolatey Package
+    runs-on: windows-latest
+    needs: [release_please, github_build, upload_artifacts]
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
+      - name: Setup | Artifacts
+        uses: actions/download-artifact@v3
+      - run: pwsh ./install/windows/choco/update.ps1
+        env:
+          STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
+          PUSH_TOKEN: ${{ secrets.CHOCO_TOKEN }}
+
   merge_crowdin_pr:
     name: Merge Crowdin PR
     runs-on: ubuntu-latest
@@ -339,28 +350,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish_docs:
-    name: Publish docs to Netlify
+    name: Trigger docs deployment
     runs-on: ubuntu-latest
     needs: merge_crowdin_pr
     steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@v3
-        with:
-          # Required to include the recently merged Crowdin PR
-          ref: master
-
-      - name: Setup | Install dependencies
-        run: npm install
-        working-directory: docs
-
-      - name: Build | Build docs site
-        run: npm run build
-        working-directory: docs
-
-      - name: Publish
-        uses: netlify/actions/cli@master
-        with:
-          args: deploy --prod --dir=docs/.vuepress/dist
+      - name: Trigger workflow dispatch
+        run: gh workflow run publish-docs.yml
         env:
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

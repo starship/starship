@@ -9,7 +9,8 @@ use crate::segment::Segment;
 use std::ffi::OsStr;
 use std::sync::Arc;
 
-const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
+const ALL_STATUS_FORMAT: &str =
+    "$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked";
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -97,6 +98,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     }),
                     "untracked" => info.get_untracked().and_then(|count| {
                         format_count(config.untracked, "git_status.untracked", context, count)
+                    }),
+                    "typechanged" => info.get_typechanged().and_then(|count| {
+                        format_count(config.typechanged, "git_status.typechanged", context, count)
                     }),
                     _ => None,
                 };
@@ -188,6 +192,10 @@ impl<'a> GitStatusInfo<'a> {
     pub fn get_untracked(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.untracked)
     }
+
+    pub fn get_typechanged(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.typechanged)
+    }
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
@@ -259,6 +267,7 @@ struct RepoStatus {
     renamed: usize,
     modified: usize,
     staged: usize,
+    typechanged: usize,
     untracked: usize,
 }
 
@@ -274,8 +283,14 @@ impl RepoStatus {
     }
 
     fn is_staged(short_status: &str) -> bool {
-        // is_index_modified || is_index_added
-        short_status.starts_with('M') || short_status.starts_with('A')
+        // is_index_modified || is_index_added || is_index_typechanged
+        short_status.starts_with('M')
+            || short_status.starts_with('A')
+            || short_status.starts_with('T')
+    }
+
+    fn is_typechanged(short_status: &str) -> bool {
+        short_status.ends_with('T')
     }
 
     fn parse_normal_status(&mut self, short_status: &str) {
@@ -289,6 +304,10 @@ impl RepoStatus {
 
         if Self::is_staged(short_status) {
             self.staged += 1;
+        }
+
+        if Self::is_typechanged(short_status) {
+            self.typechanged += 1;
         }
     }
 
@@ -367,6 +386,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     use crate::utils::create_command;
     use nix::sys::utsname::uname;
     use std::env;
+    use std::ffi::OsString;
     use std::io::ErrorKind;
 
     let starship_exe = conf.windows_starship?;
@@ -426,18 +446,21 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 
     // Get foreign starship to use WSL config
     // https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows/
-    let wslenv = env::var("WSLENV")
-        .map(|e| e + ":STARSHIP_CONFIG/wp")
-        .unwrap_or_else(|_| "STARSHIP_CONFIG/wp".to_string());
+    let wslenv = env::var("WSLENV").map_or_else(
+        |_| "STARSHIP_CONFIG/wp".to_string(),
+        |e| e + ":STARSHIP_CONFIG/wp",
+    );
 
     let out = match create_command(starship_exe)
         .map(|mut c| {
             c.env(
                 "STARSHIP_CONFIG",
-                crate::config::get_config_path().unwrap_or_else(|| "/dev/null".to_string()),
+                context
+                    .get_config_path_os()
+                    .unwrap_or_else(|| OsString::from("/dev/null")),
             )
             .env("WSLENV", wslenv)
-            .args(&["module", "git_status", "--path", winpath]);
+            .args(["module", "git_status", "--path", winpath]);
             c
         })
         .and_then(|mut c| c.output())
@@ -470,7 +493,7 @@ fn git_status_wsl(_context: &Context, _conf: &GitStatusConfig) -> Option<String>
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{ANSIStrings, Color};
+    use nu_ansi_term::{AnsiStrings, Color};
     use std::ffi::OsStr;
     use std::fs::{self, File};
     use std::io::{self, prelude::*};
@@ -483,7 +506,7 @@ mod tests {
     fn format_output(symbols: &str) -> Option<String> {
         Some(format!(
             "{} ",
-            Color::Red.bold().paint(format!("[{}]", symbols))
+            Color::Red.bold().paint(format!("[{symbols}]"))
         ))
     }
 
@@ -542,7 +565,7 @@ mod tests {
         ahead(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("⇡");
 
@@ -562,7 +585,7 @@ mod tests {
                 [git_status]
                 ahead="⇡$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("⇡1");
 
@@ -577,7 +600,7 @@ mod tests {
         diverge(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("⇕");
 
@@ -596,7 +619,7 @@ mod tests {
                 [git_status]
                 diverged=r"⇕⇡$ahead_count⇣$behind_count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("⇕⇡1⇣1");
 
@@ -613,7 +636,7 @@ mod tests {
                 [git_status]
                 up_to_date="✓"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("✓");
 
@@ -628,7 +651,7 @@ mod tests {
         create_conflict(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("=");
 
@@ -647,7 +670,7 @@ mod tests {
                 [git_status]
                 conflicted = "=$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("=1");
 
@@ -662,7 +685,7 @@ mod tests {
         create_untracked(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("?");
 
@@ -681,7 +704,7 @@ mod tests {
                 [git_status]
                 untracked = "?$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("?1");
 
@@ -696,12 +719,12 @@ mod tests {
         create_untracked(repo_dir.path())?;
 
         create_command("git")?
-            .args(&["config", "status.showUntrackedFiles", "no"])
+            .args(["config", "status.showUntrackedFiles", "no"])
             .current_dir(repo_dir.path())
             .output()?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = None;
 
@@ -716,12 +739,12 @@ mod tests {
         create_stash(repo_dir.path())?;
 
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD"])
+            .args(["reset", "--hard", "HEAD"])
             .current_dir(repo_dir.path())
             .output()?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("$");
 
@@ -736,7 +759,7 @@ mod tests {
         create_stash(repo_dir.path())?;
 
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD"])
+            .args(["reset", "--hard", "HEAD"])
             .current_dir(repo_dir.path())
             .output()?;
 
@@ -745,9 +768,28 @@ mod tests {
                 [git_status]
                 stashed = r"\$$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("$1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_typechanged() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_typechanged(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                typechanged = "⇢"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("⇢");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -760,7 +802,7 @@ mod tests {
         create_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("!");
 
@@ -779,7 +821,7 @@ mod tests {
                 [git_status]
                 modified = "!$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("!1");
 
@@ -794,7 +836,7 @@ mod tests {
         create_added(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("!");
 
@@ -809,7 +851,7 @@ mod tests {
         create_staged(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("+");
 
@@ -828,11 +870,37 @@ mod tests {
                 [git_status]
                 staged = "+[$count](green)"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = Some(format!(
             "{} ",
-            ANSIStrings(&[
+            AnsiStrings(&[
+                Color::Red.bold().paint("[+"),
+                Color::Green.paint("1"),
+                Color::Red.bold().paint("]"),
+            ])
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_typechange_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_typechange(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                staged = "+[$count](green)"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            AnsiStrings(&[
                 Color::Red.bold().paint("[+"),
                 Color::Green.paint("1"),
                 Color::Red.bold().paint("]"),
@@ -850,7 +918,7 @@ mod tests {
         create_staged_and_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("!+");
 
@@ -865,7 +933,7 @@ mod tests {
         create_renamed(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("»");
 
@@ -884,7 +952,7 @@ mod tests {
                 [git_status]
                 renamed = "»$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("»1");
 
@@ -899,7 +967,7 @@ mod tests {
         create_renamed_and_modified(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("»!");
 
@@ -914,7 +982,7 @@ mod tests {
         create_deleted(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("✘");
 
@@ -933,7 +1001,7 @@ mod tests {
                 [git_status]
                 deleted = "✘$count"
             })
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("✘1");
 
@@ -948,7 +1016,7 @@ mod tests {
         create_staged_and_ignored(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("+");
 
@@ -962,7 +1030,7 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_command("git")?
-            .args(&[
+            .args([
                 OsStr::new("config"),
                 OsStr::new("core.worktree"),
                 worktree_dir.path().as_os_str(),
@@ -973,7 +1041,7 @@ mod tests {
         File::create(worktree_dir.path().join("test_file"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .collect();
         let expected = format_output("✘?");
 
@@ -992,19 +1060,19 @@ mod tests {
         File::create(repo_dir.path().join("a"))?.sync_all()?;
         File::create(repo_dir.path().join("b"))?.sync_all()?;
         create_command("git")?
-            .args(&["add", "--all"])
-            .current_dir(&repo_dir.path())
+            .args(["add", "--all"])
+            .current_dir(repo_dir.path())
             .output()?;
         create_command("git")?
-            .args(&["commit", "-m", "add new files", "--no-gpg-sign"])
-            .current_dir(&repo_dir.path())
+            .args(["commit", "-m", "add new files", "--no-gpg-sign"])
+            .current_dir(repo_dir.path())
             .output()?;
 
         fs::remove_file(repo_dir.path().join("a"))?;
         fs::rename(repo_dir.path().join("b"), repo_dir.path().join("c"))?;
 
         let actual = ModuleRenderer::new("git_status")
-            .path(&repo_dir.path())
+            .path(repo_dir.path())
             .config(toml::toml! {
                 [git_status]
                 ahead = "A"
@@ -1024,8 +1092,8 @@ mod tests {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
         create_command("git")?
-            .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
-            .current_dir(&repo_dir)
+            .args(["commit", "-am", "Update readme", "--no-gpg-sign"])
+            .current_dir(repo_dir)
             .output()?;
 
         Ok(())
@@ -1033,7 +1101,7 @@ mod tests {
 
     fn behind(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD^"])
+            .args(["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1042,14 +1110,40 @@ mod tests {
 
     fn diverge(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD^"])
+            .args(["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
 
         fs::write(repo_dir.join("Cargo.toml"), " ")?;
 
         create_command("git")?
-            .args(&["commit", "-am", "Update readme", "--no-gpg-sign"])
+            .args(["commit", "-am", "Update readme", "--no-gpg-sign"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
+    fn create_typechanged(repo_dir: &Path) -> io::Result<()> {
+        fs::remove_file(repo_dir.join("readme.md"))?;
+
+        #[cfg(not(target_os = "windows"))]
+        std::os::unix::fs::symlink(repo_dir.join("Cargo.toml"), repo_dir.join("readme.md"))?;
+
+        #[cfg(target_os = "windows")]
+        std::os::windows::fs::symlink_file(
+            repo_dir.join("Cargo.toml"),
+            repo_dir.join("readme.md"),
+        )?;
+
+        Ok(())
+    }
+
+    fn create_staged_typechange(repo_dir: &Path) -> io::Result<()> {
+        create_typechanged(repo_dir)?;
+
+        create_command("git")?
+            .args(["add", "."])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1058,24 +1152,24 @@ mod tests {
 
     fn create_conflict(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["reset", "--hard", "HEAD^"])
+            .args(["reset", "--hard", "HEAD^"])
             .current_dir(repo_dir)
             .output()?;
 
         fs::write(repo_dir.join("readme.md"), "# goodbye")?;
 
         create_command("git")?
-            .args(&["add", "."])
+            .args(["add", "."])
             .current_dir(repo_dir)
             .output()?;
 
         create_command("git")?
-            .args(&["commit", "-m", "Change readme", "--no-gpg-sign"])
+            .args(["commit", "-m", "Change readme", "--no-gpg-sign"])
             .current_dir(repo_dir)
             .output()?;
 
         create_command("git")?
-            .args(&["pull", "--rebase"])
+            .args(["pull", "--rebase"])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1086,7 +1180,7 @@ mod tests {
         File::create(repo_dir.join("readme.md"))?.sync_all()?;
 
         create_command("git")?
-            .args(&["stash", "--all"])
+            .args(["stash", "--all"])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1103,7 +1197,7 @@ mod tests {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
         create_command("git")?
-            .args(&["add", "-A", "-N"])
+            .args(["add", "-A", "-N"])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1120,7 +1214,7 @@ mod tests {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
         create_command("git")?
-            .args(&["add", "."])
+            .args(["add", "."])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1132,7 +1226,7 @@ mod tests {
         file.sync_all()?;
 
         create_command("git")?
-            .args(&["add", "."])
+            .args(["add", "."])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1144,12 +1238,12 @@ mod tests {
 
     fn create_renamed(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["mv", "readme.md", "readme.md.bak"])
+            .args(["mv", "readme.md", "readme.md.bak"])
             .current_dir(repo_dir)
             .output()?;
 
         create_command("git")?
-            .args(&["add", "-A"])
+            .args(["add", "-A"])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1158,12 +1252,12 @@ mod tests {
 
     fn create_renamed_and_modified(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
-            .args(&["mv", "readme.md", "readme.md.bak"])
+            .args(["mv", "readme.md", "readme.md.bak"])
             .current_dir(repo_dir)
             .output()?;
 
         create_command("git")?
-            .args(&["add", "-A"])
+            .args(["add", "-A"])
             .current_dir(repo_dir)
             .output()?;
 
@@ -1186,7 +1280,7 @@ mod tests {
         file.sync_all()?;
 
         create_command("git")?
-            .args(&["add", ".gitignore"])
+            .args(["add", ".gitignore"])
             .current_dir(repo_dir)
             .output()?;
 

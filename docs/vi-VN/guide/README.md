@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="Trạng thái GitHub Actions workflow"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -169,7 +169,7 @@
 
 ### Yêu cầu
 
-- Đã cài đặt [Nerd Font](https://www.nerdfonts.com/) và đã kích hoạt trong giao diện dòng lệnh của bạn (ví dụ, thử [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Step 1. Install Starship
 
@@ -215,12 +215,10 @@ Alternatively, install Starship using any of the following package managers:
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
+| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install --edge starship`                                                 |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -333,7 +331,7 @@ Add the following to the end of your Nushell env file (find it by running `$nu.e
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
@@ -342,7 +340,7 @@ And add the following to the end of your Nushell configuration (find it by runni
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+Note: Only Nushell v0.73+ is supported
 
 </details>
 
@@ -417,6 +415,14 @@ Xin hãy xem qua những công việc này trước đây, những thứ đã gi
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

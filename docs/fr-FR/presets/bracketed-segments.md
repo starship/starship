@@ -8,6 +8,10 @@ Ce préréglage modifie le format de tous les modules intégrés pour afficher l
 
 ### Configuration
 
+```sh
+starship preset bracketed-segments -o ~/.config/starship.toml
+```
+
 [Cliquez pour télécharger le TOML](/presets/toml/bracketed-segments.toml)
 
 <<< @/.vuepress/public/presets/toml/bracketed-segments.toml

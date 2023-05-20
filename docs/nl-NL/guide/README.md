@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="GitHub Actions-werkwijze status"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -36,7 +36,9 @@
 
 <p align="center">
   <a href="https://starship.rs">Website</a>
+  ·
   <a href="#🚀-installation">Installatie</a>
+  ·
   <a href="https://starship.rs/config/">Configuratie</a>
 </p>
 
@@ -150,12 +152,12 @@
 
 **De minimalistische, razend snelle en oneindig aanpasbare prompt voor elke shell!**
 
-- **Snel:** het is snel -_echt heel erg_ snel! 🚀
-- **Aanpasbaar:** configureer elk aspect van je prompt.
+- **Snel:** het is snel -_ echt heel_ snel! 🚀
+- **Aanpasbaar:** configureer elk onderdeel van je prompt.
 - **Universeel:** werkt op elke shell, op elk besturingssysteem.
 - **Intelligent:** toont relevante informatie in een oogopslag.
 - **Rijk aan functies:** ondersteuning voor al je favoriete tools.
-- **Makkelijk:** snel te installeren - begin in een handomdraai met het te gebruiken.
+- **Makkelijk:** snel te installeren – gebruik het binnen enkele minuten.
 
 <p align="center">
 <a href="https://starship.rs/config/"><strong>Verken de Starship-documentatie&nbsp;&nbsp;▶</strong></a>
@@ -167,18 +169,18 @@
 
 ### Benodigdheden
 
-- Een [Nerd Font](https://www.nerdfonts.com/) is geïnstalleerd en ingeschakeld in je terminal (bijvoorbeeld probeer het [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
-### Step 1. Install Starship
+### Stap 1. Installeer Starship
 
-Select your operating system from the list below to view installation instructions:
+Selecteer je besturingssysteem in de onderstaande lijst en bekijk de installatie-instructies:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Installeer Starship met één van de volgende pakketbeheerders:
 
-| Repository                                                                        | Instructions           |
+| Repository                                                                        | Instructies            |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -187,9 +189,9 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Installeer Starship met één van de volgende pakketbeheerders:
 
-| Distribution | Repository                                               | Instructions                      |
+| Distribution | Repository                                               | Instructies                       |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
 | **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
 | FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
@@ -208,17 +210,15 @@ curl -sS https://starship.rs/install.sh | sh
 
 Alternatively, install Starship using any of the following package managers:
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| Distribution       | Repository                                                                                      | Instructies                                                                    |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
+| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install --edge starship`                                                 |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -237,7 +237,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 Alternatively, install Starship using any of the following package managers:
 
-| Repository                                               | Instructions                            |
+| Repository                                               | Instructies                             |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -251,9 +251,9 @@ Alternatively, install Starship using any of the following package managers:
 
 Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Install Starship using any of the following package managers:
+Installeer Starship met één van de volgende pakketbeheerders:
 
-| Repository                                                                                   | Instructions                            |
+| Repository                                                                                   | Instructies                             |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
@@ -263,7 +263,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Stap 2. Setup your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
 
@@ -331,7 +331,7 @@ Add the following to the end of your Nushell env file (find it by running `$nu.e
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
@@ -340,7 +340,7 @@ And add the following to the end of your Nushell configuration (find it by runni
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+Note: Only Nushell v0.73+ is supported
 
 </details>
 
@@ -388,7 +388,7 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### Stap 3. Configure Starship
 
 Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
@@ -415,6 +415,14 @@ Please check out these previous works that helped inspire the creation of starsh
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

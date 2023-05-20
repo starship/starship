@@ -37,10 +37,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             .or(Some(config.discharging_symbol)),
                         battery::State::Unknown => Some(config.unknown_symbol),
                         battery::State::Empty => Some(config.empty_symbol),
-                        _ => {
-                            log::debug!("Unhandled battery state `{}`", state);
-                            None
-                        }
                     },
                     _ => None,
                 })
@@ -172,7 +168,7 @@ impl BatteryInfoProvider for BatteryInfoProviderImpl {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn no_battery_status() {
@@ -238,7 +234,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 100% "));
+        let expected = Some(String::from("󰁹 100% "));
 
         assert_eq!(expected, actual);
     }
@@ -263,7 +259,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 80% "));
+        let expected = Some(String::from("󰂄 80% "));
 
         assert_eq!(expected, actual);
     }
@@ -288,7 +284,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 80% "));
+        let expected = Some(String::from("󰂃 80% "));
 
         assert_eq!(expected, actual);
     }
@@ -313,7 +309,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 0% "));
+        let expected = Some(String::from("󰁽 0% "));
 
         assert_eq!(expected, actual);
     }
@@ -338,7 +334,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 0% "));
+        let expected = Some(String::from("󰂎 0% "));
 
         assert_eq!(expected, actual);
     }
@@ -388,7 +384,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(format!("{} ", Color::Red.bold().paint(" 40%")));
+        let expected = Some(format!("{} ", Color::Red.bold().paint("󰂃 40%")));
 
         assert_eq!(expected, actual);
     }
@@ -413,7 +409,7 @@ mod tests {
             })
             .battery_info_provider(&mock)
             .collect();
-        let expected = Some(String::from(" 13% "));
+        let expected = Some(String::from("󰂃 13% "));
 
         assert_eq!(expected, actual);
     }

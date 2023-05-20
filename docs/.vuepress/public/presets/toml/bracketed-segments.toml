@@ -46,6 +46,12 @@ format = '\[[$symbol($version)]($style)\]'
 [erlang]
 format = '\[[$symbol($version)]($style)\]'
 
+[fennel]
+format = '\[[$symbol($version)]($style)\]'
+
+[fossil_branch]
+format = '\[[$symbol$branch]($style)\]'
+
 [gcloud]
 format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
 
@@ -58,7 +64,16 @@ format = '([\[$all_status$ahead_behind\]]($style))'
 [golang]
 format = '\[[$symbol($version)]($style)\]'
 
+[gradle]
+format = '\[[$symbol($version)]($style)\]'
+
+[guix_shell]
+format = '\[[$symbol]($style)\]'
+
 [haskell]
+format = '\[[$symbol($version)]($style)\]'
+
+[haxe]
 format = '\[[$symbol($version)]($style)\]'
 
 [helm]
@@ -85,6 +100,9 @@ format = '\[[$symbol($version)]($style)\]'
 [memory_usage]
 format = '\[$symbol[$ram( | $swap)]($style)\]'
 
+[meson]
+format = '\[[$symbol$project]($style)\]'
+
 [nim]
 format = '\[[$symbol($version)]($style)\]'
 
@@ -97,8 +115,14 @@ format = '\[[$symbol($version)]($style)\]'
 [ocaml]
 format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
 
+[opa]
+format = '\[[$symbol($version)]($style)\]'
+
 [openstack]
 format = '\[[$symbol$cloud(\($project\))]($style)\]'
+
+[os]
+format = '\[[$symbol]($style)\]'
 
 [package]
 format = '\[[$symbol$version]($style)\]'
@@ -108,6 +132,9 @@ format = '\[[$symbol($version)]($style)\]'
 
 [php]
 format = '\[[$symbol($version)]($style)\]'
+
+[pijul_channel]
+format = '\[[$symbol$channel]($style)\]'
 
 [pulumi]
 format = '\[[$symbol$stack]($style)\]'
@@ -137,7 +164,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol$environment]($style)\]'
 
 [sudo]
-format = '\[[as $symbol]\]'
+format = '\[[as $symbol]($style)\]'
 
 [swift]
 format = '\[[$symbol($version)]($style)\]'
@@ -158,4 +185,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 
 [zig]
+format = '\[[$symbol($version)]($style)\]'
+
+[solidity]
 format = '\[[$symbol($version)]($style)\]'

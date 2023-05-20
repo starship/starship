@@ -1,7 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct EnvVarConfig<'a> {
     pub symbol: &'a str,
@@ -12,6 +16,7 @@ pub struct EnvVarConfig<'a> {
     pub default: Option<&'a str>,
     pub format: &'a str,
     pub disabled: bool,
+    pub description: &'a str,
 }
 
 impl<'a> Default for EnvVarConfig<'a> {
@@ -23,6 +28,7 @@ impl<'a> Default for EnvVarConfig<'a> {
             default: None,
             format: "with [$env_value]($style) ",
             disabled: false,
+            description: "<env_var module>",
         }
     }
 }

@@ -53,15 +53,21 @@ $null = New-Module starship {
         }
         $process = [System.Diagnostics.Process]::Start($startInfo)
 
+        # Read the output and error streams asynchronously
+        # Avoids potential deadlocks when the child process fills one of the buffers
+        # https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.standardoutput?view=net-6.0#remarks
+        $stdout = $process.StandardOutput.ReadToEndAsync()
+        $stderr = $process.StandardError.ReadToEndAsync()
+        [System.Threading.Tasks.Task]::WaitAll(@($stdout, $stderr))
+
         # stderr isn't displayed with this style of invocation
         # Manually write it to console
-        $stderr = $process.StandardError.ReadToEnd().Trim()
-        if ($stderr -ne '') {
+        if ($stderr.Result.Trim() -ne '') {
             # Write-Error doesn't work here
-            $host.ui.WriteErrorLine($stderr)
+            $host.ui.WriteErrorLine($stderr.Result)
         }
 
-        $process.StandardOutput.ReadToEnd();
+        $stdout.Result;
     }
 
     function Enable-TransientPrompt {

@@ -55,11 +55,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    brew install starship
    ```
-
-   [Scoop](https://scoop.sh)을 통한 설치:
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. 쉘 설정 파일에 init 스크립트 추가:
@@ -150,14 +149,14 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   This will change in the future. Only Nushell v0.73+ is supported.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):

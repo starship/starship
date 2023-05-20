@@ -49,7 +49,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
     // expect ERROR_INSUFFICIENT_BUFFER
     match rc.ok() {
         Err(e) if e.code() == ERROR_INSUFFICIENT_BUFFER.into() => (),
-        result => return Err(format!("GetFileSecurityW returned unexpected return value when asked for the security descriptor size: {:?}", result)),
+        result => return Err(format!("GetFileSecurityW returned unexpected return value when asked for the security descriptor size: {result:?}")),
     }
 
     let mut buf = vec![0u8; length as usize];
@@ -112,7 +112,7 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String>
             impersonated_token,
             access_rights.0,
             &mapping,
-            &mut privileges,
+            Some(&mut privileges),
             &mut priv_size,
             &mut granted_access,
             &mut result,

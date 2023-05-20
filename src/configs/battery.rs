@@ -1,7 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct BatteryConfig<'a> {
     pub full_symbol: &'a str,
@@ -18,11 +22,11 @@ pub struct BatteryConfig<'a> {
 impl<'a> Default for BatteryConfig<'a> {
     fn default() -> Self {
         BatteryConfig {
-            full_symbol: " ",
-            charging_symbol: " ",
-            discharging_symbol: " ",
-            unknown_symbol: " ",
-            empty_symbol: " ",
+            full_symbol: "󰁹 ",
+            charging_symbol: "󰂄 ",
+            discharging_symbol: "󰂃 ",
+            unknown_symbol: "󰁽 ",
+            empty_symbol: "󰂎 ",
             format: "[$symbol$percentage]($style) ",
             display: vec![BatteryDisplayConfig::default()],
             disabled: false,
@@ -31,7 +35,11 @@ impl<'a> Default for BatteryConfig<'a> {
 }
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct BatteryDisplayConfig<'a> {
     pub threshold: i64,

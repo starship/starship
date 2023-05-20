@@ -1,12 +1,84 @@
 # Configuración Avanzada
 
-Mientras que Starship es un prompt versátil, a veces necesitas más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en Starship.
+A pesar de que Starship es una prompt versátil, a veces necesitas hacer más que editar `starhip.toml` para que haga ciertas cosas. Esta página detalla algunas de las técnicas de configuración más avanzadas en Starship.
 
 ::: warning
 
-Las configuraciones de esta sección están sujetos a cambios en futuras versiones de Starship.
+Las configuraciones de esta sección están sujetas a cambios en futuras versiones de Starship.
 
 :::
+
+## Prompt Transitoria en PowerShell
+
+Con una cadena personalizada, es posible reemplazar la prompt anteriormente impresa. Esto es útil en los casos en que toda la información de la prompt no es siempre necesaria. Para habilitar esto, ejecuta `Enable-TransientPrompt` en la línea de comandos. Para hacerlo permanente, pon esta misma sentencia en tu `$PROFILE`. La transitoriedad puede ser desactivada al momento con `Disable-TransientPrompt`.
+
+Por defecto, el lado izquierdo de la prompt es reemplazado por `>`. Para personalizar esto, defina una nueva función llamada `Invoke-Starship-TransientFunction`. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
+
+```powershell
+function Invoke-Starship-TransientFunction {
+  &starship module character
+}
+
+Invoke-Expression (&starship init powershell)
+
+Enable-TransientPrompt
+```
+
+## TransientPrompt y TransientRight Prompt en Cmd
+
+Clink re permite reemplazar el prompt impreso anteriormente con cadenas personalizadas. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. Para habilitar esto, ejecuta `Clink set prompt.transitent <value>` donde \<value\> puede ser uno de:
+
+- `always`: reemplazar siempre el prompt anterior
+- `same_dir`: reemplazar el prompt anterior sólo si el directorio de trabajo es el mismo
+- `off`: no reemplazar el prompt (es decir, desactivar la transitoriedad)
+
+Necesitas hacer esto sólo una vez. Haz los siguientes cambios en tu `starship.lua` para personalizar lo que se muestra a la izquierda y a la derecha:
+
+- Por defecto, el lado izquierdo de la entrada es reemplazado por `>`. Para personalizar esto, define una nueva función llamada `starship_transient_prompt_func`. Esta función recibe el prompt actual como una cadena que tú puedes utilizar. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
+
+```lua
+function starship_transient_prompt_func(prompt)
+  return io.popen("starship module character"
+    .." --keymap="..rl.getvariable('keymap')
+  ):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+- Por defecto, el lado derecho de la entrada está vacío. Para personalizar esto, defina una nueva función llamada `starship_transient_rprompt_func`. Esta función recibe el prompt actual como una cadena que tú puedes utilizar. Por ejemplo, para mostrar la hora en la que se inició el último comando aquí, lo harías
+
+```lua
+function starship_transient_rprompt_func(prompt)
+  return io.popen("starship module time"):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+## TransientPrompt y TransientRightPrompt en Fish
+
+Es posible reemplazar la entrada impresa anteriormente con una cadena personalizada. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. Para habilitar esto, ejecute `enable_transience` en la sesión del interprete de comandos. Para hacerlo permanente, pon esta proposición en tu `~/.config/fish/config.fish`. La transitoriedad puede ser desactivada al momento con `disable-transience`.
+
+Ten en cuenta que en el caso de Fish, el prompt transitorio sólo se imprime si el intérprete de comandos no está vacío, y sintácticamente correcta.
+
+- Por defecto, el lado izquierdo de la entrada es reemplazado por una  `❯`. Para personalizar esto, define una nueva función llamada `starship_transient_prompt_func`. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
+
+```fish
+function starship_transient_prompt_func
+  starship module character
+end
+starship init fish | source
+enable_transience
+```
+
+- Por defecto, el lado derecho de la entrada está vacío. Para personalizar esto, defina una nueva función llamada `starship_transient_rprompt_func`. Por ejemplo, para mostrar la hora en la que se inició el último comando aquí, lo harías
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
 
 ## Comandos pre-prompt y pre-ejecución personalizados en Cmd
 
@@ -69,7 +141,7 @@ function Invoke-Starship-PreCommand {
 }
 ```
 
-## Cambiar el Título de la Ventana
+## Cambiar título de la ventana
 
 Algunos intérpretes de comandos van a cambiar automáticamente el título de la ventana por ti (p. ej., para mostrar tu directorio actual). Fish incluso lo hace por defecto. Starship no hace esto, pero es bastante sencillo añadir esta funcionalidad a `bash`, `zsh`, `cmd` o `powershell`.
 
@@ -77,7 +149,7 @@ Primero, define una función para el cambio de título de la ventana (idéntico 
 
 ```bash
 function set_win_title(){
-    echo -ne "\033]0; TU_TÍTULO_DE_VENTANA_AQUÍ \007"
+    echo -ne "\033]0; TU_TITULO_DE_VENTANA_AQUI \007"
 }
 ```
 
@@ -127,13 +199,13 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Gabilitar Prompt Derecho
+## Habilitar Prompt a la Derecha
 
-Algunos intérpretes de órdenes soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt correcto usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
+Algunos intérpretes de comandos soportan un prompt derecho que se renderiza en la misma línea que la entrada. Starship puede establecer el contenido del prompt derecho usando la opción `right_format`. Cualquier módulo que pueda ser usado en `format` también es soportado en `right_format`. La variable `$all` solo contendrá módulos no utilizados explícitamente en `format` o `right_format`.
 
 Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear los módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo `fill`](/config/#fill).
 
-`right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh, xonsh, cmd.
+`right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh, xonsh, cmd, nushell.
 
 ### Ejemplo
 
@@ -157,7 +229,7 @@ Produce un prompt como el siguiente:
 
 Algunos intérpretes de comandos admiten un prompt de continuacion junto con el prompt normal. Este prompt es renderizado en lugar del prompt normal cuando el usuario ha introducido una orden incompleta (como solamente un paréntesis izquierdo o comilla).
 
-Starship puede establecer el prompt de continuación usando la opción `continuation_prompt`. El prompt por defecto es `"[∙](bright-black) "`.
+Starship puede establecer el prompt de continuación usando la opción `continuation_prompt`. El indicador por defecto es `'[∙](bright-black) '`.
 
 Nota: `continuation_prompt` debe establecerse en una cadena literal sin ninguna variable.
 
@@ -173,26 +245,29 @@ Nota: Los prompts de continuación solo están disponibles en los siguientes int
 # ~/.config/starship.toml
 
 # Un prompt de continuación que muestra dos flechas rellenas
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Cadenas de Estilo
 
-Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `negrita` y `NeGriTa` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
+Las cadenas de estilo son una lista de palabras, separadas por espacios en blanco. Las palabras no son sensibles a mayúsculas (es decir, `bold` y `BoLd` se consideran la misma cadena). Cada palabra puede ser una de las siguientes:
 
-- `bold`
-- `italic`
-- `underline`
-- `dimmed`
-- `inverted`
+- `negrita`
+- `cursiva`
+- `subrayado`
+- `atenuado`
+- `invertido`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
-- `none`
+- `ninguno`
 
 donde `<color>` es un especificador de color (discutido a continuación). `fg:<color>` y `<color>` hacen actualmente lo mismo, aunque esto puede cambiar en el futuro. `inverted` cambia el fondo y los colores de primer plano. El orden de las palabras en la cadena no importa.
 
-El token `none` anula todos los demás tokens en una cadena si no es parte de un especificador `bg:`, de modo que por ejemplo `fg:red none fg:blue` creará una cadena sin ningún estilo. `bg:none` establece el fondo al color por defecto, así que `fg:red bg:none` es equivalente a `red` o `fg:red` y `bg:green fg:red bg:none` también es equivalente a `fg:red` o `red`. Puede convertirse en un error usar `none` junto con otros tokens en el futuro.
+El token `none` anula todos los demás tokens en una cadena si no es parte de un especificador `bg:`, de modo que por ejemplo `fg:red none fg:blue` creará una cadena sin ningún estilo. `bg:none` establece el fondo al color por defecto, así que `fg:red bg:none` es equivalente a `red` o `fg:red` y `bg:green fg:red bg:none` también es equivalente a `fg:red` o `red`. Puede convertirse en un error usar `none` junto con otros estilos en el futuro.
 
 Un especificador de color puede ser uno de los siguientes:
 
@@ -201,3 +276,9 @@ Un especificador de color puede ser uno de los siguientes:
 - Un número entre 0-255. Esto especifica un [Código de color ANSI de 8-bits](https://i.stack.imgur.com/KTSQa.png).
 
 Si se especifican varios colores para el primer plano/fondo, el último en la cadena tendrá prioridad.
+
+No todas las cadenas de estilo se mostrarán correctamente en cada terminal. En particular, existen las siguientes rarezas conocidas:
+
+- Muchos terminales deshabilitan el soporte para `parpadear` por defecto
+- `hiden` no es [compatible con iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` no está soportado por macOS Terminal.app por defecto

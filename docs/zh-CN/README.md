@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: 轻量级、反应迅速、可无限定制的高颜值终端！
+tagline: 轻量、迅速、可无限定制的高颜值终端！
 actionText: 快速上手 →
 actionLink: ./guide/
 features:
@@ -45,7 +45,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   自更新 Starship ，运行下面脚本 将会在不改动 Starship 配置文件的情况下升级版本
+   要更新 Starship ，运行上面的脚本 将会在不改动 Starship 配置文件的情况下升级版本
 
 
    #### 通过软件包管理器安装
@@ -55,19 +55,18 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
    ```sh
    brew install starship
    ```
-
-   使用 [Scoop](https://scoop.sh)：
+   使用 [ Winget](https://github.com/microsoft/winget-cli)：
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
-1. 将初始化脚本添加到您的 shell 的配置文件：
+1. 将初始化脚本添加到您的 shell 的配置文件中：
 
 
    #### Bash
 
-   在 `~/.bashhrc` 的最后，添加以下内容：
+   在 `~/.bashrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.bashrc
@@ -98,7 +97,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
    ```
 
 
-   #### Powershell
+   #### PowerShell
 
    将以下内容添加到 `Microsoft.PowerShell_profile.ps1`。 你可以在 PowerShell 通过 `$PROFILE` 变量来查询文件的位置。 对于 -Nix 来说，通常文件路径是 `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` 或 `~/.config/powershell/Microsoft.PowerShell_profile.ps1`。
 
@@ -137,7 +136,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    #### Tcsh
 
-   在 `~/.bashhrc` 的最后，添加以下内容：
+   在 `~/.tcshrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.tcshrc
@@ -150,17 +149,17 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    ::: warning
 
-   这部分今后可能会改变。 仅支持 Nushell v0.61+。
+   这部分今后可能会改变。 仅支持 Nushell v0.73+。
 
    :::
 
-   将以下内容添加到您 Nushell 环境文件的末尾（使用 `$nu.env-path` 来获取它的路径）：
+   在您的 Nushell 环境文件的最后（使用 `$nu.env-path` 来获取它的路径），添加以下内容：
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
-   然后将以下内容添加到您 Nushell 配置文件的末尾（使用 `$nu.config-path` 来获取它的路径）：
+   然后在您的 Nushell 配置文件的最后（使用 `$nu.config-path` 来获取它的路径），添加以下内容：
 
    ```sh
    source ~/.cache/starship/init.nu
@@ -168,7 +167,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    #### Xonsh
 
-   在 `~/.bashhrc` 的最后，添加以下内容：
+   在 `~/.xonshrc` 的最后，添加以下内容：
 
    ```sh
    # ~/.xonshrc

@@ -2,7 +2,11 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 /// ## AWS
 ///
@@ -14,12 +18,13 @@ use std::collections::HashMap;
 ///
 /// When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 /// is read from the `AWS_VAULT` env var and the credentials expiration date
-/// is read from the `AWS_SESSION_EXPIRATION` env var.
+/// is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION`
+/// var.
 ///
 /// When using [awsu](https://github.com/kreuzwerker/awsu) the profile
 /// is read from the `AWSU_PROFILE` env var.
 ///
-/// When using [AWSume](https://awsu.me) the profile
+/// When using [`AWSume`](https://awsu.me) the profile
 /// is read from the `AWSUME_PROFILE` env var and the credentials expiration
 /// date is read from the `AWSUME_EXPIRATION` env var.
 pub struct AwsConfig<'a> {

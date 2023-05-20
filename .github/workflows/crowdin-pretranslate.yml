@@ -8,6 +8,8 @@ jobs:
   trigger_crowdin_tm:
     name: Crowdin Translation Memory Trigger
     runs-on: ubuntu-latest
+    # Prevent this workflow from running (and failing) on forks
+    if: github.repository == 'starship/starship'
     steps:
       - uses: starship/crowdin-pretranslate-action@v0.1.1
         with:

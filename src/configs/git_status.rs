@@ -1,7 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct GitStatusConfig<'a> {
     pub format: &'a str,
@@ -17,6 +21,7 @@ pub struct GitStatusConfig<'a> {
     pub modified: &'a str,
     pub staged: &'a str,
     pub untracked: &'a str,
+    pub typechanged: &'a str,
     pub ignore_submodules: bool,
     pub disabled: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -39,6 +44,7 @@ impl<'a> Default for GitStatusConfig<'a> {
             modified: "!",
             staged: "+",
             untracked: "?",
+            typechanged: "",
             ignore_submodules: false,
             disabled: false,
             windows_starship: None,

@@ -10,11 +10,11 @@ features:
     title: Prima la compatibilità
     details: Funziona sulle shell e sui sistemi operativi più comuni. Usalo ovunque!
   - 
-    title: Generato in Rust
-    details: Sfrutta la velocità e sicurezza migliori di Rust, per rendere il tuo prompt il più veloce e il più affidabile.
+    title: Scritto in Rust
+    details: Sfrutta la velocità e sicurezza di Rust, per rendere il tuo prompt il più veloce e il più affidabile.
   - 
     title: Personalizzabile
-    details: Ogni più piccolo dettaglio è personalizzabile a piacere, per rendere questo messaggio prompt minimalista o ricco delle funzionalità che desideri.
+    details: Ogni più piccolo dettaglio è personalizzabile a piacere, per rendere questo prompt minimalista o ricco di tutte le funzionalità che desideri.
 footer: Licenza ISC | Copyright © 2019-present Starship Collaboratori
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
@@ -55,11 +55,10 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
    ```sh
    brew install starship
    ```
-
-   Con [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Aggiungi lo script di inizializzazione al file di configurazione della shell:
@@ -150,14 +149,14 @@ description: Starship è il prompt minimalista, super veloce ed estremamente per
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   This will change in the future. Only Nushell v0.73+ is supported.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
