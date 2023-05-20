@@ -34,35 +34,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         if container_env_path.exists() {
             // podman and others
 
-            let image_res = read_file(container_env_path)
-                .map(|buf| {
-                    buf.lines()
-                        .find_map(|line| {
-                            if config.use_container_name && line.starts_with("name") {
-                                let (_, name) = line.split_once('=').unwrap_or(("", "podman"));
-                                Some(String::from(name.trim_matches('"')))
-                            } else {
-                                None
-                            }
-                        })
-                        .unwrap_or_else(|| {
-                            buf.lines()
-                                .find_map(|line| {
-                                    if line.starts_with("image=\"") {
-                                        let (_, val) =
-                                            line.split_once('=').unwrap_or(("", "podman"));
-                                        let (_, name) = val.rsplit_once('/').unwrap_or(("", val));
-                                        Some(String::from(name.trim_matches('"')))
-                                    } else {
-                                        None
-                                    }
-                                })
-                                .unwrap_or_else(|| "podman".into())
-                        })
-                })
-                .unwrap_or_else(|_| "podman".into());
+            let name_result = read_file(container_env_path).map(|buf| {
+                buf.lines()
+                    .find_map(|line| {
+                        let prefix = match config.use_container_name {
+                            true => "name=",
+                            false => "image=",
+                        };
+                        line.strip_prefix(prefix)
+                            .map(|value| value.trim_matches('"'))
+                            .map(|name| {
+                                // image names require extra processing
+                                if config.use_container_name {
+                                    String::from(name)
+                                } else {
+                                    let (_, processed_name) =
+                                        name.rsplit_once('/').unwrap_or(("", name));
+                                    String::from(processed_name)
+                                }
+                            })
+                    })
+                    .unwrap_or_else(|| "podman".into())
+            });
 
-            return Some(image_res);
+            return name_result.ok();
         }
 
         // WSL with systemd will set the contents of this file to "wsl"
