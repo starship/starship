@@ -165,7 +165,7 @@ mod tests {
         fs::create_dir_all(containerenv.parent().unwrap())?;
 
         let image_line = match image_name {
-            Some(image_name) => format!("image=\"{image_name}\"\n"),
+            Some(image_name) => format!("image=\"registry.fedoraproject.org/{image_name}\"\n"),
             None => String::new(),
         };
         let name_line = match container_name {
