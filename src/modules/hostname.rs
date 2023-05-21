@@ -17,9 +17,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let ssh_connection = context.get_env("SSH_CONNECTION");
     if config.ssh_only {
-        if ssh_connection.is_none() {
-            return None;
-        }
+        ssh_connection.as_ref()?;
     // check for environment variables
     } else if !(context.detect_env_vars(&config.detect_env_vars)) {
         return None;

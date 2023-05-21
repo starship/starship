@@ -11,7 +11,7 @@ pub struct HostnameConfig<'a> {
     pub ssh_only: bool,
     pub ssh_symbol: &'a str,
     pub trim_at: &'a str,
-    pub detect_env_vars: Vec<&'a str>,    
+    pub detect_env_vars: Vec<&'a str>,
     pub format: &'a str,
     pub style: &'a str,
     pub disabled: bool,

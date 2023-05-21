@@ -784,6 +784,7 @@
     },
     "hostname": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "[$ssh_symbol$hostname]($style) in ",
         "ssh_only": true,
@@ -3698,6 +3699,13 @@
         "trim_at": {
           "default": ".",
           "type": "string"
+        },
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "format": {
           "default": "[$ssh_symbol$hostname]($style) in ",
