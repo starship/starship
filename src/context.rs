@@ -235,8 +235,23 @@ impl<'a> Context<'a> {
         disabled == Some(true)
     }
 
+    /// Returns true when no negated environment variable is defined in `env_vars`
+    /// or none of the negated variables is set in the environment.
+    pub fn has_no_negative_env_vars(&self, env_vars: &'a [&'a str]) -> bool {
+        !env_vars
+            .iter()
+            .any(|env_var| env_var.starts_with('!') && self.get_env(&env_var[1..]).is_some())
+    }
+
+    /// Returns true if 'detect_env_vars' is empty,
+    /// or if at least one environment variable is set and no negated environment variable is set
     pub fn detect_env_vars(&'a self, env_vars: &'a [&'a str]) -> bool {
-        env_vars.is_empty() || (env_vars.iter().any(|e| self.get_env(e).is_some()))
+        // old
+        // env_vars.is_empty() || (env_vars.iter().any(|e| self.get_env(e).is_some()))
+        // new
+        env_vars.is_empty()
+            || ((env_vars.iter().any(|e| self.get_env(e).is_some()))
+                && self.has_no_negative_env_vars(env_vars))
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context

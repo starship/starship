@@ -8,14 +8,20 @@ use crate::formatter::StringFormatter;
 /// Creates a module with the system hostname
 ///
 /// Will display the hostname if all of the following criteria are met:
-///     - hostname.disabled is absent or false
+///     - `hostname.disabled` is absent or false
 ///     - `hostname.ssh_only` is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
+///     - `hostname.ssh_only` is false AND `hostname.detect_env_vars` is either empty or contains a defined environment variable
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
 
     let ssh_connection = context.get_env("SSH_CONNECTION");
-    if config.ssh_only && ssh_connection.is_none() {
+    if config.ssh_only {
+        if ssh_connection.is_none() {
+            return None;
+        }
+    // check for environment variables
+    } else if !(context.detect_env_vars(&config.detect_env_vars)) {
         return None;
     }
 
@@ -96,6 +102,92 @@ mod tests {
     }
 
     #[test]
+    fn ssh_only_false_with_matching_env_var() {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+                detect_env_vars = ["FORCE_HOSTNAME"]
+            })
+            .env("FORCE_HOSTNAME", "true")
+            .collect();
+
+        let expected = Some(format!("{} in ", style().paint(hostname)));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn ssh_only_false_without_matching_env_var() {
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+                detect_env_vars = ["FORCE_HOSTNAME"]
+            })
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn ssh_only_false_and_in_ssh_connection_with_matching_negated_env() {
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+                detect_env_vars = ["SSH_CONNECTION", "!TMUX"]
+            })
+            .env("SSH_CONNECTION", "something")
+            .env("TMUX", "true")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn ssh_only_false_without_matching_negated_env() {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+                detect_env_vars = ["FORCE_HOSTNAME", "!TMUX"]
+            })
+            .env("FORCE_HOSTNAME", "something")
+            .collect();
+        let expected = Some(format!("{} in ", style().paint(hostname)));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn ssh_only_false_and_in_ssh_connection_without_matching_negated_env() {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+                detect_env_vars = ["SSH_CONNECTION", "!TMUX"]
+            })
+            .env("SSH_CONNECTION", "something")
+            .collect();
+        let expected = Some(format!(
+            "{} in ",
+            style().paint("🌐 ".to_owned() + hostname.as_str())
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn ssh_only_false_no_ssh() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
@@ -107,6 +199,7 @@ mod tests {
             .collect();
         let expected = Some(format!("{} in ", style().paint(hostname)));
         println!("{}", expected.as_ref().unwrap());
+
         assert_eq!(expected, actual);
     }
 
@@ -121,6 +214,7 @@ mod tests {
             })
             .collect();
         let expected = Some(format!("{} in ", style().paint(hostname)));
+
         assert_eq!(expected, actual);
     }
 
