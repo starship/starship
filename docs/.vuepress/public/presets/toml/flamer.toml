@@ -76,7 +76,6 @@ threshold = 60
 
 [time]
 disabled = false
-#time_format = " 󰃮 %y.%m.%d 󰃶 %a 󰖉 %H.%M:%S"
 time_format = " 󰖉 %H.%M:%S"
 format = "[$time](bold bg:sapphire fg:crust)"
 
