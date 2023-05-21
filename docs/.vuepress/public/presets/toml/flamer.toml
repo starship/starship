@@ -1,0 +1,112 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """[╭─](bold surface0)[](fg:crust)$hostname\
+[](fg:crust bg:red)$directory\
+[](fg:red bg:maroon)[$git_branch $git_status](bg:maroon)\
+[](fg:maroon bg:peach)\
+$rust\
+$kotlin\
+[](fg:peach)$fill\
+[](fg:sky)$battery\
+[](fg:sky bg:sapphire)$time\
+[](fg:sapphire)
+[╰─](bold surface0)$character"""
+palette = 'catppuccin_mocha'
+add_newline = true
+continuation_prompt = "[╰── ](bold surface0)"
+
+[hostname]
+ssh_only = false
+ssh_symbol = " "
+format = "[ 󰣇  $ssh_symbol$hostname ](bold bg:crust fg:red)"
+
+[username]
+disabled = true
+style_root = "italic bg:red fg:crust"
+style_user = "bold bg:red fg:crust"
+format = "[ $user]($style)"
+show_always = true
+
+[shell]
+disabled = true
+style = "bold bg:maroon fg:crust"
+format = "[ $indicator]($style)"
+
+[directory]
+style = "bold bg:red fg:crust"
+format = "[ $path]($style)"
+truncation_length = 4
+truncation_symbol = "…"
+truncate_to_repo = false
+
+[git_branch]
+symbol = ""
+style = "bg:maroon fg:crust"
+format = "[ $symbol $branch]($style)"
+
+[git_status]
+style = "bg:maroon fg:crust"
+format = "[$all_status$ahead_behind]($style)"
+
+[rust]
+symbol = ""
+style = "bold bg:peach fg:crust"
+format = "[ $symbol ($version)]($style)"
+
+[kotlin]
+symbol = ""
+style = "bold bg:peach fg:crust"
+format = "[ $symbol ($version)]($style)"
+
+[character]
+success_symbol = '[▷](bold surface0)'
+error_symbol = '[⤬](bold red)'
+
+[battery]
+disabled = false
+full_symbol = "󰣐"
+charging_symbol = "󰗶"
+discharging_symbol = "󰋔"
+empty_symbol = "󱢠"
+unknown_symbol = "󰝙"
+format = "[$symbol $percentage](bold bg:sky fg:crust)"
+
+[[battery.display]]
+threshold = 60
+
+[time]
+disabled = false
+#time_format = " 󰃮 %y.%m.%d 󰃶 %a 󰖉 %H.%M:%S"
+time_format = " 󰖉 %H.%M:%S"
+format = "[$time](bold bg:sapphire fg:crust)"
+
+[fill]
+symbol = " "
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
