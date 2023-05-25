@@ -505,6 +505,31 @@
         }
       ]
     },
+    "flutter": {
+      "default": {
+        "check_pubspec": true,
+        "detect_extensions": [
+          "dart"
+        ],
+        "detect_files": [
+          "pubspec.yaml",
+          "pubspec.lock"
+        ],
+        "detect_folders": [
+          ".dart_tool"
+        ],
+        "disabled": false,
+        "format": "via [$symbol($version \\($channel\\) )]($style)",
+        "style": "bold blue",
+        "symbol": "🐦 ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FlutterConfig"
+        }
+      ]
+    },
     "fossil_branch": {
       "default": {
         "disabled": true,
@@ -3030,6 +3055,64 @@
         },
         "disabled": {
           "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FlutterConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version \\($channel\\) )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐦 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "dart"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "pubspec.yaml",
+            "pubspec.lock"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [
+            ".dart_tool"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "check_pubspec": {
+          "default": true,
           "type": "boolean"
         }
       },

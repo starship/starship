@@ -25,6 +25,9 @@ symbol = " "
 [elm]
 symbol = " "
 
+[flutter]
+symbol = " "
+
 [fossil_branch]
 symbol = " "
 

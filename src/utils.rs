@@ -261,6 +261,15 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::default(),
             stderr: String::default(),
         }),
+        "flutter --version" =>  Some(CommandOutput {
+            stdout: String::default(),
+            stderr: String::from(
+                "Flutter 3.11.0-1.0.pre.1 • channel beta • https://github.com/flutter/flutter.git
+                Framework • revision 74e4b092e5 (2 weeks ago) • 2023-05-10 07:08:22 -0700
+                Engine • revision 992cdb6cd4
+                Tools • Dart 3.1.0 (build 3.1.0-63.1.beta) • DevTools 2.23.1",
+            ),
+        }),
         "go version" => Some(CommandOutput {
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),

@@ -286,6 +286,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$flutter\
 $golang\
 $guix_shell\
 $haskell\
@@ -1566,6 +1567,48 @@ Produces a prompt that looks like:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
+```
+
+## Flutter
+
+The `flutter` module shows the currently installed version of [Flutter](https://flutter.dev/).
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with `.dart` extension
+- The current directory contains a `.dart_tool` directory
+- The current directory contains a `pubspec.yaml` or `pubspec.lock` file
+
+### Options
+
+| Option              | Default                                           | Description                                                               |
+| ------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version \\($channel\\) )]($style)'`| The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🐦 '`                                            | A format string representing the symbol of Dart                           |
+| `detect_extensions` | `['dart']`                                         | Which extensions should trigger this module.                              |
+| `detect_files`      | `['pubspec.yaml', 'pubspec.lock']`                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `['.dart_tool']`                                   | Which folders should trigger this module.                                 |
+| `style`             | `'bold blue'`                                      | The style for the module.                                                 |
+| `check_pubspec`     | `true`                                             | Whether the module should check the pubspec.yaml file to for a flutter dependency to be displayed.                                               |
+| `disabled`          | `false`                                            | Disables the `dart` module.                                               |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v2.8.4` | The version of `dart`                |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[dart]
+format = 'via [🔰 $version](bold red) '
 ```
 
 ## Fossil Branch
