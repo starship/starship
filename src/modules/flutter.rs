@@ -90,13 +90,13 @@ fn has_flutter_dependency(context: &Context) -> Option<()> {
             .get(0)
             .and_then(|doc| doc["dependencies"].as_hash())
             .and_then(|deps| deps.get(&flutter_key))
-            .and_then(|_| Some(())),
+            .map(|_| ()),
         Err(e) => {
             log::warn!(
                 "Error in module `flutter`: \nFailed to parse pubspec.yaml\n{}",
                 e
             );
-            return None;
+            None
         }
     }
 }
