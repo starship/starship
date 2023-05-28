@@ -7,8 +7,6 @@ use quick_xml::events::Event as QXEvent;
 use quick_xml::Reader as QXReader;
 use regex::Regex;
 use serde_json as json;
-use std::fs;
-use std::io::Read;
 
 /// Creates a module with the current package version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -223,44 +221,35 @@ fn get_sbt_version(context: &Context, config: &PackageConfig) -> Option<String> 
 }
 
 fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String> {
-    let mut file_contents = context.read_file_from_pwd("Cargo.toml")?;
+    let mut cargo_toml: toml::Table = context.read_file_from_pwd("Cargo.toml")?.parse().ok()?;
 
-    let mut cargo_toml: toml::Table = toml::from_str(&file_contents).ok()?;
     let cargo_version = cargo_toml.get("package").and_then(|p| p.get("version"));
+
     let raw_version = if let Some(v) = cargo_version.and_then(toml::Value::as_str) {
-        // regular version string
         v
-    } else if cargo_version
-        .and_then(|v| v.get("workspace"))
-        .and_then(toml::Value::as_bool)
-        .unwrap_or_default()
-    {
-        // workspace version string (`package.version.worspace = true`)
-        // need to read the Cargo.toml file from the workspace root
-        let mut version = None;
-        // discover the workspace root
-        for path in context.current_dir.ancestors().skip(1) {
-            // Assume the workspace root is the first ancestor that contains a Cargo.toml file
-            if let Ok(mut file) = fs::File::open(path.join("Cargo.toml")) {
-                file.read_to_string(&mut file_contents).ok()?;
-                cargo_toml = toml::from_str(&file_contents).ok()?;
-                // Read workspace.package.version
-                version = cargo_toml
-                    .get("workspace")?
-                    .get("package")?
-                    .get("version")?
-                    .as_str();
-                break;
+    } else if cargo_version.and_then(|v| v.get("workspace"))?.as_bool()? {
+        let mut ancestors = context
+            .current_dir
+            .ancestors()
+            .map(|a| a.join("Cargo.toml"))
+            .filter(|c| c.exists());
+
+        loop {
+            match cargo_toml
+                .get("workspace")
+                .and_then(|w| w.get("package"))
+                .and_then(|p| p.get("version"))
+                .and_then(|v| v.as_str())
+            {
+                Some(v) => break v,
+                None => {
+                    let cargo_path = ancestors.next()?;
+                    cargo_toml = std::fs::read_to_string(cargo_path).ok()?.parse().ok()?;
+                }
             }
         }
-        version?
     } else {
-        // This might be a workspace file
-        cargo_toml
-            .get("workspace")?
-            .get("package")?
-            .get("version")?
-            .as_str()?
+        return None;
     };
 
     format_version(raw_version, config.version_format)
@@ -403,6 +392,25 @@ mod tests {
 
     #[test]
     fn test_extract_cargo_version_ws() -> io::Result<()> {
+        let config_name = "Cargo.toml";
+        let config_content = toml::toml! {
+            [workspace.package]
+            version = "0.1.0"
+
+            [package]
+            name = "starship"
+            version.workspace = true
+        }
+        .to_string();
+
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(&config_content))?;
+        expect_output(&project_dir, Some("v0.1.0"), None);
+        project_dir.close()
+    }
+
+    #[test]
+    fn test_extract_cargo_version_ws_virtual() -> io::Result<()> {
         let ws_config_name = "Cargo.toml";
         let ws_config_content = toml::toml! {
             [workspace.package]
@@ -418,7 +426,7 @@ mod tests {
         .to_string();
 
         let project_dir = create_project_dir()?;
-        fs::create_dir(project_dir.path().join("member"))?;
+        std::fs::create_dir(project_dir.path().join("member"))?;
 
         fill_config(&project_dir, ws_config_name, Some(&ws_config_content))?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
@@ -437,7 +445,7 @@ mod tests {
     }
 
     #[test]
-    fn test_extract_cargo_version_ws_false() -> io::Result<()> {
+    fn test_extract_cargo_version_ws_virtual_false() -> io::Result<()> {
         let ws_config_name = "Cargo.toml";
         let ws_config_content = toml::toml! {
             [workspace.package]
@@ -453,7 +461,7 @@ mod tests {
         .to_string();
 
         let project_dir = create_project_dir()?;
-        fs::create_dir(project_dir.path().join("member"))?;
+        std::fs::create_dir(project_dir.path().join("member"))?;
 
         fill_config(&project_dir, ws_config_name, Some(&ws_config_content))?;
         fill_config(&project_dir, config_name, Some(&config_content))?;
