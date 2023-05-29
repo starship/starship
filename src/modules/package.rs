@@ -339,9 +339,9 @@ mod tests {
     use super::*;
     use crate::{test::ModuleRenderer, utils::CommandOutput};
     use nu_ansi_term::Color;
-    use std::fs::File;
     use std::io;
     use std::io::Write;
+    use std::{fs::File, path::Path};
     use tempfile::TempDir;
 
     #[test]
@@ -1414,24 +1414,28 @@ environment:
         tempfile::tempdir()
     }
 
-    fn fill_config(
-        project_dir: &TempDir,
+    fn fill_config<P: AsRef<Path>>(
+        project_dir: P,
         file_name: &str,
         contents: Option<&str>,
     ) -> io::Result<()> {
-        let mut file = File::create(project_dir.path().join(file_name))?;
+        let mut file = File::create(project_dir.as_ref().join(file_name))?;
         file.write_all(contents.unwrap_or("").as_bytes())?;
         file.sync_all()
     }
 
-    fn expect_output(project_dir: &TempDir, contains: Option<&str>, config: Option<toml::Table>) {
+    fn expect_output<P: AsRef<Path>>(
+        project_dir: P,
+        contains: Option<&str>,
+        config: Option<toml::Table>,
+    ) {
         let starship_config = config.unwrap_or(toml::toml! {
             [package]
             disabled = false
         });
 
         let actual = ModuleRenderer::new("package")
-            .path(project_dir.path())
+            .path(project_dir.as_ref())
             .config(starship_config)
             .collect();
         let text = String::from(contains.unwrap_or(""));
