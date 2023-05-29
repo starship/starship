@@ -349,6 +349,9 @@ And add the following to the end of your Nushell configuration (find it by runni
 source ~/.cache/starship/init.nu
 ```
 
+Note: the Nushell init file is both a script, a module and an overlay.
+this means `use init.nu` and `overlay use init.nu` are also valid activations for Nushell.
+
 Note: Only Nushell v0.78+ is supported
 
 </details>
