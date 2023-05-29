@@ -349,7 +349,7 @@ And add the following to the end of your Nushell configuration (find it by runni
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.73+ is supported
+Note: Only Nushell v0.78+ is supported
 
 </details>
 
