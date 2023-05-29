@@ -393,86 +393,83 @@ mod tests {
     #[test]
     fn test_extract_cargo_version_ws() -> io::Result<()> {
         let config_name = "Cargo.toml";
-        let config_content = toml::toml! {
+
+        let workspace_config_content = toml::toml! {
             [workspace.package]
             version = "0.1.0"
 
-            [package]
-            name = "starship"
-            version.workspace = true
-        }
-        .to_string();
-
-        let project_dir = create_project_dir()?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
-        expect_output(&project_dir, Some("v0.1.0"), None);
-        project_dir.close()
-    }
-
-    #[test]
-    fn test_extract_cargo_version_ws_virtual() -> io::Result<()> {
-        let ws_config_name = "Cargo.toml";
-        let ws_config_content = toml::toml! {
-            [workspace.package]
-            version = "0.1.0"
-        }
-        .to_string();
-
-        let config_name = "member/Cargo.toml";
-        let config_content = toml::toml! {
             [package]
             version.workspace = true
         }
         .to_string();
 
-        let project_dir = create_project_dir()?;
-        std::fs::create_dir(project_dir.path().join("member"))?;
+        let package_config_content = toml::toml! {
+            [package]
+            version.workspace = true
+        }
+        .to_string();
 
-        fill_config(&project_dir, ws_config_name, Some(&ws_config_content))?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        let workspace_dir = create_project_dir()?;
+        let package_dir = workspace_dir.path().join("package_name");
 
-        // Version can be read both from the workspace and the member.
-        expect_output(&project_dir, Some("v0.1.0"), None);
-        let actual = ModuleRenderer::new("package")
-            .path(project_dir.path().join("member"))
-            .collect();
-        let expected = Some(format!(
-            "is {} ",
-            Color::Fixed(208).bold().paint("📦 v0.1.0")
-        ));
-        assert_eq!(actual, expected);
-        project_dir.close()
+        std::fs::create_dir(&package_dir)?;
+
+        fill_config(&workspace_dir, config_name, Some(&workspace_config_content))?;
+        fill_config(&package_dir, config_name, Some(&package_config_content))?;
+
+        expect_output(&workspace_dir, Some("v0.1.0"), None);
+        expect_output(&package_dir, Some("v0.1.0"), None);
+        workspace_dir.close()
     }
 
     #[test]
-    fn test_extract_cargo_version_ws_virtual_false() -> io::Result<()> {
-        let ws_config_name = "Cargo.toml";
+    fn test_extract_cargo_version_ws_pkg_diff() -> io::Result<()> {
+        let config_name = "Cargo.toml";
+
         let ws_config_content = toml::toml! {
             [workspace.package]
             version = "0.1.0"
-        }
-        .to_string();
 
-        let config_name = "member/Cargo.toml";
-        let config_content = toml::toml! {
             [package]
-            version.workspace = false
+            version = "0.2.0"
         }
         .to_string();
 
-        let project_dir = create_project_dir()?;
-        std::fs::create_dir(project_dir.path().join("member"))?;
+        let ws_package_config_content = toml::toml! {
+            [package]
+            version.workspace = true
+        }
+        .to_string();
 
-        fill_config(&project_dir, ws_config_name, Some(&ws_config_content))?;
-        fill_config(&project_dir, config_name, Some(&config_content))?;
+        let non_ws_package_config_content = toml::toml! {
+            [package]
+            version = "0.3.0"
+        }
+        .to_string();
 
-        // Version can be read both from the workspace and the member.
-        let actual = ModuleRenderer::new("package")
-            .path(project_dir.path().join("member"))
-            .collect();
-        let expected = None;
-        assert_eq!(actual, expected);
-        project_dir.close()
+        let workspace_dir = create_project_dir()?;
+        let ws_package_dir = workspace_dir.path().join("ws_crate_name");
+        let non_ws_package_dir = workspace_dir.path().join("crate_name");
+
+        std::fs::create_dir(&ws_package_dir)?;
+        std::fs::create_dir(&non_ws_package_dir)?;
+
+        fill_config(&workspace_dir, "Cargo.toml", Some(&ws_config_content))?;
+        fill_config(
+            &ws_package_dir,
+            config_name,
+            Some(&ws_package_config_content),
+        )?;
+        fill_config(
+            &non_ws_package_dir,
+            config_name,
+            Some(&non_ws_package_config_content),
+        )?;
+
+        expect_output(&workspace_dir, Some("v0.2.0"), None);
+        expect_output(&ws_package_dir, Some("v0.1.0"), None);
+        expect_output(&non_ws_package_dir, Some("v0.3.0"), None);
+        workspace_dir.close()
     }
 
     #[test]
