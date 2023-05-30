@@ -165,7 +165,7 @@ A maioria dos módulos no starship permite que você configure seus estilos de e
 - `"bold fg:27"` define o texto para negrito com a cor 27 [da tabela ANSI](https://i.stack.imgur.com/KTSQa.png)
 - `"underline bg:#bf5700"` define o texto para sublinhado com o fundo laranja escuro
 - `"bold italic fg:purple"` define o texto para negrito e itálico com a cor roxa
-- `''` explicitly disables all styling
+- `"` explicitamente desabilita todos os estilos
 
 Observe que a aparência do estilo será controlada pelo emulador de terminal. Por exemplo, alguns emuladores de terminal irão clarear as cores em vez de colocar o texto em negrito, e alguns temas de cores usam os mesmos valores para as cores normais e brilhantes. Além disso, para obter texto em itálico, seu terminal deve suportar itálico.
 
@@ -204,7 +204,7 @@ Esta é a lista de opções de configuração em todo o prompt.
 | `scan_timeout`    | `30`                           | Tempo limite para escanear arquivos (em milissegundos).                                                                                                                          |
 | `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos).                                                                                                           |
 | `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                                                                                                                                    |
-| `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
+| `palette`         | `''`                           | Define qual a paleta de cores de `palettes` será usada.                                                                                                                          |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
 ### Exemplo
