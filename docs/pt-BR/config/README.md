@@ -160,11 +160,11 @@ Por exemplo:
 
 A maioria dos módulos no starship permite que você configure seus estilos de exibição. Isso é feito com uma entrada (normalmente chamada de `estilo`) que é uma string especificando a configuração. Aqui estão alguns exemplos de strings de estilo junto com o que elas fazem. Para obter detalhes sobre a sintaxe completa, consulte o [guia de configuração avançada](/advanced-config/).
 
-- `'fg:green bg:blue'` sets green text on a blue background
-- `'bg:blue fg:bright-green'` sets bright green text on a blue background
-- `'bold fg:27'` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
-- `'underline bg:#bf5700'` sets underlined text on a burnt orange background
-- `'bold italic fg:purple'` sets bold italic purple text
+- `"fg:green bg:blue"` define o texto para verde e o fundo azul
+- `"bg:blue fg:bright-green"` define o texto para verde brilhante e o fundo azul
+- `"bold fg:27"` define o texto para negrito com a cor 27 [da tabela ANSI](https://i.stack.imgur.com/KTSQa.png)
+- `"underline bg:#bf5700"` define o texto para sublinhado com o fundo laranja escuro
+- `"bold italic fg:purple"` define o texto para negrito e itálico com a cor roxa
 - `''` explicitly disables all styling
 
 Observe que a aparência do estilo será controlada pelo emulador de terminal. Por exemplo, alguns emuladores de terminal irão clarear as cores em vez de colocar o texto em negrito, e alguns temas de cores usam os mesmos valores para as cores normais e brilhantes. Além disso, para obter texto em itálico, seu terminal deve suportar itálico.
