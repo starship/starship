@@ -42,9 +42,9 @@ gix-max-perf = ["gix-features/zlib-ng", "gix/fast-sha1"]
 gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
-chrono = { version = "0.4.24", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.2.7", features = ["derive", "cargo", "unicode"] }
-clap_complete = "4.2.3"
+chrono = { version = "0.4.25", default-features = false, features = ["clock", "std", "wasmbind"] }
+clap = { version = "4.3.0", features = ["derive", "cargo", "unicode"] }
+clap_complete = "4.3.0"
 dirs-next = "2.0.0"
 dunce = "1.0.4"
 gethostname = "0.4.3"
@@ -52,12 +52,12 @@ gethostname = "0.4.3"
 gix = { version = "0.44.1", default-features = false, features = ["max-performance-safe"] }
 gix-features = { version = "0.29.0", optional = true }
 indexmap = { version = "1.9.3", features = ["serde"] }
-log = { version = "0.4.17", features = ["std"] }
+log = { version = "0.4.18", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
 # see: https://github.com/NixOS/nixpkgs/issues/160876
 notify-rust = { version = "4.8.0", optional = true }
 nu-ansi-term = "0.47.0"
-once_cell = "1.17.1"
+once_cell = "1.17.2"
 open = "4.1.0"
 # update os module config and tests when upgrading os_info
 os_info = "3.7.0"
@@ -67,21 +67,21 @@ pest_derive = "2.6.0"
 quick-xml = "0.28.2"
 rand = "0.8.5"
 rayon = "1.7.0"
-regex = { version = "1.8.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
+regex = { version = "1.8.3", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.19.0"
 semver = "1.0.17"
 serde = { version = "1.0.163", features = ["derive"] }
 serde_json = "1.0.96"
 sha1 = "0.10.5"
-shadow-rs = { version = "0.21.0", default-features = false }
+shadow-rs = { version = "0.22.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.8.0", optional = true }
 strsim = "0.10.0"
 systemstat = "=0.2.3"
 terminal_size = "0.2.6"
-toml = { version = "0.7.3", features = ["preserve_order"] }
-toml_edit = "0.19.8"
+toml = { version = "0.7.4", features = ["preserve_order"] }
+toml_edit = "0.19.10"
 unicode-segmentation = "1.10.1"
 unicode-width = "0.1.10"
 urlencoding = "2.1.2"
@@ -117,7 +117,7 @@ features = [
 nix = { version = "0.26.2", default-features = false, features = ["feature", "fs", "user"] }
 
 [build-dependencies]
-shadow-rs = { version = "0.21.0", default-features = false }
+shadow-rs = { version = "0.22.0", default-features = false }
 dunce = "1.0.4"
 
 [target.'cfg(windows)'.build-dependencies]
