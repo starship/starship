@@ -30,11 +30,33 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let is_meteor_project = context
+        .try_begin_scan()?
+        .set_folders(&[".meteor"])
+        .is_match();
+
+    let is_meteor_installed = context
+        .try_begin_scan()?
+        .set_files(&[utils::home_dir()
+            .expect("couldn't find home directory")
+            .join(".meteor")
+            .join("meteor")
+            .to_str()
+            .expect("couldn't convert meteor executable path to str")])
+        .is_match();
+
     let nodejs_version = Lazy::new(|| {
-        context
-            .exec_cmd("node", &["--version"])
-            .map(|cmd| cmd.stdout)
+        if is_meteor_project && is_meteor_installed {
+            context
+                .exec_cmd("meteor", &["node", "--version"])
+                .map(|cmd| cmd.stdout)
+        } else {
+            context
+                .exec_cmd("node", &["--version"])
+                .map(|cmd| cmd.stdout)
+        }
     });
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
