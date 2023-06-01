@@ -1881,24 +1881,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Опции
 
-| Параметр            | По умолчанию                                                                              | Описание                                                                  |
-| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | Формат модуля.                                                            |
-| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                            |
-| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                 |
-| `style`             | `'bold cyan'`                                                                             | Стиль модуля.                                                             |
-| `disabled`          | `false`                                                                                   | Отключает модуль `golang`.                                                |
+| Параметр            | По умолчанию                                                                              | Описание                                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | Формат модуля.                                                                                             |
+| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                                                               |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                                                                |
+| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
+| `style`             | `'bold cyan'`                                                                             | Стиль модуля.                                                                                              |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
 
 ### Переменные
 
-| Переменная | Пример    | Описание                             |
-| ---------- | --------- | ------------------------------------ |
-| version    | `v1.12.1` | The version of `go`                  |
-| symbol     |           | Отражает значение параметра `symbol` |
-| style\*  |           | Отражает значение параметра `style`  |
+| Переменная  | Пример    | Описание                                                                                                                                    |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | The version of `go`                                                                                                                         |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | Отражает значение параметра `symbol`                                                                                                        |
+| style\*   |           | Отражает значение параметра `style`                                                                                                         |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
@@ -1909,6 +1911,15 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2723,11 +2734,12 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Переменные
 
-| Переменная | Пример     | Описание                             |
-| ---------- | ---------- | ------------------------------------ |
-| version    | `v13.12.0` | The version of `node`                |
-| symbol     |            | Отражает значение параметра `symbol` |
-| style\*  |            | Отражает значение параметра `style`  |
+| Переменная      | Пример        | Описание                                                                                                                                                  |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |               | Отражает значение параметра `symbol`                                                                                                                      |
+| style\*       |               | Отражает значение параметра `style`                                                                                                                       |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
