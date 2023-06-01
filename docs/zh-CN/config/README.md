@@ -1881,24 +1881,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### 配置项
 
-| 选项                  | 默认值                                                                                       | 描述                                                                        |
-| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | 组件格式化模板。                                                                  |
-| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `符号`                | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                            |
-| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                 |
-| `style`             | `'bold cyan'`                                                                             | 此组件的样式。                                                                   |
-| `disabled`          | `false`                                                                                   | 禁用 `golang` 组件。                                                           |
+| 选项                  | 默认值                                                                                       | 描述                                                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | 组件格式化模板。                                                                                                   |
+| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `符号`                | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                                                               |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                                                                |
+| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
+| `style`             | `'bold cyan'`                                                                             | 此组件的样式。                                                                                                    |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
 
 ### 变量
 
-| 字段        | 示例        | 描述                  |
-| --------- | --------- | ------------------- |
-| version   | `v1.12.1` | The version of `go` |
-| 符号        |           | `symbol`对应值         |
-| style\* |           | `style`对应值          |
+| 字段          | 示例        | 描述                                                                                                                                          |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | The version of `go`                                                                                                                         |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| 符号          |           | `symbol`对应值                                                                                                                                 |
+| style\*   |           | `style`对应值                                                                                                                                  |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -1909,6 +1911,15 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2723,11 +2734,12 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### 变量
 
-| 字段        | 示例         | 描述                    |
-| --------- | ---------- | --------------------- |
-| version   | `v13.12.0` | The version of `node` |
-| 符号        |            | `symbol`对应值           |
-| style\* |            | `style`对应值            |
+| 字段              | 示例            | 描述                                                                                                                                                        |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| 符号              |               | `symbol`对应值                                                                                                                                               |
+| style\*       |               | `style`对应值                                                                                                                                                |
 
 *: 此变量只能作为样式字符串的一部分使用
 
@@ -4274,19 +4286,19 @@ shell = ['pwsh', '-Command', '-']
 # ~/.config/starship.toml
 
 [custom.foo]
-command = 'echo foo' # 显示命令输出
-detect_files = ['foo'] # 支持过滤器，但不支持通配符
+command = 'echo foo' # shows output of command
+detect_files = ['foo'] # can specify filters but wildcards are not supported
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
 [custom.time]
 command = 'time /T'
-detect_extensions = ['pst'] # 识别 *.pst 文件
+detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
 
 [custom.time-as-arg]
 command = 'time /T'
-detect_extensions = ['pst'] # 识别 *.pst 文件
+detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
