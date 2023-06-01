@@ -1881,24 +1881,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Opsi
 
-| Opsi                | Bawaan                                                                                    | Deskripsi                                                                           |
-| ------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | Format dari modul.                                                                  |
-| `version_format`    | `'v${raw}'`                                                                               | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                      |
-| `detect_extensions` | `['go']`                                                                                  | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `['Godeps']`                                                                              | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `'bold cyan'`                                                                             | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                       |
+| Opsi                | Bawaan                                                                                    | Deskripsi                                                                                                  |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | Format dari modul.                                                                                         |
+| `version_format`    | `'v${raw}'`                                                                               | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`                        |
+| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | Ekstensi mana yang sebaiknya memicu modul ini.                                                             |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | filenames mana yang sebaiknya memicu modul ini.                                                            |
+| `detect_folders`    | `['Godeps']`                                                                              | Folder mana yang sebaiknya memicul modul ini.                                                              |
+| `style`             | `'bold cyan'`                                                                             | Gaya penataan untuk modul.                                                                                 |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
 
 ### Variabel
 
-| Variabel  | Contoh    | Deskripsi                         |
-| --------- | --------- | --------------------------------- |
-| version   | `v1.12.1` | The version of `go`               |
-| symbol    |           | Menyalin nilai dari opsi `symbol` |
-| style\* |           | Menyalin nilai dari opsi `style`  |
+| Variabel    | Contoh    | Deskripsi                                                                                                                                   |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | The version of `go`                                                                                                                         |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | Menyalin nilai dari opsi `symbol`                                                                                                           |
+| style\*   |           | Menyalin nilai dari opsi `style`                                                                                                            |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
@@ -1909,6 +1911,15 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2723,11 +2734,12 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Variabel
 
-| Variabel  | Contoh     | Deskripsi                         |
-| --------- | ---------- | --------------------------------- |
-| version   | `v13.12.0` | The version of `node`             |
-| symbol    |            | Menyalin nilai dari opsi `symbol` |
-| style\* |            | Menyalin nilai dari opsi `style`  |
+| Variabel        | Contoh        | Deskripsi                                                                                                                                                 |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |               | Menyalin nilai dari opsi `symbol`                                                                                                                         |
+| style\*       |               | Menyalin nilai dari opsi `style`                                                                                                                          |
 
 *: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
