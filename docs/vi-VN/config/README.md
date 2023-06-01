@@ -1881,24 +1881,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Options
 
-| Tuỳ chọn            | Mặc định                                                                                  | Mô tả                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | Định dạng cho module.                                                     |
-| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐹 '`                                                                                    | Một format string đại diện cho biểu tượng của Go.                         |
-| `detect_extensions` | `['go']`                                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `['Godeps']`                                                                              | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `style`             | `'bold cyan'`                                                                             | Kiểu cho module.                                                          |
-| `disabled`          | `false`                                                                                   | Vô hiệu `golang` module.                                                  |
+| Tuỳ chọn            | Mặc định                                                                                  | Mô tả                                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | Định dạng cho module.                                                                                      |
+| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `symbol`            | `'🐹 '`                                                                                    | Một format string đại diện cho biểu tượng của Go.                                                          |
+| `detect_extensions` | `['go']`                                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                        |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                                                 |
+| `detect_folders`    | `['Godeps']`                                                                              | Những thư mục nào sẽ kích hoạt mô-đun này.                                                                 |
+| `style`             | `'bold cyan'`                                                                             | Kiểu cho module.                                                                                           |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
 
 ### Các biến
 
-| Biến      | Ví dụ     | Mô tả                            |
-| --------- | --------- | -------------------------------- |
-| version   | `v1.12.1` | Phiên bản của `go`               |
-| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |           | Giá trị ghi đè của `style`       |
+| Biến        | Ví dụ     | Mô tả                                                                                                                                       |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | Phiên bản của `go`                                                                                                                          |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | Giá trị ghi đè tuỳ chọn `symbol`                                                                                                            |
+| style\*   |           | Giá trị ghi đè của `style`                                                                                                                  |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1909,6 +1911,15 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2269,7 +2280,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 - Thư mục hiện tại chứa một tệp tin `.kt` hoặc một tệp tin `.kts`
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2723,11 +2734,12 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Các biến
 
-| Biến      | Ví dụ      | Mô tả                            |
-| --------- | ---------- | -------------------------------- |
-| version   | `v13.12.0` | The version of `node`            |
-| symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |            | Giá trị ghi đè của `style`       |
+| Biến            | Ví dụ         | Mô tả                                                                                                                                                     |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |               | Giá trị ghi đè tuỳ chọn `symbol`                                                                                                                          |
+| style\*       |               | Giá trị ghi đè của `style`                                                                                                                                |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
