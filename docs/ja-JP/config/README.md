@@ -1881,24 +1881,26 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ### オプション
 
-| オプション               | デフォルト                                                                                     | 説明                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | module のフォーマットです。                                      |
-| `version_format`    | `'v${raw}'`                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.         |
-| `detect_extensions` | `['go']`                                                                                  | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `['Godeps']`                                                                              | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `'bold cyan'`                                                                             | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                                   | `golang`モジュールを無効にします。                                  |
+| オプション               | デフォルト                                                                                     | 説明                                                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | module のフォーマットです。                                                                                          |
+| `version_format`    | `'v${raw}'`                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                                     |
+| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | どの拡張子がこのモジュールをアクティブにするか                                                                                    |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | どのファイル名がこのモジュールをアクティブにするか                                                                                  |
+| `detect_folders`    | `['Godeps']`                                                                              | どのフォルダーがこのモジュールをアクティブにするか                                                                                  |
+| `style`             | `'bold cyan'`                                                                             | モジュールのスタイルです。                                                                                              |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
 
 ### 変数
 
-| 変数        | 設定例       | 説明                      |
-| --------- | --------- | ----------------------- |
-| version   | `v1.12.1` | The version of `go`     |
-| symbol    |           | オプション `symbol` の値をミラーする |
-| style\* |           | オプション `style` の値をミラーする  |
+| 変数          | 設定例       | 説明                                                                                                                                          |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | The version of `go`                                                                                                                         |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | オプション `symbol` の値をミラーする                                                                                                                     |
+| style\*   |           | オプション `style` の値をミラーする                                                                                                                      |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1909,6 +1911,15 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2723,11 +2734,12 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### 変数
 
-| 変数        | 設定例        | 説明                      |
-| --------- | ---------- | ----------------------- |
-| version   | `v13.12.0` | The version of `node`   |
-| symbol    |            | オプション `symbol` の値をミラーする |
-| style\* |            | オプション `style` の値をミラーする  |
+| 変数              | 設定例           | 説明                                                                                                                                                        |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |               | オプション `symbol` の値をミラーする                                                                                                                                   |
+| style\*       |               | オプション `style` の値をミラーする                                                                                                                                    |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
