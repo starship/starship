@@ -1881,24 +1881,26 @@ El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). 
 
 ### Opciones
 
-| Opción              | Predeterminado                                                                            | Descripción                                                                             |
-| ------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | El formato del módulo.                                                                  |
-| `version_format`    | `'v${raw}'`                                                                               | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐹 '`                                                                                    | Una cadena de formato que representa el símbolo de Go.                                  |
-| `detect_extensions` | `['go']`                                                                                  | Qué extensiones deberían activar este módulo.                                           |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Qué nombres de archivo deberían activar este módulo.                                    |
-| `detect_folders`    | `['Godeps']`                                                                              | Qué carpetas deberían activar este módulo.                                              |
-| `style`             | `'bold cyan'`                                                                             | El estilo del módulo.                                                                   |
-| `disabled`          | `false`                                                                                   | Deshabilita el módulo de `golang`.                                                      |
+| Opción              | Predeterminado                                                                            | Descripción                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | El formato del módulo.                                                                                     |
+| `version_format`    | `'v${raw}'`                                                                               | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch`                    |
+| `symbol`            | `'🐹 '`                                                                                    | Una cadena de formato que representa el símbolo de Go.                                                     |
+| `detect_extensions` | `['go']`                                                                                  | Qué extensiones deberían activar este módulo.                                                              |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Qué nombres de archivo deberían activar este módulo.                                                       |
+| `detect_folders`    | `['Godeps']`                                                                              | Qué carpetas deberían activar este módulo.                                                                 |
+| `style`             | `'bold cyan'`                                                                             | El estilo del módulo.                                                                                      |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
 
 ### Variables
 
-| Variable  | Ejemplo   | Descripción                            |
-| --------- | --------- | -------------------------------------- |
-| version   | `v1.12.1` | La versión de `go`                     |
-| symbol    |           | Refleja el valor de la opción `symbol` |
-| style\* |           | Refleja el valor de la opción `style`  |
+| Variable    | Ejemplo   | Descripción                                                                                                                                 |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | La versión de `go`                                                                                                                          |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | Refleja el valor de la opción `symbol`                                                                                                      |
+| style\*   |           | Refleja el valor de la opción `style`                                                                                                       |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
@@ -1909,6 +1911,15 @@ El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). 
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2723,11 +2734,12 @@ El módulo `nodejs` muestra la versión instalada de [Node.js](https://nodejs.or
 
 ### Variables
 
-| Variable  | Ejemplo    | Descripción                            |
-| --------- | ---------- | -------------------------------------- |
-| version   | `v13.12.0` | La versión de `node`                   |
-| symbol    |            | Refleja el valor de la opción `symbol` |
-| style\* |            | Refleja el valor de la opción `style`  |
+| Variable        | Ejemplo       | Descripción                                                                                                                                               |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | La versión de `node`                                                                                                                                      |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |               | Refleja el valor de la opción `symbol`                                                                                                                    |
+| style\*       |               | Refleja el valor de la opción `style`                                                                                                                     |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
@@ -3272,7 +3284,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Solo usa el binario `python3` para obtener la versión.
+# Only use the `python3` binary to get the version.
 python_binary = 'python3'
 ```
 
@@ -3280,7 +3292,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# No se dispara con archivos con extensión py
+# Don't trigger for files with the py extension
 detect_extensions = []
 ```
 
@@ -3288,10 +3300,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Muestra la versión de python desde dentro de un entorno virtual local.
+# Display the version of python from inside a local venv.
 #
-# Ten en cuenta que esto solo funcionará cuando el venv esté dentro del proyecto y sólo
-# funcionará en el directorio que contiene el directorio venv dir pero ¿tal vez esté bien?
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3830,7 +3842,7 @@ disabled = false
 ```
 
 ```toml
-# En Windows
+# On windows
 # $HOME\.starship\config.toml
 
 [sudo]
