@@ -4,6 +4,12 @@ use crate::configs::go::GoConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
 
+use once_cell::sync::Lazy;
+use regex::Regex;
+use semver::Version;
+use semver::VersionReq;
+use std::ops::Deref;
+
 /// Creates a module with the current Go version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("golang");
@@ -19,6 +25,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
+    let golang_version =
+        Lazy::new(|| parse_go_version(&context.exec_cmd("go", &["version"])?.stdout));
+    let mod_version = Lazy::new(|| get_go_mod_version(context));
+
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
@@ -26,20 +36,35 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => {
+                    let in_mod_range =
+                        check_go_version(golang_version.as_deref(), mod_version.as_deref());
+
+                    if in_mod_range {
+                        Some(Ok(config.style))
+                    } else {
+                        Some(Ok(config.not_capable_style))
+                    }
+                }
                 _ => None,
             })
             .map(|variable| match variable {
                 "version" => {
-                    let golang_version =
-                        parse_go_version(&context.exec_cmd("go", &["version"])?.stdout)?;
+                    let go_ver = golang_version.deref().as_ref()?;
 
                     VersionFormatter::format_module_version(
                         module.get_name(),
-                        &golang_version,
+                        go_ver,
                         config.version_format,
                     )
                     .map(Ok)
+                }
+                "mod_version" => {
+                    let in_mod_range =
+                        check_go_version(golang_version.as_deref(), mod_version.as_deref());
+                    let mod_ver = mod_version.as_deref()?.to_string();
+
+                    (!in_mod_range).then_some(Ok(mod_ver))
                 }
                 _ => None,
             })
@@ -74,6 +99,32 @@ fn parse_go_version(go_stdout: &str) -> Option<String> {
     Some(version.to_string())
 }
 
+fn get_go_mod_version(context: &Context) -> Option<String> {
+    let mod_str = context.read_file_from_pwd("go.mod")?;
+    let re = Regex::new(r"(?:go\s)(\d+(\.\d+)+)").unwrap();
+
+    if let Some(cap) = re.captures(&mod_str) {
+        let mod_ver = cap.get(1)?.as_str();
+        Some(mod_ver.to_string())
+    } else {
+        None
+    }
+}
+
+fn check_go_version(go_version: Option<&str>, mod_version: Option<&str>) -> bool {
+    let (Some(go_version), Some(mod_version)) = (go_version, mod_version) else {
+        return true;
+    };
+    let Ok(r) = VersionReq::parse(mod_version) else {
+        return true;
+    };
+    let Ok(v) = Version::parse(go_version) else {
+        return true;
+    };
+
+    r.matches(&v)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -81,6 +132,7 @@ mod tests {
     use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
+    use std::io::Write;
 
     #[test]
     fn folder_without_go_files() -> io::Result<()> {
@@ -202,5 +254,54 @@ mod tests {
     fn test_format_go_version() {
         let input = "go version go1.12 darwin/amd64";
         assert_eq!(parse_go_version(input), Some("1.12".to_string()));
+    }
+
+    #[test]
+    fn show_mod_version_if_not_matching_go_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("go.mod"))?;
+        file.write_all(
+            b"package test\n\n
+            go 1.16",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("golang")
+            .path(dir.path())
+            .config(toml::toml! {
+                [golang]
+                format = "via [$symbol($version )($mod_version )]($style)"
+            })
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Red.bold().paint("🐹 v1.12.1 1.16 ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn hide_mod_version_when_it_matches_go_version() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("go.mod"))?;
+        file.write_all(
+            b"package test\n\n
+            go 1.12",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("golang")
+            .path(dir.path())
+            .config(toml::toml! {
+                [golang]
+                format = "via [$symbol($version )($mod_version )]($style)"
+            })
+            .collect();
+        let expected = Some(format!("via {}", Color::Cyan.bold().paint("🐹 v1.12.1 ")));
+
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }
