@@ -1891,7 +1891,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | `detect_folders`    | `['Godeps']`                                                                              | Những thư mục nào sẽ kích hoạt mô-đun này.                                                                 |
 | `style`             | `'bold cyan'`                                                                             | Kiểu cho module.                                                                                           |
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+| `disabled`          | `false`                                                                                   | Vô hiệu `golang` module.                                                                                   |
 
 ### Các biến
 
