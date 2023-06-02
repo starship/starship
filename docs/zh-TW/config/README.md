@@ -1891,7 +1891,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
 | `style`             | `'bold cyan'`                                                                             | 這個模組的風格。                                                                                                   |
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+| `disabled`          | `false`                                                                                   | 停用 `golang` 模組。                                                                                            |
 
 ### Variables
 
