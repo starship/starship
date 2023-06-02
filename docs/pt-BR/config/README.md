@@ -1891,7 +1891,7 @@ O módulo `golang` exibe a versão instalada atual do [Go](https://golang.org/).
 | `detect_folders`    | `['Godeps']`                                                                              | Quais pastas devem ativar este módulo.                                                                     |
 | `style`             | `'bold cyan'`                                                                             | O estilo do módulo.                                                                                        |
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+| `disabled`          | `false`                                                                                   | Desabilita o módulo `golang`.                                                                              |
 
 ### Variáveis
 
@@ -2179,7 +2179,7 @@ symbol = '🌟 '
 
 ## Jobs
 
-O módulo `jobs` exibe o número atual de jobs rodando. O módulo vai ser exibido apenas se existir jobs em segundo plano sendo executados. O módulo vai exibir o número de jobs rodando se ao menos tiver 2 jobs ou mais que o valor da configuração `number_threshold`, se existir. O módulo vai exibir um simbolo se tiver ao menos 1 job ou mais, se o valor da configuração `symbol_threshold` existir. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+O módulo `jobs` exibe o número atual de jobs rodando. O módulo vai ser exibido apenas se existir jobs em segundo plano sendo executados. O módulo vai exibir o número de jobs rodando se ao menos tiver 2 jobs ou mais que o valor da configuração `number_threshold`, se existir. O módulo vai exibir um simbolo se tiver ao menos 1 job ou mais, se o valor da configuração `symbol_threshold` existir. Você pode setar os dois valores para 0 para _sempre_ exibir o simbolo e número de jobs, mesmo que seja 0 os jobs em execução.
 
 A funcionalidade padrão é:
 
@@ -2211,7 +2211,7 @@ A opção `threshold` está obsoleta, mas se você quiser usa-la, o módulo vai 
 | `style`            | `'bold blue'`                 | O estilo do módulo.                                                       |
 | `disabled`         | `false`                       | Desabilita o módulo `jobs`.                                               |
 
-*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
+*: Esta opção está obsoleta, por favor use o `number_threshold` e `symbol_threshold` em vez disso.
 
 ### Variáveis
 
@@ -3284,7 +3284,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Use apenas o binário `python3` para obter a versão.
 python_binary = 'python3'
 ```
 
@@ -3292,7 +3292,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Não acione para arquivos com a extensão py
 detect_extensions = []
 ```
 
@@ -3300,10 +3300,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Exibe a versão do python de dentro de um venv local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Note que isso só funcionará quando o venv estiver dentro do projeto e só
+# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3842,7 +3842,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# No windows
 # $HOME\.starship\config.toml
 
 [sudo]
