@@ -4,7 +4,6 @@ use std::io::Write;
 use shadow_rs::SdResult;
 
 fn main() -> SdResult<()> {
-    shadow_rs::new().map_err(|err| err.to_string())?;
     shadow_rs::new_hook(gen_presets_hook)?;
 
     #[cfg(windows)]
