@@ -1891,7 +1891,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 | `detect_folders`    | `['Godeps']`                                                                              | どのフォルダーがこのモジュールをアクティブにするか                                                                                  |
 | `style`             | `'bold cyan'`                                                                             | モジュールのスタイルです。                                                                                              |
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+| `disabled`          | `false`                                                                                   | `golang`モジュールを無効にします。                                                                                      |
 
 ### 変数
 
