@@ -1891,7 +1891,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 | `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
 | `style`             | `'bold cyan'`                                                                             | 此组件的样式。                                                                                                    |
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+| `disabled`          | `false`                                                                                   | 禁用 `golang` 组件。                                                                                            |
 
 ### 变量
 
@@ -4286,19 +4286,19 @@ shell = ['pwsh', '-Command', '-']
 # ~/.config/starship.toml
 
 [custom.foo]
-command = 'echo foo' # shows output of command
-detect_files = ['foo'] # can specify filters but wildcards are not supported
+command = 'echo foo' # 显示命令输出
+detect_files = ['foo'] # 支持过滤器，但不支持通配符
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
 [custom.time]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # 识别 *.pst 文件
 shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
 
 [custom.time-as-arg]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # 识别 *.pst 文件
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
