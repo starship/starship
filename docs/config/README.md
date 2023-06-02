@@ -286,6 +286,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$godot\
 $golang\
 $guix_shell\
 $haskell\
@@ -2011,6 +2012,42 @@ format = 'via [🏎💨 $version](bold cyan) '
 
 [golang]
 format = 'via [$symbol($version )($mod_version )]($style)'
+```
+
+## Godot
+
+The `godot` module tells whether the current directory is in a [Godot](https://godotengine.org/) project by looking for a `project.godot` file in the current directory or any ancestor. This module can optionally display the version of a godot installation on your system.
+
+### Options
+
+| Option            | Default                              | Description                                                                |
+| ----------------- | ------------------------------------ | -------------------------------------------------------------------------- |
+| `format`          | `'via [$symbol($version )]($style)'` | The format for the module.                                                 |
+| `version_format`  | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch`. |
+| `symbol`          | `'godot '`                           | A format string representing the symbol of godot.                          |
+| `style`           | `'bold blue'`                        | The style for the module.                                                  |
+| `show_version`    | `false`                              | Whether or not to show the godot version.                                  |
+| `version_command` | `['godot', '--version']`             | Command to get godot version from.                                         |
+| `disabled`        | `false`                              | Disables the `godot` module.                                               |
+
+### Variables
+
+| Variable | Example  | Description                          |
+| -------- | -------- | ------------------------------------ |
+| version  | `v4.0.3` | The version of `godot`               |
+| symbol   |          | Mirrors the value of option `symbol` |
+| style\*  |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[godot]
+show_version = true
+version_command = ['/path/to/godot_custom', '--version']
 ```
 
 ## Guix-shell

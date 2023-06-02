@@ -61,6 +61,9 @@ format = '\[[$symbol$branch]($style)\]'
 [git_status]
 format = '([\[$all_status$ahead_behind\]]($style))'
 
+[godot]
+format = '\[[$symbol($version)]($style)\]'
+
 [golang]
 format = '\[[$symbol($version)]($style)\]'
 

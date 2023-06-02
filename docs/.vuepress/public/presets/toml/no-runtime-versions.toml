@@ -37,6 +37,9 @@ format = 'via [$symbol]($style)'
 [fennel]
 format = 'via [$symbol]($style)'
 
+[godot]
+format = 'via [$symbol]($style)'
+
 [golang]
 format = 'via [$symbol]($style)'
 

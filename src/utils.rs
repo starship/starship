@@ -265,6 +265,10 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
         }),
+        "godot --version" => Some(CommandOutput {
+            stdout: String::from("4.0.3.stable.official.5222a99f5\n"),
+            stderr: String::default(),
+        }),
         "ghc --numeric-version" => Some(CommandOutput {
             stdout: String::from("9.2.1\n"),
             stderr: String::default(),

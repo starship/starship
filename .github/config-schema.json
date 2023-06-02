@@ -630,6 +630,25 @@
         }
       ]
     },
+    "godot": {
+      "default": {
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "show_version": false,
+        "style": "bold blue",
+        "symbol": "godot ",
+        "version_command": [
+          "godot",
+          "--version"
+        ],
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/GodotConfig"
+        }
+      ]
+    },
     "golang": {
       "default": {
         "detect_extensions": [
@@ -3346,6 +3365,46 @@
             "string",
             "null"
           ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "GodotConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "godot ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "show_version": {
+          "default": false,
+          "type": "boolean"
+        },
+        "version_command": {
+          "default": [
+            "godot",
+            "--version"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
