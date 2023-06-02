@@ -1891,7 +1891,7 @@ El módulo `golang` muestra la versión instalada de [Go](https://golang.org/). 
 | `detect_folders`    | `['Godeps']`                                                                              | Qué carpetas deberían activar este módulo.                                                                 |
 | `style`             | `'bold cyan'`                                                                             | El estilo del módulo.                                                                                      |
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+| `disabled`          | `false`                                                                                   | Deshabilita el módulo de `golang`.                                                                         |
 
 ### Variables
 
@@ -2179,7 +2179,7 @@ symbol = '🌟 '
 
 ## Trabajos
 
-El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas ejecutados si hay al menos 2 tareas, o más del valor de configuración de `number_threshold`, si existe. El módulo mostrará un símbolo si hay al menos 1 tarea, o más del valor de configuración de `symbol_threshold`, si existe. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
+El módulo `jobs` muestra el número actual de tareas en ejecución. El módulo se mostrará sólo si hay tareas en segundo plano ejecutándose. El módulo mostrará el número de tareas ejecutados si hay al menos 2 tareas, o más del valor de configuración de `number_threshold`, si existe. El módulo mostrará un símbolo si hay al menos 1 tarea, o más del valor de configuración de `symbol_threshold`, si existe. Puedes establecer ambos valores a 0 para _siempre_ mostrar el símbolo y el número de tareas, incluso si hay 0 tareas en ejecución.
 
 La funcionalidad por defecto es:
 
@@ -2211,7 +2211,7 @@ La opción `threshold` está obsoleta, pero si deseas usarla, el módulo mostrar
 | `style`            | `'bold blue'`                 | El estilo del módulo.                                                              |
 | `disabled`         | `false`                       | Desactiva el módulo `jobs`.                                                        |
 
-*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
+*: Esta opción está desaprobada, por favor utiliza las opciones `number_threshold` y `symbol_threshold` en su lugar.
 
 ### Variables
 
@@ -3284,7 +3284,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Solo usa el binario `python3` para obtener la versión.
 python_binary = 'python3'
 ```
 
@@ -3292,7 +3292,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# No se dispara con archivos con extensión py
 detect_extensions = []
 ```
 
@@ -3300,10 +3300,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Muestra la versión de python desde dentro de un entorno virtual local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Ten en cuenta que esto solo funcionará cuando el venv esté dentro del proyecto y sólo
+# funcionará en el directorio que contiene el directorio venv dir pero ¿tal vez esté bien?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3842,7 +3842,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# En Windows
 # $HOME\.starship\config.toml
 
 [sudo]
