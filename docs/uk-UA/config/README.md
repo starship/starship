@@ -1891,7 +1891,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 | `detect_folders`    | `['Godeps']`                                                                              | В яких теках цей модуль має запускатись.                                                                   |
 | `style`             | `'bold cyan'`                                                                             | Стиль модуля.                                                                                              |
 | `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
-| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+| `disabled`          | `false`                                                                                   | Вимикає модуль `golang`.                                                                                   |
 
 ### Змінні
 
@@ -2229,7 +2229,7 @@ symbol = '🌟 '
 # ~/.config/starship.toml
 
 [jobs]
-symbol = '+ '
+символ = '+ '
 number_threshold = 4
 symbol_threshold = 0
 ```
@@ -2898,7 +2898,7 @@ symbol = '☁️ '
 `symbols` дозволяє визначити довільні символи для кожного типу операційної системи. Типи операційних систем не визначені вашою конфігурацією, використовують стандартну таблицю символів, дивись нижче. На цю мить усі операційні системи, що підтримуються модулем, перераховані нижче. Якщо ви бажаєте додати операційну систему, то можете створити [запит на функцію](https://github.com/starship/starship/issues/new/choose).
 
 ```toml
-# This is the default symbols table.
+# Це таблиця стандартних символів.
 [os.symbols]
 Alpaquita = "🔔 "
 Alpine = "🏔️ "
@@ -3284,7 +3284,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Використання лише двійкового файлу `python3` для отримання версії.
 python_binary = 'python3'
 ```
 
@@ -3292,7 +3292,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Не запускати файли з розширенням py
 detect_extensions = []
 ```
 
@@ -3300,10 +3300,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Показувати версію python з venv.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Зауважте, що це працюватиме лише тоді, коли venv знаходиться всередині проєкту, і він працюватиме
+# лише в теці, яка містить теку venv, якщо це нормально?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
