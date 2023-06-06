@@ -121,7 +121,7 @@ module.exports = defineConfig({
             'script',
             {
                 async: true,
-                src: 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX',
+                src: 'https://www.googletagmanager.com/gtag/js?id=G-N3M0VJ9NL6',
             },
         ],
         [
