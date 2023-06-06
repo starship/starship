@@ -353,7 +353,7 @@ module.exports = defineConfig({
         [
             "@vuepress/google-analytics",
             {
-                ga: "UA-71160903-4",
+                ga: "G-N3M0VJ9NL6",
             },
         ],
         [
