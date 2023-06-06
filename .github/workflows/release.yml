@@ -344,6 +344,8 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     continue-on-error: true
     steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
       - name: Merge | Merge Crowdin PR
         run: gh pr merge i18n_master --squash --repo=starship/starship
         env:
@@ -354,6 +356,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: merge_crowdin_pr
     steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
       - name: Trigger workflow dispatch
         run: gh workflow run publish-docs.yml
         env:
