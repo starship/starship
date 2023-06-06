@@ -55,7 +55,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
    ```sh
    brew install starship
    ```
-   With [Winget](https://github.com/microsoft/winget-cli):
+   Za pomocą [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
    winget install starship

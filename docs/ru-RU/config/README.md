@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -340,7 +341,7 @@ format = '$all$directory$character'
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -426,12 +427,13 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Опции
 
-| Переменная | По умолчанию                             | Описание                                   |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
-| `symbol`   | `'ﴃ '`                                   | The symbol used in the format.             |
-| `style`    | `'blue bold'`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| Переменная             | По умолчанию                             | Описание                                                                              |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Примеры
 
@@ -443,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -455,8 +457,17 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Батарея
@@ -467,11 +478,11 @@ style = "blue bold"
 
 | Параметр             | По умолчанию                      | Описание                                                |
 | -------------------- | --------------------------------- | ------------------------------------------------------- |
-| `full_symbol`        | `' '`                            | Символ, отображаемый при полной батарее.                |
-| `charging_symbol`    | `' '`                            | Символ, показываемый при зарядке аккумулятора.          |
-| `discharging_symbol` | `' '`                            | Символ, показываемый при разрядке аккумулятора.         |
-| `unknown_symbol`     | `' '`                            | Символ, отображаемый при неизвестном состоянии батареи. |
-| `empty_symbol`       | `' '`                            | Символ, отображаемый при пустом состоянии батареи.      |
+| `full_symbol`        | `'󰁹 '`                            | Символ, отображаемый при полной батарее.                |
+| `charging_symbol`    | `'󰂄 '`                            | Символ, показываемый при зарядке аккумулятора.          |
+| `discharging_symbol` | `'󰂃 '`                            | Символ, показываемый при разрядке аккумулятора.         |
+| `unknown_symbol`     | `'󰁽 '`                            | Символ, отображаемый при неизвестном состоянии батареи. |
+| `empty_symbol`       | `'󰂎 '`                            | Символ, отображаемый при пустом состоянии батареи.      |
 | `format`             | `'[$symbol$percentage]($style) '` | Формат модуля.                                          |
 | `display`            | [ссылка](#battery-display)        | Порог отображения и стиль для модуля.                   |
 | `disabled`           | `false`                           | Отключает модуль `battery`.                             |
@@ -1517,6 +1528,8 @@ truncation_symbol = ''
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+
 ### Опции
 
 | Параметр          | По умолчанию                                               | Описание                                                         |
@@ -1525,6 +1538,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `symbol`          | `'☁️  '`                                                   | The symbol used before displaying the current GCP profile.       |
 | `region_aliases`  | `{}`                                                       | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name. |
+| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module         |
 | `style`           | `'bold blue'`                                              | Стиль модуля.                                                    |
 | `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
@@ -1724,6 +1738,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Формат модуля.                        |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### Переменные
 
@@ -1772,6 +1787,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Стиль модуля.                                                                                               |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                         | Отключает модуль `git_status`.                                                                              |
@@ -1792,6 +1808,7 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | Отражает значение параметра `style`                                                                           |
 
 *: Эта переменная может использоваться только в качестве части строки style
@@ -1864,24 +1881,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Опции
 
-| Параметр            | По умолчанию                                                                              | Описание                                                                  |
-| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | Формат модуля.                                                            |
-| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                            |
-| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                 |
-| `style`             | `'bold cyan'`                                                                             | Стиль модуля.                                                             |
-| `disabled`          | `false`                                                                                   | Отключает модуль `golang`.                                                |
+| Параметр            | По умолчанию                                                                              | Описание                                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | Формат модуля.                                                                                             |
+| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                                                               |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                                                                |
+| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
+| `style`             | `'bold cyan'`                                                                             | Стиль модуля.                                                                                              |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Отключает модуль `golang`.                                                                                 |
 
 ### Переменные
 
-| Переменная | Пример    | Описание                             |
-| ---------- | --------- | ------------------------------------ |
-| version    | `v1.12.1` | The version of `go`                  |
-| symbol     |           | Отражает значение параметра `symbol` |
-| style\*  |           | Отражает значение параметра `style`  |
+| Переменная  | Пример    | Описание                                                                                                                                    |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | The version of `go`                                                                                                                         |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | Отражает значение параметра `symbol`                                                                                                        |
+| style\*   |           | Отражает значение параметра `style`                                                                                                         |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
@@ -1892,6 +1911,15 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2706,11 +2734,12 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Переменные
 
-| Переменная | Пример     | Описание                             |
-| ---------- | ---------- | ------------------------------------ |
-| version    | `v13.12.0` | The version of `node`                |
-| symbol     |            | Отражает значение параметра `symbol` |
-| style\*  |            | Отражает значение параметра `style`  |
+| Переменная      | Пример        | Описание                                                                                                                                                  |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |               | Отражает значение параметра `symbol`                                                                                                                      |
+| style\*       |               | Отражает значение параметра `style`                                                                                                                       |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
@@ -3565,7 +3594,7 @@ The `shell` module shows an indicator for currently used shell.
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
@@ -3638,6 +3667,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 [singularity]
 format = '[📦 \[$env\]]($style) '
+```
+
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### Опции
+
+| Параметр            | По умолчанию                         | Описание                                                                  |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Формат модуля.                                                            |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                       |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                        |
+| `detect_extensions` | `["sol"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold blue"`                        | Стиль модуля.                                                             |
+| `disabled`          | `false`                              | Disables this module.                                                     |
+
+### Переменные
+
+| Переменная | Пример   | Описание                             |
+| ---------- | -------- | ------------------------------------ |
+| version    | `v0.8.1` | The version of `solidity`            |
+| symbol     |          | Отражает значение параметра `symbol` |
+| style\*  |          | Отражает значение параметра `style`  |
+
+*: Эта переменная может использоваться только в качестве части строки style
+
+### Пример
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
 ```
 
 ## Spack
@@ -4162,7 +4229,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `описание`          | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |

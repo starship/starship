@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -263,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### 步骤 2. 设置你的终端以使用 Starship
+### 步骤 2. Set up your shell to use Starship
 
 配置你的终端来初始化 starship。 请从下面列表选择你的终端：
 

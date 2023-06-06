@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -263,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Step 2. Starshipをシェルにセットアップ
+### Step 2. Set up your shell to use Starship
 
 Starshipを初期化するためのシェルの設定。 以下のリストからお使いのシェルを選択してください。
 

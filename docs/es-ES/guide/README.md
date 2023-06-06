@@ -115,11 +115,19 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Tiếng Việt"
+      alt="Vietnamita"
  /></a>
   &nbsp;
   <a
@@ -127,7 +135,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
+      alt="Chino Mandarín"
  /></a>
   &nbsp;
   <a
@@ -135,7 +143,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
+      alt="Chino Tradicional"
  /></a>
 </p>
 
@@ -263,7 +271,7 @@ Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 
 </details>
 
-### Paso 2. Configura tu shell para usar Starship
+### Paso 2. Set up your shell to use Starship
 
 Configure su shell para inicializar starship. Selecciona el tuyo de la lista de abajo:
 

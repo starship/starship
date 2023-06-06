@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -169,7 +177,7 @@
 
 ### Pré-requisitos
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Uma [Nerd Font](https://www.nerdfonts.com/) instalada e ativa em seu terminal (por exemplo, tente a [ FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### 1º passo. Instalar o Starship
 
@@ -249,7 +257,7 @@ Ou instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Instale a ultima versão para o seu sistema usando MSI-installer a partir da [seção de lançamentos](https://github.com/starship/starship/releases/latest).
 
 Instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 
@@ -263,7 +271,7 @@ Instale o Starship usando qualquer um dos seguintes gerenciadores de pacotes:
 
 </details>
 
-### 2º passo. Configure seu shell para usar o Starship
+### 2º passo. Configure seu shell para usar Starship
 
 Configure seu shell para inicializar o starship. Selecione o seu na lista abaixo:
 
@@ -327,7 +335,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Adicione o seguinte ao final do seu arquivo env do Nushell (enconte-o rodando  `$nu.env-path` no Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -420,7 +428,7 @@ Por favor, confira esses trabalhos anteriores que ajudaram a inspirar a criaçã
 
 Apoie este projeto [tornando-se um patrocinador](https://github.com/sponsors/starship). O seu nome ou logotipo aparecerá aqui com um link para o seu site.
 
-**Supporter Tier**
+**Rank de Apoiadores**
 
 - [Appwrite](https://appwrite.io/)
 

@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -263,7 +271,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### الخطوة الثانية. قم بإعداد ال shell الخاص بك
+### الخطوة الثانية. Set up your shell to use Starship
 
 لإعداد ال starship قم بإعداد ال shell الخاص بك. اختر ما يناسبك من هذه القائمة:
 

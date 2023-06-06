@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -169,7 +177,7 @@
 
 ### Wymagania wstępne
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Czcionka [Nerd Font](https://www.nerdfonts.com/) zainstalowana i włączona w Twoim terminalu (na przykład spróbuj [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Krok 1. Zainstaluj Starship
 

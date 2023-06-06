@@ -152,9 +152,9 @@ line2
 
 例如：
 
-- `'[on](red bold)'` will print a string `on` with bold text colored red.
-- `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
+- `'[on](red bold)'` 会以红色粗体输出字符串 `on`。
+- `'[⌘ $version](bold green)'` 会以绿色粗体输出符号 `⌘` 以及字段 `version` 的内容。
+- `'[a [b](red) c](green)'` 会输出 `a b c`，其中 `b` 为红色，`a` 与 `c` 为绿色。
 
 #### 样式字符串
 
@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -340,7 +341,7 @@ format = '$all$directory$character'
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -363,7 +364,7 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | `disabled`          | `false`                                                               | 禁用 `AWS` 组件。                                                                                                |
 | `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
-### Variables
+### 变量
 
 | 字段        | 示例               | 描述                                          |
 | --------- | ---------------- | ------------------------------------------- |
@@ -373,7 +374,7 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | 符号        |                  | `symbol`对应值                                 |
 | style\* |                  | `style`对应值                                  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### Examples
 
@@ -426,12 +427,13 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### 配置项
 
-| 字段         | 默认值                                      | 描述                                         |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
-| `符号`       | `'ﴃ '`                                   | The symbol used in the format.             |
-| `style`    | `'blue bold'`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| 字段                     | 默认值                                      | 描述                                                                                    |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `符号`                   | `'󰠅 '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Examples
 
@@ -443,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -455,8 +457,17 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Battery
@@ -467,11 +478,11 @@ style = "blue bold"
 
 | 选项                   | 默认值                               | 描述               |
 | -------------------- | --------------------------------- | ---------------- |
-| `full_symbol`        | `' '`                            | 显示于电池充满时。        |
-| `charging_symbol`    | `' '`                            | 显示于正在充电时。        |
-| `discharging_symbol` | `' '`                            | 显示于电池放电时。        |
-| `unknown_symbol`     | `' '`                            | 显示于电池状态未知时       |
-| `empty_symbol`       | `' '`                            | 显示于电池状态为空时       |
+| `full_symbol`        | `'󰁹 '`                            | 显示于电池充满时。        |
+| `charging_symbol`    | `'󰂄 '`                            | 显示于正在充电时。        |
+| `discharging_symbol` | `'󰂃 '`                            | 显示于电池放电时。        |
+| `unknown_symbol`     | `'󰁽 '`                            | 显示于电池状态未知时       |
+| `empty_symbol`       | `'󰂎 '`                            | 显示于电池状态为空时       |
 | `format`             | `'[$symbol$percentage]($style) '` | 组件格式化模板。         |
 | `display`            | [见下文](#battery-display)           | 电量显示阈值和样式。       |
 | `disabled`           | `false`                           | 禁用 `battery` 组件。 |
@@ -545,7 +556,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | `style`             | `'bold blue'`                                   | 此组件的样式。                                               |
 | `disabled`          | `false`                                         | Disables the `elixir` module.                         |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                   |
 | --------- | -------- | -------------------- |
@@ -553,7 +564,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | `符号`      |          | `symbol`对应值          |
 | `style`*  |          | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -584,7 +595,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | `style`             | `'bold red'`                         | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `bun` module.                                                |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                   |
 | --------- | -------- | -------------------- |
@@ -592,7 +603,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 | 符号        |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -621,7 +632,7 @@ The `c` module shows some information about your C compiler. By default the modu
 | `style`             | `'bold 149'`                                                                | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                                                     | Disables the `c` module.                                                  |
 
-### Variables
+### 变量
 
 | 字段      | 示例     | 描述                          |
 | ------- | ------ | --------------------------- |
@@ -679,7 +690,7 @@ By default it only changes color. If you also want to change its shape take a lo
 | `vimcmd_visual_symbol`      | `'[❮](bold yellow)'` | The format string used before the text input if the shell is in vim visual mode.        |
 | `disabled`                  | `false`              | 禁用 `character` 组件。                                                                      |
 
-### Variables
+### 变量
 
 | 字段 | 示例 | 描述                                                                                                       |
 | -- | -- | -------------------------------------------------------------------------------------------------------- |
@@ -736,7 +747,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | `style`             | `'bold blue'`                          | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                | Disables the `cmake` module.                                              |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                   |
 | --------- | --------- | -------------------- |
@@ -744,7 +755,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 | 符号        |           | `symbol`对应值          |
 | style\* |           | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ## COBOL / GNUCOBOL
 
@@ -766,7 +777,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `cobol` module.                                              |
 
-### Variables
+### 变量
 
 | 字段        | 示例         | 描述                     |
 | --------- | ---------- | ---------------------- |
@@ -774,7 +785,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | 符号        |            | `symbol`对应值            |
 | style\* |            | `style`对应值             |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ## Command Duration
 
@@ -801,14 +812,14 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 | `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
 | `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                                      |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | `style`对应值                              |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -838,18 +849,18 @@ The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) e
 | `符号`                | `'🅒 '`                                 | 在环境名之前显示的符号。                                                                                                     |
 | `style`             | `'bold green'`                         | 此组件的样式。                                                                                                          |
 | `format`            | `'via [$symbol$environment]($style) '` | 组件格式化模板。                                                                                                         |
-| `ignore_base`       | `true`                                 | Ignores `base` environment when activated.                                                                       |
+| `ignore_base`       | `true`                                 | 激活时忽略 `base` 环境。                                                                                                 |
 | `disabled`          | `false`                                | 禁用 `conda` 组件。                                                                                                   |
 
-### Variables
+### 变量
 
-| 字段          | 示例           | 描述                            |
-| ----------- | ------------ | ----------------------------- |
-| environment | `astronauts` | The current conda environment |
-| 符号          |              | `symbol`对应值                   |
-| style\*   |              | `style`对应值                    |
+| 字段          | 示例           | 描述          |
+| ----------- | ------------ | ----------- |
+| environment | `astronauts` | 当前 conda 环境 |
+| 符号          |              | `symbol`对应值 |
+| style\*   |              | `style`对应值  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -873,7 +884,7 @@ The `container` module displays a symbol and container name, if inside a contain
 | `format`   | `'[$symbol \[$name\]]($style) '` | 组件格式化模板。                                  |
 | `disabled` | `false`                            | Disables the `container` module.          |
 
-### Variables
+### 变量
 
 | 字段        | 示例                  | 描述                        |
 | --------- | ------------------- | ------------------------- |
@@ -881,7 +892,7 @@ The `container` module displays a symbol and container name, if inside a contain
 | 符号        |                     | `symbol`对应值               |
 | style\* |                     | `style`对应值                |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -912,7 +923,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `crystal` module.                                            |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                       |
 | --------- | --------- | ------------------------ |
@@ -920,7 +931,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 | 符号        |           | `symbol`对应值              |
 | style\* |           | `style`对应值               |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -950,7 +961,7 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 | `disabled`          | `false`                              | Disables the `daml` module.                                               |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                    |
 | --------- | -------- | --------------------- |
@@ -958,7 +969,7 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 | 符号        |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -990,7 +1001,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | `style`             | `'bold blue'`                                     | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                           | Disables the `dart` module.                                               |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                    |
 | --------- | -------- | --------------------- |
@@ -998,7 +1009,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 | 符号        |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1028,7 +1039,7 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 | `style`             | `'green bold'`                                                          | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                                                 | Disables the `deno` module.                                               |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                    |
 | --------- | -------- | --------------------- |
@@ -1062,8 +1073,8 @@ format = 'via [🦕 $version](green bold) '
 | `format`                 | `'[$path]($style)[$read_only]($read_only_style) '`                                                                           | 组件格式化模板。                                                                                                   |
 | `style`                  | `'bold cyan'`                                                                                                                | 此组件的样式。                                                                                                    |
 | `disabled`               | `false`                                                                                                                      | 禁用 `directory` 组件。                                                                                         |
-| `read_only`              | `'🔒'`                                                                                                                        | The symbol indicating current directory is read only.                                                      |
-| `read_only_style`        | `'red'`                                                                                                                      | The style for the read only symbol.                                                                        |
+| `read_only`              | `'🔒'`                                                                                                                        | 表明当前目录只读的符号。                                                                                               |
+| `read_only_style`        | `'red'`                                                                                                                      | 只读符号的样式。                                                                                                   |
 | `truncation_symbol`      | `''`                                                                                                                         | The symbol to prefix to truncated paths. eg: '…/'                                                          |
 | `before_repo_root_style` |                                                                                                                              | The style for the path segment above the root of the git repo. The default value is equivalent to `style`. |
 | `repo_root_style`        |                                                                                                                              | The style for the root of the git repo. The default value is equivalent to `style`.                        |
@@ -1092,14 +1103,14 @@ format = 'via [🦕 $version](green bold) '
 
 </details>
 
-### Variables
+### 变量
 
 | 字段        | 示例                    | 描述                         |
 | --------- | --------------------- | -------------------------- |
 | path      | `'D:/Projects'`       | The current directory path |
 | style\* | `'black bold dimmed'` | `style`对应值                 |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 <details>
 <summary>The git repos have additional variables.</summary>
@@ -1143,7 +1154,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | `style`             | `'blue bold'`                                                 | 此组件的样式。                                                                           |
 | `disabled`          | `false`                                                       | Disables the `docker_context` module.                                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例             | 描述                         |
 | --------- | -------------- | -------------------------- |
@@ -1151,7 +1162,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 | 符号        |                | `symbol`对应值                |
 | style\* |                | `style`对应值                 |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1197,7 +1208,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | `style`             | `'bold blue'`                                                                                           | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                                                                                 | 禁用 `dotnet` 组件。                                                           |
 
-### Variables
+### 变量
 
 | 字段        | 示例               | 描述                                                                 |
 | --------- | ---------------- | ------------------------------------------------------------------ |
@@ -1206,7 +1217,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 | 符号        |                  | `symbol`对应值                                                        |
 | style\* |                  | `style`对应值                                                         |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1238,7 +1249,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | `style`             | `'bold purple'`                                             | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                                     | Disables the `elixir` module.                                             |
 
-### Variables
+### 变量
 
 | 字段          | 示例      | 描述                          |
 | ----------- | ------- | --------------------------- |
@@ -1247,7 +1258,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 | 符号          |         | `symbol`对应值                 |
 | style\*   |         | `style`对应值                  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1281,7 +1292,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | `style`             | `'cyan bold'`                                      | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                            | Disables the `elm` module.                                                |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                   |
 | --------- | --------- | -------------------- |
@@ -1289,7 +1300,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 | 符号        |           | `symbol`对应值          |
 | style\* |           | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1339,7 +1350,7 @@ default = 'unknown user'
 | `描述`       | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`. |
 | `disabled` | `false`                        | 禁用 `env_var` 组件。                                                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例                                          | 描述                                         |
 | --------- | ------------------------------------------- | ------------------------------------------ |
@@ -1347,7 +1358,7 @@ default = 'unknown user'
 | 符号        |                                             | `symbol`对应值                                |
 | style\* | `black bold dimmed`                         | `style`对应值                                 |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1391,7 +1402,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `disabled`          | `false`                              | Disables the `erlang` module.                                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                      |
 | --------- | --------- | ----------------------- |
@@ -1399,7 +1410,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 | 符号        |           | `symbol`对应值             |
 | style\* |           | `style`对应值              |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1429,7 +1440,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                      |
 | --------- | -------- | ----------------------- |
@@ -1437,7 +1448,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | 符号        |          | `symbol`对应值             |
 | style\* |          | `style`对应值              |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1492,7 +1503,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | `truncation_symbol` | `'…'`                            | 此字段的内容用来表示分支名称被截断。 You can use `''` for no symbol.                                 |
 | `disabled`          | `true`                           | Disables the `fossil_branch` module.                                               |
 
-### Variables
+### 变量
 
 | 字段        | 示例      | 描述                       |
 | --------- | ------- | ------------------------ |
@@ -1500,7 +1511,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 | 符号        |         | `symbol`对应值              |
 | style\* |         | `style`对应值               |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1517,6 +1528,8 @@ truncation_symbol = ''
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+
 ### 配置项
 
 | 选项                | 默认值                                                        | 描述                                                               |
@@ -1525,10 +1538,11 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | `符号`              | `'☁️  '`                                                   | The symbol used before displaying the current GCP profile.       |
 | `region_aliases`  | `{}`                                                       | Table of region aliases to display in addition to the GCP name.  |
 | `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name. |
+| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module         |
 | `style`           | `'bold blue'`                                              | 此组件的样式。                                                          |
 | `disabled`        | `false`                                                    | Disables the `gcloud` module.                                    |
 
-### Variables
+### 变量
 
 | 字段        | 示例            | 描述                                                                 |
 | --------- | ------------- | ------------------------------------------------------------------ |
@@ -1540,7 +1554,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 | 符号        |               | `symbol`对应值                                                        |
 | style\* |               | `style`对应值                                                         |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### Examples
 
@@ -1604,7 +1618,7 @@ very-long-project-name = 'vlpn'
 | `ignore_branches`    | `[]`                                              | A list of names to avoid displaying. Useful for 'master' or 'main'.                  |
 | `disabled`           | `false`                                           | 禁用 `git_branch` 组件。                                                                  |
 
-### Variables
+### 变量
 
 | 字段            | 示例       | 描述                                                                                                     |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
@@ -1614,7 +1628,7 @@ very-long-project-name = 'vlpn'
 | 符号            |          | `symbol`对应值                                                                                            |
 | style\*     |          | `style`对应值                                                                                             |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1645,7 +1659,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | `tag_symbol`         | `' 🏷 '`                        | Tag symbol prefixing the info shown                                                  |
 | `disabled`           | `false`                        | 禁用 `git_commit` 组件。                                                                  |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                                           |
 | --------- | --------- | -------------------------------------------- |
@@ -1653,7 +1667,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 | tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
 | style\* |           | `style`对应值                                   |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1684,7 +1698,7 @@ tag_symbol = '🔖 '
 | `format`       | `'\([$state( $progress_current/$progress_total)]($style)\) '` | 组件格式化模板。                                                                                |
 | `disabled`     | `false`                                                         | 禁用 `git_state` 组件。                                                                      |
 
-### Variables
+### 变量
 
 | 字段               | 示例         | 描述                             |
 | ---------------- | ---------- | ------------------------------ |
@@ -1693,7 +1707,7 @@ tag_symbol = '🔖 '
 | progress_total   | `2`        | The total operation progress   |
 | style\*        |            | `style`对应值                     |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1724,8 +1738,9 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | 组件格式化模板。                              |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `忽略子模块`              | `false`                                                      | 忽略子模块的更改                              |
 
-### Variables
+### 变量
 
 | 字段                | 示例  | 描述                                          |
 | ----------------- | --- | ------------------------------------------- |
@@ -1734,7 +1749,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | added_style\*   |     | Mirrors the value of option `added_style`   |
 | deleted_style\* |     | Mirrors the value of option `deleted_style` |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1758,26 +1773,27 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 ### 配置项
 
-| 选项                  | 默认值                                             | 描述                                                                                                          |
-| ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
-| `conflicted`        | `'='`                                           | 这个分支有合并冲突。                                                                                                  |
-| `ahead`             | `'⇡'`                                           | The format of `ahead`                                                                                       |
-| `behind`            | `'⇣'`                                           | The format of `behind`                                                                                      |
-| `diverged`          | `'⇕'`                                           | The format of `diverged`                                                                                    |
-| `up_to_date`        | `''`                                            | The format of `up_to_date`                                                                                  |
-| `untracked`         | `'?'`                                           | The format of `untracked`                                                                                   |
-| `stashed`           | `'$'`                                           | The format of `stashed`                                                                                     |
-| `modified`          | `'!'`                                           | The format of `modified`                                                                                    |
-| `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
-| `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
-| `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
-| `style`             | `'bold red'`                                    | 此组件的样式。                                                                                                     |
-| `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
-| `disabled`          | `false`                                         | 禁用 `git_status` 组件。                                                                                         |
-| `windows_starship`  |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
+| 选项                 | 默认值                                             | 描述                                                                                                          |
+| ------------------ | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `format`           | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `conflicted`       | `'='`                                           | 这个分支有合并冲突。                                                                                                  |
+| `ahead`            | `'⇡'`                                           | The format of `ahead`                                                                                       |
+| `behind`           | `'⇣'`                                           | The format of `behind`                                                                                      |
+| `diverged`         | `'⇕'`                                           | The format of `diverged`                                                                                    |
+| `up_to_date`       | `''`                                            | The format of `up_to_date`                                                                                  |
+| `untracked`        | `'?'`                                           | The format of `untracked`                                                                                   |
+| `stashed`          | `'$'`                                           | The format of `stashed`                                                                                     |
+| `modified`         | `'!'`                                           | The format of `modified`                                                                                    |
+| `staged`           | `'+'`                                           | The format of `staged`                                                                                      |
+| `renamed`          | `'»'`                                           | The format of `renamed`                                                                                     |
+| `deleted`          | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `typechanged`      | `""`                                            | The format of `typechange`                                                                                  |
+| `style`            | `'bold red'`                                    | 此组件的样式。                                                                                                     |
+| `忽略子模块`            | `false`                                         | 忽略子模块的更改.                                                                                                   |
+| `disabled`         | `false`                                         | 禁用 `git_status` 组件。                                                                                         |
+| `windows_starship` |                                                 | Use this (Linux) path to a Windows Starship executable to render `git_status` when on Windows paths in WSL. |
 
-### Variables
+### 变量
 
 The following variables can be used in `format`:
 
@@ -1792,9 +1808,10 @@ The following variables can be used in `format`:
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | `style`对应值                                                                                                    |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 The following variables can be used in `diverged`:
 
@@ -1864,26 +1881,28 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### 配置项
 
-| 选项                  | 默认值                                                                                       | 描述                                                                        |
-| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | 组件格式化模板。                                                                  |
-| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `符号`                | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                            |
-| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                              |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                               |
-| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                 |
-| `style`             | `'bold cyan'`                                                                             | 此组件的样式。                                                                   |
-| `disabled`          | `false`                                                                                   | 禁用 `golang` 组件。                                                           |
+| 选项                  | 默认值                                                                                       | 描述                                                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | 组件格式化模板。                                                                                                   |
+| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `符号`                | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | Which extensions should trigger this module.                                                               |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Which filenames should trigger this module.                                                                |
+| `detect_folders`    | `['Godeps']`                                                                              | Which folders should trigger this module.                                                                  |
+| `style`             | `'bold cyan'`                                                                             | 此组件的样式。                                                                                                    |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | 禁用 `golang` 组件。                                                                                            |
 
-### Variables
+### 变量
 
-| 字段        | 示例        | 描述                  |
-| --------- | --------- | ------------------- |
-| version   | `v1.12.1` | The version of `go` |
-| 符号        |           | `symbol`对应值         |
-| style\* |           | `style`对应值          |
+| 字段          | 示例        | 描述                                                                                                                                          |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | The version of `go`                                                                                                                         |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| 符号          |           | `symbol`对应值                                                                                                                                 |
+| style\*   |           | `style`对应值                                                                                                                                  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1892,6 +1911,15 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -1907,14 +1935,14 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | `style`    | `"yellow bold"`            | 此组件的样式。                                                |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
-### Variables
+### 变量
 
 | 字段        | 示例 | 描述          |
 | --------- | -- | ----------- |
 | 符号        |    | `symbol`对应值 |
 | style\* |    | `style`对应值  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -1951,7 +1979,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | `disabled`          | `false`                              | Disables the `gradle` module.                                             |
 | `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                     |
 
-### Variables
+### 变量
 
 | 字段      | 示例       | 描述                      |
 | ------- | -------- | ----------------------- |
@@ -1959,7 +1987,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | 符号      |          | `symbol`对应值             |
 | style*  |          | `style`对应值              |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ## Haskell
 
@@ -1982,7 +2010,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`             | `'bold purple'`                      | 此组件的样式。                                            |
 | `disabled`          | `false`                              | 禁用 `haskell` 组件。                                   |
 
-### Variables
+### 变量
 
 | 字段             | 示例          | 描述                                                                                      |
 | -------------- | ----------- | --------------------------------------------------------------------------------------- |
@@ -1992,7 +2020,7 @@ By default the module will be shown if any of the following conditions are met:
 | 符号             |             | `symbol`对应值                                                                             |
 | style\*      |             | `style`对应值                                                                              |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ## Haxe
 
@@ -2015,7 +2043,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | `style`             | `"bold fg:202"`                                                                                 | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                               |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                    |
 | --------- | -------- | --------------------- |
@@ -2023,7 +2051,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 | 符号        |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2054,7 +2082,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | `style`             | `'bold white'`                       | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `helm` module.                                               |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                    |
 | --------- | -------- | --------------------- |
@@ -2062,7 +2090,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 | 符号        |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2088,7 +2116,7 @@ format = 'via [⎈ $version](bold white) '
 | `style`      | `'bold dimmed green'`                  | 此组件的样式。                                                                                               |
 | `disabled`   | `false`                                | 禁用 `hostname` 组件。                                                                                     |
 
-### Variables
+### 变量
 
 | 字段         | 示例         | 描述                                                    |
 | ---------- | ---------- | ----------------------------------------------------- |
@@ -2096,7 +2124,7 @@ format = 'via [⎈ $version](bold white) '
 | style\*  |            | `style`对应值                                            |
 | ssh_symbol | `'🌏 '`     | The symbol to represent when connected to SSH session |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2130,7 +2158,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | `style`             | `'red dimmed'`                                                                                                        | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                                                                                               | 禁用 `java` 组件。                                                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例    | 描述                    |
 | --------- | ----- | --------------------- |
@@ -2138,7 +2166,7 @@ The `java` module shows the currently installed version of [Java](https://www.or
 | 符号        |       | `symbol`对应值           |
 | style\* |       | `style`对应值            |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2185,7 +2213,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 *: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
-### Variables
+### 变量
 
 | 字段        | 示例  | 描述                 |
 | --------- | --- | ------------------ |
@@ -2193,7 +2221,7 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 | 符号        |     | `symbol`对应值        |
 | style\* |     | `style`对应值         |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2227,7 +2255,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | `style`             | `'bold purple'`                      | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `julia` module.                                              |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                     |
 | --------- | -------- | ---------------------- |
@@ -2235,7 +2263,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 | 符号        |          | `symbol`对应值            |
 | style\* |          | `style`对应值             |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2266,7 +2294,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | `kotlin_binary`     | `'kotlin'`                           | Configures the kotlin binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `kotlin` module.                                                 |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                      |
 | --------- | --------- | ----------------------- |
@@ -2274,7 +2302,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 | 符号        |           | `symbol`对应值             |
 | style\* |           | `style`对应值              |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2319,7 +2347,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | `detect_folders`    | `[]`                                                 | Which folders should trigger this modules.                            |
 | `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
-### Variables
+### 变量
 
 | 字段        | 示例                   | 描述                                       |
 | --------- | -------------------- | ---------------------------------------- |
@@ -2330,7 +2358,7 @@ When the module is enabled it will always be active, unless any of `detect_exten
 | 符号        |                      | `symbol`对应值                              |
 | style\* |                      | `style`对应值                               |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2412,14 +2440,14 @@ The `localip` module shows the IPv4 address of the primary network interface.
 | `style`    | `'bold yellow'`           | 此组件的样式。                                                |
 | `disabled` | `true`                    | Disables the `localip` module.                         |
 
-### Variables
+### 变量
 
 | 字段        | 示例           | 描述                                |
 | --------- | ------------ | --------------------------------- |
 | localipv4 | 192.168.1.13 | Contains the primary IPv4 address |
 | style\* |              | `style`对应值                        |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2454,7 +2482,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | `lua_binary`        | `'lua'`                              | Configures the lua binary that Starship executes when getting the version. |
 | `disabled`          | `false`                              | Disables the `lua` module.                                                 |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                   |
 | --------- | -------- | -------------------- |
@@ -2462,7 +2490,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 | 符号        |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2495,7 +2523,7 @@ format = 'via [🌕 $version](bold blue) '
 | `style`     | `'bold dimmed white'`                           | 此组件的样式。                |
 | `disabled`  | `true`                                          | 禁用 `memory_usage` 组件。  |
 
-### Variables
+### 变量
 
 | 字段               | 示例            | 描述                                                                 |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
@@ -2537,7 +2565,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | `style`             | `'blue bold'`                      | 此组件的样式。                                                                                   |
 | `disabled`          | `false`                            | Disables the `meson` module.                                                              |
 
-### Variables
+### 变量
 
 | 字段        | 示例         | 描述                             |
 | --------- | ---------- | ------------------------------ |
@@ -2545,7 +2573,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 | 符号        | `🐏`        | `symbol`对应值                    |
 | style\* |            | `style`对应值                     |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2574,7 +2602,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | `truncation_symbol` | `'…'`                                     | 此字段的内容用来表示分支名称被截断。                                    |
 | `disabled`          | `true`                                    | 禁用 `hg_branch` 组件。                                    |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                          |
 | --------- | --------- | --------------------------- |
@@ -2583,7 +2611,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 | 符号        |           | `symbol`对应值                 |
 | style\* |           | `style`对应值                  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2618,7 +2646,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | `style`             | `'bold yellow'`                      | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `nim` module.                                                |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                    |
 | --------- | -------- | --------------------- |
@@ -2626,7 +2654,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 | 符号        |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2655,7 +2683,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | `disabled`    | `false`                                        | 禁用 `nix_shell` 组件。                                                    |
 | `heuristic`   | `false`                                        | Attempts to detect new `nix shell`-style shells with a heuristic.     |
 
-### Variables
+### 变量
 
 | 字段        | 示例      | 描述                         |
 | --------- | ------- | -------------------------- |
@@ -2664,7 +2692,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 | 符号        |         | `symbol`对应值                |
 | style\* |         | `style`对应值                 |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2704,15 +2732,16 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | `disabled`          | `false`                                    | 禁用 `nodejs` 组件。                                                                                       |
 | `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
 
-### Variables
+### 变量
 
-| 字段        | 示例         | 描述                    |
-| --------- | ---------- | --------------------- |
-| version   | `v13.12.0` | The version of `node` |
-| 符号        |            | `symbol`对应值           |
-| style\* |            | `style`对应值            |
+| 字段              | 示例            | 描述                                                                                                                                                        |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| 符号              |               | `symbol`对应值                                                                                                                                               |
+| style\*       |               | `style`对应值                                                                                                                                                |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2749,7 +2778,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | `style`                   | `'bold yellow'`                                                            | 此组件的样式。                                                                   |
 | `disabled`                | `false`                                                                    | Disables the `ocaml` module.                                              |
 
-### Variables
+### 变量
 
 | 字段               | 示例           | 描述                                                                |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
@@ -2759,7 +2788,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 | 符号               |              | `symbol`对应值                                                       |
 | style\*        |              | `style`对应值                                                        |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2787,7 +2816,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | `style`             | `'bold blue'`                        | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `opa` module.                                                |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                   |
 | --------- | --------- | -------------------- |
@@ -2795,7 +2824,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 | 符号        |           | `symbol`对应值          |
 | style\* |           | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2819,7 +2848,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | `style`    | `'bold yellow'`                                 | 此组件的样式。                                                        |
 | `disabled` | `false`                                         | Disables the `openstack` module.                               |
 
-### Variables
+### 变量
 
 | 字段        | 示例     | 描述                            |
 | --------- | ------ | ----------------------------- |
@@ -2828,7 +2857,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | 符号        |        | `symbol`对应值                   |
 | style\* |        | `style`对应值                    |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2914,7 +2943,7 @@ Unknown = "❓ "
 Windows = "🪟 "
 ```
 
-### Variables
+### 变量
 
 | 字段        | 示例           | 描述                                                                 |
 | --------- | ------------ | ------------------------------------------------------------------ |
@@ -2926,7 +2955,7 @@ Windows = "🪟 "
 | version   |              | The current operating system version, if applicable                |
 | style\* |              | `style`对应值                                                         |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -2978,7 +3007,7 @@ Arch = "Arch is the best! "
 | `display_private` | `false`                           | Enable displaying version for packages marked as private.                 |
 | `disabled`        | `false`                           | 禁用 `package` 组件。                                                          |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                          |
 | --------- | -------- | --------------------------- |
@@ -2986,7 +3015,7 @@ Arch = "Arch is the best! "
 | 符号        |          | `symbol`对应值                 |
 | style\* |          | `style`对应值                  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3020,7 +3049,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 | `style`             | `'bold 149'`                                                                                             | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                                                                                  | Disables the `perl` module.                                               |
 
-### Variables
+### 变量
 
 | 字段        | 示例        | 描述                    |
 | --------- | --------- | --------------------- |
@@ -3058,7 +3087,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | `style`             | `'147 bold'`                         | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | 禁用 `php` 组件。                                                              |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                   |
 | --------- | -------- | -------------------- |
@@ -3066,7 +3095,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 | 符号        |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3118,7 +3147,7 @@ By default the module will be shown if any of the following conditions are met:
 | `search_upwards` | `true`                                       | Enable discovery of pulumi config files in parent directories.            |
 | `disabled`       | `false`                                      | Disables the `pulumi` module.                                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例         | 描述                          |
 | --------- | ---------- | --------------------------- |
@@ -3128,7 +3157,7 @@ By default the module will be shown if any of the following conditions are met:
 | 符号        |            | `symbol`对应值                 |
 | style\* |            | `style`对应值                  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3170,7 +3199,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | `style`             | `'bold white'`                       | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `purescript` module.                                         |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                          |
 | --------- | -------- | --------------------------- |
@@ -3178,7 +3207,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 | 符号        |          | `symbol`对应值                 |
 | style\* |          | `style`对应值                  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3231,7 +3260,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 :::
 
-### Variables
+### 变量
 
 | 字段           | 示例              | 描述                                         |
 | ------------ | --------------- | ------------------------------------------ |
@@ -3303,7 +3332,7 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 | `detect_folders`    | `['.Rproj.user']`                    | Which folders should trigger this module                                  |
 | `disabled`          | `false`                              | Disables the `r` module.                                                  |
 
-### Variables
+### 变量
 
 | 字段      | 示例            | 描述                 |
 | ------- | ------------- | ------------------ |
@@ -3340,7 +3369,7 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 | `style`             | `'bold 149'`                                     | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                          | Disables the `raku` module.                                               |
 
-### Variables
+### 变量
 
 | 字段         | 示例     | 描述                                   |
 | ---------- | ------ | ------------------------------------ |
@@ -3377,7 +3406,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | `style`             | `'red bold'`                         | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `red` module.                                                |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                   |
 | --------- | -------- | -------------------- |
@@ -3385,7 +3414,7 @@ By default the `red` module shows the currently installed version of [Red](https
 | 符号        |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3421,7 +3450,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | `style`             | `'bold red'`                         | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | 禁用 `ruby` 组件。                                                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                    |
 | --------- | -------- | --------------------- |
@@ -3429,7 +3458,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 | 符号        |          | `symbol`对应值           |
 | style\* |          | `style`对应值            |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3460,7 +3489,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | `style`             | `'bold red'`                         | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | 禁用 `rust` 组件。                                                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例                | 描述                                           |
 | --------- | ----------------- | -------------------------------------------- |
@@ -3470,7 +3499,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 | 符号        |                   | `symbol`对应值                                  |
 | style\* |                   | `style`对应值                                   |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3502,7 +3531,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | `style`             | `'red dimmed'`                           | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                  | Disables the `scala` module.                                              |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                     |
 | --------- | -------- | ---------------------- |
@@ -3510,7 +3539,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 | 符号        |          | `symbol`对应值            |
 | style\* |          | `style`对应值             |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3550,14 +3579,14 @@ The `shell` module shows an indicator for currently used shell.
 | `style`                | `'white bold'`            | 此组件的样式。                                                      |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
-### Variables
+### 变量
 
 | 字段        | 默认值 | 描述                                                         |
 | --------- | --- | ---------------------------------------------------------- |
 | indicator |     | Mirrors the value of `indicator` for currently used shell. |
 | style\* |     | `style`对应值.                                                |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### Examples
 
@@ -3565,7 +3594,7 @@ The `shell` module shows an indicator for currently used shell.
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
@@ -3587,7 +3616,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | `style`     | `'bold yellow'`              | 此组件的样式。                                                       |
 | `disabled`  | `true`                       | Disables the `shlvl` module.                                  |
 
-### Variables
+### 变量
 
 | 字段        | 示例  | 描述                           |
 | --------- | --- | ---------------------------- |
@@ -3595,7 +3624,7 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 | 符号        |     | `symbol`对应值                  |
 | style\* |     | `style`对应值                   |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3621,7 +3650,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | `style`    | `'bold dimmed blue'`             | 此组件的样式。                                          |
 | `disabled` | `false`                          | Disables the `singularity` module.               |
 
-### Variables
+### 变量
 
 | 字段        | 示例           | 描述                            |
 | --------- | ------------ | ----------------------------- |
@@ -3629,7 +3658,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 | 符号        |              | `symbol`对应值                   |
 | style\* |              | `style`对应值                    |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3638,6 +3667,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 [singularity]
 format = '[📦 \[$env\]]($style) '
+```
+
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | 组件格式化模板。                                                                  |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `符号`                | `"S "`                               | A format string representing the symbol of Solidity                       |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                        |
+| `detect_extensions` | `["sol"]`                            | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `style`             | `"bold blue"`                        | 此组件的样式。                                                                   |
+| `disabled`          | `false`                              | Disables this module.                                                     |
+
+### 变量
+
+| 字段        | 示例       | 描述                        |
+| --------- | -------- | ------------------------- |
+| version   | `v0.8.1` | The version of `solidity` |
+| 符号        |          | `symbol`对应值               |
+| style\* |          | `style`对应值                |
+
+*: 此变量只能作为样式字符串的一部分使用
+
+### 示例
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
 ```
 
 ## Spack
@@ -3654,7 +3721,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 | `format`            | `'via [$symbol$environment]($style) '` | 组件格式化模板。                                                                                                              |
 | `disabled`          | `false`                                | Disables the `spack` module.                                                                                          |
 
-### Variables
+### 变量
 
 | 字段          | 示例           | 描述                            |
 | ----------- | ------------ | ----------------------------- |
@@ -3662,7 +3729,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 | 符号          |              | `symbol`对应值                   |
 | style\*   |              | `style`对应值                    |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3703,7 +3770,7 @@ The `status` module displays the exit code of the previous command. If $success_
 | `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
 | `disabled`                  | `true`                                                                             | Disables the `status` module.                                         |
 
-### Variables
+### 变量
 
 | 字段             | 示例      | 描述                                                                                         |
 | -------------- | ------- | ------------------------------------------------------------------------------------------ |
@@ -3718,7 +3785,7 @@ The `status` module displays the exit code of the previous command. If $success_
 | 符号             |         | `symbol`对应值                                                                                |
 | style\*      |         | `style`对应值                                                                                 |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3754,14 +3821,14 @@ The `sudo` module displays if sudo credentials are currently cached. The module 
 | `allow_windows` | `false`                  | Since windows has no default sudo, default is disabled. |
 | `disabled`      | `true`                   | Disables the `sudo` module.                             |
 
-### Variables
+### 变量
 
 | 字段        | 示例 | 描述          |
 | --------- | -- | ----------- |
 | 符号        |    | `symbol`对应值 |
 | style\* |    | `style`对应值  |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3803,7 +3870,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | `style`             | `'bold 202'`                         | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `swift` module.                                              |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                     |
 | --------- | -------- | ---------------------- |
@@ -3811,7 +3878,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 | 符号        |          | `symbol`对应值            |
 | style\* |          | `style`对应值             |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3850,7 +3917,7 @@ By default the module will be shown if any of the following conditions are met:
 | `style`             | `'bold 105'`                         | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | 禁用 `terraform` 组件。                                                        |
 
-### Variables
+### 变量
 
 | 字段        | 示例         | 描述                              |
 | --------- | ---------- | ------------------------------- |
@@ -3859,7 +3926,7 @@ By default the module will be shown if any of the following conditions are met:
 | 符号        |            | `symbol`对应值                     |
 | style\* |            | `style`对应值                      |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3905,14 +3972,14 @@ format = '[🏎💨 $workspace]($style) '
 
 If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
-### Variables
+### 变量
 
 | 字段        | 示例         | 描述                |
 | --------- | ---------- | ----------------- |
 | time      | `13:08:10` | The current time. |
 | style\* |            | `style`对应值        |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -3952,7 +4019,7 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | `show_always` | `false`                 | 总是显示 `username` 组件。                         |
 | `disabled`    | `false`                 | 禁用 `username` 组件。                           |
 
-### Variables
+### 变量
 
 | 字段      | 示例           | 描述                                                                                          |
 | ------- | ------------ | ------------------------------------------------------------------------------------------- |
@@ -3991,7 +4058,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | `style`             | `'cyan bold'`                        | 此组件的样式。                                                                   |
 | `disabled`          | `false`                              | Disables the `vagrant` module.                                            |
 
-### Variables
+### 变量
 
 | 字段        | 示例               | 描述                       |
 | --------- | ---------------- | ------------------------ |
@@ -3999,7 +4066,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 | 符号        |                  | `symbol`对应值              |
 | style\* |                  | `style`对应值               |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -4030,7 +4097,7 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 | `style`             | `'blue bold'`                                | 此组件的样式。                                                                   |
 | `disabled`          | `false`                                      | Disables the `vlang` module.                                              |
 
-### Variables
+### 变量
 
 | 字段        | 示例     | 描述                 |
 | --------- | ------ | ------------------ |
@@ -4059,7 +4126,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | `format`   | `'vcsh [$symbol$repo]($style) '` | 组件格式化模板。                                               |
 | `disabled` | `false`                          | Disables the `vcsh` module.                            |
 
-### Variables
+### 变量
 
 | 字段        | 示例                                          | 描述                         |
 | --------- | ------------------------------------------- | -------------------------- |
@@ -4067,7 +4134,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 | 符号        |                                             | `symbol`对应值                |
 | style\* | `black bold dimmed`                         | `style`对应值                 |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -4097,7 +4164,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
 
-### Variables
+### 变量
 
 | 字段        | 示例       | 描述                   |
 | --------- | -------- | -------------------- |
@@ -4105,7 +4172,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | 符号        |          | `symbol`对应值          |
 | style\* |          | `style`对应值           |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
 ### 示例
 
@@ -4162,7 +4229,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `描述`                | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
@@ -4174,42 +4241,42 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `use_stdin`         |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
 | `ignore_timeout`    | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
 
-### Variables
+### 变量
 
-| 字段        | 描述                                     |
-| --------- | -------------------------------------- |
-| output    | The output of shell command in `shell` |
-| 符号        | `symbol`对应值                            |
-| style\* | `style`对应值                             |
+| 字段        | 描述             |
+| --------- | -------------- |
+| output    | `shell` 中命令的输出 |
+| 符号        | `symbol`对应值    |
+| style\* | `style`对应值     |
 
-*: This variable can only be used as a part of a style string
+*: 此变量只能作为样式字符串的一部分使用
 
-#### Custom command shell
+#### 自定义命令 shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` 接受一个非空字符串列表：
 
-- The first string is the path to the shell to use to execute the command.
-- Other following arguments are passed to the shell.
+- 第一个字符串是用于执行命令的 shell 路径。
+- 剩下的将作为参数传递给 shell。
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+如果未设置，它将回退到 STARSHIP_SHELL，然后回退到 Linux 上的 "sh" 命令，在 Windows 上则是 "cmd /C"。
 
-The `command` will be passed in on stdin.
+`command` 将会被传递给标准输入。
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 PowerShell，则会自动添加 `-NoProfile -Command -` 参数。 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 Cmd，则会自动添加 `/C` 参数，并且将 `stdin` 设置为 `false`。 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 Cmd，则会自动添加 `-C` 参数，并且将 `stdin` 设置为 `false`。 可以通过将参数显式传递给 shell 来避免这种行为，例如：
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning 请确保您的自定义 shell 配置正常退出
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+如果您设置了一个自定义命令， 请确保 starship 使用的默认 shell (在 `shell` 选项设置) 执行命令后会正常退出。
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+例如，PowerShell 需要 `-Command` 参数来执行单行命令。 忽略此参数可能导致 starship 无尽递归：shell 可能会尝试加载带有 starship 的完整配置并重新执行自定义命令，导致无尽循环。
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+建议使用类似于 PowerShell 中 `-NoProfile` 的启动参数，这样还能避免额外的配置加载时间。
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+自动检测 shell 和添加适当的参数的功能已被实现，但包含的 shell 支持可能有缺漏。 遇到这种情况，请[提交一个带有 shell 信息和 starship 配置的 issue](https://github.com/starship/starship/issues/new/choose)。
 
 :::
 

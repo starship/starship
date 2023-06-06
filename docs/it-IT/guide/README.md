@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -263,7 +271,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Fase 2. Imposta la tua shell a utilizzare Starship
+### Fase 2. Set up your shell to use Starship
 
 Configura la shell a inizializzare Starship. Seleziona la tua dalla lista qui sotto:
 

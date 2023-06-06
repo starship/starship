@@ -10,7 +10,7 @@ features:
     title: Kompatibilitas Yang Utama
     details: Dapat berfungsi di shells standar dengan sistem operasi yang paling biasa. Pakai di mana saja!
   - 
-    title: Dibangun Dengan Rust
+    title: Dibuat dengan Rust
     details: Menggunakan kecepatan dan keamanan dari Rust, untuk membuat prompt kamu bekerja secepat dan seandal mungkin.
   - 
     title: Dapat Dikustomisasi

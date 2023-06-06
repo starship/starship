@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -263,7 +271,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### 第二步 為您的 shell 安裝 Starship
+### 第二步 Set up your shell to use Starship
 
 設定您的 shell 以啟用 Starship。 請從下列選單選取您的 shell：
 
