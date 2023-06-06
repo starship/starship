@@ -2749,9 +2749,9 @@ dependencies = [
 
 [[package]]
 name = "shadow-rs"
-version = "0.23.0"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "970538704756fd0bb4ec8cb89f80674afb661e7c0fe716f9ba5be57717742300"
+checksum = "157bef6b3029f72d6f4226acdfa466b84526aa62ae36a3bcf1e1801b403ecd74"
 dependencies = [
  "const_format",
  "is_debug",
@@ -2836,7 +2836,7 @@ dependencies = [
 
 [[package]]
 name = "starship"
-version = "1.14.2"
+version = "1.15.0"
 dependencies = [
  "chrono",
  "clap",
