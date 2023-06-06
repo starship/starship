@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -263,7 +271,7 @@ Starship'i herhangi bir paket yöneticisi ile yükleyin:
 
 </details>
 
-### 2. Adım Shell'inizi Starship kullanmaya hazır hale getirin
+### 2. Adım Set up your shell to use Starship
 
 Shell'ı starshiple çalışması için ayarla. Aşağıdaki listeden shell'inizi seçin:
 
