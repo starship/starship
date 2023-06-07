@@ -151,15 +151,8 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
-
-   ::: note
-
-   the Nushell init file is both a script, a module and an overlay.
-   this means `use init.nu` and `overlay use init.nu` are also valid activations for Nushell.
-
-   :::
 
    #### Xonsh
 
