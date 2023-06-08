@@ -164,7 +164,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol$environment]($style)\]'
 
 [sudo]
-format = '\[[as $symbol]\]'
+format = '\[[as $symbol]($style)\]'
 
 [swift]
 format = '\[[$symbol($version)]($style)\]'
@@ -185,4 +185,7 @@ format = '\[[$symbol($version)]($style)\]'
 format = '\[[$symbol($version)]($style)\]'
 
 [zig]
+format = '\[[$symbol($version)]($style)\]'
+
+[solidity]
 format = '\[[$symbol($version)]($style)\]'

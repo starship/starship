@@ -29,7 +29,8 @@
         "disabled": true,
         "format": "on [$symbol($subscription)]($style) ",
         "style": "blue bold",
-        "symbol": "ﴃ "
+        "subscription_aliases": {},
+        "symbol": "󰠅 "
       },
       "allOf": [
         {
@@ -39,9 +40,9 @@
     },
     "battery": {
       "default": {
-        "charging_symbol": " ",
+        "charging_symbol": "󰂄 ",
         "disabled": false,
-        "discharging_symbol": " ",
+        "discharging_symbol": "󰂃 ",
         "display": [
           {
             "charging_symbol": null,
@@ -50,10 +51,10 @@
             "threshold": 10
           }
         ],
-        "empty_symbol": " ",
+        "empty_symbol": "󰂎 ",
         "format": "[$symbol$percentage]($style) ",
-        "full_symbol": " ",
-        "unknown_symbol": " "
+        "full_symbol": "󰁹 ",
+        "unknown_symbol": "󰁽 "
       },
       "allOf": [
         {
@@ -535,6 +536,7 @@
     },
     "gcloud": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
         "project_aliases": {},
@@ -589,6 +591,7 @@
         "deleted_style": "bold red",
         "disabled": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "ignore_submodules": false,
         "only_nonzero_diffs": true
       },
       "allOf": [
@@ -631,6 +634,7 @@
         "staged": "+",
         "stashed": "\\$",
         "style": "red bold",
+        "typechanged": "",
         "untracked": "?",
         "up_to_date": ""
       },
@@ -659,6 +663,7 @@
         ],
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
+        "not_capable_style": "bold red",
         "style": "bold cyan",
         "symbol": "🐹 ",
         "version_format": "v${raw}"
@@ -1531,6 +1536,28 @@
         }
       ]
     },
+    "solidity": {
+      "default": {
+        "compiler": [
+          "solc"
+        ],
+        "detect_extensions": [
+          "sol"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version)]($style)",
+        "style": "bold blue",
+        "symbol": "S ",
+        "version_format": "v${major}.${minor}.${patch}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SolidityConfig"
+        }
+      ]
+    },
     "spack": {
       "default": {
         "disabled": false,
@@ -1852,7 +1879,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "ﴃ ",
+          "default": "󰠅 ",
           "type": "string"
         },
         "style": {
@@ -1862,6 +1889,13 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "subscription_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -1870,23 +1904,23 @@
       "type": "object",
       "properties": {
         "full_symbol": {
-          "default": " ",
+          "default": "󰁹 ",
           "type": "string"
         },
         "charging_symbol": {
-          "default": " ",
+          "default": "󰂄 ",
           "type": "string"
         },
         "discharging_symbol": {
-          "default": " ",
+          "default": "󰂃 ",
           "type": "string"
         },
         "unknown_symbol": {
-          "default": " ",
+          "default": "󰁽 ",
           "type": "string"
         },
         "empty_symbol": {
-          "default": " ",
+          "default": "󰂎 ",
           "type": "string"
         },
         "display": {
@@ -3105,6 +3139,13 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -3219,6 +3260,10 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "ignore_submodules": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
@@ -3324,6 +3369,10 @@
           "default": "?",
           "type": "string"
         },
+        "typechanged": {
+          "default": "",
+          "type": "string"
+        },
         "ignore_submodules": {
           "default": false,
           "type": "boolean"
@@ -3363,6 +3412,10 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "not_capable_style": {
+          "default": "bold red",
+          "type": "string"
         },
         "detect_extensions": {
           "default": [
@@ -5259,6 +5312,65 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SolidityConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version)]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${major}.${minor}.${patch}",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "S ",
+          "type": "string"
+        },
+        "compiler": {
+          "default": [
+            "solc"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "detect_extensions": {
+          "default": [
+            "sol"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

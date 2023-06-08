@@ -83,6 +83,7 @@ pub const ALL_MODULES: &[&str] = &[
     "shell",
     "shlvl",
     "singularity",
+    "solidity",
     "spack",
     "status",
     "sudo",

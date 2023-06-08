@@ -80,6 +80,7 @@ apps:
     plugs:
       - home
       - removable-media
+      - personal-files
 
 architectures:
   - build-on: amd64
