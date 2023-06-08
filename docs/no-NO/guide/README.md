@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -263,7 +271,7 @@ Installer Starship ved å bruke en av følgende installasjonsprogrammene:
 
 </details>
 
-### Steg 2. Sett opp skallet ditt for å bruke Starship
+### Steg 2. Set up your shell to use Starship
 
 Konfigurer skallet ditt til å initialisere starship. Velg din fra listen nedenfor:
 

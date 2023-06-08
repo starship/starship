@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -340,7 +341,7 @@ format = '$all$directory$character'
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
@@ -426,12 +427,13 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 
 ### Các tuỳ chọn
 
-| Biến       | Mặc định                                 | Mô tả                                      |
-| ---------- | ---------------------------------------- | ------------------------------------------ |
-| `format`   | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render. |
-| `symbol`   | `'ﴃ '`                                   | The symbol used in the format.             |
-| `style`    | `'blue bold'`                            | The style used in the format.              |
-| `disabled` | `true`                                   | Disables the `azure` module.               |
+| Biến                   | Mặc định                                 | Mô tả                                                                                 |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | The format for the Azure module to render.                                            |
+| `symbol`               | `'󰠅 '`                                   | The symbol used in the format.                                                        |
+| `style`                | `'blue bold'`                            | The style used in the format.                                                         |
+| `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Các ví dụ
 
@@ -443,7 +445,7 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -455,8 +457,17 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Battery
@@ -467,11 +478,11 @@ style = "blue bold"
 
 | Tuỳ chọn             | Mặc định                          | Mô tả                                                    |
 | -------------------- | --------------------------------- | -------------------------------------------------------- |
-| `full_symbol`        | `' '`                            | Kí hiệu cho biết khi pin đầy.                            |
-| `charging_symbol`    | `' '`                            | Kí hiệu cho biết khi ping đang sạc.                      |
-| `discharging_symbol` | `' '`                            | Kí hiệu cho biết khi pin đang không sạc.                 |
-| `unknown_symbol`     | `' '`                            | Kí hiệu cho biết khi trạng thái pin không được xác định. |
-| `empty_symbol`       | `' '`                            | Kí hiệu cho biết khi hết pin.                            |
+| `full_symbol`        | `'󰁹 '`                            | Kí hiệu cho biết khi pin đầy.                            |
+| `charging_symbol`    | `'󰂄 '`                            | Kí hiệu cho biết khi ping đang sạc.                      |
+| `discharging_symbol` | `'󰂃 '`                            | Kí hiệu cho biết khi pin đang không sạc.                 |
+| `unknown_symbol`     | `'󰁽 '`                            | Kí hiệu cho biết khi trạng thái pin không được xác định. |
+| `empty_symbol`       | `'󰂎 '`                            | Kí hiệu cho biết khi hết pin.                            |
 | `format`             | `'[$symbol$percentage]($style) '` | Định dạng cho module.                                    |
 | `display`            | [link](#battery-display)          | Ngưỡng hiển thị và kiểu cho module.                      |
 | `disabled`           | `false`                           | Vô hiệu `battery` module.                                |
@@ -499,7 +510,7 @@ style = 'bold red'
 
 The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
 
-#### Options
+#### Các tuỳ chọn
 
 Tuỳ chọn `display` là một mảng của của bảng sau.
 
@@ -1517,6 +1528,8 @@ truncation_symbol = ''
 
 Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Cái này dựa trên tập tin `~/.config/gcloud/active_config`, `~/.config/gcloud/configurations/config_{CONFIG NAME}` và biến môi trường `CLOUDSDK_CONFIG`.
 
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+
 ### Options
 
 | Tuỳ chọn          | Mặc định                                                   | Mô tả                                                             |
@@ -1525,6 +1538,7 @@ Mô đun `gcloud` hiển thị cấu hình hiện tại của [`gcloud`](https:/
 | `symbol`          | `'☁️  '`                                                   | Kí hiệu sử dụng hiển thị trước profile GCP hiện tại.              |
 | `region_aliases`  | `{}`                                                       | Bảng ánh xạ của các bí danh của region để hiển thị ngoài tên GCP. |
 | `project_aliases` | `{}`                                                       | Table of project aliases to display in addition to the GCP name.  |
+| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module          |
 | `style`           | `'bold blue'`                                              | Kiểu cho module.                                                  |
 | `disabled`        | `false`                                                    | Vô hiệu mô đun `gcloud`.                                          |
 
@@ -1724,6 +1738,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Định dạng cho module.                 |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### Các biến
 
@@ -1772,6 +1787,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `staged`            | `'+'`                                           | Định dạng của `modified`                                                                                    |
 | `renamed`           | `'»'`                                           | Định dạng của `renamed`                                                                                     |
 | `deleted`           | `'✘'`                                           | Định dạng của `deleted`                                                                                     |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | Kiểu cho module.                                                                                            |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
 | `disabled`          | `false`                                         | Vô hiệu `git_status` module.                                                                                |
@@ -1792,6 +1808,7 @@ Các biến dưới đây có thể được sử dụng trong `format`:
 | `staged`       | Hiển thị `staged` khi một tệp tin mới được thêm vào staging area.                                             |
 | `renamed`      | Hiển thị `renamed` khi một tệp tin đổi tên đã được thêm vào staging area.                                     |
 | `deleted`      | Hiển thị `deleted` khi một tệp tin bị xóa đã được thêm vào staging area.                                      |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | Giá trị ghi đè của `style`                                                                                    |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
@@ -1864,24 +1881,26 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Options
 
-| Tuỳ chọn            | Mặc định                                                                                  | Mô tả                                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | Định dạng cho module.                                                     |
-| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🐹 '`                                                                                    | Một format string đại diện cho biểu tượng của Go.                         |
-| `detect_extensions` | `['go']`                                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
-| `detect_folders`    | `['Godeps']`                                                                              | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
-| `style`             | `'bold cyan'`                                                                             | Kiểu cho module.                                                          |
-| `disabled`          | `false`                                                                                   | Vô hiệu `golang` module.                                                  |
+| Tuỳ chọn            | Mặc định                                                                                  | Mô tả                                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | Định dạng cho module.                                                                                      |
+| `version_format`    | `'v${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `symbol`            | `'🐹 '`                                                                                    | Một format string đại diện cho biểu tượng của Go.                                                          |
+| `detect_extensions` | `['go']`                                                                                  | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                                                        |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Những tên tệp nào sẽ kích hoạt mô-đun này.                                                                 |
+| `detect_folders`    | `['Godeps']`                                                                              | Những thư mục nào sẽ kích hoạt mô-đun này.                                                                 |
+| `style`             | `'bold cyan'`                                                                             | Kiểu cho module.                                                                                           |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Vô hiệu `golang` module.                                                                                   |
 
 ### Các biến
 
-| Biến      | Ví dụ     | Mô tả                            |
-| --------- | --------- | -------------------------------- |
-| version   | `v1.12.1` | Phiên bản của `go`               |
-| symbol    |           | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |           | Giá trị ghi đè của `style`       |
+| Biến        | Ví dụ     | Mô tả                                                                                                                                       |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | Phiên bản của `go`                                                                                                                          |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | Giá trị ghi đè tuỳ chọn `symbol`                                                                                                            |
+| style\*   |           | Giá trị ghi đè của `style`                                                                                                                  |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -1892,6 +1911,15 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2252,7 +2280,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 - Thư mục hiện tại chứa một tệp tin `.kt` hoặc một tệp tin `.kts`
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -2706,11 +2734,12 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Các biến
 
-| Biến      | Ví dụ      | Mô tả                            |
-| --------- | ---------- | -------------------------------- |
-| version   | `v13.12.0` | The version of `node`            |
-| symbol    |            | Giá trị ghi đè tuỳ chọn `symbol` |
-| style\* |            | Giá trị ghi đè của `style`       |
+| Biến            | Ví dụ         | Mô tả                                                                                                                                                     |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |               | Giá trị ghi đè tuỳ chọn `symbol`                                                                                                                          |
+| style\*       |               | Giá trị ghi đè của `style`                                                                                                                                |
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
@@ -3565,7 +3594,7 @@ Mặc định, mô đun này được vô hiệu. Để kích hoạt nó, thiế
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
@@ -3638,6 +3667,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 [singularity]
 format = '[📦 \[$env\]]($style) '
+```
+
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### Các tuỳ chọn
+
+| Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `"via [$symbol($version )]($style)"` | Định dạng cho module.                                                     |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                       |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                                        |
+| `detect_extensions` | `["sol"]`                            | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.                       |
+| `detect_files`      | `[]`                                 | Những tên tệp nào sẽ kích hoạt mô-đun này.                                |
+| `detect_folders`    | `[]`                                 | Những thư mục nào sẽ kích hoạt mô-đun này.                                |
+| `style`             | `"bold blue"`                        | Kiểu cho module.                                                          |
+| `disabled`          | `false`                              | Disables this module.                                                     |
+
+### Các biến
+
+| Biến      | Ví dụ    | Mô tả                            |
+| --------- | -------- | -------------------------------- |
+| version   | `v0.8.1` | The version of `solidity`        |
+| symbol    |          | Giá trị ghi đè tuỳ chọn `symbol` |
+| style\* |          | Giá trị ghi đè của `style`       |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
 ```
 
 ## Spack
@@ -4162,7 +4229,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `mô tả`             | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
