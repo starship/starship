@@ -337,7 +337,7 @@ print_install() {
       nushell )
         # shellcheck disable=SC2088
         config_file="${BOLD}your nu config file${NO_COLOR} (find it by running ${BOLD}\$nu.config-path${NO_COLOR} in Nushell)"
-        config_cmd="\`use ~/.cache/starship/init.nu\`"
+        config_cmd="use ~/.cache/starship/init.nu"
         warning="${warning} This will change in the future.
   Only Nushell v0.78 or higher is supported.
 
