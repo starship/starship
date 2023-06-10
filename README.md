@@ -221,6 +221,7 @@ Alternatively, install Starship using any of the following package managers:
 | Distribution       | Repository              | Instructions                                                  |
 | ------------------ | ----------------------- | ------------------------------------------------------------- |
 | **_Any_**          | **[crates.io]**         | `cargo install starship --locked`                             |
+| _Any_              | [asdf]                  | `asdf plugin-add starship && asdf install starship latest`    |
 | _Any_              | [conda-forge]           | `conda install -c conda-forge starship`                       |
 | _Any_              | [Linuxbrew]             | `brew install starship`                                       |
 | _Any_              | [Snapcraft]             | `snap install --edge starship`                                |
@@ -245,12 +246,13 @@ curl -sS https://starship.rs/install.sh | sh
 
 Alternatively, install Starship using any of the following package managers:
 
-| Repository      | Instructions                            |
-| --------------- | --------------------------------------- |
-| **[crates.io]** | `cargo install starship --locked`       |
-| [conda-forge]   | `conda install -c conda-forge starship` |
-| [Homebrew]      | `brew install starship`                 |
-| [MacPorts]      | `port install starship`                 |
+| Repository      | Instructions                                               |
+| --------------- | ---------------------------------------------------------- |
+| **[crates.io]** | `cargo install starship --locked`                          |
+| [asdf]          | `asdf plugin-add starship && asdf install starship latest` |
+| [conda-forge]   | `conda install -c conda-forge starship`                    |
+| [Homebrew]      | `brew install starship`                                    |
+| [MacPorts]      | `port install starship`                                    |
 
 </details>
 
@@ -446,6 +448,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
 [arch linux community]: https://archlinux.org/packages/community/x86_64/starship
+[asdf]: https://asdf-vm.com/
 [chocolatey]: https://community.chocolatey.org/packages/starship
 [conda-forge]: https://anaconda.org/conda-forge/starship
 [copr]: https://copr.fedorainfracloud.org/coprs/atim/starship
