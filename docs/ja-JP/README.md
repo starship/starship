@@ -149,7 +149,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    ::: warning
 
-   これは将来的に変更される可能性があります。 Nushell v0.73+ のみサポートされています。
+   これは将来的に変更される可能性があります。 Only Nushell v0.78+ is supported.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 
