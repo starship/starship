@@ -345,10 +345,10 @@ starship init nu | save -f ~/.cache/starship/init.nu
 Lalu tambahkan baris berikut di baris terakhir konfigurasi Nushell (temukan dengan menjalankan `$nu.config-path`):
 
 ```sh
-source ~/.cache/starship/init.nu
+use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.73+ is supported
+Note: Only Nushell v0.78+ is supported
 
 </details>
 
