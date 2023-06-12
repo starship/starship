@@ -149,7 +149,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    ::: warning
 
-   这部分今后可能会改变。 仅支持 Nushell v0.73+。
+   这部分今后可能会改变。 Only Nushell v0.78+ is supported.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
    然后在您的 Nushell 配置文件的最后（使用 `$nu.config-path` 来获取它的路径），添加以下内容：
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 
