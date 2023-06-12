@@ -149,7 +149,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.73+ is supported.
+   This will change in the future. Only Nushell v0.78+ is supported.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 
