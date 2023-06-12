@@ -149,7 +149,7 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    ::: warning
 
-   Ceci va changer dans le futur. Seul Nushell v0.73+ est supporté.
+   Ceci va changer dans le futur. Only Nushell v0.78+ is supported.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en exécutant `$nu.config path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 
