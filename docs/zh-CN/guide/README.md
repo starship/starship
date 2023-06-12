@@ -345,10 +345,10 @@ starship init nu | save -f ~/.cache/starship/init.nu
 然后将以下内容添加到您 Nushell 配置文件的末尾（使用 `$nu.config-path` 来获取它的路径）：
 
 ```sh
-source ~/.cache/starship/init.nu
+use ~/.cache/starship/init.nu
 ```
 
-注意：仅支持 Nushell v0.73+
+Note: Only Nushell v0.78+ is supported
 
 </details>
 
