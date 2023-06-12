@@ -149,7 +149,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    ::: warning
 
-   Ten sposób zmieni się w przyszłości. Działa tylko na Nushell v0.73+.
+   Ten sposób zmieni się w przyszłości. Only Nushell v0.78+ is supported.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
    Dodaj następujący kod na koniec Twojego pliku konfiguracyjnego Nushell (możesz go znaleźć uruchamiając `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 
