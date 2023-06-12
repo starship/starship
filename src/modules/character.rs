@@ -35,9 +35,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // We do some environment detection in src/init.rs to translate.
     // The result: in non-vi fish, keymap is always reported as "insert"
     let mode = match (&context.shell, keymap) {
-        (Shell::Fish, "default") | (Shell::Zsh, "vicmd") | (Shell::Cmd, "vi") => {
-            ShellEditMode::Normal
-        }
+        (Shell::Fish, "default")
+        | (Shell::Zsh, "vicmd")
+        | (Shell::Cmd | Shell::PowerShell, "vi") => ShellEditMode::Normal,
         (Shell::Fish, "visual") => ShellEditMode::Visual,
         (Shell::Fish, "replace") => ShellEditMode::Replace,
         (Shell::Fish, "replace_one") => ShellEditMode::ReplaceOne,
@@ -256,6 +256,38 @@ mod test {
         // cmd keymap is other
         let actual = ModuleRenderer::new("character")
             .shell(Shell::Cmd)
+            .keymap("visual")
+            .collect();
+        assert_eq!(expected_other, actual);
+    }
+
+    #[test]
+    fn powershell_keymap() {
+        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // powershell keymap is vi
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::PowerShell)
+            .keymap("vi")
+            .collect();
+        assert_eq!(expected_vicmd, actual);
+
+        // specified vicmd character
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                vicmd_symbol = "[V](bold green)"
+            })
+            .shell(Shell::PowerShell)
+            .keymap("vi")
+            .collect();
+        assert_eq!(expected_specified, actual);
+
+        // powershell keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::PowerShell)
             .keymap("visual")
             .collect();
         assert_eq!(expected_other, actual);
