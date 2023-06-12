@@ -2927,9 +2927,9 @@ dependencies = [
 
 [[package]]
 name = "starship-battery"
-version = "0.8.0"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "417551ac84efa1810d79d04555d36cbc83ec5a323f2ef9ee7318e34055461b6f"
+checksum = "cdba3bd6d6ead031f1ebf9dd84ebb02cfdbe5b0e51104b4befd0a2fc3d24f87b"
 dependencies = [
  "cfg-if",
  "core-foundation",
