@@ -118,14 +118,14 @@ module.exports = defineConfig({
         ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt" }],
         // Google Analytics
         [
-            'script',
+            "script",
             {
                 async: true,
-                src: 'https://www.googletagmanager.com/gtag/js?id=G-N3M0VJ9NL6',
+                src: "https://www.googletagmanager.com/gtag/js?id=G-N3M0VJ9NL6",
             },
         ],
         [
-            'script',
+            "script",
             {},
             "window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-N3M0VJ9NL6');",
         ],
