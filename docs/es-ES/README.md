@@ -149,7 +149,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    ::: warning
 
-   Esto cambiará en el futuro. Sólo se admite Nushell v0.73+.
+   Esto cambiará en el futuro. Only Nushell v0.78+ is supported.
 
    :::
 
@@ -162,8 +162,9 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
    Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecutando `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 
