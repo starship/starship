@@ -149,7 +149,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    ::: warning
 
-   これは将来的に変更される可能性があります。 Only Nushell v0.78+ is supported.
+   これは将来的に変更される可能性があります。 Nushell v0.78+ のみサポートされています。
 
    :::
 
