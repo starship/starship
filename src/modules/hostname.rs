@@ -83,7 +83,7 @@ mod tests {
 
     macro_rules! get_hostname {
         () => {
-            if let Some(hostname) = gethostname::gethostname().into_string().ok() {
+            if let Ok(hostname) = gethostname::gethostname().into_string() {
                 hostname
             } else {
                 println!(
