@@ -179,7 +179,7 @@ mod test {
         let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
         let expected_visual = Some(format!("{} ", Color::Yellow.bold().paint("❮")));
         let expected_replace = Some(format!("{} ", Color::Purple.bold().paint("❮")));
-        let expected_replace_one = expected_replace.clone();
+        let expected_replace_one = expected_replace.as_deref();
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
         // fish keymap is default
@@ -219,7 +219,7 @@ mod test {
             .shell(Shell::Fish)
             .keymap("replace_one")
             .collect();
-        assert_eq!(expected_replace_one, actual);
+        assert_eq!(expected_replace_one, actual.as_deref());
 
         // fish keymap is other
         let actual = ModuleRenderer::new("character")
