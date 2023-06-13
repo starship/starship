@@ -348,7 +348,7 @@ Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en 
 use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.78+ is supported
+Note: Seul Nushell v0.78+ est supporté
 
 </details>
 
