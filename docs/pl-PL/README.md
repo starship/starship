@@ -149,7 +149,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    ::: warning
 
-   Ten sposób zmieni się w przyszłości. Only Nushell v0.78+ is supported.
+   Ten sposób zmieni się w przyszłości. Działa tylko na Nushell v0.78+.
 
    :::
 
