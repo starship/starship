@@ -149,7 +149,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    ::: warning
 
-   Isto irá mudar no futuro. Only Nushell v0.78+ is supported.
+   Isto irá mudar no futuro. Somente Nushell v0.78+ é suportado.
 
    :::
 
