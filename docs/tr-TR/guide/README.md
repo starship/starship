@@ -348,7 +348,7 @@ Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşab
 use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.78+ is supported
+Not: Nushell v0.78'tan sonraki sürümler desteklenmektedir
 
 </details>
 
