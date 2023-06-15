@@ -116,6 +116,19 @@ module.exports = defineConfig({
         }],
         ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png" }],
         ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt" }],
+        // Google Analytics
+        [
+            "script",
+            {
+                async: true,
+                src: "https://www.googletagmanager.com/gtag/js?id=G-N3M0VJ9NL6",
+            },
+        ],
+        [
+            "script",
+            {},
+            "window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-N3M0VJ9NL6');",
+        ],
     ],
     evergreen: true,
     theme: "default-prefers-color-scheme",
@@ -350,12 +363,6 @@ module.exports = defineConfig({
         },
     },
     plugins: [
-        [
-            "@vuepress/google-analytics",
-            {
-                ga: "UA-71160903-4",
-            },
-        ],
         [
             "vuepress-plugin-sitemap",
             {

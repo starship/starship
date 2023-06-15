@@ -10,17 +10,17 @@ Essa predefinição altera os símbolos para cada módulo usar símbolos com Ner
 
 [![Captura de tela da personalização com símbolos usando Nerd Font](/presets/img/nerd-font-symbols.png "Clique para ver as personalizações para Nerd Font")](./nerd-font)
 
-## [No Nerd Fonts](./no-nerd-font.md)
+## [Sem Nerd Fonts](./no-nerd-font.md)
 
-This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+Essa predefinição altera os símbolos para vários módulos para que nenhum utilize símbolos das Nerd Fonts em nenhum lugar no prompt.
 
 ::: tip
 
-This preset will become the default preset [in a future release of starship](https://github.com/starship/starship/pull/3544).
+Esta predefinição se tornará padrão em [uma futura release do starship](https://github.com/starship/starship/pull/3544).
 
 :::
 
-[Click to view No Nerd Font preset](./no-nerd-font)
+[Clique para visualizar a predefinição de sem Nerd Font](./no-nerd-font)
 
 ## [Seguimentos entre colchetes](./bracketed-segments.md)
 
@@ -40,11 +40,11 @@ Esta predefinição oculta a versão do runtime da linguagem. Se você trabalha 
 
 [![Captura de tela de uma personalização ocultando a versão do runtime](/presets/img/no-runtime-versions.png "Clique para ver as personalizações para remover a versão do runtime")](./no-runtimes)
 
-## [No Empty Icons](./no-empty-icons.md)
+## [Sem Ícones Vazios](./no-empty-icons.md)
 
-This preset does not show icons if the toolset is not found.
+Este preset não mostra ícones se as ferramentas não forem encontradas.
 
-[![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png "Clique para ver as personalizações para remover a versão do runtime")](./no-empty-icons.md)
+[![Captura de tela de preset de nenhum ícone vazio](/presets/img/no-empty-icons.png "Clique para ver as personalizações para remover a versão do runtime")](./no-empty-icons.md)
 
 ## [Prompt do Terminal com Pure](./pure-preset.md)
 
@@ -60,6 +60,6 @@ Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDob
 
 ## [Tokyo Night](./tokyo-night.md)
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Este preset é inspirado por  [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-[![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+[![Captura de tela de Tokyo Night preset](/presets/img/tokyo-night.png "Clique para visualizar Tokyo Night preset")](./tokyo-night)

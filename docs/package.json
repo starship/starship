@@ -4,7 +4,6 @@
     "build": "vuepress build"
   },
   "devDependencies": {
-    "@vuepress/plugin-google-analytics": "^1.9.9",
     "vuepress": "^1.9.9",
     "vuepress-plugin-code-copy": "^1.0.6",
     "vuepress-plugin-sitemap": "^2.3.1",

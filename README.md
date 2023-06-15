@@ -225,7 +225,7 @@ Alternatively, install Starship using any of the following package managers:
 | _Any_              | [Linuxbrew]             | `brew install starship`                                       |
 | _Any_              | [Snapcraft]             | `snap install --edge starship`                                |
 | Alpine Linux 3.13+ | [Alpine Linux Packages] | `apk add starship`                                            |
-| Arch Linux         | [Arch Linux Community]  | `pacman -S starship`                                          |
+| Arch Linux         | [Arch Linux Extra]      | `pacman -S starship`                                          |
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
@@ -271,7 +271,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Step 2. Set up your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
 
@@ -346,10 +346,10 @@ starship init nu | save -f ~/.cache/starship/init.nu
 And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
 ```sh
-source ~/.cache/starship/init.nu
+use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.73+ is supported
+Note: Only Nushell v0.78+ is supported
 
 </details>
 
@@ -445,7 +445,7 @@ Copyright © 2019-present, [Starship Contributors](https://github.com/starship/s
 This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
 
 [alpine linux packages]: https://pkgs.alpinelinux.org/packages?name=starship
-[arch linux community]: https://archlinux.org/packages/community/x86_64/starship
+[arch linux extra]: https://archlinux.org/packages/extra/x86_64/starship
 [chocolatey]: https://community.chocolatey.org/packages/starship
 [conda-forge]: https://anaconda.org/conda-forge/starship
 [copr]: https://copr.fedorainfracloud.org/coprs/atim/starship

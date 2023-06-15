@@ -240,6 +240,10 @@ impl<'a> Context<'a> {
         disabled == Some(true)
     }
 
+    pub fn detect_env_vars(&'a self, env_vars: &'a [&'a str]) -> bool {
+        env_vars.is_empty() || (env_vars.iter().any(|e| self.get_env(e).is_some()))
+    }
+
     // returns a new ScanDir struct with reference to current dir_files of context
     // see ScanDir for methods
     pub fn try_begin_scan(&'a self) -> Option<ScanDir<'a>> {

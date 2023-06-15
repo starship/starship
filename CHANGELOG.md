@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.15.0](https://github.com/starship/starship/compare/v1.14.2...v1.15.0) (2023-06-06)
+
+
+### Features
+
+* Add Solidity Module ([#5047](https://github.com/starship/starship/issues/5047)) ([b2ebd5b](https://github.com/starship/starship/commit/b2ebd5b50c62fe5eb1cf8f5b0f79deaff2edd059))
+* add typechange to git_status module ([#4829](https://github.com/starship/starship/issues/4829)) ([edb96ca](https://github.com/starship/starship/commit/edb96cad580e5c414c34a4f64476a64a20595459))
+* **aws:** support aws sso with automatic authentication refresh ([#5170](https://github.com/starship/starship/issues/5170)) ([297176b](https://github.com/starship/starship/commit/297176b0b8b9da34176d7b278837f77f960799b1))
+* **azure:** subscription name aliases ([#4949](https://github.com/starship/starship/issues/4949)) ([27ffa37](https://github.com/starship/starship/commit/27ffa37cfdf2eff9874e543f88fa389bf5c2dae3))
+* **gcloud:** add `detect_env_vars` option ([#5166](https://github.com/starship/starship/issues/5166)) ([d07a8e3](https://github.com/starship/starship/commit/d07a8e3668838223aeeb94e810a0b29806e35f78))
+* **git_metrics:** add option to ignore submodules ([#5052](https://github.com/starship/starship/issues/5052)) ([ce01423](https://github.com/starship/starship/commit/ce014231521c981260ff7c1018acf694c65c97fe))
+* **golang:** adding `mod_version` variable ([#5177](https://github.com/starship/starship/issues/5177)) ([351bf9d](https://github.com/starship/starship/commit/351bf9d0b382adcc3e073c1a293fd815bb623f37))
+* **nodejs:** Add `expected_version` variable ([#5081](https://github.com/starship/starship/issues/5081)) ([70d2014](https://github.com/starship/starship/commit/70d2014f3447e616fb45b63b2793b256e19aa631))
+
+
+### Bug Fixes
+
+* bump libz-ng-sys ([#5218](https://github.com/starship/starship/issues/5218)) ([6ab8f40](https://github.com/starship/starship/commit/6ab8f4061fe816a78a310c01a993a5a4690369ff))
+* **config:** Make print-config not panic without a config ([#5001](https://github.com/starship/starship/issues/5001)) ([ce7f984](https://github.com/starship/starship/commit/ce7f984932a97b4ad3cd6e6ece8e1c3b6022ba99))
+* ensure nested style variables are processed during formatting ([e5cec9e](https://github.com/starship/starship/commit/e5cec9ea50963a45bb1c209abc747ee1983dcabd))
+* **presets:** Added ($style) to format in module 'sudo' in Bracketed Segments Preset ([#5146](https://github.com/starship/starship/issues/5146)) ([1bd6db5](https://github.com/starship/starship/commit/1bd6db58307c1945c3b0cabec8d6663730394377))
+* **snap:** Update snapcraft.yaml to add personal-files interface ([#5131](https://github.com/starship/starship/issues/5131)) ([b3ccc0f](https://github.com/starship/starship/commit/b3ccc0f05e451ada800d233613ef32756682249f))
+* **style:** ensure nested style variables are processed during formatting ([#5120](https://github.com/starship/starship/issues/5120)) ([e5cec9e](https://github.com/starship/starship/commit/e5cec9ea50963a45bb1c209abc747ee1983dcabd))
+* update of presets and default configuration to reflect changes in Nerd Fonts 3.0 ([#5162](https://github.com/starship/starship/issues/5162)) ([2558c45](https://github.com/starship/starship/commit/2558c4588b5bcc404df474c948de0b72b109be01))
+
 ## [1.14.2](https://github.com/starship/starship/compare/v1.14.1...v1.14.2) (2023-04-12)
 
 

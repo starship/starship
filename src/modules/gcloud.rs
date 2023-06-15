@@ -84,6 +84,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("gcloud");
     let config: GcloudConfig = GcloudConfig::try_load(module.config);
 
+    if !(context.detect_env_vars(&config.detect_env_vars)) {
+        return None;
+    }
+
     let (config_name, config_path) = get_current_config(context)?;
     let gcloud_context = GcloudContext::new(&config_name, &config_path);
     let account: Lazy<Option<Account<'_>>, _> = Lazy::new(|| gcloud_context.get_account());
@@ -149,6 +153,55 @@ mod tests {
     use nu_ansi_term::Color;
 
     use crate::test::ModuleRenderer;
+
+    #[test]
+    fn account_set_but_not_shown_because_of_detect_env_vars() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let active_config_path = dir.path().join("active_config");
+        let mut active_config_file = File::create(active_config_path)?;
+        active_config_file.write_all(b"default")?;
+
+        // check if this config would lead to the module being rendered
+        assert_eq!(
+            ModuleRenderer::new("gcloud")
+                .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+                .config(toml::toml! {
+                    [gcloud]
+                    format = "$active"
+                })
+                .collect(),
+            Some("default".into())
+        );
+
+        // when we set `detect_env_vars` now, the module is empty
+        assert_eq!(
+            ModuleRenderer::new("gcloud")
+                .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+                .config(toml::toml! {
+                    [gcloud]
+                    format = "$active"
+                    detect_env_vars = ["SOME_TEST_VAR"]
+                })
+                .collect(),
+            None
+        );
+
+        // and when the environment variable has a value, the module is shown
+        assert_eq!(
+            ModuleRenderer::new("gcloud")
+                .env("CLOUDSDK_CONFIG", dir.path().to_string_lossy())
+                .env("SOME_TEST_VAR", "1")
+                .config(toml::toml! {
+                    [gcloud]
+                    format = "$active"
+                    detect_env_vars = ["SOME_TEST_VAR"]
+                })
+                .collect(),
+            Some("default".into())
+        );
+
+        dir.close()
+    }
 
     #[test]
     fn account_set() -> io::Result<()> {

@@ -30,7 +30,7 @@
         "format": "on [$symbol($subscription)]($style) ",
         "style": "blue bold",
         "subscription_aliases": {},
-        "symbol": "ﴃ "
+        "symbol": "󰠅 "
       },
       "allOf": [
         {
@@ -40,9 +40,9 @@
     },
     "battery": {
       "default": {
-        "charging_symbol": " ",
+        "charging_symbol": "󰂄 ",
         "disabled": false,
-        "discharging_symbol": " ",
+        "discharging_symbol": "󰂃 ",
         "display": [
           {
             "charging_symbol": null,
@@ -51,10 +51,10 @@
             "threshold": 10
           }
         ],
-        "empty_symbol": " ",
+        "empty_symbol": "󰂎 ",
         "format": "[$symbol$percentage]($style) ",
-        "full_symbol": " ",
-        "unknown_symbol": " "
+        "full_symbol": "󰁹 ",
+        "unknown_symbol": "󰁽 "
       },
       "allOf": [
         {
@@ -522,6 +522,7 @@
     },
     "gcloud": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
         "project_aliases": {},
@@ -648,6 +649,7 @@
         ],
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
+        "not_capable_style": "bold red",
         "style": "bold cyan",
         "symbol": "🐹 ",
         "version_format": "v${raw}"
@@ -1863,7 +1865,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "ﴃ ",
+          "default": "󰠅 ",
           "type": "string"
         },
         "style": {
@@ -1888,23 +1890,23 @@
       "type": "object",
       "properties": {
         "full_symbol": {
-          "default": " ",
+          "default": "󰁹 ",
           "type": "string"
         },
         "charging_symbol": {
-          "default": " ",
+          "default": "󰂄 ",
           "type": "string"
         },
         "discharging_symbol": {
-          "default": " ",
+          "default": "󰂃 ",
           "type": "string"
         },
         "unknown_symbol": {
-          "default": " ",
+          "default": "󰁽 ",
           "type": "string"
         },
         "empty_symbol": {
-          "default": " ",
+          "default": "󰂎 ",
           "type": "string"
         },
         "display": {
@@ -3097,6 +3099,13 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -3363,6 +3372,10 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "not_capable_style": {
+          "default": "bold red",
+          "type": "string"
         },
         "detect_extensions": {
           "default": [
