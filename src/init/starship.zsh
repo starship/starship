@@ -23,6 +23,7 @@ else
     }
 fi
 
+
 # The two functions below follow the naming convention `prompt_<theme>_<hook>`
 # for compatibility with Zsh's prompt system. See
 # https://github.com/zsh-users/zsh/blob/2876c25a28b8052d6683027998cc118fc9b50157/Functions/Prompts/promptinit#L155
@@ -44,12 +45,6 @@ prompt_starship_precmd() {
     # Use length of jobstates array as number of jobs. Expansion fails inside
     # quotes so we set it here and then use the value later on.
     STARSHIP_JOBS_COUNT=${#jobstates}
-
-    # For first render, we don't want a newline so we leave the disable newline flag
-    if [[ $STARSHIP_FIRST_PRECMD == 0 ]]; then
-        STARSHIP_ADD_NEWLINE_FLAGS=()
-    fi
-    STARSHIP_FIRST_PRECMD=0
 }
 
 # Runs after the user submits the command line, but before it is executed.
@@ -84,7 +79,6 @@ fi
 __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
 
 export STARSHIP_SHELL="zsh"
-export STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
 
 # Set up the session key that will be used to store logs
 STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
@@ -93,33 +87,9 @@ export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
-prompt_starship_clear_screen() {
-    STARSHIP_ADD_NEWLINE_FLAGS=("--disable-add-newline")
-    # reset the prompt to expand the variables
-    # By default, ctrl+l uses the existing $PROMPT without expanding the variables
-    zle reset-prompt
-}
-
-# hook into ctrl+l clear-screen. If it has already been defined, wrap it
-__starship_preserved_clear_screen=${widgets[clear-screen]}
-if [[ $__starship_preserved_clear_screen == "builtin" ]]; then
-    starship_clear-screen() {
-        zle .clear-screen
-        prompt_starship_clear_screen
-    }
-    zle -N clear-screen starship_clear-screen
-else
-    # Call starship's clear-screen and assume the wrapped method will clear the screen
-    starship_clear-screen-wrapped() {
-        prompt_starship_clear_screen
-        $__starship_preserved_clear_screen
-    }
-    zle -N clear-screen starship_clear-screen-wrapped
-fi
-
 setopt promptsubst
 
-PROMPT='$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-RPROMPT='$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
-PROMPT2="$(::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --continuation)"
+PROMPT='$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+RPROMPT='$(::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="$STARSHIP_CMD_STATUS" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="$STARSHIP_JOBS_COUNT")'
+PROMPT2="$(::STARSHIP:: prompt --continuation)"
 

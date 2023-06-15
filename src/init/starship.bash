@@ -56,22 +56,12 @@ starship_precmd() {
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        starship_set_ps1 --cmd-duration=$STARSHIP_DURATION
+        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
         unset STARSHIP_START_TIME
     else
-        starship_set_ps1
+        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
     fi
-
-    STARSHIP_ADD_NEWLINE_FLAGS=()
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
-}
-
-starship_set_ps1() {
-    PS1="$(starship_get_ps1 "$@")"
-}
-
-starship_get_ps1() {
-    ::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" "$@"
 }
 
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
@@ -116,28 +106,11 @@ shopt -s checkwinsize
 STARSHIP_START_TIME=$(::STARSHIP:: time)
 export STARSHIP_SHELL="bash"
 
-# Bash 3.2 doesn't ignore the first newline unless the export is on a separate line
-export STARSHIP_ADD_NEWLINE_FLAGS
-STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
-
 # Set up the session key that will be used to store logs
 STARSHIP_SESSION_KEY="$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM"; # Random generates a number b/w 0 - 32767
 STARSHIP_SESSION_KEY="${STARSHIP_SESSION_KEY}0000000000000000" # Pad it to 16+ chars.
 export STARSHIP_SESSION_KEY=${STARSHIP_SESSION_KEY:0:16}; # Trim to 16-digits if excess.
 
-# Bash 3.2 seems different because it prints the entire PS1 after `clear` in the binding (even if it has 2 lines)
-# Bash 4/5 only prints the last line after `clear` in the binding
-if [[ "${BASH_VERSINFO[0]}" -ge 4 ]] && [[ $(bind -q clear-screen) == 'clear-screen can be invoked via "\C-l".' ]]; then
-    function starship_clear() {
-        STARSHIP_ADD_NEWLINE_FLAGS=(--disable-add-newline)
-        clear
-        STARSHIP_SHELL="" starship_get_ps1
-        printf '\r'
-        STARSHIP_ADD_NEWLINE_FLAGS=()
-    }
-    # this overrides the default `clear-screen` with `starship_clear`
-    bind -x '"\C-l": starship_clear'
-fi
-
 # Set the continuation prompt
 PS2="$(::STARSHIP:: prompt --continuation)"
+
