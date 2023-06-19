@@ -1,5 +1,5 @@
 name: starship
-base: core18
+base: core20
 adopt-info: starship
 summary: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
 description: |
@@ -57,7 +57,7 @@ parts:
     source: https://github.com/starship/starship.git
     #source-tag: v$SNAPCRAFT_PROJECT_VERSION
     build-packages:
-      - libssl-dev
+      - cmake
       - pkg-config
     override-build: |
       last_committed_tag="$(git describe --tags --abbrev=0)"
@@ -80,6 +80,7 @@ apps:
     plugs:
       - home
       - removable-media
+      - personal-files
 
 architectures:
   - build-on: amd64

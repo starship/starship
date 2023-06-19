@@ -3,13 +3,18 @@ use crate::config::{Either, VecOr};
 use serde::{self, Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct CustomConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub command: &'a str,
     pub when: Either<bool, &'a str>,
+    pub require_repo: bool,
     pub shell: VecOr<&'a str>,
     pub description: &'a str,
     pub style: &'a str,
@@ -34,6 +39,7 @@ impl<'a> Default for CustomConfig<'a> {
             symbol: "",
             command: "",
             when: Either::First(false),
+            require_repo: false,
             shell: VecOr::default(),
             description: "<custom config>",
             style: "green bold",

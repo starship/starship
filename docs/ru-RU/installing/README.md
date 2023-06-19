@@ -15,7 +15,7 @@ There are so many platforms out there that they didn't fit into the main README.
 
 Head over to the [Chocolatey installation page](https://chocolatey.org/install) and follow the instructions to install Chocolatey.
 
-### Installation
+### Установка
 
 ```powershell
 choco install starship
@@ -29,7 +29,7 @@ choco install starship
 pkg install getconf
 ```
 
-### Installation
+### Установка
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.termux/files/usr/bin
@@ -37,7 +37,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.term
 
 ## [Funtoo Linux](https://www.funtoo.org/Welcome)
 
-### Installation
+### Установка
 
 On Funtoo Linux, starship can be installed from [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
 

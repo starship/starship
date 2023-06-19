@@ -10,8 +10,8 @@ features:
     title: 互換性優先
     details: 一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！
   - 
-    title: Rust 製
-    details: Rust の最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。
+    title: Rust製
+    details: Rustの最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。
   - 
     title: カスタマイズ可能
     details: それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。
@@ -55,11 +55,10 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```sh
    brew install starship
    ```
-
-   [ Scoop ](https://scoop.sh)の場合：
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. 初期化のためのスクリプトをシェルの設定ファイルに追加
@@ -148,19 +147,19 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Nushell
 
-   ::: 警告
+   ::: warning
 
-   これは将来的に変更される可能性があります。 Nushell v0.61+ のみサポートされています。
+   これは将来的に変更される可能性があります。 Nushell v0.73+ のみサポートされています。
 
    :::
 
-   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.env-path` を実行してください）:
+   Nushellの環境ファイルの最後に以下を追記してください ( `$nu.env-path` を実行してください):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
-   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）。
+   そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):
 
    ```sh
    source ~/.cache/starship/init.nu

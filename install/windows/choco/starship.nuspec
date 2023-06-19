@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+    <metadata>
+        <id>starship</id>
+        <title>Starship</title>
+        <version>0.0.0.1</version>
+        <authors>Starship Contributors</authors>
+        <owners>davidkna,saanuregh</owners>
+        <summary>The cross-shell prompt for astronauts</summary>
+        <description>
+            Starship is the minimal, blazing fast, and extremely customizable prompt for any shell!
+            Shows the information you need, while staying sleek and minimal.
+        </description>
+        <packageSourceUrl>https://github.com/starship/starship/tree/master/install/windows/choco</packageSourceUrl>
+        <projectUrl>https://starship.rs</projectUrl>
+        <projectSourceUrl>https://github.com/starship/starship</projectSourceUrl>
+        <iconUrl>https://starship.rs/icon.png</iconUrl>
+        <tags>powershell prompt starship pwsh</tags>
+        <copyright>© 2023 Starship Contributors</copyright>
+        <licenseUrl>https://github.com/starship/starship/blob/master/LICENSE</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <releaseNotes></releaseNotes>
+    </metadata>
+    <files>
+        <file src="tools\**" target="tools" />
+    </files>
+</package>

@@ -1,4 +1,6 @@
-const sidebar = (lang, override = {}) =>
+import { defineConfig, SidebarConfigArray } from "vuepress/config";
+
+const sidebar = (lang, override = {}): SidebarConfigArray =>
     [
         "", // "Home", which should always have a override
         "guide", // README, which should always have a override
@@ -23,7 +25,7 @@ const sidebar = (lang, override = {}) =>
         return page in override ? [path, override[page]] : path;
     });
 
-module.exports = {
+module.exports = defineConfig({
     locales: {
         "/": {
             lang: "en-US",
@@ -72,6 +74,11 @@ module.exports = {
             title: "Starship",
             description: "Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!",
         },
+        "/uk-UA/": {
+            lang: "uk-UA",
+            title: "Starship",
+            description: "Простий, супер швидкий та безмежно адаптивний командний рядок для будь-якої оболонки!",
+        },
         "/vi-VN/": {
             lang: "vi-VN",
             title: "Starship",
@@ -109,6 +116,19 @@ module.exports = {
         }],
         ["meta", { name: "twitter:image", content: "https://starship.rs/icon.png" }],
         ["meta", { name: "twitter:alt", content: "Starship: Cross-Shell Prompt" }],
+        // Google Analytics
+        [
+            "script",
+            {
+                async: true,
+                src: "https://www.googletagmanager.com/gtag/js?id=G-N3M0VJ9NL6",
+            },
+        ],
+        [
+            "script",
+            {},
+            "window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-N3M0VJ9NL6');",
+        ],
     ],
     evergreen: true,
     theme: "default-prefers-color-scheme",
@@ -274,6 +294,25 @@ module.exports = {
                     faq: "Часто Задаваемые Вопросы",
                 }),
             },
+            "/uk-UA/": {
+                // text for the language dropdown
+                selectText: "Мови",
+                // label for this locale in the language dropdown
+                label: "Українська",
+                // Custom text for edit link. Defaults to "Edit this page"
+                editLinkText: "Редагувати цю сторінку на GitHub",
+                // Custom navbar values
+                nav: [{ text: "Налаштування", link: "/uk-UA/config/" }],
+                // Custom sidebar values
+                sidebar: sidebar("uk-UA", {
+                    guide: "Керівництво",
+                    installing: "Розширене встановлення",
+                    config: "Налаштування",
+                    "advanced-config": "Розширені налаштування",
+                    faq: "Часті питання",
+                    presets: "Шаблони",
+                }),
+            },
             "/vi-VN/": {
                 // text for the language dropdown
                 selectText: "Ngôn ngữ",
@@ -325,17 +364,11 @@ module.exports = {
     },
     plugins: [
         [
-            "@vuepress/google-analytics",
-            {
-                ga: "UA-71160903-4",
-            },
-        ],
-        [
-            "sitemap",
+            "vuepress-plugin-sitemap",
             {
                 hostname: "https://starship.rs",
             },
         ],
         ["vuepress-plugin-code-copy", true],
     ],
-};
+});

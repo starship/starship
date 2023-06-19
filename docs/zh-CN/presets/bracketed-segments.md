@@ -1,13 +1,17 @@
-[Return to Presets](./README.md#bracketed-segments)
+[返回全部预设](./README.md#bracketed-segments)
 
 # Bracketed Segments Preset
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+此预设使用括号来分隔所有组件的提示符，不使用 Starship 默认的分隔词（“via”，“on” 等等）。
 
-![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png)
+![Bracketed Segments preset预设屏幕截图](/presets/img/bracketed-segments.png)
 
 ### 配置
 
-[Click to download TOML](/presets/toml/bracketed-segments.toml)
+```sh
+starship preset bracketed-segments -o ~/.config/starship.toml
+```
+
+[点击下载 TOML 文件](/presets/toml/bracketed-segments.toml)
 
 <<< @/.vuepress/public/presets/toml/bracketed-segments.toml
