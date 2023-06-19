@@ -31,6 +31,12 @@ in brackets instead of using the default Starship wording ("via", "on", etc.).
 
 [![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
+## [Jetpack](./jetpack.md)
+
+This is preset aspires to be minimal.
+
+[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view the Jetpack preset")](./bracketed-segments)
+
 ## [Plain Text Symbols](./plain-text.md)
 
 This preset changes the symbols for each module into plain text. Great if you
