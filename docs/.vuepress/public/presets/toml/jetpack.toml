@@ -89,11 +89,11 @@ $time\
 
 add_newline = true
 
-[character] 
+[character]
 format = "$symbol "
-success_symbol = "[◉](bold italic bright-yellow)" 
-error_symbol   = "[⊘](italic purple)"
-vicmd_symbol   = "[◈](italic white)"
+success_symbol = "[◉](bold italic bright-yellow)"
+error_symbol = "[⊘](italic purple)"
+vicmd_symbol = "[◈](italic white)"
 
 [env_var.VIMSHELL] # vim subshell
 format = "[$env_value]($style)"
@@ -150,11 +150,11 @@ discharging_symbol = "[↓](italic)"
 unknown_symbol = "[░](italic)"
 empty_symbol = "[▃](italic red)"
 
-[[battery.display]] 
+[[battery.display]]
 threshold = 40
 style = "dimmed yellow"
 
-[[battery.display]] 
+[[battery.display]]
 threshold = 70
 style = "dimmed white"
 
@@ -167,7 +167,7 @@ style = "bold italic bright-blue"
 style = "italic bright-blue"
 format = """([⎪$ahead_behind$staged$modified$untracked$renamed$deleted$conflicted$stashed⎥]($style))"""
 conflicted = "[◪◦](italic bright-magenta)"
-ahead = "[▲│[${count}](bold white)│](italic green)" 
+ahead = "[▲│[${count}](bold white)│](italic green)"
 behind = "[▽│[${count}](bold white)│](italic red)"
 diverged = "[◇ ▲┤[${ahead_count}](regular white)│▽┤[${behind_count}](regular white)│](italic bright-magenta)"
 untracked = "[◌◦](italic bright-yellow)"
@@ -200,93 +200,93 @@ symbol = "[⌉](italic bright-blue)⌊ "
 version_format = "${major}.${minor}"
 style = "italic bright-yellow"
 
-[ruby] 
+[ruby]
 format = " rb [${symbol}${version}]($style)"
 symbol = "◆ "
 version_format = "${major}.${minor}"
 style = "italic red"
 
-[rust] 
+[rust]
 format = " rs [$symbol$version]($style)"
 symbol = "⊃ "
 version_format = "${major}.${minor}"
 style = "italic red"
 
-[package] 
+[package]
 format = " pkg [$symbol$version]($style)"
 version_format = "${major}.${minor}"
 symbol = "◫ "
 style = "bright-yellow italic"
 
-[swift] 
+[swift]
 format = " sw [${symbol}${version}]($style)"
 symbol = "◁ "
 style = "italic bright-red"
 version_format = "${major}.${minor}"
 
 [aws]
-disabled = true 
+disabled = true
 format = " aws [$symbol $profile $region]($style)"
 style = "italic blue"
 symbol = "▲ "
 
 [buf]
-symbol = "■ " 
+symbol = "■ "
 format = " buf [$symbol $version $buf_version]($style)"
 
 [c]
-symbol = "∁ " 
+symbol = "∁ "
 format = " c [$symbol($version(-$name))]($style)"
 
 [conda]
-symbol = "◯ " 
+symbol = "◯ "
 format = " conda [$symbol$environment]($style)"
 
 [dart]
-symbol = "◁◅ " 
+symbol = "◁◅ "
 format = " dart [$symbol($version )]($style)"
 
 [docker_context]
-symbol = "◧ " 
+symbol = "◧ "
 format = " docker [$symbol$context]($style)"
 
 [elixir]
-symbol = "△ " 
+symbol = "△ "
 format = " exs [$symbol $version OTP $otp_version ]($style)"
 
 [elm]
-symbol = "◩ " 
+symbol = "◩ "
 format = " elm [$symbol($version )]($style)"
 
 [golang]
-symbol = "∩ " 
+symbol = "∩ "
 format = " go [$symbol($version )]($style)"
 
 [haskell]
-symbol = "❯λ " 
+symbol = "❯λ "
 format = " hs [$symbol($version )]($style)"
 
 [java]
-symbol = "∪ " 
+symbol = "∪ "
 format = " java [${symbol}(${version} )]($style)"
 
 [julia]
-symbol = "◎ " 
+symbol = "◎ "
 format = " jl [$symbol($version )]($style)"
 
 [memory_usage]
-symbol = "▪▫▪ " 
+symbol = "▪▫▪ "
 format = " mem [${ram}( ${swap})]($style)"
 
 [nim]
-symbol = "▴▲▴ " 
+symbol = "▴▲▴ "
 format = " nim [$symbol($version )]($style)"
 
 [nix_shell]
-symbol = "⊛ " 
+symbol = "⊛ "
 format = " nix [$symbol$state $name]($style)"
 
 [spack]
-symbol = "◇ " 
+symbol = "◇ "
 format = " spack [$symbol$environment]($style)"
 
