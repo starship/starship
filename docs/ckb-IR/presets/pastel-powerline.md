@@ -12,6 +12,10 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 
 ### ڕێکخستن
 
+```sh
+starship preset pastel-powerline -o ~/.config/starship.toml
+```
+
 [Click to download TOML](/presets/toml/pastel-powerline.toml)
 
 <<< @/.vuepress/public/presets/toml/pastel-powerline.toml

@@ -10,7 +10,7 @@ If you have any questions that aren't addressed in this document, please don't h
 
 - **Module**: A component in the prompt giving information based on contextual information from your OS. For example, the `rust` module shows the version of Rust that is currently installed on your computer, if your current directory is a Rust project.
 
-- **Segment**: Smaller sub-components that compose a module. For example, the `symbol` segment in the `rust` module contains the character that is shown before the version number (`🦀` by default).
+- **Segment**: Smaller subcomponents that compose a module. For example, the `symbol` segment in the `rust` module contains the character that is shown before the version number (`🦀` by default).
 
 ## Philosophy
 
@@ -50,7 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 ## External commands
 
-To run a external command (e.g. to get the version of a tool) and to allow for mocking use the `context.exec_cmd` function. Here's a quick example:
+To run an external command (e.g. to get the version of a tool) and to allow for mocking use the `context.exec_cmd` function. Here's a quick example:
 
 ```rust
 use super::{Context, Module, ModuleConfig};
@@ -127,7 +127,7 @@ STARSHIP_LOG=trace cargo run
 
 ## Linting
 
-Starship source files are linted with [clippy](https://crates.io/crates/clippy). Clippy will be ran as part of CI. Linting errors will fail a build, so it is suggested that you run Clippy locally:
+Starship source files are linted with [clippy](https://crates.io/crates/clippy). Clippy will be run as part of CI. Linting errors will fail a build, so it is suggested that you run Clippy locally:
 
 ```sh
 rustup component add clippy
@@ -180,7 +180,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod tests {
    use super::*;
    use crate::test::ModuleRenderer;
-   use ansi_term::Color;
+   use nu_ansi_term::Color;
    use std::fs::File;
    use std::io;
 
@@ -218,7 +218,7 @@ mod tests {
 }
 ```
 
-If a module depends on output of another program, then that output should be added to the match statement in [`utils.rs`](src/utils.rs). The match has to be exactly the same as the call to `utils::exec_cmd()`, including positional arguments and flags. The array of arguments are joined by a `" "`, so `utils::exec_cmd("program", &["arg", "more_args"])` would match with the `program arg more_args` match statement.
+If a module depends on output of another program, then that output should be added to the match statement in [`utils.rs`](src/utils.rs). The match has to be exactly the same as the call to `utils::exec_cmd()`, including positional arguments and flags. The array of arguments is joined by a `" "`, so `utils::exec_cmd("program", &["arg", "more_args"])` would match with the `program arg more_args` match statement.
 
 If the program cannot be mocked (e.g. It performs some filesystem operations, either writing or reading files) then it has to added to the project's GitHub Actions workflow file([`.github/workflows/workflow.yml`](.github/workflows/workflow.yml)) and the test has to be marked with an `#[ignored]`. This ensures that anyone can run the test suite locally without needing to pre-configure their environment. The `#[ignored]` attribute is bypassed during CI runs in GitHub Actions.
 
@@ -292,7 +292,7 @@ everyone remember what they are. Don't worry: most of them are quite simple!
       appropriate--this is a bare minimum).
 - [ ] Add the variable to the appropriate location in the "Default Prompt
       Format" section of the documentation
-- [ ] Add an appropriate choice of options to each preset in `docs/presets/README.md`
+- [ ] Add an appropriate choice of options to each preset in `docs/.vuepress/public/presets/toml`
 - [ ] Update the config file schema by running `cargo run --features config-schema -- config-schema > .github/config-schema.json`
 - [ ] Create configs structs/traits in `src/configs/<module>.rs` and add the
       following:

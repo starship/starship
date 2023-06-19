@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="دۆخی ڕێڕەوی کارەکان لە GitHub Actions"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -111,6 +111,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -165,7 +173,7 @@
 
 ### پێشمەرجەکان
 
-- فۆنتێکی [Nerd](https://www.nerdfonts.com/) دامەزرابێ و چالاککرابێ لە تێرمیناڵەکەتدا (بۆ نموونە، [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) تاقی بکەرەوە).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Step 1. Install Starship
 
@@ -211,12 +219,10 @@ Alternatively, install Starship using any of the following package managers:
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
+| _Any_              | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install --edge starship`                                                 |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -247,18 +253,21 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+
 Install Starship using any of the following package managers:
 
-| Repository                                                                       | Instructions                            |
-| -------------------------------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
-| [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
-| [conda-forge](https://anaconda.org/conda-forge/starship)                         | `conda install -c conda-forge starship` |
-| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json) | `scoop install starship`                |
+| Repository                                                                                   | Instructions                            |
+| -------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
+| [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
+| [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship` |
+| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)             | `scoop install starship`                |
+| [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
 
 </details>
 
-### Step 2. Setup your shell to use Starship
+### Step 2. Set up your shell to use Starship
 
 Configure your shell to initialize starship. Select yours from the list below:
 
@@ -326,7 +335,7 @@ Add the following to the end of your Nushell env file (find it by running `$nu.e
 
 ```sh
 mkdir ~/.cache/starship
-starship init nu | save ~/.cache/starship/init.nu
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
 And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
@@ -335,7 +344,7 @@ And add the following to the end of your Nushell configuration (find it by runni
 source ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.61+ is supported
+Note: Only Nushell v0.73+ is supported
 
 </details>
 
@@ -410,6 +419,14 @@ If you're looking to further customize Starship:
 - **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+
+## ❤️ Sponsors
+
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+
+**Supporter Tier**
+
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>

@@ -55,11 +55,10 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
    ```sh
    brew install starship
    ```
-
-   Avec [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Ajouter le script d’initialisation au fichier configuration de votre shell:
@@ -150,14 +149,14 @@ description: Starship est une invite minimaliste, ultra-rapide et hautement pers
 
    ::: warning
 
-   Ceci va changer dans le futur. Seul Nushell v0.61+ est supporté.
+   Ceci va changer dans le futur. Seul Nushell v0.73+ est supporté.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en exécutant `$nu.config path`):

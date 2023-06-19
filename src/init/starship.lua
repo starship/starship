@@ -49,6 +49,18 @@ function starship_prompt:rightfilter(prompt)
   ):read("*a")
 end
 
+if starship_transient_prompt_func ~= nil then
+  function starship_prompt:transientfilter(prompt)
+    return starship_transient_prompt_func(prompt)
+  end
+end
+
+if starship_transient_rprompt_func ~= nil then
+  function starship_prompt:transientrightfilter(prompt)
+    return starship_transient_rprompt_func(prompt)
+  end
+end
+
 local characterset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 local randomkey = ""
 math.randomseed(os.time())

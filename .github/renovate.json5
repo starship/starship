@@ -1,0 +1,78 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        // stripped-down config:base
+        ":prHourlyLimit2",
+        ":prConcurrentLimit10",
+        "group:monorepos",
+        "group:recommended",
+        "workarounds:all",
+        // automerge minor updates
+        ":automergeMinor",
+        ":automergeBranch"
+    ],
+    "labels": ["📦 dependencies"],
+    "semanticCommits": "enabled",
+    "semanticCommitType": "build",
+    "rangeStrategy": "bump",
+    "rebaseWhen": "conflicted",
+    "packageRules": [
+        // group updates to related packages
+        {
+            "groupName": "clap crates",
+            "matchDatasources": ["crate"],
+            "matchPackagePrefixes": ["clap"]
+        },
+        {
+            "groupName": "gitoxide crates",
+            "matchDatasources": ["crate"],
+            "matchPackagePrefixes": ["gix"]
+        },
+        {
+            "groupName": "pest crates",
+            "matchDatasources": ["crate"],
+            "matchPackagePrefixes": ["pest"]
+        },
+        {
+            "groupName": "toml crates",
+            "matchDatasources": ["crate"],
+            "matchPackagePrefixes": ["toml"]
+        },
+        {
+            "groupName": "unicode crates",
+            "matchDatasources": ["crate"],
+            "matchPackagePrefixes": ["unicode"]
+        },
+        {
+            "groupName": "dprint plugins",
+            "matchPackagePrefixes": ["dprint"],
+            "extends": ["schedule:weekly"]
+        },
+        {
+            "groupName": "npm",
+            "matchDatasources": ["npm"],
+            "extends": ["schedule:weekly"]
+        },
+        // Update (rust) lockfiles weekly
+        {
+            "matchDatasources": ["crate"],
+            "lockFileMaintenance": {
+                "enabled": true,
+                "extends": ["schedule:weekly"]
+            }
+        }
+    ],
+    // custom regex update managers
+    "regexManagers": [
+        {
+            "fileMatch": ["(^|\\/)\\.?dprint.json"],
+            "matchStrings": ["\"https://github.com/(?<depName>.+)/releases/download/(?<currentValue>.+)/plugin.wasm\""],
+            "datasourceTemplate": "github-releases"
+        },
+        {
+            "fileMatch": ["^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.ya?ml$"],
+            "matchStrings": ["cargo install.*--version (?<currentValue>\\S+).*\\s(?<depName>\\S+)"],
+            "datasourceTemplate": "crate"
+        }
+    ]
+}

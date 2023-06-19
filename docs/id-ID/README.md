@@ -7,18 +7,18 @@ actionText: Mari Mulai →
 actionLink: ./guide/
 features:
   - 
-    title: Mengutamakan Kompabilitas
-    details: Dapat bekerja di shells yang paling biasa dengan sistem operasi yang paling biasa. Bisa digunakan di mana saja!
+    title: Kompatibilitas Yang Utama
+    details: Dapat berfungsi di shells standar dengan sistem operasi yang paling biasa. Pakai di mana saja!
   - 
-    title: Dibuat Dengan Rust
+    title: Dibuat dengan Rust
     details: Menggunakan kecepatan dan keamanan dari Rust, untuk membuat prompt kamu bekerja secepat dan seandal mungkin.
   - 
     title: Dapat Dikustomisasi
-    details: Semua detail kecil yang ada dapat kamu atur sesukamu, entah untuk membuatnya sebagai prompt yang seminimal mungkin atau mungkin kaya akan fitur sesuai keinginanmu.
+    details: Kamu dapat mengatur semua detail kecil dengan sesukamu, entah itu untuk membuatnya sebagai prompt yang seminimal mungkin atau kaya akan fitur yang kamu mau.
 footer: Berlisensi ISC | Hak Cipta © 2019-sekarang Kontributor Starship
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Prompt Lintas Shell"
-description: Starship merupakan sebuah prompt yang minimal, super cepat, dan sangat bisa untuk dikustomisasi untuk shell apapun! Bisa menampilkan informasi yang kamu butuhkan, namun tetap bisa tampil dengan ramping dan minimal. Pemasangan singkat tersedia untuk Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, dan PowerShell.
+description: Starship merupakan sebuah prompt yang minimal, super cepat, dan sangat bisa untuk dikustomisasi untuk shell apapun! Bisa menampilkan informasi yang kamu butuhkan, namun tetap bisa tampil dengan ramping dan minimal. Instalasi sederhana tersedia untuk Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, dan PowerShell.
 ---
 
 <div class="center">
@@ -30,7 +30,7 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
 ### Prasyarat
 
-- [Nerd Font](https://www.nerdfonts.com/) yang telah terinstalasi dan telah diaktifkan di dalam terminal.
+- [Nerd Font](https://www.nerdfonts.com/) yang sudah terpasang dan berjalan di dalam terminalmu.
 
 ### Instalasi Sederhana
 
@@ -45,7 +45,7 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   Untuk memperbarui Starship, jalankan kembali skrip di atas. Hal ini dapat memperbarui versi yang terpasang tanpa mengubah konfigurasi Starship.
+   Untuk memperbarui Starship, jalankan ulang skrip di atas. Hal ini akan memperbarui versi yang terpasang tanpa mengubah konfigurasi Starship.
 
 
    #### Pasang Melalui Package Manager
@@ -55,11 +55,10 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
    ```sh
    brew install starship
    ```
-
-   Dengan [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Tambahkan skrip init ke dalam file konfigurasi Shell:
@@ -122,7 +121,7 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   Hanya elvish v0.18 atau versi yang lebih baru yang mendapat dukungan pengembangan.
 
    :::
 
@@ -150,14 +149,14 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    ::: warning
 
-   This will change in the future. Hanya Nushell v0.61+ yang menerima dukungan.
+   Hal ini dapat berubah di kemudian hari. Hanya Nushell v0.73+ yang menerima dukungan.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    Lalu tambahkan baris berikut di baris terakhir konfigurasi Nushell (temukan dengan menjalankan `$nu.config-path`):

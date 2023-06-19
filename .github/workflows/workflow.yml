@@ -27,11 +27,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          profile: minimal
           components: rustfmt
 
       - name: Build | Format
@@ -48,22 +45,16 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          profile: minimal
           components: clippy
 
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
+
       - name: Build | Lint
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: clippy
-          args: --workspace --locked --all-targets --all-features -- -D clippy::all
+        uses: giraffate/clippy-action@871cc4173f2594435c7ea6b0bce499cf6c2164a1
 
   # Ensure that the project could be successfully compiled
   cargo_check:
@@ -73,15 +64,11 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked
@@ -95,15 +82,11 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --no-default-features
@@ -117,15 +100,11 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build | Check
         run: cargo check --workspace --locked --all-features
@@ -135,25 +114,29 @@ jobs:
     name: Check if config schema is up to date
     needs: cargo_check
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Run | Generate Schema
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
 
       - name: Check | Detect Changes
-        run: git diff --exit-code .github/config-schema.json
+        uses: reviewdog/action-suggester@v1.6.1
+        with:
+          tool_name: starship config-schema
+          filter_mode: nofilter
+          fail_on_error: 'true'
 
   # Run tests on Linux, macOS, and Windows
   # On both Rust stable and Rust nightly
@@ -175,17 +158,15 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v3
 
-      - name: Setup | Cache
-        uses: Swatinem/rust-cache@v1
-
       # Install all the required dependencies for testing
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.rust }}
           components: llvm-tools-preview
-          profile: minimal
-          override: true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
@@ -194,13 +175,11 @@ jobs:
       # On stable rust & main repo pushes only
       - name: Install cargo-wix [Windows]
         continue-on-error: true
-        if: >
-          matrix.os == 'windows-latest' && matrix.rust == 'stable' &&
-          github.repository == 'starship/starship' && github.event.type == 'push_event'
-        run: cargo install --version 0.3.2 cargo-wix
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: cargo install --version 0.3.4 cargo-wix
         env:
           # cargo-wix does not require static crt
-          RUSTFLAGS: ''
+          RUSTFLAGS: ""
 
       # Install Mercurial (pre-installed on Linux and windows)
       - name: Setup | Mercurial (macos)
@@ -221,13 +200,24 @@ jobs:
 
       - name: Build | Installer [Windows]
         continue-on-error: true
-        if: >
-          matrix.os == 'windows-latest' && matrix.rust == 'stable' &&
-          github.repository == 'starship/starship' && github.event.type == 'push_event'
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: wix
-          args: --dbg-build -v --nocapture -I install/windows/main.wxs
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: cargo wix --dbg-build -v --nocapture -I install/windows/main.wxs
+
+      - name: Build | Chocolatey Package [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: |
+          # Setup dummy release artifacts
+          foreach ($arch in @("aarch64", "i686", "x86_64")) {
+            foreach ($ext in @("zip", "msi")) {
+              New-Item -ItemType Directory -Path ./starship-$arch-pc-windows-msvc.$ext
+              New-Item -ItemType File -Path ./starship-$arch-pc-windows-msvc.$ext/starship-$arch-pc-windows-msvc.$ext
+            }
+          }
+          # Build package
+          pwsh ./install/windows/choco/update.ps1
+        env:
+          STARSHIP_VERSION: v1.2.3
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -235,4 +225,3 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: lcov.info
-          fail_ci_if_error: true

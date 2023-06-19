@@ -5,6 +5,7 @@ pub mod aws;
 pub mod azure;
 pub mod battery;
 pub mod buf;
+pub mod bun;
 pub mod c;
 pub mod character;
 pub mod cmake;
@@ -24,7 +25,9 @@ pub mod elixir;
 pub mod elm;
 pub mod env_var;
 pub mod erlang;
+pub mod fennel;
 pub mod fill;
+pub mod fossil_branch;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
@@ -32,7 +35,10 @@ pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
+pub mod gradle;
+pub mod guix_shell;
 pub mod haskell;
+pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
@@ -45,17 +51,22 @@ pub mod line_break;
 pub mod localip;
 pub mod lua;
 pub mod memory_usage;
+pub mod meson;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
 pub mod ocaml;
+pub mod opa;
 pub mod openstack;
+pub mod os;
 pub mod package;
 pub mod perl;
 pub mod php;
+pub mod pijul_channel;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
+pub mod raku;
 pub mod red;
 pub mod rlang;
 pub mod ruby;
@@ -64,6 +75,7 @@ pub mod scala;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
+pub mod solidity;
 pub mod spack;
 mod starship_root;
 pub mod status;
@@ -80,7 +92,11 @@ pub mod zig;
 pub use starship_root::*;
 
 #[derive(Serialize, Deserialize, Clone, Default)]
-#[cfg_attr(feature = "config-schema", derive(schemars::JsonSchema))]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct FullConfig<'a> {
     // Meta
@@ -98,6 +114,8 @@ pub struct FullConfig<'a> {
     battery: battery::BatteryConfig<'a>,
     #[serde(borrow)]
     buf: buf::BufConfig<'a>,
+    #[serde(borrow)]
+    bun: bun::BunConfig<'a>,
     #[serde(borrow)]
     c: c::CConfig<'a>,
     #[serde(borrow)]
@@ -135,7 +153,11 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     erlang: erlang::ErlangConfig<'a>,
     #[serde(borrow)]
+    fennel: fennel::FennelConfig<'a>,
+    #[serde(borrow)]
     fill: fill::FillConfig<'a>,
+    #[serde(borrow)]
+    fossil_branch: fossil_branch::FossilBranchConfig<'a>,
     #[serde(borrow)]
     gcloud: gcloud::GcloudConfig<'a>,
     #[serde(borrow)]
@@ -151,7 +173,13 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     golang: go::GoConfig<'a>,
     #[serde(borrow)]
+    gradle: gradle::GradleConfig<'a>,
+    #[serde(borrow)]
+    guix_shell: guix_shell::GuixShellConfig<'a>,
+    #[serde(borrow)]
     haskell: haskell::HaskellConfig<'a>,
+    #[serde(borrow)]
+    haxe: haxe::HaxeConfig<'a>,
     #[serde(borrow)]
     helm: helm::HelmConfig<'a>,
     #[serde(borrow)]
@@ -176,6 +204,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     memory_usage: memory_usage::MemoryConfig<'a>,
     #[serde(borrow)]
+    meson: meson::MesonConfig<'a>,
+    #[serde(borrow)]
     nim: nim::NimConfig<'a>,
     #[serde(borrow)]
     nix_shell: nix_shell::NixShellConfig<'a>,
@@ -184,7 +214,11 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     ocaml: ocaml::OCamlConfig<'a>,
     #[serde(borrow)]
+    opa: opa::OpaConfig<'a>,
+    #[serde(borrow)]
     openstack: openstack::OspConfig<'a>,
+    #[serde(borrow)]
+    os: os::OSConfig<'a>,
     #[serde(borrow)]
     package: package::PackageConfig<'a>,
     #[serde(borrow)]
@@ -192,11 +226,15 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     php: php::PhpConfig<'a>,
     #[serde(borrow)]
+    pijul_channel: pijul_channel::PijulConfig<'a>,
+    #[serde(borrow)]
     pulumi: pulumi::PulumiConfig<'a>,
     #[serde(borrow)]
     purescript: purescript::PureScriptConfig<'a>,
     #[serde(borrow)]
     python: python::PythonConfig<'a>,
+    #[serde(borrow)]
+    raku: raku::RakuConfig<'a>,
     #[serde(borrow)]
     red: red::RedConfig<'a>,
     #[serde(borrow)]
@@ -213,6 +251,8 @@ pub struct FullConfig<'a> {
     shlvl: shlvl::ShLvlConfig<'a>,
     #[serde(borrow)]
     singularity: singularity::SingularityConfig<'a>,
+    #[serde(borrow)]
+    solidity: solidity::SolidityConfig<'a>,
     #[serde(borrow)]
     spack: spack::SpackConfig<'a>,
     #[serde(borrow)]

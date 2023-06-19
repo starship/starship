@@ -8,6 +8,10 @@ Este preajuste cambia los símbolos a texto sin formato. Bueno si usted no tiene
 
 ### Configuración
 
+```sh
+starship preset plain-text-symbols -o ~/.config/starship.toml
+```
+
 [Clic para descargar TOML](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
