@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#nerd-font-symbols)
+[Return to Presets](./README.md#jetpack)
 
 # Jetpack Preset
 
