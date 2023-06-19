@@ -51,7 +51,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::{test::ModuleRenderer, utils::CommandOutput};
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn test_sudo_not_cached() {
@@ -74,8 +74,8 @@ mod tests {
             .cmd(
                 "sudo -n true",
                 Some(CommandOutput {
-                    stdout: "".to_owned(),
-                    stderr: "".to_owned(),
+                    stdout: String::new(),
+                    stderr: String::new(),
                 }),
             )
             .config(toml::toml! {
@@ -96,8 +96,8 @@ mod tests {
             .cmd(
                 "sudo -n true",
                 Some(CommandOutput {
-                    stdout: "".to_owned(),
-                    stderr: "".to_owned(),
+                    stdout: String::new(),
+                    stderr: String::new(),
                 }),
             )
             .config(toml::toml! {

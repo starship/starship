@@ -1,12 +1,16 @@
 use crate::config::{ModuleConfig, StarshipConfig};
 use crate::configs::StarshipRootConfig;
+use crate::context_env::Env;
 use crate::module::Module;
-use crate::utils::{create_command, exec_timeout, read_file, CommandOutput};
+use crate::utils::{create_command, exec_timeout, read_file, CommandOutput, PathExt};
 
 use crate::modules;
-use crate::utils::{self, home_dir};
+use crate::utils;
 use clap::Parser;
-use git2::{ErrorCode::UnbornBranch, Repository, RepositoryState};
+use gix::{
+    sec::{self as git_sec, trust::DefaultForLevel},
+    state as git_state, Repository, ThreadSafeRepository,
+};
 use once_cell::sync::OnceCell;
 #[cfg(test)]
 use std::collections::HashMap;
@@ -38,7 +42,7 @@ pub struct Context<'a> {
     /// E.g. when navigating to a PSDrive in PowerShell, or a path without symlinks resolved.
     pub logical_dir: PathBuf,
 
-    /// A struct containing directory contents in a lookup-optimised format.
+    /// A struct containing directory contents in a lookup-optimized format.
     dir_contents: OnceCell<DirContents>,
 
     /// Properties to provide to modules.
@@ -57,8 +61,7 @@ pub struct Context<'a> {
     pub width: usize,
 
     /// A HashMap of environment variable mocks
-    #[cfg(test)]
-    pub env: HashMap<&'a str, String>,
+    pub env: Env<'a>,
 
     /// A HashMap of command mocks
     #[cfg(test)]
@@ -104,7 +107,14 @@ impl<'a> Context<'a> {
             .or_else(|| env::var("PWD").map(PathBuf::from).ok())
             .unwrap_or_else(|| path.clone());
 
-        Context::new_with_shell_and_path(arguments, shell, target, path, logical_path)
+        Context::new_with_shell_and_path(
+            arguments,
+            shell,
+            target,
+            path,
+            logical_path,
+            Default::default(),
+        )
     }
 
     /// Create a new instance of Context for the provided directory
@@ -114,8 +124,9 @@ impl<'a> Context<'a> {
         target: Target,
         path: PathBuf,
         logical_path: PathBuf,
+        env: Env<'a>,
     ) -> Context<'a> {
-        let config = StarshipConfig::initialize();
+        let config = StarshipConfig::initialize(&get_config_path_os(&env));
 
         // If the vector is zero-length, we should pretend that we didn't get a
         // pipestatus at all (since this is the input `--pipestatus=""`)
@@ -159,10 +170,9 @@ impl<'a> Context<'a> {
             shell,
             target,
             width,
+            env,
             #[cfg(test)]
             root_dir: tempfile::TempDir::new().unwrap(),
-            #[cfg(test)]
-            env: HashMap::new(),
             #[cfg(test)]
             cmd: HashMap::new(),
             #[cfg(feature = "battery")]
@@ -172,39 +182,30 @@ impl<'a> Context<'a> {
         }
     }
 
+    /// Sets the context config, overwriting the existing config
+    pub fn set_config(mut self, config: toml::Table) -> Context<'a> {
+        self.root_config = StarshipRootConfig::load(&config);
+        self.config = StarshipConfig {
+            config: Some(config),
+        };
+        self
+    }
+
     // Tries to retrieve home directory from a table in testing mode or else retrieves it from the os
     pub fn get_home(&self) -> Option<PathBuf> {
-        if cfg!(test) {
-            return self.get_env("HOME").map(PathBuf::from).or_else(home_dir);
-        }
-
-        home_dir()
+        home_dir(&self.env)
     }
 
-    // Retrives a environment variable from the os or from a table if in testing mode
-    #[cfg(test)]
-    pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        self.env
-            .get(key.as_ref())
-            .map(std::string::ToString::to_string)
-    }
-
-    #[cfg(not(test))]
+    // Retrieves a environment variable from the os or from a table if in testing mode
     #[inline]
     pub fn get_env<K: AsRef<str>>(&self, key: K) -> Option<String> {
-        env::var(key.as_ref()).ok()
+        self.env.get_env(key)
     }
 
-    // Retrives a environment variable from the os or from a table if in testing mode (os version)
-    #[cfg(test)]
-    pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
-        self.env.get(key.as_ref()).map(OsString::from)
-    }
-
-    #[cfg(not(test))]
+    // Retrieves a environment variable from the os or from a table if in testing mode (os version)
     #[inline]
     pub fn get_env_os<K: AsRef<str>>(&self, key: K) -> Option<OsString> {
-        env::var_os(key.as_ref())
+        self.env.get_env_os(key)
     }
 
     /// Convert a `~` in a path to the home directory
@@ -234,13 +235,8 @@ impl<'a> Context<'a> {
         disabled == Some(true)
     }
 
-    /// Return whether the specified custom module has a `disabled` option set to true.
-    /// If it doesn't exist, `None` is returned.
-    pub fn is_custom_module_disabled_in_config(&self, name: &str) -> Option<bool> {
-        let config = self.config.get_custom_module_config(name)?;
-        let disabled = Some(config).and_then(|table| table.as_table()?.get("disabled")?.as_bool());
-
-        Some(disabled == Some(true))
+    pub fn detect_env_vars(&'a self, env_vars: &'a [&'a str]) -> bool {
+        env_vars.is_empty() || (env_vars.iter().any(|e| self.get_env(e).is_some()))
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
@@ -254,23 +250,78 @@ impl<'a> Context<'a> {
         })
     }
 
+    /// Begins an ancestor scan at the current directory, see [`ScanAncestors`] for available
+    /// methods.
+    pub fn begin_ancestor_scan(&'a self) -> ScanAncestors<'a> {
+        ScanAncestors {
+            path: &self.current_dir,
+            files: &[],
+            folders: &[],
+        }
+    }
+
     /// Will lazily get repo root and branch when a module requests it.
-    pub fn get_repo(&self) -> Result<&Repo, git2::Error> {
-        self.repo.get_or_try_init(|| -> Result<Repo, git2::Error> {
-            let repository = if env::var("GIT_DIR").is_ok() {
-                Repository::open_from_env()
-            } else {
-                let dirs: [PathBuf; 0] = [];
-                Repository::open_ext(&self.current_dir, git2::RepositoryOpenFlags::FROM_ENV, dirs)
-            }?;
-            Ok(Repo {
-                branch: get_current_branch(&repository),
-                workdir: repository.workdir().map(Path::to_path_buf),
-                path: Path::to_path_buf(repository.path()),
-                state: repository.state(),
-                remote: get_remote_repository_info(&repository),
+    pub fn get_repo(&self) -> Result<&Repo, Box<gix::discover::Error>> {
+        self.repo
+            .get_or_try_init(|| -> Result<Repo, Box<gix::discover::Error>> {
+                // custom open options
+                let mut git_open_opts_map =
+                    git_sec::trust::Mapping::<gix::open::Options>::default();
+
+                // don't use the global git configs
+                let config = gix::open::permissions::Config {
+                    git_binary: false,
+                    system: false,
+                    git: false,
+                    user: false,
+                    env: true,
+                    includes: true,
+                };
+                // change options for config permissions without touching anything else
+                git_open_opts_map.reduced =
+                    git_open_opts_map
+                        .reduced
+                        .permissions(gix::open::Permissions {
+                            config,
+                            ..gix::open::Permissions::default_for_level(git_sec::Trust::Reduced)
+                        });
+                git_open_opts_map.full =
+                    git_open_opts_map.full.permissions(gix::open::Permissions {
+                        config,
+                        ..gix::open::Permissions::default_for_level(git_sec::Trust::Full)
+                    });
+
+                let shared_repo =
+                    match ThreadSafeRepository::discover_with_environment_overrides_opts(
+                        &self.current_dir,
+                        Default::default(),
+                        git_open_opts_map,
+                    ) {
+                        Ok(repo) => repo,
+                        Err(e) => {
+                            log::debug!("Failed to find git repo: {e}");
+                            return Err(Box::new(e));
+                        }
+                    };
+
+                let repository = shared_repo.to_thread_local();
+                log::trace!(
+                    "Found git repo: {repository:?}, (trust: {:?})",
+                    repository.git_dir_trust()
+                );
+
+                let branch = get_current_branch(&repository);
+                let remote = get_remote_repository_info(&repository, branch.as_deref());
+                let path = repository.path().to_path_buf();
+                Ok(Repo {
+                    repo: shared_repo,
+                    branch,
+                    workdir: repository.work_dir().map(PathBuf::from),
+                    path,
+                    state: repository.state(),
+                    remote,
+                })
             })
-        })
     }
 
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
@@ -355,6 +406,32 @@ impl<'a> Context<'a> {
 
         read_file(self.current_dir.join(file_name)).ok()
     }
+
+    pub fn get_config_path_os(&self) -> Option<OsString> {
+        get_config_path_os(&self.env)
+    }
+}
+
+impl Default for Context<'_> {
+    fn default() -> Self {
+        Context::new(Default::default(), Target::Main)
+    }
+}
+
+fn home_dir(env: &Env) -> Option<PathBuf> {
+    if cfg!(test) {
+        if let Some(home) = env.get_env("HOME") {
+            return Some(PathBuf::from(home));
+        }
+    }
+    utils::home_dir()
+}
+
+fn get_config_path_os(env: &Env) -> Option<OsString> {
+    if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
+        return Some(config_path);
+    }
+    Some(home_dir(env)?.join(".config").join("starship.toml").into())
 }
 
 #[derive(Debug)]
@@ -397,10 +474,27 @@ impl DirContents {
                     folders.insert(path);
                 } else {
                     if !path.to_string_lossy().starts_with('.') {
+                        // Extract the file extensions (yes, that's plural) from a filename.
+                        // Why plural? Consider the case of foo.tar.gz. It's a compressed
+                        // tarball (tar.gz), and it's a gzipped file (gz). We should be able
+                        // to match both.
+
+                        // find the minimal extension on a file. ie, the gz in foo.tar.gz
+                        // NB the .to_string_lossy().to_string() here looks weird but is
+                        // required to convert it from a Cow.
                         path.extension()
                             .map(|ext| extensions.insert(ext.to_string_lossy().to_string()));
+
+                        // find the full extension on a file. ie, the tar.gz in foo.tar.gz
+                        path.file_name().map(|file_name| {
+                            file_name
+                                .to_string_lossy()
+                                .split_once('.')
+                                .map(|(_, after)| extensions.insert(after.to_string()))
+                        });
                     }
                     if let Some(file_name) = path.file_name() {
+                        // this .to_string_lossy().to_string() is also required
                         file_names.insert(file_name.to_string_lossy().to_string());
                     }
                     files.insert(path);
@@ -432,28 +526,53 @@ impl DirContents {
         self.file_names.contains(name)
     }
 
-    pub fn has_any_file_name(&self, names: &[&str]) -> bool {
-        names.iter().any(|name| self.has_file_name(name))
-    }
-
     pub fn has_folder(&self, path: &str) -> bool {
         self.folders.contains(Path::new(path))
-    }
-
-    pub fn has_any_folder(&self, paths: &[&str]) -> bool {
-        paths.iter().any(|path| self.has_folder(path))
     }
 
     pub fn has_extension(&self, ext: &str) -> bool {
         self.extensions.contains(ext)
     }
 
-    pub fn has_any_extension(&self, exts: &[&str]) -> bool {
-        exts.iter().any(|ext| self.has_extension(ext))
+    pub fn has_any_positive_file_name(&self, names: &[&str]) -> bool {
+        names
+            .iter()
+            .any(|name| !name.starts_with('!') && self.has_file_name(name))
+    }
+
+    pub fn has_any_positive_folder(&self, paths: &[&str]) -> bool {
+        paths
+            .iter()
+            .any(|path| !path.starts_with('!') && self.has_folder(path))
+    }
+
+    pub fn has_any_positive_extension(&self, exts: &[&str]) -> bool {
+        exts.iter()
+            .any(|ext| !ext.starts_with('!') && self.has_extension(ext))
+    }
+
+    pub fn has_no_negative_file_name(&self, names: &[&str]) -> bool {
+        !names
+            .iter()
+            .any(|name| name.starts_with('!') && self.has_file_name(&name[1..]))
+    }
+
+    pub fn has_no_negative_folder(&self, paths: &[&str]) -> bool {
+        !paths
+            .iter()
+            .any(|path| path.starts_with('!') && self.has_folder(&path[1..]))
+    }
+
+    pub fn has_no_negative_extension(&self, exts: &[&str]) -> bool {
+        !exts
+            .iter()
+            .any(|ext| ext.starts_with('!') && self.has_extension(&ext[1..]))
     }
 }
 
 pub struct Repo {
+    pub repo: ThreadSafeRepository,
+
     /// If `current_dir` is a git repository or is contained within one,
     /// this is the current branch name of that repo.
     pub branch: Option<String>,
@@ -466,7 +585,7 @@ pub struct Repo {
     pub path: PathBuf,
 
     /// State
-    pub state: RepositoryState,
+    pub state: Option<git_state::InProgress>,
 
     /// Remote repository
     pub remote: Option<Remote>,
@@ -474,8 +593,8 @@ pub struct Repo {
 
 impl Repo {
     /// Opens the associated git repository.
-    pub fn open(&self) -> Result<Repository, git2::Error> {
-        Repository::open(&self.path)
+    pub fn open(&self) -> Repository {
+        self.repo.to_thread_local()
     }
 }
 
@@ -516,64 +635,85 @@ impl<'a> ScanDir<'a> {
     /// based on the current `PathBuf` check to see
     /// if any of this criteria match or exist and returning a boolean
     pub fn is_match(&self) -> bool {
-        self.dir_contents.has_any_extension(self.extensions)
-            || self.dir_contents.has_any_folder(self.folders)
-            || self.dir_contents.has_any_file_name(self.files)
+        // if there exists a file with a file/folder/ext we've said we don't want,
+        // fail the match straight away
+        self.dir_contents.has_no_negative_extension(self.extensions)
+            && self.dir_contents.has_no_negative_file_name(self.files)
+            && self.dir_contents.has_no_negative_folder(self.folders)
+            && (self
+                .dir_contents
+                .has_any_positive_extension(self.extensions)
+                || self.dir_contents.has_any_positive_file_name(self.files)
+                || self.dir_contents.has_any_positive_folder(self.folders))
+    }
+}
+
+/// Scans the ancestors of a given path until a directory containing one of the given files or
+/// folders is found.
+pub struct ScanAncestors<'a> {
+    path: &'a Path,
+    files: &'a [&'a str],
+    folders: &'a [&'a str],
+}
+
+impl<'a> ScanAncestors<'a> {
+    #[must_use]
+    pub const fn set_files(mut self, files: &'a [&'a str]) -> Self {
+        self.files = files;
+        self
+    }
+
+    #[must_use]
+    pub const fn set_folders(mut self, folders: &'a [&'a str]) -> Self {
+        self.folders = folders;
+        self
+    }
+
+    /// Scans upwards starting from the initial path until a directory containing one of the given
+    /// files or folders is found.
+    ///
+    /// The scan does not cross device boundaries.
+    pub fn scan(&self) -> Option<&'a Path> {
+        let initial_device_id = self.path.device_id();
+        for dir in self.path.ancestors() {
+            if initial_device_id != dir.device_id() {
+                break;
+            }
+
+            if self.files.iter().any(|name| dir.join(name).is_file())
+                || self.folders.iter().any(|name| dir.join(name).is_dir())
+            {
+                return Some(dir);
+            }
+        }
+        None
     }
 }
 
 fn get_current_branch(repository: &Repository) -> Option<String> {
-    let head = match repository.head() {
-        Ok(reference) => reference,
-        Err(e) => {
-            return if e.code() == UnbornBranch {
-                // HEAD should only be an unborn branch if the repository is fresh,
-                // in that case read directly from `.git/HEAD`
-                let mut head_path = repository.path().to_path_buf();
-                head_path.push("HEAD");
+    let name = repository.head_name().ok()??;
+    let shorthand = name.shorten();
 
-                // get first line, then last path segment
-                fs::read_to_string(&head_path)
-                    .ok()?
-                    .lines()
-                    .next()?
-                    .trim()
-                    .split('/')
-                    .last()
-                    .map(std::borrow::ToOwned::to_owned)
-            } else {
-                None
-            };
-        }
-    };
-
-    let shorthand = head.shorthand();
-
-    shorthand.map(std::string::ToString::to_string)
+    Some(shorthand.to_string())
 }
 
-fn get_remote_repository_info(repository: &Repository) -> Option<Remote> {
-    if let Ok(head) = repository.head() {
-        if let Some(local_branch_ref) = head.name() {
-            let remote_ref = match repository.branch_upstream_name(local_branch_ref) {
-                Ok(remote_ref) => remote_ref.as_str()?.to_owned(),
-                Err(_) => return None,
-            };
+fn get_remote_repository_info(
+    repository: &Repository,
+    branch_name: Option<&str>,
+) -> Option<Remote> {
+    let branch_name = branch_name?;
+    let branch = repository
+        .branch_remote_ref(branch_name)
+        .and_then(std::result::Result::ok)
+        .map(|r| r.shorten().to_string());
+    let name = repository
+        .branch_remote_name(branch_name)
+        .map(|n| n.as_bstr().to_string());
 
-            let mut v = remote_ref.splitn(4, '/');
-            let remote_name = v.nth(2)?.to_owned();
-            let remote_branch = v.last()?.to_owned();
-
-            return Some(Remote {
-                branch: Some(remote_branch),
-                name: Some(remote_name),
-            });
-        }
-    }
-    None
+    Some(Remote { branch, name })
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Shell {
     Bash,
     Fish,
@@ -589,11 +729,12 @@ pub enum Shell {
 }
 
 /// Which kind of prompt target to print (main prompt, rprompt, ...)
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Target {
     Main,
     Right,
     Continuation,
+    Profile(String),
 }
 
 /// Properties as passed on from the shell as arguments
@@ -606,7 +747,7 @@ pub struct Properties {
     #[clap(long, value_delimiter = ' ')]
     pub pipestatus: Option<Vec<String>>,
     /// The width of the current interactive terminal.
-    #[clap(short = 'w', long, default_value_t=default_width(), parse(try_from_str=parse_width))]
+    #[clap(short = 'w', long, default_value_t=default_width(), value_parser=parse_width)]
     terminal_width: usize,
     /// The path that the prompt should render for.
     #[clap(short, long)]
@@ -622,7 +763,7 @@ pub struct Properties {
     #[clap(short = 'k', long, default_value = "viins")]
     pub keymap: String,
     /// The number of currently running jobs
-    #[clap(short, long, default_value_t, parse(try_from_str=parse_jobs))]
+    #[clap(short, long, default_value_t, value_parser=parse_jobs)]
     pub jobs: i64,
 }
 
@@ -665,6 +806,7 @@ fn parse_width(width: &str) -> Result<usize, ParseIntError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::test::default_context;
     use std::io;
 
     fn testdir(paths: &[&str]) -> Result<tempfile::TempDir, std::io::Error> {
@@ -726,6 +868,50 @@ mod tests {
         .is_match());
         node.close()?;
 
+        let tarballs = testdir(&["foo.tgz", "foo.tar.gz"])?;
+        let tarballs_dc = DirContents::from_path(tarballs.path())?;
+        assert!(ScanDir {
+            dir_contents: &tarballs_dc,
+            files: &[],
+            extensions: &["tar.gz"],
+            folders: &[],
+        }
+        .is_match());
+        tarballs.close()?;
+
+        let dont_match_ext = testdir(&["foo.js", "foo.ts"])?;
+        let dont_match_ext_dc = DirContents::from_path(dont_match_ext.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_ext_dc,
+            files: &[],
+            extensions: &["js", "!notfound", "!ts"],
+            folders: &[],
+        }
+        .is_match());
+        dont_match_ext.close()?;
+
+        let dont_match_file = testdir(&["goodfile", "evilfile"])?;
+        let dont_match_file_dc = DirContents::from_path(dont_match_file.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_file_dc,
+            files: &["goodfile", "!notfound", "!evilfile"],
+            extensions: &[],
+            folders: &[],
+        }
+        .is_match());
+        dont_match_file.close()?;
+
+        let dont_match_folder = testdir(&["gooddir/somefile", "evildir/somefile"])?;
+        let dont_match_folder_dc = DirContents::from_path(dont_match_folder.path())?;
+        assert!(!ScanDir {
+            dir_contents: &dont_match_folder_dc,
+            files: &[],
+            extensions: &[],
+            folders: &["gooddir", "!notfound", "!evildir"],
+        }
+        .is_match());
+        dont_match_folder.close()?;
+
         Ok(())
     }
 
@@ -738,7 +924,7 @@ mod tests {
 
         let tmp_dir = tempfile::TempDir::new()?;
         let path = tmp_dir.path().join("a/xxx/yyy");
-        fs::create_dir_all(&path)?;
+        fs::create_dir_all(path)?;
 
         // Set up a mock symlink
         let path_actual = tmp_dir.path().join("a/xxx");
@@ -753,6 +939,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
+            Default::default(),
         );
 
         assert_ne!(context.current_dir, context.logical_dir);
@@ -777,6 +964,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
+            Default::default(),
         );
 
         let expected_current_dir = &test_path;
@@ -798,6 +986,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path.clone(),
+            Default::default(),
         );
 
         let expected_current_dir = home_dir()
@@ -807,6 +996,16 @@ mod tests {
 
         let expected_logical_dir = test_path;
         assert_eq!(expected_logical_dir, context.logical_dir);
+    }
+
+    #[test]
+    fn set_config_method_overwrites_constructor() {
+        let context = default_context();
+        let mod_context = default_context().set_config(toml::toml! {
+            add_newline = true
+        });
+
+        assert_ne!(context.config.config, mod_context.config.config);
     }
 
     #[cfg(windows)]
@@ -819,6 +1018,7 @@ mod tests {
             Target::Main,
             test_path.clone(),
             test_path,
+            Default::default(),
         );
 
         let expected_path = Path::new(r"C:\");

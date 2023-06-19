@@ -1,15 +1,32 @@
-use std::fs::File;
-use std::io::{BufReader, Read};
-use std::path::{Path, PathBuf};
+use serde::{Deserialize, Serialize};
+use std::fs;
+use std::path::PathBuf;
 
 use super::{Context, Module, ModuleConfig};
-
-type JValue = serde_json::Value;
 
 use crate::configs::azure::AzureConfig;
 use crate::formatter::StringFormatter;
 
-type SubscriptionName = String;
+#[derive(Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+struct AzureProfile {
+    installation_id: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    subscriptions: Vec<Subscription>,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+struct User {
+    name: String,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+struct Subscription {
+    name: String,
+    user: User,
+    is_default: bool,
+}
 
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("azure");
@@ -19,11 +36,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     };
 
-    let subscription_name: Option<SubscriptionName> = get_azure_subscription_name(context);
-    if subscription_name.is_none() {
-        log::info!("Could not find Azure subscription name");
+    let subscription: Option<Subscription> = get_azure_profile_info(context);
+
+    if subscription.is_none() {
+        log::info!("Could not find Subscriptions in azureProfile.json");
         return None;
-    };
+    }
+
+    let subscription = subscription.unwrap();
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
@@ -36,7 +56,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "subscription" => Some(Ok(subscription_name.as_ref().unwrap())),
+                "subscription" => Some(Ok(config
+                    .subscription_aliases
+                    .get(&subscription.name)
+                    .copied()
+                    .unwrap_or(&subscription.name))),
+                "username" => Some(Ok(&subscription.user.name)),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -53,24 +78,24 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn get_azure_subscription_name(context: &Context) -> Option<SubscriptionName> {
+fn get_azure_profile_info(context: &Context) -> Option<Subscription> {
     let mut config_path = get_config_file_location(context)?;
     config_path.push("azureProfile.json");
 
-    let parsed_json = parse_json(&config_path)?;
+    let azure_profile = load_azure_profile(&config_path)?;
+    azure_profile
+        .subscriptions
+        .into_iter()
+        .find(|s| s.is_default)
+}
 
-    let subscriptions = parsed_json.get("subscriptions")?.as_array()?;
-    let subscription_name = subscriptions.iter().find_map(|s| {
-        if s.get("isDefault")? == true {
-            Some(s.get("name")?.as_str()?.to_string())
-        } else {
-            None
-        }
-    });
-    if subscription_name.is_some() {
-        subscription_name
+fn load_azure_profile(config_path: &PathBuf) -> Option<AzureProfile> {
+    let json_data = fs::read_to_string(config_path).ok()?;
+    let sanitized_json_data = json_data.strip_prefix('\u{feff}').unwrap_or(&json_data);
+    if let Ok(azure_profile) = serde_json::from_str::<AzureProfile>(sanitized_json_data) {
+        Some(azure_profile)
     } else {
-        log::info!("Could not find subscription name");
+        log::info!("Failed to parse azure profile.");
         None
     }
 }
@@ -86,30 +111,12 @@ fn get_config_file_location(context: &Context) -> Option<PathBuf> {
         })
 }
 
-fn parse_json(json_file_path: &Path) -> Option<JValue> {
-    let mut buffer: Vec<u8> = Vec::new();
-
-    let json_file = File::open(&json_file_path).ok()?;
-    let mut reader = BufReader::new(json_file);
-    reader.read_to_end(&mut buffer).ok()?;
-
-    let bytes = buffer.as_mut_slice();
-    let decodedbuffer = bytes.strip_prefix(&[239, 187, 191]).unwrap_or(bytes);
-
-    if let Ok(parsed_json) = serde_json::from_slice(decodedbuffer) {
-        Some(parsed_json)
-    } else {
-        log::info!("Failed to parse json");
-        None
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::modules::azure::parse_json;
+    use crate::modules::azure::load_azure_profile;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
     use ini::Ini;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io::{self, Write};
     use std::path::PathBuf;
@@ -154,6 +161,7 @@ mod tests {
                   "name": "user@domain.com",
                   "type": "user"
                 },
+                "isDefault": false,
                 "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
                 "environmentName": "AzureCloud",
                 "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
@@ -188,7 +196,500 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("ﴃ Subscription 1")
+            Color::Blue.bold().paint("󰠅 Subscription 1")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn user_name_set_correctly() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "Subscription 2",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "Subscription 3",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "Subscription 1",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+            [azure]
+            format = "on [$symbol($username)]($style)"
+            disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Blue.bold().paint("󰠅 user@domain.com")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn subscription_name_empty() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "Subscription 2",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "Subscription 3",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+            [azure]
+            format = "on [$symbol($subscription:$username)]($style)"
+            disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Blue.bold().paint("󰠅 :user@domain.com")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn user_name_empty() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "Subscription 2",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "Subscription 3",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "Subscription 1",
+                "state": "Enabled",
+                "user": {
+                  "name": "",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+            [azure]
+            format = "on [$symbol($subscription:$username)]($style)"
+            disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Blue.bold().paint("󰠅 Subscription 1:")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn user_name_missing_from_profile() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "Subscription 2",
+                "state": "Enabled",
+                "user": {
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "Subscription 3",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "Subscription 1",
+                "state": "Enabled",
+                "user": {
+                  "name": "",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+            [azure]
+            format = "on [$symbol($subscription:$username)]($style)"
+            disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = None;
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn subscription_name_missing_from_profile() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "Subscription 2",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "Subscription 3",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+            [azure]
+            format = "on [$symbol($subscription:$username)]($style)"
+            disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = None;
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn subscription_name_and_username_found() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "Subscription 2",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "Subscription 3",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false, 
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "Subscription 1",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+            [azure]
+            format = "on [$symbol($subscription:$username)]($style)"
+            disabled = false
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Blue.bold().paint("󰠅 Subscription 1:user@domain.com")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn subscription_name_with_alias() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "VeryLongSubscriptionName",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "AnotherLongSubscriptionName",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false, 
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "TheLastLongSubscriptionName",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+                [azure]
+                format = "on [$symbol($subscription:$username)]($style)"
+                disabled = false
+                [azure.subscription_aliases]
+                VeryLongSubscriptionName = "vlsn"
+                AnotherLongSubscriptionName = "alsn"
+                TheLastLongSubscriptionName = "tllsn"
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Blue.bold().paint("󰠅 tllsn:user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -203,6 +704,7 @@ mod tests {
             .with_section(Some("AzureCloud"))
             .set("subscription", "f3935dc9-92b5-9a93-da7b-42c325d86939");
 
+        //let azure_profile_contents = "\u{feff}{\"installationId\": \"2652263e-40f8-11ed-ae3b-367ddada549c\", \"subscriptions\": []}";
         let azure_profile_contents = r#"{
             "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
             "subscriptions": []
@@ -224,6 +726,48 @@ mod tests {
     }
 
     #[test]
+    fn azure_profile_with_leading_char() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let bom = vec![239, 187, 191];
+        let mut bom_str = String::from_utf8(bom).unwrap();
+
+        let json_str =
+            r#"{"installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3", "subscriptions": []}"#;
+
+        bom_str.push_str(json_str);
+
+        let dir_path_no_bom = save_string_to_file(&dir, bom_str, String::from("bom.json"))?;
+        let sanitized_json = load_azure_profile(&dir_path_no_bom).unwrap();
+
+        assert_eq!(
+            sanitized_json.installation_id,
+            "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3"
+        );
+        assert!(sanitized_json.subscriptions.is_empty());
+        dir.close()
+    }
+
+    #[test]
+    fn azure_profile_without_leading_char() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let json_str =
+            r#"{"installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3", "subscriptions": []}"#;
+
+        let dir_path_no_bom =
+            save_string_to_file(&dir, json_str.to_string(), String::from("bom.json"))?;
+        let sanitized_json = load_azure_profile(&dir_path_no_bom).unwrap();
+
+        assert_eq!(
+            sanitized_json.installation_id,
+            "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3"
+        );
+        assert!(sanitized_json.subscriptions.is_empty());
+        dir.close()
+    }
+
+    #[test]
     fn files_missing() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
 
@@ -234,22 +778,6 @@ mod tests {
             .collect();
         let expected = None;
         assert_eq!(actual, expected);
-        dir.close()
-    }
-
-    #[test]
-    fn json_parsing() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-
-        let bom = vec![239, 187, 191];
-        let mut bom_str = String::from_utf8(bom).unwrap();
-        let json_str = r#"{"testKey": "testValue"}"#;
-        bom_str.push_str(json_str);
-
-        let dir_path_no_bom = save_string_to_file(&dir, bom_str, String::from("bom.json"))?;
-        let parsed_json = parse_json(&dir_path_no_bom).unwrap();
-
-        assert_eq!(parsed_json.get("testKey").unwrap(), "testValue");
         dir.close()
     }
 

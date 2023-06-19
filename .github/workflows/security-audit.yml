@@ -8,22 +8,22 @@ on:
     paths:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
-  schedule:
-    - cron: "0 0 * * *"
 jobs:
   security_audit:
-    if: (github.event_name == 'schedule' && github.repository == 'starship/starship') || (github.event_name != 'schedule')
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        checks:
+          - advisories
+          - bans licenses sources
+
+    # Prevent sudden announcement of a new advisory from failing ci:
+    continue-on-error: ${{ matrix.checks == 'advisories' }}
+
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v3
-      - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          override: true
-          profile: minimal
       - name: Test | Security Audit
-        uses: actions-rs/audit-check@v1.2.0
+        uses: EmbarkStudios/cargo-deny-action@v1.5.2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          command: check ${{ matrix.checks }}

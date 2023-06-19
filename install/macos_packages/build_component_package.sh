@@ -8,7 +8,7 @@ set -euo pipefail
 # Usage: run this script, passing $1 to the repository path. The script assumes
 # it is being run from within a starship repository if $1 is not provided.
 
-usage(){
+usage() {
     echo "Builds a component package for macOS."
     echo "Assumes that the following items already exist:"
     echo "    - A starship binary which has already been notarized"
@@ -17,10 +17,10 @@ usage(){
     echo "Usage: $0 <path-to-starship-binary> <path-to-dist-directory>"
 }
 
-script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$script_dir/common.sh"
 
-cleanup_server(){
+cleanup_server() {
     if [[ -n "${server_pid-}" ]]; then
         echo "Killing HTTP server ($server_pid) to clean up."
         kill "$server_pid"
@@ -77,7 +77,7 @@ sleep 3
 # on MacOS by default, but lucky for us, it does exist on GHActions runners.
 # Wget may return nonzero exit codes even if things were mostly fine (e.g. 404 for
 # some links on translated pages) so we simply ignore if it has a failure
-wget --mirror --convert-links --adjust-extension --page-requisites --no-parent 127.0.0.1:8000 &> wget.log || true
+wget --mirror --convert-links --adjust-extension --page-requisites --no-parent 127.0.0.1:8000 &>wget.log || true
 mkdir -p "$pkgdir/usr/local/share/doc/"
 mv 127.0.0.1:8000 "$pkgdir/usr/local/share/doc/starship"
 

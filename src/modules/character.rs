@@ -4,7 +4,7 @@ use crate::formatter::StringFormatter;
 
 /// Creates a module for the prompt character
 ///
-/// The character segment prints an arrow character in a color dependant on the
+/// The character segment prints an arrow character in a color dependent on the
 /// exit-code of the last executed command:
 /// - If the exit-code was "0", it will be formatted with `success_symbol`
 ///   (green arrow by default)
@@ -13,6 +13,9 @@ use crate::formatter::StringFormatter;
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     enum ShellEditMode {
         Normal,
+        Visual,
+        Replace,
+        ReplaceOne,
         Insert,
     }
     const ASSUMED_MODE: ShellEditMode = ShellEditMode::Insert;
@@ -32,14 +35,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // We do some environment detection in src/init.rs to translate.
     // The result: in non-vi fish, keymap is always reported as "insert"
     let mode = match (&context.shell, keymap) {
-        (Shell::Fish, "default") | (Shell::Zsh, "vicmd") | (Shell::Cmd, "vi") => {
-            ShellEditMode::Normal
-        }
+        (Shell::Fish, "default")
+        | (Shell::Zsh, "vicmd")
+        | (Shell::Cmd | Shell::PowerShell, "vi") => ShellEditMode::Normal,
+        (Shell::Fish, "visual") => ShellEditMode::Visual,
+        (Shell::Fish, "replace") => ShellEditMode::Replace,
+        (Shell::Fish, "replace_one") => ShellEditMode::ReplaceOne,
         _ => ASSUMED_MODE,
     };
 
     let symbol = match mode {
-        ShellEditMode::Normal => config.vicmd_symbol,
+        ShellEditMode::Normal => config.vimcmd_symbol,
+        ShellEditMode::Visual => config.vimcmd_visual_symbol,
+        ShellEditMode::Replace => config.vimcmd_replace_symbol,
+        ShellEditMode::ReplaceOne => config.vimcmd_replace_one_symbol,
         ShellEditMode::Insert => {
             if exit_success {
                 config.success_symbol
@@ -73,7 +82,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 mod test {
     use crate::context::Shell;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     #[test]
     fn success_status() {
@@ -168,6 +177,9 @@ mod test {
     fn fish_keymap() {
         let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
         let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_visual = Some(format!("{} ", Color::Yellow.bold().paint("❮")));
+        let expected_replace = Some(format!("{} ", Color::Purple.bold().paint("❮")));
+        let expected_replace_one = expected_replace.as_deref();
         let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
 
         // fish keymap is default
@@ -188,10 +200,31 @@ mod test {
             .collect();
         assert_eq!(expected_specified, actual);
 
-        // fish keymap is other
+        // fish keymap is visual
         let actual = ModuleRenderer::new("character")
             .shell(Shell::Fish)
             .keymap("visual")
+            .collect();
+        assert_eq!(expected_visual, actual);
+
+        // fish keymap is replace
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("replace")
+            .collect();
+        assert_eq!(expected_replace, actual);
+
+        // fish keymap is replace_one
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("replace_one")
+            .collect();
+        assert_eq!(expected_replace_one, actual.as_deref());
+
+        // fish keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::Fish)
+            .keymap("other")
             .collect();
         assert_eq!(expected_other, actual);
     }
@@ -223,6 +256,38 @@ mod test {
         // cmd keymap is other
         let actual = ModuleRenderer::new("character")
             .shell(Shell::Cmd)
+            .keymap("visual")
+            .collect();
+        assert_eq!(expected_other, actual);
+    }
+
+    #[test]
+    fn powershell_keymap() {
+        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+
+        // powershell keymap is vi
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::PowerShell)
+            .keymap("vi")
+            .collect();
+        assert_eq!(expected_vicmd, actual);
+
+        // specified vicmd character
+        let actual = ModuleRenderer::new("character")
+            .config(toml::toml! {
+                [character]
+                vicmd_symbol = "[V](bold green)"
+            })
+            .shell(Shell::PowerShell)
+            .keymap("vi")
+            .collect();
+        assert_eq!(expected_specified, actual);
+
+        // powershell keymap is other
+        let actual = ModuleRenderer::new("character")
+            .shell(Shell::PowerShell)
             .keymap("visual")
             .collect();
         assert_eq!(expected_other, actual);

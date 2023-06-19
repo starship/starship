@@ -7,7 +7,7 @@ actionText: 馬上開始 →
 actionLink: ./guide/
 features:
   - 
-    title: 兼容性優先
+    title: 相容性優先
     details: 能夠在最常見的作業系統之中最常見的 shell 上運作。 在各處使用它吧！
   - 
     title: 以 Rust 開發
@@ -30,7 +30,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
 ### 先決要求
 
-- 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用。
+- 安裝 [Nerd Font](https://www.nerdfonts.com/) 字型，並在終端機中啟用。
 
 ### 快速安裝
 
@@ -55,11 +55,10 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    ```sh
    brew install starship
    ```
-
-   使用 [Scoop](https://scoop.sh)：
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. 將初始化腳本 (script) 加入你的 shell 的設定檔：
@@ -150,14 +149,14 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   This will change in the future. Only Nushell v0.73+ is supported.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
@@ -177,7 +176,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    ```
 
 
-   #### Cmd
+   #### 命令提示字元
 
    You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 

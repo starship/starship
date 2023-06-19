@@ -80,7 +80,9 @@ fn create_offset_time_string(
     );
     if utc_time_offset_in_hours < 24_f32 && utc_time_offset_in_hours > -24_f32 {
         let utc_offset_in_seconds: i32 = (utc_time_offset_in_hours * 3600_f32) as i32;
-        let timezone_offset = FixedOffset::east(utc_offset_in_seconds);
+        let Some(timezone_offset) = FixedOffset::east_opt(utc_offset_in_seconds) else {
+            return Err("Invalid offset")
+        };
         log::trace!("Target timezone offset is {}", timezone_offset);
 
         let target_time = utc_time.with_timezone(&timezone_offset);
@@ -161,59 +163,59 @@ mod tests {
 
     #[test]
     fn test_midnight_12hr() {
-        let time = Local.ymd(2014, 7, 8).and_hms(0, 0, 0);
+        let time = Local.with_ymd_and_hms(2014, 7, 8, 0, 0, 0).unwrap();
         let formatted = format_time(FMT_12, time);
         assert_eq!(formatted, "12:00:00 AM");
     }
 
     #[test]
     fn test_midnight_24hr() {
-        let time = Local.ymd(2014, 7, 8).and_hms(0, 0, 0);
+        let time = Local.with_ymd_and_hms(2014, 7, 8, 0, 0, 0).unwrap();
         let formatted = format_time(FMT_24, time);
         assert_eq!(formatted, "00:00:00");
     }
 
     #[test]
     fn test_noon_12hr() {
-        let time = Local.ymd(2014, 7, 8).and_hms(12, 0, 0);
+        let time = Local.with_ymd_and_hms(2014, 7, 8, 12, 0, 0).unwrap();
         let formatted = format_time(FMT_12, time);
         assert_eq!(formatted, "12:00:00 PM");
     }
 
     #[test]
     fn test_noon_24hr() {
-        let time = Local.ymd(2014, 7, 8).and_hms(12, 0, 0);
+        let time = Local.with_ymd_and_hms(2014, 7, 8, 12, 0, 0).unwrap();
         let formatted = format_time(FMT_24, time);
         assert_eq!(formatted, "12:00:00");
     }
 
     #[test]
     fn test_arbtime_12hr() {
-        let time = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let time = Local.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let formatted = format_time(FMT_12, time);
         assert_eq!(formatted, "03:36:47 PM");
     }
 
     #[test]
     fn test_arbtime_24hr() {
-        let time = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let time = Local.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let formatted = format_time(FMT_24, time);
         assert_eq!(formatted, "15:36:47");
     }
 
     #[test]
     fn test_format_with_paren() {
-        let time = Local.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let time = Local.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let formatted = format_time("[%T]", time);
         assert_eq!(formatted, "[15:36:47]");
     }
 
     #[test]
     fn test_midnight_12hr_fixed_offset() {
-        let timezone_offset = FixedOffset::east(0);
+        let timezone_offset = FixedOffset::east_opt(0).unwrap();
         let time = Utc
-            .ymd(2014, 7, 8)
-            .and_hms(0, 0, 0)
+            .with_ymd_and_hms(2014, 7, 8, 0, 0, 0)
+            .unwrap()
             .with_timezone(&timezone_offset);
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "12:00:00 AM");
@@ -221,10 +223,10 @@ mod tests {
 
     #[test]
     fn test_midnight_24hr_fixed_offset() {
-        let timezone_offset = FixedOffset::east(0);
+        let timezone_offset = FixedOffset::east_opt(0).unwrap();
         let time = Utc
-            .ymd(2014, 7, 8)
-            .and_hms(0, 0, 0)
+            .with_ymd_and_hms(2014, 7, 8, 0, 0, 0)
+            .unwrap()
             .with_timezone(&timezone_offset);
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "00:00:00");
@@ -232,10 +234,10 @@ mod tests {
 
     #[test]
     fn test_noon_12hr_fixed_offset() {
-        let timezone_offset = FixedOffset::east(0);
+        let timezone_offset = FixedOffset::east_opt(0).unwrap();
         let time = Utc
-            .ymd(2014, 7, 8)
-            .and_hms(12, 0, 0)
+            .with_ymd_and_hms(2014, 7, 8, 12, 0, 0)
+            .unwrap()
             .with_timezone(&timezone_offset);
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "12:00:00 PM");
@@ -243,10 +245,10 @@ mod tests {
 
     #[test]
     fn test_noon_24hr_fixed_offset() {
-        let timezone_offset = FixedOffset::east(0);
+        let timezone_offset = FixedOffset::east_opt(0).unwrap();
         let time = Utc
-            .ymd(2014, 7, 8)
-            .and_hms(12, 0, 0)
+            .with_ymd_and_hms(2014, 7, 8, 12, 0, 0)
+            .unwrap()
             .with_timezone(&timezone_offset);
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "12:00:00");
@@ -254,10 +256,10 @@ mod tests {
 
     #[test]
     fn test_arbtime_12hr_fixed_offset() {
-        let timezone_offset = FixedOffset::east(0);
+        let timezone_offset = FixedOffset::east_opt(0).unwrap();
         let time = Utc
-            .ymd(2014, 7, 8)
-            .and_hms(15, 36, 47)
+            .with_ymd_and_hms(2014, 7, 8, 15, 36, 47)
+            .unwrap()
             .with_timezone(&timezone_offset);
         let formatted = format_time_fixed_offset(FMT_12, time);
         assert_eq!(formatted, "03:36:47 PM");
@@ -265,10 +267,10 @@ mod tests {
 
     #[test]
     fn test_arbtime_24hr_fixed_offset() {
-        let timezone_offset = FixedOffset::east(0);
+        let timezone_offset = FixedOffset::east_opt(0).unwrap();
         let time = Utc
-            .ymd(2014, 7, 8)
-            .and_hms(15, 36, 47)
+            .with_ymd_and_hms(2014, 7, 8, 15, 36, 47)
+            .unwrap()
             .with_timezone(&timezone_offset);
         let formatted = format_time_fixed_offset(FMT_24, time);
         assert_eq!(formatted, "15:36:47");
@@ -276,10 +278,10 @@ mod tests {
 
     #[test]
     fn test_format_with_paren_fixed_offset() {
-        let timezone_offset = FixedOffset::east(0);
+        let timezone_offset = FixedOffset::east_opt(0).unwrap();
         let time = Utc
-            .ymd(2014, 7, 8)
-            .and_hms(15, 36, 47)
+            .with_ymd_and_hms(2014, 7, 8, 15, 36, 47)
+            .unwrap()
             .with_timezone(&timezone_offset);
         let formatted = format_time_fixed_offset("[%T]", time);
         assert_eq!(formatted, "[15:36:47]");
@@ -287,7 +289,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_minus_3() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "-3";
 
         let actual = create_offset_time_string(utc_time, utc_time_offset_str, FMT_12).unwrap();
@@ -296,7 +298,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_5() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "+5";
 
         let actual = create_offset_time_string(utc_time, utc_time_offset_str, FMT_12).unwrap();
@@ -305,7 +307,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_9_30() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "+9.5";
 
         let actual = create_offset_time_string(utc_time, utc_time_offset_str, FMT_12).unwrap();
@@ -314,7 +316,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_5_45() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "+5.75";
 
         let actual = create_offset_time_string(utc_time, utc_time_offset_str, FMT_12).unwrap();
@@ -323,7 +325,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_24() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "+24";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
@@ -332,7 +334,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_minus_24() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "-24";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
@@ -341,7 +343,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_plus_9001() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "+9001";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
@@ -350,7 +352,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_minus_4242() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "-4242";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
@@ -359,7 +361,7 @@ mod tests {
 
     #[test]
     fn test_create_formatted_time_string_with_invalid_string() {
-        let utc_time: DateTime<Utc> = Utc.ymd(2014, 7, 8).and_hms(15, 36, 47);
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 15, 36, 47).unwrap();
         let utc_time_offset_str = "completely wrong config";
 
         create_offset_time_string(utc_time, utc_time_offset_str, FMT_12)
@@ -381,7 +383,7 @@ mod tests {
 
         assert_eq!(
             parse_time_range(time_range),
-            (Some(NaiveTime::from_hms(10, 00, 00)), None)
+            (Some(NaiveTime::from_hms_opt(10, 00, 00).unwrap()), None)
         );
     }
 
@@ -391,7 +393,7 @@ mod tests {
 
         assert_eq!(
             parse_time_range(time_range),
-            (None, Some(NaiveTime::from_hms(22, 00, 00)))
+            (None, Some(NaiveTime::from_hms_opt(22, 00, 00).unwrap()))
         );
     }
 
@@ -402,8 +404,8 @@ mod tests {
         assert_eq!(
             parse_time_range(time_range),
             (
-                Some(NaiveTime::from_hms(10, 00, 00)),
-                Some(NaiveTime::from_hms(16, 00, 00))
+                Some(NaiveTime::from_hms_opt(10, 00, 00).unwrap()),
+                Some(NaiveTime::from_hms_opt(16, 00, 00).unwrap())
             )
         );
     }
@@ -412,16 +414,16 @@ mod tests {
     fn test_is_inside_time_range_with_no_range() {
         let time_start = None;
         let time_end = None;
-        let time_now = NaiveTime::from_hms(10, 00, 00);
+        let time_now = NaiveTime::from_hms_opt(10, 00, 00).unwrap();
 
         assert!(is_inside_time_range(time_now, time_start, time_end));
     }
 
     #[test]
     fn test_is_inside_time_range_with_start_range() {
-        let time_start = Some(NaiveTime::from_hms(10, 00, 00));
-        let time_now = NaiveTime::from_hms(12, 00, 00);
-        let time_now2 = NaiveTime::from_hms(8, 00, 00);
+        let time_start = Some(NaiveTime::from_hms_opt(10, 00, 00).unwrap());
+        let time_now = NaiveTime::from_hms_opt(12, 00, 00).unwrap();
+        let time_now2 = NaiveTime::from_hms_opt(8, 00, 00).unwrap();
 
         assert!(is_inside_time_range(time_now, time_start, None));
         assert!(!is_inside_time_range(time_now2, time_start, None));
@@ -429,9 +431,9 @@ mod tests {
 
     #[test]
     fn test_is_inside_time_range_with_end_range() {
-        let time_end = Some(NaiveTime::from_hms(16, 00, 00));
-        let time_now = NaiveTime::from_hms(15, 00, 00);
-        let time_now2 = NaiveTime::from_hms(19, 00, 00);
+        let time_end = Some(NaiveTime::from_hms_opt(16, 00, 00).unwrap());
+        let time_now = NaiveTime::from_hms_opt(15, 00, 00).unwrap();
+        let time_now2 = NaiveTime::from_hms_opt(19, 00, 00).unwrap();
 
         assert!(is_inside_time_range(time_now, None, time_end));
         assert!(!is_inside_time_range(time_now2, None, time_end));
@@ -439,11 +441,11 @@ mod tests {
 
     #[test]
     fn test_is_inside_time_range_with_complete_range() {
-        let time_start = Some(NaiveTime::from_hms(9, 00, 00));
-        let time_end = Some(NaiveTime::from_hms(18, 00, 00));
-        let time_now = NaiveTime::from_hms(3, 00, 00);
-        let time_now2 = NaiveTime::from_hms(13, 00, 00);
-        let time_now3 = NaiveTime::from_hms(20, 00, 00);
+        let time_start = Some(NaiveTime::from_hms_opt(9, 00, 00).unwrap());
+        let time_end = Some(NaiveTime::from_hms_opt(18, 00, 00).unwrap());
+        let time_now = NaiveTime::from_hms_opt(3, 00, 00).unwrap();
+        let time_now2 = NaiveTime::from_hms_opt(13, 00, 00).unwrap();
+        let time_now3 = NaiveTime::from_hms_opt(20, 00, 00).unwrap();
 
         assert!(!is_inside_time_range(time_now, time_start, time_end));
         assert!(is_inside_time_range(time_now2, time_start, time_end));
@@ -452,11 +454,11 @@ mod tests {
 
     #[test]
     fn test_is_inside_time_range_with_complete_range_passing_midnight() {
-        let time_start = Some(NaiveTime::from_hms(19, 00, 00));
-        let time_end = Some(NaiveTime::from_hms(12, 00, 00));
-        let time_now = NaiveTime::from_hms(3, 00, 00);
-        let time_now2 = NaiveTime::from_hms(13, 00, 00);
-        let time_now3 = NaiveTime::from_hms(20, 00, 00);
+        let time_start = Some(NaiveTime::from_hms_opt(19, 00, 00).unwrap());
+        let time_end = Some(NaiveTime::from_hms_opt(12, 00, 00).unwrap());
+        let time_now = NaiveTime::from_hms_opt(3, 00, 00).unwrap();
+        let time_now2 = NaiveTime::from_hms_opt(13, 00, 00).unwrap();
+        let time_now3 = NaiveTime::from_hms_opt(20, 00, 00).unwrap();
 
         assert!(is_inside_time_range(time_now, time_start, time_end));
         assert!(!is_inside_time_range(time_now2, time_start, time_end));

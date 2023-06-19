@@ -1,18 +1,39 @@
-let-env STARSHIP_SHELL = "nu"
-let-env STARSHIP_SESSION_KEY = (random chars -l 16)
-let-env PROMPT_MULTILINE_INDICATOR = (^::STARSHIP:: prompt --continuation)
+# this file is both a valid
+# - overlay which can be loaded with `overlay use starship.nu`
+# - module which can be used with `use starship.nu`
+# - script which can be used with `source starship.nu`
+export-env { load-env {
+    STARSHIP_SHELL: "nu"
+    STARSHIP_SESSION_KEY: (random chars -l 16)
+    PROMPT_MULTILINE_INDICATOR: (
+        ^::STARSHIP:: prompt --continuation
+    )
 
-# Does not play well with default character module.
-# TODO: Also Use starship vi mode indicators?
-let-env PROMPT_INDICATOR = ""
+    # Does not play well with default character module.
+    # TODO: Also Use starship vi mode indicators?
+    PROMPT_INDICATOR: ""
 
-let-env PROMPT_COMMAND = {
-    # jobs are not supported
-    let width = (term size -c | get columns | into string)
-    ^::STARSHIP:: prompt $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
-}
+    PROMPT_COMMAND: {||
+        # jobs are not supported
+        (
+            ^::STARSHIP:: prompt
+                --cmd-duration $env.CMD_DURATION_MS
+                $"--status=($env.LAST_EXIT_CODE)"
+                --terminal-width (term size).columns
+        )
+    }
 
-# Not well-suited for `starship prompt --right`.
-# Built-in right prompt is equivalent to $fill$right_format in the first prompt line.
-# Thus does not play well with default `add_newline = True`.
-let-env PROMPT_COMMAND_RIGHT = {''}
+    config: ($env.config? | default {} | merge {
+        render_right_prompt_on_last_line: true
+    })
+
+    PROMPT_COMMAND_RIGHT: {||
+        (
+            ^::STARSHIP:: prompt
+                --right
+                --cmd-duration $env.CMD_DURATION_MS
+                $"--status=($env.LAST_EXIT_CODE)"
+                --terminal-width (term size).columns
+        )
+    }
+}}
