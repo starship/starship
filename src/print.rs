@@ -121,6 +121,27 @@ pub fn get_prompt(context: Context) -> String {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
+    if config.add_separator && context.width > 0 {
+        let pattern = if config.separator_pattern.len() > 0 {
+            &config.separator_pattern
+        } else {
+            "═"
+        };
+        let chars_count = pattern.chars().count();
+        let mut count = context.width;
+        while count >= chars_count {
+            write!(buf, "{}", pattern).unwrap();
+            count = count - chars_count;
+        }
+        if count > 0 {
+            let mut chars = pattern.chars();
+            while count > 0 {
+                write!(buf, "{}", chars.next().unwrap()).unwrap();
+                count = count - 1;
+            }
+        }
+        writeln!(buf).unwrap();
+    }
     write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
 
     if context.target == Target::Right {
@@ -724,5 +745,44 @@ mod test {
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
         dir.close()
+    }
+
+    #[test]
+    fn add_separator_single() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline=false
+                add_separator=true
+                separator_pattern="-"
+                format="$character"
+                [character]
+                format=""
+        });
+        context.target = Target::Main;
+
+        let separator = std::iter::repeat("-")
+            .take(context.width)
+            .collect::<String>();
+        let expected = format!("{}\n", separator);
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn add_separator_multi() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline=false
+                add_separator=true
+                separator_pattern="ABCDEFG"
+                format="$character"
+                [character]
+                format=""
+        });
+        context.target = Target::Main;
+        context.width = 20;
+
+        let separator = std::iter::repeat("ABCDEFG").take(3).collect::<String>();
+        let expected = format!("{}\n", separator.split_at(context.width).0);
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
     }
 }
