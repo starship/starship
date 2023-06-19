@@ -91,7 +91,7 @@ add_newline = true
 
 [character] 
 format = "$symbol "
-success_symbol = "[◉](bold italic yellow)" 
+success_symbol = "[◉](bold italic bright-yellow)" 
 error_symbol   = "[⊘](italic purple)"
 vicmd_symbol   = "[◈](italic white)"
 
