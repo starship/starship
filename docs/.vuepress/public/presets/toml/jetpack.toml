@@ -289,4 +289,3 @@ format = " nix [$symbol$state $name]($style)"
 [spack]
 symbol = "◇ "
 format = " spack [$symbol$environment]($style)"
-
