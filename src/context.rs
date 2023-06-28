@@ -431,7 +431,16 @@ fn get_config_path_os(env: &Env) -> Option<OsString> {
     if let Some(config_path) = env.get_env_os("STARSHIP_CONFIG") {
         return Some(config_path);
     }
-    Some(home_dir(env)?.join(".config").join("starship.toml").into())
+
+    let config_dir = home_dir(env)?.join(".config");
+    let config_file_path = config_dir.join("starship.toml");
+    let folder_based_config_file_path = config_dir.join("starship/config.toml");
+
+    if config_file_path.exists() {
+        Some(config_file_path.into())
+    } else {
+        Some(folder_based_config_file_path.into())
+    }
 }
 
 #[derive(Debug)]
