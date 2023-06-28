@@ -14,7 +14,7 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 mkdir -p ~/.config/starship && touch ~/.config/starship/config.toml
 ```
 
-NOTE: if you have both files available, the `starship.toml` will take higher priority.
+Note: if you have both files available, the `starship.toml` will take higher priority.
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
