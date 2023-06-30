@@ -41,7 +41,7 @@ symbol = " "
 symbol = " "
 
 [haxe]
-symbol = "⌘ "
+symbol = " "
 
 [hg_branch]
 symbol = " "
@@ -118,7 +118,7 @@ Windows = "󰍲 "
 symbol = "󰏗 "
 
 [pijul_channel]
-symbol = "🪺 "
+symbol = " "
 
 [python]
 symbol = " "
@@ -134,6 +134,3 @@ symbol = " "
 
 [scala]
 symbol = " "
-
-[spack]
-symbol = "🅢 "
