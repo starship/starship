@@ -2202,8 +2202,8 @@ The `hostname` module shows the system hostname.
 
 ::: warning
 
-The `detect_env_vars` is only recognized, if `ssh_only` is set to `false`.
-You can still check for a ssh connection, add `SSH_CONNECTION` to `detect_env_vars`.
+The `detect_env_vars` is only used, if `ssh_only` is set to `false` or there
+is an environment variable `SSH_CONNECTION` set.
 
 ### Options
 
@@ -2248,7 +2248,7 @@ disabled = false
 
 [hostname]
 ssh_only = false
-detect_env_vars = ['!tmux', 'SSH_CONNECTION']
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 

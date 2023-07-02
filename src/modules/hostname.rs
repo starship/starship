@@ -16,10 +16,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
 
     let ssh_connection = context.get_env("SSH_CONNECTION");
-    if config.ssh_only {
-        ssh_connection.as_ref()?;
-    // check for environment variables
-    } else if !(context.detect_env_vars(&config.detect_env_vars)) {
+
+    if !((!config.ssh_only || ssh_connection.is_some())
+        && context.detect_env_vars(&config.detect_env_vars))
+    {
         return None;
     }
 
@@ -100,6 +100,54 @@ mod tests {
     }
 
     #[test]
+    fn ssh_only_false_with_empty_detect_env_vars() {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+                detect_env_vars = []
+            })
+            .collect();
+
+        let expected = Some(format!("{} in ", style().paint(hostname)));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn ssh_only_false_with_matching_negated_env_var() {
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+                detect_env_vars = ["!NEGATED"]
+            })
+            .env("NEGATED", "true")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn ssh_only_false_with_only_negated_env_vars() {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+                detect_env_vars = ["!NEGATED_ONE", "!NEGATED_TWO", "!NEGATED_THREE"]
+            })
+            .collect();
+
+        let expected = Some(format!("{} in ", style().paint(hostname)));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn ssh_only_false_with_matching_env_var() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
@@ -117,86 +165,16 @@ mod tests {
     }
 
     #[test]
-    fn ssh_only_false_without_matching_env_var() {
+    fn ssh_only_false_without_matching_env_vars() {
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
                 [hostname]
                 ssh_only = false
                 trim_at = ""
-                detect_env_vars = ["FORCE_HOSTNAME"]
+                detect_env_vars = ["FORCE_HOSTNAME", "!NEGATED"]
             })
             .collect();
         let expected = None;
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn ssh_only_false_and_in_ssh_connection_with_matching_negated_env() {
-        let actual = ModuleRenderer::new("hostname")
-            .config(toml::toml! {
-                [hostname]
-                ssh_only = false
-                trim_at = ""
-                detect_env_vars = ["SSH_CONNECTION", "!TMUX"]
-            })
-            .env("SSH_CONNECTION", "something")
-            .env("TMUX", "true")
-            .collect();
-        let expected = None;
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn ssh_only_false_without_matching_negated_env() {
-        let hostname = get_hostname!();
-        let actual = ModuleRenderer::new("hostname")
-            .config(toml::toml! {
-                [hostname]
-                ssh_only = false
-                trim_at = ""
-                detect_env_vars = ["FORCE_HOSTNAME", "!TMUX"]
-            })
-            .env("FORCE_HOSTNAME", "something")
-            .collect();
-        let expected = Some(format!("{} in ", style().paint(hostname)));
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn ssh_only_false_and_in_ssh_connection_without_matching_negated_env() {
-        let hostname = get_hostname!();
-        let actual = ModuleRenderer::new("hostname")
-            .config(toml::toml! {
-                [hostname]
-                ssh_only = false
-                trim_at = ""
-                detect_env_vars = ["SSH_CONNECTION", "!TMUX"]
-            })
-            .env("SSH_CONNECTION", "something")
-            .collect();
-        let expected = Some(format!(
-            "{} in ",
-            style().paint("🌐 ".to_owned() + hostname.as_str())
-        ));
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn ssh_only_false_no_ssh() {
-        let hostname = get_hostname!();
-        let actual = ModuleRenderer::new("hostname")
-            .config(toml::toml! {
-                [hostname]
-                ssh_only = false
-                trim_at = ""
-            })
-            .collect();
-        let expected = Some(format!("{} in ", style().paint(hostname)));
-        println!("{}", expected.as_ref().unwrap());
 
         assert_eq!(expected, actual);
     }
