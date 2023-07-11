@@ -18,7 +18,7 @@ SUPPORTED_TARGETS="x86_64-unknown-linux-gnu x86_64-unknown-linux-musl \
                   arm-unknown-linux-musleabihf x86_64-apple-darwin \
                   aarch64-apple-darwin x86_64-pc-windows-msvc \
                   i686-pc-windows-msvc aarch64-pc-windows-msvc \
-                  x86_64-unknown-freebsd"
+                  x86_64-unknown-freebsd x86_64-debian x86_64-ubuntu"
 
 info() {
   printf '%s\n' "${BOLD}${GREY}>${NO_COLOR} $*"
@@ -190,14 +190,37 @@ install() {
 #   - linux
 #   - linux_musl (Alpine)
 #   - freebsd
+
 detect_platform() {
   platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+  
+  if [ "${platform}" = "linux" ]; then
+    if [ -f /etc/os-release ]; then
+      id=$(awk -F= '/^ID=/{print $2}' /etc/os-release)
+    elif [ -f /etc/lsb-release ]; then
+      id=$(awk -F= '/^DISTRIB_ID=/{print $2}' /etc/lsb-release)
+    else
+      platform="${PLATFORM:-unknown-linux-musl}"
+      id=""
+    fi
+
+    case "${id}" in
+      ubuntu) platform="ubuntu" ;;
+      debian) platform="debian" ;;
+      fedora) platform="fedora" ;;
+      centos) platform="centos" ;;
+      rhel) platform="rhel" ;;
+      sles) platform="sles" ;;
+      opensuse) platform="opensuse" ;;
+      arch) platform="arch" ;;
+      alpine) platform="alpine" ;;
+      *) platform="${platform}" ;;
+    esac
+  fi
 
   case "${platform}" in
-    msys_nt*) platform="pc-windows-msvc" ;;
-    cygwin_nt*) platform="pc-windows-msvc";;
+    msys_nt*|cygwin_nt*|mingw*) platform="pc-windows-msvc" ;;
     # mingw is Git-Bash
-    mingw*) platform="pc-windows-msvc" ;;
     # use the statically compiled musl bins on linux to avoid linking issues.
     linux) platform="unknown-linux-musl" ;;
     darwin) platform="apple-darwin" ;;
@@ -206,6 +229,7 @@ detect_platform() {
 
   printf '%s' "${platform}"
 }
+
 
 # Currently supporting:
 #   - x86_64
