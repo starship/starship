@@ -205,15 +205,16 @@ detect_platform() {
     fi
 
     case "${id}" in
-      ubuntu) platform="ubuntu" ;;
-      debian) platform="debian" ;;
-      fedora) platform="fedora" ;;
-      centos) platform="centos" ;;
-      rhel) platform="rhel" ;;
-      sles) platform="sles" ;;
-      opensuse) platform="opensuse" ;;
-      arch) platform="arch" ;;
-      alpine) platform="alpine" ;;
+      ubuntu) platform="unknown-linux-gnu" ;;
+      debian) platform="unknown-linux-musl" ;;
+      fedora) platform="unknown-linux-gnu" ;;
+      centos) platform="unknown-linux-gnu" ;;
+      freebsd) platform="unknown-freebsd";;
+      rhel) platform="unknown-linux-gnu" ;;
+      sles) platform="unknown-linux-gnu" ;;
+      opensuse) platform="unknown-linux-gnu" ;;
+      arch) platform="unknown-linux-gnu" ;;
+      alpine) platform="unknown-linux-musl" ;;
       *) platform="${platform}" ;;
     esac
   fi
