@@ -244,18 +244,28 @@ fn get_repo_status(context: &Context, config: &GitStatusConfig) -> Option<RepoSt
 }
 
 fn get_stashed_count(context: &Context) -> Option<usize> {
-    let stash_output = context.exec_cmd(
-        "git",
-        &[
-            OsStr::new("-C"),
-            context.current_dir.as_os_str(),
-            OsStr::new("--no-optional-locks"),
-            OsStr::new("stash"),
-            OsStr::new("list"),
-        ],
-    )?;
+    let repo = context.get_repo().ok()?.open();
+    let reference = match repo.try_find_reference("refs/stash") {
+        Ok(Some(reference)) => reference,
+        // No stash reference found
+        Ok(None) => return Some(0),
+        Err(err) => {
+            log::warn!("Error finding stash reference: {err}");
+            return None;
+        }
+    };
 
-    Some(stash_output.stdout.trim().lines().count())
+    match reference.log_iter().all() {
+        Ok(Some(log)) => Some(log.count()),
+        Ok(None) => {
+            log::debug!("No reflog found for stash");
+            Some(0)
+        }
+        Err(err) => {
+            log::warn!("Error getting stash log: {err}");
+            None
+        }
+    }
 }
 
 #[derive(Default, Debug, Copy, Clone)]
@@ -744,9 +754,38 @@ mod tests {
             .output()?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$stashed"
+            })
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("$");
+        let expected = Some(String::from("$"));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_no_stashed_after_undo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_stash(repo_dir.path())?;
+        undo_stash(repo_dir.path())?;
+
+        create_command("git")?
+            .args(["reset", "--hard", "HEAD"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$stashed"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -756,6 +795,9 @@ mod tests {
     fn shows_stashed_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
+        create_stash(repo_dir.path())?;
+        undo_stash(repo_dir.path())?;
+        create_stash(repo_dir.path())?;
         create_stash(repo_dir.path())?;
 
         create_command("git")?
@@ -770,7 +812,7 @@ mod tests {
             })
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("$1");
+        let expected = format_output("$2");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1177,10 +1219,20 @@ mod tests {
     }
 
     fn create_stash(repo_dir: &Path) -> io::Result<()> {
-        File::create(repo_dir.join("readme.md"))?.sync_all()?;
+        let (file, _path) = tempfile::NamedTempFile::new_in(repo_dir)?.keep()?;
+        file.sync_all()?;
 
         create_command("git")?
             .args(["stash", "--all"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
+    fn undo_stash(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["stash", "pop"])
             .current_dir(repo_dir)
             .output()?;
 
