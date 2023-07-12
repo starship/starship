@@ -427,11 +427,15 @@ fn home_dir(env: &Env) -> Option<PathBuf> {
     utils::home_dir()
 }
 
+fn config_dir(env: &Env) -> Option<PathBuf> {
+    Some(home_dir(env)?.join(".config"))
+}
+
 fn config_home_dir(env: &Env) -> Option<PathBuf> {
     if let Some(xdg_config_home) = env.get_env("XDG_CONFIG_HOME") {
         Some(PathBuf::from(xdg_config_home))
     } else {
-        Some(home_dir(env)?.join(".config"))
+        config_dir(env)
     }
 }
 
@@ -440,9 +444,8 @@ fn get_config_path_os(env: &Env) -> Option<OsString> {
         return Some(config_path);
     }
 
-    let config_dir = config_home_dir(env)?;
-    let config_file_path = config_dir.join("starship.toml");
-    let folder_based_config_file_path = config_dir.join("starship/config.toml");
+    let config_file_path = config_dir(env)?.join("starship.toml");
+    let folder_based_config_file_path = config_home_dir(env)?.join("starship/config.toml");
 
     if config_file_path.exists() {
         Some(config_file_path.into())
