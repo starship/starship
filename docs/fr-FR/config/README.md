@@ -3608,14 +3608,15 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### Options
 
-| Option      | Défaut                       | Description                                                             |
-| ----------- | ---------------------------- | ----------------------------------------------------------------------- |
-| `threshold` | `2`                          | Seuil d’affichage.                                                      |
-| `format`    | `'[$symbol$shlvl]($style) '` | Format du module.                                                       |
-| `symbole`   | `'↕️  '`                     | Le symbole utilisée pour représenter le `SHLVL`.                        |
-| `repeat`    | `false`                      | Fait répéter `symbol` autant de fois que la valeur actuelle de `SHLVL`. |
-| `style`     | `'bold yellow'`              | Le style pour le module.                                                |
-| `disabled`  | `true`                       | Désactive le module `shlvl`.                                            |
+| Option          | Défaut                       | Description                                                             |
+| --------------- | ---------------------------- | ----------------------------------------------------------------------- |
+| `threshold`     | `2`                          | Seuil d’affichage.                                                      |
+| `format`        | `'[$symbol$shlvl]($style) '` | Format du module.                                                       |
+| `symbole`       | `'↕️  '`                     | Le symbole utilisée pour représenter le `SHLVL`.                        |
+| `repeat`        | `false`                      | Fait répéter `symbol` autant de fois que la valeur actuelle de `SHLVL`. |
+| `repeat_offset` | `0`                          | Decrements number of times `symbol` is repeated by the offset value     |
+| `style`         | `'bold yellow'`              | Le style pour le module.                                                |
+| `disabled`      | `true`                       | Disables the `shlvl` module.                                            |
 
 ### Variables
 
@@ -3638,9 +3639,23 @@ format = '$shlvl level(s) down'
 threshold = 3
 ```
 
+Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceeding characters are provided by `shlvl`.
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+format = '[$symbol$shlvl]($style)'
+repeat = true
+symbol = '❯'
+repeat_offset = 1
+threshold = 0
+```
+
 ## Singularity
 
-Le module `singularity` affiche l’image [Singularity](https://sylabs.io/singularity/) courante, quand vous êtes à l’intérieur d’un conteneur et que `$SINGULARITY_NAME` est définie.
+The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
 
 ### Options
 
@@ -3710,7 +3725,7 @@ format = "via [S $version](blue bold)"
 
 ## Spack
 
-Le module `spack` affiche l’environnement [Spack](https://spack.readthedocs.io/en/latest/) courant, si `$SPACK_ENV` est définie.
+The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
 
 ### Options
 
@@ -3743,7 +3758,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 ## Statut
 
-Le module `status` affiche le code de sortie de la commande précédente. Si $success_symbol est vide (par défaut), ce module sera affiché uniquement quand le code de sortie n’est pas `0`. Le code de statut est converti en entier signé 32 bits.
+The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
 ::: tip
 
@@ -3804,7 +3819,7 @@ disabled = false
 
 ## Sudo
 
-Le moduel `sudo` affiche si les identifiants sudo sont actuellement en cache. Le module sera uniquement affiché si les identifiants sont en cache.
+The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
 
 ::: tip
 
@@ -3843,7 +3858,7 @@ disabled = false
 ```
 
 ```toml
-# Sous windows
+# On windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -3853,7 +3868,7 @@ disabled = false
 
 ## Swift
 
-Par défaut, le module `swift` affiche la version de [Swift](https://swift.org/) installée. Le module sera affiché si l'une de ces conditions est remplie:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier `Package.swift`
 - Le dossier courant contient un fichier avec l’extension `.swift`
@@ -3892,11 +3907,11 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-Le module `terraform` affiche [l’espace de travail Terraform](https://www.terraform.io/docs/language/state/workspaces.html) sélectionné et sa version.
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
-Par défaut, la version de Terraform n’est pas affichée, car elle est lente pour les versions actuelles de Terraform quand beaucoup de plugins sont utilisés. Si vous voulez quand même l’activer, [suivez l’exemple montré plus bas](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
@@ -3951,7 +3966,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Date et Heure
 
-Le module `time` affiche la date et heure **locale**. La valeur de `format` est utilisée par le package [`chrono`](https://crates.io/crates/chrono) pour contrôler la façon dont l'heure est affichée. Consultez la [doc de chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) pour découvrir les options disponibles.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
@@ -3971,7 +3986,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `disabled`        | `true`                  | Désactive le module `time`.                                                                                                                                           |
 | `time_range`      | `'-'`                   | Définit la plage de temps pendant laquelle le module sera affiché. Les heures doivent être spécifiées au format 24 heures                                             |
 
-If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Définir manuellement `time_format` outrepasse le paramètre `use_12hr`.
+If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variables
 
@@ -3997,7 +4012,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Nom d'utilisateur
 
-Le module `username` affiche le nom de l’utilisateur actif. Le module sera affiché si l'une de ces conditions est remplie:
+The `username` module shows active user's username. Le module sera affiché si l'une de ces conditions est remplie:
 
 - L'utilisateur courant est root/admin
 - L'utilisateur courant est différent de celui connecté
@@ -4042,7 +4057,7 @@ show_always = true
 
 ## Vagrant
 
-Le module `vagrant` affiche la version de [Vagrant](https://www.vagrantup.com/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier `Vagrantfile`
 
@@ -4080,7 +4095,7 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 - Le dossier courant contient un fichier avec l’extension `.v`
 - Le dossier courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
@@ -4186,9 +4201,9 @@ symbol = '⚡️ '
 
 ## Commandes personnalisées
 
-Les modules `custom` affichent la sortie d’une commande arbitaitre.
+The `custom` modules show the output of some arbitrary commands.
 
-Ces modules seront affichés si l'une de ces conditions est remplie:
+These modules will be shown if any of the following conditions are met:
 
 - Le dossier courant contient un fichier dont le nom est dans `detect_files`
 - Le dossier courant contient un dossier dont le nom est dans `detect_folders`
@@ -4198,7 +4213,7 @@ Ces modules seront affichés si l'une de ces conditions est remplie:
 
 ::: tip
 
-Plusieurs modules personnalisés peuvent être définis en utilisant un `.`.
+Multiple custom modules can be defined by using a `.`.
 
 :::
 
@@ -4254,7 +4269,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 #### Commandes shell personnalisées
 
-`shell` accepte une liste de chaînes non vide, où:
+`shell` accepts a non-empty list of strings, where:
 
 - La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
 - Other following arguments are passed to the shell.
