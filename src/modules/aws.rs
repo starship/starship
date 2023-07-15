@@ -121,7 +121,11 @@ fn get_credentials_duration(
     aws_profile: Option<&Profile>,
     aws_creds: &AwsCredsFile,
 ) -> Option<i64> {
-    let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWSUME_EXPIRATION"];
+    let expiration_env_vars = [
+        "AWS_CREDENTIAL_EXPIRATION",
+        "AWS_SESSION_EXPIRATION",
+        "AWSUME_EXPIRATION",
+    ];
     let expiration_date = if let Some(expiration_date) = expiration_env_vars
         .iter()
         .find_map(|env_var| context.get_env(env_var))
@@ -170,6 +174,7 @@ fn has_credential_process_or_sso(
 
     Some(
         config_section.contains_key("credential_process")
+            || config_section.contains_key("sso_session")
             || config_section.contains_key("sso_start_url")
             || credential_section?.contains_key("credential_process")
             || credential_section?.contains_key("sso_start_url"),
@@ -200,6 +205,29 @@ fn has_defined_credentials(
     Some(section.contains_key("aws_access_key_id"))
 }
 
+// https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html#cli-configure-files-settings
+fn has_source_profile(
+    context: &Context,
+    aws_profile: Option<&Profile>,
+    aws_config: &AwsConfigFile,
+    aws_creds: &AwsCredsFile,
+) -> Option<bool> {
+    let config = get_config(context, aws_config)?;
+
+    let config_section = get_profile_config(config, aws_profile)?;
+    let source_profile = config_section
+        .get("source_profile")
+        .map(std::borrow::ToOwned::to_owned);
+
+    let has_credential_process =
+        has_credential_process_or_sso(context, source_profile.as_ref(), aws_config, aws_creds)
+            .unwrap_or(false);
+    let has_credentials =
+        has_defined_credentials(context, source_profile.as_ref(), aws_creds).unwrap_or(false);
+
+    Some(has_credential_process || has_credentials)
+}
+
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("aws");
     let config: AwsConfig = AwsConfig::try_load(module.config);
@@ -212,9 +240,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    // only display if credential_process is defined or has valid credentials
+    // only display in the presence of credential_process, source_profile or valid credentials
     if !config.force_display
         && !has_credential_process_or_sso(context, aws_profile.as_ref(), &aws_config, &aws_creds)
+            .unwrap_or(false)
+        && !has_source_profile(context, aws_profile.as_ref(), &aws_config, &aws_creds)
             .unwrap_or(false)
         && !has_defined_credentials(context, aws_profile.as_ref(), &aws_creds).unwrap_or(false)
     {
@@ -636,28 +666,32 @@ credential_process = /opt/bin/awscreds-retriever
     fn expiration_date_set() {
         use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 
-        let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
-            NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0).unwrap(),
-            Utc,
-        );
+        let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWS_CREDENTIAL_EXPIRATION"];
+        expiration_env_vars.iter().for_each(|env_var| {
+            let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
+                NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0)
+                    .unwrap(),
+                Utc,
+            );
 
-        let actual = ModuleRenderer::new("aws")
-            .env("AWS_PROFILE", "astronauts")
-            .env("AWS_REGION", "ap-northeast-2")
-            .env("AWS_ACCESS_KEY_ID", "dummy")
-            .env(
-                "AWS_SESSION_EXPIRATION",
-                now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
-            )
-            .collect();
-        let expected = Some(format!(
-            "on {}",
-            Color::Yellow
-                .bold()
-                .paint("☁️  astronauts (ap-northeast-2) [30m] ")
-        ));
+            let actual = ModuleRenderer::new("aws")
+                .env("AWS_PROFILE", "astronauts")
+                .env("AWS_REGION", "ap-northeast-2")
+                .env("AWS_ACCESS_KEY_ID", "dummy")
+                .env(
+                    env_var,
+                    now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
+                )
+                .collect();
+            let expected = Some(format!(
+                "on {}",
+                Color::Yellow
+                    .bold()
+                    .paint("☁️  astronauts (ap-northeast-2) [30m] ")
+            ));
 
-        assert_eq!(expected, actual);
+            assert_eq!(expected, actual);
+        });
     }
 
     #[test]
@@ -682,9 +716,8 @@ credential_process = /opt/bin/awscreds-retriever
                     "[astronauts]
 aws_access_key_id=dummy
 aws_secret_access_key=dummy
-{}={}
-",
-                    key, expiration_date
+{key}={expiration_date}
+"
                 )
                 .as_bytes(),
             )
@@ -803,10 +836,14 @@ aws_secret_access_key=dummy
     #[test]
     fn missing_any_credentials() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let config_path = dir.path().join("config");
-        let mut file = File::create(&config_path)?;
 
-        file.write_all(
+        let credential_path = dir.path().join("credentials");
+        File::create(&credential_path)?;
+
+        let config_path = dir.path().join("config");
+        let mut config_file = File::create(&config_path)?;
+
+        config_file.write_all(
             "[default]
 region = us-east-1
 output = json
@@ -819,6 +856,10 @@ region = us-east-2
 
         let actual = ModuleRenderer::new("aws")
             .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env(
+                "AWS_CREDENTIALS_FILE",
+                credential_path.to_string_lossy().as_ref(),
+            )
             .collect();
         let expected = None;
 
@@ -956,7 +997,7 @@ credential_process = /opt/bin/awscreds-for-tests
     }
 
     #[test]
-    fn sso_set() -> io::Result<()> {
+    fn sso_legacy_set() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("config");
         let mut file = File::create(&config_path)?;
@@ -980,6 +1021,40 @@ sso_role_name = <AWS-ROLE-NAME>
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  (ap-northeast-2) ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn sso_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut config = File::create(&config_path)?;
+        config.write_all(
+            "[profile astronauts]
+sso_session = my-sso
+sso_account_id = 123456789011
+sso_role_name = readOnly
+region = us-west-2
+output = json
+
+[sso-session my-sso]
+sso_region = us-east-1
+sso_start_url = https://starship.rs/sso
+sso_registration_scopes = sso:account:access
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts (us-west-2) ")
         ));
 
         assert_eq!(expected, actual);
@@ -1026,5 +1101,93 @@ sso_role_name = <AWS-ROLE-NAME>
         ));
 
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn source_profile_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let credential_path = dir.path().join("credentials");
+        let mut config = File::create(&config_path)?;
+        config.write_all(
+            "[profile astronauts]
+source_profile = starship
+"
+            .as_bytes(),
+        )?;
+        let mut credentials = File::create(&credential_path)?;
+        credentials.write_all(
+            "[starship]
+aws_access_key_id=dummy
+aws_secret_access_key=dummy
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env(
+                "AWS_CREDENTIALS_FILE",
+                credential_path.to_string_lossy().as_ref(),
+            )
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn source_profile_not_exists() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut config = File::create(&config_path)?;
+        config.write_all(
+            "[profile astronauts]
+source_profile = starship
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = None;
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn source_profile_uses_credential_process() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let config_path = dir.path().join("config");
+        let mut config = File::create(&config_path)?;
+        config.write_all(
+            "[profile starship]
+credential_process = /opt/bin/awscreds-retriever --username starship
+
+[profile astronauts]
+source_profile = starship
+"
+            .as_bytes(),
+        )?;
+
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_CONFIG_FILE", config_path.to_string_lossy().as_ref())
+            .env("AWS_PROFILE", "astronauts")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }

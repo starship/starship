@@ -6,14 +6,14 @@ This preset is inspired by [M365Princess](https://github.com/JanDeDobbeleer/oh-m
 
 ![Screenshot of Pastel Powerline preset](/presets/img/pastel-powerline.png)
 
-### Prerequisites
+### Nødvendig forutsetninger
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
 
 ### Configuration
 
 ```sh
-starship preset pastel-powerline > ~/.config/starship.toml
+starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/pastel-powerline.toml)

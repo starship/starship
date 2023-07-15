@@ -5,7 +5,8 @@ use crate::utils::get_command_string_output;
 use std::path::PathBuf;
 
 use regex::Regex;
-const JAVA_VERSION_PATTERN: &str = "(?:JRE.*\\(|OpenJ9 )(?P<version>[\\d]+(?:\\.\\d+){0,2})";
+const JAVA_VERSION_PATTERN: &str =
+    "(?:JRE.*\\(|OpenJ9 )(?P<version>\\d+(?:\\.\\d+){0,2}).*, built on";
 
 /// Creates a module with the current Java version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -155,6 +156,12 @@ mod tests {
     }
 
     #[test]
+    fn test_parse_java_version_android_studio_jdk() {
+        let java_11 = "OpenJDK 64-Bit Server VM (11.0.15+0-b2043.56-8887301) for linux-amd64 JRE (11.0.15+0-b2043.56-8887301), built on Jul 29 2022 22:12:21 by \"androidbuild\" with gcc Android (7284624, based on r416183b) Clang 12.0.5 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee)}";
+        assert_eq!(parse_java_version(java_11), Some("11.0.15".to_string()));
+    }
+
+    #[test]
     fn test_parse_java_version_unknown() {
         let unknown_jre = "Unknown JRE";
         assert_eq!(parse_java_version(unknown_jre), None);
@@ -239,6 +246,16 @@ mod tests {
     fn folder_with_pom_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("pom.xml"))?.sync_all()?;
+        let actual = ModuleRenderer::new("java").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_sdkman_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join(".sdkmanrc"))?.sync_all()?;
         let actual = ModuleRenderer::new("java").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Red.dimmed().paint("☕ v13.0.2 ")));
         assert_eq!(expected, actual);

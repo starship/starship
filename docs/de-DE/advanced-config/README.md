@@ -193,7 +193,7 @@ You can also set a similar output with PowerShell by creating a function named `
 ```powershell
 # edit $PROFILE
 function Invoke-Starship-PreCommand {
-  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+  $host.ui.RawUI.WindowTitle = "$env:USERNAME@$env:COMPUTERNAME`: $pwd `a"
 }
 
 Invoke-Expression (&starship init powershell)
@@ -206,8 +206,6 @@ Some shells support a right prompt which renders on the same line as the input. 
 Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
 `right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
-
-Note: Nushell 0.71.0 or later is required
 
 ### Beispiel
 
@@ -231,7 +229,7 @@ Produces a prompt like the following:
 
 Einige Shells unterstützen einen speziellen Fortsetzungsprompt zusätzlich zum normalen Prompt. Dieser Prompt wird anstelle des normalen Prompts ausgegeben, wenn der Benutzer ein unvollständiges Kommando eingegeben hat (etwa wie eine einzelne linke Klammer oder ein einzelnes Anführungszeichen).
 
-Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. The default prompt is `"[∙](bright-black) "`.
+Starship kann das Aussehen des Fortsetzungs-Prompts mit der `continuation_prompt` Option einstellen. The default prompt is `'[∙](bright-black) '`.
 
 Hinweis: Die `continuation_prompt` Anweisung sollte auf einen literalen String ohne Variablen gesetzt werden.
 
@@ -247,7 +245,7 @@ Hinweis: Fortsetzungs-Prompts sind nur für folgende Shells verfügbar:
 # ~/.config/starship.toml
 
 # Ein Fortsetzungs-Prompt der 2 ausgefüllte Pfeile darstellt
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Style-Strings

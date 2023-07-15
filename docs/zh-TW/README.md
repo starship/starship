@@ -30,7 +30,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
 ### 先決要求
 
-- 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用。
+- 安裝 [Nerd Font](https://www.nerdfonts.com/) 字型，並在終端機中啟用。
 
 ### 快速安裝
 
@@ -149,14 +149,14 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.61+ is supported.
+   This will change in the future. Only Nushell v0.73+ is supported.
 
    :::
 
-   Add the following to to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
-   starship init nu | save ~/.cache/starship/init.nu
+   starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):

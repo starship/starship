@@ -9,7 +9,8 @@ use crate::segment::Segment;
 use std::ffi::OsStr;
 use std::sync::Arc;
 
-const ALL_STATUS_FORMAT: &str = "$conflicted$stashed$deleted$renamed$modified$staged$untracked";
+const ALL_STATUS_FORMAT: &str =
+    "$conflicted$stashed$deleted$renamed$modified$typechanged$staged$untracked";
 
 /// Creates a module with the Git branch in the current directory
 ///
@@ -97,6 +98,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     }),
                     "untracked" => info.get_untracked().and_then(|count| {
                         format_count(config.untracked, "git_status.untracked", context, count)
+                    }),
+                    "typechanged" => info.get_typechanged().and_then(|count| {
+                        format_count(config.typechanged, "git_status.typechanged", context, count)
                     }),
                     _ => None,
                 };
@@ -188,6 +192,10 @@ impl<'a> GitStatusInfo<'a> {
     pub fn get_untracked(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.untracked)
     }
+
+    pub fn get_typechanged(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.typechanged)
+    }
 }
 
 /// Gets the number of files in various git states (staged, modified, deleted, etc...)
@@ -236,18 +244,28 @@ fn get_repo_status(context: &Context, config: &GitStatusConfig) -> Option<RepoSt
 }
 
 fn get_stashed_count(context: &Context) -> Option<usize> {
-    let stash_output = context.exec_cmd(
-        "git",
-        &[
-            OsStr::new("-C"),
-            context.current_dir.as_os_str(),
-            OsStr::new("--no-optional-locks"),
-            OsStr::new("stash"),
-            OsStr::new("list"),
-        ],
-    )?;
+    let repo = context.get_repo().ok()?.open();
+    let reference = match repo.try_find_reference("refs/stash") {
+        Ok(Some(reference)) => reference,
+        // No stash reference found
+        Ok(None) => return Some(0),
+        Err(err) => {
+            log::warn!("Error finding stash reference: {err}");
+            return None;
+        }
+    };
 
-    Some(stash_output.stdout.trim().lines().count())
+    match reference.log_iter().all() {
+        Ok(Some(log)) => Some(log.count()),
+        Ok(None) => {
+            log::debug!("No reflog found for stash");
+            Some(0)
+        }
+        Err(err) => {
+            log::warn!("Error getting stash log: {err}");
+            None
+        }
+    }
 }
 
 #[derive(Default, Debug, Copy, Clone)]
@@ -259,6 +277,7 @@ struct RepoStatus {
     renamed: usize,
     modified: usize,
     staged: usize,
+    typechanged: usize,
     untracked: usize,
 }
 
@@ -274,8 +293,14 @@ impl RepoStatus {
     }
 
     fn is_staged(short_status: &str) -> bool {
-        // is_index_modified || is_index_added
-        short_status.starts_with('M') || short_status.starts_with('A')
+        // is_index_modified || is_index_added || is_index_typechanged
+        short_status.starts_with('M')
+            || short_status.starts_with('A')
+            || short_status.starts_with('T')
+    }
+
+    fn is_typechanged(short_status: &str) -> bool {
+        short_status.ends_with('T')
     }
 
     fn parse_normal_status(&mut self, short_status: &str) {
@@ -289,6 +314,10 @@ impl RepoStatus {
 
         if Self::is_staged(short_status) {
             self.staged += 1;
+        }
+
+        if Self::is_typechanged(short_status) {
+            self.typechanged += 1;
         }
     }
 
@@ -367,6 +396,7 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
     use crate::utils::create_command;
     use nix::sys::utsname::uname;
     use std::env;
+    use std::ffi::OsString;
     use std::io::ErrorKind;
 
     let starship_exe = conf.windows_starship?;
@@ -426,15 +456,18 @@ fn git_status_wsl(context: &Context, conf: &GitStatusConfig) -> Option<String> {
 
     // Get foreign starship to use WSL config
     // https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows/
-    let wslenv = env::var("WSLENV")
-        .map(|e| e + ":STARSHIP_CONFIG/wp")
-        .unwrap_or_else(|_| "STARSHIP_CONFIG/wp".to_string());
+    let wslenv = env::var("WSLENV").map_or_else(
+        |_| "STARSHIP_CONFIG/wp".to_string(),
+        |e| e + ":STARSHIP_CONFIG/wp",
+    );
 
     let out = match create_command(starship_exe)
         .map(|mut c| {
             c.env(
                 "STARSHIP_CONFIG",
-                crate::config::get_config_path().unwrap_or_else(|| "/dev/null".to_string()),
+                context
+                    .get_config_path_os()
+                    .unwrap_or_else(|| OsString::from("/dev/null")),
             )
             .env("WSLENV", wslenv)
             .args(["module", "git_status", "--path", winpath]);
@@ -721,9 +754,38 @@ mod tests {
             .output()?;
 
         let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$stashed"
+            })
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("$");
+        let expected = Some(String::from("$"));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_no_stashed_after_undo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_stash(repo_dir.path())?;
+        undo_stash(repo_dir.path())?;
+
+        create_command("git")?
+            .args(["reset", "--hard", "HEAD"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$stashed"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -733,6 +795,9 @@ mod tests {
     fn shows_stashed_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
+        create_stash(repo_dir.path())?;
+        undo_stash(repo_dir.path())?;
+        create_stash(repo_dir.path())?;
         create_stash(repo_dir.path())?;
 
         create_command("git")?
@@ -747,7 +812,26 @@ mod tests {
             })
             .path(repo_dir.path())
             .collect();
-        let expected = format_output("$1");
+        let expected = format_output("$2");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_typechanged() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_typechanged(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                typechanged = "⇢"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("⇢");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -822,6 +906,32 @@ mod tests {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
         create_staged(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                staged = "+[$count](green)"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(format!(
+            "{} ",
+            AnsiStrings(&[
+                Color::Red.bold().paint("[+"),
+                Color::Green.paint("1"),
+                Color::Red.bold().paint("]"),
+            ])
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_staged_typechange_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_typechange(repo_dir.path())?;
 
         let actual = ModuleRenderer::new("git_status")
             .config(toml::toml! {
@@ -1056,6 +1166,32 @@ mod tests {
         Ok(())
     }
 
+    fn create_typechanged(repo_dir: &Path) -> io::Result<()> {
+        fs::remove_file(repo_dir.join("readme.md"))?;
+
+        #[cfg(not(target_os = "windows"))]
+        std::os::unix::fs::symlink(repo_dir.join("Cargo.toml"), repo_dir.join("readme.md"))?;
+
+        #[cfg(target_os = "windows")]
+        std::os::windows::fs::symlink_file(
+            repo_dir.join("Cargo.toml"),
+            repo_dir.join("readme.md"),
+        )?;
+
+        Ok(())
+    }
+
+    fn create_staged_typechange(repo_dir: &Path) -> io::Result<()> {
+        create_typechanged(repo_dir)?;
+
+        create_command("git")?
+            .args(["add", "."])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
     fn create_conflict(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
             .args(["reset", "--hard", "HEAD^"])
@@ -1083,10 +1219,20 @@ mod tests {
     }
 
     fn create_stash(repo_dir: &Path) -> io::Result<()> {
-        File::create(repo_dir.join("readme.md"))?.sync_all()?;
+        let (file, _path) = tempfile::NamedTempFile::new_in(repo_dir)?.keep()?;
+        file.sync_all()?;
 
         create_command("git")?
             .args(["stash", "--all"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
+    fn undo_stash(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["stash", "pop"])
             .current_dir(repo_dir)
             .output()?;
 

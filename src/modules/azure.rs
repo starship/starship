@@ -56,7 +56,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "subscription" => Some(Ok(&subscription.name)),
+                "subscription" => Some(Ok(config
+                    .subscription_aliases
+                    .get(&subscription.name)
+                    .copied()
+                    .unwrap_or(&subscription.name))),
                 "username" => Some(Ok(&subscription.user.name)),
                 _ => None,
             })
@@ -192,7 +196,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {} ",
-            Color::Blue.bold().paint("ﴃ Subscription 1")
+            Color::Blue.bold().paint("󰠅 Subscription 1")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -263,7 +267,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ user@domain.com")
+            Color::Blue.bold().paint("󰠅 user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -334,7 +338,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ :user@domain.com")
+            Color::Blue.bold().paint("󰠅 :user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -405,7 +409,7 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ Subscription 1:")
+            Color::Blue.bold().paint("󰠅 Subscription 1:")
         ));
         assert_eq!(actual, expected);
         dir.close()
@@ -610,7 +614,82 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "on {}",
-            Color::Blue.bold().paint("ﴃ Subscription 1:user@domain.com")
+            Color::Blue.bold().paint("󰠅 Subscription 1:user@domain.com")
+        ));
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn subscription_name_with_alias() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let azure_profile_contents = r#"{
+            "installationId": "3deacd2a-b9db-77e1-aa42-23e2f8dfffc3",
+            "subscriptions": [
+                {
+                "id": "f568c543-d12e-de0b-3d85-69843598b565",
+                "name": "VeryLongSubscriptionName",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false,
+                "tenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "0e8a15ec-b0f5-d355-7062-8ece54c59aee",
+                "managedByTenants": []
+              },
+              {
+                "id": "d4442d26-ea6d-46c4-07cb-4f70b8ae5465",
+                "name": "AnotherLongSubscriptionName",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": false, 
+                "tenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "a4e1bb4b-5330-2d50-339d-b9674d3a87bc",
+                "managedByTenants": []
+              },
+              {
+                "id": "f3935dc9-92b5-9a93-da7b-42c325d86939",
+                "name": "TheLastLongSubscriptionName",
+                "state": "Enabled",
+                "user": {
+                  "name": "user@domain.com",
+                  "type": "user"
+                },
+                "isDefault": true,
+                "tenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "environmentName": "AzureCloud",
+                "homeTenantId": "f0273a19-7779-e40a-00a1-53b8331b3bb6",
+                "managedByTenants": []
+              }
+            ]
+          }
+        "#;
+
+        generate_test_config(&dir, azure_profile_contents)?;
+        let dir_path = &dir.path().to_string_lossy();
+        let actual = ModuleRenderer::new("azure")
+            .config(toml::toml! {
+                [azure]
+                format = "on [$symbol($subscription:$username)]($style)"
+                disabled = false
+                [azure.subscription_aliases]
+                VeryLongSubscriptionName = "vlsn"
+                AnotherLongSubscriptionName = "alsn"
+                TheLastLongSubscriptionName = "tllsn"
+            })
+            .env("AZURE_CONFIG_DIR", dir_path.as_ref())
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Blue.bold().paint("󰠅 tllsn:user@domain.com")
         ));
         assert_eq!(actual, expected);
         dir.close()

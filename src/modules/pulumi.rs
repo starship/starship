@@ -81,24 +81,28 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 }
 
-/// Parse the output of `pulumi version` into just the version string.
+/// Parse and sanitize the output of `pulumi version` into just the version string.
 ///
 /// Normally, this just means returning it. When Pulumi is being developed, it
 /// can return results like `3.12.0-alpha.1630554544+f89e9a29.dirty`, which we
 /// don't want to see. Instead we display that as `3.12.0-alpha`.
 fn parse_version(version: &str) -> &str {
+    let new_version = version.strip_prefix('v').unwrap_or(version);
+
+    let sanitized_version = new_version.trim_end();
+
     let mut periods = 0;
-    for (i, c) in version.as_bytes().iter().enumerate() {
+    for (i, c) in sanitized_version.as_bytes().iter().enumerate() {
         if *c == b'.' {
             if periods == 2 {
-                return &version[0..i];
+                return &sanitized_version[0..i];
             } else {
                 periods += 1;
             }
         }
     }
     // We didn't hit 3 periods, so we just return the whole string.
-    version
+    sanitized_version
 }
 
 /// Find a file describing a Pulumi package in the current directory (or any parent directory).
@@ -212,20 +216,53 @@ mod tests {
 
     #[test]
     fn pulumi_version_release() {
-        let input = "3.12.0";
-        assert_eq!(parse_version(input), input);
+        let expected = "3.12.0";
+        let inputs: [&str; 6] = [
+            "v3.12.0\r\n",
+            "v3.12.0\n",
+            "v3.12.0",
+            "3.12.0\r\n",
+            "3.12.0\n",
+            "3.12.0",
+        ];
+
+        for input in &inputs {
+            assert_eq!(parse_version(input), expected);
+        }
     }
 
     #[test]
     fn pulumi_version_prerelease() {
-        let input = "3.12.0-alpha";
-        assert_eq!(parse_version(input), input);
+        let expected = "3.12.0-alpha";
+        let inputs: [&str; 6] = [
+            "v3.12.0-alpha\r\n",
+            "v3.12.0-alpha\n",
+            "v3.12.0-alpha",
+            "3.12.0-alpha\r\n",
+            "3.12.0-alpha\n",
+            "3.12.0-alpha",
+        ];
+
+        for input in &inputs {
+            assert_eq!(parse_version(input), expected);
+        }
     }
 
     #[test]
     fn pulumi_version_dirty() {
-        let input = "3.12.0-alpha.1630554544+f89e9a29.dirty";
-        assert_eq!(parse_version(input), "3.12.0-alpha");
+        let expected = "3.12.0-alpha";
+        let inputs: [&str; 6] = [
+            "v3.12.0-alpha.1630554544+f89e9a29.dirty\r\n",
+            "v3.12.0-alpha.1630554544+f89e9a29.dirty\n",
+            "v3.12.0-alpha.1630554544+f89e9a29.dirty",
+            "3.12.0-alpha.1630554544+f89e9a29.dirty\r\n",
+            "3.12.0-alpha.1630554544+f89e9a29.dirty\n",
+            "3.12.0-alpha.1630554544+f89e9a29.dirty",
+        ];
+
+        for input in &inputs {
+            assert_eq!(parse_version(input), expected);
+        }
     }
 
     #[test]

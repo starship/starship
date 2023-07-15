@@ -245,6 +245,22 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::from("0.19.1\n"),
             stderr: String::default(),
         }),
+        "fennel --version" => Some(CommandOutput {
+            stdout: String::from("Fennel 1.2.1 on PUC Lua 5.4\n"),
+            stderr: String::default(),
+        }),
+        "fossil branch current" => Some(CommandOutput{
+            stdout: String::from("topic-branch"),
+            stderr: String::default(),
+        }),
+        "fossil branch new topic-branch trunk" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
+        "fossil update topic-branch" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
         "go version" => Some(CommandOutput {
             stdout: String::from("go version go1.12.1 linux/amd64\n"),
             stderr: String::default(),
@@ -333,6 +349,18 @@ WebAssembly: unavailable
                 stderr: String::default(),
             })
         },
+        "pijul channel" => Some(CommandOutput{
+            stdout: String::from("  main\n* tributary-48198"),
+            stderr: String::default(),
+        }),
+        "pijul channel new tributary-48198" => Some(CommandOutput{
+            stdout: String::default(),
+            stderr: String::default(),
+        }),
+        "pijul channel switch tributary-48198" => Some(CommandOutput{
+            stdout: String::from("Outputting repository ↖"),
+            stderr: String::default(),
+        }),
         "pulumi version" => Some(CommandOutput{
             stdout: String::from("1.2.3-ver.1631311768+e696fb6c"),
             stderr: String::default(),
@@ -385,6 +413,14 @@ Built on MoarVM version 2021.12.\n",
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
         }),
+        "solc --version" => Some(CommandOutput {
+            stdout: String::from("solc, the solidity compiler commandline interface
+Version: 0.8.16+commit.07a7930e.Linux.g++"),
+            stderr: String::default(),
+        }),
+        "solcjs --version" => Some(CommandOutput {
+            stdout: String::from("0.8.15+commit.e14f2714.Emscripten.clang"),
+            stderr: String::default() }),
         "swift --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
@@ -616,6 +652,40 @@ pub fn encode_to_hex(slice: &[u8]) -> String {
     String::from_utf8(dst).unwrap()
 }
 
+pub trait PathExt {
+    /// Get device / volume info
+    fn device_id(&self) -> Option<u64>;
+}
+
+#[cfg(windows)]
+impl PathExt for Path {
+    fn device_id(&self) -> Option<u64> {
+        // Maybe it should use unimplemented!
+        Some(42u64)
+    }
+}
+
+#[cfg(not(windows))]
+impl PathExt for Path {
+    #[cfg(target_os = "linux")]
+    fn device_id(&self) -> Option<u64> {
+        use std::os::linux::fs::MetadataExt;
+        match self.metadata() {
+            Ok(m) => Some(m.st_dev()),
+            Err(_) => None,
+        }
+    }
+
+    #[cfg(all(unix, not(target_os = "linux")))]
+    fn device_id(&self) -> Option<u64> {
+        use std::os::unix::fs::MetadataExt;
+        match self.metadata() {
+            Ok(m) => Some(m.dev()),
+            Err(_) => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -668,8 +738,8 @@ mod tests {
     fn exec_no_output() {
         let result = internal_exec_cmd("true", &[] as &[&OsStr], Duration::from_millis(500));
         let expected = Some(CommandOutput {
-            stdout: String::from(""),
-            stderr: String::from(""),
+            stdout: String::new(),
+            stderr: String::new(),
         });
 
         assert_eq!(result, expected)
@@ -682,7 +752,7 @@ mod tests {
             internal_exec_cmd("/bin/sh", &["-c", "echo hello"], Duration::from_millis(500));
         let expected = Some(CommandOutput {
             stdout: String::from("hello\n"),
-            stderr: String::from(""),
+            stderr: String::new(),
         });
 
         assert_eq!(result, expected)
@@ -697,7 +767,7 @@ mod tests {
             Duration::from_millis(500),
         );
         let expected = Some(CommandOutput {
-            stdout: String::from(""),
+            stdout: String::new(),
             stderr: String::from("hello\n"),
         });
 

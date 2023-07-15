@@ -138,7 +138,7 @@ attempts, run
 xcrun notarytool history --keychain-profile "AC_PASSWORD"
 ```
 
-Find the `id` of the attempt you wish to view, then run one of these commmands:
+Find the `id` of the attempt you wish to view, then run one of these commands:
 
 ```
 xcrun notarytool info <run-id> --keychain-profile "AC_PASSWORD"
@@ -204,7 +204,7 @@ there are two .plist files that can be used to specify the architecture required
 
 ## Signing the Distribution package
 
-This is also fairly simple, and analagous to signing the binary.
+This is also fairly simple, and analogous to signing the binary.
 
 ```
 productsign --timestamp --sign "<Key ID>" <input.pkg> <output.pkg>
@@ -212,7 +212,7 @@ productsign --timestamp --sign "<Key ID>" <input.pkg> <output.pkg>
 
 ## Notarizing the Distribution Package
 
-Also analagous to notarizing the binary. We run
+Also analogous to notarizing the binary. We run
 
 ```
 xcrun notarytool submit <package.pkg> --keychain-profile "AC_PASSWORD" --wait

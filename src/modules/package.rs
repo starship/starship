@@ -68,7 +68,7 @@ fn get_node_package_version(context: &Context, config: &PackageConfig) -> Option
     Some(formatted_version)
 }
 
-fn get_poetry_version(pyproject: &toml::Value) -> Option<&str> {
+fn get_poetry_version(pyproject: &toml::Table) -> Option<&str> {
     pyproject
         .get("tool")?
         .get("poetry")?
@@ -76,13 +76,13 @@ fn get_poetry_version(pyproject: &toml::Value) -> Option<&str> {
         .as_str()
 }
 
-fn get_pep621_version(pyproject: &toml::Value) -> Option<&str> {
+fn get_pep621_version(pyproject: &toml::Table) -> Option<&str> {
     pyproject.get("project")?.get("version")?.as_str()
 }
 
 fn get_pyproject_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("pyproject.toml")?;
-    let pyproject_toml: toml::Value = toml::from_str(&file_contents).ok()?;
+    let pyproject_toml: toml::Table = toml::from_str(&file_contents).ok()?;
 
     get_pep621_version(&pyproject_toml)
         .or_else(|| get_poetry_version(&pyproject_toml))
@@ -105,7 +105,7 @@ fn get_gradle_version(context: &Context, config: &PackageConfig) -> Option<Strin
     context
         .read_file_from_pwd("gradle.properties")
         .and_then(|contents| {
-            let re = Regex::new(r"version=(?P<version>.*)").unwrap();
+            let re = Regex::new(r"(?m)^\s*version\s*=\s*(?P<version>.*)").unwrap();
             let caps = re.captures(&contents)?;
             format_version(&caps["version"], config.version_format)
         }).or_else(|| {
@@ -127,7 +127,7 @@ fn get_composer_version(context: &Context, config: &PackageConfig) -> Option<Str
 
 fn get_julia_project_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("Project.toml")?;
-    let project_toml: toml::Value = toml::from_str(&file_contents).ok()?;
+    let project_toml: toml::Table = toml::from_str(&file_contents).ok()?;
     let raw_version = project_toml.get("version")?.as_str()?;
 
     format_version(raw_version, config.version_format)
@@ -225,7 +225,7 @@ fn get_sbt_version(context: &Context, config: &PackageConfig) -> Option<String> 
 fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let mut file_contents = context.read_file_from_pwd("Cargo.toml")?;
 
-    let mut cargo_toml: toml::Value = toml::from_str(&file_contents).ok()?;
+    let mut cargo_toml: toml::Table = toml::from_str(&file_contents).ok()?;
     let cargo_version = cargo_toml.get("package").and_then(|p| p.get("version"));
     let raw_version = if let Some(v) = cargo_version.and_then(toml::Value::as_str) {
         // regular version string
@@ -238,7 +238,7 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
         // workspace version string (`package.version.worspace = true`)
         // need to read the Cargo.toml file from the workspace root
         let mut version = None;
-        // disover the workspace root
+        // discover the workspace root
         for path in context.current_dir.ancestors().skip(1) {
             // Assume the workspace root is the first ancestor that contains a Cargo.toml file
             if let Ok(mut file) = fs::File::open(path.join("Cargo.toml")) {
@@ -979,6 +979,18 @@ java {
         expect_output(&project_dir, Some("v1.2.3"), None);
         project_dir.close()
     }
+    #[test]
+    fn test_extract_grade_version_from_properties_with_comment_and_whitespace() -> io::Result<()> {
+        let config_name = "gradle.properties";
+        let config_content = "
+            # or use -Pversion=0.0.1
+            version = 1.2.3
+            ";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.2.3"), None);
+        project_dir.close()
+    }
 
     #[test]
     fn test_extract_mix_version() -> io::Result<()> {
@@ -1404,7 +1416,7 @@ environment:
         file.sync_all()
     }
 
-    fn expect_output(project_dir: &TempDir, contains: Option<&str>, config: Option<toml::Value>) {
+    fn expect_output(project_dir: &TempDir, contains: Option<&str>, config: Option<toml::Table>) {
         let starship_config = config.unwrap_or(toml::toml! {
             [package]
             disabled = false

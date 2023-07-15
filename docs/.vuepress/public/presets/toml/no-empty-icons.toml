@@ -37,6 +37,9 @@ format = '(via [$symbol($version )]($style))'
 [erlang]
 format = '(via [$symbol($version )]($style))'
 
+[fennel]
+format = '(via [$symbol($version )]($style))'
+
 [golang]
 format = '(via [$symbol($version )]($style))'
 

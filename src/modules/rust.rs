@@ -93,7 +93,7 @@ impl RustToolingEnvironmentInfo {
     fn get_rustup_rustc_version(&self, context: &Context) -> &RustupRunRustcVersionOutcome {
         self.rustup_rustc_output.get_or_init(|| {
             let out = if let Some(toolchain) = self.get_env_toolchain_override(context) {
-                // First try runnig ~/.rustup/toolchains/<toolchain>/bin/rustc --version
+                // First try running ~/.rustup/toolchains/<toolchain>/bin/rustc --version
                 rustup_home()
                     .map(|rustup_folder| {
                         rustup_folder
@@ -394,7 +394,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formatting `rust` version:\n{}", error);
-            Some(format!("v{}", version))
+            Some(format!("v{version}"))
         }
     }
 }
@@ -402,7 +402,7 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
 fn format_toolchain(toolchain: &str, default_host_triple: Option<&str>) -> String {
     default_host_triple
         .map_or(toolchain, |triple| {
-            toolchain.trim_end_matches(&format!("-{}", triple))
+            toolchain.trim_end_matches(&format!("-{triple}"))
         })
         .to_owned()
 }
@@ -735,6 +735,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
+            Default::default(),
         );
 
         assert_eq!(
@@ -756,6 +757,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
+            Default::default(),
         );
 
         assert_eq!(
@@ -777,6 +779,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
+            Default::default(),
         );
 
         assert_eq!(
@@ -800,6 +803,7 @@ version = "12"
             Target::Main,
             child_dir_path.clone(),
             child_dir_path,
+            Default::default(),
         );
 
         assert_eq!(
@@ -820,6 +824,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
+            Default::default(),
         );
 
         assert_eq!(find_rust_toolchain_file(&context), None);
@@ -838,6 +843,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
+            Default::default(),
         );
 
         assert_eq!(
@@ -859,6 +865,7 @@ version = "12"
             Target::Main,
             dir.path().into(),
             dir.path().into(),
+            Default::default(),
         );
 
         assert_eq!(
@@ -882,6 +889,7 @@ version = "12"
             Target::Main,
             child_dir_path.clone(),
             child_dir_path,
+            Default::default(),
         );
 
         assert_eq!(

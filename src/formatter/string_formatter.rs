@@ -570,6 +570,30 @@ mod tests {
     }
 
     #[test]
+    fn test_style_variable_nested() {
+        const STYLE_VAR_NAME: &str = "style";
+
+        let format_string = format!("[[text](${STYLE_VAR_NAME})](blue)");
+        let inner_style = Some(Color::Red.bold());
+
+        let formatter = StringFormatter::new(&format_string)
+            .unwrap()
+            .map_style(|variable| match variable {
+                STYLE_VAR_NAME => Some(Ok("red bold".to_owned())),
+                _ => None,
+            });
+
+        assert_eq!(
+            BTreeSet::from([STYLE_VAR_NAME.into()]),
+            formatter.get_style_variables()
+        );
+
+        let result = formatter.parse(None, None).unwrap();
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "text", inner_style);
+    }
+
+    #[test]
     fn test_styled_variable_as_text() {
         const FORMAT_STR: &str = "[$var](red bold)";
         let var_style = Some(Color::Red.bold());

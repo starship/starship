@@ -31,9 +31,10 @@ pub const ALL_MODULES: &[&str] = &[
     "dotnet",
     "elixir",
     "elm",
-    "env_var",
     "erlang",
+    "fennel",
     "fill",
+    "fossil_branch",
     "gcloud",
     "git_branch",
     "git_commit",
@@ -41,6 +42,7 @@ pub const ALL_MODULES: &[&str] = &[
     "git_state",
     "git_status",
     "golang",
+    "gradle",
     "guix_shell",
     "haskell",
     "haxe",
@@ -67,6 +69,7 @@ pub const ALL_MODULES: &[&str] = &[
     "package",
     "perl",
     "php",
+    "pijul_channel",
     "pulumi",
     "purescript",
     "python",
@@ -79,6 +82,7 @@ pub const ALL_MODULES: &[&str] = &[
     "shell",
     "shlvl",
     "singularity",
+    "solidity",
     "spack",
     "status",
     "sudo",
@@ -210,7 +214,7 @@ where
             }
         }
 
-        if let Segment::LineTerm = segment {
+        if matches!(segment, Segment::LineTerm) {
             break;
         }
     }
