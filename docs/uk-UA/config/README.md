@@ -3615,7 +3615,7 @@ disabled = false
 | `repeat`        | `false`                      | Повторно показує `symbol` в кількості зазначеній у `SHLVL`.         |
 | `repeat_offset` | `0`                          | Decrements number of times `symbol` is repeated by the offset value |
 | `style`         | `'bold yellow'`              | Стиль модуля.                                                       |
-| `disabled`      | `true`                       | Disables the `shlvl` module.                                        |
+| `disabled`      | `true`                       | Вимикає модуль `shlvl`.                                             |
 
 ### Змінні
 
@@ -3654,7 +3654,7 @@ threshold = 0
 
 ## Singularity
 
-The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
+Модуль `singularity` показує поточний образ [Singularity](https://sylabs.io/singularity/), якщо ви всередині контейнера і `$SINGULARITY_NAME` встановлено.
 
 ### Параметри
 
@@ -3686,7 +3686,7 @@ format = '[📦 \[$env\]]($style) '
 
 ## Solidity
 
-The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+Модуль `solidity` показує поточну версію [Solidity](https://soliditylang.org/) Модуль буде показано, якщо буде вказано якісь з наступних умов:
 
 - Поточна тека містить файл `.sol`
 
@@ -3724,7 +3724,7 @@ format = "via [S $version](blue bold)"
 
 ## Spack
 
-The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
+Модуль `spack` показує інформацію про поточне оточення [Spack](https://spack.readthedocs.io/en/latest/), якщо змінна `$SPACK_ENV` встановлена.
 
 ### Параметри
 
@@ -3757,7 +3757,7 @@ format = '[$symbol$environment](dimmed blue) '
 
 ## Status
 
-The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
+Модуль `status` показує код завершення роботи попередньої команди. Якщо $success_symbol пустий (типово), модуль буде показаний тільки якщо код виходу не `0`. Код status буде перетворений у 32-бітне ціле число.
 
 ::: tip
 
@@ -3818,7 +3818,7 @@ disabled = false
 
 ## Sudo
 
-The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
+Модуль `sudo` показує, чи облікові дані sudo зараз є в кеші. Модуль показується лише за наявності даних в кеші.
 
 ::: tip
 
@@ -3867,7 +3867,7 @@ disabled = false
 
 ## Swift
 
-By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `swift` показує поточну встановлену версію [Swift](https://swift.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Package.swift`
 - Поточна тека містить файли з розширенням `.swift`
@@ -3906,11 +3906,11 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
+Модуль `terraform` показує поточну вибрану [робочу область Terraform](https://www.terraform.io/docs/language/state/workspaces.html) і версію.
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+Стандартно версія Terraform не показується, оскільки це повільно для поточних версій Terraform, особливо коли використовується багато втулків. Якщо ви все ще хочете увімкнути показ версії, [дивіться  приклад нижче](#with-terraform-version).
 
 :::
 
@@ -3965,7 +3965,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Time
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показує поточний **місцевий** час. Значення `format` використовується крейтом [`chrono`](https://crates.io/crates/chrono) для визначення формату показу часу. Перегляньте [документацію chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), щоб побачити, які параметри доступні.
 
 ::: tip
 
@@ -3985,7 +3985,7 @@ The `time` module shows the current **local** time. The `format` configuration v
 | `disabled`        | `true`                  | Вимикає модуль `time`.                                                                                                  |
 | `time_range`      | `'-'`                   | Встановлює діапазон часу, протягом якого модуль показується. Час має бути зазначений у 24-годинному форматі             |
 
-If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
+Якщо `use_12hr` є `true`, то стандартно `time_format` — `'%r'`. В іншому випадку стандартне значення — `'%T'`. Налаштований вручну `time_format` має перевагу над параметром `use_12hr`.
 
 ### Змінні
 
@@ -4011,7 +4011,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Username
 
-The `username` module shows active user's username. Модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `username` показує імʼя активного користувача. Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточний користувач має права суперкористувача
 - Поточний користувач не є таким же, як той, який увійшов до системи
@@ -4020,7 +4020,7 @@ The `username` module shows active user's username. Модуль показує�
 
 ::: tip
 
-SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
+Модуль виявляє підключення SSH перевіряючи змінні середовища `SSH_CONNECTION`, `SSH_CLIENT` і `SSH_TTY`. Якщо ваш хост SSH не налаштував ці змінні, одним зі способів розвʼязання проблеми є встановлення для однієї з них фіктивного значення.
 
 :::
 
@@ -4056,7 +4056,7 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `vagrant` показує поточну встановлену версію [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Vagrantfile`
 
@@ -4094,7 +4094,7 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `vlang` показує поточну встановлену версію [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли з розширенням `.v`
 - Поточна тека містить файли `v.mod`, `vpkg.json` або `.vpkg-lock.json`
@@ -4130,7 +4130,7 @@ format = 'via [V $version](blue bold) '
 
 ## VCSH
 
-The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
+Модуль `vcsh` показує поточний репозиторій [VCSH](https://github.com/RichiH/vcsh). Модуль показується лише в тому випадку, якщо репозиторій використовується.
 
 ### Параметри
 
@@ -4162,7 +4162,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
+Модуль `zig` показує поточну встановлену версію [Zig](https://ziglang.org/). Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `.zig`
 
@@ -4200,9 +4200,9 @@ symbol = '⚡️ '
 
 ## Власні команди
 
-The `custom` modules show the output of some arbitrary commands.
+Модулі `custom` показують результат виконання певних довільних команд.
 
-These modules will be shown if any of the following conditions are met:
+Модулі показуються, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл, ім'я якого є в `detect_files`
 - Поточна тека містить теки, ім'я яких вказано в `detect_folders`
@@ -4212,27 +4212,27 @@ These modules will be shown if any of the following conditions are met:
 
 ::: tip
 
-Multiple custom modules can be defined by using a `.`.
+Кілька власних модулів можна визначити за допомогою символу "`.`".
 
 :::
 
 ::: tip
 
-The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
+Порядок в якому власні модулі будуть показуватись може бути встановлений індивідуально додаванням `${custom.foo}` до змінної `format` верхнього рівня (через те, що назви містять точки вам треба використовувати`${...}`). Типово, модуль `custom` покаже усі модулі custom, в тому порядку, в якому вони були визначені.
 
 :::
 
 ::: tip
 
-[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
+[Квиток #1252](https://github.com/starship/starship/discussions/1252) містить приклади власних модулів. Якщо у вас є цікавий приклад ще не розкритий там, не соромтеся, поділитися ним!
 
 :::
 
-::: warning Command output is printed unescaped to the prompt
+::: warning Вихідні дані команди друкуються без екранування
 
-Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
+Незалежно від результату, який генерує команда, він виводиться в командний рядок у незміненому вигляді. Це означає, що якщо вивід містить спеціальні послідовності, які інтерпретуються оболонкою, вони будуть оброблені та перетворені оболонкою при виводі. Ці спеціальні послідовності є специфічними для оболонки, напр. ви можете написати модуль, який записує послідовності bash, наприклад. `\h`, але цей модуль не працюватиме в оболонці fish або zsh.
 
-Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+Рядок формату також може містити специфічні послідовності командного рядка, наприклад [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 
@@ -4268,30 +4268,30 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 #### Власні команди shell
 
-`shell` accepts a non-empty list of strings, where:
+`shell` приймає непустий список рядків, де:
 
 - Перший рядок — це шлях до оболонки для виконання команди.
 - Наступні — інші аргументи, що передаються до оболонки.
 
-If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
+Якщо не налаштовано, модуль повертатиметься до STARSHIP_SHELL, а потім до «sh» у Linux і «cmd /C» у Windows.
 
-The `command` will be passed in on stdin.
+Команда `command` буде передана до stdin.
 
-If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
+Якщо `shell` не вказано або містить тільки один елемент і Starship виявить, що буде використано PowerShell, наступні аргументи будуть автоматично додані: `-Noprofile -Command -`. Якщо `shell` не вказано або міститься лише один елемент і Starship виявить, що буде використано Cmd, аргумент`/C`  буде автоматично додано, а `stdin` буде встановлено у `false`. Якщо `shell` не вказано або міститься лише один елемент і Starship виявить, що буде використано Nushell, аргумент`c` буде автоматично додано, а `stdin` буде встановлено у `false`. Такої поведінки можна уникнути шляхом явного передавання аргументів до оболонки, наприклад,
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Make sure your custom shell configuration exits gracefully
+::: warning Переконайтеся, що ваша оболонка завершує процеси правильно
 
-If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
+Якщо ви вказуєте власну команду, переконайтеся, що стандартний Shell, який використовується starship, буде виконувати команді з чистим (graceful) завершенням, за допомогою параметра `shell`.
 
-For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
+Наприклад, PowerShell потребує параметр `-Command` для виконання однорядкової команди. Пропуск цього параметра може призвести до рекурсивного циклу starship, де оболонка може спробувати знову завантажити повний профіль середовища з самим starship і, отже, повторно виконати власну команду, потрапивши в нескінченний цикл.
 
-Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
+Параметри, подібні до `-NoProfile` у PowerShell, також рекомендовані для інших оболонок, щоб уникнути додаткового часу завантаження власного профілю під час кожного виклику Starship.
 
-Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
+Наразі реалізовано автоматичне виявлення оболонок і правильне додавання параметрів, але можливо, що охоплено не всі оболонки. [Будь ласка, сповістіть про проблему](https://github.com/starship/starship/issues/new/choose) з подробицями про термінал та конфігурацію автозапуску, якщо ви зіткнулись з таким сценарій.
 
 :::
 
