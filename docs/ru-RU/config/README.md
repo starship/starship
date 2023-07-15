@@ -3965,7 +3965,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Время
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+Модуль `time` показывает текущее **локальное** время. Значение конфигурации `format` используется пакетом [`chrono`](https://crates.io/crates/chrono) для контроля того, как отображается время. Ознакомьтесь с [документацией chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html), чтобы увидеть доступные параметры.
 
 ::: tip
 
@@ -4011,7 +4011,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Имя пользователя
 
-The `username` module shows active user's username. Модуль будет показан, если любое из следующих условий соблюдено:
+Модуль `username` показывает имя текущего пользователя. Модуль будет показан, если любое из следующих условий соблюдено:
 
 - The current user is root/admin
 - Текущий пользователь отличается от залогиненного
