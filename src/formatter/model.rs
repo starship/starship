@@ -91,6 +91,7 @@ impl<'a> StyleVariableHolder<Cow<'a, str>> for Vec<FormatElement<'a>> {
         self.iter().fold(BTreeSet::new(), |mut acc, el| match el {
             FormatElement::TextGroup(textgroup) => {
                 acc.extend(textgroup.style.get_style_variables());
+                acc.extend(textgroup.format.get_style_variables());
                 acc
             }
             FormatElement::Conditional(format) => {

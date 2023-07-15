@@ -1,17 +1,17 @@
-[Return to Presets](./README.md#no-runtime-versions)
+[Повернутися до Шаблонів](./README.md#no-runtime-versions)
 
-# No Runtime Versions Preset
+# No Runtime Versions
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Шаблон приховує версію поточного інтерпретатора для мов програмування. Якщо ви працюєте в контейнерах або віртуалізованих середовищах, то це для вас!
 
-![Screenshot of Hide Runtime Versions preset](/presets/img/no-runtime-versions.png)
+![Скріншот шаблона Hide Runtime Versions](/presets/img/no-runtime-versions.png)
 
-### Configuration
+### Налаштування
 
 ```sh
-starship preset no-runtime-versions > ~/.config/starship.toml
+starship preset no-runtime-versions -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/no-runtime-versions.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/no-runtime-versions.toml)
 
 <<< @/.vuepress/public/presets/toml/no-runtime-versions.toml

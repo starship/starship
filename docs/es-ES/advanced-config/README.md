@@ -26,15 +26,15 @@ Enable-TransientPrompt
 
 ## TransientPrompt y TransientRight Prompt en Cmd
 
-Clink allows you to replace the previous-printed prompt with custom strings. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. To enable this, run `clink set prompt.transient <value>` where \<value\> can be one of:
+Clink re permite reemplazar el prompt impreso anteriormente con cadenas personalizadas. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. Para habilitar esto, ejecuta `Clink set prompt.transitent <value>` donde \<value\> puede ser uno de:
 
-- `always`: always replace the previous prompt
-- `same_dir`: replace the previous prompt only if the working directory is same
-- `off`: do not replace the prompt (i.e. turn off transience)
+- `always`: reemplazar siempre el prompt anterior
+- `same_dir`: reemplazar el prompt anterior sólo si el directorio de trabajo es el mismo
+- `off`: no reemplazar el prompt (es decir, desactivar la transitoriedad)
 
-You need to do this only once. Make the following changes to your `starship.lua` to customize what gets displayed on the left and on the right:
+Necesitas hacer esto sólo una vez. Haz los siguientes cambios en tu `starship.lua` para personalizar lo que se muestra a la izquierda y a la derecha:
 
-- Por defecto, el lado izquierdo de la entrada es reemplazado por `>`. To customize this, define a new function called `starship_transient_prompt_func`. This function receives the current prompt as a string that you can utilize. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
+- Por defecto, el lado izquierdo de la entrada es reemplazado por `>`. Para personalizar esto, define una nueva función llamada `starship_transient_prompt_func`. Esta función recibe el prompt actual como una cadena que tú puedes utilizar. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
 
 ```lua
 function starship_transient_prompt_func(prompt)
@@ -45,7 +45,7 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-- Por defecto, el lado derecho de la entrada está vacío. Para personalizar esto, defina una nueva función llamada `starship_transient_rprompt_func`. This function receives the current prompt as a string that you can utilize. For example, to display the time at which the last command was started here, you would do
+- Por defecto, el lado derecho de la entrada está vacío. Para personalizar esto, defina una nueva función llamada `starship_transient_rprompt_func`. Esta función recibe el prompt actual como una cadena que tú puedes utilizar. Por ejemplo, para mostrar la hora en la que se inició el último comando aquí, lo harías
 
 ```lua
 function starship_transient_rprompt_func(prompt)
@@ -54,13 +54,13 @@ end
 load(io.popen('starship init cmd'):read("*a"))()
 ```
 
-## TransientPrompt and TransientRightPrompt in Fish
+## TransientPrompt y TransientRightPrompt en Fish
 
-Es posible reemplazar la entrada impresa anteriormente con una cadena personalizada. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+Es posible reemplazar la entrada impresa anteriormente con una cadena personalizada. Esto es útil en los casos que toda la información de la entrada no es siempre necesaria. Para habilitar esto, ejecute `enable_transience` en la sesión del interprete de comandos. Para hacerlo permanente, pon esta proposición en tu `~/.config/fish/config.fish`. La transitoriedad puede ser desactivada al momento con `disable-transience`.
 
-Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+Ten en cuenta que en el caso de Fish, el prompt transitorio sólo se imprime si el intérprete de comandos no está vacío, y sintácticamente correcta.
 
-- By default, the left side of input gets replaced with a bold-green `❯`. To customize this, define a new function called `starship_transient_prompt_func`. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
+- Por defecto, el lado izquierdo de la entrada es reemplazado por una  `❯`. Para personalizar esto, define una nueva función llamada `starship_transient_prompt_func`. Por ejemplo, para mostrar el módulo `character` de Starship aquí, harías
 
 ```fish
 function starship_transient_prompt_func
@@ -70,7 +70,7 @@ starship init fish | source
 enable_transience
 ```
 
-- Por defecto, el lado derecho de la entrada está vacío. Para personalizar esto, defina una nueva función llamada `starship_transient_rprompt_func`. For example, to display the time at which the last command was started here, you would do
+- Por defecto, el lado derecho de la entrada está vacío. Para personalizar esto, defina una nueva función llamada `starship_transient_rprompt_func`. Por ejemplo, para mostrar la hora en la que se inició el último comando aquí, lo harías
 
 ```fish
 function starship_transient_rprompt_func
@@ -193,7 +193,7 @@ También puede establecer una salida similar con PowerShell creando una función
 ```powershell
 # edit $PROFILE
 function Invoke-Starship-PreCommand {
-  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+  $host.ui.RawUI.WindowTitle = "$env:USERNAME@$env:COMPUTERNAME`: $pwd `a"
 }
 
 Invoke-Expression (&starship init powershell)
@@ -205,7 +205,7 @@ Algunos intérpretes de comandos soportan un prompt derecho que se renderiza en 
 
 Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear los módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo `fill`](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh, xonsh, cmd, nushell.
 
 ### Ejemplo
 
@@ -279,6 +279,6 @@ Si se especifican varios colores para el primer plano/fondo, el último en la ca
 
 No todas las cadenas de estilo se mostrarán correctamente en cada terminal. En particular, existen las siguientes rarezas conocidas:
 
-- Many terminals disable support for `blink` by default
-- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app
+- Muchos terminales deshabilitan el soporte para `parpadear` por defecto
+- `hiden` no es [compatible con iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` no está soportado por macOS Terminal.app por defecto

@@ -1,17 +1,17 @@
-[Return to Presets](./README.md#pure)
+[Повернутися до Шаблонів](./README.md#pure)
 
-# Pure Preset
+# Pure Prompt
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Цей шаблон імітує зовнішній вигляд і поведінку [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Pure preset](/presets/img/pure-preset.png)
+![Скріншот шаблона Pure Prompt](/presets/img/pure-preset.png)
 
-### Configuration
+### Налаштування
 
 ```sh
-starship preset pure-preset > ~/.config/starship.toml
+starship preset pure-preset -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/pure-preset.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/pure-preset.toml)
 
 <<< @/.vuepress/public/presets/toml/pure-preset.toml

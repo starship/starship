@@ -12,7 +12,6 @@ use unicode_width::UnicodeWidthChar;
 
 use crate::configs::PROMPT_ORDER;
 use crate::context::{Context, Properties, Shell, Target};
-use crate::formatter::string_formatter::StringFormatterError;
 use crate::formatter::{StringFormatter, VariableHolder};
 use crate::module::Module;
 use crate::module::ALL_MODULES;
@@ -405,43 +404,65 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
 /// and the list of all modules used in a format string
 fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
     let config = &context.root_config;
-    let (formatter, config_param) = match &context.target {
-        Target::Main => (StringFormatter::new(&config.format), "format".to_string()),
-        Target::Right => (
-            StringFormatter::new(&config.right_format),
-            "right_format".to_string(),
-        ),
-        Target::Continuation => (
-            StringFormatter::new(&config.continuation_prompt),
-            "continuation_prompt".to_string(),
-        ),
-        Target::Profile(name) => (
-            match config.profiles.get(name) {
-                Some(format) => StringFormatter::new(format),
-                _ => Err(StringFormatterError::Custom("Invalid Profile".to_string())),
-            },
-            format!("profile: {}", &name),
-        ),
+
+    if context.target == Target::Continuation {
+        let cf = &config.continuation_prompt;
+        let formatter = StringFormatter::new(cf);
+        return match formatter {
+            Ok(f) => {
+                let modules = f.get_variables().into_iter().collect();
+                (f, modules)
+            }
+            Err(e) => {
+                log::error!("Error parsing continuation prompt: {e}");
+                (StringFormatter::raw(">"), BTreeSet::new())
+            }
+        };
+    }
+
+    let (left_format_str, right_format_str): (&str, &str) = match context.target {
+        Target::Main | Target::Right => (&config.format, &config.right_format),
+        Target::Profile(ref name) => {
+            if let Some(lf) = config.profiles.get(name) {
+                (lf, "")
+            } else {
+                log::error!("Profile {name:?} not found");
+                return (StringFormatter::raw(">"), BTreeSet::new());
+            }
+        }
+        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
     };
 
-    let rformatter = StringFormatter::new(&config.right_format);
+    let lf = StringFormatter::new(left_format_str);
+    let rf = StringFormatter::new(right_format_str);
 
-    if formatter.is_err() {
-        log::error!("Error parsing `{}`", config_param);
-    }
-    if rformatter.is_err() {
-        log::error!("Error parsing `right_format`")
+    if let Err(ref e) = lf {
+        let name = if let Target::Profile(ref profile_name) = context.target {
+            format!("profile.{profile_name}")
+        } else {
+            "format".to_string()
+        };
+        log::error!("Error parsing {name:?}: {e}");
+    };
+
+    if let Err(ref e) = rf {
+        log::error!("Error parsing right_format: {e}");
     }
 
-    match (formatter, rformatter) {
-        (Ok(lf), Ok(rf)) => {
-            let mut modules: BTreeSet<String> = BTreeSet::new();
-            if context.target != Target::Continuation {
-                modules.extend(lf.get_variables());
-                modules.extend(rf.get_variables());
-            }
-            (lf, modules)
-        }
+    let modules = [&lf, &rf]
+        .into_iter()
+        .flatten()
+        .flat_map(|f| f.get_variables())
+        .collect();
+
+    let main_formatter = match context.target {
+        Target::Main | Target::Profile(_) => lf,
+        Target::Right => rf,
+        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
+    };
+
+    match main_formatter {
+        Ok(f) => (f, modules),
         _ => (StringFormatter::raw(">"), BTreeSet::new()),
     }
 }
@@ -493,24 +514,18 @@ fn preset_list() -> String {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::config::StarshipConfig;
     use crate::test::default_context;
     use crate::utils;
 
     #[test]
     fn main_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 add_newline=false
                 format="$character"
                 [character]
                 format=">\n>"
-            }),
-        };
-        context.root_config.format = "$character".to_string();
+        });
         context.target = Target::Main;
-        context.root_config.add_newline = false;
 
         let expected = String::from(">\n>");
         let actual = get_prompt(context);
@@ -519,15 +534,11 @@ mod test {
 
     #[test]
     fn right_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 right_format="$character"
                 [character]
                 format=">\n>"
-            }),
-        };
-        context.root_config.right_format = "$character".to_string();
+        });
         context.target = Target::Right;
 
         let expected = String::from(">>"); // should strip new lines
@@ -536,23 +547,52 @@ mod test {
     }
 
     #[test]
-    fn custom_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+    fn prompt_with_all() -> io::Result<()> {
+        let mut context = default_context().set_config(toml::toml! {
                 add_newline = false
-                [profiles]
-                test="0_0$character"
+                right_format= "$directory$line_break"
+                format="$all"
                 [character]
-                format=">>"
-            }),
-        };
-        context
-            .root_config
-            .profiles
-            .insert("test".to_string(), "0_0$character".to_string());
+                format=">"
+        });
+        let dir = tempfile::tempdir().unwrap();
+        context.current_dir = dir.path().to_path_buf();
+
+        let expected = String::from(">");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn rprompt_with_all() -> io::Result<()> {
+        let mut context = default_context().set_config(toml::toml! {
+            format= "$directory$line_break"
+            right_format="$all"
+            [character]
+            format=">"
+        });
+        let dir = tempfile::tempdir().unwrap();
+        context.current_dir = dir.path().to_path_buf();
+
+        context.target = Target::Right;
+
+        let expected = String::from(">");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn custom_prompt() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            [profiles]
+            test="0_0$character"
+            [character]
+            format=">>"
+        });
         context.target = Target::Profile("test".to_string());
-        context.root_config.add_newline = false;
 
         let expected = String::from("0_0>>");
         let actual = get_prompt(context);
@@ -561,22 +601,14 @@ mod test {
 
     #[test]
     fn custom_prompt_fallback() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 add_newline=false
                 [profiles]
                 test="0_0$character"
                 [character]
                 format=">>"
-            }),
-        };
-        context
-            .root_config
-            .profiles
-            .insert("test".to_string(), "0_0$character".to_string());
+        });
         context.target = Target::Profile("wrong_prompt".to_string());
-        context.root_config.add_newline = false;
 
         let expected = String::from(">");
         let actual = get_prompt(context);
@@ -585,13 +617,9 @@ mod test {
 
     #[test]
     fn continuation_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 continuation_prompt="><>"
-            }),
-        };
-        context.root_config.continuation_prompt = "><>".to_string();
+        });
         context.target = Target::Continuation;
 
         let expected = String::from("><>");
@@ -634,10 +662,7 @@ mod test {
     #[test]
     fn custom_expands() -> std::io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let mut context = default_context();
-        context.current_dir = dir.path().to_path_buf();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="$custom"
                 [custom.a]
                 when=true
@@ -645,9 +670,8 @@ mod test {
                 [custom.b]
                 when=true
                 format="b"
-            }),
-        };
-        context.root_config.format = "$custom".to_string();
+        });
+        context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from("\nab");
         let actual = get_prompt(context);
@@ -657,9 +681,7 @@ mod test {
 
     #[test]
     fn env_expands() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="$env_var"
                 [env_var]
                 format="$env_value"
@@ -668,9 +690,7 @@ mod test {
                 format="$env_value"
                 [env_var.c]
                 format="$env_value"
-            }),
-        };
-        context.root_config.format = "$env_var".to_string();
+        });
         context.env.insert("a", "a".to_string());
         context.env.insert("b", "b".to_string());
         context.env.insert("c", "c".to_string());
@@ -683,10 +703,7 @@ mod test {
     #[test]
     fn custom_mixed() -> std::io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let mut context = default_context();
-        context.current_dir = dir.path().to_path_buf();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="${custom.c}$custom${custom.b}"
                 [custom.a]
                 when=true
@@ -697,9 +714,8 @@ mod test {
                 [custom.c]
                 when=true
                 format="c"
-            }),
-        };
-        context.root_config.format = "${custom.c}$custom${custom.b}".to_string();
+        });
+        context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from("\ncab");
         let actual = get_prompt(context);
@@ -709,9 +725,7 @@ mod test {
 
     #[test]
     fn env_mixed() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="${env_var.c}$env_var${env_var.b}"
                 [env_var]
                 format="$env_value"
@@ -722,9 +736,7 @@ mod test {
                 format="$env_value"
                 [env_var.c]
                 format="$env_value"
-            }),
-        };
-        context.root_config.format = "${env_var.c}$env_var${env_var.b}".to_string();
+        });
         context.env.insert("a", "a".to_string());
         context.env.insert("b", "b".to_string());
         context.env.insert("c", "c".to_string());
@@ -738,10 +750,7 @@ mod test {
     #[test]
     fn custom_subset() -> std::io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let mut context = default_context();
-        context.current_dir = dir.path().to_path_buf();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="${custom.b}"
                 [custom.a]
                 when=true
@@ -749,9 +758,8 @@ mod test {
                 [custom.b]
                 when=true
                 format="b"
-            }),
-        };
-        context.root_config.format = "${custom.b}".to_string();
+        });
+        context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from("\nb");
         let actual = get_prompt(context);
@@ -762,17 +770,13 @@ mod test {
     #[test]
     fn custom_missing() -> std::io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let mut context = default_context();
-        context.current_dir = dir.path().to_path_buf();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 format="${custom.b}"
                 [custom.a]
                 when=true
                 format="a"
-            }),
-        };
-        context.root_config.format = "${custom.b}".to_string();
+        });
+        context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from("\n");
         let actual = get_prompt(context);

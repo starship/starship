@@ -1,8 +1,7 @@
 use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
-    config::{ModuleConfig, StarshipConfig},
-    configs::StarshipRootConfig,
+    config::StarshipConfig,
     utils::{create_command, CommandOutput},
 };
 use log::{Level, LevelFilter};
@@ -43,6 +42,7 @@ pub fn default_context() -> Context<'static> {
         Target::Main,
         PathBuf::new(),
         PathBuf::new(),
+        Default::default(),
     );
     context.config = StarshipConfig { config: None };
     context
@@ -88,10 +88,7 @@ impl<'a> ModuleRenderer<'a> {
 
     /// Sets the config of the underlying context
     pub fn config(mut self, config: toml::Table) -> Self {
-        self.context.root_config = StarshipRootConfig::load(&config);
-        self.context.config = StarshipConfig {
-            config: Some(config),
-        };
+        self.context = self.context.set_config(config);
         self
     }
 
@@ -182,6 +179,7 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 ".fslckout"
             };
             let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join("subdir"))?;
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)

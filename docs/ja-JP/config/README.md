@@ -24,7 +24,7 @@ success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set
 disabled = true
 ```
 
-### Config File Location
+### 設定ファイルの場所
 
 `STARSHIP_CONFIG` 環境変数を使用することによって、デフォルトの設定ファイルの場所を変更できます。
 
@@ -72,11 +72,11 @@ os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 
 慣例により、ほとんどのモジュールにはデフォルトの端末色の接頭辞（"nodejs" の `via` など）と接尾辞として空のスペースがあります。
 
-### Strings
+### 文字列
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+TOML記法では、[文字列](https://toml.io/en/v1.0.0#string)は`'`、`"`、`'''`、`"""`で宣言されます。
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+これらのStarship記法の記号は文字列のフォーマットにおいて特別な用途があり、文字として表示するためにはエスケープしなければなりません: `$ [ ] ( )`.
 
 | Symbol | Type                      | Notes                                                  |
 | ------ | ------------------------- | ------------------------------------------------------ |
@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -340,7 +341,7 @@ format = '$all$directory$character'
 
 `aws`モジュールは、一時的な資格情報を使用する場合、現在のAWSリージョンとプロファイル、および有効期限タイマーを表示します。 モジュールの出力は、必要に応じて`AWS_REGION`、`AWS_DEFAULT_REGION`と`AWS_PROFILE`の環境変数と、`~/.aws/config`と`~/.aws/credentials`のファイルが使用されます。
 
-モジュールは、資格情報が`~/.aws/credentials`にある場合、または`~/.aws/config`に`credential_process`または`sso_start_url`が定義されている場合にのみプロファイルを表示します。 あるいは、環境変数に`AWS_ACCESS_KEY_ID`、`AWS_SECRET_ACCESS_KEY`または`AWS_SESSION_TOKEN`のいずれかが定義されていれば条件を満たします。 もし`force_display`のオプションを`true`に設定した場合、上記の条件による資格情報が検出されない場合でも、利用可能なすべての情報が表示されます。
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. あるいは、環境変数に`AWS_ACCESS_KEY_ID`、`AWS_SECRET_ACCESS_KEY`または`AWS_SESSION_TOKEN`のいずれかが定義されていれば条件を満たします。 もし`force_display`のオプションを`true`に設定した場合、上記の条件による資格情報が検出されない場合でも、利用可能なすべての情報が表示されます。
 
 [aws-vault](https://github.com/99designs/aws-vault)を使う場合、環境変数`AWS_VAULT`からプロファイルが、環境変数`AWS_SESSION_EXPIRATION`から資格情報の有効期限が読み込まれます。
 
@@ -426,12 +427,13 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ### オプション
 
-| 変数         | デフォルト                                    | 説明                      |
-| ---------- | ---------------------------------------- | ----------------------- |
-| `format`   | `'on [$symbol($subscription)]($style) '` | Azure module のフォーマットです。 |
-| `symbol`   | `'ﴃ '`                                   | フォーマットで使用される記号です。       |
-| `style`    | `'blue bold'`                            | フォーマットで使用されるスタイルです。     |
-| `disabled` | `true`                                   | `azure`モジュールを無効にします。    |
+| 変数                     | デフォルト                                    | 説明                                                                                    |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | Azure module のフォーマットです。                                                               |
+| `symbol`               | `'󰠅 '`                                   | フォーマットで使用される記号です。                                                                     |
+| `style`                | `'blue bold'`                            | フォーマットで使用されるスタイルです。                                                                   |
+| `disabled`             | `true`                                   | `azure`モジュールを無効にします。                                                                  |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### 設定例
 
@@ -443,7 +445,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -455,8 +457,17 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## バッテリー
@@ -467,11 +478,11 @@ style = "blue bold"
 
 | オプション                | デフォルト                             | 説明                        |
 | -------------------- | --------------------------------- | ------------------------- |
-| `full_symbol`        | `' '`                            | バッテリーが満タンのときに表示される記号です。   |
-| `charging_symbol`    | `' '`                            | バッテリーの充電中に表示される記号です。      |
-| `discharging_symbol` | `' '`                            | バッテリーが放電しているときに表示される記号です。 |
-| `unknown_symbol`     | `' '`                            | バッテリー状態が不明なときに表示される記号です。  |
-| `empty_symbol`       | `' '`                            | バッテリーが空のときに表示される記号です。     |
+| `full_symbol`        | `'󰁹 '`                            | バッテリーが満タンのときに表示される記号です。   |
+| `charging_symbol`    | `'󰂄 '`                            | バッテリーの充電中に表示される記号です。      |
+| `discharging_symbol` | `'󰂃 '`                            | バッテリーが放電しているときに表示される記号です。 |
+| `unknown_symbol`     | `'󰁽 '`                            | バッテリー状態が不明なときに表示される記号です。  |
+| `empty_symbol`       | `'󰂎 '`                            | バッテリーが空のときに表示される記号です。     |
 | `format`             | `'[$symbol$percentage]($style) '` | module のフォーマットです。         |
 | `display`            | [link](#battery-display)          | モジュールの閾値とスタイルを表示します。      |
 | `disabled`           | `false`                           | `battery`モジュールを無効にします。    |
@@ -713,7 +724,7 @@ error_symbol = '[➜](bold red) '
 # ~/.config/starship.toml
 
 [character]
-vicmd_symbol = '[V](bold green) '
+vimcmd_symbol = '[V](bold green) '
 ```
 
 ## CMake
@@ -1517,16 +1528,19 @@ truncation_symbol = ''
 
 `gcloud` モジュールは、 [`gcloud`](https://cloud.google.com/sdk/gcloud) CLIの現在の設定が表示されます。 これは `~/.config/gcloud/active_config` ファイルと `~/.config/gcloud/configurations/config_{CONFIG NAME}` ファイルと `CLOUDSDK_CONFIG` 環境変数に基づきます。
 
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+
 ### オプション
 
-| オプション             | デフォルト                                                      | 説明                            |
-| ----------------- | ---------------------------------------------------------- | ----------------------------- |
-| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | module のフォーマットです。             |
-| `symbol`          | `'☁️  '`                                                   | 現在のGCPプロファイルを表示する前に表示される記号です。 |
-| `region_aliases`  | `{}`                                                       | GCP名に加えて表示するリージョンのエイリアスです。    |
-| `project_aliases` | `{}`                                                       | GCP名に加えて表示するプロジェクトのエイリアスです。   |
-| `style`           | `'bold blue'`                                              | モジュールのスタイルです。                 |
-| `disabled`        | `false`                                                    | `gcloud`モジュールを無効にします。         |
+| オプション             | デフォルト                                                      | 説明                                                       |
+| ----------------- | ---------------------------------------------------------- | -------------------------------------------------------- |
+| `format`          | `'on [$symbol$account(@$domain)(\($region\))]($style) '` | module のフォーマットです。                                        |
+| `symbol`          | `'☁️  '`                                                   | 現在のGCPプロファイルを表示する前に表示される記号です。                            |
+| `region_aliases`  | `{}`                                                       | GCP名に加えて表示するリージョンのエイリアスです。                               |
+| `project_aliases` | `{}`                                                       | GCP名に加えて表示するプロジェクトのエイリアスです。                              |
+| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module |
+| `style`           | `'bold blue'`                                              | モジュールのスタイルです。                                            |
+| `disabled`        | `false`                                                    | `gcloud`モジュールを無効にします。                                    |
 
 ### 変数
 
@@ -1724,6 +1738,7 @@ The `git_metrics` module will show the number of added and deleted lines in the 
 | `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | module のフォーマットです。                     |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
+| `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
 
 ### 変数
 
@@ -1772,6 +1787,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `staged`            | `'+'`                                           | `staged`のフォーマット                                                        |
 | `renamed`           | `'»'`                                           | `renamed`のフォーマット                                                       |
 | `deleted`           | `'✘'`                                           | `deleted`のフォーマット                                                       |
+| `typechanged`       | `""`                                            | The format of `typechange`                                             |
 | `style`             | `'bold red'`                                    | モジュールのスタイルです。                                                          |
 | `ignore_submodules` | `false`                                         | サブモジュールの変更を無視します。                                                      |
 | `disabled`          | `false`                                         | `git_status`モジュールを無効にします。                                              |
@@ -1792,6 +1808,7 @@ WSL環境のWindowsディレクトリ(例: `/mnt/c/`以下) では、Git Status�
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
 | `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | オプション `style` の値をミラーする                                                                                        |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
@@ -1864,24 +1881,26 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ### オプション
 
-| オプション               | デフォルト                                                                                     | 説明                                                     |
-| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'via [$symbol($version )]($style)'`                                                      | module のフォーマットです。                                      |
-| `version_format`    | `'v${raw}'`                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.         |
-| `detect_extensions` | `['go']`                                                                                  | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `['Godeps']`                                                                              | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `'bold cyan'`                                                                             | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                                   | `golang`モジュールを無効にします。                                  |
+| オプション               | デフォルト                                                                                     | 説明                                                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | module のフォーマットです。                                                                                          |
+| `version_format`    | `'v${raw}'`                                                                               | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。                                                     |
+| `symbol`            | `'🐹 '`                                                                                    | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['go']`                                                                                  | どの拡張子がこのモジュールをアクティブにするか                                                                                    |
+| `detect_files`      | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | どのファイル名がこのモジュールをアクティブにするか                                                                                  |
+| `detect_folders`    | `['Godeps']`                                                                              | どのフォルダーがこのモジュールをアクティブにするか                                                                                  |
+| `style`             | `'bold cyan'`                                                                             | モジュールのスタイルです。                                                                                              |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | `golang`モジュールを無効にします。                                                                                      |
 
 ### 変数
 
-| 変数        | 設定例       | 説明                      |
-| --------- | --------- | ----------------------- |
-| version   | `v1.12.1` | The version of `go`     |
-| symbol    |           | オプション `symbol` の値をミラーする |
-| style\* |           | オプション `style` の値をミラーする  |
+| 変数          | 設定例       | 説明                                                                                                                                          |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | The version of `go`                                                                                                                         |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbol      |           | オプション `symbol` の値をミラーする                                                                                                                     |
+| style\*   |           | オプション `style` の値をミラーする                                                                                                                      |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -1892,6 +1911,15 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2706,11 +2734,12 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ### 変数
 
-| 変数        | 設定例        | 説明                      |
-| --------- | ---------- | ----------------------- |
-| version   | `v13.12.0` | The version of `node`   |
-| symbol    |            | オプション `symbol` の値をミラーする |
-| style\* |            | オプション `style` の値をミラーする  |
+| 変数              | 設定例           | 説明                                                                                                                                                        |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbol          |               | オプション `symbol` の値をミラーする                                                                                                                                   |
+| style\*       |               | オプション `style` の値をミラーする                                                                                                                                    |
 
 *: この変数は、スタイル文字列の一部としてのみ使用することができます。
 
@@ -2871,10 +2900,12 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 ```toml
 # This is the default symbols table.
 [os.symbols]
+Alpaquita = "🔔 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
+Artix = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -2887,6 +2918,7 @@ Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
 Linux = "🐧 "
+Mabox = "📦 "
 Macos = "🍎 "
 Manjaro = "🥭 "
 Mariner = "🌊 "
@@ -3562,7 +3594,7 @@ The `shell` module shows an indicator for currently used shell.
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
@@ -3635,6 +3667,44 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 [singularity]
 format = '[📦 \[$env\]]($style) '
+```
+
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### オプション
+
+| オプション               | デフォルト                                | 説明                                                     |
+| ------------------- | ------------------------------------ | ------------------------------------------------------ |
+| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
+| `version_format`    | `"v${major}.${minor}.${patch}"`      | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity    |
+| `compiler          | ["solc"]                             | The default compiler for Solidity.                     |
+| `detect_extensions` | `["sol"]`                            | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                              | Disables this module.                                  |
+
+### 変数
+
+| 変数        | 設定例      | 説明                        |
+| --------- | -------- | ------------------------- |
+| version   | `v0.8.1` | The version of `solidity` |
+| symbol    |          | オプション `symbol` の値をミラーする   |
+| style\* |          | オプション `style` の値をミラーする    |
+
+*: この変数は、スタイル文字列の一部としてのみ使用することができます。
+
+### 設定例
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
 ```
 
 ## Spack
@@ -4157,6 +4227,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
+| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [この表の下を参照してください](#custom-command-shell)                                                                                                                                                                                                                                                       |
 | `説明`                | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |

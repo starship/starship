@@ -13,7 +13,7 @@
 ### 配置
 
 ```sh
-starship preset pastel-powerline > ~/.config/starship.toml
+starship preset pastel-powerline -o ~/.config/starship.toml
 ```
 
 [点击下载 TOML 文件](/presets/toml/pastel-powerline.toml)

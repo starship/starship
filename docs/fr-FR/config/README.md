@@ -298,6 +298,7 @@ $red\
 $ruby\
 $rust\
 $scala\
+$solidity\
 $swift\
 $terraform\
 $vlang\
@@ -340,7 +341,7 @@ format = '$all$directory$character'
 
 The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
 Lorsque vous utilisez [aws-vault](https://github.com/99designs/aws-vault) le profil est lu à partir de la variable d'environnement `AWS_VAULT` et la date d'expiration des identifiants est lue à partir de la variable d'environnement `AWS_SESSION_EXPIRATION`.
 
@@ -426,12 +427,13 @@ Le module `azure` affiche l'abonnement Azure actuel. This is based on showing th
 
 ### Options
 
-| Variable   | Défaut                                   | Description                              |
-| ---------- | ---------------------------------------- | ---------------------------------------- |
-| `format`   | `'on [$symbol($subscription)]($style) '` | Le format pour le rendu du module Azure. |
-| `symbole`  | `'ﴃ '`                                   | Le symbole utilisé dans le format.       |
-| `style`    | `'blue bold'`                            | Le style utilisé dans le format.         |
-| `disabled` | `true`                                   | Désactive le module `azure`.             |
+| Variable               | Défaut                                   | Description                                                                           |
+| ---------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `format`               | `'on [$symbol($subscription)]($style) '` | Le format pour le rendu du module Azure.                                              |
+| `symbole`              | `'󰠅 '`                                   | Le symbole utilisé dans le format.                                                    |
+| `style`                | `'blue bold'`                            | Le style utilisé dans le format.                                                      |
+| `disabled`             | `true`                                   | Désactive le module `azure`.                                                          |
+| `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
 ### Exemples
 
@@ -443,7 +445,7 @@ Le module `azure` affiche l'abonnement Azure actuel. This is based on showing th
 [azure]
 disabled = false
 format = 'on [$symbol($subscription)]($style) '
-symbol = 'ﴃ '
+symbol = '󰠅 '
 style = 'blue bold'
 ```
 
@@ -455,8 +457,17 @@ style = 'blue bold'
 [azure]
 disabled = false
 format = "on [$symbol($username)]($style) "
-symbol = "ﴃ "
+symbol = "󰠅 "
 style = "blue bold"
+```
+
+#### Display Subscription Name Alias
+
+```toml
+# ~/.config/starship.toml
+
+[azure.subscription_aliases]
+very-long-subscription-name = 'vlsn'
 ```
 
 ## Battery
@@ -467,11 +478,11 @@ Le module `battery` montre à quel point la batterie de l'appareil est chargée 
 
 | Option               | Défaut                            | Description                                                   |
 | -------------------- | --------------------------------- | ------------------------------------------------------------- |
-| `full_symbol`        | `' '`                            | Le symbole affiché lorsque la batterie est pleine.            |
-| `charging_symbol`    | `' '`                            | Le symbole affiché lorsque la batterie se charge.             |
-| `discharging_symbol` | `' '`                            | Le symbole affiché lorsque la batterie se décharge.           |
-| `unknown_symbol`     | `' '`                            | Le symbole affiché lorsque l'état de la batterie est inconnu. |
-| `empty_symbol`       | `' '`                            | Le symbole affiché lorsque la batterie est vide.              |
+| `full_symbol`        | `'󰁹 '`                            | Le symbole affiché lorsque la batterie est pleine.            |
+| `charging_symbol`    | `'󰂄 '`                            | Le symbole affiché lorsque la batterie se charge.             |
+| `discharging_symbol` | `'󰂃 '`                            | Le symbole affiché lorsque la batterie se décharge.           |
+| `unknown_symbol`     | `'󰁽 '`                            | Le symbole affiché lorsque l'état de la batterie est inconnu. |
+| `empty_symbol`       | `'󰂎 '`                            | Le symbole affiché lorsque la batterie est vide.              |
 | `format`             | `'[$symbol$percentage]($style) '` | Format du module.                                             |
 | `display`            | [lien](#battery-display)          | Affiche le seuil et le style du module.                       |
 | `disabled`           | `false`                           | Désactive le module `battery`.                                |
@@ -713,7 +724,7 @@ error_symbol = '[➜](bold red) '
 # ~/.config/starship.toml
 
 [character]
-vicmd_symbol = '[V](bold green) '
+vimcmd_symbol = '[V](bold green) '
 ```
 
 ## CMake
@@ -1517,6 +1528,8 @@ truncation_symbol = ''
 
 Le module `gcloud` affiche la version de la commande [`gcloud`](https://cloud.google.com/sdk/gcloud) installée. Ceci est basé sur les fichiers `~/.config/gcloud/active_config` et `~/.config/gcloud/configurations/config_{CONFIG NAME}` et la variable d'environnement `CLOUDSDK_CONFIG`.
 
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+
 ### Options
 
 | Option            | Défaut                                                     | Description                                                 |
@@ -1525,6 +1538,7 @@ Le module `gcloud` affiche la version de la commande [`gcloud`](https://cloud.go
 | `symbole`         | `'☁️  '`                                                   | Le symbole affiché avant le profil GCP actuel.              |
 | `region_aliases`  | `{}`                                                       | Table des alias de région à afficher en plus du nom du GCP. |
 | `project_aliases` | `{}`                                                       | Table des alias de projet à afficher en plus du nom du GCP. |
+| `detect_env_vars` | `[]`                                                       | Which environmental variables should trigger this module    |
 | `style`           | `'bold blue'`                                              | Le style pour le module.                                    |
 | `disabled`        | `false`                                                    | Désactive le module `gcloud`.                               |
 
@@ -1724,6 +1738,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 | `only_nonzero_diffs` | `true`                                                       | Afficher le statut seulement pour les items modifiés. |
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format du module.                                     |
 | `disabled`           | `true`                                                       | Désactive le module `git_metrics`.                    |
+| `ignore_submodules`  | `false`                                                      | Ignorer les changements des sous-modules              |
 
 ### Variables
 
@@ -1772,6 +1787,7 @@ Le module Statut Git est très lent dans les dossiers Windows (par exemple sous 
 | `staged`            | `'+'`                                           | Le format de `staged`                                                                                                           |
 | `renamed`           | `'»'`                                           | Le format de `renamed`                                                                                                          |
 | `deleted`           | `'✘'`                                           | Le format de `deleted`                                                                                                          |
+| `typechanged`       | `""`                                            | The format of `typechange`                                                                                                      |
 | `style`             | `'bold red'`                                    | Le style pour le module.                                                                                                        |
 | `ignore_submodules` | `false`                                         | Ignorer les changements des sous-modules.                                                                                       |
 | `disabled`          | `false`                                         | Désactive le module `git_status`.                                                                                               |
@@ -1792,6 +1808,7 @@ Les variables suivantes peuvent être utilisées pour la valeur de `format`:
 | `staged`       | Affiche `staged` lorsqu'un nouveau fichier a été ajouté à la zone de validation.                                      |
 | `renamed`      | Affiche `renamed` lorsqu'un fichier renommé a été ajouté à la zone de validation.                                     |
 | `deleted`      | Affiche `deleted` lorsque la suppression d'un fichier a été ajoutée à la zone de validation.                          |
+| `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                        |
 | style\*      | Reflète la valeur de l'option `style`                                                                                 |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
@@ -1864,24 +1881,26 @@ Le module `golang` affiche la version de [Go](https://golang.org/) installée. P
 
 ### Options
 
-| Option                               | Défaut                                                                                    | Description                                                                                |
-| ------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `format`                             | `'via [$symbol($version )]($style)'`                                                      | Format du module.                                                                          |
-| `version_format`                     | `'v${raw}'`                                                                               | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'🐹 '`                                                                                    | Une chaîne de caractères représentant le symbole de Go.                                    |
-| `detect_extensionsdetect_extensions` | `['go']`                                                                                  | Les extensions qui déclenchent ce module.                                                  |
-| `detect_files`                       | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Les fichiers qui activent ce module.                                                       |
-| `detect_folders`                     | `['Godeps']`                                                                              | Les dossiers qui activent ce module.                                                       |
-| `style`                              | `'bold cyan'`                                                                             | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                                                                   | Désactive le module `golang`.                                                              |
+| Option                               | Défaut                                                                                    | Description                                                                                                |
+| ------------------------------------ | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`                             | `'via [$symbol($version )]($style)'`                                                      | Format du module.                                                                                          |
+| `version_format`                     | `'v${raw}'`                                                                               | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch`                 |
+| `symbole`                            | `'🐹 '`                                                                                    | Une chaîne de caractères représentant le symbole de Go.                                                    |
+| `detect_extensionsdetect_extensions` | `['go']`                                                                                  | Les extensions qui déclenchent ce module.                                                                  |
+| `detect_files`                       | `['go.mod', 'go.sum', 'go.work', 'glide.yaml', 'Gopkg.yml', 'Gopkg.lock', '.go-version']` | Les fichiers qui activent ce module.                                                                       |
+| `detect_folders`                     | `['Godeps']`                                                                              | Les dossiers qui activent ce module.                                                                       |
+| `style`                              | `'bold cyan'`                                                                             | Le style pour le module.                                                                                   |
+| `not_capable_style`                  | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`                           | `false`                                                                                   | Désactive le module `golang`.                                                                              |
 
 ### Variables
 
-| Variable  | Exemple   | Description                            |
-| --------- | --------- | -------------------------------------- |
-| version   | `v1.12.1` | La version de `go`                     |
-| symbole   |           | Reflète la valeur de l'option `symbol` |
-| style\* |           | Reflète la valeur de l'option `style`  |
+| Variable    | Exemple   | Description                                                                                                                                 |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `v1.12.1` | La version de `go`                                                                                                                          |
+| mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
+| symbole     |           | Reflète la valeur de l'option `symbol`                                                                                                      |
+| style\*   |           | Reflète la valeur de l'option `style`                                                                                                       |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -1892,6 +1911,15 @@ Le module `golang` affiche la version de [Go](https://golang.org/) installée. P
 
 [golang]
 format = 'via [🏎💨 $version](bold cyan) '
+```
+
+### Using `mod_version`
+
+```toml
+# ~/.config/starship.toml
+
+[golang]
+format = 'via [$symbol($version )($mod_version )]($style)'
 ```
 
 ## Guix-shell
@@ -2706,11 +2734,12 @@ Le module `nodejs` affiche la version de [Node.js](https://nodejs.org/) install�
 
 ### Variables
 
-| Variable  | Exemple    | Description                            |
-| --------- | ---------- | -------------------------------------- |
-| version   | `v13.12.0` | La version de `node`                   |
-| symbole   |            | Reflète la valeur de l'option `symbol` |
-| style\* |            | Reflète la valeur de l'option `style`  |
+| Variable        | Exemple       | Description                                                                                                                                               |
+| --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| version         | `v13.12.0`    | La version de `node`                                                                                                                                      |
+| engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
+| symbole         |               | Reflète la valeur de l'option `symbol`                                                                                                                    |
+| style\*       |               | Reflète la valeur de l'option `style`                                                                                                                     |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -2871,10 +2900,12 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 ```toml
 # This is the default symbols table.
 [os.symbols]
+Alpaquita = "🔔 "
 Alpine = "🏔️ "
 Amazon = "🙂 "
 Android = "🤖 "
 Arch = "🎗️ "
+Artix = "🎗️ "
 CentOS = "💠 "
 Debian = "🌀 "
 DragonFly = "🐉 "
@@ -2887,6 +2918,7 @@ Gentoo = "🗜️ "
 HardenedBSD = "🛡️ "
 Illumos = "🐦 "
 Linux = "🐧 "
+Mabox = "📦 "
 Macos = "🍎 "
 Manjaro = "🥭 "
 Mariner = "🌊 "
@@ -3563,7 +3595,7 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 # ~/.config/starship.toml
 
 [shell]
-fish_indicator = ''
+fish_indicator = '󰈺 '
 powershell_indicator = '_'
 unknown_indicator = 'mystery shell'
 style = 'cyan bold'
@@ -3636,6 +3668,44 @@ Le module `singularity` affiche l’image [Singularity](https://sylabs.io/singul
 
 [singularity]
 format = '[📦 \[$env\]]($style) '
+```
+
+## Solidity
+
+The `solidity` module shows the currently installed version of [Solidity](https://soliditylang.org/) The module will be shown if any of the following conditions are met:
+
+- The current directory contains a file with the `.sol` extension
+
+### Options
+
+| Option                               | Défaut                               | Description                                                                                |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`                             | `"via [$symbol($version )]($style)"` | Format du module.                                                                          |
+| `version_format`                     | `"v${major}.${minor}.${patch}"`      | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `"S "`                               | A format string representing the symbol of Solidity                                        |
+| `compiler                           | ["solc"]                             | The default compiler for Solidity.                                                         |
+| `detect_extensionsdetect_extensions` | `["sol"]`                            | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `style`                              | `"bold blue"`                        | Le style pour le module.                                                                   |
+| `disabled`                           | `false`                              | Disables this module.                                                                      |
+
+### Variables
+
+| Variable  | Exemple  | Description                            |
+| --------- | -------- | -------------------------------------- |
+| version   | `v0.8.1` | The version of `solidity`              |
+| symbole   |          | Reflète la valeur de l'option `symbol` |
+| style\* |          | Reflète la valeur de l'option `style`  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+[solidity]
+format = "via [S $version](blue bold)"
 ```
 
 ## Spack
@@ -4158,6 +4228,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | ------------------------------------ | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`                            | `''`                            | La commande dont la sortie doit être affichée. La commande sera transmise au shell sur l’entrée standard.                                                                                                                                                                                     |
 | `when`                               | `false`                         | Soit une valeur booléenne (`true` ou `false`, sans guillemets) ou une commande shell utilisée comme condition pour afficher le module. Dans le cas d’une chaine, le module sera affiché si la commande renvoie un code de statut `0`.                                                         |
+| `require_repo`                       | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`                              |                                 | [Voir plus bas](#custom-command-shell)                                                                                                                                                                                                                                                        |
 | `description`                        | `'<custom module>'`       | La description du module qui est affichée lors de l’exécution de `starship explain`.                                                                                                                                                                                                          |
 | `detect_files`                       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
