@@ -3965,7 +3965,7 @@ format = '[🏎💨 $workspace]($style) '
 
 ## 時間
 
-The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
+`time` 模組顯示目前的**當地**時間. `format` 設定值被 [`chrono`](https://crates.io/crates/chrono) crate 用來控制時間如何顯示。 請看 [chrono 的 strftime 文件](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html)來了解有那些選項可以使用。
 
 ::: tip
 
@@ -4011,7 +4011,7 @@ time_range = '10:00:00-14:00:00'
 
 ## 使用者名稱
 
-The `username` module shows active user's username. 這個模組將在下列其中一個條件滿足時顯示：
+`username` 模組顯示現在使用中的使用者名稱。 這個模組將在下列其中一個條件滿足時顯示：
 
 - The current user is root/admin
 - 目前使用者並非登入時的使用者
