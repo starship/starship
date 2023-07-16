@@ -150,7 +150,7 @@ mod tests {
 
         let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"), ));
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -250,7 +250,6 @@ mod tests {
             true,
         )?;
 
-
         let actual = ModuleRenderer::new("git_metrics")
             .config(toml::toml! {
                     [git_metrics]
@@ -309,9 +308,9 @@ mod tests {
     }
 
     fn run_git_cmd<A, S>(args: A, dir: Option<&Path>, should_succeed: bool) -> io::Result<()>
-        where
-            A: IntoIterator<Item=S>,
-            S: AsRef<OsStr>,
+    where
+        A: IntoIterator<Item = S>,
+        S: AsRef<OsStr>,
     {
         let mut command = create_command("git")?;
         command

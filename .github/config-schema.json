@@ -578,7 +578,7 @@
         "disabled": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
         "ignore_submodules": false,
-        "include_staged": true,
+        "include_staged": false,
         "only_nonzero_diffs": true
       },
       "allOf": [
