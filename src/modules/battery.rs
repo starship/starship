@@ -41,7 +41,17 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     _ => None,
                 })
                 .map_style(|style| match style {
-                    "style" => Some(Ok(display_style.style)),
+                    "style" => match state {
+                        battery::State::Full | battery::State::Charging => Some(Ok(display_style
+                            .charging_style
+                            .unwrap_or(display_style.style))),
+                        battery::State::Empty | battery::State::Discharging => {
+                            Some(Ok(display_style
+                                .discharging_style
+                                .unwrap_or(display_style.style)))
+                        }
+                        battery::State::Unknown => Some(Ok(display_style.style)),
+                    },
                     _ => None,
                 })
                 .map(|variable| match variable {
@@ -410,6 +420,87 @@ mod tests {
             .battery_info_provider(&mock)
             .collect();
         let expected = Some(String::from("󰂃 13% "));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_charging_style() {
+        let mut mock = MockBatteryInfoProvider::new();
+
+        mock.expect_get_battery_info().times(1).returning(|| {
+            Some(BatteryInfo {
+                energy: 400.0,
+                energy_full: 1000.0,
+                state: battery::State::Charging,
+            })
+        });
+
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 50
+                charging_style = "bold green"
+                discharging_style = "bold yellow"
+                style = "bold red"
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = Some(format!("{} ", Color::Green.bold().paint("󰂄 40%")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_discharging_style() {
+        let mut mock = MockBatteryInfoProvider::new();
+
+        mock.expect_get_battery_info().times(1).returning(|| {
+            Some(BatteryInfo {
+                energy: 400.0,
+                energy_full: 1000.0,
+                state: battery::State::Discharging,
+            })
+        });
+
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 50
+                charging_style = "bold green"
+                discharging_style = "bold yellow"
+                style = "bold red"
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = Some(format!("{} ", Color::Yellow.bold().paint("󰂃 40%")));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_unknown_style() {
+        let mut mock = MockBatteryInfoProvider::new();
+
+        mock.expect_get_battery_info().times(1).returning(|| {
+            Some(BatteryInfo {
+                energy: 400.0,
+                energy_full: 1000.0,
+                state: battery::State::Unknown,
+            })
+        });
+
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 50
+                charging_style = "bold green"
+                discharging_style = "bold yellow"
+                style = "bold red"
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = Some(format!("{} ", Color::Red.bold().paint("󰁽 40%")));
 
         assert_eq!(expected, actual);
     }

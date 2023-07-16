@@ -542,6 +542,8 @@ The `display` option is an array of the following table.
 | -------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
 | `threshold`          | `10`         | The upper bound for the display option.                                                                   |
 | `style`              | `'red bold'` | The style used if the display option is in use.                                                           |
+| `charging_style`     |              | The style used if the display option is in use and the battery is charging, defaults to `style`.          |
+| `discharging_style`  |              | The style used if the display option is in use and the battery is discharging, defaults to `style`.       |
 | `charging_symbol`    |              | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
 | `discharging_symbol` |              | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
@@ -552,9 +554,10 @@ The `display` option is an array of the following table.
 threshold = 10
 style = 'bold red'
 
-[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%, or 'bold green' style if the battery is charging
 threshold = 30
 style = 'bold yellow'
+charging_style = 'bold green'
 discharging_symbol = '💦'
 
 # when capacity is over 30%, the battery indicator will not be displayed

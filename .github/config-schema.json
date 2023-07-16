@@ -45,7 +45,9 @@
         "discharging_symbol": "󰂃 ",
         "display": [
           {
+            "charging_style": null,
             "charging_symbol": null,
+            "discharging_style": null,
             "discharging_symbol": null,
             "style": "red bold",
             "threshold": 10
@@ -1913,7 +1915,9 @@
         "display": {
           "default": [
             {
+              "charging_style": null,
               "charging_symbol": null,
+              "discharging_style": null,
               "discharging_symbol": null,
               "style": "red bold",
               "threshold": 10
@@ -1946,6 +1950,20 @@
         "style": {
           "default": "red bold",
           "type": "string"
+        },
+        "charging_style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "discharging_style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "charging_symbol": {
           "default": null,
