@@ -37,6 +37,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         args.push(OsStr::new("--ignore-submodules"));
     }
 
+    if config.include_staged {
+        args.push(OsStr::new("HEAD"))
+    }
+
     let diff = context.exec_cmd("git", &args)?.stdout;
 
     let stats = GitDiff::parse(&diff);
@@ -223,6 +227,38 @@ mod tests {
             "{} {} ",
             Color::Green.bold().paint("+1"),
             Color::Red.bold().paint("-0")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_all_changes_with_include_staged() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let file_path = path.join("the_file");
+        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+
+        run_git_cmd(["add", path.join("the_file").to_str().expect("Path was not UTF-8")],
+                    Some(path),
+                    true)?;
+
+        let actual = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                    [git_metrics]
+                    disabled = false
+                    ignore_submodules = true
+                    include_staged = true
+            })
+            .path(path)
+            .collect();
+
+        let expected = Some(format!(
+            "{} {} ",
+            Color::Green.bold().paint("+4"),
+            Color::Red.bold().paint("-2")
         ));
 
         assert_eq!(expected, actual);

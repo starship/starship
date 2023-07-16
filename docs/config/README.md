@@ -1827,6 +1827,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
 | `disabled`           | `true`                                                       | Disables the `git_metrics` module.    |
 | `ignore_submodules`  | `false`                                                      | Ignore changes to submodules          |
+| `include_staged`     | `false`                                                      | Include staged files changes          |
 
 ### Variables
 
