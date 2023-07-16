@@ -578,6 +578,7 @@
         "disabled": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
         "ignore_submodules": false,
+        "include_staged": true,
         "only_nonzero_diffs": true
       },
       "allOf": [
@@ -3223,6 +3224,10 @@
           "type": "boolean"
         },
         "ignore_submodules": {
+          "default": false,
+          "type": "boolean"
+        },
+        "include_staged": {
           "default": false,
           "type": "boolean"
         }
