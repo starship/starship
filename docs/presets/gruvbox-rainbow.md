@@ -5,7 +5,7 @@
 This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
 
 
-![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png) 
+![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png)
 
 ### Prerequisites
 
