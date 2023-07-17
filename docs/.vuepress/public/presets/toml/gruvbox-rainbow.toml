@@ -52,7 +52,7 @@ Debian = "󰣚"
 [username]
 show_always = true
 style_user = "bg:#d65d0e fg:#fbf1c7"
-style_root = "bg:#cc241d fg:#fbf1c7"
+style_root = "bg:#d65d0e fg:#fbf1c7"
 format = '[ $user ]($style)'
 
 [directory]
