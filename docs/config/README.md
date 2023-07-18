@@ -1114,7 +1114,7 @@ truncated, you will see a shortened name of each directory based on the number
 you enable for the option.
 
 For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root,
-and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before
+and the option `fish_style_pwd_dir_length` set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before
 it would have been `nixpkgs/pkgs`.
 
 ### Options
