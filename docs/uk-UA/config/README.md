@@ -3607,15 +3607,15 @@ disabled = false
 
 ### Параметри
 
-| Параметр        | Стандартно                   | Опис                                                                |
-| --------------- | ---------------------------- | ------------------------------------------------------------------- |
-| `threshold`     | `2`                          | Граничне значення для показу.                                       |
-| `format`        | `'[$symbol$shlvl]($style) '` | Формат модуля.                                                      |
-| `symbol`        | `'↕️  '`                     | Символ, який використовується для показу `SHLVL`.                   |
-| `repeat`        | `false`                      | Повторно показує `symbol` в кількості зазначеній у `SHLVL`.         |
-| `repeat_offset` | `0`                          | Decrements number of times `symbol` is repeated by the offset value |
-| `style`         | `'bold yellow'`              | Стиль модуля.                                                       |
-| `disabled`      | `true`                       | Вимикає модуль `shlvl`.                                             |
+| Параметр        | Стандартно                   | Опис                                                                               |
+| --------------- | ---------------------------- | ---------------------------------------------------------------------------------- |
+| `threshold`     | `2`                          | Граничне значення для показу.                                                      |
+| `format`        | `'[$symbol$shlvl]($style) '` | Формат модуля.                                                                     |
+| `symbol`        | `'↕️  '`                     | Символ, який використовується для показу `SHLVL`.                                  |
+| `repeat`        | `false`                      | Повторно показує `symbol` в кількості зазначеній у `SHLVL`.                        |
+| `repeat_offset` | `0`                          | Зменшує кількість разів, коли `symbol` повторюється використовуючи значення offset |
+| `style`         | `'bold yellow'`              | Стиль модуля.                                                                      |
+| `disabled`      | `true`                       | Вимикає модуль `shlvl`.                                                            |
 
 ### Змінні
 
@@ -3638,7 +3638,7 @@ format = '$shlvl level(s) down'
 threshold = 3
 ```
 
-Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceeding characters are provided by `shlvl`.
+Використовуючи `repeat` та `repeat_offset` разом з модулем `character`, ви можете отримати рядок виду `❯❯❯`, де останній символ має колір відповідно до статусу виконання останньої команди, а символи, що йому передують зазначаються у `shlvl`.
 
 ```toml
 # ~/.config/starship.toml
