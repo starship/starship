@@ -43,7 +43,7 @@ gix-faster = ["gix-features/zlib-stock", "gix/fast-sha1"]
 
 [dependencies]
 chrono = { version = "0.4.26", default-features = false, features = ["clock", "std", "wasmbind"] }
-clap = { version = "4.3.11", features = ["derive", "cargo", "unicode"] }
+clap = { version = "4.3.15", features = ["derive", "cargo", "unicode"] }
 clap_complete = "4.3.2"
 dirs-next = "2.0.0"
 dunce = "1.0.4"
