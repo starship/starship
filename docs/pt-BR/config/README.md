@@ -175,17 +175,17 @@ Uma string de formato condicional envolta de `(` e `)` não será renderizada se
 
 Por exemplo:
 
-- `'(@$region)'` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
-- `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
+- `(@$region)` não vai exibir nada caso a variável `region` seja `None` ou vazia, caso contrario vai exibir `@` seguido pelo valor da variável region.
+- `(texto qualquer)` não vai exibir nada sempre, pois não existe variável entre os parenteses.
 - When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`. This works the same as `'(\[$a$b\] )'`.
 
 ### Correspondência negativa
 
 Muitos módulos têm variáveis `detect_extensions`,  `detect_files`, e `detect_folders`. Estas receberão listas de strings para coresponder ou não. Opções "negativas", aquelas que não tem correspondencia, são indicadas com um caractere  '!'. A presença de _varios_ indicadores negativos no diretório resultara que o módulo não sera correspondido.
 
-Extensions are matched against both the characters after the last dot in a filename, and the characters after the first dot in a filename. For example, `foo.bar.tar.gz` will be matched against `bar.tar.gz` and `gz` in the `detect_extensions` variable. Files whose name begins with a dot are not considered to have extensions at all.
+As extensões são combinadas com os dois caracteres após o último ponto em um nome de arquivo e os caracteres após o primeiro ponto em um nome de arquivo. Por exemplo, `foo.bar.tar.gz` vai ser comparada com  `bar.tar.gz` e `gz` na `detect_extensions` variavel. Arquivos que o nome começa com um ponto não são considerados ter nenhuma extensão.
 
-To see how this works in practice, you could match TypeScript but not MPEG Transport Stream files thus:
+Para ver como isso funciona na prática, você pode combinar TypeScript mas não arquivos MPEG Transport Stream:
 
 ```toml
 detect_extensions = ['ts', '!video.ts', '!audio.ts']
