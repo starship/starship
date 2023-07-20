@@ -177,7 +177,7 @@ Por exemplo:
 
 - `(@$region)` não vai exibir nada caso a variável `region` seja `None` ou vazia, caso contrario vai exibir `@` seguido pelo valor da variável region.
 - `(texto qualquer)` não vai exibir nada sempre, pois não existe variável entre os parenteses.
-- When `$combined` is a shortcut for `\[$a$b\]`, `'($combined)'` will show nothing only if `$a` and `$b` are both `None`. This works the same as `'(\[$a$b\] )'`.
+- Quando usar `$combined` é um atalho para `\[$a$b\]`, `($combined)` só vai exibir algo se  `$a` e `$b` são `None`. Isto funciona da mesma forma que `(\[$a$b\] )`.
 
 ### Correspondência negativa
 
@@ -197,15 +197,15 @@ Esta é a lista de opções de configuração em todo o prompt.
 
 ### Opções
 
-| Opções            | Padrão                         | Descrição                                                                                                                                                                        |
-| ----------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `format`          | [link](#default-prompt-format) | Configura o formato do prompt.                                                                                                                                                   |
-| `right_format`    | `''`                           | Veja [Ativa o prompt direito](/advanced-config/#enable-right-prompt)                                                                                                             |
-| `scan_timeout`    | `30`                           | Tempo limite para escanear arquivos (em milissegundos).                                                                                                                          |
-| `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos).                                                                                                           |
-| `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                                                                                                                                    |
-| `palette`         | `''`                           | Define qual a paleta de cores de `palettes` será usada.                                                                                                                          |
-| `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| Opções            | Padrão                         | Descrição                                                                                                                                                                                               |
+| ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `format`          | [link](#default-prompt-format) | Configura o formato do prompt.                                                                                                                                                                          |
+| `right_format`    | `''`                           | Veja [Ativa o prompt direito](/advanced-config/#enable-right-prompt)                                                                                                                                    |
+| `scan_timeout`    | `30`                           | Tempo limite para escanear arquivos (em milissegundos).                                                                                                                                                 |
+| `command_timeout` | `500`                          | Tempo limite de execução de comandos pelo starship (em milissegundos).                                                                                                                                  |
+| `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                                                                                                                                                           |
+| `palette`         | `''`                           | Define qual a paleta de cores de `palettes` será usada.                                                                                                                                                 |
+| `palettes`        | `{}`                           | Coleção de paletas de cores que atribuem [cores](/advanced-config/#style-strings) aos nomes definidos pelo usuário. Note que paletas de cores não podem referir-se a suas próprias definições de cores. |
 
 ### Exemplo
 
@@ -3767,38 +3767,38 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 ### Opções
 
-| Opções                      | Padrão                                                                             | Descrição                                                             |
-| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `format`                    | `'[$symbol$status]($style) '`                                                      | O formato do módulo                                                   |
-| `symbol`                    | `'❌'`                                                                              | O simbolo exibido no erro de programa                                 |
-| `success_symbol`            | `''`                                                                               | O simbolo exibido no sucesso de programa                              |
-| `not_executable_symbol`     | `'🚫'`                                                                              | O simbolo exibido quando o arquivo não é executável                   |
-| `not_found_symbol`          | `'🔍'`                                                                              | O simbolo exibido quando o comando não é encontrado                   |
-| `sigint_symbol`             | `'🧱'`                                                                              | O simbolo exibido no SIGINT (Ctrl + c)                                |
-| `signal_symbol`             | `'⚡'`                                                                              | O simbolo exibido em qualquer sinal                                   |
-| `style`                     | `'bold red'`                                                                       | O estilo do módulo.                                                   |
-| `recognize_signal_code`     | `true`                                                                             | Habilita o mapeamento de sinais para códigos de saída                 |
-| `map_symbol`                | `false`                                                                            | Habilita o mapeamento de símbolos para códigos de saída               |
-| `pipestatus`                | `false`                                                                            | Habilita o relatório de pipestatus                                    |
-| `pipestatus_separator`      | <code>&vert;</code>                                                          | The symbol used to separate pipestatus segments (supports formatting) |
-| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | O formato do módulo quando o comando é um pipeline                    |
-| `pipestatus_segment_format` |                                                                                    | When specified, replaces `format` when formatting pipestatus segments |
-| `disabled`                  | `true`                                                                             | Desabilita o módulo `status`.                                         |
+| Opções                      | Padrão                                                                             | Descrição                                                                               |
+| --------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`                    | `'[$symbol$status]($style) '`                                                      | O formato do módulo                                                                     |
+| `symbol`                    | `'❌'`                                                                              | O simbolo exibido no erro de programa                                                   |
+| `success_symbol`            | `''`                                                                               | O simbolo exibido no sucesso de programa                                                |
+| `not_executable_symbol`     | `'🚫'`                                                                              | O simbolo exibido quando o arquivo não é executável                                     |
+| `not_found_symbol`          | `'🔍'`                                                                              | O simbolo exibido quando o comando não é encontrado                                     |
+| `sigint_symbol`             | `'🧱'`                                                                              | O simbolo exibido no SIGINT (Ctrl + c)                                                  |
+| `signal_symbol`             | `'⚡'`                                                                              | O simbolo exibido em qualquer sinal                                                     |
+| `style`                     | `'bold red'`                                                                       | O estilo do módulo.                                                                     |
+| `recognize_signal_code`     | `true`                                                                             | Habilita o mapeamento de sinais para códigos de saída                                   |
+| `map_symbol`                | `false`                                                                            | Habilita o mapeamento de símbolos para códigos de saída                                 |
+| `pipestatus`                | `false`                                                                            | Habilita o relatório de pipestatus                                                      |
+| `pipestatus_separator`      | <code>&vert;</code>                                                          | O símbolo usado para separar segmentos de pipestatus (suporta formatação)               |
+| `pipestatus_format`         | `'\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'` | O formato do módulo quando o comando é um pipeline                                      |
+| `pipestatus_segment_format` |                                                                                    | Quando especificado, substitui o  `format` quando ha formatação de segmentos pipestatus |
+| `disabled`                  | `true`                                                                             | Desabilita o módulo `status`.                                                           |
 
 ### Variáveis
 
-| Variável       | Exemplo | Descrição                                                                                  |
-| -------------- | ------- | ------------------------------------------------------------------------------------------ |
-| status         | `127`   | O codígo de saída do último comando                                                        |
-| hex_status     | `0x7F`  | O codígo de saída do último comando em hex                                                 |
-| int            | `127`   | O codígo de saída do último comando                                                        |
-| common_meaning | `ERROR` | Significa que o código não é um sinal                                                      |
-| signal_number  | `9`     | Número do sinal correspondente ao código de saída, apenas se sinalizado                    |
-| signal_name    | `KILL`  | Nome do sinal correspondente ao código de saída, apenas se for sinalizado                  |
-| maybe_int      | `7`     | Contém o código de saída quando nenhum significado for encontrado                          |
-| pipestatus     |         | Rendering of in pipeline programs' exit codes, this is only available in pipestatus_format |
-| symbol         |         | Espelha o valor da opção `symbol`                                                          |
-| style\*      |         | Espelha o valor da opção `style`                                                           |
+| Variável       | Exemplo | Descrição                                                                                                |
+| -------------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| status         | `127`   | O codígo de saída do último comando                                                                      |
+| hex_status     | `0x7F`  | O codígo de saída do último comando em hex                                                               |
+| int            | `127`   | O codígo de saída do último comando                                                                      |
+| common_meaning | `ERROR` | Significa que o código não é um sinal                                                                    |
+| signal_number  | `9`     | Número do sinal correspondente ao código de saída, apenas se sinalizado                                  |
+| signal_name    | `KILL`  | Nome do sinal correspondente ao código de saída, apenas se for sinalizado                                |
+| maybe_int      | `7`     | Contém o código de saída quando nenhum significado for encontrado                                        |
+| pipestatus     |         | Exibição do pipeline de programas com os códigos de saída, este é apenas disponível no pipestatus_format |
+| symbol         |         | Espelha o valor da opção `symbol`                                                                        |
+| style\*      |         | Espelha o valor da opção `style`                                                                         |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
@@ -4242,7 +4242,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 | ------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `command`           | `''`                            | O comando cuja a saída deve ser exibida. O comando será passado no stdin para o shell.                                                                                                                                                                                                                                           |
 | `when`              | `false`                         | Ou um valor booleano (`true` ou `false`, sem aspas) ou um comando shell de string usado como condição para mostrar o módulo. No caso de uma string, o módulo será mostrado se o comando retornar um código de status `0`.                                                                                                        |
-| `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                                                              |
+| `require_repo`      | `false`                         | Se `true`, o módulo será exibido apenas em caminhos que contenham um repositório (git). Esta opção, por si só, não é uma condição de exibição suficiente na ausência de outras opções.                                                                                                                                           |
 | `shell`             |                                 | [Veja abaixo](#custom-command-shell)                                                                                                                                                                                                                                                                                             |
 | `description`       | `'<custom module>'`       | A descrição do módulo, isto será exibido quando executar `starship explain`.                                                                                                                                                                                                                                                     |
 | `detect_files`      | `[]`                            | Os arquivos que serão buscados por correspondência no diretório atual.                                                                                                                                                                                                                                                           |
