@@ -1506,6 +1506,7 @@
         "disabled": true,
         "format": "[$symbol$shlvl]($style) ",
         "repeat": false,
+        "repeat_offset": 0,
         "style": "bold yellow",
         "symbol": "↕️  ",
         "threshold": 2
@@ -5324,6 +5325,12 @@
         "repeat": {
           "default": false,
           "type": "boolean"
+        },
+        "repeat_offset": {
+          "default": 0,
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0.0
         },
         "style": {
           "default": "bold yellow",
