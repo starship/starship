@@ -4528,3 +4528,33 @@ detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
+## Random
+
+`random` modules randomise their output every time the prompt is displayed.
+
+### Options
+
+| Option     | Default              | Description                          |
+| ---------- | -------------------- | ------------------------------------ |
+| `styles`   | `['>', '$', '%']`    | List of style variables to pick from |
+| `symbols`  | `['bold', 'italic']` | List of symbols to pick from         |
+| `format`   | `'[$symbol]($style)` | The format for the module            |
+| `disabled` | `false`              | Disables this `random` module        |
+
+### Variables
+
+| Variable | Description                 |
+| -------- | --------------------------- |
+| style    | Random element of `styles`  |
+| symbol   | Random element of `symbols` |
+
+## Example
+
+```toml
+[random.prompt]
+symbols = ['>', '\\$', '%']
+styles = ['#ffffff', '#ababab', '#3c3c3c']
+format = '[$symbol](fg:$style)'
+```
+
+
