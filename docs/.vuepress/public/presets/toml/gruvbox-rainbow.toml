@@ -27,8 +27,8 @@ $time\
 \n$character"""
 
 [os]
-style = "bg:#d65d0e fg:#fbf1c7"
 disabled = false
+style = "bg:#d65d0e fg:#fbf1c7"
 
 [os.symbols]
 Windows = "󰍲"
