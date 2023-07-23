@@ -67,6 +67,7 @@ pub mod pulumi;
 pub mod purescript;
 pub mod python;
 pub mod raku;
+pub mod random;
 pub mod red;
 pub mod rlang;
 pub mod ruby;
@@ -277,6 +278,8 @@ pub struct FullConfig<'a> {
     zig: zig::ZigConfig<'a>,
     #[serde(borrow)]
     custom: IndexMap<String, custom::CustomConfig<'a>>,
+    #[serde(borrow)]
+    random: IndexMap<String, random::RandomConfig<'a>>,
 }
 
 #[cfg(test)]

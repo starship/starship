@@ -321,8 +321,11 @@ fn handle_module<'a>(
         if !context.is_module_disabled_in_config(module) {
             modules.extend(modules::handle(module, context));
         }
-    } else if module.starts_with("custom.") || module.starts_with("env_var.") {
-        // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
+    } else if module.starts_with("custom.")
+        || module.starts_with("env_var.")
+        || module.starts_with("random.")
+    {
+        // custom.<name>, random.<name> and env_var.<name> are special cases and handle disabled modules themselves
         modules.extend(modules::handle(module, context));
     } else if matches!(module, "custom" | "env_var") {
         // env var is a spacial case and may contain a top-level module definition
