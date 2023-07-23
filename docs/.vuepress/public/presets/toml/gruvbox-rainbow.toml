@@ -24,7 +24,7 @@ $docker_context\
 [](fg:#665c54 bg:#3c3836)\
 $time\
 [ ](fg:#3c3836)\
-\n$character"""
+$line_break$character"""
 
 [os]
 disabled = false
@@ -133,7 +133,11 @@ time_format = "%R"
 style = "bg:#3c3836"
 format = '[[  $time ](fg:#fbf1c7 bg:#3c3836)]($style)'
 
+[line_break]
+disabled = false
+
 [character]
+disabled = false
 success_symbol = '[](bold fg:#98971a)'
 error_symbol = '[](bold fg:#cc241d)'
 vimcmd_symbol = '[](bold fg:#98971a)'
