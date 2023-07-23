@@ -4528,6 +4528,7 @@ detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
+
 ## Random
 
 `random` modules randomise their output every time the prompt is displayed.
@@ -4556,5 +4557,3 @@ symbols = ['>', '\\$', '%']
 styles = ['#ffffff', '#ababab', '#3c3c3c']
 format = '[$symbol](fg:$style)'
 ```
-
-
