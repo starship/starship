@@ -64,7 +64,7 @@ os_info = "3.7.0"
 path-slash = "0.2.1"
 pest = "2.7.1"
 pest_derive = "2.7.1"
-quick-xml = "0.29.0"
+quick-xml = "0.30.0"
 rand = "0.8.5"
 rayon = "1.7.0"
 regex = { version = "1.9.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
