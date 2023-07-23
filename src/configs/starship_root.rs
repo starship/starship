@@ -119,6 +119,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "os",
     "shell",
     "character",
+    "random",
 ];
 
 // On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
