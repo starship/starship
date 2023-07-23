@@ -4535,12 +4535,13 @@ use_stdin = false
 
 ### Options
 
-| Option     | Default              | Description                          |
-| ---------- | -------------------- | ------------------------------------ |
-| `styles`   | `['>', '$', '%']`    | List of style variables to pick from |
-| `symbols`  | `['bold', 'italic']` | List of symbols to pick from         |
-| `format`   | `'[$symbol]($style)` | The format for the module            |
-| `disabled` | `false`              | Disables this `random` module        |
+| Option        | Default              | Description                          |
+| ------------- | -------------------- | ------------------------------------ |
+| `styles`      | `['>', '$', '%']`    | List of style variables to pick from |
+| `symbols`     | `['bold', 'italic']` | List of symbols to pick from         |
+| `format`      | `'[$symbol]($style)` | The format for the module            |
+| `disabled`    | `false`              | Disables this `random` module        |
+| `description` | `'<random module>'`  | Description for the module           |
 
 ### Variables
 

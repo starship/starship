@@ -12,6 +12,7 @@ pub struct RandomConfig<'a> {
     pub symbols: Vec<&'a str>,
     pub styles: Vec<&'a str>,
     pub disabled: bool,
+    pub description: &'a str,
 }
 
 impl<'a> Default for RandomConfig<'a> {
@@ -21,6 +22,7 @@ impl<'a> Default for RandomConfig<'a> {
             styles: vec!["bold", "italic"],
             disabled: false,
             symbols: vec![">", "$", "%"],
+            description: "<random module>",
         }
     }
 }

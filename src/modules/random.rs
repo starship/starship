@@ -10,12 +10,11 @@ use crate::{
 const EMPTY_STYLES_MSG: &str = "`styles` is empty but a $style was encountered";
 
 pub fn module<'ctx>(name: &str, ctx: &'ctx Context) -> Option<Module<'ctx>> {
-    let cfg = ctx.config.get_random_module_config(name).or_else(|| {
+    let raw_cfg = ctx.config.get_random_module_config(name).or_else(|| {
         log::debug!("tried to load top level random config '{name}' but config doesn't exist");
         None
     })?;
-    let mut module = Module::new(&format!("random.{name}"), "<random module>", Some(cfg));
-    let cfg = RandomConfig::load(cfg);
+    let cfg = RandomConfig::load(raw_cfg);
     if cfg.disabled {
         log::debug!("Module `random.{name}` is disabled, skipping it");
         return None;
@@ -24,6 +23,7 @@ pub fn module<'ctx>(name: &str, ctx: &'ctx Context) -> Option<Module<'ctx>> {
         log::warn!("No symbols found for random module `random.{name}`, skipping it");
         return None;
     }
+    let mut module = Module::new(&format!("random.{name}"), cfg.description, Some(raw_cfg));
 
     let mut rng = rand::thread_rng();
     let symbol = cfg.symbols.choose(&mut rng)?;
