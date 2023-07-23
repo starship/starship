@@ -17,6 +17,11 @@ pub fn module<'ctx>(name: &str, ctx: &'ctx Context) -> Option<Module<'ctx>> {
     let mut module = Module::new(&format!("random.{name}"), "<random module>", Some(cfg));
     let cfg = RandomConfig::load(cfg);
     if cfg.disabled {
+        log::debug!("Module `random.{name}` is disabled, skipping it");
+        return None;
+    }
+    if cfg.symbols.is_empty() {
+        log::warn!("No symbols found for random module `random.{name}`, skipping it");
         return None;
     }
 

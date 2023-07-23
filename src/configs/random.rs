@@ -19,7 +19,7 @@ impl<'a> Default for RandomConfig<'a> {
         Self {
             format: "[$symbol ]($style)",
             styles: vec!["bold", "italic"],
-            disabled: true,
+            disabled: false,
             symbols: vec![">", "$", "%"],
         }
     }
