@@ -53,8 +53,6 @@ pub fn module<'ctx>(name: &str, ctx: &'ctx Context) -> Option<Module<'ctx>> {
 
 #[cfg(test)]
 mod tests {
-    use nu_ansi_term::Style;
-
     use crate::test::ModuleRenderer;
 
     #[test]
