@@ -74,6 +74,8 @@ mod tests {
             .config(toml::toml! {
                 format = "${random.test}"
                 [random.test]
+                styles = []
+                symbols = []
                 format = "[$symbol]($style)"
             })
             .collect();
@@ -86,11 +88,12 @@ mod tests {
             .config(toml::toml! {
                 format = "${random.test}"
                 [random.test]
+                styles = []
                 symbols = [">"]
                 format = "$symbol"
             })
             .collect();
-        assert_eq!(result, Some(format!("{}", Style::new().bold().paint(">"))));
+        assert_eq!(result, Some(">".to_owned()));
     }
 
     #[test]
@@ -99,6 +102,7 @@ mod tests {
             .config(toml::toml! {
                 format = "${random.test}"
                 [random.test]
+                styles = []
                 symbols = [">"]
                 format = "[$symbol]($style)"
             })
@@ -111,6 +115,7 @@ mod tests {
             .config(toml::toml! {
                 format = "${random.test}"
                 [random.test]
+                symbols = []
                 styles = ["fg:blue"]
                 format = "[$symbol]($style)"
             })
