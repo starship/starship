@@ -120,4 +120,37 @@ mod tests {
             .collect();
         assert_eq!(result, None);
     }
+
+    #[test]
+    fn try_to_load_invalid_module() {
+        let result = ModuleRenderer::new("random.test")
+            .config(toml::toml! {
+                format = "${random.test}"
+                [random.idontexist]
+            })
+            .collect();
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn missing_symbol() {
+        let result = ModuleRenderer::new("random.test")
+            .config(toml::toml! {
+                [random.test]
+                    format = "$invalid"
+            })
+            .collect();
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn missing_style() {
+        let result = ModuleRenderer::new("random.test")
+            .config(toml::toml! {
+                [random.test]
+                    format = "[>]($invalid)"
+            })
+            .collect();
+        assert_eq!(result, Some(">".to_owned()));
+    }
 }
