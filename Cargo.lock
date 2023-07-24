@@ -975,9 +975,9 @@ dependencies = [
 
 [[package]]
 name = "gix"
-version = "0.50.0"
+version = "0.50.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41e278c81b66e27876235fe5415da6fa709b2c8c82e1d1387c30c426982aa6a7"
+checksum = "275b1bfa0d6f6ed31a2e2e878a4539f4994eac8840546283ab3aebbd8fcaa42d"
 dependencies = [
  "gix-actor",
  "gix-attributes",
@@ -1403,9 +1403,9 @@ dependencies = [
 
 [[package]]
 name = "gix-pack"
-version = "0.40.1"
+version = "0.40.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4805d23741f5c3642332a665d4fbfa15ffe666e6252d6a72f0923c506dc35eb8"
+checksum = "46f029a4dce9ac91da35c968c3abdcae573b3e52c123be86cbab3011599de533"
 dependencies = [
  "clru",
  "gix-chunk",
@@ -1474,9 +1474,9 @@ dependencies = [
 
 [[package]]
 name = "gix-ref"
-version = "0.33.1"
+version = "0.33.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d564f1cc4c5074b84d6cdd260862f9095775c07c93656e4ae67bd5bfa0b091fe"
+checksum = "c16776eab78f4a918464064fa9c0f640014e8f1c3f9d1d366e929251c7193b2c"
 dependencies = [
  "gix-actor",
  "gix-date",
