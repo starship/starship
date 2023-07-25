@@ -132,7 +132,7 @@ jobs:
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
 
       - name: Check | Detect Changes
-        uses: reviewdog/action-suggester@v1.6.0
+        uses: reviewdog/action-suggester@v1.7.1
         with:
           tool_name: starship config-schema
           filter_mode: nofilter
