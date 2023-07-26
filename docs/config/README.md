@@ -3576,7 +3576,6 @@ styles = ['#ffffff', '#ababab', '#3c3c3c']
 format = '[$symbol](fg:$style)'
 ```
 
-
 ## Red
 
 By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/).
