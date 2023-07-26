@@ -20,9 +20,8 @@ function fish_prompt
             printf "\e[1;32m❯\e[0m "
         end
     else
-        ::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
-    set -g STARSHIP_ADD_NEWLINE_FLAGS
 end
 
 function fish_right_prompt
@@ -44,9 +43,8 @@ function fish_right_prompt
             printf ""
         end
     else
-        ::STARSHIP:: prompt $STARSHIP_ADD_NEWLINE_FLAGS --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
     end
-    set -g STARSHIP_ADD_NEWLINE_FLAGS
 end
 
 # Disable virtualenv prompt, it breaks starship
@@ -56,7 +54,6 @@ set -g VIRTUAL_ENV_DISABLE_PROMPT 1
 builtin functions -e fish_mode_prompt
 
 set -gx STARSHIP_SHELL "fish"
-set -gx STARSHIP_ADD_NEWLINE_FLAGS --disable-add-newline
 
 # Transience related functions
 function reset-transient --on-event fish_postexec
@@ -85,26 +82,6 @@ end
 function disable_transience --description 'remove transient prompt keybindings'
     bind --user -e \r
     bind --user -M insert -e \r
-end
-
-# On screen clear (ctrl+l), do not draw a newline
-function starship_clear
-    set -g STARSHIP_ADD_NEWLINE_FLAGS --disable-add-newline
-end
-
-# Hook into the clear screen function
-# if the user has already defined a `clear` function, wrap that definition
-if functions -q clear
-    functions -c clear __original_clear
-end
-
-function clear
-    starship_clear
-    if functions -q __original_clear
-        __original_clear
-    else
-        command clear
-    end
 end
 
 # Set up the session key that will be used to store logs
