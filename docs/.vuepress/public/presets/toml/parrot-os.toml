@@ -4,8 +4,8 @@ format = '''
 '''
 
 [status]
-style='fg:white'
-symbol='✗'
+style = 'fg:white'
+symbol = '✗'
 format = '[\[](fg:red)[$symbol]($style)[\]](fg:red)'
 disabled = false
 
