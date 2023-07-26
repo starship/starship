@@ -31,12 +31,6 @@ in brackets instead of using the default Starship wording ("via", "on", etc.).
 
 [![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png "Click to view Bracketed Segments preset")](./bracketed-segments)
 
-## [Jetpack](./jetpack.md)
-
-This is preset aspires to be minimal.
-
-[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view the Jetpack preset")](./bracketed-segments)
-
 ## [Plain Text Symbols](./plain-text.md)
 
 This preset changes the symbols for each module into plain text. Great if you
@@ -74,3 +68,15 @@ It also shows how path substitution works in starship.
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
 [![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+
+## [Jetpack](./jetpack.md)
+
+This is preset aspires to be minimal.
+
+::: warning
+Requires a shell with `right_prompt` capabilities.
+:::
+
+
+[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view the Jetpack preset")](./bracketed-segments)
+
