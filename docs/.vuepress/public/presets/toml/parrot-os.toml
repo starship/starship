@@ -1,0 +1,53 @@
+format = '''
+[┌](fg:red)$status$os$hostname$time$directory$git_branch$git_status
+[└──╼](fg:red)$username$character
+'''
+
+[status]
+style='fg:white'
+symbol='✗'
+format = '[\[](fg:red)[$symbol]($style)[\]](fg:red)'
+disabled = false
+
+[character]
+success_symbol = '[\$](fg:yellow)'
+error_symbol = '[\$](fg:yellow)'
+vimcmd_symbol = '[\$](fg:yellow)'
+vimcmd_replace_one_symbol = '[\$](fg:yellow)'
+vimcmd_replace_symbol = '[\$](fg:yellow)'
+vimcmd_visual_symbol = '[\$](fg:yellow)'
+
+[username]
+style_user = 'green'
+show_always = true
+format = '[$user]($style)'
+
+[hostname]
+ssh_only = false
+style = "fg:cyan"
+format = '[\[](fg:red)[$ssh_symbol$hostname]($style)[\]](fg:red)'
+
+[directory]
+style = "fg:purple"
+format = '[─\[](fg:red)[$path]($style)[\]](fg:red)'
+truncate_to_repo = false
+
+[git_branch]
+symbol = ""
+style = "fg:blue"
+format = '[─\[](fg:red)[$symbol $branch]($style)'
+
+[git_status]
+style = "fg:yellow"
+format = '([$all_status$ahead_behind]($style))[\]](fg:red)'
+staged = '[++\($count\)](green)'
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[time]
+style = "fg:yellow"
+format = '─[\[](fg:red)[$time]($style)[\]](fg:red)'
+time_format = '%H:%M-%d/%m'
+disabled = false

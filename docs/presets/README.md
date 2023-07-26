@@ -68,3 +68,9 @@ It also shows how path substitution works in starship.
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
 [![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+
+## [Parrot OS](./parrot-os.md)
+
+This preset is inspired by the zsh look that comes with the [ParrotOS](https://www.parrotsec.org) operating system.
+
+[![Screenshot of ParrotOS preset](/presets/img/parrot-os.png "Click to view ParrotOS preset")](./parrot-os)
