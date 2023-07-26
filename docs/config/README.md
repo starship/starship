@@ -8,13 +8,13 @@ To get started configuring starship, create one of the following file:
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-- `~/.config/starship/config.toml`
+- `~/.config/starship/config.toml` or `$XDG_CONFIG_HOME/starship/config.toml` if `$XDG_CONFIG_HOME` is set.
 
 ```sh
 mkdir -p ~/.config/starship && touch ~/.config/starship/config.toml
 ```
 
-Note: if you have both files available, the `starship.toml` will take higher priority.
+Note: if you have both files available, the `~/.config/starship.toml` will take higher priority.
 
 All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
 
