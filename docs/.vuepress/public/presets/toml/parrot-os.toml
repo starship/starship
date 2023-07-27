@@ -48,6 +48,6 @@ style = "bright-black"
 
 [time]
 style = "fg:yellow"
-format = '─[\[](fg:red)[$time]($style)[\]](fg:red)'
+format = '[─\[](fg:red)[$time]($style)[\]](fg:red)'
 time_format = '%H:%M-%d/%m'
 disabled = false
