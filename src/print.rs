@@ -424,24 +424,64 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
         ),
     };
 
-    let rformatter = StringFormatter::new(&config.right_format);
-
-    if formatter.is_err() {
-        log::error!("Error parsing `{}`", config_param);
-    }
-    if rformatter.is_err() {
-        log::error!("Error parsing `right_format`")
-    }
-
-    match (formatter, rformatter) {
-        (Ok(lf), Ok(rf)) => {
-            let mut modules: BTreeSet<String> = BTreeSet::new();
-            if context.target != Target::Continuation {
-                modules.extend(lf.get_variables());
-                modules.extend(rf.get_variables());
+    if context.target == Target::Continuation {
+        let cf = &config.continuation_prompt;
+        let formatter = StringFormatter::new(cf);
+        return match formatter {
+            Ok(f) => {
+                let modules = f.get_variables().into_iter().collect();
+                (f, modules)
             }
-            (lf, modules)
+            Err(e) => {
+                log::error!("Error parsing continuation prompt: {e}");
+                (StringFormatter::raw(">"), BTreeSet::new())
+            }
+        };
+    }
+
+    let (left_format_str, right_format_str): (&str, &str) = match context.target {
+        Target::Main | Target::Right => (&config.format, &config.right_format),
+        Target::Profile(ref name) => {
+            if let Some(lf) = config.profiles.get(name) {
+                (lf, "")
+            } else {
+                log::error!("Profile {name:?} not found");
+                return (StringFormatter::raw(">"), BTreeSet::new());
+            }
         }
+        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
+    };
+
+    let lf = StringFormatter::new(left_format_str);
+    let rf = StringFormatter::new(right_format_str);
+
+    if let Err(ref e) = lf {
+        let name = if let Target::Profile(ref profile_name) = context.target {
+            format!("profile.{profile_name}")
+        } else {
+            "format".to_string()
+        };
+        log::error!("Error parsing {name:?}: {e}");
+    };
+
+    if let Err(ref e) = rf {
+        log::error!("Error parsing right_format: {e}");
+    }
+
+    let modules = [&lf, &rf]
+        .into_iter()
+        .flatten()
+        .flat_map(|f| f.get_variables())
+        .collect();
+
+    let main_formatter = match context.target {
+        Target::Main | Target::Profile(_) => lf,
+        Target::Right => rf,
+        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
+    };
+
+    match main_formatter {
+        Ok(f) => (f, modules),
         _ => (StringFormatter::raw(">"), BTreeSet::new()),
     }
 }
@@ -526,13 +566,50 @@ mod test {
     }
 
     #[test]
-    fn custom_prompt() {
+    fn prompt_with_all() -> io::Result<()> {
         let mut context = default_context().set_config(toml::toml! {
                 add_newline = false
-                [profiles]
-                test="0_0$character"
+                right_format= "$directory$line_break"
+                format="$all"
                 [character]
-                format=">>"
+                format=">"
+        });
+        let dir = tempfile::tempdir().unwrap();
+        context.current_dir = dir.path().to_path_buf();
+
+        let expected = String::from(">");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn rprompt_with_all() -> io::Result<()> {
+        let mut context = default_context().set_config(toml::toml! {
+            format= "$directory$line_break"
+            right_format="$all"
+            [character]
+            format=">"
+        });
+        let dir = tempfile::tempdir().unwrap();
+        context.current_dir = dir.path().to_path_buf();
+
+        context.target = Target::Right;
+
+        let expected = String::from(">");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn custom_prompt() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            [profiles]
+            test="0_0$character"
+            [character]
+            format=">>"
         });
         context.target = Target::Profile("test".to_string());
 

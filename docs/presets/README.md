@@ -68,15 +68,3 @@ It also shows how path substitution works in starship.
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
 [![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
-
-## [Jetpack](./jetpack.md)
-
-This is preset aspires to be minimal.
-
-::: warning
-Requires a shell with `right_prompt` capabilities.
-:::
-
-
-[![Screenshot of Jetpack preset](/presets/img/jetpack.png "Click to view the Jetpack preset")](./bracketed-segments)
-
