@@ -10,7 +10,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 ### Prerequisite
 
-- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support. 
+- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
 - [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
 
 ### Manual Configuration
