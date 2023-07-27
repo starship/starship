@@ -4,7 +4,7 @@
 
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png)
+![Screenshot of Tokyo Night preset](/.vuepress/public/presets/img/tokyo-night.png)
 
 ### Prerequisites
 
@@ -16,6 +16,6 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/tokyo-night.toml)
+[Click to download TOML](/.vuepress/public/presets/toml/tokyo-night.toml)
 
 <<< @/.vuepress/public/presets/toml/tokyo-night.toml
