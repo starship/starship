@@ -1,6 +1,6 @@
 format = '''
 [┌](fg:red)$status$os$hostname$time$directory$git_branch$git_status
-[└──╼](fg:red)$username$character
+[└──╼](fg:red)$username[\$ ](fg:yellow)
 '''
 
 [status]
@@ -8,14 +8,6 @@ style = 'fg:white'
 symbol = '✗'
 format = '[\[](fg:red)[$symbol]($style)[\]](fg:red)'
 disabled = false
-
-[character]
-success_symbol = '[\$](fg:yellow)'
-error_symbol = '[\$](fg:yellow)'
-vimcmd_symbol = '[\$](fg:yellow)'
-vimcmd_replace_one_symbol = '[\$](fg:yellow)'
-vimcmd_replace_symbol = '[\$](fg:yellow)'
-vimcmd_visual_symbol = '[\$](fg:yellow)'
 
 [username]
 style_user = 'green'
