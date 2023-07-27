@@ -1,13 +1,17 @@
 format = """
 [░▒▓](#a3aed2)\
-[  ](bg:#a3aed2 fg:#090c0c)\
+[ ](bg:#a3aed2 fg:#090c0c)\
+$username\
+$os\
 [](bg:#769ff0 fg:#a3aed2)\
 $directory\
 [](fg:#769ff0 bg:#394260)\
 $git_branch\
 $git_status\
 [](fg:#394260 bg:#212736)\
+$java\
 $nodejs\
+$python\
 $rust\
 $golang\
 $php\
@@ -15,6 +19,52 @@ $php\
 $time\
 [ ](fg:#1d2230)\
 \n$character"""
+
+# Disable the blank line at the start of the prompt
+add_newline = true
+
+# You can also replace your username with a neat symbol like   or disable this
+[username]
+show_always = true
+style_user = "bg:#a3aed2 fg:#090c0c"
+style_root = "bg:#a3aed2 fg:#090c0c"
+format = '[$user ]($style)'
+disabled = false
+
+# represents the current operating system
+[os]
+style = "bg:#a3aed2 fg:#090c0c"
+disabled = false # Enabled by default
+
+[os.symbols]
+Alpine = " "
+Amazon = " "
+Android = "󰀲 "
+Arch = " "
+CentOS = " "
+Debian = "󰣚 "
+EndeavourOS = " "
+Fedora = "󰣛 "
+FreeBSD = "󰣠 "
+Gentoo = "󰣨 "
+Illumos = " "
+Linux = "󰌽 "
+Macos = "󰀵 "
+Manjaro = "󱘊 "
+Mint = "󰣭 "
+NixOS = "󱄅 "
+OpenBSD = " "
+openSUSE = " "
+Pop = " "
+Raspbian = " "
+Redhat = "󱄛 "
+RedHatEnterprise = "󱄛 "
+Redox = "🧪 "
+Solus = " "
+SUSE = " "
+Ubuntu = "󰕈 "
+Unknown = " "
+Windows = "󰍲 "
 
 [directory]
 style = "fg:#e3e5e5 bg:#769ff0"
@@ -37,8 +87,18 @@ format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
 style = "bg:#394260"
 format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
 
+[java]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
 [nodejs]
 symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[python]
+symbol = ""
 style = "bg:#212736"
 format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
 
@@ -48,7 +108,7 @@ style = "bg:#212736"
 format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
 
 [golang]
-symbol = ""
+symbol = "ﳑ"
 style = "bg:#212736"
 format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
 
