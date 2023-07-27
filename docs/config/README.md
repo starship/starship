@@ -3554,8 +3554,8 @@ The `random` modules randomizes the output every time the prompt is displayed.
 
 | Option        | Default              | Description                          |
 | ------------- | -------------------- | ------------------------------------ |
-| `styles`      | `['>', '$', '%']`    | List of style variables to pick from |
-| `symbols`     | `['bold', 'italic']` | List of symbols to pick from         |
+| `symbols`     | `['>', '$', '%']`    | List of style variables to pick from |
+| `styles`      | `['bold', 'italic']` | List of symbols to pick from         |
 | `format`      | `'[$symbol]($style)` | The format for the module            |
 | `disabled`    | `false`              | Disables this `random` module        |
 | `description` | `'<random module>'`  | Description for the module           |
