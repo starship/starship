@@ -33,7 +33,7 @@ format = '[─\[](fg:red)[$path]($style)[\]](fg:red)'
 truncate_to_repo = false
 
 [git_branch]
-symbol = ""
+symbol = "🍴"
 style = "fg:blue"
 format = '[─\[](fg:red)[$symbol $branch]($style)'
 
