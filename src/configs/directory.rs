@@ -1,4 +1,6 @@
 use indexmap::IndexMap;
+#[cfg(feature = "config-schema")]
+use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
@@ -12,6 +14,7 @@ use serde::{Deserialize, Serialize};
 pub struct DirectoryConfig<'a> {
     pub truncation_length: i64,
     pub truncate_to_repo: bool,
+    #[cfg_attr(feature = "config-schema", schemars(with = "HashMap<String, &'a str>"))]
     pub substitutions: IndexMap<String, &'a str>,
     pub fish_style_pwd_dir_length: i64,
     pub use_logical_path: bool,

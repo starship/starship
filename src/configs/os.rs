@@ -1,6 +1,8 @@
 use indexmap::{indexmap, IndexMap};
 use os_info::Type;
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "config-schema")]
+use std::collections::HashMap;
 
 #[derive(Clone, Deserialize, Serialize)]
 #[cfg_attr(
@@ -12,6 +14,7 @@ use serde::{Deserialize, Serialize};
 pub struct OSConfig<'a> {
     pub format: &'a str,
     pub style: &'a str,
+    #[cfg_attr(feature = "config-schema", schemars(with = "HashMap<Type, &'a str>"))]
     pub symbols: IndexMap<Type, &'a str>,
     pub disabled: bool,
 }

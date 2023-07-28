@@ -21,6 +21,7 @@ pub struct StarshipRootConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub palette: Option<String>,
     pub palettes: HashMap<String, Palette>,
+    #[cfg_attr(feature = "config-schema", schemars(with = "HashMap<String, String>"))]
     pub profiles: IndexMap<String, String>,
 }
 

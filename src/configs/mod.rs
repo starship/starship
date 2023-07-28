@@ -1,5 +1,7 @@
 use indexmap::IndexMap;
 use serde::{self, Deserialize, Serialize};
+#[cfg(feature = "config-schema")]
+use std::collections::HashMap;
 
 pub mod aws;
 pub mod azure;
@@ -149,6 +151,10 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     elm: elm::ElmConfig<'a>,
     #[serde(borrow)]
+    #[cfg_attr(
+        feature = "config-schema",
+        schemars(with = "HashMap<String, env_var::EnvVarConfig<'a>>")
+    )]
     env_var: IndexMap<String, env_var::EnvVarConfig<'a>>,
     #[serde(borrow)]
     erlang: erlang::ErlangConfig<'a>,
@@ -276,6 +282,10 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     zig: zig::ZigConfig<'a>,
     #[serde(borrow)]
+    #[cfg_attr(
+        feature = "config-schema",
+        schemars(with = "HashMap<String, custom::CustomConfig<'a>>")
+    )]
     custom: IndexMap<String, custom::CustomConfig<'a>>,
 }
 
