@@ -1,41 +1,77 @@
 format = """
-[░▒▓](#a3aed2)\
-[ ](bg:#a3aed2 fg:#090c0c)\
+[ ](bg:blurple_darkest)\
+[ ](bg:blurple_dark)\
+[ ](bg:blurple_darker)\
+[ ](bg:blurple)\
 $username\
 $os\
-[](bg:#769ff0 fg:#a3aed2)\
+[](bg:blue fg:blurple)\
 $directory\
-[](fg:#769ff0 bg:#394260)\
+[](fg:blue bg:blurple_dark)\
 $git_branch\
 $git_status\
-[](fg:#394260 bg:#212736)\
+[](fg:blurple_dark bg:blurple_darkest)\
 $java\
 $nodejs\
 $python\
 $rust\
 $golang\
 $php\
-[](fg:#212736 bg:#1d2230)\
+$c\
+$docker_context\
+$elixir\
+$elm\
+$gradle\
+$haskell\
+$julia\
+$nim\
+$scala\
+[](fg:blurple_darkest bg:black)\
 $time\
-[ ](fg:#1d2230)\
+[ ](fg:black)\
 \n$character"""
 
-# Disable the blank line at the start of the prompt
-add_newline = true
+# Set Tokyo Night as custom color palette
+# You can also use the legacy version of the palette by setting the palette to 'tokyo_night_legacy'
+palette = 'tokyo_night'
+
+# Define custom colors
+# Tokyo Night palette (consistent with the VSCode theme)
+[palettes.tokyo_night]
+blurple = "#a9b1dc"
+blurple_darker = "#9aa5ce"
+blurple_dark = "#565f89"
+blurple_darkest = "#414868"
+white = "#c0caf5"
+black = "#24283b"
+night = "#1a1b26"
+blue = "#7aa2f7"
+
+# Tokyo Night Legacy palette (consistent with the old Starship preset)
+[palettes.tokyo_night_legacy]
+blurple = "#a3aed2"
+blurple_darker = "#7d8cad"
+blurple_dark = "#394260"
+blurple_darkest = "#212736"
+white = "#e3e5e5"
+black = "#1d2230"
+night = "#090c0c"
+blue = "#769ff0"
 
 # You can also replace your username with a neat symbol like   or disable this
 [username]
 show_always = true
-style_user = "bg:#a3aed2 fg:#090c0c"
-style_root = "bg:#a3aed2 fg:#090c0c"
+style_user = "bg:blurple fg:night"
+style_root = "bg:blurple fg:night"
 format = '[$user ]($style)'
-disabled = false
+disabled = true # Disabled by default
 
-# represents the current operating system
+# Represents the current operating system
 [os]
-style = "bg:#a3aed2 fg:#090c0c"
+style = "bg:blurple fg:night"
 disabled = false # Enabled by default
 
+# Define custom symbols for operating systems
 [os.symbols]
 Alpine = " "
 Amazon = " "
@@ -66,59 +102,110 @@ Ubuntu = "󰕈 "
 Unknown = " "
 Windows = "󰍲 "
 
+# Represents the current directory
 [directory]
-style = "fg:#e3e5e5 bg:#769ff0"
+style = "fg:white bg:blue"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
+# Define custom symbols for directories
 [directory.substitutions]
 "Documents" = "󰈙 "
 "Downloads" = " "
 "Music" = " "
 "Pictures" = " "
 
+# Represents the current git branch
 [git_branch]
 symbol = ""
-style = "bg:#394260"
-format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
+style = "bg:blurple_dark"
+format = '[[ $symbol $branch ](fg:blue bg:blurple_dark)]($style)'
 
+# Represents the current git status
 [git_status]
-style = "bg:#394260"
-format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+style = "bg:blurple_dark"
+format = '[[($all_status$ahead_behind )](fg:blue bg:blurple_dark)]($style)'
 
+# Define custom symbols for languages
 [java]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "bg:blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [nodejs]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "bg:blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [python]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "bg:blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [rust]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "bg:blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [golang]
-symbol = "ﳑ"
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+symbol = ""
+style = "bg:blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [php]
 symbol = ""
-style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+style = "bg:blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
+[c]
+symbol = " "
+style = "bg:#blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+[docker_context]
+symbol = " "
+style = "bg:#06969A"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+[elixir]
+symbol = " "
+style = "bg:#blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+[elm]
+symbol = " "
+style = "bg:#blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+[gradle]
+symbol = " "
+style = "bg:#blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+[haskell]
+symbol = " "
+style = "bg:#blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+[julia]
+symbol = " "
+style = "bg:#blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+[nim]
+symbol = "󰆥 "
+style = "bg:#blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+[scala]
+symbol = " "
+style = "bg:#blurple_darkest"
+format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
+
+# Represents the current time
 [time]
 disabled = false
 time_format = "%R" # Hour:Minute Format
-style = "bg:#1d2230"
-format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
+style = "bg:black"
+format = '[[  $time ](fg:#a0a9cb bg:black)]($style)'
