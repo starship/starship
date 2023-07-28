@@ -4,7 +4,7 @@
 
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-![Screenshot of Tokyo Night preset](/docs/.vuepress/public/presets/img/tokyo-night.png)
+![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png)
 
 ### Prerequisites
 
