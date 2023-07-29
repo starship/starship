@@ -159,42 +159,42 @@ format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [c]
 symbol = " "
-style = "bg:#blurple_darkest"
+style = "bg:blurple_darkest"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [elixir]
 symbol = " "
-style = "bg:#blurple_darkest"
+style = "bg:blurple_darkest"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [elm]
 symbol = " "
-style = "bg:#blurple_darkest"
+style = "bg:blurple_darkest"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [gradle]
 symbol = " "
-style = "bg:#blurple_darkest"
+style = "bg:blurple_darkest"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [haskell]
 symbol = " "
-style = "bg:#blurple_darkest"
+style = "bg:blurple_darkest"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [julia]
 symbol = " "
-style = "bg:#blurple_darkest"
+style = "bg:blurple_darkest"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [nim]
 symbol = "󰆥 "
-style = "bg:#blurple_darkest"
+style = "bg:blurple_darkest"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [scala]
 symbol = " "
-style = "bg:#blurple_darkest"
+style = "bg:blurple_darkest"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 # Represents the current time
