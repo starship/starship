@@ -68,3 +68,9 @@ It also shows how path substitution works in starship.
 This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
 [![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+
+## One Dark Preset
+
+This preset is inspired by [one-dark-syntax](https://github.com/atom/one-dark-syntax) and [OneDark-Pro](https://github.com/Binaryify/OneDark-Pro).
+
+![Screenshot of One Dark preset](/presets/img/one-dark.png)
