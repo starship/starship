@@ -340,6 +340,7 @@
         "read_only_style": "red",
         "repo_root_format": "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ",
         "repo_root_style": null,
+        "separator_symbol": "",
         "style": "cyan bold",
         "substitutions": {},
         "truncate_to_repo": true,
@@ -2662,6 +2663,10 @@
         "use_os_path_sep": {
           "default": true,
           "type": "boolean"
+        },
+        "separator_symbol": {
+          "default": "",
+          "type": "string"
         }
       },
       "additionalProperties": false
