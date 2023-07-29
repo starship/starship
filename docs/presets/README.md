@@ -69,7 +69,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 [![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
 
-## One Dark Preset
+## [One Dark Preset](./one-dark.md)
 
 This preset is inspired by [one-dark-syntax](https://github.com/atom/one-dark-syntax) and [OneDark-Pro](https://github.com/Binaryify/OneDark-Pro).
 
