@@ -18,7 +18,6 @@ $rust\
 $golang\
 $php\
 $c\
-$docker_context\
 $elixir\
 $elm\
 $gradle\
@@ -161,11 +160,6 @@ format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 [c]
 symbol = " "
 style = "bg:#blurple_darkest"
-format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
-
-[docker_context]
-symbol = " "
-style = "bg:#06969A"
 format = '[[ $symbol ($version) ](fg:blue bg:blurple_darkest)]($style)'
 
 [elixir]
