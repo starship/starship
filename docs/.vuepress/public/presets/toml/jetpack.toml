@@ -93,7 +93,7 @@ add_newline = true
 format = "$symbol "
 success_symbol = "[◉](bold italic bright-yellow)"
 error_symbol = "[◎](italic purple)"
-# vicmd_symbol = "[●](italic white)" # hmmm... this should work https://starship.rs/config/#character 
+# vicmd_symbol = "[●](italic white)" # hmmm... this should work https://starship.rs/config/#character
 
 [env_var.VIMSHELL] # vim subshell
 format = "[$env_value]($style)"
