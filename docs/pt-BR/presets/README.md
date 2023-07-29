@@ -63,3 +63,9 @@ Esta personalização é inspirada em [M365Princess](https://github.com/JanDeDob
 Este preset é inspirado por  [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
 [![Captura de tela de Tokyo Night preset](/presets/img/tokyo-night.png "Clique para visualizar Tokyo Night preset")](./tokyo-night)
+
+## [One Dark Preset](./one-dark.md)
+
+Este preset é inspirado por [one-dark-syntax](https://github.com/atom/one-dark-syntax) e [OneDark-Pro](https://github.com/Binaryify/OneDark-Pro).
+
+[![Captura de tela de One Dark preset](/presets/img/one-dark.png "Clique para visualizar One Dark preset")](./one-dark)
