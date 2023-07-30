@@ -88,9 +88,9 @@ foreach ($install_type in @('portable', 'install')) {
 }
 
 if ($null -ne $ENV:PUSH_TOKEN) {
-    choco push starship.portable.$versionNumber.nupkg --key $ENV:PUSH_TOKEN
-    choco push starship.install.$versionNumber.nupkg --key $ENV:PUSH_TOKEN
-    choco push starship.$versionNumber.nupkg --key $ENV:PUSH_TOKEN
+    choco push starship.portable.$versionNumber.nupkg --key $ENV:PUSH_TOKEN --source="'https://push.chocolatey.org/'"
+    choco push starship.install.$versionNumber.nupkg --key $ENV:PUSH_TOKEN --source="'https://push.chocolatey.org/'"
+    choco push starship.$versionNumber.nupkg --key $ENV:PUSH_TOKEN --source="'https://push.chocolatey.org/'"
 }
 else {
     Write-Host "No API key provided, skipping push"
