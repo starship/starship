@@ -1,5 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# Configures the format of the prompt.
 format = """
 [](color_green)\
 $os\
@@ -29,52 +30,23 @@ $scala\
 [](fg:color_blue bg:mono3)\
 $docker_context\
 [ ](mono3)\
+$fill\
 [ ](mono4)\
 $time\
 $battery\
 [](mono4)\
 $line_break$character"""
 
-# If you want the time to be displayed on the right side of the prompt (if your shell supports it), comment out the above (format) and uncomment the following (format and right_format):
-
-# format = """
-# [](color_green)\
-# $os\
-# $username\
-# [](bg:color_orange fg:color_green)\
-# $directory\
-# [](fg:color_orange bg:color_cyan)\
-# $git_branch\
-# $git_status\
-# [](fg:color_cyan bg:color_blue)\
-# $c\
-# $rust\
-# $golang\
-# $nodejs\
-# $php\
-# $java\
-# $kotlin\
-# $haskell\
-# $python\
-# [](fg:color_blue bg:mono3)\
-# $docker_context\
-# [](mono3)\"""
-
-# right_format = """
-# [](syntax_bg)\
-# $time\
-# $battery\
-# [](syntax_bg)\
-# $line_break$character"""
-
+# Sets the palette to "one_dark".
 palette = 'one_dark'
 
+# Sets the colors of the "one_dark" palette.
 [palettes.one_dark]
-mono0 = '#d7dae0' # terminal white, from the One Dark Pro VSCode theme
-mono1 = '#abb2bf' # syntax_fg
+mono0 = '#d7dae0' # terminal white, from the One Dark Pro VSCode theme.
+mono1 = '#abb2bf' # syntax_fg.
 mono2 = '#828997'
 mono3 = '#5c6370'
-mono4 = '#3f4451' # terminal black, from the One Dark Pro VSCode theme
+mono4 = '#3f4451' # terminal black, from the One Dark Pro VSCode theme.
 color_red0 = '#e06c75'
 color_red1 = '#be5046'
 color_green = '#98c379'
@@ -89,11 +61,13 @@ color_bg2 = '#665c54'
 syntax_gutter = '#647382'
 syntax_accent = '#528cff'
 
+# Module that displays the current OS.
 [os]
 disabled = false # Disabled by default
 style = "bg:color_green fg:syntax_bg"
 format = '[ $symbol ]($style)'
 
+# Sets custom symbols for each OS.
 [os.symbols]
 Alpine = ""
 Amazon = ""
@@ -124,18 +98,21 @@ Ubuntu = "󰕈"
 Unknown = ""
 Windows = "󰍲"
 
+# Module that displays the current username.
 [username]
 show_always = true
 style_user = "bold bg:color_green fg:syntax_bg"
 style_root = "bold bg:color_green fg:syntax_bg"
 format = '[ $user ]($style)'
 
+# Module that displays the current directory.
 [directory]
 style = "italic fg:syntax_bg bg:color_orange"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
+# Sets the custom symbols for directories.
 [directory.substitutions]
 "Documents" = "󰈙 "
 "Downloads" = " "
@@ -143,15 +120,18 @@ truncation_symbol = "…/"
 "Pictures" = " "
 "Developer" = "󰲋 "
 
+# Module that displays the current git branch.
 [git_branch]
 symbol = ""
 style = "bg:color_cyan"
 format = '[[ $symbol $branch ](fg:syntax_bg bg:color_cyan)]($style)'
 
+# Module that displays the current git status.
 [git_status]
 style = "bg:color_cyan"
 format = '[[($all_status$ahead_behind )](fg:syntax_bg bg:color_cyan)]($style)'
 
+# Language specific modules
 [nodejs]
 symbol = ""
 style = "bg:color_blue"
@@ -232,20 +212,28 @@ symbol = " "
 style = "bg:color_blue"
 format = '[[ $symbol ($version) ](fg:syntax_bg bg:color_blue)]($style)'
 
+# Module that displays the docker context.
 [docker_context]
 symbol = " "
 style = "bg:mono3"
 format = '[[ $symbol( $context) ](fg:syntax_fg bg:mono3)]($style)'
 
+# Module that fills the space between the left and right segments.
+[fill]
+symbol = " "
+
+# Module that displays the time.
 [time]
 disabled = false # Disabled by default
 use_12hr = true # Disable for 24h format without seconds
 style = "bg:mono4"
 format = '[[ 󰥔 $time ](fg:syntax_fg bg:mono4)]($style)'
 
+# Module that displays the battery level and status.
 [battery]
 format = '[$symbol $percentage ]($style)'
 
+# Battery symbols and colors for each threshold.
 [[battery.display]]
 threshold = 10
 style = "bold bg:mono4 fg:color_red1"
@@ -306,6 +294,7 @@ discharging_symbol = "󰁹"
 charging_symbol = "󰂅"
 threshold = 100
 
+# New line character
 [character]
 success_symbol = '[󰅂](bold fg:syntax_accent)'
 error_symbol = '[](bold fg:color_red1)'
