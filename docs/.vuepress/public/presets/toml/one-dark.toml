@@ -239,8 +239,7 @@ format = '[[ $symbol( $context) ](fg:syntax_fg bg:mono3)]($style)'
 
 [time]
 disabled = false # Disabled by default
-time_format = "%R"
-use_12hr = true # Disable for 24h format
+use_12hr = true # Disable for 24h format without seconds
 style = "bg:mono4"
 format = '[[ 󰥔 $time ](fg:syntax_fg bg:mono4)]($style)'
 
