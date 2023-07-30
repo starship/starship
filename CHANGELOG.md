@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.16.0](https://github.com/starship/starship/compare/v1.15.0...v1.16.0) (2023-07-30)
+
+
+### Features
+
+* **pwsh:** Support vi command mode indicator ([#5049](https://github.com/starship/starship/issues/5049)) ([3180509](https://github.com/starship/starship/commit/318050976b58f032a17ff4d122d21cb63faf8e3b))
+* **shlvl:** add repeat_offset for repeated symbol ([#5289](https://github.com/starship/starship/issues/5289)) ([3402f0e](https://github.com/starship/starship/commit/3402f0e82aab907a77f0967abb99d4cde512c069))
+* update the nushell init file and make it valid module and overlay ([#5188](https://github.com/starship/starship/issues/5188)) ([470aeb0](https://github.com/starship/starship/commit/470aeb09a72936a66937d68f96165a977b5c213d))
+
+
+### Bug Fixes
+
+* **bash:** Clear out completed jobs before counting NUM_JOBS ([#5253](https://github.com/starship/starship/issues/5253)) ([0a05b5c](https://github.com/starship/starship/commit/0a05b5ca8b7f147ead6d575297ef9f34191193af))
+* **rprompt:** remove lprompt modules from `$all` again ([#5067](https://github.com/starship/starship/issues/5067)) ([b9a4b08](https://github.com/starship/starship/commit/b9a4b08ac24805061c5faaef98ccbee7b018f5f0))
+
+
+### Performance Improvements
+
+* **git_status:** query git stash count via gitoxide ([#5238](https://github.com/starship/starship/issues/5238)) ([410f107](https://github.com/starship/starship/commit/410f107c722a2f07737d4be01960f2621bf418dd))
+
 ## [1.15.0](https://github.com/starship/starship/compare/v1.14.2...v1.15.0) (2023-06-06)
 
 
