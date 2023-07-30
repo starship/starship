@@ -149,7 +149,7 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    ::: warning
 
-   Hal ini dapat berubah di kemudian hari. Hanya Nushell v0.73+ yang menerima dukungan.
+   Hal ini dapat berubah di kemudian hari. Hanya Nushell v0.78+ yang menerima dukungan.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
    Lalu tambahkan baris berikut di baris terakhir konfigurasi Nushell (temukan dengan menjalankan `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 

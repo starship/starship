@@ -149,7 +149,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    ::: warning
 
-   Isto irá mudar no futuro. Somente Nushell v0.73+ é suportado.
+   Isto irá mudar no futuro. Somente Nushell v0.78+ é suportado.
 
    :::
 
@@ -162,8 +162,9 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    E adicione o seguinte ao final da sua configuração do Nushell (encontre-o executando `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 

@@ -1060,7 +1060,7 @@ format = 'via [🦕 $version](green bold) '
 
 El módulo `directory` muestra la ruta a tu directorio actual, truncado a tres carpetas padres. Tu directorio se truncará a la raíz del repositorio git en el que te encuentres.
 
-Cuando usas el estilo fish de la opción pwd, en lugar de ocultar la ruta truncada, verás una versión acortada del nombre de cada directorio basada en el número que activaste para la opción.
+When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
 Por ejemplo, dado `~/Dev/Nix/nixpkgs/pkgs` donde `nixpkgs` es la raíz del repositorio y la opción establecida a `1`. Ahora verás `~/D/N/nixpkgs/pkgs`, mientras que antes habría sido `nixpkgs/pkgs`.
 
@@ -3607,14 +3607,15 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### Opciones
 
-| Opción      | Predeterminado               | Descripción                                                       |
-| ----------- | ---------------------------- | ----------------------------------------------------------------- |
-| `threshold` | `2`                          | Mostrar el umbral.                                                |
-| `format`    | `'[$symbol$shlvl]($style) '` | El formato del módulo.                                            |
-| `symbol`    | `'↕️  '`                     | El símbolo utilizado para representar el `SHLVL`.                 |
-| `repetir`   | `false`                      | Hace que el `symbol` se repita con la cantidad actual de `SHLVL`. |
-| `style`     | `'bold yellow'`              | El estilo del módulo.                                             |
-| `disabled`  | `true`                       | Deshabilita el módulo `shlvl`.                                    |
+| Opción          | Predeterminado               | Descripción                                                         |
+| --------------- | ---------------------------- | ------------------------------------------------------------------- |
+| `threshold`     | `2`                          | Mostrar el umbral.                                                  |
+| `format`        | `'[$symbol$shlvl]($style) '` | El formato del módulo.                                              |
+| `symbol`        | `'↕️  '`                     | El símbolo utilizado para representar el `SHLVL`.                   |
+| `repetir`       | `false`                      | Hace que el `symbol` se repita con la cantidad actual de `SHLVL`.   |
+| `repeat_offset` | `0`                          | Decrements number of times `symbol` is repeated by the offset value |
+| `style`         | `'bold yellow'`              | El estilo del módulo.                                               |
+| `disabled`      | `true`                       | Deshabilita el módulo `shlvl`.                                      |
 
 ### Variables
 
@@ -3635,6 +3636,20 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 disabled = false
 format = '$shlvl level(s) down'
 threshold = 3
+```
+
+Using `repeat` and `repeat_offset` along with `character` module, one can get prompt like `❯❯❯` where last character is colored appropriately for return status code and preceeding characters are provided by `shlvl`.
+
+```toml
+# ~/.config/starship.toml
+
+[shlvl]
+disabled = false
+format = '[$symbol$shlvl]($style)'
+repeat = true
+symbol = '❯'
+repeat_offset = 1
+threshold = 0
 ```
 
 ## Singularity
