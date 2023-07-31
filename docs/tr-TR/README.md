@@ -149,7 +149,7 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.73+ is supported.
+   This will change in the future. Only Nushell v0.78+ is supported.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship, her prompt için minimal, son derece hızlı ve son derec
    Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşabilirsiniz) sonuna ekleyin:
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 
