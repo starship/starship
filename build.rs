@@ -1,4 +1,5 @@
 use std::fs::{self, File};
+use std::io;
 use std::io::Write;
 
 use shadow_rs::SdResult;
@@ -20,11 +21,12 @@ fn main() -> SdResult<()> {
 fn gen_presets_hook(mut file: &File) -> SdResult<()> {
     println!("cargo:rerun-if-changed=docs/.vuepress/public/presets/toml");
     let paths = fs::read_dir("docs/.vuepress/public/presets/toml")?;
+    let mut sortedpaths = paths.collect::<io::Result<Vec<_>>>()?;
+    sortedpaths.sort_by_key(|e| e.path());
 
     let mut presets = String::new();
     let mut match_arms = String::new();
-    for path in paths {
-        let unwrapped = path?;
+    for unwrapped in sortedpaths {
         let file_name = unwrapped.file_name();
         let full_path = dunce::canonicalize(unwrapped.path())?;
         let full_path = full_path.to_str().expect("failed to convert to string");
