@@ -28,7 +28,7 @@ $scala\
 [](fg:blurple_darkest bg:black)\
 $time\
 [ ](fg:black)\
-\n$character"""
+$line_break$character"""
 
 # Set Tokyo Night as custom color palette
 # You can also use the legacy version of the palette by setting the palette to 'tokyo_night_legacy'
