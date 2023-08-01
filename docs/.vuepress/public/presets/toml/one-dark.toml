@@ -31,10 +31,10 @@ $scala\
 $docker_context\
 [ ](mono3)\
 $fill\
-[ ](mono4)\
+([ ](mono4)\
 $time\
 $battery\
-[ ](mono4)\
+[ ](mono4))\
 $line_break$character"""
 
 # Sets the palette to "one_dark".
