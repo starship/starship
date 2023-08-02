@@ -1,7 +1,7 @@
 format = """
 [░▒▓](blurple)\
-$username\
 $os\
+$username\
 [](bg:blue fg:blurple)\
 $directory\
 [](fg:blue bg:blurple_dark)\
@@ -59,7 +59,7 @@ blue = "#769ff0"
 show_always = true
 style_user = "bg:blurple fg:night"
 style_root = "bg:blurple fg:night"
-format = '[ $user]($style)'
+format = '[ $user ]($style)'
 disabled = true # Disabled by default
 
 # Represents the current operating system
