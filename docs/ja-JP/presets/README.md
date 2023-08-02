@@ -63,3 +63,9 @@ This preset does not show icons if the toolset is not found.
 このプリセットは[tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme)を参考にしています。
 
 [![Tokyo Night プリセットのスクリーンショット](/presets/img/tokyo-night.png "Click to view Tokyo Night preset")](./tokyo-night)
+
+## [Gruvbox Rainbow](./gruvbox-rainbow.md)
+
+This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+
+[![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
