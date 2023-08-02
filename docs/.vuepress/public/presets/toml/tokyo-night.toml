@@ -25,7 +25,7 @@ $scala\
 [](fg:blurple_darkest bg:black)\
 $time\
 [ ](fg:black)\
-\n$character"""
+$line_break$character"""
 
 # Set Tokyo Night as custom color palette
 # You can also use the legacy version of the palette by setting the palette to 'tokyo_night_legacy'
@@ -59,13 +59,14 @@ blue = "#769ff0"
 show_always = true
 style_user = "bg:blurple fg:night"
 style_root = "bg:blurple fg:night"
-format = '[ $user ]($style)'
-disabled = false # Disabled by default
+format = '[ $user]($style)'
+disabled = true # Disabled by default
 
 # Represents the current operating system
 [os]
+format = "[ $symbol]($style)"
 style = "bg:blurple fg:night"
-disabled = false # Enabled by default
+disabled = false # Disabled by default
 
 # Define custom symbols for operating systems
 [os.symbols]
