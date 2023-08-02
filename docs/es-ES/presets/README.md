@@ -66,6 +66,6 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 ## [Gruvbox Rainbow](./gruvbox-rainbow.md)
 
-This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+Este preajuste está muy inspirado en [Pastel Powerline](./pastel-powerline.md) y [Tokyo Night](./tokyo-night.md).
 
-[![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+[![Captura de pantalla de el preajuste Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Clic para ver el preajuste Gruvbox Rainbow")](./gruvbox-rainbow)
