@@ -219,7 +219,6 @@ style = "italic bright-red"
 version_format = "${major}.${minor}"
 
 [aws]
-disabled = true
 format = " aws [$symbol $profile $region]($style)"
 style = "italic blue"
 symbol = "▲ "
