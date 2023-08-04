@@ -115,7 +115,6 @@ home_symbol = "⌂"
 truncation_length = 2
 truncation_symbol = "▦ "
 read_only = " ■"
-use_os_path_sep = true
 style = "italic blue"
 format = ' [$path]($style)[$read_only]($read_only_style)'
 
