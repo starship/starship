@@ -93,7 +93,6 @@ add_newline = true
 format = "$symbol "
 success_symbol = "[◉](bold italic bright-yellow)"
 error_symbol = "[⊘](italic purple)"
-# vicmd_symbol = "[◈](italic white)"
 
 [env_var.VIMSHELL] # vim subshell
 format = "[$env_value]($style)"
@@ -140,7 +139,6 @@ format = "[ $time]($style)"
 time_format = "%R"
 utc_time_offset = "local"
 style = "dimmed white"
-# time_range = "00:00:00-07:00:00"
 
 [battery]
 format = "[ $percentage $symbol]($style)"
@@ -183,16 +181,13 @@ version_format = "${major}.${minor}"
 
 [lua]
 format = " lua [${symbol}${version}]($style)"
-symbol = "⨀ " # ⏾◕
-# version_format = "${major}.${minor}"
+symbol = "⨀ "
 style = "italic bright-yellow"
 
 [nodejs]
 format = " node [◫ ($version)](italic bright-green)"
 detect_files = ["package-lock.json", "yarn.lock"]
 version_format = "${major}.${minor}"
-# detect_folders = ["node_modules"]
-# detect_extensions = ["js", "mjs", "cjs", "ts", "mts", "cts"]
 
 [python]
 format = " py [${symbol}${version}]($style)"
