@@ -49,7 +49,7 @@ dirs-next = "2.0.0"
 dunce = "1.0.4"
 gethostname = "0.4.3"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
-gix = { version = "0.50.1", default-features = false, features = ["max-performance-safe"] }
+gix = { version = "0.51.0", default-features = false, features = ["max-performance-safe"] }
 gix-features = { version = "0.32.1", optional = true }
 indexmap = { version = "1.9.3", features = ["serde"] }
 log = { version = "0.4.19", features = ["std"] }
@@ -62,21 +62,21 @@ open = "5.0.0"
 # update os module config and tests when upgrading os_info
 os_info = "3.7.0"
 path-slash = "0.2.1"
-pest = "2.7.1"
-pest_derive = "2.7.1"
+pest = "2.7.2"
+pest_derive = "2.7.2"
 quick-xml = "0.30.0"
 rand = "0.8.5"
 rayon = "1.7.0"
-regex = { version = "1.9.1", default-features = false, features = ["perf", "std", "unicode-perl"] }
+regex = { version = "1.9.3", default-features = false, features = ["perf", "std", "unicode-perl"] }
 rust-ini = "0.19.0"
 semver = "1.0.18"
-serde = { version = "1.0.180", features = ["derive"] }
+serde = { version = "1.0.183", features = ["derive"] }
 serde_json = "1.0.104"
 sha1 = "0.10.5"
 shadow-rs = { version = "0.23.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
-starship-battery = { version = "0.8.1", optional = true }
+starship-battery = { version = "0.8.2", optional = true }
 strsim = "0.10.0"
 systemstat = "=0.2.3"
 terminal_size = "0.2.6"
