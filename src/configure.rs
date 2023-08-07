@@ -219,7 +219,7 @@ fn handle_toggle_configuration(doc: &mut Document, name: &str, key: &str) -> Res
 pub fn get_configuration(context: &Context) -> toml::Table {
     let starship_config = StarshipConfig::initialize(&context.get_config_path_os());
 
-    starship_config.config.unwrap_or(toml::Table::new())
+    starship_config.config.unwrap_or_default()
 }
 
 pub fn get_configuration_edit(context: &Context) -> Document {

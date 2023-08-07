@@ -141,6 +141,10 @@ $null = New-Module starship {
 
         $arguments += "--status=$($lastExitCodeForPrompt)"
 
+        if ([Microsoft.PowerShell.PSConsoleReadLine]::InViCommandMode()) {
+            $arguments += "--keymap=vi"
+        }
+
         # Invoke Starship
         $promptText = if ($script:TransientPrompt) {
             $script:TransientPrompt = $false
@@ -205,6 +209,12 @@ $null = New-Module starship {
             "--continuation"
         )
     )
+
+    try {
+        Set-PSReadLineOption -ViModeIndicator script -ViModeChangeHandler {
+            [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+        }
+    } catch {}
 
     Export-ModuleMember -Function @(
         "Enable-TransientPrompt"

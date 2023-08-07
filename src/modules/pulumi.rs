@@ -226,7 +226,7 @@ mod tests {
             "3.12.0",
         ];
 
-        for input in inputs.iter() {
+        for input in &inputs {
             assert_eq!(parse_version(input), expected);
         }
     }
@@ -243,7 +243,7 @@ mod tests {
             "3.12.0-alpha",
         ];
 
-        for input in inputs.iter() {
+        for input in &inputs {
             assert_eq!(parse_version(input), expected);
         }
     }
@@ -260,7 +260,7 @@ mod tests {
             "3.12.0-alpha.1630554544+f89e9a29.dirty",
         ];
 
-        for input in inputs.iter() {
+        for input in &inputs {
             assert_eq!(parse_version(input), expected);
         }
     }

@@ -7,5 +7,6 @@ esy = "esy"
 numver = "numver"
 afe = "afe"
 extentions = "extentions" # TODO: should be extensions
+worl = "worl" # typo on purpose
 [files]
 extend-exclude = ["CHANGELOG.md", "docs/*"]
