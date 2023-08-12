@@ -270,7 +270,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### 第二步 Set up your shell to use Starship
+### 第二步 設定您的 shell 以啟用 Starship
 
 設定您的 shell 以啟用 Starship。 請從下列選單選取您的 shell：
 
@@ -288,7 +288,7 @@ eval "$(starship init bash)"
 <details>
 <summary>命令提示字元</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+您需要在 Cmd 中使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+)。 在此路徑 `%LocalAppData%\clink\starship.lua` 建立一個檔案，並填入以下內容：
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -305,7 +305,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+注意：只支援 Elvish v0.18+ 以上的版本
 
 </details>
 
