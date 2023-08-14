@@ -26,9 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     if config.include_staged {
-        git_args.push(OsStr::new("HEAD"))
+        git_args.push("HEAD")
     }
-
 
     let diff = repo.exec_git(context, &git_args)?.stdout;
 
@@ -139,7 +138,7 @@ mod tests {
 
         let actual = render_metrics(path);
 
-        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"),));
+        let expected = Some(format!("{} ", Color::Green.bold().paint("+1"), ));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -297,9 +296,9 @@ mod tests {
     }
 
     fn run_git_cmd<A, S>(args: A, dir: Option<&Path>, should_succeed: bool) -> io::Result<()>
-    where
-        A: IntoIterator<Item = S>,
-        S: AsRef<OsStr>,
+        where
+            A: IntoIterator<Item=S>,
+            S: AsRef<OsStr>,
     {
         let mut command = create_command("git")?;
         command
