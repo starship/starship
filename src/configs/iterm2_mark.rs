@@ -13,6 +13,7 @@ pub struct ITerm2MarkConfig<'a> {
     /// We check this environment variable to determine if this module should be activated.
     /// Currently, the value of TERM_PROGRAM is set to 'iTerm.app'. (see Default trait below)
     /// In case of changing, we let user to specify the value of TERM_PROGRAM.
+    #[serde(borrow)]
     pub term_programs: Vec<&'a str>,
 
     /// Activate this module by force or not.
