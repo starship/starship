@@ -1,15 +1,19 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
 pub struct GitMetricsConfig<'a> {
     pub added_style: &'a str,
     pub deleted_style: &'a str,
     pub only_nonzero_diffs: bool,
     pub format: &'a str,
     pub disabled: bool,
+    pub ignore_submodules: bool,
 }
 
 impl<'a> Default for GitMetricsConfig<'a> {
@@ -20,6 +24,7 @@ impl<'a> Default for GitMetricsConfig<'a> {
             only_nonzero_diffs: true,
             format: "([+$added]($added_style) )([-$deleted]($deleted_style) )",
             disabled: true,
+            ignore_submodules: false,
         }
     }
 }

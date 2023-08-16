@@ -1,6 +1,6 @@
 use super::{Context, Module};
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::configs::shlvl::ShLvlConfig;
 use crate::formatter::StringFormatter;
 use std::borrow::Cow;
@@ -22,11 +22,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let shlvl_str = &shlvl.to_string();
 
-    let repeat_count = if config.repeat {
+    let mut repeat_count: usize = if config.repeat {
         shlvl.try_into().unwrap_or(1)
     } else {
         1
     };
+
+    if config.repeat_offset > 0 {
+        repeat_count =
+            repeat_count.saturating_sub(config.repeat_offset.try_into().unwrap_or(usize::MAX));
+        if repeat_count == 0 {
+            return None;
+        }
+    }
+
     let symbol = if repeat_count != 1 {
         Cow::Owned(config.symbol.repeat(repeat_count))
     } else {
@@ -63,7 +72,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
 #[cfg(test)]
 mod tests {
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
 
     use crate::test::ModuleRenderer;
 
@@ -218,5 +227,34 @@ mod tests {
         let expected = Some(format!("{} ", style().paint("~~~>")));
 
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn repeat_offset() {
+        fn get_actual(shlvl: usize, repeat_offset: usize, threshold: usize) -> Option<String> {
+            ModuleRenderer::new("shlvl")
+                .config(toml::toml! {
+                    [shlvl]
+                    format = "[$symbol]($style)"
+                    symbol = "~"
+                    repeat = true
+                    repeat_offset = repeat_offset
+                    disabled = false
+                    threshold = threshold
+                })
+                .env(SHLVL_ENV_VAR, format!("{}", shlvl))
+                .collect()
+        }
+
+        assert_eq!(
+            get_actual(2, 0, 0),
+            Some(format!("{}", style().paint("~~")))
+        );
+        assert_eq!(get_actual(2, 1, 0), Some(format!("{}", style().paint("~"))));
+        assert_eq!(get_actual(2, 2, 0), None); // offset same as shlvl; hide
+        assert_eq!(get_actual(2, 3, 0), None); // offset larger than shlvl; hide
+        assert_eq!(get_actual(2, 1, 3), None); // high threshold; hide
+                                               // threshold not high enough; hide
+        assert_eq!(get_actual(2, 1, 2), Some(format!("{}", style().paint("~"))));
     }
 }

@@ -3,6 +3,8 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::{env, io};
 
+use which::which;
+
 /* We use a two-phase init here: the first phase gives a simple command to the
 shell. This command evaluates a more complicated script using `source` and
 process substitution.
@@ -23,9 +25,11 @@ struct StarshipPath {
 }
 impl StarshipPath {
     fn init() -> io::Result<Self> {
-        Ok(Self {
-            native_path: env::current_exe()?,
-        })
+        let exe_name = option_env!("CARGO_PKG_NAME").unwrap_or("starship");
+
+        let native_path = which(exe_name).or_else(|_| env::current_exe())?;
+
+        Ok(Self { native_path })
     }
     fn str_path(&self) -> io::Result<&str> {
         let current_exe = self
@@ -40,15 +44,15 @@ impl StarshipPath {
         self.str_path().map(|p| shell_words::quote(p).into_owned())
     }
 
-    /// PowerShell specific path escaping
+    /// `PowerShell` specific path escaping
     fn sprint_pwsh(&self) -> io::Result<String> {
         self.str_path()
             .map(|s| s.replace('\'', "''"))
-            .map(|s| format!("'{}'", s))
+            .map(|s| format!("'{s}'"))
     }
     /// Command Shell specific path escaping
     fn sprint_cmdexe(&self) -> io::Result<String> {
-        self.str_path().map(|s| format!("\"{}\"", s))
+        self.str_path().map(|s| format!("\"{s}\""))
     }
     fn sprint_posix(&self) -> io::Result<String> {
         // On non-Windows platform, return directly.
@@ -63,7 +67,7 @@ impl StarshipPath {
                 if e.kind() != io::ErrorKind::NotFound {
                     log::warn!("Failed to convert \"{}\" to unix path:\n{:?}", str_path, e);
                 }
-                // Failed to execute cygpath.exe means there're not inside cygwin evironment,return directly.
+                // Failed to execute cygpath.exe means there're not inside cygwin environment,return directly.
                 return self.sprint();
             }
         };
@@ -165,13 +169,13 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
             r#"eval ({} init elvish --print-full-init | slurp)"#,
-            starship.sprint_posix()?
+            starship.sprint()?
         ),
         "tcsh" => print!(
             r#"eval `({} init tcsh --print-full-init)`"#,
             starship.sprint_posix()?
         ),
-        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint_posix()?),
+        "nu" => print_script(NU_INIT, &StarshipPath::init()?.sprint()?),
         "xonsh" => print!(
             r#"execx($({} init xonsh --print-full-init))"#,
             starship.sprint_posix()?
@@ -179,7 +183,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
         "cmd" => print_script(CMDEXE_INIT, &StarshipPath::init()?.sprint_cmdexe()?),
         _ => {
             eprintln!(
-                "{0} is not yet supported by starship.\n\
+                "{shell_basename} is not yet supported by starship.\n\
                  For the time being, we support the following shells:\n\
                  * bash\n\
                  * elvish\n\
@@ -193,9 +197,8 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
                  * cmd\n\
                  \n\
                  Please open an issue in the starship repo if you would like to \
-                 see support for {0}:\n\
-                 https://github.com/starship/starship/issues/new\n",
-                shell_basename
+                 see support for {shell_basename}:\n\
+                 https://github.com/starship/starship/issues/new\n"
             )
         }
     };
@@ -229,7 +232,7 @@ pub fn init_main(shell_name: &str) -> io::Result<()> {
 
 fn print_script(script: &str, path: &str) {
     let script = script.replace("::STARSHIP::", path);
-    print!("{}", script);
+    print!("{script}");
 }
 
 /* GENERAL INIT SCRIPT NOTES

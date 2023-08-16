@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use once_cell::sync::Lazy;
 use std::ops::Deref;
 use std::path::Path;
@@ -112,7 +112,7 @@ fn parse_opam_switch(opam_switch: &str) -> Option<OpamSwitch> {
 mod tests {
     use super::{parse_opam_switch, SwitchType};
     use crate::{test::ModuleRenderer, utils::CommandOutput};
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 

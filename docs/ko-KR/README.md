@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: 간결하고 화끈하게 빠르며 무제한으로 커스터마이징이 가능한 프롬프트. 어떤 쉘에서든 사용할 수 있습니다!
 actionText: Get Started →
 actionLink: ./guide/
 features:
@@ -55,11 +55,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    brew install starship
    ```
-
-   [Scoop](https://scoop.sh)을 통한 설치:
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. 쉘 설정 파일에 init 스크립트 추가:
@@ -120,7 +119,11 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Elvish
 
-   ::: 주의 elvish 버전 v0.17 이상에서만 지원됩니다. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    `~/.elvish/rc.elv` 의 끝부분에 아래 라인을 추가:
 
@@ -144,15 +147,22 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Nushell
 
-   ::: 주의 이는 추후 변경될 예정입니다. 버전 v0.33 이상에서만 지원됩니다. ::: 새로운 설정 파일에 아래의 내용을 추가하세요. `config path`를 실행시키면 파일의 위치를 확인할 수 있습니다.
+   ::: warning
 
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   This will change in the future. Only Nushell v0.78+ is supported.
+
+   :::
+
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save -f ~/.cache/starship/init.nu
+   ```
+
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   use ~/.cache/starship/init.nu
    ```
 
 

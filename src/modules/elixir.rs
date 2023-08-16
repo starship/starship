@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::elixir::ElixirConfig;
 use crate::formatter::StringFormatter;
@@ -91,7 +91,7 @@ fn parse_elixir_version(version: &str) -> Option<(String, String)> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

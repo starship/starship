@@ -1,6 +1,6 @@
 use yaml_rust::YamlLoader;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::openstack::OspConfig;
 use crate::formatter::StringFormatter;
@@ -86,7 +86,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io::{self, Write};
 
@@ -94,7 +94,7 @@ mod tests {
     fn parse_valid_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("clouds.yaml");
-        let mut file = File::create(&config_path)?;
+        let mut file = File::create(config_path)?;
         file.write_all(
             b"---
 clouds:
@@ -126,7 +126,7 @@ clouds:
     fn parse_broken_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("clouds.yaml");
-        let mut file = File::create(&config_path)?;
+        let mut file = File::create(config_path)?;
         file.write_all(
             b"---
 dummy_yaml
@@ -149,7 +149,7 @@ dummy_yaml
     fn dont_crash_on_empty_config() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let config_path = dir.path().join("clouds.yaml");
-        let mut file = File::create(&config_path)?;
+        let mut file = File::create(config_path)?;
         file.write_all(b"")?;
         drop(file);
         let actual = ModuleRenderer::new("openstack")

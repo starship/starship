@@ -1,8 +1,10 @@
-use ansi_term::ANSIStrings;
+use clap::{builder::PossibleValue, ValueEnum};
+use nu_ansi_term::AnsiStrings;
 use rayon::prelude::*;
 use std::collections::BTreeSet;
-use std::fmt::{self, Debug, Write as FmtWrite};
+use std::fmt::{Debug, Write as FmtWrite};
 use std::io::{self, Write};
+use std::path::PathBuf;
 use std::time::Duration;
 use terminal_size::terminal_size;
 use unicode_segmentation::UnicodeSegmentation;
@@ -15,6 +17,7 @@ use crate::module::Module;
 use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
+use crate::shadow;
 use strip_ansi_escapes;
 
 pub struct Grapheme<'a>(pub &'a str);
@@ -128,7 +131,7 @@ pub fn get_prompt(context: Context) -> String {
         // continuation prompts normally do not include newlines, but they can
         writeln!(buf).unwrap();
     }
-    write!(buf, "{}", ANSIStrings(&module_strings)).unwrap();
+    write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
@@ -136,7 +139,7 @@ pub fn get_prompt(context: Context) -> String {
     }
 
     // escape \n and ! characters for tcsh
-    if let Shell::Tcsh = context.shell {
+    if context.shell == Shell::Tcsh {
         buf = buf.replace('!', "\\!");
         // space is required before newline
         buf = buf.replace('\n', " \\n");
@@ -148,7 +151,7 @@ pub fn get_prompt(context: Context) -> String {
 pub fn module(module_name: &str, args: Properties) {
     let context = Context::new(args, Target::Main);
     let module = get_module(module_name, context).unwrap_or_default();
-    print!("{}", module);
+    print!("{module}");
 }
 
 pub fn get_module(module_name: &str, context: Context) -> Option<String> {
@@ -172,7 +175,7 @@ pub fn timings(args: Properties) {
         .map(|module| ModuleTiming {
             name: String::from(module.get_name().as_str()),
             name_len: module.get_name().width_graphemes(),
-            value: ansi_term::ANSIStrings(&module.ansi_strings())
+            value: nu_ansi_term::AnsiStrings(&module.ansi_strings())
                 .to_string()
                 .replace('\n', "\\n"),
             duration: module.duration,
@@ -221,7 +224,7 @@ pub fn explain(args: Properties) {
         .map(|module| {
             let value = module.get_segments().join("");
             ModuleInfo {
-                value: ansi_term::ANSIStrings(&module.ansi_strings()).to_string(),
+                value: nu_ansi_term::AnsiStrings(&module.ansi_strings()).to_string(),
                 value_len: value.width_graphemes()
                     + format_duration(&module.duration).width_graphemes(),
                 desc: module.get_description().clone(),
@@ -255,12 +258,12 @@ pub fn explain(args: Properties) {
                 " ".repeat(max_module_width - (info.value_len))
             );
             for g in info.desc.graphemes(true) {
-                // Handle ANSI escape sequnces
+                // Handle ANSI escape sequences
                 if g == "\x1B" {
                     escaping = true;
                 }
                 if escaping {
-                    print!("{}", g);
+                    print!("{g}");
                     escaping = !(("a"..="z").contains(&g) || ("A"..="Z").contains(&g));
                     continue;
                 }
@@ -282,7 +285,7 @@ pub fn explain(args: Properties) {
 
                     current_pos = 1;
                 }
-                print!("{}", g);
+                print!("{g}");
             }
             println!();
         } else {
@@ -322,14 +325,6 @@ fn handle_module<'a>(
     context: &'a Context,
     module_list: &BTreeSet<String>,
 ) -> Vec<Module<'a>> {
-    struct DebugCustomModules<'tmp>(&'tmp toml::value::Table);
-
-    impl Debug for DebugCustomModules<'_> {
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            f.debug_list().entries(self.0.keys()).finish()
-        }
-    }
-
     let mut modules: Vec<Module> = Vec::new();
 
     if ALL_MODULES.contains(&module) {
@@ -337,34 +332,29 @@ fn handle_module<'a>(
         if !context.is_module_disabled_in_config(module) {
             modules.extend(modules::handle(module, context));
         }
-    } else if module == "custom" {
-        // Write out all custom modules, except for those that are explicitly set
-        if let Some(custom_modules) = context.config.get_custom_modules() {
-            let custom_modules = custom_modules.iter().filter_map(|(custom_module, config)| {
-                if should_add_implicit_custom_module(custom_module, config, module_list) {
-                    modules::custom::module(custom_module, context)
-                } else {
-                    None
-                }
-            });
-            modules.extend(custom_modules);
+    } else if module.starts_with("custom.") || module.starts_with("env_var.") {
+        // custom.<name> and env_var.<name> are special cases and handle disabled modules themselves
+        modules.extend(modules::handle(module, context));
+    } else if matches!(module, "custom" | "env_var") {
+        // env var is a spacial case and may contain a top-level module definition
+        if module == "env_var" {
+            modules.extend(modules::handle(module, context));
         }
-    } else if let Some(module) = module.strip_prefix("custom.") {
-        // Write out a custom module if it isn't disabled (and it exists...)
-        match context.is_custom_module_disabled_in_config(module) {
-            Some(true) => (), // Module is disabled, we don't add it to the prompt
-            Some(false) => modules.extend(modules::custom::module(module, context)),
-            None => match context.config.get_custom_modules() {
-                Some(modules) => log::debug!(
-                    "top level format contains custom module \"{}\", but no configuration was provided. Configuration for the following modules were provided: {:?}",
-                    module,
-                    DebugCustomModules(modules),
-                    ),
-                None => log::debug!(
-                    "top level format contains custom module \"{}\", but no configuration was provided.",
-                    module,
-                    ),
-            },
+
+        // Write out all custom modules, except for those that are explicitly set
+        for (child, config) in context
+            .config
+            .get_config(&[module])
+            .and_then(|config| config.as_table().map(toml::map::Map::iter))
+            .into_iter()
+            .flatten()
+        {
+            // Some env var keys may be part of a top-level module definition
+            if module == "env_var" && !config.is_table() {
+                continue;
+            } else if should_add_implicit_module(module, child, config, module_list) {
+                modules.extend(modules::handle(&format!("{module}.{child}"), context));
+            }
         }
     } else {
         log::debug!(
@@ -377,12 +367,13 @@ fn handle_module<'a>(
     modules
 }
 
-fn should_add_implicit_custom_module(
-    custom_module: &str,
+fn should_add_implicit_module(
+    parent_module: &str,
+    child_module: &str,
     config: &toml::Value,
     module_list: &BTreeSet<String>,
 ) -> bool {
-    let explicit_module_name = format!("custom.{}", custom_module);
+    let explicit_module_name = format!("{parent_module}.{child_module}");
     let is_explicitly_specified = module_list.contains(&explicit_module_name);
 
     if is_explicitly_specified {
@@ -425,53 +416,140 @@ fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
 fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>, BTreeSet<String>) {
     let config = &context.root_config;
 
-    let lformatter = StringFormatter::new(&config.format);
-    let rformatter = StringFormatter::new(&config.right_format);
-    let cformatter = StringFormatter::new(&config.continuation_prompt);
-    if lformatter.is_err() {
-        log::error!("Error parsing `format`")
-    }
-    if rformatter.is_err() {
-        log::error!("Error parsing `right_format`")
-    }
-    if cformatter.is_err() {
-        log::error!("Error parsing `continuation_prompt`")
+    if context.target == Target::Continuation {
+        let cf = &config.continuation_prompt;
+        let formatter = StringFormatter::new(cf);
+        return match formatter {
+            Ok(f) => {
+                let modules = f.get_variables().into_iter().collect();
+                (f, modules)
+            }
+            Err(e) => {
+                log::error!("Error parsing continuation prompt: {e}");
+                (StringFormatter::raw(">"), BTreeSet::new())
+            }
+        };
     }
 
-    match (lformatter, rformatter, cformatter) {
-        (Ok(lf), Ok(rf), Ok(cf)) => {
-            let mut modules: BTreeSet<String> = BTreeSet::new();
-            if context.target != Target::Continuation {
-                modules.extend(lf.get_variables());
-                modules.extend(rf.get_variables());
-            }
-            match context.target {
-                Target::Main => (lf, modules),
-                Target::Right => (rf, modules),
-                Target::Continuation => (cf, modules),
+    let (left_format_str, right_format_str): (&str, &str) = match context.target {
+        Target::Main | Target::Right => (&config.format, &config.right_format),
+        Target::Profile(ref name) => {
+            if let Some(lf) = config.profiles.get(name) {
+                (lf, "")
+            } else {
+                log::error!("Profile {name:?} not found");
+                return (StringFormatter::raw(">"), BTreeSet::new());
             }
         }
+        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
+    };
+
+    let lf = StringFormatter::new(left_format_str);
+    let rf = StringFormatter::new(right_format_str);
+
+    if let Err(ref e) = lf {
+        let name = if let Target::Profile(ref profile_name) = context.target {
+            format!("profile.{profile_name}")
+        } else {
+            "format".to_string()
+        };
+        log::error!("Error parsing {name:?}: {e}");
+    };
+
+    if let Err(ref e) = rf {
+        log::error!("Error parsing right_format: {e}");
+    }
+
+    let modules = [&lf, &rf]
+        .into_iter()
+        .flatten()
+        .flat_map(|f| f.get_variables())
+        .collect();
+
+    let main_formatter = match context.target {
+        Target::Main | Target::Profile(_) => lf,
+        Target::Right => rf,
+        Target::Continuation => unreachable!("Continuation prompt should have been handled above"),
+    };
+
+    match main_formatter {
+        Ok(f) => (f, modules),
         _ => (StringFormatter::raw(">"), BTreeSet::new()),
     }
+}
+
+#[cfg(feature = "config-schema")]
+pub fn print_schema() {
+    let schema = schemars::schema_for!(crate::configs::FullConfig);
+    println!("{}", serde_json::to_string_pretty(&schema).unwrap());
+}
+
+#[derive(Clone, Debug)]
+pub struct Preset(pub &'static str);
+
+impl ValueEnum for Preset {
+    fn value_variants<'a>() -> &'a [Self] {
+        shadow::get_preset_list()
+    }
+
+    fn to_possible_value(&self) -> Option<PossibleValue> {
+        Some(PossibleValue::new(self.0))
+    }
+}
+
+pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool) {
+    if list {
+        println!("{}", preset_list());
+        return;
+    }
+    let variant = name.expect("name argument must be specified");
+    let content = shadow::get_preset_content(variant.0);
+    if let Some(output) = output {
+        if let Err(err) = std::fs::write(output, content) {
+            eprintln!("Error writing preset to file: {err}");
+            std::process::exit(1);
+        }
+    } else if let Err(err) = std::io::stdout().write_all(content) {
+        eprintln!("Error writing preset to stdout: {err}");
+        std::process::exit(1);
+    }
+}
+
+fn preset_list() -> String {
+    Preset::value_variants()
+        .iter()
+        .map(|v| format!("{}\n", v.0))
+        .collect()
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::config::StarshipConfig;
     use crate::test::default_context;
+    use crate::utils;
+
+    #[test]
+    fn main_prompt() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline=false
+                format="$character"
+                [character]
+                format=">\n>"
+        });
+        context.target = Target::Main;
+
+        let expected = String::from(">\n>");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
 
     #[test]
     fn right_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 right_format="$character"
                 [character]
                 format=">\n>"
-            }),
-        };
-        context.root_config.right_format = "$character".to_string();
+        });
         context.target = Target::Right;
 
         let expected = String::from(">>"); // should strip new lines
@@ -480,18 +558,240 @@ mod test {
     }
 
     #[test]
+    fn prompt_with_all() -> io::Result<()> {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline = false
+                right_format= "$directory$line_break"
+                format="$all"
+                [character]
+                format=">"
+        });
+        let dir = tempfile::tempdir().unwrap();
+        context.current_dir = dir.path().to_path_buf();
+
+        let expected = String::from(">");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn rprompt_with_all() -> io::Result<()> {
+        let mut context = default_context().set_config(toml::toml! {
+            format= "$directory$line_break"
+            right_format="$all"
+            [character]
+            format=">"
+        });
+        let dir = tempfile::tempdir().unwrap();
+        context.current_dir = dir.path().to_path_buf();
+
+        context.target = Target::Right;
+
+        let expected = String::from(">");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn custom_prompt() {
+        let mut context = default_context().set_config(toml::toml! {
+            add_newline = false
+            [profiles]
+            test="0_0$character"
+            [character]
+            format=">>"
+        });
+        context.target = Target::Profile("test".to_string());
+
+        let expected = String::from("0_0>>");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn custom_prompt_fallback() {
+        let mut context = default_context().set_config(toml::toml! {
+                add_newline=false
+                [profiles]
+                test="0_0$character"
+                [character]
+                format=">>"
+        });
+        context.target = Target::Profile("wrong_prompt".to_string());
+
+        let expected = String::from(">");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn continuation_prompt() {
-        let mut context = default_context();
-        context.config = StarshipConfig {
-            config: Some(toml::toml! {
+        let mut context = default_context().set_config(toml::toml! {
                 continuation_prompt="><>"
-            }),
-        };
-        context.root_config.continuation_prompt = "><>".to_string();
+        });
         context.target = Target::Continuation;
 
         let expected = String::from("><>");
         let actual = get_prompt(context);
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn preset_list_returns_one_or_more_items() {
+        assert!(preset_list().trim().split('\n').count() > 0);
+    }
+
+    #[test]
+    fn preset_command_does_not_panic_on_correct_inputs() {
+        preset_command(None, None, true);
+        Preset::value_variants()
+            .iter()
+            .for_each(|v| preset_command(Some(v.clone()), None, false));
+    }
+
+    #[test]
+    fn preset_command_output_to_file() -> std::io::Result<()> {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("preset.toml");
+        preset_command(Some(Preset("nerd-font-symbols")), Some(path.clone()), false);
+
+        let actual = utils::read_file(&path)?;
+        let expected = include_str!("../docs/.vuepress/public/presets/toml/nerd-font-symbols.toml");
+        assert_eq!(actual, expected);
+
+        dir.close()
+    }
+
+    #[test]
+    #[cfg(feature = "config-schema")]
+    fn print_schema_does_not_panic() {
+        print_schema();
+    }
+
+    #[test]
+    fn custom_expands() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context().set_config(toml::toml! {
+                format="$custom"
+                [custom.a]
+                when=true
+                format="a"
+                [custom.b]
+                when=true
+                format="b"
+        });
+        context.current_dir = dir.path().to_path_buf();
+
+        let expected = String::from("\nab");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn env_expands() {
+        let mut context = default_context().set_config(toml::toml! {
+                format="$env_var"
+                [env_var]
+                format="$env_value"
+                variable = "a"
+                [env_var.b]
+                format="$env_value"
+                [env_var.c]
+                format="$env_value"
+        });
+        context.env.insert("a", "a".to_string());
+        context.env.insert("b", "b".to_string());
+        context.env.insert("c", "c".to_string());
+
+        let expected = String::from("\nabc");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn custom_mixed() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context().set_config(toml::toml! {
+                format="${custom.c}$custom${custom.b}"
+                [custom.a]
+                when=true
+                format="a"
+                [custom.b]
+                when=true
+                format="b"
+                [custom.c]
+                when=true
+                format="c"
+        });
+        context.current_dir = dir.path().to_path_buf();
+
+        let expected = String::from("\ncab");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn env_mixed() {
+        let mut context = default_context().set_config(toml::toml! {
+                format="${env_var.c}$env_var${env_var.b}"
+                [env_var]
+                format="$env_value"
+                variable = "d"
+                [env_var.a]
+                format="$env_value"
+                [env_var.b]
+                format="$env_value"
+                [env_var.c]
+                format="$env_value"
+        });
+        context.env.insert("a", "a".to_string());
+        context.env.insert("b", "b".to_string());
+        context.env.insert("c", "c".to_string());
+        context.env.insert("d", "d".to_string());
+
+        let expected = String::from("\ncdab");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn custom_subset() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context().set_config(toml::toml! {
+                format="${custom.b}"
+                [custom.a]
+                when=true
+                format="a"
+                [custom.b]
+                when=true
+                format="b"
+        });
+        context.current_dir = dir.path().to_path_buf();
+
+        let expected = String::from("\nb");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn custom_missing() -> std::io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut context = default_context().set_config(toml::toml! {
+                format="${custom.b}"
+                [custom.a]
+                when=true
+                format="a"
+        });
+        context.current_dir = dir.path().to_path_buf();
+
+        let expected = String::from("\n");
+        let actual = get_prompt(context);
+        assert_eq!(expected, actual);
+        dir.close()
     }
 }

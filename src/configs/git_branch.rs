@@ -1,9 +1,12 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
 pub struct GitBranchConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
@@ -19,7 +22,7 @@ pub struct GitBranchConfig<'a> {
 impl<'a> Default for GitBranchConfig<'a> {
     fn default() -> Self {
         GitBranchConfig {
-            format: "on [$symbol$branch]($style)(:[$remote]($style)) ",
+            format: "on [$symbol$branch(:$remote_branch)]($style) ",
             symbol: " ",
             style: "bold purple",
             truncation_length: std::i64::MAX,

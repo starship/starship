@@ -1,6 +1,6 @@
-[Return to Presets](/presets/#no-runtime-versions)
+[Volver a Preajustes](./README.md#no-runtime-versions)
 
-# No Runtime Versions Preset
+# Preajuste Ocultar Versiones en Tiempo de Ejecución
 
 Este preajuste oculta la versión de los tiempos de ejecución del idioma. Si trabajas en contenedores o entornos virtualizados, ¡ésto es para ti!
 
@@ -8,6 +8,10 @@ Este preajuste oculta la versión de los tiempos de ejecución del idioma. Si tr
 
 ### Configuración
 
-[Click to download TOML](/presets/toml/no-runtime-versions.toml)
+```sh
+starship preset no-runtime-versions -o ~/.config/starship.toml
+```
+
+[Clic para descargar TOML](/presets/toml/no-runtime-versions.toml)
 
 <<< @/.vuepress/public/presets/toml/no-runtime-versions.toml

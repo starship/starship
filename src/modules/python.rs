@@ -1,7 +1,7 @@
 use ini::Ini;
 use std::path::Path;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::python::PythonConfig;
 use crate::formatter::StringFormatter;
 use crate::formatter::VersionFormatter;
@@ -133,7 +133,7 @@ fn get_prompt_from_venv(venv_path: &Path) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{create_dir_all, File};
     use std::io;
     use std::io::Write;
@@ -424,7 +424,7 @@ prompt = '(foo)'
         dir.close()
     }
 
-    fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+    fn check_python2_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Table>) {
         let config = starship_config.unwrap_or(toml::toml! {
             [python]
             python_binary = "python2"
@@ -439,7 +439,7 @@ prompt = '(foo)'
         assert_eq!(expected, actual);
     }
 
-    fn check_python3_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+    fn check_python3_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Table>) {
         let config = starship_config.unwrap_or(toml::toml! {
              [python]
              python_binary = "python3"
@@ -456,7 +456,7 @@ prompt = '(foo)'
 
     fn check_multiple_binaries_renders(
         dir: &tempfile::TempDir,
-        starship_config: Option<toml::Value>,
+        starship_config: Option<toml::Table>,
     ) {
         let config = starship_config.unwrap_or(toml::toml! {
              [python]
@@ -472,7 +472,7 @@ prompt = '(foo)'
         assert_eq!(expected, actual);
     }
 
-    fn check_pyenv_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Value>) {
+    fn check_pyenv_renders(dir: &tempfile::TempDir, starship_config: Option<toml::Table>) {
         let config = starship_config.unwrap_or(toml::toml! {
              [python]
              pyenv_version_name = true

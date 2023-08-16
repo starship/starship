@@ -1,16 +1,21 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
 pub struct NixShellConfig<'a> {
     pub format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
     pub impure_msg: &'a str,
     pub pure_msg: &'a str,
+    pub unknown_msg: &'a str,
     pub disabled: bool,
+    pub heuristic: bool,
 }
 
 /* The trailing double spaces in `symbol` are needed to work around issues with
@@ -24,7 +29,9 @@ impl<'a> Default for NixShellConfig<'a> {
             style: "bold blue",
             impure_msg: "impure",
             pure_msg: "pure",
+            unknown_msg: "",
             disabled: false,
+            heuristic: false,
         }
     }
 }

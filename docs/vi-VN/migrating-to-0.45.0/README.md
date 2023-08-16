@@ -10,7 +10,7 @@ Từ trước đế v0.45.0, `prompt_order` sẽ chấp nhận một mảng các
 
 Starship v0.45.0 thay vì chấp nhận một giá trị `format`, nó cho phép tùy biến dấu nhắc lệnh bên ngoài chính các mô đun đó.
 
-**Ví dụcủa cấu hình pre-v0.45.0**
+**Ví dụ của cấu hình pre-v0.45.0**
 
 ```toml
 prompt_order = [
@@ -31,7 +31,7 @@ prompt_order = [
 ]
 ```
 
-**Ví dụcủa cấu hình v0.45.0**
+**Ví dụ của cấu hình v0.45.0**
 
 ```toml
 format = """\
@@ -58,14 +58,14 @@ Từ trước tới v0.45.0, một vài mô đun sẽ chấp nhận `prefix` và
 
 Starship v0.45.0 thay vì chấp nhận một giá trị `format`, nó cho phép tùy biến dấu nhắc lệnh bên ngoài chính các mô đun đó. Thay vì định nghĩa một tiền tố và hậu tố cho các giá trị context-based, các giá trị bây giờ có thể được thay thế với một format string, cái đại diện cho đầu ra của module.
 
-**Ví dụ của cấu hình pre-v0.45.0**
+**Ví dụcủa cấu hình pre-v0.45.0**
 
 ```toml
 [cmd_duration]
 prefix = "took "
 ```
 
-**Ví dụ của cấu hình v0.45.0**
+**Ví dụcủa cấu hình v0.45.0**
 
 ```toml
 [cmd_duration]

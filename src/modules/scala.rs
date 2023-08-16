@@ -1,7 +1,7 @@
 use crate::configs::scala::ScalaConfig;
 use crate::formatter::StringFormatter;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::formatter::VersionFormatter;
 use crate::utils::get_command_string_output;
 
@@ -77,7 +77,7 @@ fn parse_scala_version(scala_version_string: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 

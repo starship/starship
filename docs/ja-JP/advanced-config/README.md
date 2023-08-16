@@ -8,9 +8,81 @@ Starship は汎用性の高いシェルですが、時には特定の処理を�
 
 :::
 
-## Custom pre-prompt and pre-execution Commands in Cmd
+## PowerShell の TransientPrompt
 
-Clink provides extremely flexible APIs to run pre-prompt and pre-exec commands in Cmd shell. It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
+過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 有効にするには、 `Enable-TransientPrompt` をシェルで実行してください。 `$PROFILE` に追記することによって常時有効にすることが出来ます。 また、 `Disable-TransientPrompt` によっていつでも無効化することが出来ます。
+
+デフォルトでは、入力した文字列の左側を `>` で置換します。 カスタマイズするには、関数を `Invoke-Starship-TransientFunction` という名前で定義してください。 Starshipの `character` モジュールを表示する場合はこのようにします：
+
+```powershell
+function Invoke-Starship-TransientFunction {
+  &starship module character
+}
+
+Invoke-Expression (&starship init powershell)
+
+Enable-TransientPrompt
+```
+
+## Cmd の TransientPrompt と TransientRightPrompt
+
+Clink を使うと直前に出力したプロント文字列をカスタマイズできます。 全ての情報が必要では無い時に役に立ちます。 有効化するには次のコマンドを実行します。 `clink set prompt.transient <value>` 。 \<value\> には次のいずれかの値を指定します。
+
+- `always`: 直前に出力したプロンプト文字列を常に置換します。
+- `same_dir`: 作業ディレクトリが同じなら、直前に出力したプロンプト文字列を置換します。
+- `off`: プロンプト文字列を置換しません(無効化します)。
+
+この操作が必要なのは1度だけです。 自分の `starship.lua` を次のように編集すると、プロンプト文字列の左側や右側に出力する文字列を変更できます。
+
+- デフォルトでは、入力した文字列の左側を `>` へ置換します。 カスタマイズするには、新しい関数  `starship_transient_prompt_func` を定義します。 この関数の受け取る引数は今のプロンプト文字列で、あなたが変更できるようになっています。 Starshipの `character` モジュールを表示する場合はこのようにします：
+
+```lua
+function starship_transient_prompt_func(prompt)
+  return io.popen("starship module character"
+    .." --keymap="..rl.getvariable('keymap')
+  ):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+- デフォルトでは、入力した文字列の右側は空です。 カスタマイズするには、新しい関数 `starship_transient_rprompt_func` を定義します。 この関数の受け取る引数は今のプロンプト文字列で、あなたが変更できるようになっています。 例えば、直前のコマンドを実行した時刻を表示するには次のようにします。
+
+```lua
+function starship_transient_rprompt_func(prompt)
+  return io.popen("starship module time"):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+## Fish の TransientPrompt と TransientRightPrompt
+
+過去に出力されたプロンプトを置き換えることができます。 全ての情報が必要では無い時に役に立ちます。 To enable this, run `enable_transience` in the shell session. To make it permanent, put this statement in your `~/.config/fish/config.fish`. Transience can be disabled on-the-fly with `disable_transience`.
+
+Note that in case of Fish, the transient prompt is only printed if the commandline is non-empty, and syntactically correct.
+
+- By default, the left side of input gets replaced with a bold-green `❯`. カスタマイズするには、新しい関数  `starship_transient_prompt_func` を定義します。 Starshipの `character` モジュールを表示する場合はこのようにします：
+
+```fish
+function starship_transient_prompt_func
+  starship module character
+end
+starship init fish | source
+enable_transience
+```
+
+- デフォルトでは、入力した文字列の右側は空です。 カスタマイズするには、新しい関数 `starship_transient_rprompt_func` を定義します。 例えば、直前のコマンドを実行した時刻を表示するには次のようにします。
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
+
+## Cmdのカスタムの事前プロンプトおよび事前実行コマンド
+
+Clinkはプロンプト表示前と実行前にCmd shellコマンドを実行するための非常に柔軟なAPIを提供します。 It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
 
 - To run a custom function right before the prompt is drawn, define a new function called `starship_preprompt_user_func`. This function receives the current prompt as a string that you can utilize. For example, to draw a rocket before the prompt, you would do
 
@@ -19,7 +91,7 @@ function starship_preprompt_user_func(prompt)
   print("🚀")
 end
 
-load(io.popen('starship init cmd'):read("*a"))()
+load(io.popen('starship init cmd'):read("*a")()
 ```
 
 - To run a custom function right before a command is executed, define a new function called `starship_precmd_user_func`. This function receives the current commandline as a string that you can utilize. For example, to print the command that's about to be executed, you would do
@@ -59,7 +131,7 @@ set +o functrace
 
 ## Custom pre-prompt and pre-execution Commands in PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. ただし、Starship はプロンプトを描画する一連の流れに、限定的に独自の関数を挿入することができます。
+PowerShell does not have a formal preexec/precmd framework like most other shells. そのため、`powershell`で完全にカスタマイズ可能なフックを提供することは困難です。 ただし、Starship はプロンプトを描画する一連の流れに、限定的に独自の関数を挿入することができます。
 
 Create a function named `Invoke-Starship-PreCommand`
 
@@ -121,7 +193,7 @@ You can also set a similar output with PowerShell by creating a function named `
 ```powershell
 # edit $PROFILE
 function Invoke-Starship-PreCommand {
-  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+  $host.ui.RawUI.WindowTitle = "$env:USERNAME@$env:COMPUTERNAME`: $pwd `a"
 }
 
 Invoke-Expression (&starship init powershell)
@@ -131,9 +203,9 @@ Invoke-Expression (&starship init powershell)
 
 シェルによっては、入力と同じ行にレンダリングされる右プロンプトをサポートしています。 Starship では `right_format` オプションを使って右プロンプトの内容を設定できます。 `format`で使用できるモジュールはすべて`right_format`でも使用できます。 変数`$all`には、`format`や`right_format`で明示的に使用されていないモジュールのみが格納されます。
 
-注意: 右プロンプトは入力の場所に続く単一の行です。 複数行のプロンプトで入力行の上を右寄せにするには、[fillモジュール](/config/#fill)を参照してください。
+注意: 右プロンプトは入力の場所に続く単一の行です。 To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
 ### 設定例
 
@@ -157,7 +229,7 @@ right_format = """$all"""
 
 Some shells support a continuation prompt along with the normal prompt. This prompt is rendered instead of the normal prompt when the user has entered an incomplete statement (such as a single left parenthesis or quote).
 
-Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `"[∙](bright-black) "`.
+Starship can set the continuation prompt using the `continuation_prompt` option. The default prompt is `'[∙](bright-black) '`.
 
 Note: `continuation_prompt` should be set to a literal string without any variables.
 
@@ -173,7 +245,7 @@ Note: Continuation prompts are only available in the following shells:
 # ~/.config/starship.toml
 
 # A continuation prompt that displays two filled in arrows
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## スタイルの設定
@@ -185,6 +257,9 @@ continuation_prompt = "▶▶"
 - `underline`
 - `dimmed`
 - `inverted`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
@@ -201,3 +276,9 @@ continuation_prompt = "▶▶"
 - 0-255 までの間の数字。 [8-bit ANSI カラーコード](https://i.stack.imgur.com/KTSQa.png) を表します。
 
 複数の色が文字色/背景色に指定された際には、最後の指定が優先して選ばれます。
+
+Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+
+- Many terminals disable support for `blink` by default
+- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` is not supported by the default macOS Terminal.app

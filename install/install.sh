@@ -111,7 +111,7 @@ unpack() {
 
   case "$archive" in
     *.tar.gz)
-      flags=$(test -n "${VERBOSE-}" && echo "-xzvf" || echo "-xzf")
+      flags=$(test -n "${VERBOSE-}" && echo "-xzvof" || echo "-xzof")
       ${sudo} tar "${flags}" "${archive}" -C "${bin_dir}"
       return 0
       ;;
@@ -297,7 +297,7 @@ print_install() {
     # we don't want these '~' expanding
     config_file="~/.${s}rc"
     config_cmd="eval \"\$(starship init ${s})\""
- 
+
     case ${s} in
       ion )
         # shellcheck disable=SC2088
@@ -336,22 +336,20 @@ print_install() {
         ;;
       nushell )
         # shellcheck disable=SC2088
-        config_file="your nu config file."
-        config_cmd="startup = [
-          \"mkdir ~/.cache/starship\",
-          \"starship init nu | save ~/.cache/starship/init.nu\",
-          \"source ~/.cache/starship/init.nu\"
-        ]
-        prompt = \"starship_prompt\""
+        config_file="${BOLD}your nu config file${NO_COLOR} (find it by running ${BOLD}\$nu.config-path${NO_COLOR} in Nushell)"
+        config_cmd="use ~/.cache/starship/init.nu"
         warning="${warning} This will change in the future.
-  Only nu version v0.33 or higher is supported.
-  You can check the location of this your config file by running config path in nu"
+  Only Nushell v0.78 or higher is supported.
+  Add the following to the end of ${BOLD}your Nushell env file${NO_COLOR} (find it by running ${BOLD}\$nu.env-path${NO_COLOR} in Nushell):
+
+	mkdir ~/.cache/starship
+	starship init nu | save -f ~/.cache/starship/init.nu"
         ;;
     esac
-    printf "  %s\n  %s\n  Add the following to the end of %s:\n\n\t%s\n\n" \
+    printf "  %s\n  %s\n  And add the following to the end of %s:\n\n\t%s\n\n" \
       "${BOLD}${UNDERLINE}${s}${NO_COLOR}" \
       "${warning}" \
-      "${BOLD}${config_file}${NO_COLOR}" \
+      "${config_file}" \
       "${config_cmd}"
   done
 
@@ -362,7 +360,7 @@ print_install() {
   Typically the path is ~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 or ~/.config/powershell/Microsoft.PowerShell_profile.ps1 on -Nix." \
     "Invoke-Expression (&starship init powershell)"
 
-  printf "  %s\n You need to use Clink (v1.2.30+) with Cmd. Add the following to a file %s and place this file in Clink scripts directory:\n\n\t%s\n\n" \
+  printf "  %s\n  You need to use Clink (v1.2.30+) with Cmd. Add the following to a file %s and place this file in Clink scripts directory:\n\n\t%s\n\n" \
     "${BOLD}${UNDERLINE}Cmd${NO_COLOR}" \
     "${BOLD}starship.lua${NO_COLOR}" \
     "load(io.popen('starship init cmd'):read(\"*a\"))()"
@@ -518,4 +516,3 @@ printf '\n'
 info "Please follow the steps for your shell to complete the installation:"
 
 print_install
-

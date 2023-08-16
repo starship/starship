@@ -76,11 +76,11 @@ format = "took [$duration]($style) "
 
 ### Modules affectés
 
-#### Character
+#### Caractère
 
 | Propriété supprimée     | Remplacement     |
 | ----------------------- | ---------------- |
-| `symbol`                | `success_symbol` |
+| `symbole`               | `success_symbol` |
 | `use_symbol_for_status` | `error_symbol`   |
 | `style_success`         | `success_symbol` |
 | `style_failure`         | `error_symbol`   |
@@ -100,7 +100,7 @@ format = "took [$duration]($style) "
 
 Précédemment, la propriété `use_symbol_for_status` était utilisée pour configurer l'invite afin d'afficher le `error_symbol` lorsque la dernière commande aboutissait à un résultat non-nul.
 
-Depuis la version v0.45.0, nous utilisons désormais systématiquement `error_symbol` après une commande dont le résultat est non-nul, fusionnant ainsi les propriétés `use_symbol_for_status` et `error_symbol`.
+Depuis la version v0.45.0, nous utilisons systématiquement `error_symbol` après un code de statut non-nul, unifiant ainsi les propriétés `use_symbol_for_status` et `error_symbol`.
 
 Pour que l'invite utilise l'ancienne configuration `use_symbol_for_status = true`, ajoutez la ligne suivante à votre configuration:
 
@@ -109,7 +109,7 @@ Pour que l'invite utilise l'ancienne configuration `use_symbol_for_status = true
 error_symbol = "[✖](bold red)"
 ```
 
-_Note :_ L’élément `character` ajoute automatiquement une espace après lui, donc contrairement aux autres chaines `format`, nous n’en ajoutons pas une exprès dans les exemples de dessus.
+_Note:_ L'élément `character` est automatiquement suivi d'un espace, donc à la différence des autres valeurs `format`, nous n'en ajoutons pas dans les exemples précédents.
 
 #### Temps d'exécution
 

@@ -1,4 +1,4 @@
-# 🚀 Gelişmiş Kurulum
+# Gelişmiş Kurulum
 
 Starship'i kurmak için, 2 şeye ihtiyacınız var:
 
@@ -11,7 +11,7 @@ Birçok platform var ki ana sisteme uymuyorlar. README.md belgesi ile diğer pla
 
 ## [Chocolatey ](https://chocolatey.org)
 
-### Ön gereklilikler
+### Ön koşullar
 
 [Chocolatey kurulum sayfasına](https://chocolatey.org/install) gidin ve Chocolatey'i yüklemek için talimatları izleyin.
 
@@ -23,7 +23,7 @@ choco install starship
 
 ## [termux](https://termux.com)
 
-### Ön gereklilikler
+### Ön koşullar
 
 ```sh
 pkg install getconf

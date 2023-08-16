@@ -1,10 +1,10 @@
-[Return to Presets](/presets/#nerd-font-symbols)
+[Powrót do ustawień predefiniowanych](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Ustawienia symboli Nerd Font
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Ten zestaw ustawień zmienia symbole dla każdego modułu tak, by wykorzystywały symbole czcionki Nerd Font.
 
-![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png)
+![Zrzut ekranu ustawień symboli czcionki Nerd Font](/presets/img/nerd-font-symbols.png)
 
 ### Wymagania wstępne
 
@@ -12,6 +12,10 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 ### Konfiguracja
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml)
+```sh
+starship preset nerd-font-symbols -o ~/.config/starship.toml
+```
+
+[Kliknij, aby pobrać TOML](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml

@@ -1,7 +1,8 @@
 use crate::context::Shell;
+use crate::segment;
 use crate::segment::{FillSegment, Segment};
 use crate::utils::wrap_colorseq_for_shell;
-use ansi_term::{ANSIString, ANSIStrings};
+use nu_ansi_term::{AnsiString, AnsiStrings};
 use std::fmt;
 use std::time::Duration;
 
@@ -13,6 +14,8 @@ pub const ALL_MODULES: &[&str] = &[
     #[cfg(feature = "battery")]
     "battery",
     "buf",
+    "bun",
+    "c",
     "character",
     "cmake",
     "cmd_duration",
@@ -20,6 +23,7 @@ pub const ALL_MODULES: &[&str] = &[
     "conda",
     "container",
     "crystal",
+    "daml",
     "dart",
     "deno",
     "directory",
@@ -27,9 +31,10 @@ pub const ALL_MODULES: &[&str] = &[
     "dotnet",
     "elixir",
     "elm",
-    "env_var",
     "erlang",
+    "fennel",
     "fill",
+    "fossil_branch",
     "gcloud",
     "git_branch",
     "git_commit",
@@ -37,7 +42,10 @@ pub const ALL_MODULES: &[&str] = &[
     "git_state",
     "git_status",
     "golang",
+    "gradle",
+    "guix_shell",
     "haskell",
+    "haxe",
     "helm",
     "hg_branch",
     "hostname",
@@ -51,17 +59,22 @@ pub const ALL_MODULES: &[&str] = &[
     "localip",
     "lua",
     "memory_usage",
+    "meson",
     "nim",
     "nix_shell",
     "nodejs",
     "ocaml",
+    "opa",
     "openstack",
+    "os",
     "package",
     "perl",
     "php",
+    "pijul_channel",
     "pulumi",
     "purescript",
     "python",
+    "raku",
     "red",
     "rlang",
     "ruby",
@@ -70,6 +83,8 @@ pub const ALL_MODULES: &[&str] = &[
     "shell",
     "shlvl",
     "singularity",
+    "solidity",
+    "spack",
     "status",
     "sudo",
     "swift",
@@ -138,21 +153,18 @@ impl<'a> Module<'a> {
 
     /// Get values of the module's segments
     pub fn get_segments(&self) -> Vec<&str> {
-        self.segments
-            .iter()
-            .map(|segment| segment.value())
-            .collect()
+        self.segments.iter().map(segment::Segment::value).collect()
     }
 
-    /// Returns a vector of colored ANSIString elements to be later used with
-    /// `ANSIStrings()` to optimize ANSI codes
-    pub fn ansi_strings(&self) -> Vec<ANSIString> {
+    /// Returns a vector of colored `AnsiString` elements to be later used with
+    /// `AnsiStrings()` to optimize ANSI codes
+    pub fn ansi_strings(&self) -> Vec<AnsiString> {
         self.ansi_strings_for_shell(Shell::Unknown, None)
     }
 
-    pub fn ansi_strings_for_shell(&self, shell: Shell, width: Option<usize>) -> Vec<ANSIString> {
+    pub fn ansi_strings_for_shell(&self, shell: Shell, width: Option<usize>) -> Vec<AnsiString> {
         let mut iter = self.segments.iter().peekable();
-        let mut ansi_strings: Vec<ANSIString> = Vec::new();
+        let mut ansi_strings: Vec<AnsiString> = Vec::new();
         while iter.peek().is_some() {
             ansi_strings.extend(ansi_line(&mut iter, width));
         }
@@ -169,27 +181,27 @@ impl<'a> Module<'a> {
 impl<'a> fmt::Display for Module<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let ansi_strings = self.ansi_strings();
-        write!(f, "{}", ANSIStrings(&ansi_strings))
+        write!(f, "{}", AnsiStrings(&ansi_strings))
     }
 }
 
-fn ansi_strings_modified(ansi_strings: Vec<ANSIString>, shell: Shell) -> Vec<ANSIString> {
+fn ansi_strings_modified(ansi_strings: Vec<AnsiString>, shell: Shell) -> Vec<AnsiString> {
     ansi_strings
         .into_iter()
         .map(|ansi| {
             let wrapped = wrap_colorseq_for_shell(ansi.to_string(), shell);
-            ANSIString::from(wrapped)
+            AnsiString::from(wrapped)
         })
-        .collect::<Vec<ANSIString>>()
+        .collect::<Vec<AnsiString>>()
 }
 
-fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<ANSIString<'a>>
+fn ansi_line<'a, I>(segments: &mut I, term_width: Option<usize>) -> Vec<AnsiString<'a>>
 where
     I: Iterator<Item = &'a Segment>,
 {
     let mut used = 0usize;
-    let mut current: Vec<ANSIString> = Vec::new();
-    let mut chunks: Vec<(Vec<ANSIString>, &FillSegment)> = Vec::new();
+    let mut current: Vec<AnsiString> = Vec::new();
+    let mut chunks: Vec<(Vec<AnsiString>, &FillSegment)> = Vec::new();
 
     for segment in segments {
         match segment {
@@ -203,7 +215,7 @@ where
             }
         }
 
-        if let Segment::LineTerm = segment {
+        if matches!(segment, Segment::LineTerm) {
             break;
         }
     }
@@ -221,7 +233,7 @@ where
                     .chain(std::iter::once(fill.ansi_string(fill_size)))
             })
             .chain(current.into_iter())
-            .collect::<Vec<ANSIString>>()
+            .collect::<Vec<AnsiString>>()
     }
 }
 

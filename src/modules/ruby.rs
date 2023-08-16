@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::ruby::RubyConfig;
 use crate::formatter::{StringFormatter, VersionFormatter};
@@ -76,7 +76,7 @@ fn format_ruby_version(ruby_version: &str, version_format: &str) -> Option<Strin
         Ok(formatted) => Some(formatted),
         Err(error) => {
             log::warn!("Error formatting `ruby` version:\n{}", error);
-            Some(format!("v{}", version))
+            Some(format!("v{version}"))
         }
     }
 }
@@ -85,7 +85,7 @@ fn format_ruby_version(ruby_version: &str, version_format: &str) -> Option<Strin
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

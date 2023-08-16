@@ -1,9 +1,14 @@
-use crate::config::{ModuleConfig, VecOr};
+use crate::config::VecOr;
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
 pub struct PythonConfig<'a> {
     pub pyenv_version_name: bool,
     pub pyenv_prefix: &'a str,

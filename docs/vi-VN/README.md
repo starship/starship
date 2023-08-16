@@ -55,11 +55,10 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
    ```sh
    brew install starship
    ```
-
-   Với [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Thêm đoạn mã khởi tạo vào tệp tin cấu hình shell của bạn:
@@ -100,7 +99,7 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Powershell
 
-   Thêm vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
+   Thêm đoạn sau vào cuối tệp tin `Microsoft.PowerShell_profile.ps1`. Bạn có thể kiểm tra vị trí tệp tin này bằng việc truy xuất biến `$PROFILE` trong PowerShell. Thông thường, đường dẫn là `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` hoặc `~/.config/powershell/Microsoft.PowerShell_profile.ps1` trên -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -109,18 +108,22 @@ description: Starship là prompt nhỏ, cực nhanh, và khả năng tuỳ biế
 
    #### Ion
 
-   Thêm vào cuối tệp tin `~/.config/ion/initrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.config/ion/initrc`:
 
    ```sh
    # ~/.config/ion/initrc
 
-eval $(starship init ion)   
+   eval $(starship init ion)
    ```
 
 
    #### Elvish
 
-   ::: warning Chỉ elvish v0.17 hoặc cao hơn được hỗ trợ. :::
+   ::: warning
+
+   Only elvish v0.18 or higher is supported.
+
+   :::
 
    Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
 
@@ -133,7 +136,7 @@ eval $(starship init ion)
 
    #### Tcsh
 
-   Thêm đoạn dưới vào cuối file `~/.tcshrc`:
+   Thêm đoạn sau vào cuối tệp tin `~/.tcshrc`:
 
    ```sh
    # ~/.tcshrc
@@ -144,15 +147,22 @@ eval $(starship init ion)
 
    #### Nushell
 
-   ::: warning This will change in the future. Chỉ có nu phiên bản v. 033 hoặc cao hơn được hỗ trợ. ::: Add the following to your nu config file. Bạn có thể kiểm tra vị trí của cái file này bằng cách chạy `đường dẫn cấu hình` trong nu.
+   ::: warning
 
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   This will change in the future. Only Nushell v0.78+ is supported.
+
+   :::
+
+   Thêm đoạn code dưới đây vào cuối file Nushell env của bạn (Bạn có thể tìm đường dẫn tới file Nushell env bằng cách chạy `$nu.env-path` trong Nushell):
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save -f ~/.cache/starship/init.nu
+   ```
+
+   Thêm đoạn code sau vào cuối file cấu hình Nushell (bạn có thể tìm đường dẫn tới file cấu hình Nushell bằng cách chạy câu lệnh `$nu.config-path`):
+
+   ```sh
+   use ~/.cache/starship/init.nu
    ```
 
 
@@ -169,7 +179,7 @@ eval $(starship init ion)
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   Bạn cần phải dùng [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) với Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

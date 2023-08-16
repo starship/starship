@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/starship/starship/actions"
     ><img
-      src="https://img.shields.io/github/workflow/status/starship/starship/Main workflow/master?label=workflow&style=flat-square"
+      src="https://img.shields.io/github/actions/workflow/status/starship/starship/workflow.yml?branch=master&label=workflow&style=flat-square"
       alt="GitHub Actions 工作流状态"
  /></a>
   <a href="https://crates.io/crates/starship"
@@ -115,6 +115,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -139,16 +147,18 @@
  /></a>
 </p>
 
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
 <h1></h1>
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="使用 iTerm 和 Snazz 主题的 Starship"
+  alt="使用 iTerm 和 Snazzy 主题的 Starship"
   width="50%"
   align="right"
  />
 
-**轻量级、反应迅速，可定制的高颜值终端！**
+**轻量、迅速、可无限定制的高颜值终端！**
 
 - **快：** 很快 —— 真的真的非常快！ 🚀
 - **定制化：** 可定制各种各样的提示符。
@@ -167,11 +177,11 @@
 
 ### 前置要求
 
-- 安装一个 [Nerd Font](https://www.nerdfonts.com/) 的字体，并在终端启用（例如，可以尝试使用 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) 字体）。
+- 安装并在终端启用 [Nerd Font](https://www.nerdfonts.com/) 字体（如 [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads) ）。
 
 ### 步骤 1. 安装 Starship
 
-从下面的列表中选择您的操作系统以查看安装指令：
+请选择你的操作系统以查看合适的安装教程：
 
 <details>
 <summary>Android</summary>
@@ -213,12 +223,9 @@ curl -sS https://starship.rs/install.sh | sh
 | **_任意发行版_**        | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _任意发行版_            | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _任意发行版_            | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _任意发行版_            | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
+| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Fedora 31+         | [Fedora Packages](https://src.fedoraproject.org/rpms/rust-starship)                             | `dnf install starship`                                                         |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixos.starship`                                                   |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
@@ -249,25 +256,28 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
+在 [发布页](https://github.com/starship/starship/releases/latest) 下载 MSI 包来安装最新版。
+
 使用下列软件包管理器安装Starship：
 
-| 软件包来源                                                                            | 指令                                      |
-| -------------------------------------------------------------------------------- | --------------------------------------- |
-| **[crates.io](https://crates.io/crates/starship)**                               | `cargo install starship --locked`       |
-| [Chocolatey](https://community.chocolatey.org/packages/starship)                 | `choco install starship`                |
-| [conda-forge](https://anaconda.org/conda-forge/starship)                         | `conda install -c conda-forge starship` |
-| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json) | `scoop install starship`                |
+| 软件包来源                                                                                        | 指令                                      |
+| -------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
+| [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
+| [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship` |
+| [Scoop](https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json)             | `scoop install starship`                |
+| [winget](https://github.com/microsoft/winget-pkgs/tree/master/manifests/s/Starship/Starship) | `winget install --id Starship.Starship` |
 
 </details>
 
-### 步骤 2. 设置你的终端以使用 Starship
+### 步骤 2. Set up your shell to use Starship
 
 配置你的终端来初始化 starship。 请从下面列表选择你的终端：
 
 <details>
 <summary>Bash</summary>
 
-在 `~/.bashhrc` 的最后，添加以下内容：
+在 `~/.bashrc` 的最后，添加以下内容：
 
 ```sh
 eval "$(starship init bash)"
@@ -295,7 +305,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-注意：仅支持 v0.17 及以上版本的 Elvish
+注意：仅支持 v0.18 及以上版本的 Elvish
 
 </details>
 
@@ -324,16 +334,20 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-将以下内容添加到您 Nushell 配置文件的末尾(通过运行 `config path` 来获取配置文件的路径)：
+在您的 Nushell 环境文件的最后（使用 `$nu.env-path` 来获取它的路径），添加以下内容：
 
-```toml
-startup = [
-  "mkdir ~/.cache/starship",
-  "starship init nu | save ~/.cache/starship/init.nu",
-  "source ~/.cache/starship/init.nu",
-]
-prompt = "starship_prompt"
+```sh
+mkdir ~/.cache/starship
+starship init nu | save -f ~/.cache/starship/init.nu
 ```
+
+然后将以下内容添加到您 Nushell 配置文件的末尾（使用 `$nu.config-path` 来获取它的路径）：
+
+```sh
+use ~/.cache/starship/init.nu
+```
+
+注意：仅支持 Nushell v0.78+
 
 </details>
 
@@ -351,7 +365,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-在 `~/.bashhrc` 的最后，添加以下内容：
+在 `~/.tcshrc` 的最后，添加以下内容：
 
 ```sh
 eval `starship init tcsh`
@@ -362,7 +376,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-在 `~/.bashhrc` 的最后，添加以下内容：
+在 `~/.xonshrc` 的最后，添加以下内容：
 
 ```python
 execx($(starship init xonsh))
@@ -381,9 +395,9 @@ eval "$(starship init zsh)"
 
 </details>
 
-### 步骤 3. 配置 StarShip
+### 步骤 3. 配置 Starship
 
-打开一个新的 Shell 实例，你应该就能看到漂亮的 Shell 新提示符了。 如果你对默认配置感到满意，就可以开始享用了！
+打开一个新的 Shell 实例，你应该就能看到漂亮的 Shell 新提示符了。 如果你对默认配置感到满意，那么开始使用吧！
 
 如果你想进一步配置 Starship，查阅下列内容：
 
@@ -393,27 +407,35 @@ eval "$(starship init zsh)"
 
 ## 🤝 贡献
 
-我们期待着 **所有技能等级** 的参与者！ 如果你想让自己参与项目的路径轻松一些，可以先试试某个 [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)。
+我们欢迎  **任何水平** 的参与者！ 如果想练手，可以试着解决某个标记为  [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) 的议题。
 
-如果你熟练掌握某个非英语语言，我们非常感谢任何帮助翻译与同步文档到其他语言的贡献。 如果你想要帮忙，可以在 [Starship Crowdin](https://translate.starship.rs/) 上参与。
+如果你精通非英语语言，请协助我们翻译并更新文档，非常感谢！ 你可以在 [Starship Crowdin](https://translate.starship.rs/) 上参与翻译。
 
-如果你有兴趣贡献 Starship 这个项目，请先看看我们的 [贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 也欢迎加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 和大家打个招呼。 👋
+如果你想参与 Starship 项目，请查看我们的 [贡献指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)。 也欢迎加入我们的 [Discord 服务器](https://discord.gg/8Jzqu3T) 和大家打个招呼。 👋
 
-## 💭该项目受以下项目启发
+## 💭 该项目受以下项目启发
 
 请看看这些之前的项目，他们启发了 Starship 项目。 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – 为宇航员准备的 ZSH 提示符。
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – 可用于所有 Shell 的 Robbyrussell 主题，使用 JavaScript 编写。
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – 带图标且可定制的类 Powerline 提示符，适用于所有 Shell。
+
+## ❤️ 赞助商
+
+通过 [成为赞助商 ](https://github.com/sponsors/starship)来支持这个项目。 您的名字或 LOGO 将在此处显示，并链接到您的网站。
+
+**支持者级别**
+
+- [Appwrite](https://appwrite.io/)
 
 <p align="center">
     <br>
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship 图标">
 </p>
 
-## 📝 License
+## 📝 许可证
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+版权所有 © 2019 至今, [Starship 贡献者](https://github.com/starship/starship/graphs/contributors).<br /> 此项目使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 许可.

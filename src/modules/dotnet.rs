@@ -5,7 +5,7 @@ use std::iter::Iterator;
 use std::path::{Path, PathBuf};
 use std::str;
 
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 use crate::configs::dotnet::DotnetConfig;
 use crate::formatter::StringFormatter;
 use crate::utils;
@@ -105,13 +105,13 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
     let mut buf = Vec::new();
 
     loop {
-        match reader.read_event(&mut buf) {
+        match reader.read_event_into(&mut buf) {
             // for triggering namespaced events, use this instead:
             // match reader.read_namespaced_event(&mut buf) {
             Ok(Event::Start(ref e)) => {
                 // for namespaced:
                 // Ok((ref namespace_value, Event::Start(ref e)))
-                match e.name() {
+                match e.name().as_ref() {
                     b"TargetFrameworks" => in_tfm = true,
                     b"TargetFramework" => in_tfm = true,
                     _ => in_tfm = false,
@@ -120,11 +120,17 @@ fn get_tfm_from_project_file(path: &Path) -> Option<String> {
             // unescape and decode the text event using the reader encoding
             Ok(Event::Text(e)) => {
                 if in_tfm {
-                    return e.unescape_and_decode(&reader).ok();
+                    return e.unescape().ok().map(std::borrow::Cow::into_owned);
                 }
             }
             Ok(Event::Eof) => break, // exits the loop when reaching end of file
-            Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
+            Err(e) => {
+                log::error!(
+                    "Error parsing project file {path:?} at position {pos}: {e:?}",
+                    pos = reader.buffer_position()
+                );
+                return None;
+            }
             _ => (), // There are several other `Event`s we do not consider here
         }
 
@@ -264,7 +270,7 @@ fn get_local_dotnet_files(context: &Context) -> Result<Vec<DotNetFile>, std::io:
 fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
     let file_name_lower = map_str_to_lower(path.file_name());
 
-    match file_name_lower.as_ref().map(|f| f.as_ref()) {
+    match file_name_lower.as_ref().map(std::convert::AsRef::as_ref) {
         Some(GLOBAL_JSON_FILE) => return Some(FileType::GlobalJson),
         Some(PROJECT_JSON_FILE) => return Some(FileType::ProjectJson),
         _ => (),
@@ -272,7 +278,7 @@ fn get_dotnet_file_type(path: &Path) -> Option<FileType> {
 
     let extension_lower = map_str_to_lower(path.extension());
 
-    match extension_lower.as_ref().map(|f| f.as_ref()) {
+    match extension_lower.as_ref().map(std::convert::AsRef::as_ref) {
         Some("sln") => return Some(FileType::SolutionFile),
         Some("csproj" | "fsproj" | "xproj") => return Some(FileType::ProjectFile),
         Some("props" | "targets") => return Some(FileType::MsBuildFile),
@@ -346,7 +352,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use crate::utils::create_command;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, OpenOptions};
     use std::io::{self, Write};
     use tempfile::{self, TempDir};
@@ -552,7 +558,7 @@ mod tests {
 
         if is_repo {
             create_command("git")?
-                .args(&["init", "--quiet"])
+                .args(["init", "--quiet"])
                 .current_dir(repo_dir.path())
                 .output()?;
         }

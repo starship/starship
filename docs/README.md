@@ -51,11 +51,10 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    brew install starship
    ```
-
-   With [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Add the init script to your shell's config file:
@@ -111,7 +110,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    #### Elvish
 
    ::: warning
-   Only elvish v0.17 or higher is supported.
+
+   Only elvish v0.18 or higher is supported.
+
    :::
 
    Add the following to the end of `~/.elvish/rc.elv`:
@@ -135,19 +136,22 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    #### Nushell
 
    ::: warning
-   This will change in the future.
-   Only nu version v0.33 or higher is supported.
-   :::
-   Add the following to your nu config file. You can check the location of this
-   file by running `config path` in nu.
 
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   This will change in the future.
+   Only Nushell v0.78+ is supported.
+
+   :::
+
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save -f ~/.cache/starship/init.nu
+   ```
+
+   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+
+   ```sh
+   use ~/.cache/starship/init.nu
    ```
 
    #### Xonsh

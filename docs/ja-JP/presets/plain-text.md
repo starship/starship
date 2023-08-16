@@ -1,13 +1,17 @@
-[Return to Presets](/presets/#plain-text-symbols)
+[プリセット一覧に戻る](./README.md#plain-text-symbols)
 
-## Plain Text Symbols Preset
+## Plain Text Symbolsプリセット
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+このプリセットはそれぞれのモジュールで記号をテキストに変更します。 Unicodeにアクセスできない場合に最適です。
 
 ![Plain Text Symbolsプリセットのスクリーンショット](/presets/img/plain-text-symbols.png)
 
 ### 設定
 
-[Click to download TOML](/presets/toml/plain-text-symbols.toml)
+```sh
+starship preset plain-text-symbols -o ~/.config/starship.toml
+```
+
+[クリックしてTOMLをダウンロード](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml

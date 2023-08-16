@@ -1,12 +1,12 @@
-use crate::config::ModuleConfig;
 use indexmap::IndexMap;
-use serde::{self, Serialize};
-use starship_module_config_derive::ModuleConfig;
+use serde::{self, Deserialize, Serialize};
 
 pub mod aws;
 pub mod azure;
 pub mod battery;
 pub mod buf;
+pub mod bun;
+pub mod c;
 pub mod character;
 pub mod cmake;
 pub mod cmd_duration;
@@ -15,6 +15,7 @@ pub mod conda;
 pub mod container;
 pub mod crystal;
 pub mod custom;
+pub mod daml;
 pub mod dart;
 pub mod deno;
 pub mod directory;
@@ -24,7 +25,9 @@ pub mod elixir;
 pub mod elm;
 pub mod env_var;
 pub mod erlang;
+pub mod fennel;
 pub mod fill;
+pub mod fossil_branch;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
@@ -32,7 +35,10 @@ pub mod git_metrics;
 pub mod git_state;
 pub mod git_status;
 pub mod go;
+pub mod gradle;
+pub mod guix_shell;
 pub mod haskell;
+pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
@@ -46,17 +52,22 @@ pub mod line_break;
 pub mod localip;
 pub mod lua;
 pub mod memory_usage;
+pub mod meson;
 pub mod nim;
 pub mod nix_shell;
 pub mod nodejs;
 pub mod ocaml;
+pub mod opa;
 pub mod openstack;
+pub mod os;
 pub mod package;
 pub mod perl;
 pub mod php;
+pub mod pijul_channel;
 pub mod pulumi;
 pub mod purescript;
 pub mod python;
+pub mod raku;
 pub mod red;
 pub mod rlang;
 pub mod ruby;
@@ -65,6 +76,8 @@ pub mod scala;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
+pub mod solidity;
+pub mod spack;
 mod starship_root;
 pub mod status;
 pub mod sudo;
@@ -79,175 +92,194 @@ pub mod zig;
 
 pub use starship_root::*;
 
-#[derive(Serialize, ModuleConfig, Clone)]
+#[derive(Serialize, Deserialize, Clone, Default)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
 #[serde(default)]
 pub struct FullConfig<'a> {
+    // Meta
+    #[serde(rename = "$schema")]
+    schema: String,
     // Root config
-    pub format: String,
-    pub right_format: String,
-    pub continuation_prompt: String,
-    pub scan_timeout: u64,
-    pub command_timeout: u64,
-    pub add_newline: bool,
+    #[serde(flatten)]
+    root: StarshipRootConfig,
     // modules
+    #[serde(borrow)]
     aws: aws::AwsConfig<'a>,
+    #[serde(borrow)]
     azure: azure::AzureConfig<'a>,
+    #[serde(borrow)]
     battery: battery::BatteryConfig<'a>,
+    #[serde(borrow)]
     buf: buf::BufConfig<'a>,
+    #[serde(borrow)]
+    bun: bun::BunConfig<'a>,
+    #[serde(borrow)]
+    c: c::CConfig<'a>,
+    #[serde(borrow)]
     character: character::CharacterConfig<'a>,
+    #[serde(borrow)]
     cmake: cmake::CMakeConfig<'a>,
+    #[serde(borrow)]
     cmd_duration: cmd_duration::CmdDurationConfig<'a>,
+    #[serde(borrow)]
     cobol: cobol::CobolConfig<'a>,
+    #[serde(borrow)]
     conda: conda::CondaConfig<'a>,
+    #[serde(borrow)]
     container: container::ContainerConfig<'a>,
+    #[serde(borrow)]
     crystal: crystal::CrystalConfig<'a>,
+    #[serde(borrow)]
+    daml: daml::DamlConfig<'a>,
+    #[serde(borrow)]
     dart: dart::DartConfig<'a>,
+    #[serde(borrow)]
     deno: deno::DenoConfig<'a>,
+    #[serde(borrow)]
     directory: directory::DirectoryConfig<'a>,
+    #[serde(borrow)]
     docker_context: docker_context::DockerContextConfig<'a>,
+    #[serde(borrow)]
     dotnet: dotnet::DotnetConfig<'a>,
+    #[serde(borrow)]
     elixir: elixir::ElixirConfig<'a>,
+    #[serde(borrow)]
     elm: elm::ElmConfig<'a>,
+    #[serde(borrow)]
     env_var: IndexMap<String, env_var::EnvVarConfig<'a>>,
+    #[serde(borrow)]
     erlang: erlang::ErlangConfig<'a>,
+    #[serde(borrow)]
+    fennel: fennel::FennelConfig<'a>,
+    #[serde(borrow)]
     fill: fill::FillConfig<'a>,
+    #[serde(borrow)]
+    fossil_branch: fossil_branch::FossilBranchConfig<'a>,
+    #[serde(borrow)]
     gcloud: gcloud::GcloudConfig<'a>,
+    #[serde(borrow)]
     git_branch: git_branch::GitBranchConfig<'a>,
+    #[serde(borrow)]
     git_commit: git_commit::GitCommitConfig<'a>,
+    #[serde(borrow)]
     git_metrics: git_metrics::GitMetricsConfig<'a>,
+    #[serde(borrow)]
     git_state: git_state::GitStateConfig<'a>,
+    #[serde(borrow)]
     git_status: git_status::GitStatusConfig<'a>,
+    #[serde(borrow)]
     golang: go::GoConfig<'a>,
+    #[serde(borrow)]
+    gradle: gradle::GradleConfig<'a>,
+    #[serde(borrow)]
+    guix_shell: guix_shell::GuixShellConfig<'a>,
+    #[serde(borrow)]
     haskell: haskell::HaskellConfig<'a>,
+    #[serde(borrow)]
+    haxe: haxe::HaxeConfig<'a>,
+    #[serde(borrow)]
     helm: helm::HelmConfig<'a>,
+    #[serde(borrow)]
     hg_branch: hg_branch::HgBranchConfig<'a>,
+    #[serde(borrow)]
     hostname: hostname::HostnameConfig<'a>,
+    #[serde(borrow)]
     iterm2_mark: iterm2_mark::ITerm2MarkConfig<'a>,
+    #[serde(borrow)]
     java: java::JavaConfig<'a>,
+    #[serde(borrow)]
     jobs: jobs::JobsConfig<'a>,
+    #[serde(borrow)]
     julia: julia::JuliaConfig<'a>,
+    #[serde(borrow)]
     kotlin: kotlin::KotlinConfig<'a>,
+    #[serde(borrow)]
     kubernetes: kubernetes::KubernetesConfig<'a>,
     line_break: line_break::LineBreakConfig,
+    #[serde(borrow)]
     localip: localip::LocalipConfig<'a>,
+    #[serde(borrow)]
     lua: lua::LuaConfig<'a>,
+    #[serde(borrow)]
     memory_usage: memory_usage::MemoryConfig<'a>,
+    #[serde(borrow)]
+    meson: meson::MesonConfig<'a>,
+    #[serde(borrow)]
     nim: nim::NimConfig<'a>,
+    #[serde(borrow)]
     nix_shell: nix_shell::NixShellConfig<'a>,
+    #[serde(borrow)]
     nodejs: nodejs::NodejsConfig<'a>,
+    #[serde(borrow)]
     ocaml: ocaml::OCamlConfig<'a>,
+    #[serde(borrow)]
+    opa: opa::OpaConfig<'a>,
+    #[serde(borrow)]
     openstack: openstack::OspConfig<'a>,
+    #[serde(borrow)]
+    os: os::OSConfig<'a>,
+    #[serde(borrow)]
     package: package::PackageConfig<'a>,
+    #[serde(borrow)]
     perl: perl::PerlConfig<'a>,
+    #[serde(borrow)]
     php: php::PhpConfig<'a>,
+    #[serde(borrow)]
+    pijul_channel: pijul_channel::PijulConfig<'a>,
+    #[serde(borrow)]
     pulumi: pulumi::PulumiConfig<'a>,
+    #[serde(borrow)]
     purescript: purescript::PureScriptConfig<'a>,
+    #[serde(borrow)]
     python: python::PythonConfig<'a>,
+    #[serde(borrow)]
+    raku: raku::RakuConfig<'a>,
+    #[serde(borrow)]
     red: red::RedConfig<'a>,
+    #[serde(borrow)]
     rlang: rlang::RLangConfig<'a>,
+    #[serde(borrow)]
     ruby: ruby::RubyConfig<'a>,
+    #[serde(borrow)]
     rust: rust::RustConfig<'a>,
+    #[serde(borrow)]
     scala: scala::ScalaConfig<'a>,
+    #[serde(borrow)]
     shell: shell::ShellConfig<'a>,
+    #[serde(borrow)]
     shlvl: shlvl::ShLvlConfig<'a>,
+    #[serde(borrow)]
     singularity: singularity::SingularityConfig<'a>,
+    #[serde(borrow)]
+    solidity: solidity::SolidityConfig<'a>,
+    #[serde(borrow)]
+    spack: spack::SpackConfig<'a>,
+    #[serde(borrow)]
     status: status::StatusConfig<'a>,
+    #[serde(borrow)]
     sudo: sudo::SudoConfig<'a>,
+    #[serde(borrow)]
     swift: swift::SwiftConfig<'a>,
+    #[serde(borrow)]
     terraform: terraform::TerraformConfig<'a>,
+    #[serde(borrow)]
     time: time::TimeConfig<'a>,
+    #[serde(borrow)]
     username: username::UsernameConfig<'a>,
+    #[serde(borrow)]
     vagrant: vagrant::VagrantConfig<'a>,
+    #[serde(borrow)]
     vcsh: vcsh::VcshConfig<'a>,
+    #[serde(borrow)]
     vlang: v::VConfig<'a>,
+    #[serde(borrow)]
     zig: zig::ZigConfig<'a>,
+    #[serde(borrow)]
     custom: IndexMap<String, custom::CustomConfig<'a>>,
-}
-
-impl<'a> Default for FullConfig<'a> {
-    fn default() -> Self {
-        Self {
-            format: "$all".to_string(),
-            right_format: "".to_string(),
-            continuation_prompt: "[∙](bright-black) ".to_string(),
-            scan_timeout: 30,
-            command_timeout: 500,
-            add_newline: true,
-
-            aws: Default::default(),
-            azure: Default::default(),
-            battery: Default::default(),
-            buf: Default::default(),
-            character: Default::default(),
-            cmake: Default::default(),
-            cmd_duration: Default::default(),
-            cobol: Default::default(),
-            conda: Default::default(),
-            container: Default::default(),
-            crystal: Default::default(),
-            dart: Default::default(),
-            deno: Default::default(),
-            directory: Default::default(),
-            docker_context: Default::default(),
-            dotnet: Default::default(),
-            elixir: Default::default(),
-            elm: Default::default(),
-            env_var: Default::default(),
-            erlang: Default::default(),
-            fill: Default::default(),
-            gcloud: Default::default(),
-            git_branch: Default::default(),
-            git_commit: Default::default(),
-            git_metrics: Default::default(),
-            git_state: Default::default(),
-            git_status: Default::default(),
-            golang: Default::default(),
-            haskell: Default::default(),
-            helm: Default::default(),
-            hg_branch: Default::default(),
-            hostname: Default::default(),
-            iterm2_mark: Default::default(),
-            java: Default::default(),
-            jobs: Default::default(),
-            julia: Default::default(),
-            kotlin: Default::default(),
-            kubernetes: Default::default(),
-            line_break: Default::default(),
-            localip: Default::default(),
-            lua: Default::default(),
-            memory_usage: Default::default(),
-            nim: Default::default(),
-            nix_shell: Default::default(),
-            nodejs: Default::default(),
-            ocaml: Default::default(),
-            openstack: Default::default(),
-            package: Default::default(),
-            perl: Default::default(),
-            php: Default::default(),
-            pulumi: Default::default(),
-            purescript: Default::default(),
-            python: Default::default(),
-            red: Default::default(),
-            rlang: Default::default(),
-            ruby: Default::default(),
-            rust: Default::default(),
-            scala: Default::default(),
-            shell: Default::default(),
-            shlvl: Default::default(),
-            singularity: Default::default(),
-            status: Default::default(),
-            sudo: Default::default(),
-            swift: Default::default(),
-            terraform: Default::default(),
-            time: Default::default(),
-            username: Default::default(),
-            vagrant: Default::default(),
-            vcsh: Default::default(),
-            vlang: Default::default(),
-            zig: Default::default(),
-            custom: Default::default(),
-        }
-    }
 }
 
 #[cfg(test)]
@@ -262,19 +294,6 @@ mod test {
         let cfg_table = full_cfg.as_table().unwrap();
         for module in ALL_MODULES {
             assert!(cfg_table.contains_key(*module));
-        }
-    }
-
-    #[test]
-    fn root_in_full_config() {
-        let full_cfg = Value::try_from(FullConfig::default()).unwrap();
-        let cfg_table = full_cfg.as_table().unwrap();
-
-        let root_cfg = Value::try_from(StarshipRootConfig::default()).unwrap();
-        let root_table = root_cfg.as_table().unwrap();
-        for (option, default_value) in root_table.iter() {
-            assert!(cfg_table.contains_key(option));
-            assert_eq!(&cfg_table[option], default_value);
         }
     }
 }

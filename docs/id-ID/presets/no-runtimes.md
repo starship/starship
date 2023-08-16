@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#no-runtime-versions)
+[Return to Presets](./README.md#no-runtime-versions)
 
 # No Runtime Versions Preset
 
@@ -7,6 +7,10 @@ Konfigurasi prasetel berikut menyembunyikan versi language runtimes. Jika kamu b
 ![Tangkapan Layar dari preset Penyembunyian Versi Runtime](/presets/img/no-runtime-versions.png)
 
 ### Konfigurasi
+
+```sh
+starship preset no-runtime-versions -o ~/.config/starship.toml
+```
 
 [Click to download TOML](/presets/toml/no-runtime-versions.toml)
 

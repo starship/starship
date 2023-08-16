@@ -1,7 +1,7 @@
 use super::{Context, Module};
 use std::ffi::OsString;
 
-use crate::config::RootModuleConfig;
+use crate::config::ModuleConfig;
 use crate::configs::hostname::HostnameConfig;
 use crate::formatter::StringFormatter;
 
@@ -9,7 +9,7 @@ use crate::formatter::StringFormatter;
 ///
 /// Will display the hostname if all of the following criteria are met:
 ///     - hostname.disabled is absent or false
-///     - hostname.ssh_only is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
+///     - `hostname.ssh_only` is false OR the user is currently connected as an SSH session (`$SSH_CONNECTION`)
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
@@ -43,6 +43,16 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         formatter
+            .map_meta(|var, _| match var {
+                "ssh_symbol" => {
+                    if ssh_connection.is_some() {
+                        Some(config.ssh_symbol)
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            })
             .map_style(|variable| match variable {
                 "style" => Some(Ok(config.style)),
                 _ => None,
@@ -68,12 +78,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::{Color, Style};
+    use nu_ansi_term::{Color, Style};
     use unicode_segmentation::UnicodeSegmentation;
 
     macro_rules! get_hostname {
         () => {
-            if let Some(hostname) = gethostname::gethostname().into_string().ok() {
+            if let Ok(hostname) = gethostname::gethostname().into_string() {
                 hostname
             } else {
                 println!(
@@ -86,7 +96,7 @@ mod tests {
     }
 
     #[test]
-    fn ssh_only_false() {
+    fn ssh_only_false_no_ssh() {
         let hostname = get_hostname!();
         let actual = ModuleRenderer::new("hostname")
             .config(toml::toml! {
@@ -96,7 +106,21 @@ mod tests {
             })
             .collect();
         let expected = Some(format!("{} in ", style().paint(hostname)));
+        println!("{}", expected.as_ref().unwrap());
+        assert_eq!(expected, actual);
+    }
 
+    #[test]
+    fn ssh_only_false_ssh() {
+        let hostname = get_hostname!();
+        let actual = ModuleRenderer::new("hostname")
+            .config(toml::toml! {
+                [hostname]
+                ssh_only = false
+                trim_at = ""
+            })
+            .collect();
+        let expected = Some(format!("{} in ", style().paint(hostname)));
         assert_eq!(expected, actual);
     }
 
@@ -124,7 +148,10 @@ mod tests {
             })
             .env("SSH_CONNECTION", "something")
             .collect();
-        let expected = Some(format!("{} in ", style().paint(hostname)));
+        let expected = Some(format!(
+            "{} in ",
+            style().paint("🌐 ".to_owned() + hostname.as_str())
+        ));
 
         assert_eq!(expected, actual);
     }

@@ -10,15 +10,15 @@ features:
     title: 互換性優先
     details: 一般的なほとんどのOSの一般的なほとんどのシェル上で動作します。 あらゆるところで使用してください！
   - 
-    title: Rust 製
-    details: Rust の最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。
+    title: Rust製
+    details: Rustの最高レベルの速度と安全性を用いることで、可能な限り高速かつ信頼性を高くしています。
   - 
     title: カスタマイズ可能
     details: それぞれの細かい点は好みにカスタマイズが出来るため、ミニマルにも多機能にも好きなようにプロンプトを設定することができます。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
 metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship はミニマルで、非常に高速で、カスタマイズ性の高い、あらゆるシェルのためのプロンプトです！ ミニマルかつ洗練された形で、あなたに必要な情報を表示します。 Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+description: Starship はミニマルで、非常に高速で、カスタマイズ性の高い、あらゆるシェルのためのプロンプトです！ ミニマルかつ洗練された形で、あなたに必要な情報を表示します。 Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, PowerShellで簡単に利用できます。
 ---
 
 <div class="center">
@@ -55,11 +55,10 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
    ```sh
    brew install starship
    ```
-
-   [ Scoop ](https://scoop.sh)の場合：
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. 初期化のためのスクリプトをシェルの設定ファイルに追加
@@ -120,7 +119,11 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Elvish
 
-   ::: warning elvish v0.17以上のみサポートされています。 :::
+   ::: warning
+
+   elvish v0.18 以降のみサポートされます。
+
+   :::
 
    `~/.elvish/rc.elv` の最後に以下を追記してください。
 
@@ -144,15 +147,22 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Nushell
 
-   ::: warning This will change in the future. nu バージョン 0.33 以降のみサポートされます。 ::: Add the following to your nu config file. nu で`config path`を実行することで、設定ファイルの場所を確認できます。
+   ::: warning
 
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   これは将来的に変更される可能性があります。 Nushell v0.78+ のみサポートされています。
+
+   :::
+
+   Nushellの環境ファイルの最後に以下を追記してください ( `$nu.env-path` を実行してください):
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save -f ~/.cache/starship/init.nu
+   ```
+
+   そして、Nushellの設定ファイルの最後に以下を追記してください (`$nu.config-path` を実行してください):
+
+   ```sh
+   use ~/.cache/starship/init.nu
    ```
 
 
@@ -169,7 +179,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) コマンドを使用する必要があります。 以下をファイル `starship.lua` に追加し、Clinkスクリプトディレクトリに配置します:
 
    ```lua
    -- starship.lua

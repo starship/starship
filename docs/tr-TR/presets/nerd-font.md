@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#nerd-font-symbols)
+[Return to Presets](./README.md#nerd-font-symbols)
 
 # Nerd Font Symbols Preset
 
@@ -11,6 +11,10 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 - Terminalinizde kurulu ve etkinleştirilmiş bir [Nerd Yazı Tipi](https://www.nerdfonts.com/) (örnekte Fira Code Nerd Yazı Tipi kullanılır)
 
 ### Yapılandırma
+
+```sh
+starship preset nerd-font-symbols -o ~/.config/starship.toml
+```
 
 [Click to download TOML](/presets/toml/nerd-font-symbols.toml)
 

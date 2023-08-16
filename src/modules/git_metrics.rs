@@ -1,8 +1,7 @@
 use regex::Regex;
-use std::ffi::OsStr;
 
 use crate::{
-    config::RootModuleConfig, configs::git_metrics::GitMetricsConfig,
+    config::ModuleConfig, configs::git_metrics::GitMetricsConfig,
     formatter::string_formatter::StringFormatterError, formatter::StringFormatter, module::Module,
 };
 
@@ -21,22 +20,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let repo = context.get_repo().ok()?;
-    let repo_root = repo.workdir.as_ref()?;
+    let mut git_args = vec!["diff", "--shortstat"];
+    if config.ignore_submodules {
+        git_args.push("--ignore-submodules");
+    }
 
-    let diff = context
-        .exec_cmd(
-            "git",
-            &[
-                OsStr::new("--git-dir"),
-                repo.path.as_os_str(),
-                OsStr::new("--work-tree"),
-                repo_root.as_os_str(),
-                OsStr::new("--no-optional-locks"),
-                OsStr::new("diff"),
-                OsStr::new("--shortstat"),
-            ],
-        )?
-        .stdout;
+    let diff = repo.exec_git(context, &git_args)?.stdout;
 
     let stats = GitDiff::parse(&diff);
 
@@ -109,14 +98,14 @@ impl<'a> GitDiff<'a> {
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::create_command;
+    use crate::utils::{create_command, write_file};
     use std::ffi::OsStr;
     use std::fs::OpenOptions;
     use std::io::{self, Error, ErrorKind, Write};
-    use std::path::{Path, PathBuf};
+    use std::path::Path;
     use std::process::Stdio;
 
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     use crate::test::ModuleRenderer;
 
@@ -139,7 +128,7 @@ mod tests {
         let path = repo_dir.path();
 
         let the_file = path.join("the_file");
-        let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
+        let mut the_file = OpenOptions::new().append(true).open(the_file)?;
         writeln!(the_file, "Added line")?;
         the_file.sync_all()?;
 
@@ -157,7 +146,7 @@ mod tests {
         let path = repo_dir.path();
 
         let file_path = path.join("the_file");
-        write_file(file_path, "First Line\nSecond Line")?;
+        write_file(file_path, "First Line\nSecond Line\n")?;
 
         let actual = render_metrics(path);
 
@@ -173,7 +162,7 @@ mod tests {
         let path = repo_dir.path();
 
         let file_path = path.join("the_file");
-        write_file(file_path, "\nSecond Line\n\nModified\nAdded")?;
+        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
 
         let actual = render_metrics(path);
 
@@ -205,7 +194,7 @@ mod tests {
         let path = repo_dir.path();
 
         let the_file = path.join("the_file");
-        let mut the_file = OpenOptions::new().append(true).open(&the_file)?;
+        let mut the_file = OpenOptions::new().append(true).open(the_file)?;
         writeln!(the_file, "Added line")?;
         the_file.sync_all()?;
 
@@ -222,6 +211,33 @@ mod tests {
             "{} {} ",
             Color::Green.bold().paint("+1"),
             Color::Red.bold().paint("-0")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_all_changes_with_ignored_submodules() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let file_path = path.join("the_file");
+        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+
+        let actual = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                    [git_metrics]
+                    disabled = false
+                    ignore_submodules = true
+            })
+            .path(path)
+            .collect();
+
+        let expected = Some(format!(
+            "{} {} ",
+            Color::Green.bold().paint("+4"),
+            Color::Red.bold().paint("-2")
         ));
 
         assert_eq!(expected, actual);
@@ -263,16 +279,6 @@ mod tests {
         }
     }
 
-    fn write_file(file: PathBuf, text: &str) -> io::Result<()> {
-        let mut file = OpenOptions::new()
-            .write(true)
-            .create(true)
-            .truncate(true)
-            .open(&file)?;
-        writeln!(file, "{}", text)?;
-        file.sync_all()
-    }
-
     fn create_repo_with_commit() -> io::Result<tempfile::TempDir> {
         let repo_dir = tempfile::tempdir()?;
         let path = repo_dir.path();
@@ -280,7 +286,7 @@ mod tests {
 
         // Initialize a new git repo
         run_git_cmd(
-            &[
+            [
                 "init",
                 "--quiet",
                 path.to_str().expect("Path was not UTF-8"),
@@ -291,12 +297,12 @@ mod tests {
 
         // Set local author info
         run_git_cmd(
-            &["config", "--local", "user.email", "starship@example.com"],
+            ["config", "--local", "user.email", "starship@example.com"],
             Some(path),
             true,
         )?;
         run_git_cmd(
-            &["config", "--local", "user.name", "starship"],
+            ["config", "--local", "user.name", "starship"],
             Some(path),
             true,
         )?;
@@ -305,17 +311,17 @@ mod tests {
         // If build environment has `init.defaultBranch` global set
         // it will default to an unknown branch, so need to make & change branch
         run_git_cmd(
-            &["checkout", "-b", "master"],
+            ["checkout", "-b", "master"],
             Some(path),
             // command expected to fail if already on the expected branch
             false,
         )?;
 
         // Write a file on master and commit it
-        write_file(file, "First Line\nSecond Line\nThird Line")?;
-        run_git_cmd(&["add", "the_file"], Some(path), true)?;
+        write_file(file, "First Line\nSecond Line\nThird Line\n")?;
+        run_git_cmd(["add", "the_file"], Some(path), true)?;
         run_git_cmd(
-            &["commit", "--message", "Commit A", "--no-gpg-sign"],
+            ["commit", "--message", "Commit A", "--no-gpg-sign"],
             Some(path),
             true,
         )?;

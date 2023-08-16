@@ -1,8 +1,7 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::haskell::HaskellConfig;
 use crate::formatter::StringFormatter;
-use crate::utils;
 
 /// Creates a module with the current Haskell version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -64,7 +63,7 @@ fn get_snapshot(context: &Context) -> Option<String> {
     if !is_stack_project(context) {
         return None;
     }
-    let file_contents = utils::read_file(context.current_dir.join("stack.yaml")).ok()?;
+    let file_contents = context.read_file_from_pwd("stack.yaml")?;
     let yaml = yaml_rust::YamlLoader::load_from_str(&file_contents).ok()?;
     let version = yaml.first()?["resolver"]
         .as_str()
@@ -88,7 +87,7 @@ fn is_stack_project(context: &Context) -> bool {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
     use std::io::Write;
@@ -126,7 +125,7 @@ mod tests {
             let actual = ModuleRenderer::new("haskell").path(dir.path()).collect();
             let expected = Some(format!(
                 "via {}",
-                Color::Purple.bold().paint(format!("λ {} ", resolver))
+                Color::Purple.bold().paint(format!("λ {resolver} "))
             ));
             assert_eq!(expected, actual);
             dir.close()?;

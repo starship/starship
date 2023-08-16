@@ -8,6 +8,78 @@ As configurações nesta seção estão sujeitas a alterações em futuras vers�
 
 :::
 
+## TransientPrompt no PowerShell
+
+É possível substituir o prompt anteriormente impresso por uma string personalisada. Isto é útil quando todas as informações do prompt não são nescessárias sempre. Para habilitar isto, execute `Enable-TransientPrompt` na sessão do shell. Para ser permanente, adicione esta declaração no seu `$PROFILE`. A transição pode ser desativada com `Disable-TransientPrompt`.
+
+Por padrão, o lado esquerdo da entrada é substituida por  `>`. Para personalizar isso defina uma nova função chamada `Invoke-Starship-TransientFunction`. Por exemplo, para mostrar o módulo de caractere do ` Starship's`aqui, você faria
+
+```powershell
+function Invoke-Starship-TransientFunction {
+  &starship module character
+}
+
+Invoke-Expression (&starship init powershell)
+
+Enable-TransientPrompt
+```
+
+## TransientPrompt e TransientRightPrompt em Cmd
+
+Clink permite você substituir o prompt anteriormente impresso com strings personalizadas. Isto é útil quando todas as informações do prompt não são nescessárias sempre. Para habilitar isso, execute  `clink set prompt.transient <value>` onde \<value\> pode ser um dos:
+
+- `always`: sempre substitui o prompt anterior
+- `same_dir`: substitui o prompt anterior apenas se o diretório de trabalho for o mesmo
+- `off`: não substitui o prompt (ou seja, desliga a transição)
+
+Você precisa fazer isso apenas uma vez. Faça as seguintes alterações ao seu `starship.lua` para personalizar o que é exibido à esquerda e à direita:
+
+- Por padrão, o lado esquerdo da entrada é substituida por  `>`. Para personalizar isso, defina uma nova função chamada `starship_transient_prompt_func`. Esta função recebe o prompt atual como uma string que você pode utilizar. Por exemplo, para mostrar o módulo de caractere do ` Starship's`aqui, você faria
+
+```lua
+function starship_transient_prompt_func(prompt)
+  return io.popen("starship module character"
+    .." --keymap="..rl.getvariable('keymap')
+  ):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+- Por padrão, o lado direito da entrada é vazio. Para personalizar isso, defina uma nova função chamada `starship_transient_rprompt_func`. Esta função recebe a prompt atual de como uma string que você pode utilizar. Por exemplo, para exibir o momento em que o último comando foi iniciado, você faria
+
+```lua
+function starship_transient_rprompt_func(prompt)
+  return io.popen("starship module time"):read("*a")
+end
+load(io.popen('starship init cmd'):read("*a"))()
+```
+
+## TransientPrompt e TransientRightPrompt no Fish
+
+É possível substituir o prompt anteriormente impresso por uma string personalisada. Isto é útil quando todas as informações do prompt não são nescessárias sempre. Para habilitar isso, execute `enable_transience` na sessão do shell. Para torná-lo permanente, coloque esta declaração no seu `~/.config/fish/config.fish`. Transição pode ser desativada com `disable_transience`.
+
+Observe que, no caso do Fish, o prompt transitório só será impresso se a linha de comando não estiver vazia, e sintaticamente correta.
+
+- Por padrão, o lado esquerdo da entrada é substituído por um símbolo `❯` verde. Para personalizar isso, defina uma nova função chamada `starship_transient_prompt_func`. Por exemplo, para mostrar o módulo de caractere do ` Starship's`aqui, você faria
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
+
+- Por padrão, o lado direito da entrada é vazio. Para personalizar isso, defina uma nova função chamada `starship_transient_rprompt_func`. Por exemplo, para exibir o momento em que o último comando foi iniciado, você faria
+
+```fish
+function starship_transient_rprompt_func
+  starship module time
+end
+starship init fish | source
+enable_transience
+```
+
 ## Comandos personalizados de pré-prompt e pré-execução no Cmd
 
 O Clink fornece APIs extremamente flexíveis para executar comandos pré-prompt e pré-execução em Cmd shell. É bastante simples de usar com o Starship. Faça as seguintes alterações no seu arquivo `starship.lua` conforme suas necessidades:
@@ -121,19 +193,19 @@ Você também pode definir uma saída semelhante com o PowerShell criando uma fu
 ```powershell
 # editar $PROFILE
 function Invoke-Starship-PreCommand {
-   $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+  $host.ui.RawUI.WindowTitle = "$env:USERNAME@$env:COMPUTERNAME`: $pwd `a"
 }
 
-Invoke-Expression (& starship init powershell)
+Invoke-Expression (&starship init powershell)
 ```
 
 ## Ativando o Prompt Direito
 
 Alguns shells suportam um prompt direito que é renderizado na mesma linha que a entrada. Starship pode definir o conteúdo do prompt correto usando a opção `right_format`. Qualquer módulo que pode ser usado no `format` também é compatível com `right_format`. A variável `$all` conterá apenas módulos não usado explicitamente em `format` ou `right_format`.
 
-Nota: O prompt direito é uma única linha após o local de entrada. Para alinhar à direita os módulos acima a linha de entrada em um prompt de várias linhas, consulte o [módulo fill](/config/#fill).
+Nota: O prompt direito é uma única linha após o local de entrada. Para alinhar módulos à direita acima da linha de entrada em um prompt de várias linhas, consulte o [módulo `fill`](/config/#fill).
 
-`right_format` é atualmente compatível com os seguintes shells: elvish, fish, zsh, xonsh, cmd.
+`right_format` é atualmente suportado pelos seguintes shells: elvish, fish, zsh, xonsh, cmd, nushell.
 
 ### Exemplo
 
@@ -157,7 +229,7 @@ Produz um prompt como o seguinte:
 
 Alguns shells suportam um prompt de continuação junto com o prompt normal. Esse prompt é renderizado em vez do prompt normal quando o usuário insere uma instrução incompleta (como um único parêntese esquerdo ou aspas).
 
-Starship pode definir o prompt de continuação usando a opção `continuation_prompt`. O prompt padrão é `"[∙](bright-black) "`.
+Starship pode definir o prompt de continuação usando a opção `continuation_prompt`. O prompt padrão é  `'[∙](bright-black) '`.
 
 Nota: `continuation_prompt` deve ser definido como uma string literal sem nenhuma variável.
 
@@ -173,18 +245,21 @@ Nota: os prompts de continuação estão disponíveis apenas nos seguintes shell
 # ~/.config/starship.toml
 
 # Um prompt de continuação que exibe duas setas preenchidas
-continuation_prompt = "▶▶"
+continuation_prompt = '▶▶ '
 ```
 
 ## Estilo dos textos
 
-As strings de estilo são uma lista de palavras, separadas por espaços em branco. As palavras não diferenciam maiúsculas de minúsculas (ou seja, `bold` e `BoLd` são considerados a mesma string). Cada palavra pode ser uma das seguintes:
+As strings de estilo são uma lista de palavras, separadas por espaços em branco. As palavras não diferenciam maiúsculas de minúsculas (ou seja, `bold` e `BoLd` são considerados a mesma string). Cada palavra pode ser as seguintes:
 
 - `bold`
 - `italic`
 - `underline`
 - `dimmed`
 - `inverted`
+- `blink`
+- `hidden`
+- `strikethrough`
 - `bg:<color>`
 - `fg:<color>`
 - `<color>`
@@ -201,3 +276,9 @@ Um especificador de cor pode ser um dos seguintes:
 - Um número entre 0-255. Especifica um [Código de cores ANSI de 8 bits](https://i.stack.imgur.com/KTSQa.png).
 
 Se várias cores forem especificadas para primeiro plano/plano de fundo, a última na string terá prioridade.
+
+Nem todas os estilos de string serão exibidos corretamente em todos terminais. Em particular, existem os seguintes erros conhecidos:
+
+- Muitos terminais desabilitam por padrão o suporte ao `blink`
+- `hidden` não é [ suportado no iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` não é suportado por padrão no aplicativo de terminal do macOS

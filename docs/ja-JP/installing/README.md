@@ -1,4 +1,4 @@
-# 🚀 高度なインストール
+# 高度なインストール
 
 Starship をインストールするには、以下の2つのことを行う必要があります。
 
@@ -39,7 +39,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir /data/data/com.term
 
 ### インストール
 
-On Funtoo Linux, starship can be installed from [core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship) via Portage:
+Funtoo Linuxでは、Portageの[core-kit](https://github.com/funtoo/core-kit/tree/1.4-release/app-shells/starship)からstarship をインストールできます。
 
 ```sh
 emerge app-shells/starship
@@ -49,13 +49,13 @@ emerge app-shells/starship
 
 ### バイナリの取得
 
-#### Imperatively
+#### 命令的な手法
 
 ```sh
 nix-env -iA nixos.starship
 ```
 
-#### Declarative, single user, via [home-manager](https://github.com/nix-community/home-manager)
+#### 単一ユーザーで[home-manager](https://github.com/nix-community/home-manager)を使う宣言的な手法
 
 `home.nix`ファイルで`programs.starship`を有効にして、設定を追加してください。
 
@@ -84,7 +84,7 @@ nix-env -iA nixos.starship
 home-manager switch
 ```
 
-#### Declarative, system-wide, with NixOS
+#### NixOSでシステム全体に適用する宣言的な手法
 
 `configuration.nix`で`environment.systemPackages`に`pkgs.starship`を追加して、次を実行してください
 

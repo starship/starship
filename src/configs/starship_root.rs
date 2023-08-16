@@ -1,18 +1,30 @@
-use crate::{config::ModuleConfig, module::ALL_MODULES};
+use indexmap::IndexMap;
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
-use serde::Serialize;
-use std::cmp::Ordering;
-
-// On changes please also update the `FullConfig` struct in `mod.rs`
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
 pub struct StarshipRootConfig {
+    #[serde(rename = "$schema")]
+    schema: String,
     pub format: String,
     pub right_format: String,
     pub continuation_prompt: String,
     pub scan_timeout: u64,
     pub command_timeout: u64,
     pub add_newline: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub palette: Option<String>,
+    pub palettes: HashMap<String, Palette>,
+    pub profiles: IndexMap<String, String>,
 }
+
+pub type Palette = HashMap<String, String>;
 
 // List of default prompt order
 // NOTE: If this const value is changed then Default prompt order subheading inside
@@ -27,26 +39,34 @@ pub const PROMPT_ORDER: &[&str] = &[
     "kubernetes",
     "directory",
     "vcsh",
+    "fossil_branch",
     "git_branch",
     "git_commit",
     "git_state",
     "git_metrics",
     "git_status",
     "hg_branch",
+    "pijul_channel",
     "docker_context",
     "package",
     // ↓ Toolchain version modules ↓
     // (Let's keep these sorted alphabetically)
+    "bun",
+    "c",
     "cmake",
     "cobol",
+    "daml",
     "dart",
     "deno",
     "dotnet",
     "elixir",
     "elm",
     "erlang",
+    "fennel",
     "golang",
+    "gradle",
     "haskell",
+    "haxe",
     "helm",
     "java",
     "julia",
@@ -55,16 +75,19 @@ pub const PROMPT_ORDER: &[&str] = &[
     "nim",
     "nodejs",
     "ocaml",
+    "opa",
     "perl",
     "php",
     "pulumi",
     "purescript",
     "python",
+    "raku",
     "rlang",
     "red",
     "ruby",
     "rust",
     "scala",
+    "solidity",
     "swift",
     "terraform",
     "vlang",
@@ -72,8 +95,11 @@ pub const PROMPT_ORDER: &[&str] = &[
     "zig",
     // ↑ Toolchain version modules ↑
     "buf",
+    "guix_shell",
     "nix_shell",
     "conda",
+    "meson",
+    "spack",
     "memory_usage",
     "aws",
     "gcloud",
@@ -91,77 +117,25 @@ pub const PROMPT_ORDER: &[&str] = &[
     "time",
     "status",
     "container",
+    "os",
     "shell",
     "character",
 ];
 
 // On changes please also update `Default` for the `FullConfig` struct in `mod.rs`
-impl<'a> Default for StarshipRootConfig {
+impl Default for StarshipRootConfig {
     fn default() -> Self {
-        StarshipRootConfig {
+        Self {
+            schema: "https://starship.rs/config-schema.json".to_string(),
             format: "$all".to_string(),
-            right_format: "".to_string(),
+            right_format: String::new(),
             continuation_prompt: "[∙](bright-black) ".to_string(),
+            profiles: Default::default(),
             scan_timeout: 30,
             command_timeout: 500,
             add_newline: true,
+            palette: None,
+            palettes: HashMap::default(),
         }
-    }
-}
-
-impl<'a> ModuleConfig<'a> for StarshipRootConfig {
-    fn load_config(&mut self, config: &'a toml::Value) {
-        if let toml::Value::Table(config) = config {
-            config.iter().for_each(|(k, v)| match k.as_str() {
-                "format" => self.format.load_config(v),
-                "right_format" => self.right_format.load_config(v),
-                "continuation_prompt" => self.continuation_prompt.load_config(v),
-                "scan_timeout" => self.scan_timeout.load_config(v),
-                "command_timeout" => self.command_timeout.load_config(v),
-                "add_newline" => self.add_newline.load_config(v),
-                unknown => {
-                    if !ALL_MODULES.contains(&unknown)
-                        && unknown != "custom"
-                        && unknown != "env_var"
-                    {
-                        log::warn!("Unknown config key '{}'", unknown);
-
-                        let did_you_mean = &[
-                            // Root options
-                            "format",
-                            "right_format",
-                            "continuation_prompt",
-                            "scan_timeout",
-                            "command_timeout",
-                            "add_newline",
-                            // Modules
-                            "custom",
-                            "env_var",
-                        ]
-                        .iter()
-                        .chain(ALL_MODULES)
-                        .filter_map(|field| {
-                            let score = strsim::jaro_winkler(unknown, field);
-                            (score > 0.8).then(|| (score, field))
-                        })
-                        .max_by(
-                            |(score_a, _field_a), (score_b, _field_b)| {
-                                score_a.partial_cmp(score_b).unwrap_or(Ordering::Equal)
-                            },
-                        );
-
-                        if let Some((_score, field)) = did_you_mean {
-                            log::warn!("Did you mean '{}'?", field);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    fn from_config(config: &'a toml::Value) -> Option<Self> {
-        let mut out = Self::default();
-        out.load_config(config);
-        Some(out)
     }
 }

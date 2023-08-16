@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::cobol::CobolConfig;
 use crate::formatter::StringFormatter;
@@ -75,7 +75,7 @@ fn get_cobol_version(cobol_stdout: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
 

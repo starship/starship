@@ -23,7 +23,7 @@ Oui, ils peuvent tous deux être utilisés pour désactiver les modules dans l'i
 
 ## La documentation dit que Starship est shell-agnostique. Pourquoi mon shell préféré n'est-il pas pris en charge ?
 
-Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation de l'invite de commande et l'expansion, Starship peut être utilisé.
+Étant donné la façon dont Starship est construit, il devrait être possible d'ajouter le support pour pratiquement n'importe quel shell. Le binaire de Starship est sans état et agnostique, donc tant que votre shell supporte la personnalisation rapide et l'expansion du shell, Starship peut être utilisé.
 
 Voici un petit exemple pour que Starship fonctionne avec bash :
 
@@ -38,19 +38,19 @@ NUM_JOBS=$(jobs -p | wc -l)
 PS1="$(starship prompt --status=$STATUS --jobs=$NUM_JOBS)"
 ```
 
-[L'implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée dans Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module Durée de commande](https://starship.rs/config/#command-duration) et pour s'assurer que Starship est compatible avec les configurations Bash préinstallées.
+L' [implémentation Bash](https://github.com/starship/starship/blob/master/src/init/starship.bash) intégrée à Starship est légèrement plus complexe pour permettre des fonctionnalités avancées comme le [module de durée de commande](https://starship.rs/config/#command-duration) et pour s'assurer que Starship est compatible avec les configurations Bash pré-installées.
 
-Pour une liste de tous les flags acceptés par `starship`, utilisez la commande suivante :
+Pour une liste de tous les flags acceptés par `starship prompt`, utilisez la commande suivante :
 
 ```sh
 starship prompt --help
 ```
 
-L'invite utilisera autant de contexte que possible, mais aucun paramètre n'est "requis".
+L'invite de commande utilisera toutes les données contextuelles fournies, mais aucun indicateur n'est "requis".
 
 ## Comment utiliser Starship sur des distributions Linux avec des versions de glibc plus ancienne ?
 
-Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by starship)_" lors de l'utilisation de l'exécutable précompilé (par exemple sur CentOS 6 ou 7), vous pouvez utiliser un exécutable compilé avec `musl` au lieu de `glibc`:
+Si vous obtenez une erreur du type "_version 'GLIBC_2.18' not found (required by starship)_" lors de l'utilisation du binaire précompilé (par exemple sur CentOS 6 ou 7), vous pouvez utiliser un binaire compilé avec `musl` au lieu de `glibc`:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
@@ -80,7 +80,7 @@ env STARSHIP_LOG=trace starship timings
 
 Cela affichera le journal de suivi et un détail de tous les modules qui ont soit pris plus d’1ms pour s’exécuter, soit affiché quelque chose.
 
-Finalement, si vous trouvez un bug, vous pouvez utiliser la commande `bug-report` pour créer un ticket GitHub.
+Finally if you find a bug you can use the `bug-report` command to create a GitHub issue.
 
 ```sh
 starship bug-report
@@ -107,7 +107,7 @@ Si l'un ou l'autre des symboles ne parvient pas à s'afficher correctement, votr
 
 ## Comment désinstaller Starship ?
 
-Starship est tout aussi facile à désinstaller que d'installer.
+Starship est tout aussi facile à désinstaller qu'à installer.
 
 1. Supprimez les lignes de la configuration de votre shell (par exemple `~/.bashrc`) utilisées pour initialiser Starship.
 1. Supprimez l'exécutable de Starship.

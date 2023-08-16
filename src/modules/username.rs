@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
@@ -16,12 +16,15 @@ const USERNAME_ENV_VAR: &str = "USERNAME";
 ///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
 ///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
-    let username = context.get_env(USERNAME_ENV_VAR)?;
+    let mut username = context.get_env(USERNAME_ENV_VAR)?;
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
 
     let is_root = is_root_user();
+    if cfg!(target_os = "windows") && is_root {
+        username = "Administrator".to_string();
+    }
     let show_username = config.show_always
         || is_root // [1]
         || !is_login_user(context, &username) // [2]
@@ -67,7 +70,29 @@ fn is_login_user(context: &Context, username: &str) -> bool {
         .map_or(true, |logname| logname == username)
 }
 
-#[cfg(target_os = "windows")]
+#[cfg(all(target_os = "windows", not(test)))]
+fn is_root_user() -> bool {
+    use deelevate::{PrivilegeLevel, Token};
+    let token = match Token::with_current_process() {
+        Ok(token) => token,
+        Err(e) => {
+            log::warn!("Failed to get process token: {e:?}");
+            return false;
+        }
+    };
+    matches!(
+        match token.privilege_level() {
+            Ok(level) => level,
+            Err(e) => {
+                log::warn!("Failed to get privilege level: {e:?}");
+                return false;
+            }
+        },
+        PrivilegeLevel::Elevated | PrivilegeLevel::HighIntegrityAdmin
+    )
+}
+
+#[cfg(all(target_os = "windows", test))]
 fn is_root_user() -> bool {
     false
 }

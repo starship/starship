@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::lua::LuaConfig;
 use crate::formatter::StringFormatter;
@@ -80,7 +80,7 @@ fn parse_lua_version(lua_version: &str) -> Option<String> {
 mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 
@@ -118,7 +118,7 @@ mod tests {
     fn folder_with_lua_folder() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let lua_dir = dir.path().join("lua");
-        fs::create_dir_all(&lua_dir)?;
+        fs::create_dir_all(lua_dir)?;
 
         let actual = ModuleRenderer::new("lua").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("🌙 v5.4.0 ")));

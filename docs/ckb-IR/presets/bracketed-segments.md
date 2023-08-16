@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#bracketed-segments)
+[Return to Presets](./README.md#bracketed-segments)
 
 # Bracketed Segments Preset
 
@@ -7,6 +7,10 @@ This preset changes the format of all the built-in modules to show their segment
 ![ڕوونماوێنەی پێشڕێکخستنی Bracketed Segments](/presets/img/bracketed-segments.png)
 
 ### ڕێکخستن
+
+```sh
+starship preset bracketed-segments -o ~/.config/starship.toml
+```
 
 [Click to download TOML](/presets/toml/bracketed-segments.toml)
 

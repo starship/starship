@@ -1,4 +1,4 @@
-use ansi_term::Style;
+use nu_ansi_term::Style;
 use pest::error::Error as PestError;
 use rayon::prelude::*;
 use std::borrow::Cow;
@@ -32,17 +32,17 @@ type VariableMapType<'a> =
 type StyleVariableMapType<'a> =
     BTreeMap<String, Option<Result<Cow<'a, str>, StringFormatterError>>>;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringFormatterError {
     Custom(String),
-    Parse(PestError<Rule>),
+    Parse(Box<PestError<Rule>>),
 }
 
 impl fmt::Display for StringFormatterError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Custom(error) => write!(f, "{}", error),
-            Self::Parse(error) => write!(f, "{}", error),
+            Self::Custom(error) => write!(f, "{error}"),
+            Self::Parse(error) => write!(f, "{error}"),
         }
     }
 }
@@ -62,7 +62,7 @@ pub struct StringFormatter<'a> {
 }
 
 impl<'a> StringFormatter<'a> {
-    /// Creates an instance of StringFormatter from a format string
+    /// Creates an instance of `StringFormatter` from a format string
     ///
     /// This method will throw an Error when the given format string fails to parse.
     pub fn new(format: &'a str) -> Result<Self, StringFormatterError> {
@@ -88,7 +88,7 @@ impl<'a> StringFormatter<'a> {
         })
     }
 
-    /// A StringFormatter that does no formatting, parse just returns the raw text
+    /// A `StringFormatter` that does no formatting, parse just returns the raw text
     pub fn raw(text: &'a str) -> Self {
         Self {
             format: vec![FormatElement::Text(text.into())],
@@ -245,7 +245,7 @@ impl<'a> StringFormatter<'a> {
             style_variables: &'a StyleVariableMapType<'a>,
             context: Option<&Context>,
         ) -> Result<Vec<Segment>, StringFormatterError> {
-            let style = parse_style(textgroup.style, style_variables);
+            let style = parse_style(textgroup.style, style_variables, context);
             parse_format(
                 textgroup.format,
                 style.transpose()?,
@@ -258,6 +258,7 @@ impl<'a> StringFormatter<'a> {
         fn parse_style<'a>(
             style: Vec<StyleElement>,
             variables: &'a StyleVariableMapType<'a>,
+            context: Option<&Context>,
         ) -> Option<Result<Style, StringFormatterError>> {
             let style_strings = style
                 .into_iter()
@@ -276,7 +277,7 @@ impl<'a> StringFormatter<'a> {
                 .map(|style_strings| {
                     let style_string: String =
                         style_strings.iter().flat_map(|s| s.chars()).collect();
-                    parse_style_string(&style_string)
+                    parse_style_string(&style_string, context)
                 })
                 .transpose()
         }
@@ -292,7 +293,16 @@ impl<'a> StringFormatter<'a> {
                 .into_iter()
                 .map(|el| {
                     match el {
-                        FormatElement::Text(text) => Ok(Segment::from_text(style, text)),
+                        FormatElement::Text(text) => Ok(Segment::from_text(
+                            style,
+                            shell_prompt_escape(
+                                text,
+                                match context {
+                                    None => Shell::Unknown,
+                                    Some(c) => c.shell,
+                                },
+                            ),
+                        )),
                         FormatElement::TextGroup(textgroup) => {
                             let textgroup = TextGroup {
                                 format: textgroup.format,
@@ -438,7 +448,7 @@ where
 {
     // Handle other interpretable characters
     match shell {
-        // Bash might interepret baskslashes, backticks and $
+        // Bash might interpret backslashes, backticks and $
         // see #658 for more details
         Shell::Bash => text
             .into()
@@ -456,7 +466,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
 
     // match_next(result: IterMut<Segment>, value, style)
     macro_rules! match_next {
@@ -528,7 +538,7 @@ mod tests {
 
         let formatter = StringFormatter::new(FORMAT_STR)
             .unwrap()
-            .map(|variable| Some(Ok(format!("${{{}}}", variable))));
+            .map(|variable| Some(Ok(format!("${{{variable}}}"))));
         let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
         match_next!(result_iter, "${env:PWD}", None);
@@ -557,6 +567,30 @@ mod tests {
         match_next!(result_iter, "outer ", outer_style);
         match_next!(result_iter, "middle ", middle_style);
         match_next!(result_iter, "inner", inner_style);
+    }
+
+    #[test]
+    fn test_style_variable_nested() {
+        const STYLE_VAR_NAME: &str = "style";
+
+        let format_string = format!("[[text](${STYLE_VAR_NAME})](blue)");
+        let inner_style = Some(Color::Red.bold());
+
+        let formatter = StringFormatter::new(&format_string)
+            .unwrap()
+            .map_style(|variable| match variable {
+                STYLE_VAR_NAME => Some(Ok("red bold".to_owned())),
+                _ => None,
+            });
+
+        assert_eq!(
+            BTreeSet::from([STYLE_VAR_NAME.into()]),
+            formatter.get_style_variables()
+        );
+
+        let result = formatter.parse(None, None).unwrap();
+        let mut result_iter = result.iter();
+        match_next!(result_iter, "text", inner_style);
     }
 
     #[test]

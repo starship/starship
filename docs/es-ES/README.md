@@ -34,7 +34,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
 ### Instalación rápida
 
-1. Instalar el binario de **Starship**:
+1. Instala el binario de **Starship**:
 
 
    #### Instalar la última versión
@@ -48,18 +48,17 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
    Para actualizar Starship, vuelve a ejecutar el guión anterior. Reemplazará la versión actual sin tocar la configuración de Starship.
 
 
-   #### Instalar con un gestor de paquetes
+   #### Instalar vía un gestor de paquetes
 
-   Con [Homebrew](https://brew.sh/):
+   Con [Homebew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
-
-   Con [Scoop](https://scoop.sh):
+   With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
 1. Añade el guión de inicio al archivo de configuración de tu intérprete de comandos:
@@ -67,7 +66,7 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Bash
 
-   Añade el siguiente código al final de `~/.bashrc`:
+   Añade la siguiente línea al final de `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -120,7 +119,11 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Elvish
 
-   ::: advertencia Solo se admite Elvish v0.17 o superior. :::
+   ::: warning
+
+   Sólo se admite elvish v0.18 o superior.
+
+   :::
 
    Añade el siguiente código al final de `~/.elvish/rc.elv`:
 
@@ -144,15 +147,22 @@ description: '¡Starship es el prompt minimalista, ultrarápido e infinitamente 
 
    #### Nushell
 
-   ::: advertencia Esto cambiará en el futuro. Sólo se admite la versión nu v0.33 o superior. ::: Añade lo siguiente a tu archivo de configuración nu. Puedes comprobar la ubicación de este archivo ejecutando `ruta de configuración` en nu.
+   ::: warning
 
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   Esto cambiará en el futuro. Sólo se admite Nushell v0.78+.
+
+   :::
+
+   Añade lo siguiente al final de tu archivo Nushell env (encuéntralo ejecutando `$nu.env-path` en Nushell):
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save -f ~/.cache/starship/init.nu
+   ```
+
+   Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecutando `$nu.config-path`):
+
+   ```sh
+   use ~/.cache/starship/init.nu
    ```
 
 

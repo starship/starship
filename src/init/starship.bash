@@ -37,8 +37,20 @@ starship_precmd() {
         STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
     fi
 
+    # Due to a bug in certain Bash versions, any external process launched
+    # inside $PROMPT_COMMAND will be reported by `jobs` as a background job:
+    #
+    #   [1]  42135 Done                    /bin/echo
+    #
+    # This is a workaround - we run `jobs` once to clear out any completed jobs
+    # first, and then we run it again and count the number of jobs.
+    #
+    # More context: https://github.com/starship/starship/issues/5159
+    # Original bug: https://lists.gnu.org/archive/html/bug-bash/2022-07/msg00117.html
+    jobs &>/dev/null
+
     local NUM_JOBS=0
-    # Evaluate the number of jobs before running the preseved prompt command, so that tools
+    # Evaluate the number of jobs before running the preserved prompt command, so that tools
     # like z/autojump, which background certain jobs, do not cause spurious background jobs
     # to be displayed by starship. Also avoids forking to run `wc`, slightly improving perf.
     for job in $(jobs -p); do [[ $job ]] && ((NUM_JOBS++)); done
@@ -98,6 +110,9 @@ else
         PROMPT_COMMAND="starship_precmd"
     fi
 fi
+
+# Ensure that $COLUMNS gets set
+shopt -s checkwinsize
 
 # Set up the start time and STARSHIP_SHELL, which controls shell-specific sequences
 STARSHIP_START_TIME=$(::STARSHIP:: time)

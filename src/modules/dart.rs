@@ -1,4 +1,4 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module, ModuleConfig};
 
 use crate::configs::dart::DartConfig;
 use crate::formatter::StringFormatter;
@@ -73,7 +73,7 @@ fn parse_dart_version(dart_version: &str) -> Option<String> {
 mod tests {
     use crate::test::ModuleRenderer;
     use crate::utils::CommandOutput;
-    use ansi_term::Color;
+    use nu_ansi_term::Color;
     use std::fs::{self, File};
     use std::io;
 

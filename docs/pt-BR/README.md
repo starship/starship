@@ -37,7 +37,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 1. Instale o binário do **starship**:
 
 
-   #### Instalar a última versão
+   #### Instalando a última versão
 
    Com o Shell:
 
@@ -48,21 +48,20 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
    Para atualizar o Starship de maneira manual, execute novamente o script acima. Isto irá substituir a versão atual sem alterar as configurações do Starship.
 
 
-   #### Instalar via Gerenciador de Pacotes
+   #### Instalar via gerenciador de pacotes
 
    Com o [Homebrew](https://brew.sh/):
 
    ```sh
    brew install starship
    ```
-
-   Com o [Scoop](https://scoop.sh):
+   Com o [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
-   scoop install starship
+   winget install starship
    ```
 
-1. Adicione o script de inicialização ao arquivo de configuração do shell:
+1. Adicione o script de inicialização no arquivo de configuração do seu shell:
 
 
    #### Bash
@@ -100,7 +99,7 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Powershell
 
-   Adicione o comando a seguir ao final do arquivo `Microsoft.PowerShell_profile.ps1`. Você pode conferir a localização do arquivo consultando a varável `$PROFILE` no PowerShell. Normalmente o caminho é  `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` no -Nix.
+   Adicione o comando a seguir ao final do arquivo `Microsoft.PowerShell_profile.ps1`. Você pode checar a localização deste arquivo consultando a variável `$PROFILE` no PowerShell. Normalmente o caminho é  `~\Documentos\PowerShell\Microsoft.PowerShell_profile.ps1` ou `~/.config/powershell/Microsoft.PowerShell_profile.ps1` no -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -120,7 +119,11 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Elvish
 
-   ::: warning Apenas a versão elvish v0.17 ou superior é suportada. :::
+   ::: warning
+
+   Apenas elvish v0.18 ou superior é suportado.
+
+   :::
 
    Adicione o comando a seguir ao final do arquivo `~/.elvish/rc.elv`:
 
@@ -144,15 +147,22 @@ description: O Starship é o prompt minimalista, extremamente rápido e extremam
 
    #### Nushell
 
-   ::: Atenção Isto vai mudar no futuro. Apenas a versão v0.33 do nu ou superior é suportada. Adicione o seguinte no seu arquivo de configuração nu. Você pode verificar o local deste arquivo rodando `config path` in nu.
+   ::: warning
 
-   ```toml
-   startup = [
-     "mkdir ~/.cache/starship",
-     "starship init nu | save ~/.cache/starship/init.nu",
-     "source ~/.cache/starship/init.nu",
-   ]
-   prompt = "starship_prompt"
+   Isto irá mudar no futuro. Somente Nushell v0.78+ é suportado.
+
+   :::
+
+   Adicione o seguinte ao final do seu arquivo env do Nushell (enconte-o rodando  `$nu.env-path` no Nushell):
+   ```sh
+   mkdir ~/.cache/starship
+   starship init nu | save -f ~/.cache/starship/init.nu
+   ```
+
+   E adicione o seguinte ao final da sua configuração do Nushell (encontre-o executando `$nu.config-path`):
+
+   ```sh
+   use ~/.cache/starship/init.nu
    ```
 
 

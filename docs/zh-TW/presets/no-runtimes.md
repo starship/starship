@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#no-runtime-versions)
+[Return to Presets](./README.md#no-runtime-versions)
 
 # No Runtime Versions Preset
 
@@ -7,6 +7,10 @@
 ![隱藏運行版本預設樣式的截圖](/presets/img/no-runtime-versions.png)
 
 ### 設定
+
+```sh
+starship preset no-runtime-versions -o ~/.config/starship.toml
+```
 
 [Click to download TOML](/presets/toml/no-runtime-versions.toml)
 

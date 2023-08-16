@@ -1,13 +1,17 @@
-[Return to Presets](/presets/#pure)
+[Powrót do ustawień predefiniowanych](./README.md#pure)
 
-# Pure Preset
+# Ustawienia Pure
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Ten zestaw ustawień naśladuje wygląd i zachowanie  [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Pure preset](/presets/img/pure-preset.png)
+![Zrzut ekranu ustawień Pure](/presets/img/pure-preset.png)
 
 ### Konfiguracja
 
-[Click to download TOML](/presets/toml/pure-preset.toml)
+```sh
+starship preset pure-preset -o ~/.config/starship.toml
+```
+
+[Kliknij, aby pobrać TOML](/presets/toml/pure-preset.toml)
 
 <<< @/.vuepress/public/presets/toml/pure-preset.toml

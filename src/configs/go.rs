@@ -1,15 +1,19 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
 pub struct GoConfig<'a> {
     pub format: &'a str,
     pub version_format: &'a str,
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
+    pub not_capable_style: &'a str,
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
@@ -23,10 +27,12 @@ impl<'a> Default for GoConfig<'a> {
             symbol: "🐹 ",
             style: "bold cyan",
             disabled: false,
+            not_capable_style: "bold red",
             detect_extensions: vec!["go"],
             detect_files: vec![
                 "go.mod",
                 "go.sum",
+                "go.work",
                 "glide.yaml",
                 "Gopkg.yml",
                 "Gopkg.lock",

@@ -1,4 +1,4 @@
-# FAQ
+# Perguntas Frequentes
 
 ## Qual é a configuração usada no GIF de demonstração?
 
@@ -58,7 +58,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 
 ## Porque eu vejo alertas de `Executing command "..." timed out.`?
 
-O Starship executa comandos diferentes para recuperar as informações para exibir no prompt, por exemplo a versão de um programa ou o status atual do git. Para ter certeza de que o starship não travou durante uma execução destes comandos nos definimos um limite de tempo, se um comando ultrapassar este limite o starship vai parar a execução do comando e exibe o alerta acima, esse é um comportamento esperado. Este limite de tempo é configurado usando a [chave](/config/#prompt) `command_timeout` então se você quiser você pode aumentar este limite. Você pode também seguir os passos para debugar para ver qual comando esta demorando e se você pode otimizar ele. Finalmente você pode definir a variável de ambiente `STARSHIP_LOG` para `error` para esconder estes alertas.
+O Starship executa comandos diferentes para recuperar as informações para exibir no prompt, por exemplo a versão de um programa ou o status atual do git. Para ter certeza de que o starship não travou durante uma execução destes comandos nos definimos um limite de tempo, se um comando ultrapassar este limite o starship vai parar a execução do comando e exibe o alerta acima, esse é um comportamento esperado. Este limite de tempo é configurado usando o [`command_timeout`key](/config/#prompt) então se você quiser você pode aumentar este limite. Você pode também seguir os passos para debugar para ver qual comando esta demorando e se você pode otimizar ele. Finalmente você pode definir a variável de ambiente `STARSHIP_LOG` para `error` para esconder estes alertas.
 
 ## Eu vejo símbolos que não entendo ou não esperado, o que isso significa?
 
@@ -80,7 +80,7 @@ env STARSHIP_LOG=trace starship timings
 
 Isto vai retornar o rastreamento do log e um detalhamento de todos os módulos que levam mais que 1ms para executar ou produzir alguma saída.
 
-Finalmente se você quer procurar um bug você pode usar o comando `bug-report` para criar uma issue no Github.
+Por fim se você encontrar um bug use o comando `bug-report`  para criar um GitHub issue.
 
 ```sh
 starship bug-report

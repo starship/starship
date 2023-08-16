@@ -1,14 +1,18 @@
-use crate::config::ModuleConfig;
+use serde::{Deserialize, Serialize};
 
-use serde::Serialize;
-use starship_module_config_derive::ModuleConfig;
-
-#[derive(Clone, ModuleConfig, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
 pub struct ShLvlConfig<'a> {
     pub threshold: i64,
     pub format: &'a str,
     pub symbol: &'a str,
     pub repeat: bool,
+    pub repeat_offset: u64,
     pub style: &'a str,
     pub disabled: bool,
 }
@@ -20,6 +24,7 @@ impl<'a> Default for ShLvlConfig<'a> {
             format: "[$symbol$shlvl]($style) ",
             symbol: "↕️  ", // extra space for emoji
             repeat: false,
+            repeat_offset: 0,
             style: "bold yellow",
             disabled: true,
         }

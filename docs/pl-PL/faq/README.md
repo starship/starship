@@ -1,4 +1,4 @@
-# Najczęściej zadawane pytania (FAQ)
+# Frequently Asked Questions
 
 ## Jakiej konfiguracji użyto w GIFie demonstracyjnym?
 
@@ -80,7 +80,7 @@ env STARSHIP_LOG=trace starship timings
 
 This will output the trace log and a breakdown of all modules that either took more than 1ms to execute or produced some output.
 
-Finally if you find a bug you can use the `bug-report` command to create a Github issue.
+Finally if you find a bug you can use the `bug-report` command to create a GitHub issue.
 
 ```sh
 starship bug-report

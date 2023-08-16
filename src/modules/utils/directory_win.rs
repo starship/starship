@@ -1,29 +1,32 @@
-extern crate winapi;
+use std::{mem, os::windows::ffi::OsStrExt, path::Path};
 
-use std::mem;
-use std::os::windows::ffi::OsStrExt;
-use std::path::Path;
-
-use winapi::shared::minwindef::{BOOL, DWORD};
-use winapi::um::handleapi;
-use winapi::um::processthreadsapi;
-use winapi::um::securitybaseapi;
-use winapi::um::winnt::{
-    SecurityImpersonation, BOOLEAN, DACL_SECURITY_INFORMATION, FILE_ALL_ACCESS,
-    FILE_GENERIC_EXECUTE, FILE_GENERIC_READ, FILE_GENERIC_WRITE, GENERIC_MAPPING,
-    GROUP_SECURITY_INFORMATION, HANDLE, LPCWSTR, OWNER_SECURITY_INFORMATION, PRIVILEGE_SET,
-    STANDARD_RIGHTS_READ, TOKEN_DUPLICATE, TOKEN_IMPERSONATE, TOKEN_QUERY,
+use windows::{
+    core::PCWSTR,
+    Win32::{
+        Foundation::{CloseHandle, ERROR_INSUFFICIENT_BUFFER, HANDLE},
+        Security::{
+            AccessCheck, DuplicateToken, GetFileSecurityW, MapGenericMask, SecurityImpersonation,
+            DACL_SECURITY_INFORMATION, GENERIC_MAPPING, GROUP_SECURITY_INFORMATION,
+            OWNER_SECURITY_INFORMATION, PRIVILEGE_SET, PSECURITY_DESCRIPTOR, TOKEN_DUPLICATE,
+            TOKEN_IMPERSONATE, TOKEN_QUERY, TOKEN_READ_CONTROL,
+        },
+        Storage::FileSystem::{
+            FILE_ALL_ACCESS, FILE_GENERIC_EXECUTE, FILE_GENERIC_READ, FILE_GENERIC_WRITE,
+        },
+        System::Threading::{GetCurrentProcess, OpenProcessToken},
+        UI::Shell::PathIsNetworkPathW,
+    },
 };
-
 /// Checks if the current user has write access right to the `folder_path`
 ///
 /// First, the function extracts DACL from the given directory and then calls `AccessCheck` against
 /// the current process access token and directory's security descriptor.
 /// Does not work for network drives and always returns true
-pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, &'static str> {
-    let folder_name: Vec<u16> = folder_path.as_os_str().encode_wide().chain([0]).collect();
+pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, String> {
+    let wpath_vec: Vec<u16> = folder_path.as_os_str().encode_wide().chain([0]).collect();
+    let wpath = PCWSTR(wpath_vec.as_ptr());
 
-    if is_network_path(&folder_name) {
+    if unsafe { PathIsNetworkPathW(wpath) }.as_bool() {
         log::info!(
             "Directory '{:?}' is a network drive, unable to check write permissions. See #1506 for details",
             folder_path
@@ -31,102 +34,98 @@ pub fn is_write_allowed(folder_path: &Path) -> std::result::Result<bool, &'stati
         return Ok(true);
     }
 
-    let mut length: DWORD = 0;
+    let mut length = 0;
 
     let rc = unsafe {
-        securitybaseapi::GetFileSecurityW(
-            folder_name.as_ptr(),
-            OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
-            std::ptr::null_mut(),
+        GetFileSecurityW(
+            wpath,
+            (OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION).0,
+            PSECURITY_DESCRIPTOR::default(),
             0,
             &mut length,
         )
     };
-    if rc != 0 {
-        return Err(
-            "GetFileSecurityW returned non-zero when asked for the security descriptor size",
-        );
+
+    // expect ERROR_INSUFFICIENT_BUFFER
+    match rc.ok() {
+        Err(e) if e.code() == ERROR_INSUFFICIENT_BUFFER.into() => (),
+        result => return Err(format!("GetFileSecurityW returned unexpected return value when asked for the security descriptor size: {result:?}")),
     }
 
-    let mut buf: Vec<u8> = Vec::with_capacity(length as usize);
+    let mut buf = vec![0u8; length as usize];
+    let psecurity_descriptor = PSECURITY_DESCRIPTOR(buf.as_mut_ptr().cast::<std::ffi::c_void>());
 
     let rc = unsafe {
-        securitybaseapi::GetFileSecurityW(
-            folder_name.as_ptr(),
-            OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
-            buf.as_mut_ptr().cast::<std::ffi::c_void>(),
+        GetFileSecurityW(
+            wpath,
+            (OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION).0,
+            psecurity_descriptor,
             length,
             &mut length,
         )
     };
 
-    if rc != 1 {
-        return Err("GetFileSecurityW failed to retrieve the security descriptor");
+    if let Err(e) = rc.ok() {
+        return Err(format!(
+            "GetFileSecurityW failed to retrieve the security descriptor: {e:?}"
+        ));
     }
 
-    let mut token: HANDLE = 0 as HANDLE;
+    let mut token = HANDLE::default();
     let rc = unsafe {
-        processthreadsapi::OpenProcessToken(
-            processthreadsapi::GetCurrentProcess(),
-            TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_DUPLICATE | STANDARD_RIGHTS_READ,
+        OpenProcessToken(
+            GetCurrentProcess(),
+            TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_READ_CONTROL,
             &mut token,
         )
     };
-    if rc != 1 {
-        return Err("OpenProcessToken failed to retrieve current process' security token");
+    if let Err(e) = rc.ok() {
+        return Err(format!(
+            "OpenProcessToken failed to retrieve current process' security token: {e:?}"
+        ));
     }
 
-    let mut impersonated_token: HANDLE = 0 as HANDLE;
-    let rc = unsafe {
-        securitybaseapi::DuplicateToken(token, SecurityImpersonation, &mut impersonated_token)
-    };
-    if rc != 1 {
-        unsafe { handleapi::CloseHandle(token) };
-        return Err("DuplicateToken failed");
+    let mut impersonated_token = HANDLE::default();
+    let rc = unsafe { DuplicateToken(token, SecurityImpersonation, &mut impersonated_token) };
+
+    if let Err(e) = rc.ok() {
+        unsafe { CloseHandle(token) };
+        return Err(format!("DuplicateToken failed: {e:?}"));
     }
 
-    let mut mapping: GENERIC_MAPPING = GENERIC_MAPPING {
-        GenericRead: FILE_GENERIC_READ,
-        GenericWrite: FILE_GENERIC_WRITE,
-        GenericExecute: FILE_GENERIC_EXECUTE,
-        GenericAll: FILE_ALL_ACCESS,
+    let mapping = GENERIC_MAPPING {
+        GenericRead: FILE_GENERIC_READ.0,
+        GenericWrite: FILE_GENERIC_WRITE.0,
+        GenericExecute: FILE_GENERIC_EXECUTE.0,
+        GenericAll: FILE_ALL_ACCESS.0,
     };
 
-    let mut priviledges: PRIVILEGE_SET = PRIVILEGE_SET::default();
-    let mut priv_size = mem::size_of::<PRIVILEGE_SET>() as DWORD;
-    let mut granted_access: DWORD = 0;
-    let mut access_rights: DWORD = FILE_GENERIC_WRITE;
-    let mut result: BOOL = 0;
-    unsafe { securitybaseapi::MapGenericMask(&mut access_rights, &mut mapping) };
+    let mut privileges: PRIVILEGE_SET = PRIVILEGE_SET::default();
+    let mut priv_size = mem::size_of::<PRIVILEGE_SET>() as _;
+    let mut granted_access = 0;
+    let mut access_rights = FILE_GENERIC_WRITE;
+    let mut result = 0;
+    unsafe { MapGenericMask(&mut access_rights.0, &mapping) };
     let rc = unsafe {
-        securitybaseapi::AccessCheck(
-            buf.as_mut_ptr().cast::<std::ffi::c_void>(),
+        AccessCheck(
+            psecurity_descriptor,
             impersonated_token,
-            access_rights,
-            &mut mapping,
-            &mut priviledges,
+            access_rights.0,
+            &mapping,
+            Some(&mut privileges),
             &mut priv_size,
             &mut granted_access,
             &mut result,
         )
     };
     unsafe {
-        handleapi::CloseHandle(impersonated_token);
-        handleapi::CloseHandle(token);
+        CloseHandle(impersonated_token);
+        CloseHandle(token);
     }
 
-    if rc != 1 {
-        return Err("AccessCheck failed");
+    if let Err(e) = rc.ok() {
+        return Err(format!("AccessCheck failed: {e:?}"));
     }
 
     Ok(result != 0)
-}
-
-#[link(name = "Shlwapi")]
-extern "system" {
-    fn PathIsNetworkPathW(pszPath: LPCWSTR) -> BOOLEAN;
-}
-
-fn is_network_path(folder_path: &[u16]) -> bool {
-    unsafe { PathIsNetworkPathW(folder_path.as_ptr()) == 1 }
 }

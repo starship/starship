@@ -41,7 +41,7 @@ assignees: ''
 - Operating system: [e.g. macOS 10.13.4, Windows 10]
 
 #### Relevant Shell Configuration
-<!-- 
+<!--
   Based on the shell you use, please paste the appropriate configuration.
   The default location for your shell is:
     Bash: ~/.bashrc
@@ -49,7 +49,7 @@ assignees: ''
     Fish: ~/.config/fish/config.fish
     Xonsh: ~/.config/xonsh/rc.xsh
     Elvish: ~/.config/elvish/rc.elv
-    Nushell: ~/.config/nu/config.toml
+    Nushell: $nu.config-path
     Ion: ~/.config/ion/initrc
 -->
 

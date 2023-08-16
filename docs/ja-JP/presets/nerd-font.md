@@ -1,8 +1,8 @@
-[Return to Presets](/presets/#nerd-font-symbols)
+[プリセット一覧に戻る](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Nerd Font Symbolsプリセット
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+このプリセットはそれぞれのモジュールで記号がNerd Fontの記号に変更されます。
 
 ![Nerd Font Symbolsプリセットのスクリーンショット](/presets/img/nerd-font-symbols.png)
 
@@ -12,6 +12,10 @@ This preset changes the symbols for each module to use Nerd Font symbols.
 
 ### 設定
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml)
+```sh
+starship preset nerd-font-symbols -o ~/.config/starship.toml
+```
+
+[クリックしてTOMLをダウンロード](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml

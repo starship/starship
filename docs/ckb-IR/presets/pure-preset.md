@@ -1,4 +1,4 @@
-[Return to Presets](/presets/#pure)
+[Return to Presets](./README.md#pure)
 
 # Pure Preset
 
@@ -7,6 +7,10 @@
 ![Screenshot of Pure preset](/presets/img/pure-preset.png)
 
 ### ڕێکخستن
+
+```sh
+starship preset pure-preset -o ~/.config/starship.toml
+```
 
 [Click to download TOML](/presets/toml/pure-preset.toml)
 
