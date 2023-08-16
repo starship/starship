@@ -347,7 +347,7 @@ starship init nu | save -f ~/.cache/starship/init.nu
 use ~/.cache/starship/init.nu
 ```
 
-注意: Elvish v0.78以降でサポートされています
+注意: Nushell v0.78以降でサポートされています
 
 </details>
 
