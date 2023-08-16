@@ -1,4 +1,5 @@
-use super::{Context, Module, RootModuleConfig};
+use super::{Context, Module};
+use crate::config::ModuleConfig;
 use crate::configs::iterm2_mark::ITerm2MarkConfig;
 use crate::segment::Segment;
 
