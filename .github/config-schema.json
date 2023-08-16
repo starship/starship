@@ -797,6 +797,20 @@
         }
       ]
     },
+    "iterm2_mark": {
+      "default": {
+        "disabled": false,
+        "force": false,
+        "term_programs": [
+          "iTerm.app"
+        ]
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ITerm2MarkConfig"
+        }
+      ]
+    },
     "java": {
       "default": {
         "detect_extensions": [
@@ -3708,6 +3722,32 @@
           "type": "string"
         },
         "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ITerm2MarkConfig": {
+      "type": "object",
+      "properties": {
+        "term_programs": {
+          "description": "A vector of supported terminal application names. The iTerm2 set an environment variable named 'TERM_PROGRAM' when it starts. We check this environment variable to determine if this module should be activated. Currently, the value of TERM_PROGRAM is set to 'iTerm.app'. (see Default trait below) In case of changing, we let user to specify the value of TERM_PROGRAM.",
+          "default": [
+            "iTerm.app"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "force": {
+          "description": "Activate this module by force or not. Sometimes it is not reliable by the environment variable 'TERM_PROGRAM' to activate this module. For example, the iTerm.app failed to set the environment variable when remote login by ssh. Users could set the `force` flag to true in the config file under the 'iterm2_mark' section. Note the differences between `force` and `disabled`. When `disabled` is set to be true, this module will not run at all.",
+          "default": false,
+          "type": "boolean"
+        },
+        "disabled": {
+          "description": "Disable this module or not.",
           "default": false,
           "type": "boolean"
         }
