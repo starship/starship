@@ -77,8 +77,8 @@ shadow-rs = { version = "0.23.0", default-features = false }
 # battery is optional (on by default) because the crate doesn't currently build for Termux
 # see: https://github.com/svartalf/rust-battery/issues/33
 starship-battery = { version = "0.8.2", optional = true }
-strsim = "0.10.0"
 strip-ansi-escapes = "0.1.1"
+strsim = "0.10.0"
 systemstat = "=0.2.3"
 terminal_size = "0.2.6"
 toml = { version = "0.7.6", features = ["preserve_order"] }
