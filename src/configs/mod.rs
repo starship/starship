@@ -37,6 +37,7 @@ pub mod git_status;
 pub mod go;
 pub mod gradle;
 pub mod guix_shell;
+pub mod hare;
 pub mod haskell;
 pub mod haxe;
 pub mod helm;
@@ -176,6 +177,8 @@ pub struct FullConfig<'a> {
     gradle: gradle::GradleConfig<'a>,
     #[serde(borrow)]
     guix_shell: guix_shell::GuixShellConfig<'a>,
+    #[serde(borrow)]
+    hare: hare::HareConfig<'a>,
     #[serde(borrow)]
     haskell: haskell::HaskellConfig<'a>,
     #[serde(borrow)]

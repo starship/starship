@@ -44,6 +44,7 @@ pub const ALL_MODULES: &[&str] = &[
     "golang",
     "gradle",
     "guix_shell",
+    "hare",
     "haskell",
     "haxe",
     "helm",

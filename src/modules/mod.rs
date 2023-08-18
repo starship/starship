@@ -34,6 +34,7 @@ mod git_status;
 mod golang;
 mod gradle;
 mod guix_shell;
+mod hare;
 mod haskell;
 mod haxe;
 mod helm;
@@ -138,6 +139,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "golang" => golang::module(context),
             "gradle" => gradle::module(context),
             "guix_shell" => guix_shell::module(context),
+            "hare" => hare::module(context),
             "haskell" => haskell::module(context),
             "haxe" => haxe::module(context),
             "helm" => helm::module(context),
@@ -253,6 +255,7 @@ pub fn description(module: &str) -> &'static str {
         "golang" => "The currently installed version of Golang",
         "gradle" => "The currently installed version of Gradle",
         "guix_shell" => "The guix-shell environment",
+        "hare" => "The currently installed version of Hare",
         "haskell" => "The selected version of the Haskell toolchain",
         "haxe" => "The currently installed version of Haxe",
         "helm" => "The currently installed version of Helm",
