@@ -229,6 +229,7 @@ Alternatively, install Starship using any of the following package managers:
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
 | NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
+| openSUSE           | [openSUSE]              | `zypper install starship`                                     |
 | Void Linux         | [Void Linux Packages]   | `xbps-install -S starship`                                    |
 
 </details>
@@ -455,6 +456,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [homebrew]: https://formulae.brew.sh/formula/starship
 [macports]: https://ports.macports.org/port/starship
 [nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix
+[openSUSE]: https://software.opensuse.org/package/starship
 [pkgsrc]: https://pkgsrc.se/shells/starship
 [scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json
 [termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
