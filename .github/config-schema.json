@@ -3537,10 +3537,6 @@
           "default": false,
           "type": "boolean"
         },
-        "not_capable_style": {
-          "default": "bold red",
-          "type": "string"
-        },
         "detect_extensions": {
           "default": [
             "ha"
