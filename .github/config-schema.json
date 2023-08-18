@@ -696,6 +696,28 @@
         }
       ]
     },
+    "hare": {
+      "default": {
+        "detect_extensions": [
+          "ha"
+        ],
+        "detect_files": [
+          ".hare-version"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "not_capable_style": "bold red",
+        "style": "bold blue",
+        "symbol": "🐰 ",
+        "version_format": "${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/HareConfig"
+        }
+      ]
+    },
     "haskell": {
       "default": {
         "detect_extensions": [
