@@ -7,7 +7,7 @@ use crate::formatter::VersionFormatter;
 use once_cell::sync::Lazy;
 use std::ops::Deref;
 
-/// Creates a module with the current Go version
+/// Creates a module with the current Hare version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hare");
     let config = HareConfig::try_load(module.config);
