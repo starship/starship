@@ -3514,6 +3514,61 @@
       },
       "additionalProperties": false
     },
+    "HareConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "🐰 ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "not_capable_style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "detect_extensions": {
+          "default": [
+            "ha"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            ".hare-version"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "HaskellConfig": {
       "type": "object",
       "properties": {
