@@ -43,6 +43,9 @@ format = '(via [$symbol($version )]($style))'
 [golang]
 format = '(via [$symbol($version )]($style))'
 
+[hare]
+format = '(via [$symbol($version )]($style))'
+
 [haskell]
 format = '(via [$symbol($version )]($style))'
 

@@ -288,6 +288,7 @@ $erlang\
 $fennel\
 $golang\
 $guix_shell\
+$hare\
 $haskell\
 $haxe\
 $helm\
@@ -2079,6 +2080,37 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 | version  | `v7.5.1` | The version of `gradle`              |
 | symbol   |          | Mirrors the value of option `symbol` |
 | style*   |          | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+## Hare
+
+The `hare` module shows the currently installed version of [Hare](https://harelang.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `.hare-version` file
+- The current directory contains a file with the `.ha` extension
+
+### Options
+
+| Option              | Default                                                                                   | Description                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'`                                                      | The format for the module.                                                                                 |
+| `version_format`    | `'${raw}'`                                                                               | The version format. Available vars are `raw`, `major`, `minor`, & `patch`                                  |
+| `symbol`            | `'🐰 '`                                                                                   | A format string representing the symbol of Go.                                                             |
+| `detect_extensions` | `['ha']`                                                                                  | Which extensions should trigger this module.                                                               |
+| `detect_files`      | `['.hare-version']`                                                                       | Which filenames should trigger this module.                                                                |
+| `style`             | `'bold blue'`                                                                             | The style for the module.                                                                                  |
+| `not_capable_style` | `'bold red'`                                                                              | The style for the module when the go directive in the go.mod file does not match the installed Go version. |
+| `disabled`          | `false`                                                                                   | Disables the `golang` module.                                                                              |
+
+### Variables
+
+| Variable    | Example        | Description                                                                                                                                 |
+| ----------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| version     | `dev+102a2270` | The version of `go`                                                                                                                    |
+| symbol      |                | Mirrors the value of option `symbol`                                                                                                        |
+| style\*     |                | Mirrors the value of option `style`                                                                                                         |
 
 *: This variable can only be used as a part of a style string
 
