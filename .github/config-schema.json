@@ -707,7 +707,6 @@
         "detect_folders": [],
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
-        "not_capable_style": "bold red",
         "style": "bold blue",
         "symbol": "🐰 ",
         "version_format": "${raw}"
