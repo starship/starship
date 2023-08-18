@@ -102,7 +102,10 @@ mod tests {
         let actual = ModuleRenderer::new("hare").path(dir.path()).collect();
 
         // let expected = Some(format!("via {}", Color::Cyan.bold().paint("🐰 dev+102a2270 ")));
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🐰 dev+102a2270 ")));
+        let expected = Some(format!(
+            "via {}",
+            Color::Blue.bold().paint("🐰 dev+102a2270 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
@@ -113,7 +116,10 @@ mod tests {
         File::create(dir.path().join(".hare-version"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("hare").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Blue.bold().paint("🐰 dev+102a2270 ")));
+        let expected = Some(format!(
+            "via {}",
+            Color::Blue.bold().paint("🐰 dev+102a2270 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
