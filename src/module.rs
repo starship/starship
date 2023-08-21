@@ -210,7 +210,7 @@ where
             }
             _ => {
                 used += segment.width_graphemes();
-                current.push(segment.ansi_string());
+                current.push(segment.ansi_string(current.last().map(|s| s.style_ref())));
             }
         }
 

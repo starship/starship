@@ -75,7 +75,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     context,
                 )
                 .ok()
-                .map(|segments| segments.into_iter().map(|s| s.to_string()))
+                .map(|segments| {
+                    segments
+                        .into_iter()
+                        .map(|s| format!("{}", s.ansi_string(None)))
+                })
             })
             .flatten()
             .collect::<String>(),
