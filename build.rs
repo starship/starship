@@ -22,7 +22,7 @@ fn gen_presets_hook(mut file: &File) -> SdResult<()> {
     println!("cargo:rerun-if-changed=docs/.vuepress/public/presets/toml");
     let paths = fs::read_dir("docs/.vuepress/public/presets/toml")?;
     let mut sortedpaths = paths.collect::<io::Result<Vec<_>>>()?;
-    sortedpaths.sort_by_key(|e| e.path());
+    sortedpaths.sort_by_key(std::fs::DirEntry::path);
 
     let mut presets = String::new();
     let mut match_arms = String::new();
