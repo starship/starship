@@ -2113,9 +2113,9 @@ dependencies = [
 
 [[package]]
 name = "nix"
-version = "0.27.0"
+version = "0.27.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "896d4664b919f48478f3ce02c502adfe9bffeb61563d2a12ddf1aad8f6cd926f"
+checksum = "2eb04e9c688eff1c89d72b407f168cf79bb9e867a9d3323ed6c01519eb9cc053"
 dependencies = [
  "bitflags 2.3.3",
  "cfg-if",
@@ -3021,7 +3021,7 @@ dependencies = [
  "indexmap 1.9.3",
  "log",
  "mockall",
- "nix 0.27.0",
+ "nix 0.27.1",
  "notify-rust",
  "nu-ansi-term",
  "once_cell",
