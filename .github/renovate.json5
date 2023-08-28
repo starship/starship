@@ -19,6 +19,11 @@
     "packageRules": [
         // group updates to related packages
         {
+            "groupName": "chrono crates",
+            "matchDatasources": ["crate"],
+            "matchPackagePrefixes": ["chrono"]
+        },
+        {
             "groupName": "clap crates",
             "matchDatasources": ["crate"],
             "matchPackagePrefixes": ["clap"]

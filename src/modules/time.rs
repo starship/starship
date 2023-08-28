@@ -1,6 +1,7 @@
 use chrono::{DateTime, FixedOffset, Local, NaiveTime, Utc};
 
 use super::{Context, Module, ModuleConfig};
+use crate::config::Either;
 use crate::configs::time::TimeConfig;
 use crate::formatter::StringFormatter;
 
@@ -30,18 +31,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         time_format
     );
 
-    let formatted_time_string = if config.utc_time_offset != "local" {
-        match create_offset_time_string(Utc::now(), config.utc_time_offset, time_format) {
-            Ok(formatted_string) => formatted_string,
-            Err(_) => {
-                log::warn!(
-                    "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
-                );
-                format_time(time_format, Local::now())
+    let formatted_time_string = match config.utc_time_offset {
+        Either::First(tz) => format_time_tz(Utc::now(), &tz, time_format),
+        Either::Second("local") => format_time(time_format, Local::now()),
+        Either::Second(utc_time_offset) => {
+            match create_offset_time_string(Utc::now(), utc_time_offset, time_format) {
+                Ok(formatted_string) => formatted_string,
+                Err(_) => {
+                    log::warn!(
+                        "Invalid utc_time_offset configuration provided! Falling back to \"local\"."
+                    );
+                    format_time(time_format, Local::now())
+                }
             }
         }
-    } else {
-        format_time(time_format, Local::now())
     };
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
@@ -104,6 +107,11 @@ fn format_time_fixed_offset(time_format: &str, utc_time: DateTime<FixedOffset>) 
     utc_time.format(time_format).to_string()
 }
 
+fn format_time_tz(time: DateTime<Utc>, tz: &chrono_tz::Tz, time_format: &str) -> String {
+    let time = time.with_timezone(tz);
+    time.format(time_format).to_string()
+}
+
 /// Returns true if `time_now` is between `time_start` and `time_end`.
 /// If one of these values is not given, then it is ignored.
 /// It also handles cases where `time_start` and `time_end` have a midnight in between
@@ -157,6 +165,7 @@ mod tests {
     use super::*;
     use crate::test::ModuleRenderer;
     use chrono::offset::TimeZone;
+    use nu_ansi_term::Color;
 
     const FMT_12: &str = "%r";
     const FMT_24: &str = "%T";
@@ -369,6 +378,14 @@ mod tests {
     }
 
     #[test]
+    fn test_arbtime_24hr_tz() {
+        let utc_time: DateTime<Utc> = Utc.with_ymd_and_hms(2014, 7, 8, 17, 36, 47).unwrap();
+
+        let formatted = format_time_tz(utc_time, &chrono_tz::Tz::Europe__Berlin, FMT_24);
+        assert_eq!(formatted, "19:36:47");
+    }
+
+    #[test]
     fn test_parse_invalid_time_range() {
         let time_range = "10:00:00-12:00:00-13:00:00";
         let time_range_2 = "10:00:00";
@@ -506,5 +523,51 @@ mod tests {
 
         assert!(actual.starts_with(&col_prefix));
         assert!(actual.ends_with(&col_suffix));
+    }
+
+    #[test]
+    fn config_check_invalid_tz() {
+        let actual = ModuleRenderer::new("time")
+            .config(toml::toml! {
+                [time]
+                disabled = false
+                time_format = "%T"
+                utc_time_offset = "invalid"
+            })
+            .collect();
+
+        assert!(actual.is_some(), "Falls back to local time")
+    }
+
+    #[test]
+    fn module_tz() {
+        let actual = ModuleRenderer::new("time")
+            .config(toml::toml! {
+                [time]
+                disabled = false
+                time_format = "%:z"
+                utc_time_offset = "Asia/Kolkata"
+            })
+            .collect();
+
+        let expected = Some(format!("at {} ", Color::Yellow.bold().paint("+05:30")));
+
+        assert_eq!(actual, expected, "Uses timezone");
+    }
+
+    #[test]
+    fn module_offset() {
+        let actual = ModuleRenderer::new("time")
+            .config(toml::toml! {
+                [time]
+                disabled = false
+                time_format = "%:z"
+                utc_time_offset = "-1.75"
+            })
+            .collect();
+
+        let expected = Some(format!("at {} ", Color::Yellow.bold().paint("-01:45")));
+
+        assert_eq!(actual, expected, "Uses timezone");
     }
 }
