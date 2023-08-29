@@ -2757,6 +2757,7 @@ checksum = "763f8cd0d4c71ed8389c90cb8100cba87e763bd01a8e614d4f0af97bcd50a161"
 dependencies = [
  "dyn-clone",
  "indexmap 1.9.3",
+ "indexmap 2.0.0",
  "schemars_derive",
  "serde",
  "serde_json",

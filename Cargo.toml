@@ -98,7 +98,7 @@ shell-words = "1.1.0"
 [dependencies.schemars]
 version = "0.8.13"
 optional = true
-features = ["preserve_order", "indexmap"]
+features = ["preserve_order", "indexmap2"]
 
 [target.'cfg(windows)'.dependencies]
 deelevate = "0.2.0"
