@@ -546,12 +546,12 @@ mod tests {
 
     #[test]
     fn test_escaped_chars() {
-        const FORMAT_STR: &str = r#"\\\[\$text\]\(red bold\)"#;
+        const FORMAT_STR: &str = r"\\\[\$text\]\(red bold\)";
 
         let formatter = StringFormatter::new(FORMAT_STR).unwrap().map(empty_mapper);
         let result = formatter.parse(None, None).unwrap();
         let mut result_iter = result.iter();
-        match_next!(result_iter, r#"\[$text](red bold)"#, None);
+        match_next!(result_iter, r"\[$text](red bold)", None);
     }
 
     #[test]

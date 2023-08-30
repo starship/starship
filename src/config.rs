@@ -287,64 +287,62 @@ pub fn parse_style_string(
 ) -> Option<nu_ansi_term::Style> {
     style_string
         .split_whitespace()
-        .fold(Some(nu_ansi_term::Style::new()), |maybe_style, token| {
-            maybe_style.and_then(|style| {
-                let token = token.to_lowercase();
+        .try_fold(nu_ansi_term::Style::new(), |style, token| {
+            let token = token.to_lowercase();
 
-                // Check for FG/BG identifiers and strip them off if appropriate
-                // If col_fg is true, color the foreground. If it's false, color the background.
-                let (token, col_fg) = if token.as_str().starts_with("fg:") {
-                    (token.trim_start_matches("fg:").to_owned(), true)
-                } else if token.as_str().starts_with("bg:") {
-                    (token.trim_start_matches("bg:").to_owned(), false)
-                } else {
-                    (token, true) // Bare colors are assumed to color the foreground
-                };
+            // Check for FG/BG identifiers and strip them off if appropriate
+            // If col_fg is true, color the foreground. If it's false, color the background.
+            let (token, col_fg) = if token.as_str().starts_with("fg:") {
+                (token.trim_start_matches("fg:").to_owned(), true)
+            } else if token.as_str().starts_with("bg:") {
+                (token.trim_start_matches("bg:").to_owned(), false)
+            } else {
+                (token, true) // Bare colors are assumed to color the foreground
+            };
 
-                match token.as_str() {
-                    "underline" => Some(style.underline()),
-                    "bold" => Some(style.bold()),
-                    "italic" => Some(style.italic()),
-                    "dimmed" => Some(style.dimmed()),
-                    "inverted" => Some(style.reverse()),
-                    "blink" => Some(style.blink()),
-                    "hidden" => Some(style.hidden()),
-                    "strikethrough" => Some(style.strikethrough()),
-                    // When the string is supposed to be a color:
-                    // Decide if we yield none, reset background or set color.
-                    color_string => {
-                        if color_string == "none" && col_fg {
-                            None // fg:none yields no style.
+            match token.as_str() {
+                "underline" => Some(style.underline()),
+                "bold" => Some(style.bold()),
+                "italic" => Some(style.italic()),
+                "dimmed" => Some(style.dimmed()),
+                "inverted" => Some(style.reverse()),
+                "blink" => Some(style.blink()),
+                "hidden" => Some(style.hidden()),
+                "strikethrough" => Some(style.strikethrough()),
+                // When the string is supposed to be a color:
+                // Decide if we yield none, reset background or set color.
+                color_string => {
+                    if color_string == "none" && col_fg {
+                        None // fg:none yields no style.
+                    } else {
+                        // Either bg or valid color or both.
+                        let parsed = parse_color_string(
+                            color_string,
+                            context.and_then(|x| {
+                                get_palette(
+                                    &x.root_config.palettes,
+                                    x.root_config.palette.as_deref(),
+                                )
+                            }),
+                        );
+                        // bg + invalid color = reset the background to default.
+                        if !col_fg && parsed.is_none() {
+                            let mut new_style = style;
+                            new_style.background = Option::None;
+                            Some(new_style)
                         } else {
-                            // Either bg or valid color or both.
-                            let parsed = parse_color_string(
-                                color_string,
-                                context.and_then(|x| {
-                                    get_palette(
-                                        &x.root_config.palettes,
-                                        x.root_config.palette.as_deref(),
-                                    )
-                                }),
-                            );
-                            // bg + invalid color = reset the background to default.
-                            if !col_fg && parsed.is_none() {
-                                let mut new_style = style;
-                                new_style.background = Option::None;
-                                Some(new_style)
-                            } else {
-                                // Valid color, apply color to either bg or fg
-                                parsed.map(|ansi_color| {
-                                    if col_fg {
-                                        style.fg(ansi_color)
-                                    } else {
-                                        style.on(ansi_color)
-                                    }
-                                })
-                            }
+                            // Valid color, apply color to either bg or fg
+                            parsed.map(|ansi_color| {
+                                if col_fg {
+                                    style.fg(ansi_color)
+                                } else {
+                                    style.on(ansi_color)
+                                }
+                            })
                         }
                     }
                 }
-            })
+            }
         })
 }
 
