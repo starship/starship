@@ -245,7 +245,6 @@ impl<'a> Context<'a> {
 
     /// Returns true if 'detect_env_vars' is empty,
     /// or if at least one environment variable is set and no negated environment variable is set
-    /// or if there are only negated environment variable provided (which are not set)
     pub fn detect_env_vars(&'a self, env_vars: &'a [&'a str]) -> bool {
         if env_vars.is_empty() {
             return true;
@@ -255,8 +254,7 @@ impl<'a> Context<'a> {
             return false;
         }
 
-        // Returns true if all environment variables start with a "!",
-        // or if at least one environment variable is set
+        // Returns true if at least one environment variable is set
         let mut iter = env_vars
             .iter()
             .filter(|env_var| !env_var.starts_with('!'))
