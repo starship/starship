@@ -239,7 +239,8 @@ impl<'a> Context<'a> {
     fn has_negated_env_var(&self, env_vars: &'a [&'a str]) -> bool {
         env_vars
             .iter()
-            .any(|env_var| env_var.starts_with('!') && self.get_env(&env_var[1..]).is_some())
+            .filter_map(|env_var| env_var.strip_prefix('!'))
+            .any(|env_var| self.get_env(env_var).is_some())
     }
 
     /// Returns true if 'detect_env_vars' is empty,
@@ -256,10 +257,12 @@ impl<'a> Context<'a> {
 
         // Returns true if all environment variables start with a "!",
         // or if at least one environment variable is set
-        env_vars.iter().all(|env_var| env_var.starts_with('!'))
-            || env_vars
-                .iter()
-                .any(|env_var| self.get_env(env_var).is_some())
+        let mut iter = env_vars
+            .iter()
+            .filter(|env_var| !env_var.starts_with('!'))
+            .peekable();
+
+        iter.peek().is_none() || iter.any(|env_var| self.get_env(env_var).is_some())
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
