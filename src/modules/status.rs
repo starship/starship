@@ -189,6 +189,24 @@ fn status_common_meaning(ex: ExitCode) -> Option<&'static str> {
         0 => Some(""), // SUCCESS can be defined by $success_symbol if the user wishes too.
         1 => Some("ERROR"),
         2 => Some("USAGE"),
+
+        // status codes 64-78 from libc
+        64 => Some("USAGE"),
+        65 => Some("DATAERR"),
+        66 => Some("NOINPUT"),
+        67 => Some("NOUSER"),
+        68 => Some("NOHOST"),
+        69 => Some("UNAVAILABLE"),
+        70 => Some("SOFTWARE"),
+        71 => Some("OSERR"),
+        72 => Some("OSFILE"),
+        73 => Some("CANTCREAT"),
+        74 => Some("IOERR"),
+        75 => Some("TEMPFAIL"),
+        76 => Some("PROTOCOL"),
+        77 => Some("NOPERM"),
+        78 => Some("CONFIG"),
+
         126 => Some("NOPERM"),
         127 => Some("NOTFOUND"),
         _ => None,
@@ -409,10 +427,28 @@ mod tests {
 
     #[test]
     fn exit_code_name_no_signal() {
-        let exit_values = [1, 2, 126, 127, 130, 101, 132];
+        let exit_values = [
+            1, 2, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 126, 127, 130, 101,
+            132,
+        ];
         let exit_values_name = [
             Some("ERROR"),
             Some("USAGE"),
+            Some("USAGE"),
+            Some("DATAERR"),
+            Some("NOINPUT"),
+            Some("NOUSER"),
+            Some("NOHOST"),
+            Some("UNAVAILABLE"),
+            Some("SOFTWARE"),
+            Some("OSERR"),
+            Some("OSFILE"),
+            Some("CANTCREAT"),
+            Some("IOERR"),
+            Some("TEMPFAIL"),
+            Some("PROTOCOL"),
+            Some("NOPERM"),
+            Some("CONFIG"),
             Some("NOPERM"),
             Some("NOTFOUND"),
             None,
