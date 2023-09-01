@@ -1,17 +1,17 @@
 [Volver a Preajustes](./README.md#jetpack)
 
-# Jetpack Preset
+# Preajust Jetpack
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+Este es un preajuste pseudominimalista inspirado en las indicaciones [geometría](https://github.com/geometry-zsh/geometry) y [nave espacial](https://github.com/spaceship-prompt/spaceship-prompt).
 
-> Jetpack uses the terminal's color theme.
+> Jetpack utiliza los colores temáticos de la terminal.
 
-![Screenshot of Jetpack preset](/presets/img/jetpack.png)
+![Captura de pantalla del preajuste Jetpack](/presets/img/jetpack.png)
 
-### Prerequisite
+### Prerrequisito
 
-- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
-- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
+- Requiere un comando con [`la indicación correcta`](https://starship.rs/advanced-config/#enable-right-prompt).
+- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) es recomendado.
 
 ### Configuración
 
