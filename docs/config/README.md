@@ -2200,11 +2200,6 @@ format = 'via [⎈ $version](bold white) '
 
 The `hostname` module shows the system hostname.
 
-::: warning
-
-The `detect_env_vars` is only used, if `ssh_only` is set to `false` or there
-is an environment variable `SSH_CONNECTION` set.
-
 ### Options
 
 | Option            | Default                                | Description                                                                                                                           |
