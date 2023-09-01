@@ -79,7 +79,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
-      alt="Bahasa Indonesia"
+      alt="印尼文 (Bahasa)"
  /></a>
   &nbsp;
   <a
@@ -87,7 +87,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
-      alt="Italiano"
+      alt="意大利語"
  /></a>
   &nbsp;
   <a
@@ -103,7 +103,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="巴西葡萄牙語"
  /></a>
   &nbsp;
   <a
@@ -111,7 +111,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="俄語"
  /></a>
   &nbsp;
   <a
@@ -119,7 +119,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
-      alt="Українська"
+      alt="烏克蘭語"
  /></a>
   &nbsp;
   <a
@@ -177,7 +177,7 @@
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 至少一個[Nerd Font](https://www.nerdfonts.com/)需要已經被安裝，並且在終端模擬器中啓用 (你可以試試看[FireCode Nerd Font](https://www.nerdfonts.com/font-downloads))。
 
 ### 第一步 安裝 Starship
 
@@ -423,13 +423,13 @@ eval "$(starship init zsh)"
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
 
-## ❤️ Sponsors
+## ❤️ 贊助我們
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+你可以[成爲一個贊助者](https://github.com/sponsors/starship)來支持這個專案！ 你的名字和頭像會在這裏顯示，並且會帶有一個前往你網站的鏈接。
 
-**Supporter Tier**
+**贊助者等級**
 
-- [Appwrite](https://appwrite.io/)
+- [後端](https://appwrite.io/)
 
 <p align="center">
     <br>
