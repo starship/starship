@@ -2387,7 +2387,7 @@ The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` 
 | `detect_extensions` | `[]`                                                 | Qué extensiones deberían activar este módulo.                         |
 | `detect_files`      | `[]`                                                 | Qué nombres de archivo deberían activar este módulo.                  |
 | `detect_folders`    | `[]`                                                 | Qué carpetas deberían activar estos módulos.                          |
-| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
+| `contextos`         | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
 
 *: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
@@ -3063,14 +3063,14 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Opciones
 
-| Opción            | Predeterminado                    | Descripción                                                                             |
-| ----------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`          | `'is [$symbol$version]($style) '` | El formato del módulo.                                                                  |
-| `symbol`          | `'📦 '`                            | The symbol used before displaying the version the package.                              |
-| `version_format`  | `'v${raw}'`                       | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `style`           | `'bold 208'`                      | El estilo del módulo.                                                                   |
-| `display_private` | `false`                           | Enable displaying version for packages marked as private.                               |
-| `disabled`        | `false`                           | Disables the `package` module.                                                          |
+| Opción           | Predeterminado                    | Descripción                                                                             |
+| ---------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`         | `'is [$symbol$version]($style) '` | El formato del módulo.                                                                  |
+| `symbol`         | `'📦 '`                            | The symbol used before displaying the version the package.                              |
+| `version_format` | `'v${raw}'`                       | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `style`          | `'bold 208'`                      | El estilo del módulo.                                                                   |
+| `'📦 '`           | `false`                           | Enable displaying version for packages marked as private.                               |
+| `disabled`       | `false`                           | Disables the `package` module.                                                          |
 
 ### Variables
 
