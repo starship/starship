@@ -906,6 +906,7 @@
     "kubernetes": {
       "default": {
         "context_aliases": {},
+        "contexts": [],
         "detect_extensions": [],
         "detect_files": [],
         "detect_folders": [],
@@ -4013,6 +4014,58 @@
           "items": {
             "type": "string"
           }
+        },
+        "contexts": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KubernetesContextConfig"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "KubernetesContextConfig": {
+      "type": "object",
+      "properties": {
+        "context_pattern": {
+          "default": "",
+          "type": "string"
+        },
+        "user_pattern": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "symbol": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "context_alias": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "user_alias": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false
