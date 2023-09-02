@@ -28,6 +28,7 @@ pub mod erlang;
 pub mod fennel;
 pub mod fill;
 pub mod fossil_branch;
+pub mod fossil_metrics;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
@@ -158,6 +159,8 @@ pub struct FullConfig<'a> {
     fill: fill::FillConfig<'a>,
     #[serde(borrow)]
     fossil_branch: fossil_branch::FossilBranchConfig<'a>,
+    #[serde(borrow)]
+    fossil_metrics: fossil_metrics::FossilMetricsConfig<'a>,
     #[serde(borrow)]
     gcloud: gcloud::GcloudConfig<'a>,
     #[serde(borrow)]

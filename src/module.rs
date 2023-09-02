@@ -35,6 +35,7 @@ pub const ALL_MODULES: &[&str] = &[
     "fennel",
     "fill",
     "fossil_branch",
+    "fossil_metrics",
     "gcloud",
     "git_branch",
     "git_commit",

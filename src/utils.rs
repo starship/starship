@@ -257,6 +257,12 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::default(),
             stderr: String::default(),
         }),
+        "fossil diff --numstat" => Some(CommandOutput{
+            stdout: String::from("\
+         3          2 README.md
+         3          2 TOTAL over 1 changed files"),
+            stderr: String::default(),
+        }),
         "fossil update topic-branch" => Some(CommandOutput{
             stdout: String::default(),
             stderr: String::default(),

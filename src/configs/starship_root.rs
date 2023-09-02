@@ -39,6 +39,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "directory",
     "vcsh",
     "fossil_branch",
+    "fossil_metrics",
     "git_branch",
     "git_commit",
     "git_state",
