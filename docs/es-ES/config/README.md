@@ -1543,8 +1543,8 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 
 | Variable          | Ejemplo | Descripción                                 |
 | ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
+| añadido           | `1`     | The current number of added lines           |
+| eliminado         | `2`     | The current number of deleted lines         |
 | added_style\*   |         | Mirrors the value of option `added_style`   |
 | deleted_style\* |         | Mirrors the value of option `deleted_style` |
 
@@ -1583,10 +1583,10 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 | Variable  | Ejemplo       | Descripción                                                        |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
-| account   | `foo`         | The current GCP profile                                            |
-| domain    | `example.com` | The current GCP profile domain                                     |
-| project   |               | The current GCP project                                            |
-| active    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
+| cuenta    | `foo`         | The current GCP profile                                            |
+| dominio   | `example.com` | The current GCP profile domain                                     |
+| proyecto  |               | The current GCP project                                            |
+| activo    | `default`     | The active config name written in `~/.config/gcloud/active_config` |
 | symbol    |               | Refleja el valor de la opción `symbol`                             |
 | style\* |               | Refleja el valor de la opción `style`                              |
 
@@ -1780,8 +1780,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Variable          | Ejemplo | Descripción                                 |
 | ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
+| añadido           | `1`     | The current number of added lines           |
+| eliminado         | `2`     | The current number of deleted lines         |
 | added_style\*   |         | Mirrors the value of option `added_style`   |
 | deleted_style\* |         | Mirrors the value of option `deleted_style` |
 
@@ -1819,10 +1819,10 @@ The Git Status module is very slow in Windows directories (for example under `/m
 | `up_to_date`        | `''`                                            | The format of `up_to_date`                                                                                  |
 | `untracked`         | `'?'`                                           | The format of `untracked`                                                                                   |
 | `stashed`           | `'$'`                                           | The format of `stashed`                                                                                     |
-| `modified`          | `'!'`                                           | The format of `modified`                                                                                    |
+| `modificado`        | `'!'`                                           | The format of `modified`                                                                                    |
 | `staged`            | `'+'`                                           | The format of `staged`                                                                                      |
 | `renamed`           | `'»'`                                           | The format of `renamed`                                                                                     |
-| `deleted`           | `'✘'`                                           | The format of `deleted`                                                                                     |
+| `eliminado`         | `'✘'`                                           | The format of `deleted`                                                                                     |
 | `typechanged`       | `""`                                            | The format of `typechange`                                                                                  |
 | `style`             | `'bold red'`                                    | El estilo del módulo.                                                                                       |
 | `ignore_submodules` | `false`                                         | Ignore changes to submodules.                                                                               |
@@ -1840,10 +1840,10 @@ The following variables can be used in `format`:
 | `conflicted`   | Displays `conflicted` when this branch has merge conflicts.                                                   |
 | `untracked`    | Displays `untracked` when there are untracked files in the working directory.                                 |
 | `stashed`      | Displays `stashed` when a stash exists for the local repository.                                              |
-| `modified`     | Displays `modified` when there are file modifications in the working directory.                               |
+| `modificado`   | Displays `modified` when there are file modifications in the working directory.                               |
 | `staged`       | Displays `staged` when a new file has been added to the staging area.                                         |
 | `renamed`      | Displays `renamed` when a renamed file has been added to the staging area.                                    |
-| `deleted`      | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
+| `eliminado`    | Displays `deleted` when a file's deletion has been added to the staging area.                                 |
 | `typechanged`  | Displays `typechange` when a file's type has been changed in the staging area.                                |
 | style\*      | Refleja el valor de la opción `style`                                                                         |
 
@@ -1858,9 +1858,9 @@ The following variables can be used in `diverged`:
 
 The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
-| Variable | Descripción              |
-| -------- | ------------------------ |
-| `count`  | Show the number of files |
+| Variable | Descripción                   |
+| -------- | ----------------------------- |
+| `count`  | Mostrar el número de archivos |
 
 ### Ejemplo
 
@@ -2634,7 +2634,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 | Variable  | Ejemplo    | Descripción                            |
 | --------- | ---------- | -------------------------------------- |
-| project   | `starship` | The current Meson project name         |
+| proyecto  | `starship` | The current Meson project name         |
 | symbol    | `🐏`        | Refleja el valor de la opción `symbol` |
 | style\* |            | Refleja el valor de la opción `style`  |
 
@@ -2918,7 +2918,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 | Variable  | Ejemplo | Descripción                            |
 | --------- | ------- | -------------------------------------- |
 | cloud     | `corp`  | The current OpenStack cloud            |
-| project   | `dev`   | The current OpenStack project          |
+| proyecto  | `dev`   | The current OpenStack project          |
 | symbol    |         | Refleja el valor de la opción `symbol` |
 | style\* |         | Refleja el valor de la opción `style`  |
 
