@@ -89,7 +89,7 @@ jobs:
       RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@master
@@ -178,7 +178,7 @@ jobs:
       KEYCHAIN_ENTRY: AC_PASSWORD
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
         with:
           # Required to include the recently merged Crowdin PR
           ref: master
@@ -284,7 +284,7 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
 
       - name: Setup | Rust
         uses: dtolnay/rust-toolchain@stable
@@ -329,7 +329,7 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
       - run: pwsh ./install/windows/choco/update.ps1
@@ -345,7 +345,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
       - name: Merge | Merge Crowdin PR
         run: gh pr merge i18n_master --squash --repo=starship/starship
         env:
@@ -357,7 +357,7 @@ jobs:
     needs: merge_crowdin_pr
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
       - name: Trigger workflow dispatch
         run: gh workflow run publish-docs.yml
         env:
