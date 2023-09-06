@@ -2359,7 +2359,7 @@ kotlin_binary = 'kotlinc'
 
 ## Kubernetes
 
-Показує поточну назву [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) та, якщо встановлено, простір імен, користувача та кластер з файлу kubeconfig. Простір імен повинен бути встановлений у файлі kubeconfig файл, це можна зробити через `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Якщо параметр `$KUBECONFIG` встановлено, то модуль буде використовувати його, якщо ні — `~/.kube/config`.
+Показує поточну назву [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) та, якщо встановлено, простір імен, користувача та кластер з файлу kubeconfig. Простір імен повинен бути встановлений у файлі kubeconfig файл, це можна зробити через `kubectl config set-context starship-context --namespace astronaut`. Так само можна встановити користувача та  кластер за допомогою `kubectl config set-context starship-context --user starship-user` та `kubectl config set-context context context context --cluster starship-cluster`, відповідно. Якщо параметр `$KUBECONFIG` встановлено, то модуль буде використовувати його, якщо ні — `~/.kube/config`.
 
 ::: tip
 
@@ -2373,37 +2373,37 @@ kotlin_binary = 'kotlinc'
 
 ::: warning
 
-The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
+Параметри `context_aliases` та `user_aliases` є застарілими. Використовуйте `contexts` та, відповідно, `context_alias` та `user_alias`, натомість.
 
 :::
 
-| Параметр            | Стандартно                                           | Опис                                                 |
-| ------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `symbol`            | `'☸ '`                                               | Символ, що показується перед Кластером.              |
-| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Формат модуля.                                       |
-| `style`             | `'cyan bold'`                                        | Стиль модуля.                                        |
-| `context_aliases`*  | `{}`                                                 | Таблиця контекстних псевдонімів.                     |
-| `user_aliases`*     | `{}`                                                 | Таблиця псевдонімів користувача.                     |
-| `detect_extensions` | `[]`                                                 | Які розширення повинні запускати цей модуль.         |
-| `detect_files`      | `[]`                                                 | Які імена файлів мають запускати цей модуль.         |
-| `detect_folders`    | `[]`                                                 | Які теки мають запускати цей модуль.                 |
-| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts. |
-| `disabled`          | `true`                                               | Вимикає модуль `kubernetes`.                         |
+| Параметр            | Стандартно                                           | Опис                                                      |
+| ------------------- | ---------------------------------------------------- | --------------------------------------------------------- |
+| `symbol`            | `'☸ '`                                               | Символ, що показується перед Кластером.                   |
+| `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | Формат модуля.                                            |
+| `style`             | `'cyan bold'`                                        | Стиль модуля.                                             |
+| `context_aliases`*  | `{}`                                                 | Таблиця контекстних псевдонімів.                          |
+| `user_aliases`*     | `{}`                                                 | Таблиця псевдонімів користувача.                          |
+| `detect_extensions` | `[]`                                                 | Які розширення повинні запускати цей модуль.              |
+| `detect_files`      | `[]`                                                 | Які імена файлів мають запускати цей модуль.              |
+| `detect_folders`    | `[]`                                                 | Які теки мають запускати цей модуль.                      |
+| `contexts`          | `[]`                                                 | Кастомізовані стилі та символи для конкретних контекстів. |
+| `disabled`          | `true`                                               | Вимикає модуль `kubernetes`.                              |
 
-*: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
+*: Цей параметр є застарілими, додайте `contexts`, відповідно, `context_alias` та `user_alias`, натомість.
 
-To customize the style of the module for specific environments, use the following configuration as part of the `contexts` list:
+Для налаштування стилю модуля для конкретних середовищ використовуйте наступну конфігурацію як частину списку `contexts`:
 
-| Змінна            | Опис                                                                                     |
-| ----------------- | ---------------------------------------------------------------------------------------- |
-| `context_pattern` | **Required** Regular expression to match current Kubernetes context name.                |
-| `user_pattern`    | Regular expression to match current Kubernetes user name.                                |
-| `context_alias`   | Context alias to display instead of the full context name.                               |
-| `user_alias`      | User alias to display instead of the full user name.                                     |
-| `style`           | The style for the module when using this context. If not set, will use module's style.   |
-| `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+| Змінна            | Опис                                                                                                      |
+| ----------------- | --------------------------------------------------------------------------------------------------------- |
+| `context_pattern` | **Обовʼязково** Регулярний вираз, що повертає збіг з назвою поточного контексту Kubernetes.               |
+| `user_pattern`    | Регулярний вираз, що відповідає поточному імені користувача Kubernetes.                                   |
+| `context_alias`   | Псевдонім контексту для показу замість назви повного контексту.                                           |
+| `user_alias`      | Псевдонім користувача для показу замість повного імені користувача.                                       |
+| `style`           | Стиль для модуля, при використанні цього контексту. Якщо не вказано, використовуватиметься стиль модуля.  |
+| `symbol`          | Символ для модуля при використанні цього контексту. Якщо не вказано, використовуватиметься символ модуля. |
 
-Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern` regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N` (see example below and the [rust Regex::replace() documentation](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
+Зверніть увагу, що всі регулярні вирази виглядають як `^<pattern>$` і мають збігатись з усім рядком. Регулярний вираз `*_pattern` може мати групи, які можуть зазначатись у відповідних аліасах як `$name` та `$N` (дивіться приклад нижче та [документації rust Regex::replace()](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
 
 ### Змінні
 
@@ -2441,16 +2441,16 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Kubernetes Context specific config
+#### Kubernetes Context спец налаштування
 
-The `contexts` configuration option is used to customise what the current Kubernetes context name looks like (style and symbol) if the name matches the defined regular expression.
+Параметр `contexts` використовується для налаштування того, як виглядає назва контексту  Kubernetes (стиль та символ), якщо назва збігається з визначеною регулярним виразом.
 
 ```toml
 # ~/.config/starship.toml
 
 [[kubernetes.contexts]]
-# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
-# equals "admin_user"
+# стиль "bold red" + типовий символ, коли назва поточного контексту Kubernetes збігається з "production" *та* поточний користувач
+# збігається з "admin_user"
 context_pattern = "production"
 user_pattern = "admin_user"
 style = "bold red"
@@ -2458,17 +2458,17 @@ context_alias = "prod"
 user_alias = "admin"
 
 [[kubernetes.contexts]]
-# "green" style + a different symbol when Kubernetes current context name contains openshift
+# стиль "green" + інший символ, коли назва поточного контексту Kubernetes містить openshift
 context_pattern = ".*openshift.*"
 style = "green"
 symbol = "💔 "
 context_alias = "openshift"
 
 [[kubernetes.contexts]]
-# Using capture groups
-# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
-# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
-# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+# Використання груп
+# Контекст з GKE, AWS та інших хмарних постачальників зазвичай має додаткову інформацію, наприклад регіон/зону.
+# Наступний елемент збігається з форматом GKE format (`gke_projectname_zone_cluster-name`)
+# та змінює кожний відповідний kube context на більш зрозумілий формат (`gke-cluster-name`):
 context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
 context_alias = "gke-$cluster"
 ```
