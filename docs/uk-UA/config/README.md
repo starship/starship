@@ -1527,7 +1527,7 @@ truncation_symbol = ''
 
 ## Fossil Metrics
 
-The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+Модуль `fossil_metrics` покаже кількість доданих та видалених рядків у поточній теці. Потрібна версія Fossil не нижче v2.14 (2021-01-20).
 
 ### Параметри
 
@@ -1537,7 +1537,7 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 | `added_style`        | `'bold green'`                                               | Стиль для показу кількості доданих рядків.   |
 | `deleted_style`      | `'bold red'`                                                 | Стиль для показу кількості видалених рядків. |
 | `only_nonzero_diffs` | `true`                                                       | Показувати стан лише для змінених елементів. |
-| `disabled`           | `true`                                                       | Disables the `fossil_metrics` module.        |
+| `disabled`           | `true`                                                       | Вимикає модуль `fossil_metrics`.             |
 
 ### Змінні
 
