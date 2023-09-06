@@ -1,17 +1,17 @@
 [Повернутися до Шаблонів](./README.md#jetpack)
 
-# Jetpack Preset
+# Jetpack
 
-This is a pseudo minimalist preset inspired by the [geometry](https://github.com/geometry-zsh/geometry) and [spaceship](https://github.com/spaceship-prompt/spaceship-prompt) prompts.
+Цей псевдомінімалістичний шаблон створений під враженням від [geometry](https://github.com/geometry-zsh/geometry) та командного рядка [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
-> Jetpack uses the terminal's color theme.
+> Jetpack використовує колірну тему термінала.
 
-![Screenshot of Jetpack preset](/presets/img/jetpack.png)
+![Скріншот шаблона Jetpack](/presets/img/jetpack.png)
 
-### Prerequisite
+### Передумови
 
-- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
-- [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
+- Потрібна командна оболонка з підтримкою [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt).
+- Рекомендується  [Jetbrains Mono](https://www.jetbrains.com/lp/mono/).
 
 ### Налаштування
 
