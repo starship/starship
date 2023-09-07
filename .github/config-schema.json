@@ -48,7 +48,14 @@
             "charging_symbol": null,
             "discharging_symbol": null,
             "style": "red bold",
-            "threshold": 10
+            "threshold": 10,
+            "when": [
+              "unknown",
+              "charging",
+              "discharging",
+              "empty",
+              "full"
+            ]
           }
         ],
         "empty_symbol": "󰂎 ",
@@ -1931,7 +1938,14 @@
               "charging_symbol": null,
               "discharging_symbol": null,
               "style": "red bold",
-              "threshold": 10
+              "threshold": 10,
+              "when": [
+                "unknown",
+                "charging",
+                "discharging",
+                "empty",
+                "full"
+              ]
             }
           ],
           "type": "array",
@@ -1975,9 +1989,47 @@
             "string",
             "null"
           ]
+        },
+        "when": {
+          "default": [
+            "unknown",
+            "charging",
+            "discharging",
+            "empty",
+            "full"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_State_and_Array_of_State"
+            }
+          ]
         }
       },
       "additionalProperties": false
+    },
+    "Either_for_State_and_Array_of_State": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/State"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/State"
+          }
+        }
+      ]
+    },
+    "State": {
+      "description": "Possible battery state values.\n\nUnknown can mean either controller returned unknown, or not able to retrieve state due to some error.",
+      "type": "string",
+      "enum": [
+        "unknown",
+        "charging",
+        "discharging",
+        "empty",
+        "full"
+      ]
     },
     "BufConfig": {
       "type": "object",

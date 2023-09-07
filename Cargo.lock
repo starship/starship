@@ -3074,6 +3074,8 @@ dependencies = [
  "mach2",
  "nix 0.26.2",
  "num-traits",
+ "schemars",
+ "serde",
  "uom",
  "winapi",
 ]
