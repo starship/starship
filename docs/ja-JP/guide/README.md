@@ -177,7 +177,7 @@
 
 ### 必要なもの
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- [Nerd Font](https://www.nerdfonts.com/)がインストールされ、端末にて有効になっている（例えば、[FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)を試してみてください）。
 
 ### Step 1. Starshipをインストール
 
@@ -270,7 +270,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### Step 2. Set up your shell to use Starship
+### Step 2. Starshipをシェルにセットアップ
 
 Starshipを初期化するためのシェルの設定。 以下のリストからお使いのシェルを選択してください。
 
