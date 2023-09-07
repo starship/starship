@@ -50,12 +50,12 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### パッケージマネージャー経由でインストール
 
-   [ Homebrew ](https://brew.sh/)の場合：
+   [ Homebrew](https://brew.sh/)を使用する
 
    ```sh
    brew install starship
    ```
-   With [Winget](https://github.com/microsoft/winget-cli):
+   [Winget](https://github.com/microsoft/winget-cli)を使用する
 
    ```powershell
    winget install starship
