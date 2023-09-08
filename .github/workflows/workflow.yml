@@ -55,6 +55,8 @@ jobs:
 
       - name: Build | Lint
         uses: giraffate/clippy-action@871cc4173f2594435c7ea6b0bce499cf6c2164a1
+        with:
+          clippy_flags: --workspace --locked --all-targets --all-features -- -D clippy::all
 
   # Ensure that the project could be successfully compiled
   cargo_check:

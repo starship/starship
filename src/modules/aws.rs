@@ -668,7 +668,7 @@ credential_process = /opt/bin/awscreds-retriever
 
         let expiration_env_vars = ["AWS_SESSION_EXPIRATION", "AWS_CREDENTIAL_EXPIRATION"];
         expiration_env_vars.iter().for_each(|env_var| {
-            let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
+            let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_naive_utc_and_offset(
                 NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0)
                     .unwrap(),
                 Utc,
@@ -702,7 +702,7 @@ credential_process = /opt/bin/awscreds-retriever
 
         use chrono::{DateTime, NaiveDateTime, Utc};
 
-        let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_utc(
+        let now_plus_half_hour: DateTime<Utc> = chrono::DateTime::from_naive_utc_and_offset(
             NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() + 1800, 0).unwrap(),
             Utc,
         );
@@ -789,7 +789,7 @@ aws_secret_access_key=dummy
     fn expiration_date_set_expired() {
         use chrono::{DateTime, NaiveDateTime, SecondsFormat, Utc};
 
-        let now: DateTime<Utc> = chrono::DateTime::from_utc(
+        let now: DateTime<Utc> = chrono::DateTime::from_naive_utc_and_offset(
             NaiveDateTime::from_timestamp_opt(chrono::Local::now().timestamp() - 1800, 0).unwrap(),
             Utc,
         );
