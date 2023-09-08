@@ -3681,11 +3681,12 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### Variables
 
-| Variable | Example  | Description                          |
-| -------- | -------- | ------------------------------------ |
-| version  | `v2.5.1` | The version of `ruby`                |
-| symbol   |          | Mirrors the value of option `symbol` |
-| style\*  |          | Mirrors the value of option `style`  |
+| Variable | Example      | Description                                                                |
+| -------- | ------------ | -------------------------------------------------------------------------- |
+| version  | `v2.5.1`     | The version of `ruby`                                                      |
+| symbol   |              | Mirrors the value of option `symbol`                                       |
+| style\*  |              | Mirrors the value of option `style`                                        |
+| gemset   | `2.0.0@test` | Reads the Gemset and its version from the environment variable `GEM_HOME`. |
 
 *: This variable can only be used as a part of a style string
 

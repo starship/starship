@@ -1,3 +1,5 @@
+use regex::Regex;
+
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::ruby::RubyConfig;
@@ -7,8 +9,11 @@ use crate::formatter::{StringFormatter, VersionFormatter};
 ///
 /// Will display the Ruby version if any of the following criteria are met:
 ///     - Current directory contains a `.rb` file
-///     - Current directory contains a `Gemfile` or `.ruby-version` file
+///     - Current directory contains a `Gemfile` or `.ruby-version` fileruby
 ///     - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
+///
+/// Will display the current Gemset if any of the following criteria are met:
+///     - The environment variable `GEM_HOME` is set by RVM
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("ruby");
     let config = RubyConfig::try_load(module.config);
@@ -45,6 +50,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     config.version_format,
                 )
                 .map(Ok),
+                "gemset" => format_rvm_gemset_version(context).map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -79,6 +85,26 @@ fn format_ruby_version(ruby_version: &str, version_format: &str) -> Option<Strin
             Some(format!("v{version}"))
         }
     }
+}
+
+fn format_rvm_gemset_version(context: &Context) -> Option<String> {
+    if let Some(path) = context.get_env("GEM_HOME") {
+        let stem = path.split('/').last()?;
+
+        let version_re = Regex::new(r"(?:ruby-)(\d.\d.\d)").unwrap();
+        let gemset_re = Regex::new(r"@(\S+)").unwrap();
+
+        let version_cap = version_re.captures(stem);
+        let gemset_cap = gemset_re.captures(stem);
+
+        if let (Some(ver), Some(gem)) = (version_cap, gemset_cap) {
+            let version = ver.get(1)?.as_str();
+            let gemset = gem.get(1)?.as_str();
+            return Some(format!("{}@{}", version, gemset));
+        }
+    }
+
+    None
 }
 
 #[cfg(test)]
@@ -159,6 +185,32 @@ mod tests {
 
         // rbenv variable is only detected; its value is not used
         let expected = Some(format!("via {}", Color::Red.bold().paint("💎 v2.5.1 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn with_rvm_gemset_env() -> io::Result<()> {
+        // will check for gemset if the directory is a ruby directory
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.rb"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("ruby")
+            .path(dir.path())
+            .env(
+                "GEM_HOME",
+                "/some/file/path/.rvm/gems/ruby-2.0.0-p481@test-gemset",
+            )
+            .config(toml::toml! {
+                [ruby]
+                format = "via [$symbol($gemset )]($style)"
+            })
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Red.bold().paint("💎 2.0.0@test-gemset ")
+        ));
+
         assert_eq!(expected, actual);
         dir.close()
     }
