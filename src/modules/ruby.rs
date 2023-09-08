@@ -9,7 +9,7 @@ use crate::formatter::{StringFormatter, VersionFormatter};
 ///
 /// Will display the Ruby version if any of the following criteria are met:
 ///     - Current directory contains a `.rb` file
-///     - Current directory contains a `Gemfile` or `.ruby-version` fileruby
+///     - Current directory contains a `Gemfile` or `.ruby-version` file
 ///     - The environment variables `RUBY_VERSION` or `RBENV_VERSION` are set
 ///
 /// Will display the current Gemset if any of the following criteria are met:
