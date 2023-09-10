@@ -227,10 +227,7 @@ mod tests {
                 format = "via [$symbol($gemset )]($style)"
             })
             .collect();
-        let expected = Some(format!(
-            "via {}",
-            Color::Red.bold().paint("💎 ")
-        ));
+        let expected = Some(format!("via {}", Color::Red.bold().paint("💎 ")));
 
         assert_eq!(expected, actual);
         dir.close()
