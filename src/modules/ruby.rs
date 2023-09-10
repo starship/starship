@@ -216,6 +216,27 @@ mod tests {
     }
 
     #[test]
+    fn no_gemset_env_set() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("any.rb"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("ruby")
+            .path(dir.path())
+            .config(toml::toml! {
+                [ruby]
+                format = "via [$symbol($gemset )]($style)"
+            })
+            .collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Red.bold().paint("💎 ")
+        ));
+
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
     fn test_format_ruby_version() {
         let config = RubyConfig::default();
         assert_eq!(
