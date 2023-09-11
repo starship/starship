@@ -255,7 +255,7 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
         // No stash reference found
         Ok(None) => return Some(0),
         Err(err) => {
-            log::warn!("Error finding stash reference: {err}");
+            log::debug!("Error finding stash reference: {err}");
             return None;
         }
     };
@@ -267,7 +267,7 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
             Some(0)
         }
         Err(err) => {
-            log::warn!("Error getting stash log: {err}");
+            log::debug!("Error getting stash log: {err}");
             None
         }
     }
