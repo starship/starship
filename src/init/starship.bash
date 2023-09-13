@@ -21,7 +21,7 @@ starship_preexec() {
     local PREV_LAST_ARG=$1
 
     # Avoid restarting the timer for commands in the same pipeline
-    if [ "$STARSHIP_PREEXEC_READY" = "true" ]; then
+    if [ "${STARSHIP_PREEXEC_READY:-}" = "true" ]; then
         STARSHIP_PREEXEC_READY=false
         STARSHIP_START_TIME=$(::STARSHIP:: time)
     fi
