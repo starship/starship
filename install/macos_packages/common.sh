@@ -24,7 +24,7 @@ starship_version() {
     "$starship_program_file" -V | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
   else
     pushd "$(git rev-parse --show-toplevel)" || true
-    grep '^version = \"\(.*\)\"' Cargo.toml | head -n 1 | cut -f 2 -d '"'
+    grep '^version = \"\(.*\)\"' Cargo.toml | head -n 1 | cut -f 2 -d '"' | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
     popd
   fi
 }
