@@ -89,14 +89,14 @@ download() {
   file="$1"
   url="$2"
 
-  if has curl; then
-    if curl_is_snap; then
-      cmd="curl --fail --silent --location --output $file $url"
-    else
-      warn "curl installed through snap cannot install starship."
-      warn "See https://github.com/starship/starship/issues/5403 for details."
-      warn "Searching for other HTTP download programs..."
-    fi
+  if has curl && curl_is_snap; then
+    warn "curl installed through snap cannot install starship."
+    warn "See https://github.com/starship/starship/issues/5403 for details."
+    warn "Searching for other HTTP download programs..."
+  fi
+
+  if has curl && ! curl_is_snap; then
+    cmd="curl --fail --silent --location --output $file $url"
   elif has wget; then
     cmd="wget --quiet --output-document=$file $url"
   elif has fetch; then
