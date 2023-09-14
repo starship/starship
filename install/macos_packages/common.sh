@@ -19,12 +19,12 @@ starship_version() {
   # These get increasingly fragile as we go down the list---ideally CI should
   # always run with STARSHIP_VERSION set to avoid issues in determining version.
   if [ "$STARSHIP_VERSION" != "" ]; then
-    echo "$STARSHIP_VERSION"
+    echo "$STARSHIP_VERSION" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
   elif "$starship_program_file" -V >/dev/null 2>&1; then
-    "$starship_program_file" -V | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
+    "$starship_program_file" -V 2> /dev/null | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
   else
-    pushd "$(git rev-parse --show-toplevel)" || true
+    pushd "$(git rev-parse --show-toplevel)" &> /dev/null || true
     grep '^version = \"\(.*\)\"' Cargo.toml | head -n 1 | cut -f 2 -d '"' | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'
-    popd
+    popd &> /dev/null || true
   fi
 }
