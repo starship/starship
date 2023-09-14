@@ -43,8 +43,8 @@ has() {
 curl_is_snap() {
   curl_path="$(command -v curl)"
   case "$curl_path" in
-    (/snap/*) return 0 ;;
-    (*) return 1 ;;
+    /snap/*) return 0 ;;
+    *) return 1 ;;
   esac
 }
 
@@ -90,7 +90,7 @@ download() {
   url="$2"
 
   if has curl && curl_is_snap; then
-    warn "curl installed through snap cannot install starship."
+    warn "curl installed through snap cannot download starship."
     warn "See https://github.com/starship/starship/issues/5403 for details."
     warn "Searching for other HTTP download programs..."
   fi
