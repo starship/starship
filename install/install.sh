@@ -40,6 +40,14 @@ has() {
   command -v "$1" 1>/dev/null 2>&1
 }
 
+curl_is_snap() {
+  curl_path="$(command -v curl)"
+  case "$curl_path" in
+    (/snap/*) return 0 ;;
+    (*) return 1 ;;
+  esac
+}
+
 # Make sure user is not using zsh or non-POSIX-mode bash, which can cause issues
 verify_shell_is_posix_or_exit() {
   if [ -n "${ZSH_VERSION+x}" ]; then
@@ -55,7 +63,6 @@ verify_shell_is_posix_or_exit() {
   fi
 }
 
-# Gets path to a temporary file, even if
 get_tmpfile() {
   suffix="$1"
   if has mktemp; then
@@ -83,7 +90,13 @@ download() {
   url="$2"
 
   if has curl; then
-    cmd="curl --fail --silent --location --output $file $url"
+    if curl_is_snap; then
+      cmd="curl --fail --silent --location --output $file $url"
+    else
+      warn "curl installed through snap cannot install starship."
+      warn "See https://github.com/starship/starship/issues/5403 for details."
+      warn "Searching for other HTTP download programs..."
+    fi
   elif has wget; then
     cmd="wget --quiet --output-document=$file $url"
   elif has fetch; then
