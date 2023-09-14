@@ -220,7 +220,7 @@ jobs:
           STARSHIP_VERSION: v1.2.3
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         if: github.repository == 'starship/starship'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
