@@ -2143,14 +2143,15 @@ format = 'via [⎈ $version](bold white) '
 
 ### 配置项
 
-| 选项           | 默认值                                    | 描述                                                                                                    |
-| ------------ | -------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `ssh_only`   | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                   |
-| `ssh_symbol` | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                |
-| `trim_at`    | `'.'`                                  | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | 组件格式化模板。                                                                                              |
-| `style`      | `'bold dimmed green'`                  | 此组件的样式。                                                                                               |
-| `disabled`   | `false`                                | 禁用 `hostname` 组件。                                                                                     |
+| 选项                | 默认值                                    | 描述                                                                                                     |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `ssh_only`        | `true`                                 | 仅在连接到 SSH 会话时显示主机名。                                                                                    |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                 |
+| `trim_at`         | `'.'`                                  | 当主机名过长被截断时，会截断成第一次匹配该字符串之前的主机名。 `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                              |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | 组件格式化模板。                                                                                               |
+| `style`           | `'bold dimmed green'`                  | 此组件的样式。                                                                                                |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                        |
 
 ### 变量
 
@@ -2162,7 +2163,9 @@ format = 'via [⎈ $version](bold white) '
 
 *: 此变量只能作为样式字符串的一部分使用
 
-### 示例
+### Examples
+
+#### Always show the hostname
 
 ```toml
 # ~/.config/starship.toml
@@ -2171,6 +2174,17 @@ format = 'via [⎈ $version](bold white) '
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
@@ -4331,7 +4345,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 *: 此变量只能作为样式字符串的一部分使用
 
-#### 自定义命令 shell
+#### Custom command shell
 
 `shell` 接受一个非空字符串列表：
 
@@ -4366,19 +4380,19 @@ shell = ['pwsh', '-Command', '-']
 # ~/.config/starship.toml
 
 [custom.foo]
-command = 'echo foo' # 显示命令输出
-detect_files = ['foo'] # 支持过滤器，但不支持通配符
+command = 'echo foo' # shows output of command
+detect_files = ['foo'] # can specify filters but wildcards are not supported
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
 [custom.time]
 command = 'time /T'
-detect_extensions = ['pst'] # 识别 *.pst 文件
+detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
 
 [custom.time-as-arg]
 command = 'time /T'
-detect_extensions = ['pst'] # 识别 *.pst 文件
+detect_extensions = ['pst'] # filters *.pst files
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
