@@ -2143,14 +2143,15 @@ format = 'via [⎈ $version](bold white) '
 
 ### Опции
 
-| Параметр     | По умолчанию                           | Описание                                                                                                                                      |
-| ------------ | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only`   | `true`                                 | Показывать имя хоста только при подключении через SSH.                                                                                        |
-| `ssh_symbol` | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                                        |
-| `trim_at`    | `'.'`                                  | Символы, по которую имя хоста будет сокращено после первого совпадения. `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                                |
-| `style`      | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                                 |
-| `disabled`   | `false`                                | Отключает модуль `hostname`.                                                                                                                  |
+| Параметр          | По умолчанию                           | Описание                                                                                                                                       |
+| ----------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Показывать имя хоста только при подключении через SSH.                                                                                         |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                                         |
+| `trim_at`         | `'.'`                                  | Символы, по которую имя хоста будет сокращено после первого совпадения. `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                                      |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                                 |
+| `style`           | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                                  |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                                |
 
 ### Переменные
 
@@ -2162,7 +2163,9 @@ format = 'via [⎈ $version](bold white) '
 
 *: Эта переменная может использоваться только в качестве части строки style
 
-### Пример
+### Примеры
+
+#### Always show the hostname
 
 ```toml
 # ~/.config/starship.toml
@@ -2171,6 +2174,17 @@ format = 'via [⎈ $version](bold white) '
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
