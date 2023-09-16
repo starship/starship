@@ -3391,7 +3391,7 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Muestra la versión de python dentro de un entorno virtual local.
 #
 # Note this will only work when the venv is inside the project and it will only
 # work in the directory that contains the venv dir but maybe this is ok?
