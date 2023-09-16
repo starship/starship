@@ -2143,14 +2143,15 @@ format = 'via [⎈ $version](bold white) '
 
 ### 選項
 
-| Option       | 預設                                     | 說明                                                                                          |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `ssh_only`   | `true`                                 | 只在連接到一個 SSH session 時顯示主機名稱。                                                                |
-| `ssh_symbol` | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                      |
-| `trim_at`    | `'.'`                                  | 擷取出主機名稱的斷點，以第一個符合的為準。 `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                  |
-| `style`      | `'bold dimmed green'`                  | 這個模組的風格。                                                                                    |
-| `disabled`   | `false`                                | 停用 `hostname` 模組。                                                                           |
+| Option            | 預設                                     | 說明                                                                                           |
+| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | 只在連接到一個 SSH session 時顯示主機名稱。                                                                 |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                       |
+| `trim_at`         | `'.'`                                  | 擷取出主機名稱的斷點，以第一個符合的為準。 `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                    |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                   |
+| `style`           | `'bold dimmed green'`                  | 這個模組的風格。                                                                                     |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                              |
 
 ### Variables
 
@@ -2162,7 +2163,9 @@ format = 'via [⎈ $version](bold white) '
 
 *: This variable can only be used as a part of a style string
 
-### 範例
+### Examples
+
+#### Always show the hostname
 
 ```toml
 # ~/.config/starship.toml
@@ -2171,6 +2174,17 @@ format = 'via [⎈ $version](bold white) '
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
