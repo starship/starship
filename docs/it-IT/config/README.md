@@ -2143,14 +2143,15 @@ The `hostname` module shows the system hostname.
 
 ### Opzioni
 
-| Opzione      | Default                                | Descrizione                                                                                                                          |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`   | `true`                                 | Only show hostname when connected to an SSH session.                                                                                 |
-| `ssh_symbol` | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                               |
-| `trim_at`    | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                                                           |
-| `style`      | `'bold dimmed green'`                  | Lo stile per il modulo.                                                                                                              |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| Opzione           | Default                                | Descrizione                                                                                                                           |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Only show hostname when connected to an SSH session.                                                                                  |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                                |
+| `trim_at`         | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                             |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                                                            |
+| `style`           | `'bold dimmed green'`                  | Lo stile per il modulo.                                                                                                               |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
 
 ### Variables
 
@@ -2162,7 +2163,9 @@ The `hostname` module shows the system hostname.
 
 *: This variable can only be used as a part of a style string
 
-### Esempio
+### Examples
+
+#### Always show the hostname
 
 ```toml
 # ~/.config/starship.toml
@@ -2171,6 +2174,17 @@ The `hostname` module shows the system hostname.
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
