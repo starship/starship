@@ -2189,7 +2189,7 @@ trim_at = '.companyname.com'
 disabled = false
 ```
 
-#### Hide the hostname in remote tmux sessions
+#### Ocultar el nombre de host en sesiones remotas de tmux
 
 ```toml
 # ~/.config/starship.toml
@@ -3060,7 +3060,7 @@ disabled = false
 
 [os.symbols]
 Windows = " "
-Arch = "Arch is the best! "
+Arch = "Arch es lo mejor! "
 ```
 
 ## Package Version
@@ -3252,7 +3252,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Ejemplo
 
-#### With Pulumi Version
+#### Con la versión de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3261,7 +3261,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Without Pulumi version
+#### Sin versión de Pulumi
 
 ```toml
 # ~/.config/starship.toml
