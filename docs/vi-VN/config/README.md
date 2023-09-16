@@ -2143,14 +2143,15 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 ### Các tuỳ chọn
 
-| Tuỳ chọn     | Mặc định                               | Mô tả                                                                                                                             |
-| ------------ | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only`   | `true`                                 | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                         |
-| `ssh_symbol` | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                            |
-| `trim_at`    | `'.'`                                  | Chuỗi mà hostname được cắt ngắn, sau khi khớp lần đầu tiên. `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | Định dạng cho module.                                                                                                             |
-| `style`      | `'bold dimmed green'`                  | Kiểu cho module.                                                                                                                  |
-| `disabled`   | `false`                                | Vô hiệu `hastname` module.                                                                                                        |
+| Tuỳ chọn          | Mặc định                               | Mô tả                                                                                                                              |
+| ----------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Chỉ hiển thị hostname khi được kết nối tới một phiên SSH.                                                                          |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                             |
+| `trim_at`         | `'.'`                                  | Chuỗi mà hostname được cắt ngắn, sau khi khớp lần đầu tiên. `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                          |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | Định dạng cho module.                                                                                                              |
+| `style`           | `'bold dimmed green'`                  | Kiểu cho module.                                                                                                                   |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                    |
 
 ### Các biến
 
@@ -2162,7 +2163,9 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 
 *: Biến này có thể chỉ được sử dụng như một phần của style string
 
-### Ví dụ
+### Các ví dụ
+
+#### Always show the hostname
 
 ```toml
 # ~/.config/starship.toml
@@ -2171,6 +2174,17 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
