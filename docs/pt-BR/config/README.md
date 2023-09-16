@@ -2143,14 +2143,15 @@ O módulo `hostname` exibe o nome do hostname.
 
 ### Opções
 
-| Opções       | Padrão                                 | Descrição                                                                                                                                     |
-| ------------ | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only`   | `true`                                 | Apenas exibe o hostname quando conectado em uma sessão SSH.                                                                                   |
-| `ssh_symbol` | `'🌐 '`                                 | Uma formatação de string que representa o símbolo quando conectado à sessão SSH.                                                              |
-| `trim_at`    | `'.'`                                  | String na qual vai truncar o hostname, após a primeira correspondência. `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | O formato do módulo.                                                                                                                          |
-| `style`      | `'bold dimmed green'`                  | O estilo do módulo.                                                                                                                           |
-| `disabled`   | `false`                                | Desabilita o módulo `hostname`.                                                                                                               |
+| Opções            | Padrão                                 | Descrição                                                                                                                                      |
+| ----------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Apenas exibe o hostname quando conectado em uma sessão SSH.                                                                                    |
+| `ssh_symbol`      | `'🌐 '`                                 | Uma formatação de string que representa o símbolo quando conectado à sessão SSH.                                                               |
+| `trim_at`         | `'.'`                                  | String na qual vai truncar o hostname, após a primeira correspondência. `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                                      |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | O formato do módulo.                                                                                                                           |
+| `style`           | `'bold dimmed green'`                  | O estilo do módulo.                                                                                                                            |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                                |
 
 ### Variáveis
 
@@ -2162,7 +2163,9 @@ O módulo `hostname` exibe o nome do hostname.
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
-### Exemplo
+### Exemplos
+
+#### Always show the hostname
 
 ```toml
 # ~/.config/starship.toml
@@ -2171,6 +2174,17 @@ O módulo `hostname` exibe o nome do hostname.
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
@@ -3226,7 +3240,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### Com a versão do Pulumi
+#### With Pulumi Version
 
 ```toml
 # ~/.config/starship.toml
@@ -3235,7 +3249,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Sem a versão do Pulumi
+#### Without Pulumi version
 
 ```toml
 # ~/.config/starship.toml
@@ -3349,7 +3363,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Use apenas o binário `python3` para obter a versão.
+# Only use the `python3` binary to get the version.
 python_binary = 'python3'
 ```
 
@@ -3357,7 +3371,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Não acione para arquivos com a extensão py
+# Don't trigger for files with the py extension
 detect_extensions = []
 ```
 
@@ -3365,10 +3379,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Exibe a versão do python de dentro de um venv local.
+# Display the version of python from inside a local venv.
 #
-# Note que isso só funcionará quando o venv estiver dentro do projeto e só
-# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
+# Note this will only work when the venv is inside the project and it will only
+# work in the directory that contains the venv dir but maybe this is ok?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3922,7 +3936,7 @@ disabled = false
 ```
 
 ```toml
-# No windows
+# On windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -4010,7 +4024,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### Com a versão do Terraform
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -4019,7 +4033,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Sem a versão do Terraform
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
@@ -4331,7 +4345,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
-#### Comandos personalizados de shell
+#### Custom command shell
 
 `shell` aceita uma lista não vazia de string, onde:
 
