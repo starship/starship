@@ -2143,29 +2143,41 @@ El módulo `hostname` muestra el nombre de host del sistema.
 
 ### Opciones
 
-| Opción            | Predeterminado                         | Descripción                                                                                                                                              |
-| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ssh_only`        | `true`                                 | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                   |
-| `ssh_symbol`      | `'🌐 '`                                 | Una cadena de formato que representa el símbolo cuando se conecta a la sesión SSH.                                                                       |
-| `trim_at`         | `'.'`                                  | Cadena en la que el nombre del host se corta, después de la primera coincidencia. `'.'` will stop after the first dot. `''` will disable any truncation. |
-| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                                                |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                   |
-| `style`           | `'bold dimmed green'`                  | El estilo del módulo.                                                                                                                                    |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                                          |
+| Opción            | Predeterminado                         | Descripción                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ssh_only`        | `true`                                 | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                                                                                                                                                                                                                                                                             |
+| `ssh_symbol`      | `'🌐 '`                                 | Una cadena de formato que representa el símbolo cuando se conecta a la sesión SSH.                                                                                                                                                                                                                                                                                                                                 |
+| `trim_at`         | `'.'`                                  | Cadena en la que el nombre del host se corta, después de la primera coincidencia. `'.'` will stop after the first dot. `''` will disable any truncation.                                                                                                                                                                                                                                                           |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                                                                                                                                                                                                                                                                                                          |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                                                                                                                                                                                                                                                                             |
+| `style`           | `'bold dimmed green'`                  | El estilo del módulo.                                                                                                                                                                                                                                                                                                                                                                                              |
+| `disabled`        | `false`                                | Deshabilita el módulo `hostname<0>.</td>
+</tr>
+</tbody>
+</table>
 
-### Variables
+<h3 spaces-before="0">Variables</h3>
 
-| Variable        | Ejemplo       | Descripción                                                    |
-| --------------- | ------------- | -------------------------------------------------------------- |
-| nombre del host | `computadora` | El nombre de host de la computadora                            |
-| style\*       |               | Refleja el valor de la opción `style`                          |
-| ssh_symbol      | `'🌏 '`        | El símbolo a representar cuando está conectado a la sesión SSH |
+<table spaces-before="0">
+<thead>
+<tr>
+  <th>Variable</th>
+  <th>Ejemplo</th>
+  <th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>nombre del host</td>
+  <td><code>computadora` | El nombre de host de la computadora |
+| style\*         |                                        | Refleja el valor de la opción `style`                                                                                                                                                                                                                                                                                                                                                                              |
+| ssh_symbol        | `'🌏 '`                                 | El símbolo a representar cuando está conectado a la sesión SSH                                                                                                                                                                                                                                                                                                                                                     |
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
 ### Ejemplos
 
-#### Always show the hostname
+#### Mostrar siempre el nombre del host
 
 ```toml
 # ~/.config/starship.toml
@@ -3102,7 +3114,7 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 # ~/.config/starship.toml
 
 [package]
-format = 'via [🎁 $version](208 bold) '
+format = 'vía [🎁 $version](208 bold) '
 ```
 
 ## Perl
@@ -3980,7 +3992,7 @@ Por defecto, el módulo `swift` muestra la versión instalada de [Swift](https:/
 # ~/.config/starship.toml
 
 [swift]
-format = 'via [🏎  $version](red bold)'
+format = 'vía [🏎  $version](red bold)'
 ```
 
 ## Terraform
@@ -4024,7 +4036,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 
 ### Ejemplo
 
-#### With Terraform Version
+#### Con Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -4033,7 +4045,7 @@ Por defecto, el módulo se mostrará si se cumplen cualquiera de las siguientes 
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Sin Terraform Version
 
 ```toml
 # ~/.config/starship.toml
