@@ -2143,14 +2143,15 @@ format = 'via [⎈ $version](bold white) '
 
 ### オプション
 
-| オプション        | デフォルト                                  | 説明                                                                                                |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `ssh_only`   | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                                  |
-| `ssh_symbol` | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                            |
-| `trim_at`    | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                                 |
-| `style`      | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                                     |
-| `disabled`   | `false`                                | `hostname`モジュールを無効にします。                                                                           |
+| オプション             | デフォルト                                  | 説明                                                                                                 |
+| ----------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | SSHセッションに接続されている場合にのみホスト名を表示します。                                                                   |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                             |
+| `trim_at`         | `'.'`                                  | この文字が最初にマッチするまでをホスト名と認識します。 `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                          |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                                  |
+| `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                                      |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                    |
 
 ### 変数
 
@@ -2164,6 +2165,8 @@ format = 'via [⎈ $version](bold white) '
 
 ### 設定例
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -2171,6 +2174,17 @@ format = 'via [⎈ $version](bold white) '
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
@@ -4010,7 +4024,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 
 ### 設定例
 
-#### Terraform バージョン表示あり
+#### With Terraform Version
 
 ```toml
 # ~/.config/starship.toml
@@ -4019,7 +4033,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Terraform バージョン表示なし
+#### Without Terraform version
 
 ```toml
 # ~/.config/starship.toml
