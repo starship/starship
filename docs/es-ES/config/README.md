@@ -2147,7 +2147,7 @@ El módulo `hostname` muestra el nombre de host del sistema.
 | ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `ssh_only`        | `true`                                 | Mostrar sólo el nombre de host cuando esté conectado a una sesión SSH.                                                                                                                                                                                                                                                                                                                                             |
 | `ssh_symbol`      | `'🌐 '`                                 | Una cadena de formato que representa el símbolo cuando se conecta a la sesión SSH.                                                                                                                                                                                                                                                                                                                                 |
-| `trim_at`         | `'.'`                                  | Cadena en la que el nombre del host se corta, después de la primera coincidencia. `'.'` will stop after the first dot. `''` will disable any truncation.                                                                                                                                                                                                                                                           |
+| `trim_at`         | `'.'`                                  | Cadena en la que el nombre del host se corta, después de la primera coincidencia. `'.'` will stop after the first dot. `''` deshabilitará cualquier truncamiento.                                                                                                                                                                                                                                                  |
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                                                                                                                                                                                                                                                                                                          |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                                                                                                                                                                                                                                                                             |
 | `style`           | `'bold dimmed green'`                  | El estilo del módulo.                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -2379,7 +2379,7 @@ symbol = '🅺 '
 # ~/.config/starship.toml
 
 [kotlin]
-# Uses the Kotlin Compiler binary to get the installed version
+# Utiliza el compilador binario Kotlink para obtener la versión instalada
 kotlin_binary = 'kotlinc'
 ```
 
@@ -2467,7 +2467,7 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Kubernetes Context specific config
+#### Configuración específica del Contexto de Kubernetes
 
 The `contexts` configuration option is used to customise what the current Kubernetes context name looks like (style and symbol) if the name matches the defined regular expression.
 
