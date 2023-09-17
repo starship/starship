@@ -2151,7 +2151,7 @@ format = 'via [⎈ $version](bold white) '
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                                      |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                                 |
 | `style`           | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                                  |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                                |
+| `disabled`        | `false`                                | Отключает модуль `hostname`.                                                                                                                   |
 
 ### Переменные
 
@@ -3228,13 +3228,13 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Переменные
 
-| Переменная | Пример     | Описание                             |
-| ---------- | ---------- | ------------------------------------ |
-| version    | `v0.12.24` | The version of `pulumi`              |
-| stack      | `dev`      | The current Pulumi stack             |
-| username   | `alice`    | The current Pulumi username          |
-| symbol     |            | Отражает значение параметра `symbol` |
-| style\*  |            | Отражает значение параметра `style`  |
+| Переменная       | Пример     | Описание                             |
+| ---------------- | ---------- | ------------------------------------ |
+| version          | `v0.12.24` | The version of `pulumi`              |
+| stack            | `dev`      | The current Pulumi stack             |
+| имя пользователя | `alice`    | The current Pulumi username          |
+| symbol           |            | Отражает значение параметра `symbol` |
+| style\*        |            | Отражает значение параметра `style`  |
 
 *: Эта переменная может использоваться только в качестве части строки style
 
