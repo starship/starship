@@ -87,4 +87,4 @@ trap - INT
 
 # Build the component package
 version="$(starship_version "$starship_program_file")"
-pkgbuild --identifier com.starshipprompt.starship --version "$version" --root $pkgdir starship-component.pkg
+pkgbuild --identifier com.starshipprompt.starship --version "$version" --root "$pkgdir" starship-component.pkg
