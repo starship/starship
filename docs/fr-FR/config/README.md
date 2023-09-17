@@ -2151,7 +2151,7 @@ Le module `hostname` affiche le nom d’hôte du système system.
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                                           |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | Format du module.                                                                                                                                   |
 | `style`           | `'bold dimmed green'`                  | Le style pour le module.                                                                                                                            |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                                     |
+| `disabled`        | `false`                                | Désactive le module `hostname`.                                                                                                                     |
 
 ### Variables
 
@@ -3228,19 +3228,19 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Variables
 
-| Variable  | Exemple    | Description                            |
-| --------- | ---------- | -------------------------------------- |
-| version   | `v0.12.24` | La version de `pulumi`                 |
-| stack     | `dev`      | The current Pulumi stack               |
-| username  | `alice`    | Le nom d’utilisateur Pulumi actuel     |
-| symbole   |            | Reflète la valeur de l'option `symbol` |
-| style\* |            | Reflète la valeur de l'option `style`  |
+| Variable          | Exemple    | Description                            |
+| ----------------- | ---------- | -------------------------------------- |
+| version           | `v0.12.24` | La version de `pulumi`                 |
+| stack             | `dev`      | The current Pulumi stack               |
+| nom d'utilisateur | `alice`    | Le nom d’utilisateur Pulumi actuel     |
+| symbole           |            | Reflète la valeur de l'option `symbol` |
+| style\*         |            | Reflète la valeur de l'option `style`  |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
 ### Exemple
 
-#### With Pulumi Version
+#### Avec la version de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3249,7 +3249,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Without Pulumi version
+#### Sans la version de Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3363,7 +3363,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# N'utilisez que le binaire `python3` pour obtenir la version.
 python_binary = 'python3'
 ```
 
@@ -3371,7 +3371,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Ne pas déclencher pour les fichiers avec l'extension py
 detect_extensions = []
 ```
 
@@ -3379,10 +3379,11 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Affiche la version de python depuis l'intérieur d'un venv local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Notez que cela ne fonctionnera que lorsque le venv est à l'intérieur du projet,
+# et uniquement lorsque vous vous situez dans le répertoire contenant le dossier du venv
+# mais peut-être que c'est suffisant?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3936,7 +3937,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# Sous windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -4024,7 +4025,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
 ### Exemple
 
-#### With Terraform Version
+#### Avec la version de Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -4033,7 +4034,7 @@ Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Sans la version de Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -4345,7 +4346,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
-#### Custom command shell
+#### Commandes shell personnalisées
 
 `shell` accepte une liste de chaînes non vide, où:
 
