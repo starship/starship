@@ -2151,7 +2151,7 @@ O módulo `hostname` exibe o nome do hostname.
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                                      |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | O formato do módulo.                                                                                                                           |
 | `style`           | `'bold dimmed green'`                  | O estilo do módulo.                                                                                                                            |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                                |
+| `disabled`        | `false`                                | Desabilita o módulo `hostname`.                                                                                                                |
 
 ### Variáveis
 
@@ -3028,7 +3028,7 @@ Windows = "🪟 "
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
-| type      | `Arch`       | The current operating system type                                  |
+| tipo      | `Arch`       | The current operating system type                                  |
 | codename  |              | The current operating system codename, if applicable               |
 | edition   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
@@ -3240,7 +3240,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### With Pulumi Version
+#### Com a versão do Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3249,7 +3249,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Without Pulumi version
+#### Sem a versão do Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3363,7 +3363,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Use apenas o binário `python3` para obter a versão.
 python_binary = 'python3'
 ```
 
@@ -3371,7 +3371,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Não acione para arquivos com a extensão py
 detect_extensions = []
 ```
 
@@ -3379,10 +3379,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Exibe a versão do python de dentro de um venv local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Note que isso só funcionará quando o venv estiver dentro do projeto e só
+# funcionará apenas no diretório que contém o diretório venv, mas talvez isso seja ok?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -3936,7 +3936,7 @@ disabled = false
 ```
 
 ```toml
-# On windows
+# No windows
 # $HOME\.starship\config.toml
 
 [sudo]
@@ -4024,7 +4024,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ### Exemplo
 
-#### With Terraform Version
+#### Com a versão do Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -4033,7 +4033,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Sem a versão do Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -4345,7 +4345,7 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
-#### Custom command shell
+#### Comandos personalizados de shell
 
 `shell` aceita uma lista não vazia de string, onde:
 
