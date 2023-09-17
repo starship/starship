@@ -2150,7 +2150,7 @@ El módulo `hostname` muestra el nombre de host del sistema.
 | `trim_at`         | `'.'`                                  | Cadena en la que el nombre del host se corta, después de la primera coincidencia. `'.'` will stop after the first dot. `''` deshabilitará cualquier truncamiento.                                                                                                                                                                                                                                                  |
 | `detect_env_vars` | `[]`                                   | Qué variable(s) de entorno deben activar este módulo.                                                                                                                                                                                                                                                                                                                                                              |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                                                                                                                                                                                                                                                                             |
-| `style`           | `'bold dimmed green'`                  | El estilo del módulo.                                                                                                                                                                                                                                                                                                                                                                                              |
+| `style`           | `'negrita oscurecida verde'`           | El estilo del módulo.                                                                                                                                                                                                                                                                                                                                                                                              |
 | `disabled`        | `false`                                | Deshabilita el módulo `hostname<0>.</td>
 </tr>
 </tbody>
@@ -3375,7 +3375,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Solo usa el binario `python3` para obtener la versión.
 python_binary = 'python3'
 ```
 
@@ -3383,7 +3383,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# No se dispara con archivos con extensión py
 detect_extensions = []
 ```
 
@@ -3393,8 +3393,8 @@ detect_extensions = []
 [python]
 # Muestra la versión de python dentro de un entorno virtual local.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Ten en cuenta que esto solo funcionará cuando el venv esté dentro del proyecto y sólo
+# funcionará en el directorio que contiene el directorio venv dir pero ¿tal vez esté bien?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -4357,7 +4357,7 @@ Las cadenas de formato también pueden contener secuencias específicas del int�
 
 *: Esta variable solamente puede ser usada como parte de una cadena de caracteres de estilo
 
-#### Custom command shell
+#### Comando personalizado del intérprete de comandos
 
 `shell` acepta una lista no vacía de cadenas, donde:
 
