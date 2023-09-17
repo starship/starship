@@ -66,11 +66,7 @@ fn parse_hare_version(hare_stdout: &str) -> Option<String> {
     // hare version output looks like this:
     // Hare dev+SHA
 
-    let version = hare_stdout
-        // split into ("", "1.12.4 linux/amd64")
-        .split_once(' ')?
-        // return "1.12.4 linux/amd64"
-        .1;
+    let version = hare_stdout.split_whitespace().skip(1).next()?;
 
     Some(version.to_string())
 }
@@ -126,7 +122,7 @@ mod tests {
 
     #[test]
     fn test_format_hare_version() {
-        let input = "Hare dev+102a2270";
+        let input = "Hare dev+102a2270\n\r";
         assert_eq!(parse_hare_version(input), Some("dev+102a2270".to_string()));
     }
 }
