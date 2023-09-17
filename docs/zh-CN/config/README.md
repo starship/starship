@@ -2151,7 +2151,7 @@ format = 'via [⎈ $version](bold white) '
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                              |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | 组件格式化模板。                                                                                               |
 | `style`           | `'bold dimmed green'`                  | 此组件的样式。                                                                                                |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                        |
+| `disabled`        | `false`                                | 禁用 `hostname` 组件。                                                                                      |
 
 ### 变量
 
@@ -3028,7 +3028,7 @@ Windows = "🪟 "
 | --------- | ------------ | ------------------------------------------------------------------ |
 | 符号        | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
-| type      | `Arch`       | The current operating system type                                  |
+| 类型        | `Arch`       | The current operating system type                                  |
 | codename  |              | The current operating system codename, if applicable               |
 | edition   |              | The current operating system edition, if applicable                |
 | version   |              | The current operating system version, if applicable                |
@@ -4345,7 +4345,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 *: 此变量只能作为样式字符串的一部分使用
 
-#### Custom command shell
+#### 自定义命令 shell
 
 `shell` 接受一个非空字符串列表：
 
@@ -4380,19 +4380,19 @@ shell = ['pwsh', '-Command', '-']
 # ~/.config/starship.toml
 
 [custom.foo]
-command = 'echo foo' # shows output of command
-detect_files = ['foo'] # can specify filters but wildcards are not supported
+command = 'echo foo' # 显示命令输出
+detect_files = ['foo'] # 支持过滤器，但不支持通配符
 when = ''' test "$HOME" = "$PWD" '''
 format = ' transcending [$output]($style)'
 
 [custom.time]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # 识别 *.pst 文件
 shell = ['pwsh.exe', '-NoProfile', '-Command', '-']
 
 [custom.time-as-arg]
 command = 'time /T'
-detect_extensions = ['pst'] # filters *.pst files
+detect_extensions = ['pst'] # 识别 *.pst 文件
 shell = ['pwsh.exe', '-NoProfile', '-Command']
 use_stdin = false
 ```
