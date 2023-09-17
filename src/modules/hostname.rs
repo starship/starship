@@ -15,8 +15,31 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("hostname");
     let config: HostnameConfig = HostnameConfig::try_load(module.config);
 
-    let ssh_connection = context.get_env("SSH_CONNECTION");
+    let user_override = context
+        .get_env(crate::modules::username::USERNAME_ENV_VAR)
+        .map(|x| {
+            if crate::modules::username::is_root_user() {
+                if cfg!(target_os = "windows") {
+                    "Administrator".to_string()
+                } else {
+                    "root".to_string()
+                }
+            } else {
+                x
+            }
+        })
+        .and_then(|x| config.user_overrides.get(&x));
 
+    if user_override.is_some_and(|x| x.disabled) {
+        return None;
+    }
+
+    let format = user_override
+        .and_then(|x| x.format)
+        .unwrap_or(config.format);
+    let style = user_override.and_then(|x| x.style).unwrap_or(config.style);
+
+    let ssh_connection = context.get_env("SSH_CONNECTION");
     if (config.ssh_only && ssh_connection.is_none())
         || !context.detect_env_vars(&config.detect_env_vars)
     {
@@ -45,7 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         host.as_ref()
     };
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
             .map_meta(|var, _| match var {
                 "ssh_symbol" => {
@@ -58,7 +81,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map_style(|variable| match variable {
-                "style" => Some(Ok(config.style)),
+                "style" => Some(Ok(style)),
                 _ => None,
             })
             .map(|variable| match variable {
