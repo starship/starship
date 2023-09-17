@@ -2151,7 +2151,7 @@ format = 'via [⎈ $version](bold white) '
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                    |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                   |
 | `style`           | `'bold dimmed green'`                  | 這個模組的風格。                                                                                     |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                              |
+| `disabled`        | `false`                                | 停用 `hostname` 模組。                                                                            |
 
 ### Variables
 
@@ -3232,7 +3232,7 @@ By default the module will be shown if any of the following conditions are met:
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `pulumi`              |
 | stack     | `dev`      | The current Pulumi stack             |
-| username  | `alice`    | The current Pulumi username          |
+| 使用者名稱     | `alice`    | The current Pulumi username          |
 | symbol    |            | Mirrors the value of option `symbol` |
 | style\* |            | Mirrors the value of option `style`  |
 
