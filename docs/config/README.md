@@ -4026,6 +4026,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `format`                    | `'[$symbol$status]($style) '`                                                 | The format of the module                                              |
 | `symbol`                    | `'❌'`                                                                        | The symbol displayed on program error                                 |
 | `success_symbol`            | `''`                                                                          | The symbol displayed on program success                               |
+| `success_symbol_rootuser`   | `''`                                                                          | The symbol displayed on program success (root user only)              |
 | `not_executable_symbol`     | `'🚫'`                                                                        | The symbol displayed when file isn't executable                       |
 | `not_found_symbol`          | `'🔍'`                                                                        | The symbol displayed when the command can't be found                  |
 | `sigint_symbol`             | `'🧱'`                                                                        | The symbol displayed on SIGINT (Ctrl + c)                             |
@@ -4065,6 +4066,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 style = 'bg:blue'
 symbol = '🔴 '
 success_symbol = '🟢 SUCCESS'
+success_symbol_rootuser = '🟢 SUCCESS'
 format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
 map_symbol = true
 disabled = false
