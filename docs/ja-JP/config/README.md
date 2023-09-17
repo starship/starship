@@ -2151,7 +2151,7 @@ format = 'via [⎈ $version](bold white) '
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                          |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | module のフォーマットです。                                                                                  |
 | `style`           | `'bold dimmed green'`                  | モジュールのスタイルです。                                                                                      |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                    |
+| `disabled`        | `false`                                | `hostname`モジュールを無効にします。                                                                            |
 
 ### 変数
 
@@ -3206,7 +3206,7 @@ The `pulumi` module shows the current username, selected [Pulumi Stack](https://
 
 ::: tip
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). それでも有効にしたい場合は、 [以下の例に従ってください](#with-pulumi-version).
 
 :::
 
@@ -4024,7 +4024,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 
 ### 設定例
 
-#### With Terraform Version
+#### Terraform バージョン表示あり
 
 ```toml
 # ~/.config/starship.toml
@@ -4033,7 +4033,7 @@ Terraformのバージョンはデフォルトでは表示されません。多�
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Terraform バージョン表示なし
 
 ```toml
 # ~/.config/starship.toml
