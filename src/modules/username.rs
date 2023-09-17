@@ -4,10 +4,10 @@ use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
 
 #[cfg(not(target_os = "windows"))]
-const USERNAME_ENV_VAR: &str = "USER";
+pub const USERNAME_ENV_VAR: &str = "USER";
 
 #[cfg(target_os = "windows")]
-const USERNAME_ENV_VAR: &str = "USERNAME";
+pub const USERNAME_ENV_VAR: &str = "USERNAME";
 
 /// Creates a module with the current user's username
 ///
@@ -31,26 +31,32 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     }
 
     let show_username = config.show_always
-        || is_root // [1]
-        || !is_login_user(context, &username) // [2]
-        || is_ssh_session(context) // [3]
+        || (config.show_if_root && is_root) // [1]
+        || (config.show_if_different && !is_login_user(context, &username)) // [2]
+        || (config.show_if_ssh && is_ssh_session(context)) // [3]
         || ( !config.detect_env_vars.is_empty() && has_detected_env_var ); // [4]
 
     if !show_username || !has_detected_env_var {
         return None; // [A]
     }
 
-    let parsed = StringFormatter::new(config.format).and_then(|formatter| {
+    let user_override = config
+        .user_overrides
+        .get(if is_root { "root" } else { &username });
+
+    if user_override.is_some_and(|x| x.disabled) {
+        return None;
+    }
+
+    let format = user_override
+        .and_then(|x| x.format)
+        .unwrap_or(config.format);
+    let style = user_override.and_then(|x| x.style).unwrap_or(config.style);
+
+    let parsed = StringFormatter::new(format).and_then(|formatter| {
         formatter
             .map_style(|variable| match variable {
-                "style" => {
-                    let module_style = if is_root {
-                        config.style_root
-                    } else {
-                        config.style_user
-                    };
-                    Some(Ok(module_style))
-                }
+                "style" => Some(Ok(style)),
                 _ => None,
             })
             .map(|variable| match variable {
@@ -77,7 +83,7 @@ fn is_login_user(context: &Context, username: &str) -> bool {
 }
 
 #[cfg(all(target_os = "windows", not(test)))]
-fn is_root_user() -> bool {
+pub fn is_root_user() -> bool {
     use deelevate::{PrivilegeLevel, Token};
     let token = match Token::with_current_process() {
         Ok(token) => token,
@@ -99,12 +105,12 @@ fn is_root_user() -> bool {
 }
 
 #[cfg(all(target_os = "windows", test))]
-fn is_root_user() -> bool {
+pub fn is_root_user() -> bool {
     false
 }
 
 #[cfg(not(target_os = "windows"))]
-fn is_root_user() -> bool {
+pub fn is_root_user() -> bool {
     nix::unistd::geteuid() == nix::unistd::ROOT
 }
 
@@ -130,8 +136,8 @@ mod tests {
             // Test output should not change when run by root/non-root user
             .config(toml::toml! {
                 [username]
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
                 detect_env_vars = []
             })
             .collect();
@@ -149,8 +155,8 @@ mod tests {
             // Test output should not change when run by root/non-root user
             .config(toml::toml! {
                 [username]
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
                 detect_env_vars = ["FORCE_USERNAME"]
             })
             .collect();
@@ -168,8 +174,8 @@ mod tests {
             // Test output should not change when run by root/non-root user
             .config(toml::toml! {
                 [username]
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
                 detect_env_vars = ["!NEGATED"]
             })
             .collect();
@@ -228,8 +234,8 @@ mod tests {
             // Test output should not change when run by root/non-root user
             .config(toml::toml! {
                 [username]
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
             })
             .collect();
         let expected = Some("cosmonaut in ");
@@ -245,8 +251,8 @@ mod tests {
             // Test output should not change when run by root/non-root user
             .config(toml::toml! {
                 [username]
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
             })
             .collect();
         let expected = Some("astronaut in ");
@@ -262,8 +268,8 @@ mod tests {
             // Test output should not change when run by root/non-root user
             .config(toml::toml! {
                 [username]
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
             })
             .collect();
         let expected = Some("astronaut in ");
@@ -279,8 +285,8 @@ mod tests {
             // Test output should not change when run by root/non-root user
             .config(toml::toml! {
                 [username]
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
             })
             .collect();
         let expected = Some("astronaut in ");
@@ -297,8 +303,8 @@ mod tests {
                 [username]
                 show_always = true
 
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
             })
             .collect();
         let expected = Some("astronaut in ");
@@ -315,8 +321,8 @@ mod tests {
                 [username]
                 show_always = false
 
-                style_root = ""
-                style_user = ""
+                style = ""
+                user_overrides = { root = { style = "" } }
             })
             .collect();
         let expected = None;
