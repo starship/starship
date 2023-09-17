@@ -2143,15 +2143,15 @@ format = 'via [⎈ $version](bold white) '
 
 ### Параметри
 
-| Параметр          | Стандартно                             | Опис                                                                                                                                 |
-| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`        | `true`                                 | Показувати назву хоста лише при підключенні через SSH.                                                                               |
-| `ssh_symbol`      | `'🌐 '`                                 | Формат рядка для показу символу підключення до SSH-сеансу.                                                                           |
-| `trim_at`         | `'.'`                                  | Рядок, у якому назва хоста буде обрізано після першого збігу. `'.'` зупиниться після першої точки. `''` will disable any truncation. |
-| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                            |
-| `format`          | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                       |
-| `style`           | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                        |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                      |
+| Параметр          | Стандартно                             | Опис                                                                                                                                |
+| ----------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Показувати назву хоста лише при підключенні через SSH.                                                                              |
+| `ssh_symbol`      | `'🌐 '`                                 | Формат рядка для показу символу підключення до SSH-сеансу.                                                                          |
+| `trim_at`         | `'.'`                                  | Рядок, у якому назва хоста буде обрізано після першого збігу. `'.'` зупиниться після першої точки. `''` вимкне будь-яке скорочення. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                           |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | Формат модуля.                                                                                                                      |
+| `style`           | `'bold dimmed green'`                  | Стиль модуля.                                                                                                                       |
+| `disabled`        | `false`                                | Вимикає модуль `hostname`.                                                                                                          |
 
 ### Змінні
 
@@ -2279,7 +2279,7 @@ symbol = '🌟 '
 # ~/.config/starship.toml
 
 [jobs]
-symbol = '+ '
+символ = '+ '
 number_threshold = 4
 symbol_threshold = 0
 ```
@@ -2455,7 +2455,7 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Kubernetes Context specific config
+#### Kubernetes Context спец налаштування
 
 Параметр `contexts` використовується для налаштування того, як виглядає назва контексту  Kubernetes (стиль та символ), якщо назва збігається з визначеною регулярним виразом.
 
@@ -2463,8 +2463,8 @@ detect_files = ['k8s']
 # ~/.config/starship.toml
 
 [[kubernetes.contexts]]
-# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
-# equals "admin_user"
+# стиль "bold red" + типовий символ, коли назва поточного контексту Kubernetes збігається з "production" *та* поточний користувач
+# збігається з "admin_user"
 context_pattern = "production"
 user_pattern = "admin_user"
 style = "bold red"
@@ -2472,17 +2472,17 @@ context_alias = "prod"
 user_alias = "admin"
 
 [[kubernetes.contexts]]
-# "green" style + a different symbol when Kubernetes current context name contains openshift
+# стиль "green" + інший символ, коли назва поточного контексту Kubernetes містить openshift
 context_pattern = ".*openshift.*"
 style = "green"
 symbol = "💔 "
 context_alias = "openshift"
 
 [[kubernetes.contexts]]
-# Using capture groups
-# Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
-# The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
-# and renames every matching kube context into a more readable format (`gke-cluster-name`):
+# Використання груп
+# Контекст з GKE, AWS та інших хмарних постачальників зазвичай має додаткову інформацію, наприклад регіон/зону.
+# Наступний елемент збігається з форматом GKE format (`gke_projectname_zone_cluster-name`)
+# та змінює кожний відповідний kube context на більш зрозумілий формат (`gke-cluster-name`):
 context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
 context_alias = "gke-$cluster"
 ```
@@ -2977,7 +2977,7 @@ symbol = '☁️ '
 `symbols` дозволяє визначити довільні символи для кожного типу операційної системи. Типи операційних систем не визначені вашою конфігурацією, використовують стандартну таблицю символів, дивись нижче. На цю мить усі операційні системи, що підтримуються модулем, перераховані нижче. Якщо ви бажаєте додати операційну систему, то можете створити [запит на функцію](https://github.com/starship/starship/issues/new/choose).
 
 ```toml
-# This is the default symbols table.
+# Це таблиця стандартних символів.
 [os.symbols]
 Alpaquita = "🔔 "
 Alpine = "🏔️ "
@@ -3240,7 +3240,7 @@ format = 'via [🔹 $version](147 bold) '
 
 ### Приклад
 
-#### With Pulumi Version
+#### З версією Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3249,7 +3249,7 @@ format = 'via [🔹 $version](147 bold) '
 format = '[🛥 ($version )$stack]($style) '
 ```
 
-#### Without Pulumi version
+#### Без версії Pulumi
 
 ```toml
 # ~/.config/starship.toml
@@ -3363,7 +3363,7 @@ pyenv_version_name = true
 # ~/.config/starship.toml
 
 [python]
-# Only use the `python3` binary to get the version.
+# Використання лише двійкового файлу `python3` для отримання версії.
 python_binary = 'python3'
 ```
 
@@ -3371,7 +3371,7 @@ python_binary = 'python3'
 # ~/.config/starship.toml
 
 [python]
-# Don't trigger for files with the py extension
+# Не запускати файли з розширенням py
 detect_extensions = []
 ```
 
@@ -3379,10 +3379,10 @@ detect_extensions = []
 # ~/.config/starship.toml
 
 [python]
-# Display the version of python from inside a local venv.
+# Показувати версію python з venv.
 #
-# Note this will only work when the venv is inside the project and it will only
-# work in the directory that contains the venv dir but maybe this is ok?
+# Зауважте, що це працюватиме лише тоді, коли venv знаходиться всередині проєкту, і він працюватиме
+# лише в теці, яка містить теку venv, якщо це нормально?
 python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 ```
 
@@ -4024,7 +4024,7 @@ format = 'via [🏎  $version](red bold)'
 
 ### Приклад
 
-#### With Terraform Version
+#### За версією Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -4033,7 +4033,7 @@ format = 'via [🏎  $version](red bold)'
 format = '[🏎💨 $version$workspace]($style) '
 ```
 
-#### Without Terraform version
+#### Без версії Terraform
 
 ```toml
 # ~/.config/starship.toml
@@ -4345,7 +4345,7 @@ symbol = '⚡️ '
 
 *: Ця змінна може бути використана лише як частина стилю рядка
 
-#### Custom command shell
+#### Власні команди shell
 
 `shell` приймає непустий список рядків, де:
 
