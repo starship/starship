@@ -66,7 +66,7 @@ fn parse_hare_version(hare_stdout: &str) -> Option<String> {
     // hare version output looks like this:
     // Hare dev+SHA
 
-    let version = hare_stdout.split_whitespace().skip(1).next()?;
+    let version = hare_stdout.split_whitespace().nth(1)?;
 
     Some(version.to_string())
 }
