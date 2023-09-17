@@ -2151,7 +2151,7 @@ Das `hostname`-Modul zeigt den Hostnamen des Systems an.
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                             |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | Das Format für das Modul.                                                                                                             |
 | `style`           | `'bold dimmed green'`                  | Stil für dieses Modul.                                                                                                                |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
+| `disabled`        | `false`                                | Deaktiviert das `hostname`-Modul.                                                                                                     |
 
 ### Variables
 
