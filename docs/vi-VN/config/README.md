@@ -2151,7 +2151,7 @@ Mô đun `hostname` hiển thị hostnam hệ thống.
 | `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                          |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | Định dạng cho module.                                                                                                              |
 | `style`           | `'bold dimmed green'`                  | Kiểu cho module.                                                                                                                   |
-| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                    |
+| `disabled`        | `false`                                | Vô hiệu `hastname` module.                                                                                                         |
 
 ### Các biến
 
