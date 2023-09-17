@@ -1,8 +1,8 @@
-[Volver a Preajustes](./README.md#no-empty-icons)
+[Volver a las preselecciones](./README.md#no-empty-icons)
 
-# No Empty Icons Preset
+# Preselección de iconos no vacíos
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+Si se identifican archivos del conjunto de herramientas, entonces se mostrara el ícono del conjunto de herramientas. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
 
 ![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
 
