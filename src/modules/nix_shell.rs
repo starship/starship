@@ -8,15 +8,26 @@ enum NixShellType {
     Impure,
     /// We're in a Nix shell, but we don't know which type.
     /// This can only happen in a `nix shell` shell (not a `nix-shell` one).
+    Devbox,
+    DevboxGlobal,
     Unknown,
 }
 
 impl NixShellType {
     fn detect_shell_type(use_heuristic: bool, context: &Context) -> Option<Self> {
-        use NixShellType::{Impure, Pure, Unknown};
+        use NixShellType::{Impure, Pure, Devbox, DevboxGlobal, Unknown};
 
-        let shell_type = context.get_env("IN_NIX_SHELL");
+
+        let shell_devbox = Self::detect_devbox_shell(context);
+        let shell_type = if shell_devbox.is_some() {
+            shell_devbox
+        } else {
+            context.get_env("IN_NIX_SHELL")
+        };
+
         match shell_type.as_deref() {
+            Some("devbox") => return Some(Devbox),
+            Some("devboxglobal") => return Some(DevboxGlobal),
             Some("pure") => return Some(Pure),
             Some("impure") => return Some(Impure),
             _ => {}
@@ -37,6 +48,22 @@ impl NixShellType {
         std::env::split_paths(&path)
             .any(|path| path.starts_with("/nix/store"))
             .then_some(())
+    }
+
+    fn detect_devbox_shell(context: &Context) -> Option<String> {
+        let in_devbox_shell = context.get_env("DEVBOX_SHELL_ENABLED");
+        match in_devbox_shell.as_deref() {
+            Some("1") => return Some("devbox".to_string()),
+            _ => {}
+        };
+
+        for (key, _value) in std::env::vars() {
+            if key.starts_with("__DEVBOX_SHELLENV_HASH_") {
+                return Some("devboxglobal".to_string())
+            }
+        }
+
+        return None
     }
 }
 
@@ -66,6 +93,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let shell_type_format = match shell_type {
         NixShellType::Pure => config.pure_msg,
         NixShellType::Impure => config.impure_msg,
+        NixShellType::Devbox => config.devbox_msg,
+        NixShellType::DevboxGlobal => config.devboxglobal_msg,
         NixShellType::Unknown => config.unknown_msg,
     };
 
