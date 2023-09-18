@@ -527,6 +527,20 @@
         }
       ]
     },
+    "fossil_metrics": {
+      "default": {
+        "added_style": "bold green",
+        "deleted_style": "bold red",
+        "disabled": true,
+        "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "only_nonzero_diffs": true
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FossilMetricsConfig"
+        }
+      ]
+    },
     "gcloud": {
       "default": {
         "detect_env_vars": [],
@@ -791,6 +805,7 @@
     },
     "hostname": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "[$ssh_symbol$hostname]($style) in ",
         "ssh_only": true,
@@ -899,6 +914,7 @@
     "kubernetes": {
       "default": {
         "context_aliases": {},
+        "contexts": [],
         "detect_extensions": [],
         "detect_files": [],
         "detect_folders": [],
@@ -3150,6 +3166,32 @@
       },
       "additionalProperties": false
     },
+    "FossilMetricsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+          "type": "string"
+        },
+        "added_style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "deleted_style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "only_nonzero_diffs": {
+          "default": true,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "GcloudConfig": {
       "type": "object",
       "properties": {
@@ -3781,6 +3823,13 @@
           "default": ".",
           "type": "string"
         },
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "format": {
           "default": "[$ssh_symbol$hostname]($style) in ",
           "type": "string"
@@ -4055,6 +4104,58 @@
           "items": {
             "type": "string"
           }
+        },
+        "contexts": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KubernetesContextConfig"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "KubernetesContextConfig": {
+      "type": "object",
+      "properties": {
+        "context_pattern": {
+          "default": "",
+          "type": "string"
+        },
+        "user_pattern": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "symbol": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "context_alias": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "user_alias": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false

@@ -266,6 +266,7 @@ $kubernetes\
 $directory\
 $vcsh\
 $fossil_branch\
+$fossil_metrics\
 $git_branch\
 $git_commit\
 $git_state\
@@ -1604,6 +1605,41 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Fossil Metrics
+
+The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+### Options
+
+| Option               | Default                                                      | Description                           |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `format`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | The format for the module.            |
+| `added_style`        | `'bold green'`                                               | The style for the added count.        |
+| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `disabled`           | `true`                                                       | Disables the `fossil_metrics` module. |
+
+### Variables
+
+| Variable        | Example | Description                                 |
+| --------------- | ------- | ------------------------------------------- |
+| added           | `1`     | The current number of added lines           |
+| deleted         | `2`     | The current number of deleted lines         |
+| added_style\*   |         | Mirrors the value of option `added_style`   |
+| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[fossil_metrics]
+added_style = 'bold blue'
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
 ## Google Cloud (`gcloud`)
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI.
@@ -2202,14 +2238,15 @@ The `hostname` module shows the system hostname.
 
 ### Options
 
-| Option       | Default                                | Description                                                                                                                          |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`   | `true`                                 | Only show hostname when connected to an SSH session.                                                                                 |
-| `ssh_symbol` | `'🌐 '`                                | A format string representing the symbol when connected to SSH session.                                                               |
-| `trim_at`    | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation |
-| `format`     | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                                                           |
-| `style`      | `'bold dimmed green'`                  | The style for the module.                                                                                                            |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| Option            | Default                                | Description                                                                                                                           |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Only show hostname when connected to an SSH session.                                                                                  |
+| `ssh_symbol`      | `'🌐 '`                                | A format string representing the symbol when connected to SSH session.                                                                |
+| `trim_at`         | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                             |
+| `format`          | `'[$ssh_symbol$hostname]($style) in '` | The format for the module.                                                                                                            |
+| `style`           | `'bold dimmed green'`                  | The style for the module.                                                                                                             |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
 
 ### Variables
 
@@ -2221,7 +2258,9 @@ The `hostname` module shows the system hostname.
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### Examples
+
+#### Always show the hostname
 
 ```toml
 # ~/.config/starship.toml
@@ -2230,6 +2269,17 @@ The `hostname` module shows the system hostname.
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
@@ -2434,7 +2484,8 @@ kotlin_binary = 'kotlinc'
 Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file.
 The namespace needs to be set in the kubeconfig file, this can be done via
 `kubectl config set-context starship-context --namespace astronaut`.
-Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`.
+Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user`
+and `kubectl config set-context starship-context --cluster starship-cluster`.
 If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
@@ -2450,17 +2501,44 @@ case the module will only be active in directories that match those conditions.
 
 ### Options
 
+::: warning
+
+The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias`
+and `user_alias` options instead.
+
+:::
+
 | Option              | Default                                            | Description                                                           |
 | ------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`            | `'☸ '`                                             | A format string representing the symbol displayed before the Cluster. |
 | `format`            | `'[$symbol$context( \($namespace\))]($style) in '` | The format for the module.                                            |
 | `style`             | `'cyan bold'`                                      | The style for the module.                                             |
-| `context_aliases`   | `{}`                                               | Table of context aliases to display.                                  |
-| `user_aliases`      | `{}`                                               | Table of user aliases to display.                                     |
+| `context_aliases`*  | `{}`                                               | Table of context aliases to display.                                  |
+| `user_aliases`*     | `{}`                                               | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                               | Which extensions should trigger this module.                          |
 | `detect_files`      | `[]`                                               | Which filenames should trigger this module.                           |
 | `detect_folders`    | `[]`                                               | Which folders should trigger this modules.                            |
+| `contexts`          | `[]`                                               | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                             | Disables the `kubernetes` module.                                     |
+
+*: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
+
+To customize the style of the module for specific environments, use the following configuration as
+part of the `contexts` list:
+
+| Variable          | Description                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| `context_pattern` | **Required** Regular expression to match current Kubernetes context name.                |
+| `user_pattern`    | Regular expression to match current Kubernetes user name.                                |
+| `context_alias`   | Context alias to display instead of the full context name.                               |
+| `user_alias`      | User alias to display instead of the full user name.                                     |
+| `style`           | The style for the module when using this context. If not set, will use module's style.   |
+| `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+
+Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern`
+regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N`
+(see example below and the
+[rust Regex::replace() documentation](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
 
 ### Variables
 
@@ -2483,13 +2561,9 @@ case the module will only be active in directories that match those conditions.
 [kubernetes]
 format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 disabled = false
-[kubernetes.context_aliases]
-'dev.local.cluster.k8s' = 'dev'
-'.*/openshift-cluster/.*' = 'openshift'
-'gke_.*_(?P<var_cluster>[\w-]+)' = 'gke-$var_cluster'
-[kubernetes.user_aliases]
-'dev.local.cluster.k8s' = 'dev'
-'root/.*' = 'root'
+contexts = [
+  { context_pattern = "dev.local.cluster.k8s", style = "green", symbol = "💔 " },
+]
 ```
 
 Only show the module in directories that contain a `k8s` file.
@@ -2502,29 +2576,37 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Regex Matching
+#### Kubernetes Context specific config
 
-Additional to simple aliasing, `context_aliases` and `user_aliases` also supports
-extended matching and renaming using regular expressions.
-
-The regular expression must match on the entire kube context,
-capture groups can be referenced using `$name` and `$N` in the replacement.
-This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
-
-Long and automatically generated cluster names can be identified
-and shortened using regular expressions:
+The `contexts` configuration option is used to customise what the current Kubernetes context name looks
+like (style and symbol) if the name matches the defined regular expression.
 
 ```toml
-[kubernetes.context_aliases]
-# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
-'.*/openshift-cluster/.*' = 'openshift'
-# Or better, to rename every OpenShift cluster at once:
-'.*/(?P<var_cluster>[\w-]+)/.*' = '$var_cluster'
+# ~/.config/starship.toml
 
+[[kubernetes.contexts]]
+# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
+# equals "admin_user"
+context_pattern = "production"
+user_pattern = "admin_user"
+style = "bold red"
+context_alias = "prod"
+user_alias = "admin"
+
+[[kubernetes.contexts]]
+# "green" style + a different symbol when Kubernetes current context name contains openshift
+context_pattern = ".*openshift.*"
+style = "green"
+symbol = "💔 "
+context_alias = "openshift"
+
+[[kubernetes.contexts]]
+# Using capture groups
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-'gke_.*_(?P<var_cluster>[\w-]+)' = 'gke-$var_cluster'
+context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
+context_alias = "gke-$cluster"
 ```
 
 ## Line Break

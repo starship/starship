@@ -235,8 +235,32 @@ impl<'a> Context<'a> {
         disabled == Some(true)
     }
 
+    /// Returns true when a negated environment variable is defined in `env_vars` and is present
+    fn has_negated_env_var(&self, env_vars: &'a [&'a str]) -> bool {
+        env_vars
+            .iter()
+            .filter_map(|env_var| env_var.strip_prefix('!'))
+            .any(|env_var| self.get_env(env_var).is_some())
+    }
+
+    /// Returns true if 'detect_env_vars' is empty,
+    /// or if at least one environment variable is set and no negated environment variable is set
     pub fn detect_env_vars(&'a self, env_vars: &'a [&'a str]) -> bool {
-        env_vars.is_empty() || (env_vars.iter().any(|e| self.get_env(e).is_some()))
+        if env_vars.is_empty() {
+            return true;
+        }
+
+        if self.has_negated_env_var(env_vars) {
+            return false;
+        }
+
+        // Returns true if at least one environment variable is set
+        let mut iter = env_vars
+            .iter()
+            .filter(|env_var| !env_var.starts_with('!'))
+            .peekable();
+
+        iter.peek().is_none() || iter.any(|env_var| self.get_env(env_var).is_some())
     }
 
     // returns a new ScanDir struct with reference to current dir_files of context
