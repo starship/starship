@@ -6,13 +6,13 @@
 
 ## [Nerd Font Symbols](./nerd-font.md)
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Этот пресет изменяет символы для каждого модуля на символы Nerd Font.
 
 [![Скриншот пресета Nerd Font Symbols](/presets/img/nerd-font-symbols.png "Нажмите, чтобы просмотреть пресет Nerd Font Symbols")](./nerd-font)
 
 ## [No Nerd Fonts](./no-nerd-font.md)
 
-This preset changes the symbols for several modules so that no Nerd Font symbols are used anywhere in the prompt.
+Этот пресет изменяет символы для нескольких модулей таким образом, чтобы в приглашении командной строки нигде не использовались символы Nerd Font.
 
 ::: tip
 
@@ -20,7 +20,7 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 :::
 
-[Click to view No Nerd Font preset](./no-nerd-font)
+[Нажмите, чтобы просмотреть пресет No Nerd Font](./no-nerd-font)
 
 ## [Bracketed Segments](./bracketed-segments.md)
 
@@ -30,7 +30,7 @@ This preset changes the symbols for several modules so that no Nerd Font symbols
 
 ## [Plain Text Symbols](./plain-text.md)
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Этот пресет изменяет символы для каждого модуля на обычный текст. Great if you don't have access to Unicode.
 
 [![Скриншот пресета Plain Text Symbols](/presets/img/plain-text-symbols.png "Нажмите, чтобы просмотреть пресет Plain Text Symbols")](./plain-text)
 
@@ -48,7 +48,7 @@ This preset does not show icons if the toolset is not found.
 
 ## [Pure Prompt](./pure-preset.md)
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Этот пресет имитирует внешний вид и поведение [Pure](https://github.com/sindresorhus/pure).
 
 [![Скриншот пресета Pure](/presets/img/pure-preset.png "Нажмите, чтобы просмотреть пресет Pure Prompt")](./pure-preset)
 
