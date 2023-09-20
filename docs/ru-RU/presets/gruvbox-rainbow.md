@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#gruvbox-rainbow)
+[Вернуться к пресетам](./README.md#gruvbox-rainbow)
 
 # Gruvbox Rainbow Preset
 
@@ -16,6 +16,6 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/gruvbox-rainbow.toml)
+[Нажмите, чтобы загрузить TOML](/presets/toml/gruvbox-rainbow.toml)
 
 <<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
