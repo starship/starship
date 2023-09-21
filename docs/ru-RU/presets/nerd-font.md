@@ -2,7 +2,7 @@
 
 # Nerd Font Symbols Preset
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+Этот пресет изменяет символы для каждого модуля на символы Nerd Font.
 
 ![Скриншот предустановки Nerd Font Symbols](/presets/img/nerd-font-symbols.png)
 
