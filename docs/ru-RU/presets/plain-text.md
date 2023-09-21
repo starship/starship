@@ -2,9 +2,9 @@
 
 ## Plain Text Symbols Preset
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Этот пресет изменяет символы для каждого модуля на обычный текст. Great if you don't have access to Unicode.
 
-![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png)
+![Скриншот пресета Plain Text Symbols](/presets/img/plain-text-symbols.png)
 
 ### Конфигурация
 
