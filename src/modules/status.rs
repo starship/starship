@@ -1,5 +1,6 @@
 use std::string::ToString;
 
+use super::utils::is_root_user::is_root_user;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::status::StatusConfig;
@@ -231,38 +232,6 @@ fn status_signal_name(signal: SignalNumber) -> Option<&'static str> {
         22 => Some("TTOU"),   // 128 + 22
         _ => None,
     }
-}
-
-#[cfg(all(target_os = "windows", not(test)))]
-fn is_root_user() -> bool {
-    use deelevate::{PrivilegeLevel, Token};
-    let token = match Token::with_current_process() {
-        Ok(token) => token,
-        Err(e) => {
-            log::warn!("Failed to get process token: {e:?}");
-            return false;
-        }
-    };
-    matches!(
-        match token.privilege_level() {
-            Ok(level) => level,
-            Err(e) => {
-                log::warn!("Failed to get privilege level: {e:?}");
-                return false;
-            }
-        },
-        PrivilegeLevel::Elevated | PrivilegeLevel::HighIntegrityAdmin
-    )
-}
-
-#[cfg(all(target_os = "windows", test))]
-fn is_root_user() -> bool {
-    false
-}
-
-#[cfg(not(target_os = "windows"))]
-fn is_root_user() -> bool {
-    nix::unistd::geteuid() == nix::unistd::ROOT
 }
 
 #[cfg(test)]
