@@ -2,9 +2,9 @@
 
 # Gruvbox Rainbow Preset
 
-This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+Этот пресет в значительной степени вдохновлен [Pastel Powerline](./pastel-powerline.md) и [Tokyo Night](./tokyo-night.md).
 
-![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png)
+![Скриншот пресета Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png)
 
 ### Обязательные требования
 
