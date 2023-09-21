@@ -2,9 +2,9 @@
 
 # Tokyo Night Preset
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+Этот пресет вдохновлен [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
-![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png)
+![Скриншот пресета Tokyo Night](/presets/img/tokyo-night.png)
 
 ### Обязательные требования
 
