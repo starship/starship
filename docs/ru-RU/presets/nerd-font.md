@@ -1,6 +1,6 @@
 [Вернуться к пресетам](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Пресет Nerd Font Symbols
 
 Этот пресет изменяет символы для каждого модуля на символы Nerd Font.
 
