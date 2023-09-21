@@ -2,9 +2,9 @@
 
 # Pure Preset
 
-This preset emulates the look and behavior of [Pure](https://github.com/sindresorhus/pure).
+Этот пресет имитирует внешний вид и поведение [Pure](https://github.com/sindresorhus/pure).
 
-![Screenshot of Pure preset](/presets/img/pure-preset.png)
+![Скриншот пресета Pure](/presets/img/pure-preset.png)
 
 ### Конфигурация
 
