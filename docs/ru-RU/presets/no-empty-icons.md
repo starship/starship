@@ -4,7 +4,7 @@
 
 If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
 
-![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
+![Скриншот пресета No Empty Icons](/presets/img/no-empty-icons.png)
 
 ### Конфигурация
 
