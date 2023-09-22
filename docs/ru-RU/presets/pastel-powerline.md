@@ -1,14 +1,14 @@
 [Вернуться к пресетам](./README.md#pastel-powerline)
 
-# Pastel Powerline Preset
+# Пресет Pastel Powerline
 
-Эта пресет вдохновлен [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). В нем также показано, как работает замена пути в starship.
+Этот пресет вдохновлен [M365Princess](https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/M365Princess.omp.json). В нем также показано, как работает замена пути в starship.
 
 ![Скриншот пресета Pastel Powerline](/presets/img/pastel-powerline.png)
 
 ### Обязательные требования
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Caskaydia Cove Nerd Font)
+- Установленный и включенный в терминале шрифт [Nerd Font](https://www.nerdfonts.com/) (в примере используется Caskaydia Cove Nerd Font)
 
 ### Конфигурация
 
