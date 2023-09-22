@@ -5,7 +5,8 @@ use crate::utils::get_command_string_output;
 use std::path::PathBuf;
 
 use regex::Regex;
-const JAVA_VERSION_PATTERN: &str = "(?:JRE.*\\(|OpenJ9 )(?P<version>[\\d]+(?:\\.\\d+){0,2})";
+const JAVA_VERSION_PATTERN: &str =
+    "(?:JRE.*\\(|OpenJ9 )(?P<version>\\d+(?:\\.\\d+){0,2}).*, built on";
 
 /// Creates a module with the current Java version
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -152,6 +153,12 @@ mod tests {
     fn test_parse_java_version_sapmachine() {
         let java_11 = "OpenJDK 64-Bit Server VM (11.0.4+11-LTS-sapmachine) for linux-amd64 JRE (11.0.4+11-LTS-sapmachine), built on Jul 17 2019 08:58:43 by \"\" with gcc 7.3.0";
         assert_eq!(parse_java_version(java_11), Some("11.0.4".to_string()));
+    }
+
+    #[test]
+    fn test_parse_java_version_android_studio_jdk() {
+        let java_11 = "OpenJDK 64-Bit Server VM (11.0.15+0-b2043.56-8887301) for linux-amd64 JRE (11.0.15+0-b2043.56-8887301), built on Jul 29 2022 22:12:21 by \"androidbuild\" with gcc Android (7284624, based on r416183b) Clang 12.0.5 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee)}";
+        assert_eq!(parse_java_version(java_11), Some("11.0.15".to_string()));
     }
 
     #[test]

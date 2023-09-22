@@ -80,7 +80,7 @@ env STARSHIP_LOG=trace starship timings
 
 Isto vai retornar o rastreamento do log e um detalhamento de todos os módulos que levam mais que 1ms para executar ou produzir alguma saída.
 
-Finalmente se você quer procurar um bug você pode usar o comando `bug-report` para criar uma issue no Github.
+Por fim se você encontrar um bug use o comando `bug-report`  para criar um GitHub issue.
 
 ```sh
 starship bug-report

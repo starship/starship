@@ -29,7 +29,8 @@
         "disabled": true,
         "format": "on [$symbol($subscription)]($style) ",
         "style": "blue bold",
-        "symbol": "ﴃ "
+        "subscription_aliases": {},
+        "symbol": "󰠅 "
       },
       "allOf": [
         {
@@ -39,9 +40,9 @@
     },
     "battery": {
       "default": {
-        "charging_symbol": " ",
+        "charging_symbol": "󰂄 ",
         "disabled": false,
-        "discharging_symbol": " ",
+        "discharging_symbol": "󰂃 ",
         "display": [
           {
             "charging_symbol": null,
@@ -50,10 +51,10 @@
             "threshold": 10
           }
         ],
-        "empty_symbol": " ",
+        "empty_symbol": "󰂎 ",
         "format": "[$symbol$percentage]($style) ",
-        "full_symbol": " ",
-        "unknown_symbol": " "
+        "full_symbol": "󰁹 ",
+        "unknown_symbol": "󰁽 "
       },
       "allOf": [
         {
@@ -475,7 +476,7 @@
     },
     "fennel": {
       "default": {
-        "detect_extentions": [
+        "detect_extensions": [
           "fnl"
         ],
         "detect_files": [],
@@ -519,8 +520,23 @@
         }
       ]
     },
+    "fossil_metrics": {
+      "default": {
+        "added_style": "bold green",
+        "deleted_style": "bold red",
+        "disabled": true,
+        "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "only_nonzero_diffs": true
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/FossilMetricsConfig"
+        }
+      ]
+    },
     "gcloud": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "on [$symbol$account(@$domain)(\\($region\\))]($style) ",
         "project_aliases": {},
@@ -575,6 +591,7 @@
         "deleted_style": "bold red",
         "disabled": true,
         "format": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+        "ignore_submodules": false,
         "only_nonzero_diffs": true
       },
       "allOf": [
@@ -617,6 +634,7 @@
         "staged": "+",
         "stashed": "\\$",
         "style": "red bold",
+        "typechanged": "",
         "untracked": "?",
         "up_to_date": ""
       },
@@ -645,6 +663,7 @@
         ],
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
+        "not_capable_style": "bold red",
         "style": "bold cyan",
         "symbol": "🐹 ",
         "version_format": "v${raw}"
@@ -779,6 +798,7 @@
     },
     "hostname": {
       "default": {
+        "detect_env_vars": [],
         "disabled": false,
         "format": "[$ssh_symbol$hostname]($style) in ",
         "ssh_only": true,
@@ -887,6 +907,7 @@
     "kubernetes": {
       "default": {
         "context_aliases": {},
+        "contexts": [],
         "detect_extensions": [],
         "detect_files": [],
         "detect_folders": [],
@@ -1121,10 +1142,12 @@
         "format": "[$symbol]($style)",
         "style": "bold white",
         "symbols": {
+          "Alpaquita": "🔔 ",
           "Alpine": "🏔️ ",
           "Amazon": "🙂 ",
           "Android": "🤖 ",
           "Arch": "🎗️ ",
+          "Artix": "🎗️ ",
           "CentOS": "💠 ",
           "Debian": "🌀 ",
           "DragonFly": "🐉 ",
@@ -1137,6 +1160,7 @@
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
           "Linux": "🐧 ",
+          "Mabox": "📦 ",
           "Macos": "🍎 ",
           "Manjaro": "🥭 ",
           "Mariner": "🌊 ",
@@ -1491,6 +1515,7 @@
         "disabled": true,
         "format": "[$symbol$shlvl]($style) ",
         "repeat": false,
+        "repeat_offset": 0,
         "style": "bold yellow",
         "symbol": "↕️  ",
         "threshold": 2
@@ -1511,6 +1536,28 @@
       "allOf": [
         {
           "$ref": "#/definitions/SingularityConfig"
+        }
+      ]
+    },
+    "solidity": {
+      "default": {
+        "compiler": [
+          "solc"
+        ],
+        "detect_extensions": [
+          "sol"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version)]($style)",
+        "style": "bold blue",
+        "symbol": "S ",
+        "version_format": "v${major}.${minor}.${patch}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/SolidityConfig"
         }
       ]
     },
@@ -1775,7 +1822,7 @@
   "definitions": {
     "AwsConfig": {
       "title": "AWS",
-      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION` var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
       "type": "object",
       "properties": {
         "format": {
@@ -1835,7 +1882,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "ﴃ ",
+          "default": "󰠅 ",
           "type": "string"
         },
         "style": {
@@ -1845,6 +1892,13 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "subscription_aliases": {
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -1853,23 +1907,23 @@
       "type": "object",
       "properties": {
         "full_symbol": {
-          "default": " ",
+          "default": "󰁹 ",
           "type": "string"
         },
         "charging_symbol": {
-          "default": " ",
+          "default": "󰂄 ",
           "type": "string"
         },
         "discharging_symbol": {
-          "default": " ",
+          "default": "󰂃 ",
           "type": "string"
         },
         "unknown_symbol": {
-          "default": " ",
+          "default": "󰁽 ",
           "type": "string"
         },
         "empty_symbol": {
-          "default": " ",
+          "default": "󰂎 ",
           "type": "string"
         },
         "display": {
@@ -2955,7 +3009,7 @@
           "default": true,
           "type": "boolean"
         },
-        "detect_extentions": {
+        "detect_extensions": {
           "default": [
             "fnl"
           ],
@@ -3030,6 +3084,32 @@
       },
       "additionalProperties": false
     },
+    "FossilMetricsConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "([+$added]($added_style) )([-$deleted]($deleted_style) )",
+          "type": "string"
+        },
+        "added_style": {
+          "default": "bold green",
+          "type": "string"
+        },
+        "deleted_style": {
+          "default": "bold red",
+          "type": "string"
+        },
+        "only_nonzero_diffs": {
+          "default": true,
+          "type": "boolean"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "GcloudConfig": {
       "type": "object",
       "properties": {
@@ -3060,6 +3140,13 @@
           "default": {},
           "type": "object",
           "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
             "type": "string"
           }
         }
@@ -3176,6 +3263,10 @@
         "disabled": {
           "default": true,
           "type": "boolean"
+        },
+        "ignore_submodules": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
@@ -3281,6 +3372,10 @@
           "default": "?",
           "type": "string"
         },
+        "typechanged": {
+          "default": "",
+          "type": "string"
+        },
         "ignore_submodules": {
           "default": false,
           "type": "boolean"
@@ -3320,6 +3415,10 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        },
+        "not_capable_style": {
+          "default": "bold red",
+          "type": "string"
         },
         "detect_extensions": {
           "default": [
@@ -3642,6 +3741,13 @@
           "default": ".",
           "type": "string"
         },
+        "detect_env_vars": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "format": {
           "default": "[$ssh_symbol$hostname]($style) in ",
           "type": "string"
@@ -3916,6 +4022,58 @@
           "items": {
             "type": "string"
           }
+        },
+        "contexts": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/KubernetesContextConfig"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "KubernetesContextConfig": {
+      "type": "object",
+      "properties": {
+        "context_pattern": {
+          "default": "",
+          "type": "string"
+        },
+        "user_pattern": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "symbol": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "style": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "context_alias": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "user_alias": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false
@@ -4377,10 +4535,12 @@
         },
         "symbols": {
           "default": {
+            "Alpaquita": "🔔 ",
             "Alpine": "🏔️ ",
             "Amazon": "🙂 ",
             "Android": "🤖 ",
             "Arch": "🎗️ ",
+            "Artix": "🎗️ ",
             "CentOS": "💠 ",
             "Debian": "🌀 ",
             "DragonFly": "🐉 ",
@@ -4393,6 +4553,7 @@
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
             "Linux": "🐧 ",
+            "Mabox": "📦 ",
             "Macos": "🍎 ",
             "Manjaro": "🥭 ",
             "Mariner": "🌊 ",
@@ -5184,6 +5345,12 @@
           "default": false,
           "type": "boolean"
         },
+        "repeat_offset": {
+          "default": 0,
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0.0
+        },
         "style": {
           "default": "bold yellow",
           "type": "string"
@@ -5213,6 +5380,65 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SolidityConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version)]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${major}.${minor}.${patch}",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "style": {
+          "default": "bold blue",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "S ",
+          "type": "string"
+        },
+        "compiler": {
+          "default": [
+            "solc"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/definitions/Either_for_String_and_Array_of_String"
+            }
+          ]
+        },
+        "detect_extensions": {
+          "default": [
+            "sol"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false
@@ -5700,6 +5926,10 @@
               "$ref": "#/definitions/Either_for_Boolean_and_String"
             }
           ]
+        },
+        "require_repo": {
+          "default": false,
+          "type": "boolean"
         },
         "shell": {
           "default": [],

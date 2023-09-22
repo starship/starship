@@ -9,7 +9,7 @@ Está personalização altera o formato de todos os módulos integrados para que
 ### Configuração
 
 ```sh
-starship preset bracketed-segments > ~/.config/starship.toml
+starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
 [Clique para baixar o TOML](/presets/toml/bracketed-segments.toml)

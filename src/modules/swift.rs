@@ -60,10 +60,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn parse_swift_version(swift_version: &str) -> Option<String> {
     // split into ["Apple", "Swift", "version", "5.2.2", ...] or
     //            ["Swift", "version", "5.3-dev", ...]
-    let mut splited = swift_version.split_whitespace();
-    let _ = splited.position(|t| t == "version")?;
+    let mut split = swift_version.split_whitespace();
+    let _ = split.position(|t| t == "version")?;
     // return "5.2.2" or "5.3-dev"
-    let version = splited.next()?;
+    let version = split.next()?;
 
     Some(version.to_string())
 }

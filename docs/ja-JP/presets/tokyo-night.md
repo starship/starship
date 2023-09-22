@@ -1,19 +1,19 @@
 [プリセット一覧に戻る](./README.md#pastel-powerline)
 
-# Tokyo Night Preset
+# Tokyo Night プリセット
 
-This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
+このプリセットは[tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme)を参考にしています。
 
-![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png)
+![Tokyo Night プリセットのスクリーンショット](/presets/img/tokyo-night.png)
 
 ### 必要なもの
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
+- [Nerd Font](https://www.nerdfonts.com/)のインストールとターミナルでの有効化
 
 ### 設定
 
 ```sh
-starship preset tokyo-night > ~/.config/starship.toml
+starship preset tokyo-night -o ~/.config/starship.toml
 ```
 
 [クリックしてTOMLをダウンロード](/presets/toml/tokyo-night.toml)

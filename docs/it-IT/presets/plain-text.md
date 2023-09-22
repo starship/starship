@@ -9,7 +9,7 @@ This preset changes the symbols for each module into plain text. Great if you do
 ### Configurazione
 
 ```sh
-starship preset plain-text-symbols > ~/.config/starship.toml
+starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/plain-text-symbols.toml)

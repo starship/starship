@@ -37,12 +37,12 @@ pub fn cleanup_log_files<P: AsRef<Path>>(path: P) {
     let log_dir = path.as_ref();
     let Ok(log_files) = fs::read_dir(log_dir) else {
         // Avoid noisily handling errors in this cleanup function.
-        return
+        return;
     };
 
     for file in log_files {
         // Skip files that can't be read.
-        let Ok (file) = file else {
+        let Ok(file) = file else {
             continue;
         };
 

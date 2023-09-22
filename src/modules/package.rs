@@ -194,7 +194,7 @@ fn get_meson_version(context: &Context, config: &PackageConfig) -> Option<String
         .split_ascii_whitespace()
         .collect::<String>();
 
-    let re = Regex::new(r#"project\([^())]*,version:'(?P<version>[^']+)'[^())]*\)"#).unwrap();
+    let re = Regex::new(r"project\([^())]*,version:'(?P<version>[^']+)'[^())]*\)").unwrap();
     let caps = re.captures(&file_contents)?;
 
     format_version(&caps["version"], config.version_format)
@@ -238,7 +238,7 @@ fn get_cargo_version(context: &Context, config: &PackageConfig) -> Option<String
         // workspace version string (`package.version.worspace = true`)
         // need to read the Cargo.toml file from the workspace root
         let mut version = None;
-        // disover the workspace root
+        // discover the workspace root
         for path in context.current_dir.ancestors().skip(1) {
             // Assume the workspace root is the first ancestor that contains a Cargo.toml file
             if let Ok(mut file) = fs::File::open(path.join("Cargo.toml")) {
@@ -487,12 +487,12 @@ mod tests {
     fn test_extract_nimble_package_version() -> io::Result<()> {
         let config_name = "test_project.nimble";
 
-        let config_content = r##"
+        let config_content = r#"
 version = "0.1.0"
 author = "Mr. nimble"
 description = "A new awesome nimble package"
 license = "MIT"
-"##;
+"#;
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(config_content))?;
@@ -505,7 +505,7 @@ license = "MIT"
             .cmd(
                 "nimble dump --json",
                 Some(CommandOutput {
-                    stdout: r##"
+                    stdout: r#"
 {
   "name": "test_project.nimble",
   "version": "0.1.0",
@@ -524,7 +524,7 @@ license = "MIT"
   "srcDir": "",
   "backend": "c"
 }
-"##
+"#
                     .to_owned(),
                     stderr: String::new(),
                 }),
@@ -547,12 +547,12 @@ license = "MIT"
     ) -> io::Result<()> {
         let config_name = "test_project.nimble";
 
-        let config_content = r##"
+        let config_content = r#"
 version = "0.1.0"
 author = "Mr. nimble"
 description = "A new awesome nimble package"
 license = "MIT"
-"##;
+"#;
 
         let project_dir = create_project_dir()?;
         fill_config(&project_dir, config_name, Some(config_content))?;

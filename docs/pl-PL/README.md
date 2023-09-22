@@ -55,7 +55,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
    ```sh
    brew install starship
    ```
-   With [Winget](https://github.com/microsoft/winget-cli):
+   Za pomocą [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
    winget install starship
@@ -149,7 +149,7 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
 
    ::: warning
 
-   Ten sposób zmieni się w przyszłości. Działa tylko na Nushell v0.73+.
+   Ten sposób zmieni się w przyszłości. Działa tylko na Nushell v0.78+.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship to minimalny, szybki i ekstremalnie konfigurowalny wiersz 
    Dodaj następujący kod na koniec Twojego pliku konfiguracyjnego Nushell (możesz go znaleźć uruchamiając `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 

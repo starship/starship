@@ -28,6 +28,7 @@ pub mod erlang;
 pub mod fennel;
 pub mod fill;
 pub mod fossil_branch;
+pub mod fossil_metrics;
 pub mod gcloud;
 pub mod git_branch;
 pub mod git_commit;
@@ -75,6 +76,7 @@ pub mod scala;
 pub mod shell;
 pub mod shlvl;
 pub mod singularity;
+pub mod solidity;
 pub mod spack;
 mod starship_root;
 pub mod status;
@@ -157,6 +159,8 @@ pub struct FullConfig<'a> {
     fill: fill::FillConfig<'a>,
     #[serde(borrow)]
     fossil_branch: fossil_branch::FossilBranchConfig<'a>,
+    #[serde(borrow)]
+    fossil_metrics: fossil_metrics::FossilMetricsConfig<'a>,
     #[serde(borrow)]
     gcloud: gcloud::GcloudConfig<'a>,
     #[serde(borrow)]
@@ -250,6 +254,8 @@ pub struct FullConfig<'a> {
     shlvl: shlvl::ShLvlConfig<'a>,
     #[serde(borrow)]
     singularity: singularity::SingularityConfig<'a>,
+    #[serde(borrow)]
+    solidity: solidity::SolidityConfig<'a>,
     #[serde(borrow)]
     spack: spack::SpackConfig<'a>,
     #[serde(borrow)]

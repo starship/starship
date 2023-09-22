@@ -138,7 +138,7 @@
 
                 1. Comment out or remove the two `Publish` tags that follow the
                    `WixVariable` tag.
-                2. Uncomment the `<WixVariable Id='WixUILicenseRtf' Value='Path\to\Eula.rft'>` tag futher down
+                2. Uncomment the `<WixVariable Id='WixUILicenseRtf' Value='Path\to\Eula.rft'>` tag further down
                 3. Replace the `Value` attribute of the `WixVariable` tag with
                    the path to a RTF file that will be used as the EULA and
                    displayed in the license agreement dialog.
@@ -158,7 +158,7 @@
 
 
     <!--
-          Uncomment the next `WixVaraible` tag to customize the installer's
+          Uncomment the next `WixVariable` tag to customize the installer's
           Graphical User Interface (GUI) and add a custom banner image across
           the top of each screen. See the WiX Toolset documentation for details
           about customization.

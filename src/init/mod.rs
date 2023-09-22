@@ -153,10 +153,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
             "#,
             starship.sprint_posix()?
         ),
-        "zsh" => print!(
-            r#"source <({} init zsh --print-full-init)"#,
-            starship.sprint_posix()?
-        ),
+        "zsh" => print_script(ZSH_INIT, &starship.sprint_posix()?),
         "fish" => print!(
             // Fish does process substitution with pipes and psub instead of bash syntax
             r#"source ({} init fish --print-full-init | psub)"#,
@@ -169,7 +166,7 @@ pub fn init_stub(shell_name: &str) -> io::Result<()> {
         "ion" => print!("eval $({} init ion --print-full-init)", starship.sprint()?),
         "elvish" => print!(
             r#"eval ({} init elvish --print-full-init | slurp)"#,
-            starship.sprint_posix()?
+            starship.sprint()?
         ),
         "tcsh" => print!(
             r#"eval `({} init tcsh --print-full-init)`"#,

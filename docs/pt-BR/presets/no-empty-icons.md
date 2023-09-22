@@ -1,15 +1,15 @@
 [Retornar para Personalizações](./README.md#no-empty-icons)
 
-# No Empty Icons Preset
+# Predefinição Nenhum Ícones Vazios
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+Se os arquivos de toolset forem encontrados o ícone do toolset será exibido. Se um toolset não for encontrado para determinar o número da versão, ele não será exibido. Esta predefinição altera o comportamento para que o ícone seja exibido somente se a informação do toolset puder ser determinada.
 
-![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
+![Captura de tela da predefinição de nenhum ícone vazio](/presets/img/no-empty-icons.png)
 
 ### Configuração
 
 ```sh
-starship preset no-empty-icons > ~/.config/starship.toml
+starship preset no-empty-icons -o ~/.config/starship.toml
 ```
 
 [Clique para baixar o TOML](/presets/toml/no-empty-icons.toml)
