@@ -1,8 +1,8 @@
 [Вернуться к пресетам](./README.md#plain-text-symbols)
 
-## Plain Text Symbols Preset
+## Пресет Plain Text Symbols
 
-Этот пресет изменяет символы для каждого модуля на обычный текст. Great if you don't have access to Unicode.
+Этот пресет изменяет символы для каждого модуля на обычный текст. Отлично подходит, если у вас нет возможности использовать Unicode.
 
 ![Скриншот пресета Plain Text Symbols](/presets/img/plain-text-symbols.png)
 
