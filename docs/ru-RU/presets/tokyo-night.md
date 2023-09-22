@@ -1,6 +1,6 @@
 [Вернуться к пресетам](./README.md#pastel-powerline)
 
-# Tokyo Night Preset
+# Пресет Tokyo Night
 
 Этот пресет вдохновлен [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme).
 
