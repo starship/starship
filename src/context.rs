@@ -842,7 +842,7 @@ pub struct Properties {
     #[clap(short, long, default_value_t, value_parser=parse_jobs)]
     pub jobs: i64,
     /// The current value of SHLVL, for shells that mis-handle it in $()
-    #[clap(long)]
+    #[clap(long, value_parser=parse_jobs)]
     pub shlvl: Option<i64>,
 }
 
