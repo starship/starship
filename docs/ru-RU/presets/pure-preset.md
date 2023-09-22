@@ -1,6 +1,6 @@
 [Вернуться к пресетам](./README.md#pure)
 
-# Pure Preset
+# Пресет Pure
 
 Этот пресет имитирует внешний вид и поведение [Pure](https://github.com/sindresorhus/pure).
 
