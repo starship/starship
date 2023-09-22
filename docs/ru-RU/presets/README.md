@@ -30,13 +30,13 @@
 
 ## [Plain Text Symbols](./plain-text.md)
 
-Этот пресет изменяет символы для каждого модуля на обычный текст. Great if you don't have access to Unicode.
+Этот пресет изменяет символы для каждого модуля на обычный текст. Отлично подходит, если у вас нет возможности использовать Unicode.
 
 [![Скриншот пресета Plain Text Symbols](/presets/img/plain-text-symbols.png "Нажмите, чтобы просмотреть пресет Plain Text Symbols")](./plain-text)
 
 ## [No Runtime Versions](./no-runtimes.md)
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Этот пресет скрывает версии сред выполнения языков программирования. Если вы работаете с контейнерами или виртуализированными средами, то этот пресет для вас!
 
 [![Скриншот пресета Hide Runtime Versions](/presets/img/no-runtime-versions.png "Нажмите, чтобы просмотреть пресет No Runtime Versions")](./no-runtimes)
 
