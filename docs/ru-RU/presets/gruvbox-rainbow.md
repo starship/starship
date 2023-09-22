@@ -1,6 +1,6 @@
 [Вернуться к пресетам](./README.md#gruvbox-rainbow)
 
-# Gruvbox Rainbow Preset
+# Пресет Gruvbox Rainbow
 
 Этот пресет в значительной степени вдохновлен [Pastel Powerline](./pastel-powerline.md) и [Tokyo Night](./tokyo-night.md).
 
