@@ -2,15 +2,15 @@
 
 # Пресет Jetpack
 
-Это псевдоминималистичный пресет, вдохновленный приглашениями командной строки [geometry](https://github.com/geometry-zsh/geometry) и [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
+Это псевдоминималистичный пресет, вдохновленный приглашениями командной оболочки [geometry](https://github.com/geometry-zsh/geometry) и [spaceship](https://github.com/spaceship-prompt/spaceship-prompt).
 
 > Jetpack использует цветовую тему терминала.
 
 ![Скриншот пресета Jetpack](/presets/img/jetpack.png)
 
-### Prerequisite
+### Обязательные условия
 
-- Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
+- Требуется оболочка с поддержкой [`правостороннего приглашения`](https://starship.rs/advanced-config/#enable-right-prompt).
 - Рекомендуется [Jetbrains Mono](https://www.jetbrains.com/lp/mono/).
 
 ### Конфигурация
