@@ -2,7 +2,7 @@
 
 # Пресет No Empty Icons
 
-If toolset files are identified the toolset icon is displayed. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+Если файлы набора инструментов найдены, то отображается икнока набора инструментов. Если набор инструментов не найден и нельзя определить номер его версии, то он не отображается. Этот пресет изменяет поведение так, чтобы значок отображался только в том случае, если информация о наборе инструментов может быть определена.
 
 ![Скриншот пресета No Empty Icons](/presets/img/no-empty-icons.png)
 
