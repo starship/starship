@@ -42,7 +42,7 @@
 
 ## [No Empty Icons](./no-empty-icons.md)
 
-This preset does not show icons if the toolset is not found.
+Этот пресет не отображает иконки, если набор инструментов не найден.
 
 [![Скриншот пресета No Empty Icons](/presets/img/no-empty-icons.png "Нажмите, чтобы просмотреть пресет No Runtime Versions")](./no-empty-icons.md)
 
