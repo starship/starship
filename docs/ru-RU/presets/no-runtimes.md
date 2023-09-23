@@ -2,7 +2,7 @@
 
 # No Runtime Versions Preset
 
-This preset hides the version of language runtimes. If you work in containers or virtualized environments, this one is for you!
+Этот пресет скрывает версии сред выполнения языков программирования. Если вы работаете с контейнерами или виртуализированными средами, то этот пресет для вас!
 
 ![Скриншот пресета Hide Runtime Versions](/presets/img/no-runtime-versions.png)
 
