@@ -158,71 +158,71 @@
   align="right"
  />
 
-**আপনার টার্মিনাল এর জন্য একটি সহজ, প্রচণ্ড দ্রুত এবং অশেষ কাস্টমাইজ করার সুবিধাসম্পন্ন একটি প্রম্প্ট!**
+**আপনার টার্মিনাল এর জন্য একটি সহজ, প্রচণ্ড দ্রুত এবং অশেষভাবে কাস্টমাইজ করার  মতো সুবিধাসম্পন্ন একটি প্রম্প্ট!**
 
 - **দ্রুত:** দ্রুত - সত্যি সত্যিই _অনেক_ দ্রুত! 🚀
 - **কাস্টমাইজ করার সুবিধা:** প্রম্পটের প্রতিটি দিক কনফিগ করুন মন মত ।
-- **Universal:** works on any shell, on any operating system.
-- **Intelligent:** shows relevant information at a glance.
-- **Feature rich:** support for all your favorite tools.
-- **Easy:** quick to install – start using it in minutes.
+- **ব্যতিক্রমহীন:** যেকোনো অপারেটিং সিস্টেম ও শেলে কাজ করে ।
+- **চালাক:** এক নজরে দরকারি সকল তথ্য দেখা যায় ।
+- **ফিচার সমৃদ্ধ:** আপনার প্রিয় সকল টুল ব্যবহার করতে পারবেন ।
+- **সহজ:** অনায়াসে ইন্সটল করুন – মিনিটের মধ্যে ব্যবহার শুরু করে দিন ।
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starship এর ডকুমেন্টেশন ঘুরে দেখুন&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
 
-## 🚀 Installation
+## 🚀 ইন্সটল
 
-### Prerequisites
+### পূর্বশর্ত
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- আপনার থেকে টার্মিনালে একটি [Nerd Font](https://www.nerdfonts.com/) ব্যবহার করতে হবে (উদাহরণস্বরূপ আপনি [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads) টি ব্যবহার করতে পারেন) ।
 
-### Step 1. Install Starship
+### ধাপ ১.  Starship ইন্সটল করুন
 
-Select your operating system from the list below to view installation instructions:
+ইনস্টলেশন নির্দেশিকা দেখতে নিচের তালিকা থেকে আপনার অপারেটিং সিস্টেম বাছাই করুন:
 
 <details>
-<summary>Android</summary>
+<summary>অ্যান্ড্রয়েড</summary>
 
-Install Starship using any of the following package managers:
+নিম্নলিখিত প্যাকেজ ম্যানেজার গুলোর মধ্যে থেকে যেকোনো একটি ব্যবহার করে Starship ইন্সটল করুন:
 
-| Repository                                                                        | Instructions           |
+| রিপোজিটরি                                                                         | নির্দেশাবলী            |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
 </details>
 
 <details>
-<summary>BSD</summary>
+<summary>বিএসডি</summary>
 
-Install Starship using any of the following package managers:
+নিম্নলিখিত প্যাকেজ ম্যানেজার গুলোর মধ্যে থেকে যেকোনো একটি ব্যবহার করে Starship ইন্সটল করুন:
 
-| Distribution | Repository                                               | Instructions                      |
-| ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| ডিস্ট্রিবিউশন | রিপোজিটরি                                                | নির্দেশাবলী                       |
+| ------------- | -------------------------------------------------------- | --------------------------------- |
+| **_যেকোনো_**  | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD       | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD        | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
 </details>
 
 <details>
-<summary>Linux</summary>
+<summary>লিনাক্স </summary>
 
-Install the latest version for your system:
+আপনার সিস্টেম এর জন্য লেটেস্ট সংস্করণটি ইন্সটল করুন:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+অথবা, নিম্নলিখিত প্যাকেজ ম্যানেজার গুলোর মধ্যে থেকে যেকোনো একটি ব্যবহার করে Starship ইন্সটল করুন:
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| ডিস্ট্রিবিউশন      | রিপোজিটরি                                                                                       | নির্দেশাবলী                                                                    |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
-| _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
-| _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| **_যেকোনো_**       | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _যেকোনো_           | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _যেকোনো_           | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
@@ -234,17 +234,17 @@ Alternatively, install Starship using any of the following package managers:
 </details>
 
 <details>
-<summary>macOS</summary>
+<summary>ম্যাক ওএস </summary>
 
-Install the latest version for your system:
+আপনার সিস্টেম এর জন্য লেটেস্ট সংস্করণটি ইন্সটল করুন:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+অথবা, নিম্নলিখিত প্যাকেজ ম্যানেজার গুলোর মধ্যে থেকে যেকোনো একটি ব্যবহার করে Starship ইন্সটল করুন:
 
-| Repository                                               | Instructions                            |
+| রিপোজিটরি                                                | নির্দেশাবলী                             |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -254,13 +254,13 @@ Alternatively, install Starship using any of the following package managers:
 </details>
 
 <details>
-<summary>Windows</summary>
+<summary>উইন্ডোজ</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+আপনার সিস্টেম এর জন্য লেটেস্ট সংস্করণটি [রিলিজ সেকশনে](https://github.com/starship/starship/releases/latest) থাকা MSI-ইন্সটলার ব্যবহার করে ইন্সটল করুন ।
 
-Install Starship using any of the following package managers:
+নিম্নলিখিত প্যাকেজ ম্যানেজার গুলোর মধ্যে থেকে যেকোনো একটি ব্যবহার করে Starship ইন্সটল করুন:
 
-| Repository                                                                                   | Instructions                            |
+| রিপোজিটরি                                                                                    | নির্দেশাবলী                             |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
@@ -270,14 +270,14 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Step 2. Set up your shell to use Starship
+### ধাপ ২. Starship ব্যবহার করার জন্য আপনার শেল প্রস্তুত করুন
 
-Configure your shell to initialize starship. Select yours from the list below:
+Starship চালু করতে আপনার শেল কে ঠিক মতো কনফিগার করুন । নিম্নলিখিত তালিকা থেকে আপনার শেল বাছাই করুন:
 
 <details>
 <summary>Bash</summary>
 
-Add the following to the end of `~/.bashrc`:
+`~/.bashrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
 ```sh
 eval "$(starship init bash)"
@@ -288,7 +288,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+আপনাকে Cmd এর সাথে [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) ব্যবহার করতে হবে । `%LocalAppData%\clink\starship.lua` ফাইল টি তৈরি করে তার মধ্যে নিম্নলিখিত লাইন টি যোগ করুন:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -299,20 +299,20 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-Add the following to the end of `~/.elvish/rc.elv`:
+`~/.elvish/rc.elv` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
 ```sh
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+বিঃদ্রঃ শুধুমাত্র Elvish v0.18+ কাজ করবে ।
 
 </details>
 
 <details>
 <summary>Fish</summary>
 
-Add the following to the end of `~/.config/fish/config.fish`:
+`~/.config/fish/config.fish` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
 ```fish
 starship init fish | source
@@ -323,7 +323,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-Add the following to the end of `~/.config/ion/initrc`:
+`~/.config/ion/initrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
 ```sh
 eval $(starship init ion)
@@ -334,27 +334,27 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+আপনার Nushell env ফাইলের (Nushell এ `$nu.env-path` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনগুলি যোগ করুন:
 
 ```sh
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+এরপর আপনার Nushell কনফিগের (Nushell এ `$nu.config-path` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনটি যোগ করুন:
 
 ```sh
 use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.78+ is supported
+বিঃদ্রঃ শুধুমাত্র Nushell v0.78+ কাজ করবে ।
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+আপনার PowerShell কনফিগের (PowerShell এ `$PROFILE` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনটি যোগ করুন:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -365,7 +365,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-Add the following to the end of `~/.tcshrc`:
+`~/.tcshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
 ```sh
 eval `starship init tcsh`
@@ -376,7 +376,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-Add the following to the end of `~/.xonshrc`:
+`~/.xonshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
 ```python
 execx($(starship init xonsh))
@@ -387,7 +387,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-Add the following to the end of `~/.zshrc`:
+`~/.zshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
 ```sh
 eval "$(starship init zsh)"
@@ -395,21 +395,21 @@ eval "$(starship init zsh)"
 
 </details>
 
-### Step 3. Configure Starship
+### ধাপ ৩. Starship কনফিগার করুন
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+নতুন একটি শেল চালু করুন, এরপর আপনি আপনার সুন্দর নতুন শেল প্রম্প্ট দেখতে পাবেন । পূর্ব নির্ধারিত কনফিগ যদি ভালো লেগে থাকে, তাহলে উপভোগ করুন!
 
-If you're looking to further customize Starship:
+আপনি যদি Starship কে নিজের মতো করে কাস্টমাইজ করতে চান:
 
-- **[Configuration](https://starship.rs/config/)** – learn how to configure Starship to tweak your prompt to your liking
+- **[কনফিগারেশন](https://starship.rs/config/)** – আপনার নিজের ইচ্ছা মতো নিজের প্রম্প্টকে পরিবর্তন করতে শিখুন
 
-- **[Presets](https://starship.rs/presets/)** – get inspired by the pre-built configuration of others
+- **[অন্যদের তৈরি কনফিগ](https://starship.rs/presets/)** – অন্যদের তৈরি করা সুন্দর কনফিগ দেখে অনুপ্রাণিত হন
 
-## 🤝 Contributing
+## 🤝 নিজে অবদান রাখুন
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+আমরা সবসময় **সকল দক্ষতা স্তরের** অবদানকারীদের খুঁজছি! আপনি যদি সহজ ভাবে এই প্রোজেক্টে অবদান রাখতে চান তাইলে ["good first issue"](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) গুলির সমাধান করার চেষ্টা করতে পারেন ।
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+আপনি যদি ইংরেজি ছাড়া অন্য কোন ভাষায় সাবলীল হন, তাহলে আপনি আমাদের ডকুমেন্টেশন অনুবাদে এবং আপ-টু-ডেট রাখতে সহায়তা করতে পারেন, আমরা খুবই কৃতজ্ঞ হব ।  If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
 If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
