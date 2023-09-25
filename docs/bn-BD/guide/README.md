@@ -35,11 +35,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
-  ·
-  <a href="#🚀-installation">Installation</a>
-  ·
-  <a href="https://starship.rs/config/">Configuration</a>
+  <a href="https://starship.rs">ওয়েবসাইট</a>
+ · 
+<a href="#🚀-installation">ইন্সটল</a>
+ ·
+<a href="https://starship.rs/config/"> কনফিগ</a>
 </p>
 
 <p align="center">
@@ -158,10 +158,10 @@
   align="right"
  />
 
-**The minimal, blazing-fast, and infinitely customizable prompt for any shell!**
+**আপনার টার্মিনাল এর জন্য একটি সহজ, প্রচণ্ড দ্রুত এবং অশেষ কাস্টমাইজ করার সুবিধাসম্পন্ন একটি প্রম্প্ট!**
 
-- **Fast:** it's fast – _really really_ fast! 🚀
-- **Customizable:** configure every aspect of your prompt.
+- **দ্রুত:** দ্রুত - সত্যি সত্যিই _অনেক_ দ্রুত! 🚀
+- **কাস্টমাইজ করার সুবিধা:** প্রম্পটের প্রতিটি দিক কনফিগ করুন মন মত ।
 - **Universal:** works on any shell, on any operating system.
 - **Intelligent:** shows relevant information at a glance.
 - **Feature rich:** support for all your favorite tools.
