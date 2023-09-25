@@ -409,13 +409,13 @@ eval "$(starship init zsh)"
 
 আমরা সবসময় **সকল দক্ষতা স্তরের** অবদানকারীদের খুঁজছি! আপনি যদি সহজ ভাবে এই প্রোজেক্টে অবদান রাখতে চান তাইলে ["good first issue"](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) গুলির সমাধান করার চেষ্টা করতে পারেন ।
 
-আপনি যদি ইংরেজি ছাড়া অন্য কোন ভাষায় সাবলীল হন, তাহলে আপনি আমাদের ডকুমেন্টেশন অনুবাদে এবং আপ-টু-ডেট রাখতে সহায়তা করতে পারেন, আমরা খুবই কৃতজ্ঞ হব ।  If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+আপনি যদি ইংরেজি ছাড়া অন্য কোন ভাষায় সাবলীল হন, তাহলে আপনি আমাদের ডকুমেন্টেশন অনুবাদে এবং আপ-টু-ডেট রাখতে সহায়তা করতে পারেন, আমরা খুবই কৃতজ্ঞ হব ।  যদি এক্ষেত্রে সাহায্য করতে চান, তাহলে [Starship Crowdin](https://translate.starship.rs/) পেইজ এ গিয়ে আপনার অনুবাদ গুলি যোগ করতে পারবেন ।
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+আপনি যদি Starship এ অবদান রাখতে আগ্রহী হন, অনুগ্রহ করে আমাদের অবদান রাখার [নির্দেশিকা ও নিয়মকানুন](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) দেখে নিবেন ।  এছাড়াও, নির্দ্বিধায় আমাদের [Discord](https://discord.gg/8Jzqu3T) সার্ভারে এসে হাই বলে যান । 👋
 
-## 💭 Inspired By
+## 💭 অনুপ্রেরণা
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+অনুগ্রহ করে Starship এর পূর্ববর্তী এইসব প্রোজেক্ট থেকে ঘুরে আসুন, যারা Starship তৈরিতে অনেক অনুপ্রেরণা দিয়েছে । 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -423,11 +423,11 @@ Please check out these previous works that helped inspire the creation of starsh
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
 
-## ❤️ Sponsors
+## ❤️ স্পনসর
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+[একজন স্পনসর হয়ে](https://github.com/sponsors/starship) এই প্রোজেক্টটিকে আর্থিক ভাবে সহায়তা করুন । আপনার নাম অথবা লোগো নিম্নে দেখা যাবে আপনার ওয়েবসাইট এর লিঙ্ক সহ ।
 
-**Supporter Tier**
+**সমর্থক স্তর**
 
 - [Appwrite](https://appwrite.io/)
 
@@ -436,6 +436,6 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
     <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
-## 📝 License
+## 📝 লাইসেন্স
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> এই প্রোজেক্টটি [ISC](https://github.com/starship/starship/blob/master/LICENSE) লাইসেন্সের অধিনে রয়েছে ।
