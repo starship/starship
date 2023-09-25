@@ -6,7 +6,7 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 ![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png)
 
-### Prerequisites
+### পূর্বশর্ত
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
 
