@@ -6,7 +6,7 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 
 ![Screenshot of Tokyo Night preset](/presets/img/tokyo-night.png)
 
-### Prerequisites
+### পূর্বশর্ত
 
 - A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal
 
