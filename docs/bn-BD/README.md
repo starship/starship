@@ -2,7 +2,7 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+tagline: আপনার টার্মিনাল এর জন্য একটি সহজ, প্রচণ্ড দ্রুত এবং অশেষভাবে কাস্টমাইজ করার  মতো সুবিধাসম্পন্ন একটি প্রম্প্ট!
 actionText: Get Started →
 actionLink: ./guide/
 features:
@@ -66,7 +66,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Bash
 
-   Add the following to the end of `~/.bashrc`:
+   `~/.bashrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
    ```sh
    # ~/.bashrc
@@ -77,7 +77,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Fish
 
-   Add the following to the end of `~/.config/fish/config.fish`:
+   `~/.config/fish/config.fish` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
    ```sh
    # ~/.config/fish/config.fish
@@ -88,7 +88,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Zsh
 
-   Add the following to the end of `~/.zshrc`:
+   `~/.zshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
    ```sh
    # ~/.zshrc
@@ -108,7 +108,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Ion
 
-   Add the following to the end of `~/.config/ion/initrc`:
+   `~/.config/ion/initrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
    ```sh
    # ~/.config/ion/initrc
@@ -125,7 +125,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    :::
 
-   Add the following to the end of `~/.elvish/rc.elv`:
+   `~/.elvish/rc.elv` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
    ```sh
    # ~/.elvish/rc.elv
@@ -136,7 +136,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Tcsh
 
-   Add the following to the end of `~/.tcshrc`:
+   `~/.tcshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
    ```sh
    # ~/.tcshrc
@@ -159,7 +159,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   এরপর আপনার Nushell কনফিগের (Nushell এ `$nu.config-path` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনটি যোগ করুন:
 
    ```sh
    use ~/.cache/starship/init.nu
@@ -168,7 +168,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Xonsh
 
-   Add the following to the end of `~/.xonshrc`:
+   `~/.xonshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
 
    ```sh
    # ~/.xonshrc
@@ -179,7 +179,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### Cmd
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   আপনাকে Cmd এর সাথে [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) ব্যবহার করতে হবে । Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua
