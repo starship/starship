@@ -169,6 +169,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Install cargo-llvm-cov
+        if: matrix.rust == 'stable'
         uses: taiki-e/install-action@cargo-llvm-cov
 
       # For windows installer test
@@ -187,7 +188,8 @@ jobs:
         run: brew install mercurial
 
       # Run the ignored tests that expect the above setup
-      - name: Build | Test
+      - name: Build | Test [Coverage]
+        if: matrix.rust == 'stable'
         run: "cargo llvm-cov
           --all-features
           --locked
@@ -197,6 +199,10 @@ jobs:
         env:
           # Avoid -D warnings on nightly builds
           RUSTFLAGS: ""
+      
+      - name: Build | Test [No Coverage]
+        if: matrix.rust == 'nightly'
+        run: cargo test --all-features --locked --workspace -- --include-ignored
 
       - name: Build | Installer [Windows]
         continue-on-error: true
@@ -221,7 +227,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
-        if: github.repository == 'starship/starship'
+        if: github.repository == 'starship/starship' && matrix.rust == 'stable'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: lcov.info
