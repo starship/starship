@@ -119,7 +119,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
-      alt="Українська"
+      alt="乌克兰语"
  /></a>
   &nbsp;
   <a
@@ -224,7 +224,7 @@ curl -sS https://starship.rs/install.sh | sh
 | _任意发行版_            | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _任意发行版_            | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
+| Arch Linux         | [Arch Linux 额外](https://archlinux.org/packages/extra/x86_64/starship)                           | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
@@ -270,7 +270,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 </details>
 
-### 步骤 2. Set up your shell to use Starship
+### 步骤 2. 设置您的 shell 以使用 Starship
 
 配置你的终端来初始化 starship。 请从下面列表选择你的终端：
 
@@ -344,7 +344,7 @@ starship init nu | save -f ~/.cache/starship/init.nu
 然后将以下内容添加到您 Nushell 配置文件的末尾（使用 `$nu.config-path` 来获取它的路径）：
 
 ```sh
-use ~/.cache/starship/init.nu
+使用 ~/.cache/starship/init.nu
 ```
 
 注意：仅支持 Nushell v0.78+
