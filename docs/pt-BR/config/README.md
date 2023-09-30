@@ -424,7 +424,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-O módulo `azure` exibe a assinatura Azure atual. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
+O módulo `azure` exibe a assinatura Azure atual. Isto é baseado na exibição do nome da assinatura padrão ou no nome do usuário, como definido no arquivo `~/.azure/azureProfile.json`.
 
 ### Opções
 
