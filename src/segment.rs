@@ -19,7 +19,7 @@ impl TextSegment {
     // Returns the AnsiString of the segment value
     fn ansi_string(&self, prev: Option<&nu_ansi_term::Style>) -> AnsiString {
         match self.style {
-            Some(style) => style.new(prev).paint(&self.value),
+            Some(style) => style.modify(prev).paint(&self.value),
             None => AnsiString::from(&self.value),
         }
     }
@@ -37,7 +37,7 @@ pub struct FillSegment {
 
 impl FillSegment {
     // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, width: Option<usize>) -> AnsiString {
+    pub fn ansi_string(&self, prev: Option<&nu_ansi_term::Style>, width: Option<usize>) -> AnsiString {
         let s = match width {
             Some(w) => self
                 .value
@@ -55,7 +55,7 @@ impl FillSegment {
             None => String::from(&self.value),
         };
         match self.style {
-            Some(style) => style.style().paint(s),
+            Some(style) => style.modify(prev).paint(s),
             None => AnsiString::from(s),
         }
     }
@@ -70,6 +70,7 @@ mod fill_seg_tests {
     fn ansi_string_width() {
         let width: usize = 10;
         let style = Color::Blue.bold();
+        let prev = Color::Red.bold();
 
         let inputs = vec![
             (".", ".........."),
@@ -84,7 +85,7 @@ mod fill_seg_tests {
                 value: String::from(*text),
                 style: Some(style.into()),
             };
-            let actual = f.ansi_string(Some(width));
+            let actual = f.ansi_string(Some(&prev.into()), Some(width));
             assert_eq!(style.paint(*expected), actual);
         }
     }
@@ -163,7 +164,7 @@ impl Segment {
     // Returns the AnsiString of the segment value, not including its prefix and suffix
     pub fn ansi_string(&self, prev: Option<&nu_ansi_term::Style>) -> AnsiString {
         match self {
-            Self::Fill(fs) => fs.ansi_string(None),
+            Self::Fill(fs) => fs.ansi_string(prev, None),
             Self::Text(ts) => ts.ansi_string(prev),
             Self::LineTerm => AnsiString::from(LINE_TERMINATOR_STRING),
         }

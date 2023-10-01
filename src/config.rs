@@ -285,7 +285,7 @@ pub struct Style {
 }
 
 impl Style {
-    pub fn new(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
+    pub fn modify(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
         match prev {
             None => self.style,
             Some(prev_style) => {
@@ -938,7 +938,7 @@ mod tests {
         .0;
 
         assert_eq!(
-            both_prev_fg.new(None),
+            both_prev_fg.modify(None),
             nu_ansi_term::Style::new().fg(Color::Black).bold().underline()
         );
 
@@ -946,7 +946,7 @@ mod tests {
         let prev_style = nu_ansi_term::Style::new().underline().fg(Color::Yellow).on(Color::Red);
 
         assert_eq!(
-            both_prev_fg.new(Some(&prev_style)),
+            both_prev_fg.modify(Some(&prev_style)),
             nu_ansi_term::Style::new()
                 .fg(Color::Red)
                 .on(Color::Yellow)
@@ -959,7 +959,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            fg_prev_fg.new(Some(&prev_style)),
+            fg_prev_fg.modify(Some(&prev_style)),
             nu_ansi_term::Style::new().fg(Color::Yellow)
         );
 
@@ -967,7 +967,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            fg_prev_bg.new(Some(&prev_style)),
+            fg_prev_bg.modify(Some(&prev_style)),
             nu_ansi_term::Style::new().fg(Color::Red)
         );
 
@@ -975,7 +975,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            bg_prev_fg.new(Some(&prev_style)),
+            bg_prev_fg.modify(Some(&prev_style)),
             nu_ansi_term::Style::new().on(Color::Yellow)
         );
 
@@ -983,7 +983,7 @@ mod tests {
             .unwrap()
             .0;
         assert_eq!(
-            bg_prev_bg.new(Some(&prev_style)),
+            bg_prev_bg.modify(Some(&prev_style)),
             nu_ansi_term::Style::new().on(Color::Red)
         );
     }
