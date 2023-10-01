@@ -176,6 +176,7 @@ jobs:
     env:
       KEYCHAIN_FILENAME: app-signing.keychain-db
       KEYCHAIN_ENTRY: AC_PASSWORD
+      STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
