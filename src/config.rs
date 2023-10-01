@@ -261,7 +261,7 @@ impl StarshipConfig {
 }
 
 /// Deserialize a style string in the starship format with serde
-pub fn deserialize_style<'de, D>(de: D) -> Result<CustomStyle, D::Error>
+pub fn deserialize_style<'de, D>(de: D) -> Result<Style, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -270,35 +270,45 @@ where
     })
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq)]
-/// Wrapper for `nu_ansi_term::Style` that supports referencing the previous style's foreground/background color.
-pub struct CustomStyle {
-    style: nu_ansi_term::Style,
-    bg_prev_fg: bool,
-    bg_prev_bg: bool,
-    fg_prev_fg: bool,
-    fg_prev_bg: bool,
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum PreviousColorFrom {
+    Foreground,
+    Background,
 }
 
-impl CustomStyle {
-    fn new() -> CustomStyle {
-        Default::default()
-    }
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+/// Wrapper for `nu_ansi_term::Style` that supports referencing the previous style's foreground/background color.
+pub struct Style {
+    style: nu_ansi_term::Style,
+    bg_prev: Option<PreviousColorFrom>,
+    fg_prev: Option<PreviousColorFrom>,
+}
 
-    pub fn custom(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
+impl Style {
+    pub fn new(&self, prev: Option<&nu_ansi_term::Style>) -> nu_ansi_term::Style {
         match prev {
             None => self.style,
             Some(prev_style) => {
                 let mut current = self.style;
-                if self.bg_prev_bg {
-                    current.background = prev_style.background;
-                } else if self.bg_prev_fg {
-                    current.background = prev_style.foreground;
+
+                match self.bg_prev {
+                    Some(PreviousColorFrom::Background) => {
+                        current.background = prev_style.background;
+                    },
+                    Some(PreviousColorFrom::Foreground) => {
+                        current.background = prev_style.foreground;
+                    },
+                    None => {},
                 }
-                if self.fg_prev_fg {
-                    current.foreground = prev_style.foreground;
-                } else if self.fg_prev_bg {
-                    current.foreground = prev_style.background;
+
+                match self.fg_prev {
+                    Some(PreviousColorFrom::Background) => {
+                        current.foreground = prev_style.background;
+                    },
+                    Some(PreviousColorFrom::Foreground) => {
+                        current.foreground = prev_style.foreground;
+                    },
+                    None => {},
                 }
 
                 current
@@ -314,7 +324,7 @@ impl CustomStyle {
     where
         F: FnOnce(&nu_ansi_term::Style) -> nu_ansi_term::Style,
     {
-        CustomStyle {
+        Style {
             style: f(&self.style),
             ..*self
         }
@@ -322,13 +332,13 @@ impl CustomStyle {
 
     fn prev_fg(&self, col_fg: bool) -> Self {
         if col_fg {
-            CustomStyle {
-                fg_prev_fg: true,
+            Style {
+                fg_prev: Some(PreviousColorFrom::Foreground),
                 ..*self
             }
         } else {
-            CustomStyle {
-                bg_prev_fg: true,
+            Style {
+                bg_prev: Some(PreviousColorFrom::Foreground),
                 ..*self
             }
         }
@@ -336,31 +346,31 @@ impl CustomStyle {
 
     fn prev_bg(&self, col_fg: bool) -> Self {
         if col_fg {
-            CustomStyle {
-                fg_prev_bg: true,
+            Style {
+                fg_prev: Some(PreviousColorFrom::Background),
                 ..*self
             }
         } else {
-            CustomStyle {
-                bg_prev_bg: true,
+            Style {
+                bg_prev: Some(PreviousColorFrom::Background),
                 ..*self
             }
         }
     }
 }
 
-impl From<nu_ansi_term::Style> for CustomStyle {
+impl From<nu_ansi_term::Style> for Style {
     fn from(value: nu_ansi_term::Style) -> Self {
-        CustomStyle {
+        Style {
             style: value,
             ..Default::default()
         }
     }
 }
 
-impl From<nu_ansi_term::Color> for CustomStyle {
+impl From<nu_ansi_term::Color> for Style {
     fn from(value: nu_ansi_term::Color) -> Self {
-        CustomStyle {
+        Style {
             style: value.into(),
             ..Default::default()
         }
@@ -376,15 +386,15 @@ impl From<nu_ansi_term::Color> for CustomStyle {
  - 'italic'
  - 'inverted'
  - 'blink'
- - 'prevfg'        (specifies the color should be the previous foreground color)
- - 'prevbg'        (specifies the color should be the previous background color)
+ - 'prev_fg'        (specifies the color should be the previous foreground color)
+ - 'prev_bg'        (specifies the color should be the previous background color)
  - '<color>'       (see the `parse_color_string` doc for valid color strings)
 */
-pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Option<CustomStyle> {
+pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Option<Style> {
     style_string
         .split_whitespace()
-        .try_fold(nu_ansi_term::Style::new(), |style, token| {
-            let token = token.to_lowercase();
+        .try_fold(Style::default(), |style, token| {
+            let token: String = token.to_lowercase();
 
             // Check for FG/BG identifiers and strip them off if appropriate
             // If col_fg is true, color the foreground. If it's false, color the background.
@@ -397,16 +407,16 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
             };
 
             match token.as_str() {
-                "underline" => Some(style.underline()),
-                "bold" => Some(style.bold()),
-                "italic" => Some(style.italic()),
-                "dimmed" => Some(style.dimmed()),
-                "inverted" => Some(style.reverse()),
-                "blink" => Some(style.blink()),
-                "hidden" => Some(style.hidden()),
-                "strikethrough" => Some(style.strikethrough()),
-                "prevfg" => Some(style.prev_fg(col_fg)),
-                "prevbg" => Some(style.prev_bg(col_fg)),
+                "underline" => Some(style.map_style(|s| s.underline())),
+                "bold" => Some(style.map_style(|s| s.bold())),
+                "italic" => Some(style.map_style(|s| s.italic())),
+                "dimmed" => Some(style.map_style(|s| s.dimmed())),
+                "inverted" => Some(style.map_style(|s| s.reverse())),
+                "blink" => Some(style.map_style(|s| s.blink())),
+                "hidden" => Some(style.map_style(|s| s.hidden())),
+                "strikethrough" => Some(style.map_style(|s| s.strikethrough())),
+                "prev_fg" => Some(style.prev_fg(col_fg)),
+                "prev_bg" => Some(style.prev_bg(col_fg)),
                 // When the string is supposed to be a color:
                 // Decide if we yield none, reset background or set color.
                 color_string => {
@@ -426,15 +436,15 @@ pub fn parse_style_string(style_string: &str, context: Option<&Context>) -> Opti
                         // bg + invalid color = reset the background to default.
                         if !col_fg && parsed.is_none() {
                             let mut new_style = style;
-                            new_style.background = Option::None;
+                            new_style.style.background = Option::None;
                             Some(new_style)
                         } else {
                             // Valid color, apply color to either bg or fg
                             parsed.map(|ansi_color| {
                                 if col_fg {
-                                    style.fg(ansi_color)
+                                    style.map_style(|s| s.fg(ansi_color))
                                 } else {
-                                    style.on(ansi_color)
+                                    style.map_style(|s| s.on(ansi_color))
                                 }
                             })
                         }
@@ -539,11 +549,10 @@ fn get_palette<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nu_ansi_term::Style;
 
     // Small wrapper to allow deserializing Style without a struct with #[serde(deserialize_with=)]
     #[derive(Default, Clone, Debug, PartialEq)]
-    struct StyleWrapper(CustomStyle);
+    struct StyleWrapper(Style);
 
     impl<'de> Deserialize<'de> for StyleWrapper {
         fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -591,7 +600,7 @@ mod tests {
         struct SegmentDisplayConfig<'a> {
             pub value: &'a str,
             #[serde(deserialize_with = "deserialize_style")]
-            pub style: CustomStyle,
+            pub style: Style,
         }
 
         let config = toml::toml! {
@@ -605,7 +614,7 @@ mod tests {
             git_status_config.untracked,
             SegmentDisplayConfig {
                 value: "x",
-                style: CustomStyle::default(),
+                style: Style::default(),
             }
         );
         assert_eq!(
@@ -922,23 +931,23 @@ mod tests {
     #[test]
     fn table_get_styles_previous() {
         // Test that previous has no effect when there is no previous style
-        let both_prevfg = <StyleWrapper>::from_config(&Value::from(
-            "bold fg:black fg:prevbg bg:prevfg underline",
+        let both_prev_fg = <StyleWrapper>::from_config(&Value::from(
+            "bold fg:black fg:prev_bg bg:prev_fg underline",
         ))
         .unwrap()
         .0;
 
         assert_eq!(
-            both_prevfg.custom(None),
-            Style::new().fg(Color::Black).bold().underline()
+            both_prev_fg.new(None),
+            nu_ansi_term::Style::new().fg(Color::Black).bold().underline()
         );
 
         // But if there is a style on the previous string, then use that
-        let prev_style = Style::new().underline().fg(Color::Yellow).on(Color::Red);
+        let prev_style = nu_ansi_term::Style::new().underline().fg(Color::Yellow).on(Color::Red);
 
         assert_eq!(
-            both_prevfg.custom(Some(&prev_style)),
-            Style::new()
+            both_prev_fg.new(Some(&prev_style)),
+            nu_ansi_term::Style::new()
                 .fg(Color::Red)
                 .on(Color::Yellow)
                 .bold()
@@ -946,36 +955,36 @@ mod tests {
         );
 
         // Test that all the combinations of previous colors work
-        let fg_prev_fg = <StyleWrapper>::from_config(&Value::from("fg:prevfg"))
+        let fg_prev_fg = <StyleWrapper>::from_config(&Value::from("fg:prev_fg"))
             .unwrap()
             .0;
         assert_eq!(
-            fg_prev_fg.custom(Some(&prev_style)),
-            Style::new().fg(Color::Yellow)
+            fg_prev_fg.new(Some(&prev_style)),
+            nu_ansi_term::Style::new().fg(Color::Yellow)
         );
 
-        let fg_prev_bg = <StyleWrapper>::from_config(&Value::from("fg:prevbg"))
+        let fg_prev_bg = <StyleWrapper>::from_config(&Value::from("fg:prev_bg"))
             .unwrap()
             .0;
         assert_eq!(
-            fg_prev_bg.custom(Some(&prev_style)),
-            Style::new().fg(Color::Red)
+            fg_prev_bg.new(Some(&prev_style)),
+            nu_ansi_term::Style::new().fg(Color::Red)
         );
 
-        let bg_prev_fg = <StyleWrapper>::from_config(&Value::from("bg:prevfg"))
+        let bg_prev_fg = <StyleWrapper>::from_config(&Value::from("bg:prev_fg"))
             .unwrap()
             .0;
         assert_eq!(
-            bg_prev_fg.custom(Some(&prev_style)),
-            Style::new().on(Color::Yellow)
+            bg_prev_fg.new(Some(&prev_style)),
+            nu_ansi_term::Style::new().on(Color::Yellow)
         );
 
-        let bg_prev_bg = <StyleWrapper>::from_config(&Value::from("bg:prevbg"))
+        let bg_prev_bg = <StyleWrapper>::from_config(&Value::from("bg:prev_bg"))
             .unwrap()
             .0;
         assert_eq!(
-            bg_prev_bg.custom(Some(&prev_style)),
-            Style::new().on(Color::Red)
+            bg_prev_bg.new(Some(&prev_style)),
+            nu_ansi_term::Style::new().on(Color::Red)
         );
     }
 
@@ -986,7 +995,7 @@ mod tests {
         let flipped_style = <StyleWrapper>::from_config(&config).unwrap().0;
         assert_eq!(
             flipped_style.style(),
-            &Style::new()
+            &nu_ansi_term::Style::new()
                 .underline()
                 .fg(Color::Fixed(120))
                 .on(Color::Rgb(5, 5, 5))
@@ -997,7 +1006,7 @@ mod tests {
         let multi_style = <StyleWrapper>::from_config(&config).unwrap().0;
         assert_eq!(
             multi_style.style(),
-            &Style::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
+            &nu_ansi_term::Style::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
         );
     }
 

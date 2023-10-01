@@ -1,15 +1,15 @@
 use crate::{
-    config::CustomStyle,
+    config::Style,
     print::{Grapheme, UnicodeWidthGraphemes},
 };
-use nu_ansi_term::{AnsiString, Style};
+use nu_ansi_term::AnsiString;
 use unicode_segmentation::UnicodeSegmentation;
 
 /// Type that holds text with an associated style
 #[derive(Clone)]
 pub struct TextSegment {
     /// The segment's style. If None, will inherit the style of the module containing it.
-    style: Option<CustomStyle>,
+    style: Option<Style>,
 
     /// The string value of the current segment.
     value: String,
@@ -17,9 +17,9 @@ pub struct TextSegment {
 
 impl TextSegment {
     // Returns the AnsiString of the segment value
-    fn ansi_string(&self, prev: Option<&Style>) -> AnsiString {
+    fn ansi_string(&self, prev: Option<&nu_ansi_term::Style>) -> AnsiString {
         match self.style {
-            Some(style) => style.custom(prev).paint(&self.value),
+            Some(style) => style.new(prev).paint(&self.value),
             None => AnsiString::from(&self.value),
         }
     }
@@ -29,7 +29,7 @@ impl TextSegment {
 #[derive(Clone)]
 pub struct FillSegment {
     /// The segment's style. If None, will inherit the style of the module containing it.
-    style: Option<CustomStyle>,
+    style: Option<Style>,
 
     /// The string value of the current segment.
     value: String,
@@ -100,7 +100,7 @@ pub enum Segment {
 
 impl Segment {
     /// Creates new segments from a text with a style; breaking out `LineTerminators`.
-    pub fn from_text<T>(style: Option<CustomStyle>, value: T) -> Vec<Self>
+    pub fn from_text<T>(style: Option<Style>, value: T) -> Vec<Self>
     where
         T: Into<String>,
     {
@@ -118,7 +118,7 @@ impl Segment {
     }
 
     /// Creates a new fill segment
-    pub fn fill<T>(style: Option<CustomStyle>, value: T) -> Self
+    pub fn fill<T>(style: Option<Style>, value: T) -> Self
     where
         T: Into<String>,
     {
@@ -128,7 +128,7 @@ impl Segment {
         })
     }
 
-    pub fn style(&self) -> Option<Style> {
+    pub fn style(&self) -> Option<nu_ansi_term::Style> {
         match self {
             Self::Fill(fs) => fs.style.map(|cs| cs.style().to_owned()),
             Self::Text(ts) => ts.style.map(|cs| cs.style().to_owned()),
@@ -136,7 +136,7 @@ impl Segment {
         }
     }
 
-    pub fn set_style_if_empty(&mut self, style: Option<CustomStyle>) {
+    pub fn set_style_if_empty(&mut self, style: Option<Style>) {
         match self {
             Self::Fill(fs) => {
                 if fs.style.is_none() {
@@ -161,7 +161,7 @@ impl Segment {
     }
 
     // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, prev: Option<&Style>) -> AnsiString {
+    pub fn ansi_string(&self, prev: Option<&nu_ansi_term::Style>) -> AnsiString {
         match self {
             Self::Fill(fs) => fs.ansi_string(None),
             Self::Text(ts) => ts.ansi_string(prev),

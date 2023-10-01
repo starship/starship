@@ -5,7 +5,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt;
 
-use crate::config::{parse_style_string, CustomStyle};
+use crate::config::{parse_style_string, Style};
 use crate::context::{Context, Shell};
 use crate::segment::Segment;
 
@@ -235,7 +235,7 @@ impl<'a> StringFormatter<'a> {
     /// - Variable mapper returns an error.
     pub fn parse(
         self,
-        default_style: Option<CustomStyle>,
+        default_style: Option<Style>,
         context: Option<&Context>,
     ) -> Result<Vec<Segment>, StringFormatterError> {
         fn parse_textgroup<'a>(
@@ -258,7 +258,7 @@ impl<'a> StringFormatter<'a> {
             style: Vec<StyleElement>,
             variables: &'a StyleVariableMapType<'a>,
             context: Option<&Context>,
-        ) -> Option<Result<CustomStyle, StringFormatterError>> {
+        ) -> Option<Result<Style, StringFormatterError>> {
             let style_strings = style
                 .into_iter()
                 .map(|style| match style {
@@ -283,7 +283,7 @@ impl<'a> StringFormatter<'a> {
 
         fn parse_format<'a>(
             format: Vec<FormatElement<'a>>,
-            style: Option<CustomStyle>,
+            style: Option<Style>,
             variables: &'a VariableMapType<'a>,
             style_variables: &'a StyleVariableMapType<'a>,
             context: Option<&Context>,
