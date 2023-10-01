@@ -294,21 +294,21 @@ impl Style {
                 match self.bg_prev {
                     Some(PreviousColorFrom::Background) => {
                         current.background = prev_style.background;
-                    },
+                    }
                     Some(PreviousColorFrom::Foreground) => {
                         current.background = prev_style.foreground;
-                    },
-                    None => {},
+                    }
+                    None => {}
                 }
 
                 match self.fg_prev {
                     Some(PreviousColorFrom::Background) => {
                         current.foreground = prev_style.background;
-                    },
+                    }
                     Some(PreviousColorFrom::Foreground) => {
                         current.foreground = prev_style.foreground;
-                    },
-                    None => {},
+                    }
+                    None => {}
                 }
 
                 current
@@ -939,11 +939,17 @@ mod tests {
 
         assert_eq!(
             both_prev_fg.modify(None),
-            nu_ansi_term::Style::new().fg(Color::Black).bold().underline()
+            nu_ansi_term::Style::new()
+                .fg(Color::Black)
+                .bold()
+                .underline()
         );
 
         // But if there is a style on the previous string, then use that
-        let prev_style = nu_ansi_term::Style::new().underline().fg(Color::Yellow).on(Color::Red);
+        let prev_style = nu_ansi_term::Style::new()
+            .underline()
+            .fg(Color::Yellow)
+            .on(Color::Red);
 
         assert_eq!(
             both_prev_fg.modify(Some(&prev_style)),
@@ -1006,7 +1012,9 @@ mod tests {
         let multi_style = <StyleWrapper>::from_config(&config).unwrap().0;
         assert_eq!(
             multi_style.style(),
-            &nu_ansi_term::Style::new().fg(Color::Fixed(125)).on(Color::Fixed(127))
+            &nu_ansi_term::Style::new()
+                .fg(Color::Fixed(125))
+                .on(Color::Fixed(127))
         );
     }
 

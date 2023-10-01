@@ -201,10 +201,11 @@ where
 {
     let mut used = 0usize;
     let mut current: Vec<AnsiString> = Vec::new();
-    let mut chunks: Vec<(Vec<AnsiString>, &FillSegment, Option<::nu_ansi_term::Style>)> = Vec::new();
+    let mut chunks: Vec<(Vec<AnsiString>, &FillSegment, Option<::nu_ansi_term::Style>)> =
+        Vec::new();
 
     for segment in segments {
-        let prev_style = current.last().map(|s| s.style_ref().clone());
+        let prev_style = current.last().map(|s| *s.style_ref());
         match segment {
             Segment::Fill(fs) => {
                 chunks.push((current, fs, prev_style));
@@ -230,8 +231,9 @@ where
         chunks
             .into_iter()
             .flat_map(|(strs, fill, prev_style)| {
-                strs.into_iter()
-                    .chain(std::iter::once(fill.ansi_string(prev_style.as_ref(), fill_size)))
+                strs.into_iter().chain(std::iter::once(
+                    fill.ansi_string(prev_style.as_ref(), fill_size),
+                ))
             })
             .chain(current)
             .collect::<Vec<AnsiString>>()

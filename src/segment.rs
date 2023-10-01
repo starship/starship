@@ -37,7 +37,11 @@ pub struct FillSegment {
 
 impl FillSegment {
     // Returns the AnsiString of the segment value, not including its prefix and suffix
-    pub fn ansi_string(&self, prev: Option<&nu_ansi_term::Style>, width: Option<usize>) -> AnsiString {
+    pub fn ansi_string(
+        &self,
+        prev: Option<&nu_ansi_term::Style>,
+        width: Option<usize>,
+    ) -> AnsiString {
         let s = match width {
             Some(w) => self
                 .value
@@ -85,7 +89,7 @@ mod fill_seg_tests {
                 value: String::from(*text),
                 style: Some(style.into()),
             };
-            let actual = f.ansi_string(Some(&prev.into()), Some(width));
+            let actual = f.ansi_string(Some(&prev), Some(width));
             assert_eq!(style.paint(*expected), actual);
         }
     }
