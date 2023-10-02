@@ -228,7 +228,7 @@ Alternatively, install Starship using any of the following package managers:
 | CentOS 7+          | [Copr]                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro            |                         | `pacman -S starship`                                          |
-| NixOS              | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
+| NixOS              | [nixpkgs]               | `nix-env -iA nixos.starship`                                  |
 | Void Linux         | [Void Linux Packages]   | `xbps-install -S starship`                                    |
 
 </details>
