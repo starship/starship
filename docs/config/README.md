@@ -3814,6 +3814,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `fish_indicator`       | `'fsh'`                   | A format string used to represent fish.                      |
 | `zsh_indicator`        | `'zsh'`                   | A format string used to represent zsh.                       |
 | `powershell_indicator` | `'psh'`                   | A format string used to represent powershell.                |
+| `pwsh_indicator`       | `'psh'`                   | A format string used to represent pwsh.                      |
 | `ion_indicator`        | `'ion'`                   | A format string used to represent ion.                       |
 | `elvish_indicator`     | `'esh'`                   | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                      |
