@@ -823,7 +823,7 @@ mod tests {
             r"\$(echo a)"
         );
         assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            shell_prompt_escape(test.to_owned(), Shell::PowerShellCore),
             test
         );
 
@@ -833,7 +833,7 @@ mod tests {
             r"\\\$(echo a)"
         );
         assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            shell_prompt_escape(test.to_owned(), Shell::PowerShellCore),
             test
         );
 
@@ -843,7 +843,7 @@ mod tests {
             r"\`echo a\`"
         );
         assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            shell_prompt_escape(test.to_owned(), Shell::PowerShellCore),
             test
         );
     }
@@ -852,7 +852,7 @@ mod tests {
         let test = "10%";
         assert_eq!(shell_prompt_escape(test.to_owned(), Shell::Zsh), "10%%");
         assert_eq!(
-            shell_prompt_escape(test.to_owned(), Shell::PowerShell),
+            shell_prompt_escape(test.to_owned(), Shell::PowerShellCore),
             test
         );
     }
