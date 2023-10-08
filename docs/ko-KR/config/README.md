@@ -1,30 +1,30 @@
-# Configuration
+# 설정
 
-To get started configuring starship, create the following file: `~/.config/starship.toml`.
+Starship을 설정하려면, `~/.config/starship.toml` 경로에 파일을 만드세요.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
 ```
 
-All configuration for starship is done in this [TOML](https://github.com/toml-lang/toml) file:
+Starship의 모든 설정은 이 [TOML](https://github.com/toml-lang/toml) 파일에서 할 수 있습니다.
 
 ```toml
-# Get editor completions based on the config schema
+# 설정 스키마에 따른 에디터 자동 완성 가져오기
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# 셸 프롬프트 사이에 빈 줄 추가하기
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# 프롬프트의 '❯' 심볼을  '➜' 로 대체하기
+[character] # 설정할 모듈의 이름은 'character'
+success_symbol = '[➜](bold green)' # 'success_symbol' 세그먼트를 'bold green' 색상의 '➜' 로 설정
 
-# Disable the package module, hiding it from the prompt completely
+# package 모듈을 비활성화하고 프롬프트에서 완전히 숨겨버리기
 [package]
 disabled = true
 ```
 
-### Config File Location
+### 설정 파일 경로
 
 You can change default configuration file location with `STARSHIP_CONFIG` environment variable:
 
@@ -44,7 +44,7 @@ Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
 ```
 
-### Logging
+### 로그
 
 By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
 
@@ -64,28 +64,28 @@ Or for Cmd (Windows) would be adding this line to your `starship.lua`:
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
 ```
 
-### Terminology
+### 용어
 
-**Module**: A component in the prompt giving information based on contextual information from your OS. For example, the "nodejs" module shows the version of Node.js that is currently installed on your computer, if your current directory is a Node.js project.
+**모듈**: OS의 배경 정보를 기반으로 정보를 제공하는 프롬프트의 구성 요소입니다. 예를 들어, "nodejs" 모듈은 현재 디렉토리가 Node.js 프로젝트 디렉토리라면 컴퓨터에 현재 설치되어 있는 Node.js 버전을 보여줍니다.
 
 **Variable**: Smaller sub-components that contain information provided by the module. For example, the "version" variable in the "nodejs" module contains the current version of Node.js.
 
 By convention, most modules have a prefix of default terminal color (e.g. `via` in "nodejs") and an empty space as a suffix.
 
-### Strings
+### 문자열
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+TOML 문법에서는 [텍스트 값](https://toml.io/en/v1.0.0#string)을 `'`, `"`, `'''`, 그리고 `"""`으로 지정합니다.
 
 The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
 
-| Symbol | Type                      | Notes                                                  |
-| ------ | ------------------------- | ------------------------------------------------------ |
-| `'`    | literal string            | less escaping                                          |
-| `"`    | string                    | more escaping                                          |
-| `'''`  | multi-line literal string | less escaping                                          |
-| `"""`  | multi-line string         | more escaping, newlines in declarations can be ignored |
+| 기호    | 종류                        | 비고                                                     |
+| ----- | ------------------------- | ------------------------------------------------------ |
+| `'`   | 리터럴 문자열                   | less escaping                                          |
+| `"`   | string                    | more escaping                                          |
+| `'''` | multi-line literal string | less escaping                                          |
+| `"""` | multi-line string         | more escaping, newlines in declarations can be ignored |
 
-For example:
+예를 들어:
 
 ```toml
 # literal string
@@ -136,7 +136,7 @@ Format strings are the format that a module prints all its variables with. Most 
 
 A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
-For example:
+예를 들어:
 
 - `'$version'` is a format string with a variable named `version`.
 - `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
@@ -150,15 +150,15 @@ The first part, which is enclosed in a `[]`, is a [format string](#format-string
 
 In the second part, which is enclosed in a `()`, is a [style string](#style-strings). This can be used to style the first part.
 
-For example:
+예를 들어:
 
 - `'[on](red bold)'` will print a string `on` with bold text colored red.
 - `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
 - `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
 
-#### Style Strings
+#### 스타일 문자열
 
-Most modules in starship allow you to configure their display styles. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
+Starship의 대부분의 모듈에 표시 스타일을 설정할 수 있습니다. This is done with an entry (usually called `style`) which is a string specifying the configuration. Here are some examples of style strings along with what they do. For details on the full syntax, consult the [advanced config guide](/advanced-config/).
 
 - `'fg:green bg:blue'` sets green text on a blue background
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -173,7 +173,7 @@ Note that what styling looks like will be controlled by your terminal emulator. 
 
 A conditional format string wrapped in `(` and `)` will not render if all variables inside are empty.
 
-For example:
+예를 들어:
 
 - `'(@$region)'` will show nothing if the variable `region` is `None` or empty string, otherwise `@` followed by the value of region.
 - `'(some text)'` will always show nothing since there are no variables wrapped in the braces.
