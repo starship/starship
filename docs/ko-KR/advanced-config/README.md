@@ -203,9 +203,9 @@ Invoke-Expression (&starship init powershell)
 
 일부 셸은 입력과 같은 줄에 렌더링되는 오른쪽 프롬프트를 지원합니다. Starship에서는 `right_format` 옵션을 사용하여 오른쪽 프롬프트의 내용을 설정할 수 있습니다. `format`에서 사용할 수 있는 모든 모듈은 `right_format`에서도 지원됩니다. `$all` 변수는 `format` 또는 `right_format`에서 명시적으로 사용하지 않는 모듈만 포함합니다.
 
-Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
+알림: 오른쪽 프롬프트는 입력 위치에 따라 한 줄로 표시됩니다. 여러 줄 프롬프트에서 입력 선 위의 모듈을 오른쪽 정렬하려면, [`fill` 모듈](/config/#fill)을 참고하세요.
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format`은 현재 elvish, fish, zsh, xonsh, cmd, nushell에서 지원됩니다.
 
 ### 예시
 
@@ -219,7 +219,7 @@ format = """$character"""
 right_format = """$all"""
 ```
 
-Produces a prompt like the following:
+위 설정은 아래와 같은 프롬프트를 출력합니다:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
@@ -271,9 +271,9 @@ The `none` token overrides all other tokens in a string if it is not part of a `
 
 색상 지정자는 다음 중 하나가 될 수 있습니다:
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
-- A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
-- A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+- 표준 터미널 색상: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. 앞에 `bright-`를 붙여 밝게 만들 수도 있습니다 (예시: `bright-white`).
+- `#` 다음의 여섯 자리 16진수 숫자. 이는 [RGB 색상 16진수 코드](https://www.w3schools.com/colors/colors_hexadecimal.asp)입니다.
+- 0~255 사이의 숫자. 이는 [8비트 ANSI 색상 코드](https://i.stack.imgur.com/KTSQa.png)입니다.
 
 If multiple colors are specified for foreground/background, the last one in the string will take priority.
 
