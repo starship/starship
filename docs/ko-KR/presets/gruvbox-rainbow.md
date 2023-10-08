@@ -10,7 +10,7 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 - 터미널에 [Nerd Font](https://www.nerdfonts.com/)가 설치되어 있고 사용 가능해야 합니다
 
-### Configuration
+### 설정
 
 ```sh
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
