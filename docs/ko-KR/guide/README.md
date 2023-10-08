@@ -2,7 +2,7 @@
   <img
     width="400"
     src="https://raw.githubusercontent.com/starship/starship/master/media/logo.png"
-    alt="Starship – Cross-shell prompt"
+    alt="Starship – 크로스-쉘 프롬프트"
  />
 </p>
 
@@ -87,7 +87,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
-      alt="Italiano"
+      alt="이탈리아어"
  /></a>
   &nbsp;
   <a
@@ -153,7 +153,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="ITerm2, Snazzy 테마가 포함된 Starship"
   width="50%"
   align="right"
  />
@@ -188,7 +188,7 @@
 
 다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
-| Repository                                                                        | Instructions           |
+| 리포지토리                                                                             | 설명                     |
 | --------------------------------------------------------------------------------- | ---------------------- |
 | [Termux](https://github.com/termux/termux-packages/tree/master/packages/starship) | `pkg install starship` |
 
@@ -199,11 +199,11 @@
 
 다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
-| Distribution | Repository                                               | Instructions                      |
-| ------------ | -------------------------------------------------------- | --------------------------------- |
-| **_Any_**    | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
-| FreeBSD      | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
-| NetBSD       | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
+| 배포판       | 리포지토리                                                    | 설명                                |
+| --------- | -------------------------------------------------------- | --------------------------------- |
+| **_Any_** | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked` |
+| FreeBSD   | [FreshPorts](https://www.freshports.org/shells/starship) | `pkg install starship`            |
+| NetBSD    | [pkgsrc](https://pkgsrc.se/shells/starship)              | `pkgin install starship`          |
 
 </details>
 
@@ -218,15 +218,15 @@ curl -sS https://starship.rs/install.sh | sh
 
 다음의 패키지 관리자를 사용해서 Starship을 설치할 수도 있습니다.
 
-| Distribution       | Repository                                                                                      | Instructions                                                                   |
+| 배포판                | 리포지토리                                                                                           | 설명                                                                             |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **_Any_**          | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Any_              | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _Any_              | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
+| Alpine Linux 3.13+ | [Alpine Linux 패키지](https://pkgs.alpinelinux.org/packages?name=starship)                         | `apk add starship`                                                             |
 | Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
+| Gentoo             | [Gentoo 패키지](https://packages.gentoo.org/packages/app-shells/starship)                          | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
@@ -244,7 +244,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 다음의 패키지 관리자를 사용해서 Starship을 설치할 수도 있습니다.
 
-| Repository                                               | Instructions                            |
+| 리포지토리                                                    | 설명                                      |
 | -------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**       | `cargo install starship --locked`       |
 | [conda-forge](https://anaconda.org/conda-forge/starship) | `conda install -c conda-forge starship` |
@@ -260,7 +260,7 @@ Install the latest version for your system with the MSI-installers from the [rel
 
 다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
-| Repository                                                                                   | Instructions                            |
+| 리포지토리                                                                                        | 설명                                      |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
 | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`       |
 | [Chocolatey](https://community.chocolatey.org/packages/starship)                             | `choco install starship`                |
@@ -270,7 +270,7 @@ Install the latest version for your system with the MSI-installers from the [rel
 
 </details>
 
-### 2단계. Set up your shell to use Starship
+### 2단계. 쉘에 Starship 적용하기
 
 쉘에 Starship 초기 설정을 합니다. 아래의 리스트 중에 해당하는 것을 고르세요:
 
@@ -305,7 +305,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+알림: Elvish v0.18 버전 이상에서만 지원됩니다.
 
 </details>
 
@@ -409,23 +409,23 @@ Starship을 추가로 커스터마이징 하고싶다면:
 
 우리는 언제나 **기술 수준에 관계없이** 기여자를 찾고 있습니다! 프로젝트에 참여하고자 한다면, [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) 를 보내보세요.
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. 번역에 도움을 주고자 한다면, [Starship Crowdin](https://translate.starship.rs/) 에서 기여할 수 있습니다.
+영어 이외의 언어에 유창하시다면, 저희 문서를 다른 언어로 최신화하는 데 도움을 주시면 대단히 감사하겠습니다. 번역에 도움을 주고자 한다면, [Starship Crowdin](https://translate.starship.rs/) 에서 기여할 수 있습니다.
 
 Starship 에 기여하는데 관심이 있다면, [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 를 한 번 살펴봐 주세요 그리고 부담갖지 말고 [Discord 서버](https://discord.gg/8Jzqu3T) 에 들러 인사 한 마디 남겨보세요 👋
 
-## 💭 Inspired By
+## 💭 영감받은 곳
 
 Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보세요. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – 우주 비행사를 위한 ZSH 프롬프트.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – JavaScript로 작성된 크로스-쉘 robbyrussell 테마.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silver](https://github.com/reujab/silver)** – 아이콘이 있는 커스텀 가능한 powerline 계열 크로스-쉘 프롬프트.
 
 ## ❤️ Sponsors
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+이 [프로젝트를 후원](https://github.com/sponsors/starship)하여 프로젝트를 지원해 주세요. 여러분의 웹사이트로 이동하는 링크가 걸린 이름 혹은 로고가 여기에 걸립니다.
 
 **Supporter Tier**
 
@@ -438,4 +438,4 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 ## 📝라이선스
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-현재, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> 이 프로젝트는 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 라이선스입니다.
