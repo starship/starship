@@ -6,7 +6,7 @@ This preset emulates the look and behavior of [Pure](https://github.com/sindreso
 
 ![Screenshot of Pure preset](/presets/img/pure-preset.png)
 
-### Configuration
+### 설정
 
 ```sh
 starship preset pure-preset -o ~/.config/starship.toml
