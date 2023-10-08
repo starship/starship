@@ -13,7 +13,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 - Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
 - [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
 
-### Configuration
+### 설정
 
 ```sh
 starship preset jetpack -o ~/.config/starship.toml
