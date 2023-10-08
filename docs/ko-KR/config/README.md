@@ -207,7 +207,7 @@ This is the list of prompt-wide configuration options.
 | `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -367,7 +367,7 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 
 ### Variables
 
-| Variable  | Example          | Description                                 |
+| Variable  | 예시               | Description                                 |
 | --------- | ---------------- | ------------------------------------------- |
 | region    | `ap-northeast-1` | The current AWS region                      |
 | profile   | `astronauts`     | The current AWS profile                     |
@@ -488,7 +488,7 @@ The `battery` module shows how charged the device's battery is and its current c
 | `display`            | [link](#battery-display)          | Display threshold and style for the module.         |
 | `disabled`           | `false`                           | Disables the `battery` module.                      |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -522,7 +522,7 @@ The `display` option is an array of the following table.
 | `charging_symbol`    |              | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
 | `discharging_symbol` |              | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
 
-#### Example
+#### 예시
 
 ```toml
 [[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
@@ -559,7 +559,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | `version` | `v1.0.0` | The version of `buf`                 |
 | `symbol`  |          | Mirrors the value of option `symbol` |
@@ -567,7 +567,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -598,7 +598,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.1.4` | The version of `bun`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -606,7 +606,7 @@ The `bun` module shows the currently installed version of the [bun](https://bun.
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -635,12 +635,12 @@ The `c` module shows some information about your C compiler. By default the modu
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| name     | clang   | The name of the compiler             |
-| version  | 13.0.0  | The version of the compiler          |
-| symbol   |         | Mirrors the value of option `symbol` |
-| style    |         | Mirrors the value of option `style`  |
+| Variable | 예시     | Description                          |
+| -------- | ------ | ------------------------------------ |
+| name     | clang  | The name of the compiler             |
+| version  | 13.0.0 | The version of the compiler          |
+| symbol   |        | Mirrors the value of option `symbol` |
+| style    |        | Mirrors the value of option `style`  |
 
 NB that `version` is not in the default format.
 
@@ -652,7 +652,7 @@ Each command is represented as a list of the executable name, followed by its ar
 
 If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -693,9 +693,9 @@ By default it only changes color. If you also want to change its shape take a lo
 
 ### Variables
 
-| Variable | Example | Description                                                                                              |
-| -------- | ------- | -------------------------------------------------------------------------------------------------------- |
-| symbol   |         | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
+| Variable | 예시 | Description                                                                                              |
+| -------- | -- | -------------------------------------------------------------------------------------------------------- |
+| symbol   |    | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
 ### Examples
 
@@ -750,7 +750,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v3.17.3` | The version of cmake                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -780,7 +780,7 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Variable  | 예시         | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v3.1.2.0` | The version of `cobol`               |
 | symbol    |            | Mirrors the value of option `symbol` |
@@ -815,14 +815,14 @@ Bash users who need preexec-like functionality can use [rcaloras's bash_preexec 
 
 ### Variables
 
-| Variable  | Example  | Description                             |
+| Variable  | 예시       | Description                             |
 | --------- | -------- | --------------------------------------- |
 | duration  | `16m40s` | The time it took to execute the command |
 | style\* |          | Mirrors the value of option `style`     |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -855,7 +855,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 ### Variables
 
-| Variable    | Example      | Description                          |
+| Variable    | 예시           | Description                          |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current conda environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
@@ -863,7 +863,7 @@ This does not suppress conda's own prompt modifier, you may want to run `conda c
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -887,7 +887,7 @@ The `container` module displays a symbol and container name, if inside a contain
 
 ### Variables
 
-| Variable  | Example             | Description                          |
+| Variable  | 예시                  | Description                          |
 | --------- | ------------------- | ------------------------------------ |
 | name      | `fedora-toolbox:35` | The name of the container            |
 | symbol    |                     | Mirrors the value of option `symbol` |
@@ -895,7 +895,7 @@ The `container` module displays a symbol and container name, if inside a contain
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -926,7 +926,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.32.1` | The version of `crystal`             |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -934,7 +934,7 @@ The `crystal` module shows the currently installed version of [Crystal](https://
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -964,7 +964,7 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.2.0` | The version of `daml`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -972,7 +972,7 @@ The `daml` module shows the currently used [Daml](https://www.digitalasset.com/d
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1004,7 +1004,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.8.4` | The version of `dart`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1012,7 +1012,7 @@ The `dart` module shows the currently installed version of [Dart](https://dart.d
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1042,13 +1042,13 @@ The `deno` module shows you your currently installed version of [Deno](https://d
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.8.3` | The version of `deno`                |
 | symbol    |          | Mirrors the value of option `symbol` |
 | style\* |          | Mirrors the value of option `style`  |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1106,7 +1106,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 ### Variables
 
-| Variable  | Example               | Description                         |
+| Variable  | 예시                    | Description                         |
 | --------- | --------------------- | ----------------------------------- |
 | path      | `'D:/Projects'`       | The current directory path          |
 | style\* | `'black bold dimmed'` | Mirrors the value of option `style` |
@@ -1118,7 +1118,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 
 Let us consider the path `/path/to/home/git_repo/src/lib`
 
-| Variable           | Example               | Description                             |
+| Variable           | 예시                    | Description                             |
 | ------------------ | --------------------- | --------------------------------------- |
 | before_root_path | `'/path/to/home/'`    | The path before git root directory path |
 | repo_root          | `'git_repo'`          | The git root directory name             |
@@ -1128,7 +1128,7 @@ Let us consider the path `/path/to/home/git_repo/src/lib`
 
 </details>
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1157,7 +1157,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 ### Variables
 
-| Variable  | Example        | Description                          |
+| Variable  | 예시             | Description                          |
 | --------- | -------------- | ------------------------------------ |
 | context   | `test_context` | The current docker context           |
 | symbol    |                | Mirrors the value of option `symbol` |
@@ -1165,7 +1165,7 @@ The `docker_context` module shows the currently active [Docker context](https://
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1211,7 +1211,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 ### Variables
 
-| Variable  | Example          | Description                                                        |
+| Variable  | 예시               | Description                                                        |
 | --------- | ---------------- | ------------------------------------------------------------------ |
 | version   | `v3.1.201`       | The version of `dotnet` sdk                                        |
 | tfm       | `netstandard2.0` | The Target Framework Moniker that the current project is targeting |
@@ -1220,7 +1220,7 @@ The module will also show the Target Framework Moniker (<https://docs.microsoft.
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1252,7 +1252,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 ### Variables
 
-| Variable    | Example | Description                          |
+| Variable    | 예시      | Description                          |
 | ----------- | ------- | ------------------------------------ |
 | version     | `v1.10` | The version of `elixir`              |
 | otp_version |         | The otp version of `elixir`          |
@@ -1261,7 +1261,7 @@ The `elixir` module shows the currently installed version of [Elixir](https://el
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1295,7 +1295,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.19.1` | The version of `elm`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1303,7 +1303,7 @@ The `elm` module shows the currently installed version of [Elm](https://elm-lang
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1353,7 +1353,7 @@ default = 'unknown user'
 
 ### Variables
 
-| Variable  | Example                                     | Description                                |
+| Variable  | 예시                                          | Description                                |
 | --------- | ------------------------------------------- | ------------------------------------------ |
 | env_value | `Windows NT` (if _variable_ would be `$OS`) | The environment value of option `variable` |
 | symbol    |                                             | Mirrors the value of option `symbol`       |
@@ -1361,7 +1361,7 @@ default = 'unknown user'
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1405,7 +1405,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v22.1.3` | The version of `erlang`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -1413,7 +1413,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1443,7 +1443,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.1` | The version of `fennel`              |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -1451,7 +1451,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1472,7 +1472,7 @@ The `fill` module fills any extra space on the line with a symbol. If multiple `
 | `style`    | `'bold black'` | The style for the module.         |
 | `disabled` | `false`        | Disables the `fill` module        |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1506,7 +1506,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | 예시      | Description                          |
 | --------- | ------- | ------------------------------------ |
 | branch    | `trunk` | The active Fossil branch             |
 | symbol    |         | Mirrors the value of option `symbol` |
@@ -1514,7 +1514,7 @@ The `fossil_branch` module shows the name of the active branch of the check-out 
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1541,16 +1541,16 @@ The `fossil_metrics` module will show the number of added and deleted lines in t
 
 ### Variables
 
-| Variable          | Example | Description                                 |
-| ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
-| added_style\*   |         | Mirrors the value of option `added_style`   |
-| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+| Variable          | 예시  | Description                                 |
+| ----------------- | --- | ------------------------------------------- |
+| added             | `1` | The current number of added lines           |
+| deleted           | `2` | The current number of deleted lines         |
+| added_style\*   |     | Mirrors the value of option `added_style`   |
+| deleted_style\* |     | Mirrors the value of option `deleted_style` |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1580,7 +1580,7 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 
 ### Variables
 
-| Variable  | Example       | Description                                                        |
+| Variable  | 예시            | Description                                                        |
 | --------- | ------------- | ------------------------------------------------------------------ |
 | region    | `us-central1` | The current GCP region                                             |
 | account   | `foo`         | The current GCP profile                                            |
@@ -1592,7 +1592,7 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 
 *: This variable can only be used as a part of a style string
 
-### Examples
+### 예시
 
 #### Display account and project
 
@@ -1656,7 +1656,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 ### Variables
 
-| Variable      | Example  | Description                                                                                            |
+| Variable      | 예시       | Description                                                                                            |
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
 | branch        | `master` | The current branch name, falls back to `HEAD` if there's no current branch (e.g. git detached `HEAD`). |
 | remote_name   | `origin` | The remote name.                                                                                       |
@@ -1666,7 +1666,7 @@ The `git_branch` module shows the active branch of the repo in your current dire
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1697,7 +1697,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 ### Variables
 
-| Variable  | Example   | Description                                  |
+| Variable  | 예시        | Description                                  |
 | --------- | --------- | -------------------------------------------- |
 | hash      | `b703eb3` | The current git commit hash                  |
 | tag       | `v1.0.0`  | The tag name if showing tag info is enabled. |
@@ -1705,7 +1705,7 @@ The `git_commit` module shows the current commit hash and also the tag (if any) 
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1736,7 +1736,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 ### Variables
 
-| Variable         | Example    | Description                         |
+| Variable         | 예시         | Description                         |
 | ---------------- | ---------- | ----------------------------------- |
 | state            | `REBASING` | The current state of the repo       |
 | progress_current | `1`        | The current operation progress      |
@@ -1745,7 +1745,7 @@ The `git_state` module will show in directories which are part of a git reposito
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1778,16 +1778,16 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable          | Example | Description                                 |
-| ----------------- | ------- | ------------------------------------------- |
-| added             | `1`     | The current number of added lines           |
-| deleted           | `2`     | The current number of deleted lines         |
-| added_style\*   |         | Mirrors the value of option `added_style`   |
-| deleted_style\* |         | Mirrors the value of option `deleted_style` |
+| Variable          | 예시  | Description                                 |
+| ----------------- | --- | ------------------------------------------- |
+| added             | `1` | The current number of added lines           |
+| deleted           | `2` | The current number of deleted lines         |
+| added_style\*   |     | Mirrors the value of option `added_style`   |
+| deleted_style\* |     | Mirrors the value of option `deleted_style` |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1862,7 +1862,7 @@ The following variables can be used in `conflicted`, `ahead`, `behind`, `untrack
 | -------- | ------------------------ |
 | `count`  | Show the number of files |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1931,7 +1931,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 ### Variables
 
-| Variable    | Example   | Description                                                                                                                                 |
+| Variable    | 예시        | Description                                                                                                                                 |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | version     | `v1.12.1` | The version of `go`                                                                                                                         |
 | mod_version | `1.16`    | `go` version requirement as set in the go directive of `go.mod`. Will only show if the version requirement does not match the `go` version. |
@@ -1940,7 +1940,7 @@ The `golang` module shows the currently installed version of [Go](https://golang
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -1973,14 +1973,14 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 
 ### Variables
 
-| Variable  | Example | Description                          |
-| --------- | ------- | ------------------------------------ |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | 예시 | Description                          |
+| --------- | -- | ------------------------------------ |
+| symbol    |    | Mirrors the value of option `symbol` |
+| style\* |    | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2017,7 +2017,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ### Variables
 
-| Variable | Example  | Description                          |
+| Variable | 예시       | Description                          |
 | -------- | -------- | ------------------------------------ |
 | version  | `v7.5.1` | The version of `gradle`              |
 | symbol   |          | Mirrors the value of option `symbol` |
@@ -2048,7 +2048,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable       | Example     | Description                                                                             |
+| Variable       | 예시          | Description                                                                             |
 | -------------- | ----------- | --------------------------------------------------------------------------------------- |
 | version        |             | `ghc_version` or `snapshot` depending on whether the current project is a Stack project |
 | snapshot       | `lts-18.12` | Currently selected Stack snapshot                                                       |
@@ -2081,7 +2081,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v4.2.5` | The version of `haxe`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2089,7 +2089,7 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2120,7 +2120,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v3.1.1` | The version of `helm`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2128,7 +2128,7 @@ The `helm` module shows the currently installed version of [Helm](https://helm.s
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2155,7 +2155,7 @@ The `hostname` module shows the system hostname.
 
 ### Variables
 
-| Variable   | Example    | Description                                           |
+| Variable   | 예시         | Description                                           |
 | ---------- | ---------- | ----------------------------------------------------- |
 | hostname   | `computer` | The hostname of the computer                          |
 | style\*  |            | Mirrors the value of option `style`                   |
@@ -2163,7 +2163,7 @@ The `hostname` module shows the system hostname.
 
 *: This variable can only be used as a part of a style string
 
-### Examples
+### 예시
 
 #### Always show the hostname
 
@@ -2210,15 +2210,15 @@ The `java` module shows the currently installed version of [Java](https://www.or
 
 ### Variables
 
-| Variable  | Example | Description                          |
-| --------- | ------- | ------------------------------------ |
-| version   | `v14`   | The version of `java`                |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | 예시    | Description                          |
+| --------- | ----- | ------------------------------------ |
+| version   | `v14` | The version of `java`                |
+| symbol    |       | Mirrors the value of option `symbol` |
+| style\* |       | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2265,15 +2265,15 @@ The `threshold` option is deprecated, but if you want to use it, the module will
 
 ### Variables
 
-| Variable  | Example | Description                          |
-| --------- | ------- | ------------------------------------ |
-| number    | `1`     | The number of jobs                   |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | 예시  | Description                          |
+| --------- | --- | ------------------------------------ |
+| number    | `1` | The number of jobs                   |
+| symbol    |     | Mirrors the value of option `symbol` |
+| style\* |     | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2307,7 +2307,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.4.0` | The version of `julia`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2315,7 +2315,7 @@ The `julia` module shows the currently installed version of [Julia](https://juli
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2346,7 +2346,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v1.4.21` | The version of `kotlin`              |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -2354,7 +2354,7 @@ The `kotlin` module shows the currently installed version of [Kotlin](https://ko
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2421,7 +2421,7 @@ Note that all regular expression are anchored with `^<pattern>$` and so must mat
 
 ### Variables
 
-| Variable  | Example              | Description                              |
+| Variable  | 예시                   | Description                              |
 | --------- | -------------------- | ---------------------------------------- |
 | context   | `starship-context`   | The current kubernetes context name      |
 | namespace | `starship-namespace` | If set, the current kubernetes namespace |
@@ -2432,7 +2432,7 @@ Note that all regular expression are anchored with `^<pattern>$` and so must mat
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2497,7 +2497,7 @@ The `line_break` module separates the prompt into two lines.
 | ---------- | ------- | ------------------------------------------------------------------ |
 | `disabled` | `false` | Disables the `line_break` module, making the prompt a single line. |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2521,14 +2521,14 @@ The `localip` module shows the IPv4 address of the primary network interface.
 
 ### Variables
 
-| Variable  | Example      | Description                         |
+| Variable  | 예시           | Description                         |
 | --------- | ------------ | ----------------------------------- |
 | localipv4 | 192.168.1.13 | Contains the primary IPv4 address   |
 | style\* |              | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2563,7 +2563,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.4.0` | The version of `lua`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2571,7 +2571,7 @@ The `lua` module shows the currently installed version of [Lua](http://www.lua.o
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2604,7 +2604,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable         | Example       | Description                                                        |
+| Variable         | 예시            | Description                                                        |
 | ---------------- | ------------- | ------------------------------------------------------------------ |
 | ram              | `31GiB/65GiB` | The usage/total RAM of the current system memory.                  |
 | ram_pct          | `48%`         | The percentage of the current system memory.                       |
@@ -2615,7 +2615,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 *: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2646,7 +2646,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Variable  | 예시         | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | project   | `starship` | The current Meson project name       |
 | symbol    | `🐏`        | Mirrors the value of option `symbol` |
@@ -2654,7 +2654,7 @@ By default the Meson project name is displayed, if `$MESON_DEVENV` is set.
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2683,7 +2683,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | branch    | `master`  | The active mercurial branch          |
 | topic     | `feature` | The active mercurial topic           |
@@ -2692,7 +2692,7 @@ The `hg_branch` module shows the active branch and topic of the repo in your cur
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2727,7 +2727,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.2.0` | The version of `nimc`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -2735,7 +2735,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2764,7 +2764,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 ### Variables
 
-| Variable  | Example | Description                          |
+| Variable  | 예시      | Description                          |
 | --------- | ------- | ------------------------------------ |
 | state     | `pure`  | The state of the nix-shell           |
 | name      | `lorri` | The name of the nix-shell            |
@@ -2773,7 +2773,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2813,7 +2813,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 ### Variables
 
-| Variable        | Example       | Description                                                                                                                                               |
+| Variable        | 예시            | Description                                                                                                                                               |
 | --------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | version         | `v13.12.0`    | The version of `node`                                                                                                                                     |
 | engines_version | `>=12.0.0` | `node` version requirement as set in the engines property of `package.json`. Will only show if the version requirement does not match the `node` version. |
@@ -2822,7 +2822,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2859,7 +2859,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 ### Variables
 
-| Variable         | Example      | Description                                                       |
+| Variable         | 예시           | Description                                                       |
 | ---------------- | ------------ | ----------------------------------------------------------------- |
 | version          | `v4.10.0`    | The version of `ocaml`                                            |
 | switch_name      | `my-project` | The active OPAM switch                                            |
@@ -2869,7 +2869,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2897,7 +2897,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v0.44.0` | The version of `opa`                 |
 | symbol    |           | Mirrors the value of option `symbol` |
@@ -2905,7 +2905,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -2929,16 +2929,16 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 ### Variables
 
-| Variable  | Example | Description                          |
-| --------- | ------- | ------------------------------------ |
-| cloud     | `corp`  | The current OpenStack cloud          |
-| project   | `dev`   | The current OpenStack project        |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | 예시     | Description                          |
+| --------- | ------ | ------------------------------------ |
+| cloud     | `corp` | The current OpenStack cloud          |
+| project   | `dev`  | The current OpenStack project        |
+| symbol    |        | Mirrors the value of option `symbol` |
+| style\* |        | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3024,7 +3024,7 @@ Windows = "🪟 "
 
 ### Variables
 
-| Variable  | Example      | Description                                                        |
+| Variable  | 예시           | Description                                                        |
 | --------- | ------------ | ------------------------------------------------------------------ |
 | symbol    | `🎗️`         | The current operating system symbol from advanced option `symbols` |
 | name      | `Arch Linux` | The current operating system name                                  |
@@ -3036,7 +3036,7 @@ Windows = "🪟 "
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3088,7 +3088,7 @@ The `package` module is shown when the current directory is the repository for a
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v1.0.0` | The version of your package          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3096,7 +3096,7 @@ The `package` module is shown when the current directory is the repository for a
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3130,13 +3130,13 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 ### Variables
 
-| Variable  | Example   | Description                          |
+| Variable  | 예시        | Description                          |
 | --------- | --------- | ------------------------------------ |
 | version   | `v5.26.1` | The version of `perl`                |
 | symbol    |           | Mirrors the value of option `symbol` |
 | style\* |           | Mirrors the value of option `style`  |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3168,7 +3168,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v7.3.8` | The version of `php`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3176,7 +3176,7 @@ The `php` module shows the currently installed version of [PHP](https://www.php.
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3228,7 +3228,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Variable  | 예시         | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `pulumi`              |
 | stack     | `dev`      | The current Pulumi stack             |
@@ -3238,7 +3238,7 @@ By default the module will be shown if any of the following conditions are met:
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 #### With Pulumi Version
 
@@ -3280,7 +3280,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `0.13.5` | The version of `purescript`          |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3288,7 +3288,7 @@ The `purescript` module shows the currently installed version of [PureScript](ht
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3341,7 +3341,7 @@ The default values and order for `python_binary` was chosen to first identify th
 
 ### Variables
 
-| Variable     | Example         | Description                                |
+| Variable     | 예시              | Description                                |
 | ------------ | --------------- | ------------------------------------------ |
 | version      | `'v3.8.1'`      | The version of `python`                    |
 | symbol       | `'🐍 '`          | Mirrors the value of option `symbol`       |
@@ -3349,7 +3349,7 @@ The default values and order for `python_binary` was chosen to first identify th
 | pyenv_prefix | `'pyenv '`      | Mirrors the value of option `pyenv_prefix` |
 | virtualenv   | `'venv'`        | The current `virtualenv` name              |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3413,13 +3413,13 @@ The `rlang` module shows the currently installed version of [R](https://www.r-pr
 
 ### Variables
 
-| Variable | Example       | Description                          |
+| Variable | 예시            | Description                          |
 | -------- | ------------- | ------------------------------------ |
 | version  | `v4.0.5`      | The version of `R`                   |
 | symbol   |               | Mirrors the value of option `symbol` |
 | style    | `'blue bold'` | Mirrors the value of option `style`  |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3450,14 +3450,14 @@ The `raku` module shows the currently installed version of [Raku](https://www.ra
 
 ### Variables
 
-| Variable   | Example | Description                          |
-| ---------- | ------- | ------------------------------------ |
-| version    | `v6.d`  | The version of `raku`                |
-| vm_version | `moar`  | The version of VM `raku` is built on |
-| symbol     |         | Mirrors the value of option `symbol` |
-| style\*  |         | Mirrors the value of option `style`  |
+| Variable   | 예시     | Description                          |
+| ---------- | ------ | ------------------------------------ |
+| version    | `v6.d` | The version of `raku`                |
+| vm_version | `moar` | The version of VM `raku` is built on |
+| symbol     |        | Mirrors the value of option `symbol` |
+| style\*  |        | Mirrors the value of option `style`  |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3487,7 +3487,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `red`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3495,7 +3495,7 @@ By default the `red` module shows the currently installed version of [Red](https
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3531,7 +3531,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v2.5.1` | The version of `ruby`                |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3539,7 +3539,7 @@ Starship gets the current Ruby version by running `ruby -v`.
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3570,7 +3570,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 ### Variables
 
-| Variable  | Example           | Description                                  |
+| Variable  | 예시                | Description                                  |
 | --------- | ----------------- | -------------------------------------------- |
 | version   | `v1.43.0-nightly` | The version of `rustc`                       |
 | numver    | `1.51.0`          | The numeric component of the `rustc` version |
@@ -3580,7 +3580,7 @@ By default the `rust` module shows the currently installed version of [Rust](htt
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3612,7 +3612,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `2.13.5` | The version of `scala`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3620,7 +3620,7 @@ The `scala` module shows the currently installed version of [Scala](https://www.
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3667,7 +3667,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 *: This variable can only be used as a part of a style string
 
-### Examples
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3698,15 +3698,15 @@ The `shlvl` module shows the current [`SHLVL`](https://tldp.org/LDP/abs/html/int
 
 ### Variables
 
-| Variable  | Example | Description                          |
-| --------- | ------- | ------------------------------------ |
-| shlvl     | `3`     | The current value of `SHLVL`         |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | 예시  | Description                          |
+| --------- | --- | ------------------------------------ |
+| shlvl     | `3` | The current value of `SHLVL`         |
+| symbol    |     | Mirrors the value of option `symbol` |
+| style\* |     | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3746,7 +3746,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 ### Variables
 
-| Variable  | Example      | Description                          |
+| Variable  | 예시           | Description                          |
 | --------- | ------------ | ------------------------------------ |
 | env       | `centos.img` | The current Singularity image        |
 | symbol    |              | Mirrors the value of option `symbol` |
@@ -3754,7 +3754,7 @@ The `singularity` module shows the current [Singularity](https://sylabs.io/singu
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3785,7 +3785,7 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.8.1` | The version of `solidity`            |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3793,7 +3793,7 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3817,7 +3817,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 ### Variables
 
-| Variable    | Example      | Description                          |
+| Variable    | 예시           | Description                          |
 | ----------- | ------------ | ------------------------------------ |
 | environment | `astronauts` | The current spack environment        |
 | symbol      |              | Mirrors the value of option `symbol` |
@@ -3825,7 +3825,7 @@ The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/lat
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3866,7 +3866,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable       | Example | Description                                                                                |
+| Variable       | 예시      | Description                                                                                |
 | -------------- | ------- | ------------------------------------------------------------------------------------------ |
 | status         | `127`   | The exit code of the last command                                                          |
 | hex_status     | `0x7F`  | The exit code of the last command in hex                                                   |
@@ -3881,7 +3881,7 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3917,14 +3917,14 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Variables
 
-| Variable  | Example | Description                          |
-| --------- | ------- | ------------------------------------ |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | 예시 | Description                          |
+| --------- | -- | ------------------------------------ |
+| symbol    |    | Mirrors the value of option `symbol` |
+| style\* |    | Mirrors the value of option `style`  |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3966,7 +3966,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v5.2.4` | The version of `swift`               |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -3974,7 +3974,7 @@ By default the `swift` module shows the currently installed version of [Swift](h
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -3989,7 +3989,7 @@ The `terraform` module shows the currently selected [Terraform workspace](https:
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. 그래도 활성화하려면, [아래에 있는 예시를 따라 하세요](#with-terraform-version).
 
 :::
 
@@ -4013,7 +4013,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Variables
 
-| Variable  | Example    | Description                          |
+| Variable  | 예시         | Description                          |
 | --------- | ---------- | ------------------------------------ |
 | version   | `v0.12.24` | The version of `terraform`           |
 | workspace | `default`  | The current Terraform workspace      |
@@ -4022,7 +4022,7 @@ By default the module will be shown if any of the following conditions are met:
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 #### With Terraform Version
 
@@ -4068,14 +4068,14 @@ If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it de
 
 ### Variables
 
-| Variable  | Example    | Description                         |
+| Variable  | 예시         | Description                         |
 | --------- | ---------- | ----------------------------------- |
 | time      | `13:08:10` | The current time.                   |
 | style\* |            | Mirrors the value of option `style` |
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -4115,12 +4115,12 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Variables
 
-| Variable | Example      | Description                                                                                 |
+| Variable | 예시           | Description                                                                                 |
 | -------- | ------------ | ------------------------------------------------------------------------------------------- |
 | `style`  | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
 | `user`   | `'matchai'`  | The currently logged-in user ID.                                                            |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -4154,7 +4154,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 ### Variables
 
-| Variable  | Example          | Description                          |
+| Variable  | 예시               | Description                          |
 | --------- | ---------------- | ------------------------------------ |
 | version   | `Vagrant 2.2.10` | The version of `Vagrant`             |
 | symbol    |                  | Mirrors the value of option `symbol` |
@@ -4162,7 +4162,7 @@ The `vagrant` module shows the currently installed version of [Vagrant](https://
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -4193,13 +4193,13 @@ The `vlang` module shows you your currently installed version of [V](https://vla
 
 ### Variables
 
-| Variable  | Example | Description                          |
-| --------- | ------- | ------------------------------------ |
-| version   | `v0.2`  | The version of `v`                   |
-| symbol    |         | Mirrors the value of option `symbol` |
-| style\* |         | Mirrors the value of option `style`  |
+| Variable  | 예시     | Description                          |
+| --------- | ------ | ------------------------------------ |
+| version   | `v0.2` | The version of `v`                   |
+| symbol    |        | Mirrors the value of option `symbol` |
+| style\* |        | Mirrors the value of option `style`  |
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -4222,7 +4222,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Variables
 
-| Variable  | Example                                     | Description                          |
+| Variable  | 예시                                          | Description                          |
 | --------- | ------------------------------------------- | ------------------------------------ |
 | repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name           |
 | symbol    |                                             | Mirrors the value of option `symbol` |
@@ -4230,7 +4230,7 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -4260,7 +4260,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 ### Variables
 
-| Variable  | Example  | Description                          |
+| Variable  | 예시       | Description                          |
 | --------- | -------- | ------------------------------------ |
 | version   | `v0.6.0` | The version of `zig`                 |
 | symbol    |          | Mirrors the value of option `symbol` |
@@ -4268,7 +4268,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 *: This variable can only be used as a part of a style string
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -4374,7 +4374,7 @@ Automatic detection of shells and proper parameters addition are currently imple
 
 :::
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
