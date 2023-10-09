@@ -383,7 +383,7 @@ falls back to the `x_security_token_expires` key.
 | `region_aliases`    | `{}`                                                              | Table of region aliases to display in addition to the AWS name.                                             |
 | `profile_aliases`   | `{}`                                                              | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                   | The style for the module.                                                                                   |
-| `expiration_symbol` | `'X'`                                                               | The symbol displayed when the temporary credentials have expired.                                           |
+| `expiration_symbol` | `'X'`                                                             | The symbol displayed when the temporary credentials have expired.                                           |
 | `disabled`          | `false`                                                           | Disables the `AWS` module.                                                                                  |
 | `force_display`     | `false`                                                           | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
@@ -648,17 +648,17 @@ file.
 
 ### Options
 
-| Option              | Default                                                                     | Description                                                               |
-| ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                                                                 | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'C '`                                                                      | The symbol used before displaying the compiler details                    |
-| `detect_extensions` | `['c', 'h']`                                                                | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                                                        | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                        | Which folders should trigger this module.                                 |
+| Option              | Default                                                                       | Description                                                               |
+| ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | The format string for the module.                                         |
+| `version_format`    | `'v${raw}'`                                                                   | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C '`                                                                        | The symbol used before displaying the compiler details                    |
+| `detect_extensions` | `['c', 'h']`                                                                  | Which extensions should trigger this module.                              |
+| `detect_files`      | `[]`                                                                          | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                          | Which folders should trigger this module.                                 |
 | `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | How to detect what the compiler is                                        |
-| `style`             | `'bold 149'`                                                                | The style for the module.                                                 |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                                                  |
+| `style`             | `'bold 149'`                                                                  | The style for the module.                                                 |
+| `disabled`          | `false`                                                                       | Disables the `c` module.                                                  |
 
 ### Variables
 
@@ -1514,7 +1514,7 @@ By default the module will be shown if any of the following conditions are met:
 | `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🧅 '`                              | The symbol used before displaying the version of fennel.                  |
 | `style`             | `'bold green'`                       | The style for the module.                                                 |
-| `detect_extensions` | `['fnl']`                              | Which extensions should trigger this module.                              |
+| `detect_extensions` | `['fnl']`                            | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                 | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                 | Which folders should trigger this modules.                                |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                             |
@@ -2937,7 +2937,7 @@ By default the module will be shown if any of the following conditions are met:
 | `detect_folders`    | `['node_modules']`                         | Which folders should trigger this module.                                                             |
 | `style`             | `'bold green'`                             | The style for the module.                                                                             |
 | `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `'bold red'`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
+| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variables
 
@@ -3474,7 +3474,7 @@ By default the module will be shown if any of the following conditions are met:
 | `symbol`             | `'🐍 '`                                                                                                      | A format string representing the symbol of Python                                      |
 | `style`              | `'yellow bold'`                                                                                              | The style for the module.                                                              |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `'pyenv'`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `['py']`                                                                                                     | Which extensions should trigger this module                                            |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | Which filenames should trigger this module                                             |
