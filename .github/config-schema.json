@@ -1332,6 +1332,7 @@
           "python3",
           "python2"
         ],
+        "show_detect_venv_prompt": false,
         "style": "yellow bold",
         "symbol": "🐍 ",
         "version_format": "v${raw}"
@@ -4915,6 +4916,10 @@
           "items": {
             "type": "string"
           }
+        },
+        "show_detect_venv_prompt": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false
