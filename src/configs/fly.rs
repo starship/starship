@@ -21,6 +21,8 @@ pub struct FlyConfig<'a> {
 impl<'a> Default for FlyConfig<'a> {
     fn default() -> Self {
         FlyConfig {
+            // $version is excluded by default as flyctl version command takes too long
+            // tracked in https://github.com/superfly/flyctl/issues/2908
             format: "via [$symbol]($style)",
             version_format: "v${raw}",
             symbol: "🎈 ",
