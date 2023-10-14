@@ -21,15 +21,13 @@ pub struct FlyConfig<'a> {
 impl<'a> Default for FlyConfig<'a> {
     fn default() -> Self {
         FlyConfig {
-            format: "via [$symbol($version )]($style)",
+            format: "via [$symbol ]($style)",
             version_format: "v${raw}",
             symbol: "🎈 ",
             style: "green bold",
             disabled: false,
             detect_extensions: vec![],
-            detect_files: vec![
-                "fly.toml",
-            ],
+            detect_files: vec!["fly.toml"],
             detect_folders: vec![],
         }
     }
