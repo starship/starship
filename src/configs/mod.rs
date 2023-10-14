@@ -141,6 +141,8 @@ pub struct FullConfig<'a> {
     #[serde(borrow)]
     deno: deno::DenoConfig<'a>,
     #[serde(borrow)]
+    fly: fly::FlyConfig<'a>,
+    #[serde(borrow)]
     directory: directory::DirectoryConfig<'a>,
     #[serde(borrow)]
     docker_context: docker_context::DockerContextConfig<'a>,
