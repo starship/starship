@@ -21,7 +21,7 @@ pub struct FlyConfig<'a> {
 impl<'a> Default for FlyConfig<'a> {
     fn default() -> Self {
         FlyConfig {
-            format: "via [$symbol ]($style)",
+            format: "via [$symbol]($style)",
             version_format: "v${raw}",
             symbol: "🎈 ",
             style: "green bold",
