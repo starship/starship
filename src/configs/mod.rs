@@ -27,6 +27,7 @@ pub mod env_var;
 pub mod erlang;
 pub mod fennel;
 pub mod fill;
+pub mod fly;
 pub mod fossil_branch;
 pub mod fossil_metrics;
 pub mod gcloud;
