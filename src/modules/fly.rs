@@ -62,6 +62,6 @@ fn parse_fly_version(fly_version: &str) -> Option<String> {
             // return "1.8.3"
             .nth(1)?
             .to_string()
-            .replace("v", ""),
+            .replace('v', ""),
     )
 }
