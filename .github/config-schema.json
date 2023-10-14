@@ -337,7 +337,7 @@
         ],
         "detect_folders": [],
         "disabled": false,
-        "format": "via [$symbol($version )]($style)",
+        "format": "via [$symbol ]($style)",
         "style": "green bold",
         "symbol": "🎈 ",
         "version_format": "v${raw}"
@@ -2624,7 +2624,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "via [$symbol($version )]($style)",
+          "default": "via [$symbol ]($style)",
           "type": "string"
         },
         "version_format": {
