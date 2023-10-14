@@ -65,3 +65,30 @@ fn parse_fly_version(fly_version: &str) -> Option<String> {
             .replace('v', ""),
     )
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use nu_ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+
+    #[test]
+    fn folder_without_fly_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("fly").path(dir.path()).collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn folder_with_fly_toml() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("fly.toml"))?.sync_all()?;
+        let actual = ModuleRenderer::new("fly").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Green.bold().paint("🎈 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+}
