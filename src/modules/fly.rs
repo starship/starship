@@ -59,15 +59,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 fn get_toml_value(context: &Context<'_>, key: &str) -> Option<String> {
     context
         .read_file_from_pwd("fly.toml")
-        .and_then(|contents| match contents.parse::<toml::Table>() {
-            Ok(dict) => {
-                let val = dict.get(key)?;
-                match val {
-                    toml::Value::String(x) => Some(x.to_string()),
-                    _ => None,
-                }
-            }
-            Err(_) => None,
+        .and_then(|contents| contents.parse::<toml::Table>().ok())
+        .and_then(|dict| match dict.get(key) {
+            Some(toml::Value::String(v)) => Some(v.to_owned()),
+            _ => None,
         })
         .or(None)
 }
