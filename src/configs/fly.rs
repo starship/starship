@@ -26,7 +26,7 @@ impl<'a> Default for FlyConfig<'a> {
             format: "via [$symbol$app $primary_region ]($style)",
             version_format: "v${raw}",
             symbol: "🎈 ",
-            style: "green bold",
+            style: "purple bold",
             disabled: false,
             detect_extensions: vec![],
             detect_files: vec!["fly.toml"],
