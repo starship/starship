@@ -87,11 +87,19 @@ fn parse_fly_version(fly_version: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    use super::parse_fly_version;
     use crate::test::ModuleRenderer;
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
     use std::io::Write;
+
+    #[test]
+    fn fly_version_parser() {
+        let actual = parse_fly_version("flyctl v0.1.108 linux/amd64 Commit: 03247ac9d9dc7d53cc946777090e8f471c70c197 BuildDate: 2023-10-12T12:59:42Z");
+        let expected = Some("0.1.108".to_string());
+        assert_eq!(expected, actual);
+    }
 
     #[test]
     fn folder_without_fly_files() -> io::Result<()> {
