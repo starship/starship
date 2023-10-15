@@ -38,6 +38,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     )
                     .map(Ok)
                 }
+                "app" => {
+                    let file_contents = context.read_file_from_pwd(config.detect_files.first()?)?;
+                    parse_fly_app_name(file_contents).map(Ok)
+                }
+                "primary_region" => {
+                    let file_contents = context.read_file_from_pwd(config.detect_files.first()?)?;
+                    parse_fly_primary_region(file_contents).map(Ok)
+                }
                 _ => None,
             })
             .parse(None, Some(context))
@@ -52,6 +60,30 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     });
 
     Some(module)
+}
+
+fn parse_fly_app_name(file_contents: String) -> Option<String> {
+    Some({
+        let contents = file_contents.parse::<toml::Table>().unwrap();
+        let app = contents.get("app")?;
+
+        match app {
+            toml::Value::String(app) => app.to_string(),
+            _ => "".to_string(),
+        }
+    })
+}
+
+fn parse_fly_primary_region(file_contents: String) -> Option<String> {
+    Some({
+        let contents = file_contents.parse::<toml::Table>().unwrap();
+        let app = contents.get("primary_region")?;
+
+        match app {
+            toml::Value::String(app) => app.to_string(),
+            _ => "".to_string(),
+        }
+    })
 }
 
 fn parse_fly_version(fly_version: &str) -> Option<String> {
