@@ -69,7 +69,7 @@ fn get_toml_value(context: &Context<'_>, key: &str) -> Option<String> {
             }
             Err(_) => None,
         })
-        .or_else(|| None)
+        .or(None)
 }
 
 fn parse_fly_version(fly_version: &str) -> Option<String> {
