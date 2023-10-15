@@ -338,7 +338,7 @@
         "detect_folders": [],
         "disabled": false,
         "format": "via [$symbol$app $primary_region ]($style)",
-        "style": "green bold",
+        "style": "purple bold",
         "symbol": "🎈 ",
         "version_format": "v${raw}"
       },
@@ -2636,7 +2636,7 @@
           "type": "string"
         },
         "style": {
-          "default": "green bold",
+          "default": "purple bold",
           "type": "string"
         },
         "disabled": {
