@@ -106,7 +106,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         File::create(dir.path().join("fly.toml"))?.sync_all()?;
         let actual = ModuleRenderer::new("fly").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::Green.bold().paint("🎈 ")));
+        let expected = Some(format!("via {}", Color::Purple.bold().paint("🎈 ")));
         assert_eq!(expected, actual);
         dir.close()
     }
