@@ -38,14 +38,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     )
                     .map(Ok)
                 }
-                "app" => {
-                    let file_contents = context.read_file_from_pwd(config.detect_files.first()?)?;
-                    parse_fly_app_name(file_contents).map(Ok)
-                }
-                "primary_region" => {
-                    let file_contents = context.read_file_from_pwd(config.detect_files.first()?)?;
-                    parse_fly_primary_region(file_contents).map(Ok)
-                }
+                "app" => get_toml_value(context, "app").map(Ok),
+                "primary_region" => get_toml_value(context, "primary_region").map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -62,28 +56,20 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(module)
 }
 
-fn parse_fly_app_name(file_contents: String) -> Option<String> {
-    Some({
-        let contents = file_contents.parse::<toml::Table>().unwrap();
-        let app = contents.get("app")?;
-
-        match app {
-            toml::Value::String(app) => app.to_string(),
-            _ => "".to_string(),
-        }
-    })
-}
-
-fn parse_fly_primary_region(file_contents: String) -> Option<String> {
-    Some({
-        let contents = file_contents.parse::<toml::Table>().unwrap();
-        let app = contents.get("primary_region")?;
-
-        match app {
-            toml::Value::String(app) => app.to_string(),
-            _ => "".to_string(),
-        }
-    })
+fn get_toml_value(context: &Context<'_>, key: &str) -> Option<String> {
+    context
+        .read_file_from_pwd("fly.toml")
+        .and_then(|contents| match contents.parse::<toml::Table>() {
+            Ok(dict) => {
+                let val = dict.get(key)?;
+                match val {
+                    toml::Value::String(x) => Some(x.to_string()),
+                    _ => None,
+                }
+            }
+            Err(_) => None,
+        })
+        .or_else(|| None)
 }
 
 fn parse_fly_version(fly_version: &str) -> Option<String> {
@@ -91,9 +77,10 @@ fn parse_fly_version(fly_version: &str) -> Option<String> {
         fly_version
             // split into ["flyctl", "v0.1.108"]
             .split_whitespace()
-            // return "1.8.3"
             .nth(1)?
+            // "v0.1.108"
             .to_string()
+            // return "0.1.108"
             .replace('v', ""),
     )
 }
