@@ -91,6 +91,7 @@ mod tests {
     use nu_ansi_term::Color;
     use std::fs::File;
     use std::io;
+    use std::io::Write;
 
     #[test]
     fn folder_without_fly_files() -> io::Result<()> {
@@ -107,6 +108,56 @@ mod tests {
         File::create(dir.path().join("fly.toml"))?.sync_all()?;
         let actual = ModuleRenderer::new("fly").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Purple.bold().paint("🎈 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn fly_toml_with_app_name() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("fly.toml"))?;
+        file.write_all(b"app = \"my-fly-app-1234\"")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("fly").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Purple.bold().paint("🎈 my-fly-app-1234 ")
+        ));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn fly_toml_with_region() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("fly.toml"))?;
+        file.write_all(b"primary_region = \"bos\"")?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("fly").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::Purple.bold().paint("🎈 bos ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn fly_toml_with_app_and_region() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let mut file = File::create(dir.path().join("fly.toml"))?;
+        file.write_all(
+            b"
+app = \"my-fly-app-1234\"
+primary_region = \"bos\"
+        ",
+        )?;
+        file.sync_all()?;
+
+        let actual = ModuleRenderer::new("fly").path(dir.path()).collect();
+        let expected = Some(format!(
+            "via {}",
+            Color::Purple.bold().paint("🎈 my-fly-app-1234 bos ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
