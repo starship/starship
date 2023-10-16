@@ -76,12 +76,6 @@ pub fn get_prompt(context: Context) -> String {
         _ => {}
     }
 
-    // A workaround for a fish bug (see #739,#279). Applying it to all shells
-    // breaks things (see #808,#824,#834). Should only be printed in fish.
-    if Shell::Fish == context.shell && context.target == Target::Main {
-        buf.push_str("\x1b[J"); // An ASCII control code to clear screen
-    }
-
     let (formatter, modules) = load_formatter_and_modules(&context);
 
     let formatter = formatter.map_variables_to_segments(|module| {
