@@ -28,6 +28,7 @@ $package\
 $c\
 $cmake\
 $cobol\
+$cuda\
 $daml\
 $dart\
 $deno\
