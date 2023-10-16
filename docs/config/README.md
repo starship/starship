@@ -1027,7 +1027,7 @@ If a CUDA compiler or driver is not supported by this module, you can request it
 ```toml
 # ~/.config/starship.toml
 
-[c]
+[cuda]
 format = 'via [$name $version]($style)'
 ```
 
