@@ -331,11 +331,6 @@
     },
     "fly": {
       "default": {
-        "detect_extensions": [],
-        "detect_files": [
-          "fly.toml"
-        ],
-        "detect_folders": [],
         "disabled": false,
         "format": "via [$symbol($app )($primary_region )]($style)",
         "style": "purple bold",
@@ -2642,29 +2637,6 @@
         "disabled": {
           "default": false,
           "type": "boolean"
-        },
-        "detect_extensions": {
-          "default": [],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "detect_files": {
-          "default": [
-            "fly.toml"
-          ],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "detect_folders": {
-          "default": [],
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         }
       },
       "additionalProperties": false

@@ -13,9 +13,6 @@ pub struct FlyConfig<'a> {
     pub symbol: &'a str,
     pub style: &'a str,
     pub disabled: bool,
-    pub detect_extensions: Vec<&'a str>,
-    pub detect_files: Vec<&'a str>,
-    pub detect_folders: Vec<&'a str>,
 }
 
 impl<'a> Default for FlyConfig<'a> {
@@ -28,9 +25,6 @@ impl<'a> Default for FlyConfig<'a> {
             symbol: "🎈 ",
             style: "purple bold",
             disabled: false,
-            detect_extensions: vec![],
-            detect_files: vec!["fly.toml"],
-            detect_folders: vec![],
         }
     }
 }
