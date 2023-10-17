@@ -991,22 +991,22 @@ The `cuda` module shows some information about your `nvcc` compiler or nVIDIA dr
 
 ### Options
 
-| Option              | Default                                                                     | Description                                                               |
-| ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version)]($style)'`                                | The format string for the module.                                         |
-| `version_format`    | `'v${raw}'`                                                                 | The version format. |
-| `symbol`            | `'NV '`                                                                      | The symbol used before displaying the compiler or driver details                    |
-| `commands`          | `[ [ 'nvcc', '--version' ], [ 'nvidia-smi', '--query' ] ]` | How to detect what the compiler is and what the driver is                                        |
-| `style`             | `'bold #76b900'`                                                                | The style for the module.                                                 |
-| `disabled`          | `false`                                                                     | Disables the `cuda` module.                                                  |
+| Option           | Default                                                    | Description                                                      |
+| ---------------- | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| `format`         | `'via [$symbol($version)]($style)'`                        | The format string for the module.                                |
+| `version_format` | `'v${raw}'`                                                | The version format.                                              |
+| `symbol`         | `'NV '`                                                    | The symbol used before displaying the compiler or driver details |
+| `commands`       | `[ [ 'nvcc', '--version' ], [ 'nvidia-smi', '--query' ] ]` | How to detect what the compiler is and what the driver is        |
+| `style`          | `'bold #76b900'`                                           | The style for the module.                                        |
+| `disabled`       | `false`                                                    | Disables the `cuda` module.                                      |
 
 ### Variables
 
-| Variable | Example | Description                          |
-| -------- | ------- | ------------------------------------ |
-| version  | 12.0    | The version of `nvcc` or installed `CUDA`|
-| symbol   |         | Mirrors the value of option `symbol` |
-| style    |         | Mirrors the value of option `style`  |
+| Variable | Example | Description                               |
+| -------- | ------- | ----------------------------------------- |
+| version  | 12.0    | The version of `nvcc` or installed `CUDA` |
+| symbol   |         | Mirrors the value of option `symbol`      |
+| style    |         | Mirrors the value of option `style`       |
 
 NB that `version` is not in the default format.
 
