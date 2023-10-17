@@ -261,6 +261,35 @@
         }
       ]
     },
+    "cuda": {
+      "default": {
+        "commands": [
+          [
+            "nvcc",
+            "--version"
+          ],
+          [
+            "nvidia-smi",
+            "--query"
+          ]
+        ],
+        "detect_extensions": [
+          "cu"
+        ],
+        "detect_files": [],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version(-$name) )]($style)",
+        "style": "bold #76b900",
+        "symbol": "NV ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/CudaConfig"
+        }
+      ]
+    },
     "daml": {
       "default": {
         "detect_extensions": [],
@@ -2438,6 +2467,74 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CudaConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version(-$name) )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold #76b900",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "NV ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "cu"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "commands": {
+          "default": [
+            [
+              "nvcc",
+              "--version"
+            ],
+            [
+              "nvidia-smi",
+              "--query"
+            ]
+          ],
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

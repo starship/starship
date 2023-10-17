@@ -23,6 +23,7 @@ pub const ALL_MODULES: &[&str] = &[
     "conda",
     "container",
     "crystal",
+    "cuda",
     "daml",
     "dart",
     "deno",

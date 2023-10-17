@@ -993,13 +993,13 @@ The `cuda` module shows some information about your `nvcc` compiler or nVIDIA dr
 
 | Option              | Default                                                                     | Description                                                               |
 | ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                | The format string for the module.                                         |
+| `format`            | `'via [$symbol($version)]($style)'`                                | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                                                 | The version format. |
 | `symbol`            | `'NV '`                                                                      | The symbol used before displaying the compiler or driver details                    |
 | `detect_extensions` | `['cu']`                                                                | Which extensions should trigger this module.                              |
 | `detect_files`      | `[]`                                                                        | Which filenames should trigger this module.                               |
 | `detect_folders`    | `[]`                                                                        | Which folders should trigger this module.                                 |
-| `commands`          | `[ [ 'nvcc', '--version' ], [ 'nvidia-smi' ] ]` | How to detect what the compiler is and what the driver is                                        |
+| `commands`          | `[ [ 'nvcc', '--version' ], [ 'nvidia-smi', '--query' ] ]` | How to detect what the compiler is and what the driver is                                        |
 | `style`             | `'bold #76b900'`                                                                | The style for the module.                                                 |
 | `disabled`          | `false`                                                                     | Disables the `cuda` module.                                                  |
 
