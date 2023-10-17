@@ -27,7 +27,7 @@ impl<'a> Default for CudaConfig<'a> {
             style: "bold #76b900",
             symbol: "NV ",
             disabled: false,
-            detect_extensions: vec!["cu"],
+            detect_extensions: vec![],
             detect_files: vec![],
             detect_folders: vec![],
             commands: vec![
