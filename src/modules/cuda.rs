@@ -28,16 +28,6 @@ fn parse_cuda_version(s: &str) -> Option<String> {
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("cuda");
     let config: CudaConfig = CudaConfig::try_load(module.config);
-    let is_cuda_project = context
-        .try_begin_scan()?
-        .set_extensions(&config.detect_extensions)
-        .set_files(&config.detect_files)
-        .set_folders(&config.detect_folders)
-        .is_match();
-
-    if !is_cuda_project {
-        return None;
-    }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
         // The cuda compiler or driver info

@@ -13,9 +13,6 @@ pub struct CudaConfig<'a> {
     pub style: &'a str,
     pub symbol: &'a str,
     pub disabled: bool,
-    pub detect_extensions: Vec<&'a str>,
-    pub detect_files: Vec<&'a str>,
-    pub detect_folders: Vec<&'a str>,
     pub commands: Vec<Vec<&'a str>>,
 }
 
@@ -27,9 +24,6 @@ impl<'a> Default for CudaConfig<'a> {
             style: "bold #76b900",
             symbol: "NV ",
             disabled: false,
-            detect_extensions: vec![],
-            detect_files: vec![],
-            detect_folders: vec![],
             commands: vec![
                 // the compiler is usually nvcc
                 vec!["nvcc", "--version"],

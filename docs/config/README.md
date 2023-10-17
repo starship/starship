@@ -996,9 +996,6 @@ The `cuda` module shows some information about your `nvcc` compiler or nVIDIA dr
 | `format`            | `'via [$symbol($version)]($style)'`                                | The format string for the module.                                         |
 | `version_format`    | `'v${raw}'`                                                                 | The version format. |
 | `symbol`            | `'NV '`                                                                      | The symbol used before displaying the compiler or driver details                    |
-| `detect_extensions` | `[]`                                                                | Which extensions should trigger this module.                              |
-| `detect_files`      | `[]`                                                                        | Which filenames should trigger this module.                               |
-| `detect_folders`    | `[]`                                                                        | Which folders should trigger this module.                                 |
 | `commands`          | `[ [ 'nvcc', '--version' ], [ 'nvidia-smi', '--query' ] ]` | How to detect what the compiler is and what the driver is                                        |
 | `style`             | `'bold #76b900'`                                                                | The style for the module.                                                 |
 | `disabled`          | `false`                                                                     | Disables the `cuda` module.                                                  |
@@ -1007,8 +1004,7 @@ The `cuda` module shows some information about your `nvcc` compiler or nVIDIA dr
 
 | Variable | Example | Description                          |
 | -------- | ------- | ------------------------------------ |
-| name     | clang   | The name of the compiler             |
-| version  | 13.0.0  | The version of the compiler          |
+| version  | 12.0    | The version of `nvcc` or installed `CUDA`|
 | symbol   |         | Mirrors the value of option `symbol` |
 | style    |         | Mirrors the value of option `style`  |
 
