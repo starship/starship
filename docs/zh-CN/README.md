@@ -153,7 +153,7 @@ description: Starship是一款轻量级、反应迅速、可自定义的高颜�
 
    :::
 
-   在您的 Nushell 环境文件的最后（使用 `$nu.env-path` 来获取它的路径），添加以下内容：
+   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
