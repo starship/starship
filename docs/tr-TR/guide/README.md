@@ -147,13 +147,11 @@
  /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-
 <h1></h1>
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="iTerm2 ve Snazzy temalı Starship"
+  alt="Starship with iTerm2 and the Snazzy theme"
   width="50%"
   align="right"
  />
@@ -168,7 +166,7 @@
 - **Kolay:** hızlı kurulum -  dakikalar içinde kullanmaya başla.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Starship dokümantasyonunu incele &nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -181,12 +179,12 @@
 
 ### 1. Adım Starship'i Kur
 
-Kurulum talimatlarını görmek için aşağıdaki listeden işletim sisteminizi seçiniz:
+Select your operating system from the list below to view installation instructions:
 
 <details>
 <summary>Android</summary>
 
-Starship'i herhangi bir paket yöneticisi ile yükleyin:
+Install Starship using any of the following package managers:
 
 | Depo                                                                              | Talimatlar             |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -197,7 +195,7 @@ Starship'i herhangi bir paket yöneticisi ile yükleyin:
 <details>
 <summary>BSD</summary>
 
-Starship'i herhangi bir paket yöneticisi ile yükleyin:
+Install Starship using any of the following package managers:
 
 | Dağıtım                    | Depo                                                     | Talimatlar                        |
 | -------------------------- | -------------------------------------------------------- | --------------------------------- |
@@ -210,13 +208,13 @@ Starship'i herhangi bir paket yöneticisi ile yükleyin:
 <details>
 <summary>Linux</summary>
 
-Sisteminiz için son sürümü yükleyin:
+Install the latest version for your system:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatif olarak aşağıdaki paket yöneticileri ile de Starship'i yükleyebilirsiniz:
+Alternatively, install Starship using any of the following package managers:
 
 | Dağıtım                    | Depo                                                                                            | Talimatlar                                                                     |
 | -------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -236,13 +234,13 @@ Alternatif olarak aşağıdaki paket yöneticileri ile de Starship'i yükleyebil
 <details>
 <summary>macOS</summary>
 
-Sisteminiz için son sürümü yükleyin:
+Install the latest version for your system:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatif olarak aşağıdaki paket yöneticileri ile de Starship'i yükleyebilirsiniz:
+Alternatively, install Starship using any of the following package managers:
 
 | Depo                                                     | Talimatlar                              |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -256,9 +254,9 @@ Alternatif olarak aşağıdaki paket yöneticileri ile de Starship'i yükleyebil
 <details>
 <summary>Windows</summary>
 
-Sisteminiz için en son sürümü [releases bölümündeki](https://github.com/starship/starship/releases/latest) MSI yükleyicileri ile yükleyin.
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Starship'i herhangi bir paket yöneticisi ile yükleyin:
+Install Starship using any of the following package managers:
 
 | Depo                                                                                         | Talimatlar                              |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -272,7 +270,7 @@ Starship'i herhangi bir paket yöneticisi ile yükleyin:
 
 ### 2. Adım Set up your shell to use Starship
 
-Shell'ı starshiple çalışması için ayarla. Aşağıdaki listeden shell'inizi seçin:
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -288,7 +286,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Cmd ıle beraber [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) kullanmalısınız. `%LocalAppData%\clink\starship.lua` dosyasını belirtilen dizinde aşağıdaki kod içeriği olacak şekilde oluşturun:
+Cmd ile beraber [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) kullanmalısınız. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -305,7 +303,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Not: Elvish v0.18'den sonraki sürümler desteklenmektedir
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -334,7 +332,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Nushell env dosyanızın sonuna aşağıdakileri ekleyin (Nushell'de `$nu.env-path` komutunu çalıştırarak bulabilirsiniz):
+Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -347,14 +345,14 @@ Aşağıdaki kodu Nushell ayarlarınızın (`$nu.config-path` komutu ile ulaşab
 use ~/.cache/starship/init.nu
 ```
 
-Not: Nushell v0.78'tan sonraki sürümler desteklenmektedir
+Note: Only Nushell v0.78+ is supported
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Aşağıdaki kodu PowerShell ayarlarınızın (`$PROFILE` komutu ile ulaşabilirsiniz) sonuna ekleyin:
+Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -397,9 +395,9 @@ eval "$(starship init zsh)"
 
 ### 3. Adım Starship'i Yapılandır
 
-Shellinizi yeniden başlatın, işte yeni shell promptunuzun güzelliği ile karşı karşıyasınız. Eğer varsayılan görünümden memnunsanız, keyfini çıkartın!
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-Daha fazla özelleştirme seçeneği için:
+If you're looking to further customize Starship:
 
 - **[Configuration](https://starship.rs/config/)** – Starship'i yapılandırmayı ve dilediğiniz gibi düzenlenemeyi öğrenin
 
@@ -407,15 +405,15 @@ Daha fazla özelleştirme seçeneği için:
 
 ## 🤝 Katkıda Bulunmak
 
-Katılımcılara **yetenek düzeyleri fark etmeksizin**, her zaman açığız! Eğer katkıda bulunmaya kolay bir şekilde başlamak istiyorsanız [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)'lardan bir tanesini deneyin.
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Eğer ingilizce harici bir dili akıcı seviyede kullanabiliyorsanız, dosyaların diğer diller ile güncel bir şekilde çevirilebilmesi için yardımlarınızı bekliyoruz. Çeviriye [Starship Crowdin](https://translate.starship.rs/)'den destekte bulunabilirsiniz.
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Eğer starship'e katkıda bulunmak istiyorsanız lütfen [Katkı Kılavuzu](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)'na göz atınız. Ayrıca, istediğiniz zaman [Discord server](https://discord.gg/8Jzqu3T)'ımıza gelip merhaba diyebilir, iletişime geçebilirsiniz. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 İlham Kaynakları
 
-Lütfen starship'in oluşmasında ilham kaynağı olan çalışmalara da göz atın. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -433,9 +431,9 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship roket simgesi">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
 </p>
 
 ## 📝 Lisans
 
-Telif Hakkı © 2019-günümüz, [Starship Contributors](https://github.com/starship/starship/graphs/contributors). <br /> Bu proje [ISC](https://github.com/starship/starship/blob/master/LICENSE) lisanslıdır.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
