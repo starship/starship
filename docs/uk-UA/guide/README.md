@@ -147,13 +147,11 @@
  /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-
 <h1></h1>
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship в iTerm2 з темою Snazzy"
+  alt="Starship with iTerm2 and the Snazzy theme"
   width="50%"
   align="right"
  />
@@ -168,7 +166,7 @@
 - **Простий:** швидка інсталяція дозволяє почати роботу за лічені хвилини.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Ознайомтесь з документацією Starship &nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -181,12 +179,12 @@
 
 ### Крок 1. Встановіть Starship
 
-Оберіть Вашу операційну систему зі списку нижче, щоб переглянути інструкцію зі встановлення:
+Select your operating system from the list below to view installation instructions:
 
 <details>
 <summary>Android</summary>
 
-Встановіть Starship використовуючи будь-який з наступних пакетних менеджерів:
+Install Starship using any of the following package managers:
 
 | Репозиторій                                                                       | Команда для встановлення |
 | --------------------------------------------------------------------------------- | ------------------------ |
@@ -197,7 +195,7 @@
 <details>
 <summary>BSD</summary>
 
-Встановіть Starship використовуючи будь-який з наступних пакетних менеджерів:
+Install Starship using any of the following package managers:
 
 | Дистрибутив     | Репозиторій                                              | Команда для встановлення          |
 | --------------- | -------------------------------------------------------- | --------------------------------- |
@@ -210,13 +208,13 @@
 <details>
 <summary>Linux</summary>
 
-Встановіть останню версію для вашої системи:
+Install the latest version for your system:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Як варіант, можете встановити Starship через будь-який з наступних пакетних менеджерів:
+Alternatively, install Starship using any of the following package managers:
 
 | Дистрибутив        | Репозиторій                                                                                     | Команда для встановлення                                                       |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -236,13 +234,13 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>macOS</summary>
 
-Встановіть останню версію для вашої системи:
+Install the latest version for your system:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Як варіант, можете встановити Starship скориставшись будь-яким з наступних пакетних менеджерів:
+Alternatively, install Starship using any of the following package managers:
 
 | Репозиторій                                              | Команда для встановлення                |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -256,9 +254,9 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
-Встановіть останню версію системи за допомогою MSI-інсталятора з розділу [релізів](https://github.com/starship/starship/releases/latest).
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Встановіть Starship використовуючи будь-який з наступних менеджерів пакетів:
+Install Starship using any of the following package managers:
 
 | Репозиторій                                                                                  | Команда для встановлення                |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -272,7 +270,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 ### Крок 2. Налаштуйте оболонку для використання Starship
 
-Налаштуйте свою оболонку, щоб ініціалізувати starship. Виберіть ваш варіант зі списку:
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -288,7 +286,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Вам потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) разом з Cmd. Створіть файл `%LocalAppData%\clink\starship.lua` із наступним вмістом:
+Вам потрібно використовувати [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) разом з Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -305,7 +303,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Примітка: Підтримується лише Elvish v0.18+
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -334,27 +332,27 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Додайте наступне в кінець вашого файлу env (його можна знайти за допомогою змінної `$nu.env-path` в Nushell):
+Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
 
 ```sh
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
-Додайте наступний рядок наприкінці налаштувань Nushell (знайдіть її за допомоги `$nu.config-path`):
+Додайте наступний рядок наприкінці Вашої конфігурації Nushell (знайдіть її виконавши `$nu.config-path`):
 
 ```sh
 use ~/.cache/starship/init.nu
 ```
 
-Примітка: Підтримується лише Nushell v0.78+
+Note: Only Nushell v0.78+ is supported
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Додайте наступний рядок наприкінці Вашої конфігурації PowerShell (знайдіть її виконавши `$PROFILE`):
+Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -397,9 +395,9 @@ eval "$(starship init zsh)"
 
 ### Крок 3. Налаштуйте starship
 
-Запустіть новий екземпляр вашої оболонки і ви побачите новий яскравий командний рядок. Якщо вас влаштовують стандартні налаштування – насолоджуйтесь результатом!
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-Якщо ви бажаєте, ви можете продовжити налаштування Starship:
+If you're looking to further customize Starship:
 
 - **[Налаштування](https://starship.rs/config/)** – дізнайтесь як налаштувати Starship, щоб підлаштувати командний рядок під свої потреби
 
@@ -407,15 +405,15 @@ eval "$(starship init zsh)"
 
 ## 🤝 Участь
 
-Ми завжди раді вашому внеску, незалежно від рівня **вашого досвіду**! Якщо ви шукаєте спосіб допомоги проєкту, але ще не визначились, що можна зробити, спробуйте [завдання для початківців](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Якщо ви вільно володієте мовою відмінною від англійської, ми будемо дуже вдячні, якщо ви допоможете в перекладі документації та її підтримці в актуальному стані. Якщо у вас є бажання, переклади можна робити за допомогою [Starship Crowdin](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Якщо ви зацікавлені у допомозі в розвитку starship, будь ласка, ознайомтесь з [Настановами з участі](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Також, завітайте до нашого [сервера Discord](https://discord.gg/8Jzqu3T). 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 Подяки
 
-Будь ласка, перегляньте роботи, які надихнули на створення starship. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Командний рядок ZSH для астронавтів.
 
@@ -425,9 +423,9 @@ eval "$(starship init zsh)"
 
 ## ❤️ Спонсори
 
-Підтримайте цей проект [ставши спонсором](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
 
-**Підтримувачі**
+**Supporter Tier**
 
 - [Appwrite](https://appwrite.io/)
 
@@ -438,4 +436,4 @@ eval "$(starship init zsh)"
 
 ## 📝 Ліцензія
 
-Авторські права © 2019-по сьогодні, [Учасники Starship](https://github.com/starship/starship/graphs/contributors).<br /> Цей проєкт ліцензується на умовах Ліцензії [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
