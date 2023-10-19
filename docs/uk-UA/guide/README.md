@@ -423,9 +423,9 @@ eval "$(starship init zsh)"
 
 ## ❤️ Спонсори
 
-Підтримайте цей проєкт [ставши спонсором](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+Підтримайте цей проєкт [ставши спонсором](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
 
-**Supporter Tier**
+**Підтримувачі**
 
 - [Appwrite](https://appwrite.io/)
 
@@ -436,4 +436,4 @@ eval "$(starship init zsh)"
 
 ## 📝 Ліцензія
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Авторські права © 2019-по сьогодні, [Учасники Starship](https://github.com/starship/starship/graphs/contributors).<br /> Цей проєкт ліцензується на умовах Ліцензії [ISC](https://github.com/starship/starship/blob/master/LICENSE).
