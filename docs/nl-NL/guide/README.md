@@ -147,13 +147,11 @@
  /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-
 <h1></h1>
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship met iTerm2 en het thema Snazzy"
+  alt="Starship with iTerm2 and the Snazzy theme"
   width="50%"
   align="right"
  />
@@ -168,7 +166,7 @@
 - **Makkelijk:** snel te installeren – gebruik het binnen enkele minuten.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Verken de Starship-documentatie&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -181,12 +179,12 @@
 
 ### Stap 1. Installeer Starship
 
-Selecteer je besturingssysteem in de onderstaande lijst en bekijk de installatie-instructies:
+Select your operating system from the list below to view installation instructions:
 
 <details>
 <summary>Android</summary>
 
-Installeer Starship met één van de volgende pakketbeheerders:
+Install Starship using any of the following package managers:
 
 | Repository                                                                        | Instructies            |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -197,7 +195,7 @@ Installeer Starship met één van de volgende pakketbeheerders:
 <details>
 <summary>BSD</summary>
 
-Installeer Starship met één van de volgende pakketbeheerders:
+Install Starship using any of the following package managers:
 
 | Distribution | Repository                                               | Instructies                       |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -258,7 +256,7 @@ Alternatively, install Starship using any of the following package managers:
 
 Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Installeer Starship met één van de volgende pakketbeheerders:
+Install Starship using any of the following package managers:
 
 | Repository                                                                                   | Instructies                             |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
