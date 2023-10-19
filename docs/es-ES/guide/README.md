@@ -147,13 +147,11 @@
  /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-
 <h1></h1>
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship con iTerm 2 y el tema Snazzy"
+  alt="Starship with iTerm2 and the Snazzy theme"
   width="50%"
   align="right"
  />
@@ -168,7 +166,7 @@
 - **Fácil:** rápido de instalar – empieza a usarlo en minutos.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -181,12 +179,12 @@
 
 ### Paso 1. Instalar Starship
 
-Seleccione su sistema operativo de la lista de abajo para ver las instrucciones de instalación:
+Select your operating system from the list below to view installation instructions:
 
 <details>
 <summary>Android</summary>
 
-Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
+Install Starship using any of the following package managers:
 
 | Repositorio                                                                       | Instrucciones          |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -197,7 +195,7 @@ Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 <details>
 <summary>BSD</summary>
 
-Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
+Install Starship using any of the following package managers:
 
 | Distribución     | Repositorio                                              | Instrucciones                     |
 | ---------------- | -------------------------------------------------------- | --------------------------------- |
@@ -210,13 +208,13 @@ Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 <details>
 <summary>Linux</summary>
 
-Instale la última versión para su sistema:
+Install the latest version for your system:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternativamente, instale Starship usando cualquiera de los siguientes gestores de paquetes:
+Alternatively, install Starship using any of the following package managers:
 
 | Distribución       | Repositorio                                                                                     | Instrucciones                                                                  |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -236,13 +234,13 @@ Alternativamente, instale Starship usando cualquiera de los siguientes gestores 
 <details>
 <summary>macOS</summary>
 
-Instale la última versión para su sistema:
+Install the latest version for your system:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternativamente, instale Starship usando cualquiera de los siguientes gestores de paquetes:
+Alternatively, install Starship using any of the following package managers:
 
 | Repositorio                                              | Instrucciones                           |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -256,9 +254,9 @@ Alternativamente, instale Starship usando cualquiera de los siguientes gestores 
 <details>
 <summary>Windows</summary>
 
-Instale la última versión para su sistema con los MSI-Installers de la sección [lanzamientos](https://github.com/starship/starship/releases/latest).
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
+Install Starship using any of the following package managers:
 
 | Repositorio                                                                                  | Instrucciones                           |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -272,7 +270,7 @@ Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 
 ### Paso 2. Set up your shell to use Starship
 
-Configure su shell para inicializar starship. Selecciona el tuyo de la lista de abajo:
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -288,7 +286,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Necesitas usar [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) con Cmd. Crea un archivo en esta ruta `%LocalAppData%\clink\starship.lua` con el siguiente contenido:
+Necesitas usar [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) con Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -305,7 +303,7 @@ Añade el siguiente código al final de `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Nota: Sólo se admite Elvish v0.18+
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -334,7 +332,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Añade lo siguiente al final de tu archivo Nushell env (encuéntralo ejecutando `$nu.env-path` en Nushell):
+Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -347,14 +345,14 @@ Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecu
 use ~/.cache/starship/init.nu
 ```
 
-Nota: Sólo se admite Nushell v0.78+
+Note: Only Nushell v0.78+ is supported
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Añade lo siguiente al final de tu configuración de PowerShell (encuéntrala ejecutando `$PROFILE`):
+Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -397,9 +395,9 @@ eval "$(starship init zsh)"
 
 ### Paso 3. Configurar Starship
 
-Inicia una nueva instancia de shell, y deberías ver tu nuevo y hermoso prompt para shell. Si está contento con los valores por defecto, ¡disfrútelos!
+Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
 
-Si estás buscando personalizar Starship:
+If you're looking to further customize Starship:
 
 - **[Configuración](https://starship.rs/config/)** – aprende a configurar Starship para ajustar el prompt a tu gusto
 
@@ -407,15 +405,15 @@ Si estás buscando personalizar Starship:
 
 ## 🤝 Contribuir
 
-¡Siempre estamos buscando colaboradores de **todos los niveles y habilidades**! Si estas buscando una manera fácil de ayudar este proyecto, puedes intentar resolver un problema con la etiqueta "[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)".
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-Si habla con fluidez en un idioma que no es inglés, agradecemos mucho cualquier ayuda para mantener nuestros documentos traducidos y actualizados en otros idiomas. Si quieres ayudar, puedes contribuir con las traducciones en el [Crowdin de Starship](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-Si estás interesado en ayudar contribuyendo a Starship, por favor échale un vistazo a nuestra [Guía de Colaboración](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Además, siéntete libre de entrar en nuestro [servidor de Discord](https://discord.gg/8Jzqu3T) y di "¡Hola!". 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 Inspirado por
 
-Por favor, revisa estas obras anteriores que ayudaron a inspirar la creación de la nave. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Un prompt de ZSH para astronautas.
 
@@ -425,9 +423,9 @@ Por favor, revisa estas obras anteriores que ayudaron a inspirar la creación de
 
 ## ❤️ Patrocinadores
 
-Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsors/starship). Tu nombre o logo aparecerá aquí con un enlace a tu sitio web.
+Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
 
-**Patrocinadores**
+**Supporter Tier**
 
 - [Appwrite](https://appwrite.io/)
 
@@ -438,4 +436,4 @@ Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsor
 
 ## 📝 Licencia
 
-Derechos de autor © 2019-presente, [Colaboradores de Starship](https://github.com/starship/starship/graphs/contributors).<br /> Este proyecto está bajo una licencia [ISC](https://github.com/starship/starship/blob/master/LICENSE).
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
