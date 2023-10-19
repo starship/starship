@@ -147,8 +147,6 @@
  /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-
 <h1></h1>
 
 <img
@@ -168,7 +166,7 @@
 - **Easy:** سريع التثبيت – استخدمها في دقائق معدودة.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>استكشف مستندات Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -181,12 +179,12 @@
 
 ### الخطوة الأولى. تثبيت starship
 
-حدد نظام التشغيل الخاص بك من القائمة أدناه لعرض تعليمات التثبيت:
+Select your operating system from the list below to view installation instructions:
 
 <details>
 <summary>Android</summary>
 
-يمكنك تثبيت starship باستخدام احد ال package managers التالية:
+Install Starship using any of the following package managers:
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -197,7 +195,7 @@
 <details>
 <summary>BSD</summary>
 
-يمكنك تثبيت starship باستخدام احد ال package managers التالية:
+Install Starship using any of the following package managers:
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -210,13 +208,13 @@
 <details>
 <summary>Linux</summary>
 
-قم بتثبيت أحدث إصدار للنظام الخاص بك:
+Install the latest version for your system:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-يمكنك تثبيت starship باستخدام احد ال package managers التالية:
+Alternatively, install Starship using any of the following package managers:
 
 | Distribution       | Repository                                                                                      | Instructions                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -236,13 +234,13 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>macOS</summary>
 
-قم بتثبيت أحدث إصدار للنظام الخاص بك:
+Install the latest version for your system:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-يمكنك تثبيت starship باستخدام احد ال package managers التالية:
+Alternatively, install Starship using any of the following package managers:
 
 | Repository                                               | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -256,9 +254,9 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
-قم بتثبيت أحدث إصدار للنظام الخاص بك مع MSI-installers من قسم الإصدارات [](https://github.com/starship/starship/releases/latest).
+Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-يمكنك تثبيت starship باستخدام احد ال package managers التالية:
+Install Starship using any of the following package managers:
 
 | Repository                                                                                   | Instructions                            |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -272,7 +270,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 ### الخطوة الثانية. Set up your shell to use Starship
 
-لإعداد ال starship قم بإعداد ال shell الخاص بك. اختر ما يناسبك من هذه القائمة:
+Configure your shell to initialize starship. Select yours from the list below:
 
 <details>
 <summary>Bash</summary>
@@ -288,7 +286,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-عليك بإستخدام [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) مع Cmd. قم بإنشاء ملف في المسار `%LocalAppData%\clink\starship.lua` و ضع فيه المحتوى التالي:
+عليك بإستخدام [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) مع Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -299,13 +297,13 @@ load(io.popen('starship init cmd'):read("*a"))()
 <details>
 <summary>Elvish</summary>
 
-أضف ما يلي إلى نهاية `~/.elvish/rc.elv`:
+أضف ما يلي إلى نهاية الملف `~/.elvish/rc.elv`:
 
 ```sh
 eval (starship init elvish)
 ```
 
-ملاحظة: فقط +Elvish v0.18 مدعوم
+Note: Only Elvish v0.18+ is supported
 
 </details>
 
@@ -407,15 +405,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 المساهمة
 
-نبحث دائماً عن مساهمين من **جميع المستويات**! إذا كنت تتطلع إلى تسهيل طريقك إلى المشروع، جرب [إنشاء اول مشكلة](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-إذا كنت تتحدث بطلاقة بلغة غير إنجليزية، فإننا نقدر أي مساعدة للحفاظ على ترجمة المستندات وتحديثها بلغات أخرى. إذا كنت ترغب في المساعدة، يمكن المساهمة بالترجمة على [Starship Crowdin](https://translate.starship.rs/).
+If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
 
-إذا كنت مهتما بالمساهمة في starship، يرجى إلقاء نظرة على [دليل المساهمة](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) لدينا. أيضا، لا تتردد في أن تنضم لنا في [Discord](https://discord.gg/8Jzqu3T) وقُل مرحبا. 👋
+If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
 
 ## 💭 مستوحاة من قبل
 
-يرجى التحقق من هذه الأعمال السابقة التي ساعدت على إنشاء starship. 🙏
+Please check out these previous works that helped inspire the creation of starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
