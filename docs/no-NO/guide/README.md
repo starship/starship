@@ -151,7 +151,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="Starship med iTerm2 og Snazzy tema"
   width="50%"
   align="right"
  />
@@ -166,7 +166,7 @@
 - **Lett:** raskt å installere - start å bruke det på minutter.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Utforsk Starship dokumentasjon&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -179,12 +179,12 @@
 
 ### Steg 1. Installer Starship
 
-Select your operating system from the list below to view installation instructions:
+Velg operativsystemet ditt fra listen nedenfor for å se installasjonsinstrukser:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Installer Starship ved å bruke en av følgende installasjonsprogrammene:
 
 | Repository                                                                        | Instruksjoner          |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -195,7 +195,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Installer Starship ved å bruke en av følgende installasjonsprogrammene:
 
 | Distribusjonen | Repository                                               | Instruksjoner                     |
 | -------------- | -------------------------------------------------------- | --------------------------------- |
@@ -256,7 +256,7 @@ Alternatively, install Starship using any of the following package managers:
 
 Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Install Starship using any of the following package managers:
+Installer Starship ved å bruke en av følgende installasjonsprogrammene:
 
 | Repository                                                                                   | Instruksjoner                           |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -270,7 +270,7 @@ Install Starship using any of the following package managers:
 
 ### Steg 2. Set up your shell to use Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Konfigurer skallet ditt til å initialisere starship. Velg din fra listen nedenfor:
 
 <details>
 <summary>Bash</summary>
@@ -286,7 +286,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Du må bruke [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) med Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Du må bruke [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) med Cmd. Lag en fil på følgende lokasjonen  `%LocalAppData%\clink\starship.lua` med dette innholdet:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -303,7 +303,7 @@ Legg til følgende i slutten av  `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+Merk: Bare Alvisk v0.18+ støttes
 
 </details>
 
@@ -332,7 +332,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Legg til følgende i slutten av Nushell env filen (finn den ved å kjøre `$nu.env-path` i Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -345,14 +345,14 @@ Og legg følgende til slutten av Nushell konfigurasjonen (finn det ved å kjøre
 use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.78+ is supported
+Merk: Bare Nushell v0.78+ støttes
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Legg til følgende i slutten av PowerShell-konfigurasjonen (finn den ved å kjøre `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
