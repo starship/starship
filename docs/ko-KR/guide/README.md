@@ -151,7 +151,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="ITerm2, Snazzy 테마가 포함된 Starship"
   width="50%"
   align="right"
  />
@@ -166,7 +166,7 @@
 - **쉬움:** 빠른 설치 - 몇 분만 투자하면 바로 사용할 수 있습니다.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -179,12 +179,12 @@
 
 ### 1단계. Starship 설치하기
 
-Select your operating system from the list below to view installation instructions:
+아래의 목록 중 해당하는 운영체제를 골라 설치 지침을 확인하세요:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
 | 리포지토리                                                                             | 설명                     |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -195,7 +195,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
 | 배포판      | 리포지토리                                                    | 설명                                |
 | -------- | -------------------------------------------------------- | --------------------------------- |
@@ -208,13 +208,13 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+사용중인 시스템에서 최신버전을 설치해주세요.
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+다음의 패키지 관리자를 사용해서 Starship을 설치할 수도 있습니다.
 
 | 배포판                | 리포지토리                                                                                        | 설명                                                                             |
 | ------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -234,13 +234,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+사용중인 시스템에서 최신버전을 설치해주세요.
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+다음의 패키지 관리자를 사용해서 Starship을 설치할 수도 있습니다.
 
 | 리포지토리                                                    | 설명                                      |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -256,7 +256,7 @@ Alternatively, install Starship using any of the following package managers:
 
 Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
 
-Install Starship using any of the following package managers:
+다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
 | 리포지토리                                                                                        | 설명                                      |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -270,7 +270,7 @@ Install Starship using any of the following package managers:
 
 ### 2단계. 셸에 Starship 적용하기
 
-Configure your shell to initialize starship. Select yours from the list below:
+Starship 적용을 위해 셸을 구성해야 합니다. 아래의 리스트 중에 해당하는 것을 고르세요:
 
 <details>
 <summary>Bash</summary>
@@ -286,7 +286,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Cmd를 이용하려면 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 를 사용해야 합니다. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Cmd를 이용하려면 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) 를 사용해야 합니다. `%LocalAppData%\clink\starship.lua` 경로에 파일을 만들고 아래 내용으로 채우세요:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -303,7 +303,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+알림: Elvish v0.18 버전 이상에서만 지원됩니다.
 
 </details>
 
@@ -345,14 +345,14 @@ And add the following to the end of your Nushell configuration (find it by runni
 use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.78+ is supported
+알림: Nushell v0.78 버전 이상에서만 지원됩니다.
 
 </details>
 
 <details>
-<summary>PowerShell</summary>
+<summary>Powershell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+다음 내용을 PowerShell 설정파일 (찾으려면 `$PROFILE` 실행) 마지막 부분에 추가하세요:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -395,9 +395,9 @@ eval "$(starship init zsh)"
 
 ### 3단계. Starship 설정하기
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+새로운 쉘 인스턴스를 시작하면 아름다운 새 쉘 프롬프트를 볼 수 있습니다. 기본 설정에 만족한다면, 즐기세요!
 
-If you're looking to further customize Starship:
+Starship을 추가로 커스터마이징 하고싶다면:
 
 - **[Configuration](https://starship.rs/config/)** – 원하는대로 프롬프트를 수정할 수 있도록 Starship 설정을 배울 수 있습니다.
 
@@ -405,15 +405,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 기여하기
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+우리는 언제나 **기술 수준에 관계없이** 기여자를 찾고 있습니다! 프로젝트에 참여하고자 한다면, [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue) 를 보내보세요.
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+영어 이외의 언어에 유창하시다면, 저희 문서를 다른 언어로 최신화하는 데 도움을 주시면 대단히 감사하겠습니다. 번역에 도움을 주고자 한다면, [Starship Crowdin](https://translate.starship.rs/) 에서 기여할 수 있습니다.
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Starship에 기여하는데 관심이 있으시다면, [기여 가이드](https://github.com/starship/starship/blob/master/CONTRIBUTING.md)를 읽어주세요. 그리고 부담갖지 말고 [Discord 서버](https://discord.gg/8Jzqu3T) 에 들러 인사 한 마디 남겨보세요 👋
 
 ## 💭 영감받은 곳
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보세요. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – 우주 비행사를 위한 ZSH 프롬프트.
 
@@ -423,7 +423,7 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## ❤️ Sponsors
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+이 [프로젝트를 후원](https://github.com/sponsors/starship)하여 프로젝트를 지원해 주세요. 여러분의 웹사이트로 이동하는 링크가 걸린 이름 혹은 로고가 여기에 걸립니다.
 
 **Supporter Tier**
 
@@ -431,9 +431,9 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 <p align="center">
     <br>
-    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship rocket icon">
+    <img width="100" src="https://raw.githubusercontent.com/starship/starship/master/media/icon.png" alt="Starship 로켓 아이콘">
 </p>
 
 ## 📝라이선스
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-현재, [Starship 기여자](https://github.com/starship/starship/graphs/contributors).<br /> 이 프로젝트는 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 라이선스입니다.
