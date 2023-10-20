@@ -153,7 +153,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   আপনার Nushell env ফাইলের (Nushell এ `$nu.env-path` কমান্ডটি রান করে ফাইলটি খুঁজে বের করুন) শেষে নিম্নলিখিত লাইনগুলি যোগ করুন:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
