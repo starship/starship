@@ -166,7 +166,7 @@
 - **易用：**安裝快速 – 幾分鐘內即可開始使用。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -179,7 +179,7 @@
 
 ### 第一步 安裝 Starship
 
-Select your operating system from the list below to view installation instructions:
+瀏覽各系統的安裝指示
 
 <details>
 <summary>Android</summary>
@@ -270,7 +270,7 @@ Install Starship using any of the following package managers:
 
 ### 第二步 設定您的 shell 以啟用 Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+設定您的 shell 以啟用 Starship。 請從下列選單選取您的 shell：
 
 <details>
 <summary>Bash</summary>
@@ -286,7 +286,7 @@ eval "$(starship init bash)"
 <details>
 <summary>命令提示字元</summary>
 
-您需要在 Cmd 中使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+)。 Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+您需要在 Cmd 中使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+)。 在此路徑 `%LocalAppData%\clink\starship.lua` 建立一個檔案，並填入以下內容：
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -303,7 +303,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+注意：只支援 Elvish v0.18+ 以上的版本
 
 </details>
 
@@ -395,9 +395,9 @@ eval "$(starship init zsh)"
 
 ### 第三步 設定 Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+開啟一個新的 shell，您應該可以看到新的美麗 shell 提示字元。 若您對預設值感到滿意，盡情享受！
 
-If you're looking to further customize Starship:
+如果您想要更加客製化 Startship ：
 
 - **[設定](https://starship.rs/config/)**：學習如何設定 Starship 來微調提示字元的外觀
 
@@ -405,15 +405,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 貢獻
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+我們歡迎具有**各式各樣能力**的貢獻者！ 如果你正在尋找容易加入的方法，試試看標註為「[good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue)」的 issue。
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+如果您精通非英語語言，並能協助我們在文檔上的翻譯保持最新狀態，我們會非常感謝！ 如果你想要提供翻譯，可以到 [Starship Crowdin](https://translate.starship.rs/) 上提交您的翻譯。
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+如果你對貢獻 Starship 有興趣，請看我們的 [貢獻指南](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) 。 另外，請不用客氣加入我們的 [Discord 伺服器](https://discord.gg/8Jzqu3T) 並來問候一下。 👋
 
 ## 💭 發想來自
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+請看之前這些幫助我們創造 Starship 的前任作品。 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -423,9 +423,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## ❤️ 贊助我們
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+你可以[成爲一個贊助者](https://github.com/sponsors/starship)來支持這個專案！ 你的名字和頭像會在這裏顯示，並且會帶有一個前往你網站的鏈接。
 
-**Supporter Tier**
+**贊助者等級**
 
 - [後端](https://appwrite.io/)
 
@@ -436,4 +436,4 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 ## 📝 許可
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> 這個專案使用 [ISC](https://github.com/starship/starship/blob/master/LICENSE) 許可。
