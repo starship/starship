@@ -151,7 +151,7 @@
 
 <img
   src="https://raw.githubusercontent.com/starship/starship/master/media/demo.gif"
-  alt="Starship with iTerm2 and the Snazzy theme"
+  alt="Starship với iTerm2 and chủ đề Snazzy"
   width="50%"
   align="right"
  />
@@ -166,7 +166,7 @@
 - **Dễ dàng:** cài đặt nhanh chóng – bắt đầu sử dụng nó trong vài phút.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explore the Starship docs&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/config/"><strong>Khám phá tài liệu của Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>
@@ -179,12 +179,12 @@
 
 ### Bước 1. Cài Đặt Starship
 
-Select your operating system from the list below to view installation instructions:
+Chọn hệ điều hành của bạn trong danh sách bên dưới để xem hướng dẫn cài đặt:
 
 <details>
 <summary>Android</summary>
 
-Install Starship using any of the following package managers:
+Cài đặt Starship bằng một package manager bất kì:
 
 | Repository                                                                        | Instructions           |
 | --------------------------------------------------------------------------------- | ---------------------- |
@@ -195,7 +195,7 @@ Install Starship using any of the following package managers:
 <details>
 <summary>BSD</summary>
 
-Install Starship using any of the following package managers:
+Cài đặt Starship bằng một package manager bất kì:
 
 | Distribution | Repository                                               | Instructions                      |
 | ------------ | -------------------------------------------------------- | --------------------------------- |
@@ -208,13 +208,13 @@ Install Starship using any of the following package managers:
 <details>
 <summary>Linux</summary>
 
-Install the latest version for your system:
+Cài đặt phiên bản mới nhất cho hệ điều hành của bạn:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Hoặc là, cài đặt Starship bằng một package manager bất kì:
 
 | Distribution       | Repository                                                                                      | Instructions                                                                   |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -234,13 +234,13 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>macOS</summary>
 
-Install the latest version for your system:
+Cài đặt phiên bản mới nhất cho hệ điều hành của bạn:
 
 ```sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Alternatively, install Starship using any of the following package managers:
+Hoặc là, cài đặt Starship bằng một package manager bất kì:
 
 | Repository                                               | Instructions                            |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -254,9 +254,9 @@ Alternatively, install Starship using any of the following package managers:
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+Cài đặt phiên bản mới nhất cho hệ điều hành của bạn với MSI-installers từ [phần release](https://github.com/starship/starship/releases/latest).
 
-Install Starship using any of the following package managers:
+Cài đặt Starship bằng một package manager bất kì:
 
 | Repository                                                                                   | Instructions                            |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -270,7 +270,7 @@ Install Starship using any of the following package managers:
 
 ### Bước 2. Thiết lập shell của bạn để dùng Starship
 
-Configure your shell to initialize starship. Select yours from the list below:
+Cấu hình shell của bạn để chạy starship. Bạn có thể chọn từ danh sách bên dưới:
 
 <details>
 <summary>Bash</summary>
@@ -286,7 +286,7 @@ eval "$(starship init bash)"
 <details>
 <summary>Cmd</summary>
 
-Bạn cần phải dùng [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) với Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Bạn cần phải dùng [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) với Cmd. Tạo một file như đường dẫn `%LocalAppData%/clink/starship.lua` với nội dung như sau:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -303,7 +303,7 @@ Thêm đoạn sau vào cuối tệp tin `~/.elvish/rc.elv`:
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+Lưu ý: Chỉ hỗ trợ Elvish v0.18+
 
 </details>
 
@@ -332,7 +332,7 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Thêm đoạn code dưới đây vào cuối file Nushell env của bạn (Bạn có thể tìm đường dẫn tới file Nushell env bằng cách chạy `$nu.env-path` trong Nushell):
 
 ```sh
 mkdir ~/.cache/starship
@@ -345,14 +345,14 @@ Thêm đoạn code sau vào cuối file cấu hình Nushell (bạn có thể tì
 use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.78+ is supported
+Lưu ý: Chỉ hỗ trợ Nushell v0.78+
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Thêm đoạn code sau vào cuối file cấu hình PowerShell (bạn có thể tìm đường dẫn tới file cấu hình PowerShell bằng cách chạy câu lệnh `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -395,9 +395,9 @@ eval "$(starship init zsh)"
 
 ### Bước 3. Cấu hình Starship
 
-Start a new shell instance, and you should see your beautiful new shell prompt. If you're happy with the defaults, enjoy!
+Khởi tạo một shell mới, và bạn sẽ thấy một chiếc shell mới tinh, đẹp lung linh. Nếu bạn hài lòng với cấu hình mặc định thì giờ là lúc mà bạn nên tận hưởng chiếc shell mới của mình!
 
-If you're looking to further customize Starship:
+Nếu bạn muốn tùy chỉnh Starship nhiều hơn nữa:
 
 - **[Cấu hình](https://starship.rs/config/)** – học cách cấu hình Starship để tùy chỉnh prompt theo ý bạn
 
@@ -405,15 +405,15 @@ If you're looking to further customize Starship:
 
 ## 🤝 Đóng góp
 
-We are always looking for contributors of **all skill levels**! If you're looking to ease your way into the project, try out a [good first issue](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
+Chúng tôi luôn luôn tìm kiếm những cộng tác viên ở **tất cả các các mức độ về kĩ năng**! Nếu bạn đang tìm kiếm cách dễ dàng để tham gia vào dự án, thử một [good issue đầu tiên](https://github.com/starship/starship/labels/🌱%20good%20first%20issue).
 
-If you are fluent in a non-English language, we greatly appreciate any help keeping our docs translated and up-to-date in other languages. If you would like to help, translations can be contributed on the [Starship Crowdin](https://translate.starship.rs/).
+Nếu bạn thành thạo một ngôn ngữ không phải Tiếng Anh, chúng tôi đánh giá cao mọi sự giúp đỡ của bạn trong việc dịch tài liệu của chúng tôi và cập nhật các ngôn ngữ khác. Nếu bạn muốn giúp đỡ, những bản dịch có thể được đóng góp trên [Starship Crowdin](https://translate.starship.rs/).
 
-If you are interested in helping contribute to starship, please take a look at our [Contributing Guide](https://github.com/starship/starship/blob/master/CONTRIBUTING.md). Also, feel free to drop into our [Discord server](https://discord.gg/8Jzqu3T) and say hi. 👋
+Nếu bạn thích thú trong việc giúp đỡ đóng góp cho starship, xin hãy xem [Hướng dẫn đóng góp](https://github.com/starship/starship/blob/master/CONTRIBUTING.md) của chúng tôi. Ngoài ra, vui lòng truy cập vào [máy chủ Discord](https://discord.gg/8Jzqu3T) và nói xin chào. 👋
 
 ## Cảm hứng
 
-Please check out these previous works that helped inspire the creation of starship. 🙏
+Xin hãy xem qua những công việc này trước đây, những thứ đã giúp truyền cảm hứng để tạo ra starship. 🙏
 
 - **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
 
@@ -423,9 +423,9 @@ Please check out these previous works that helped inspire the creation of starsh
 
 ## Tài trợ
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+Hỗ trợ project này bằng việc [trở thành nhà tài trợ](https://github.com/sponsors/starship). Tên hoặc logo của nhà tài trợ sẽ được hiển thị với một liên kết dẫn tới trang web của họ.
 
-**Supporter Tier**
+**Nhà tài trợ ủng hộ**
 
 - [Appwrite](https://appwrite.io/)
 
@@ -436,4 +436,4 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 ## 📝 Giấy phép
 
-Copyright © 2019-present, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) licensed.
+Bản quyền © 2019-nay, [Starship Contributors](https://github.com/starship/starship/graphs/contributors).<br /> Dự án này được [ISC](https://github.com/starship/starship/blob/master/LICENSE) cấp phép.
