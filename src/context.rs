@@ -868,6 +868,9 @@ pub struct Properties {
     /// The number of currently running jobs
     #[clap(short, long, default_value_t, value_parser=parse_jobs)]
     pub jobs: i64,
+    /// The list of keywords in the command line buffer
+    #[clap(long, default_value = "", value_delimiter = ' ')]
+    pub keywords: Vec<String>,
 }
 
 impl Default for Properties {
@@ -881,6 +884,7 @@ impl Default for Properties {
             cmd_duration: None,
             keymap: "viins".to_string(),
             jobs: 0,
+            keywords: Vec::new(),
         }
     }
 }
