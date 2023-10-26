@@ -89,6 +89,7 @@ pub mod v;
 pub mod vagrant;
 pub mod vcsh;
 pub mod zig;
+pub mod typst;
 
 pub use starship_root::*;
 
@@ -268,6 +269,8 @@ pub struct FullConfig<'a> {
     terraform: terraform::TerraformConfig<'a>,
     #[serde(borrow)]
     time: time::TimeConfig<'a>,
+    #[serde(borrow)]
+    typst: typst::TypstConfig<'a>,
     #[serde(borrow)]
     username: username::UsernameConfig<'a>,
     #[serde(borrow)]
