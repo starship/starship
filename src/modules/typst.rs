@@ -56,10 +56,40 @@ fn get_typst_config(context: &Context) -> Option<String> {
             .trim()
             .to_string()
             .as_str()[6..11]
+            .trim()
             .to_string(),
     )
 }
 
 fn get_version(context: &Context) -> Option<String> {
     get_typst_config(context)
+}
+#[cfg(test)]
+mod tests {
+    use crate::test::ModuleRenderer;
+    use nu_ansi_term::Color;
+    use std::fs::File;
+    use std::io;
+    #[test]
+    fn read_typst_not_present() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("typst").path(dir.path()).collect();
+
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn read_typst_present() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+
+        File::create(dir.path().join("test.typ"))?.sync_all()?;
+
+        let actual = ModuleRenderer::new("typst").path(dir.path()).collect();
+        let expected = Some(format!("via {}", Color::LightBlue.paint("\u{0074}\u{0308} 0.8.0 ")));
+        assert_eq!(expected, actual);
+        dir.close()
+    }
 }

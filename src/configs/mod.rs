@@ -84,12 +84,12 @@ pub mod sudo;
 pub mod swift;
 pub mod terraform;
 pub mod time;
+pub mod typst;
 pub mod username;
 pub mod v;
 pub mod vagrant;
 pub mod vcsh;
 pub mod zig;
-pub mod typst;
 
 pub use starship_root::*;
 
