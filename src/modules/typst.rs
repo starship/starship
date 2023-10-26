@@ -88,7 +88,10 @@ mod tests {
         File::create(dir.path().join("test.typ"))?.sync_all()?;
 
         let actual = ModuleRenderer::new("typst").path(dir.path()).collect();
-        let expected = Some(format!("via {}", Color::LightBlue.paint("\u{0074}\u{0308} 0.8.0 ")));
+        let expected = Some(format!(
+            "via {}",
+            Color::Rgb(0, 147, 167).bold().paint("𝐭 0.8.0 ")
+        ));
         assert_eq!(expected, actual);
         dir.close()
     }
