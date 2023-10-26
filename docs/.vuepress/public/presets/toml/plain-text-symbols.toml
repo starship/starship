@@ -209,6 +209,9 @@ symbol = "sudo "
 [swift]
 symbol = "swift "
 
+[typst]
+symbol = "typst "
+
 [terraform]
 symbol = "terraform "
 

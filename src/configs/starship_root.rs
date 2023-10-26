@@ -91,6 +91,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "solidity",
     "swift",
     "terraform",
+    "typst",
     "vlang",
     "vagrant",
     "zig",

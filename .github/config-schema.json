@@ -1671,6 +1671,27 @@
         }
       ]
     },
+    "typst": {
+      "default": {
+        "detect_extensions": [
+          "typ"
+        ],
+        "detect_files": [
+          "template.typ"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold #0093A7",
+        "symbol": "t ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/TypstConfig"
+        }
+      ]
+    },
     "username": {
       "default": {
         "disabled": false,
@@ -5705,6 +5726,57 @@
         "time_range": {
           "default": "-",
           "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TypstConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "t ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold #0093A7",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "typ"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "template.typ"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

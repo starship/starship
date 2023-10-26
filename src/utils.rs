@@ -341,6 +341,11 @@ WebAssembly: unavailable
             stdout: String::from("default\n"),
             stderr: String::default(),
         }),
+        "typst --version" => Some(CommandOutput {
+            stdout: String::from("typst 0.10 (360cc9b9)"),
+            stderr: String::default(),
+        }),
+
         "esy ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
