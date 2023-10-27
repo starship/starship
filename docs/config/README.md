@@ -1581,7 +1581,7 @@ By default the module will be shown if the current directory contains `fly.toml`
 | ---------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
 | `format`         | `'via [$symbol($app )($primary_region )]($style)'` | The format for the module.                                                |
 | `version_format` | `'v${raw}'`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`         | `'🎈 '`                                            | A format string representing the symbol of Deno                           |
+| `symbol`         | `'🎈 '`                                            | A format string representing the symbol of Fly                           |
 | `style`          | `'purple bold'`                                    | The style for the module.                                                 |
 
 ### Variables
