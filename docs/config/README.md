@@ -1569,6 +1569,7 @@ Produces a prompt that looks like:
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
 ```
+
 ## Fly
 
 The `fly` module shows you your currently installed version of [Fly](https://fly.io/).
@@ -1576,20 +1577,20 @@ By default the module will be shown if the current directory contains `fly.toml`
 
 ### Options
 
-| Option              | Default                                                                 | Description                                                               |
-| ------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($app )($primary_region )]($style)'`                      | The format for the module.                                                |
-| `version_format`    | `'v${raw}'`                                                             | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'🎈 '`                                                                 | A format string representing the symbol of Deno                           |
-| `style`             | `'purple bold'`                                                         | The style for the module.                                                 |
+| Option           | Default                                            | Description                                                               |
+| ---------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
+| `format`         | `'via [$symbol($app )($primary_region )]($style)'` | The format for the module.                                                |
+| `version_format` | `'v${raw}'`                                        | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`         | `'🎈 '`                                            | A format string representing the symbol of Deno                           |
+| `style`          | `'purple bold'`                                    | The style for the module.                                                 |
 
 ### Variables
 
-| Variable        | Example  | Description                                                                   |
-| --------------- | -------- | ----------------------------------------------------------------------------- |
-| version         | `v1.8.3` | The version of `fly`                                                          |
-| app             |          | The name of your app at fly.io (read from the fly.toml config file)           |
-| primary_region  |          | The primary region of your app at fly.io (read from the fly.toml config file) |
+| Variable       | Example  | Description                                                                   |
+| -------------- | -------- | ----------------------------------------------------------------------------- |
+| version        | `v1.8.3` | The version of `fly`                                                          |
+| app            |          | The name of your app at fly.io (read from the fly.toml config file)           |
+| primary_region |          | The primary region of your app at fly.io (read from the fly.toml config file) |
 
 ### Example
 
