@@ -1572,7 +1572,7 @@ AA -------------------------------------------- BB -----------------------------
 
 ## Fly
 
-The `fly` module shows you your currently installed version of [Fly](https://fly.io/).
+The `fly` module shows the currently installed version of [Fly CLI](https://fly.io/docs/flyctl/).
 By default the module will be shown if the current directory contains `fly.toml` configuration file
 
 ### Options
