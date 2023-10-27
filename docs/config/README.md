@@ -282,6 +282,7 @@ $cobol\
 $daml\
 $dart\
 $deno\
+$fly\
 $dotnet\
 $elixir\
 $elm\
