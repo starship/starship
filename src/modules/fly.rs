@@ -10,7 +10,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let config = FlyConfig::try_load(module.config);
     let is_fly_project = context
         .try_begin_scan()?
-        .set_files(&vec!["fly.toml"])
+        .set_files(&["fly.toml"])
         .is_match();
 
     if !is_fly_project {
