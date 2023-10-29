@@ -3814,7 +3814,7 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `fish_indicator`       | `'fsh'`                   | A format string used to represent fish.                      |
 | `zsh_indicator`        | `'zsh'`                   | A format string used to represent zsh.                       |
 | `powershell_indicator` | `'psh'`                   | A format string used to represent powershell.                |
-| `pwsh_indicator`       | `'psh'`                   | A format string used to represent pwsh.                      |
+| `pwsh_indicator`       | `''`                      | A format string used to represent pwsh.                      |
 | `ion_indicator`        | `'ion'`                   | A format string used to represent ion.                       |
 | `elvish_indicator`     | `'esh'`                   | A format string used to represent elvish.                    |
 | `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                      |
@@ -3825,6 +3825,8 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `format`               | `'[$indicator]($style) '` | The format for the module.                                   |
 | `style`                | `'white bold'`            | The style for the module.                                    |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
+
+`pwsh_indicator` is empty by default and falls back to using `powershell_indicator`.
 
 ### Variables
 

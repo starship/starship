@@ -232,6 +232,21 @@ mod tests {
     }
 
     #[test]
+    fn test_pwsh_custom_format_fallback() {
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("pwsh")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Pwsh)
+            .config(toml::toml! {
+                [shell]
+                powershell_indicator = "[pwsh](bold cyan)"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn test_ion_default_format() {
         let expected = Some(format!("{} ", Color::White.bold().paint("ion")));
         let actual = ModuleRenderer::new("shell")
