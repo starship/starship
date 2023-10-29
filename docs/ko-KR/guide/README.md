@@ -156,7 +156,7 @@
   align="right"
  />
 
-**간결하고 화끈하게 빠르며 무제한으로 커스터마이징이 가능한 프롬프트. 어떤 쉘에서든 사용할 수 있습니다!**
+**아무 셸에나 적용할 수 있는 간결하고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!**
 
 - ** 빠름:** 빠릅니다. – _정말_ 빠릅니다.  🚀
 - ** 커스텀 가능:** 프롬프트의 모든 부분을 커스텀 할 수 있습니다.
@@ -254,7 +254,7 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
-Install the latest version for your system with the MSI-installers from the [releases section](https://github.com/starship/starship/releases/latest).
+[releases 섹션](https://github.com/starship/starship/releases/latest)에서 MSI 인스톨러를 받아 실행하여 시스템에 맞는 최신 버전을 설치하세요.
 
 다음 패키지 관리자 중 하나를 사용해 Starship 을 설치하세요:
 
@@ -332,14 +332,14 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+다음 내용을 Nushell env 파일 (찾으려면 Nushell에서 `$nu.env-path` 실행) 마지막 부분에 추가하세요:
 
 ```sh
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
-And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+다음 내용을 Nushell 설정 파일 (찾으려면 Nushell에서 `$nu.config-path` 실행) 마지막 부분에 추가하세요:
 
 ```sh
 use ~/.cache/starship/init.nu
@@ -421,11 +421,11 @@ Starship 을 만드는 데에 영감이 되었던 이전 작업들도 살펴보�
 
 - **[reujab/silver](https://github.com/reujab/silver)** – 아이콘이 있는 커스텀 가능한 powerline 계열 크로스-쉘 프롬프트.
 
-## ❤️ Sponsors
+## ❤️ 스폰서
 
 이 [프로젝트를 후원](https://github.com/sponsors/starship)하여 프로젝트를 지원해 주세요. 여러분의 웹사이트로 이동하는 링크가 걸린 이름 혹은 로고가 여기에 걸립니다.
 
-**Supporter Tier**
+**후원자 티어**
 
 - [Appwrite](https://appwrite.io/)
 
