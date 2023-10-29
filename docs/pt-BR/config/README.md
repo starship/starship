@@ -361,7 +361,7 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | `region_aliases`    | `{}`                                                                  | Tabela de aleases de regiões a serem exibidas, além do nome da AWS.                                                           |
 | `profile_aliases`   | `{}`                                                                  | Tabela de apelidos de perfil a serem exibidos além do nome da AWS.                                                            |
 | `style`             | `'bold yellow'`                                                       | O estilo do módulo.                                                                                                           |
-| `expiration_symbol` | `X`                                                                   | O simbolo exibido quando as credenciais temporárias estão expiradas.                                                          |
+| `expiration_symbol` | `'X'`                                                                 | O simbolo exibido quando as credenciais temporárias estão expiradas.                                                          |
 | `disabled`          | `false`                                                               | Desabilita o módulo `AWS`.                                                                                                    |
 | `force_display`     | `false`                                                               | Se `true` exibe as informações mesmo que `credentials`, `credential_process` ou `sso_start_url` não tenham sido configurados. |
 
@@ -621,17 +621,17 @@ O módulo `c` mostra algumas informações sobre o seu compilador de C. Por padr
 
 ### Opções
 
-| Opções              | Padrão                                                                      | Descrição                                                                           |
-| ------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                | A string de formato do módulo.                                                      |
-| `version_format`    | `'v${raw}'`                                                                 | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'C '`                                                                      | O símbolo utilizado antes de exibir os detalhes do compilador                       |
-| `detect_extensions` | `['c', 'h']`                                                                | Quais extensões devem ativar este módulo.                                           |
-| `detect_files`      | `[]`                                                                        | Quais nomes de arquivos devem ativar este módulo.                                   |
-| `detect_folders`    | `[]`                                                                        | Quais pastas devem ativar este módulo.                                              |
-| `commands`          | [ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ] | Como detectar qual é o compilador                                                   |
-| `style`             | `'bold 149'`                                                                | O estilo do módulo.                                                                 |
-| `disabled`          | `false`                                                                     | Desabilita o módulo `c`.                                                            |
+| Opções              | Padrão                                                                        | Descrição                                                                           |
+| ------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | A string de formato do módulo.                                                      |
+| `version_format`    | `'v${raw}'`                                                                   | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C '`                                                                        | O símbolo utilizado antes de exibir os detalhes do compilador                       |
+| `detect_extensions` | `['c', 'h']`                                                                  | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `[]`                                                                          | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `detect_folders`    | `[]`                                                                          | Quais pastas devem ativar este módulo.                                              |
+| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | Como detectar qual é o compilador                                                   |
+| `style`             | `'bold 149'`                                                                  | O estilo do módulo.                                                                 |
+| `disabled`          | `false`                                                                       | Desabilita o módulo `c`.                                                            |
 
 ### Variáveis
 
@@ -1436,7 +1436,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel.                            |
 | `style`             | `'bold green'`                       | O estilo do módulo.                                                                 |
-| `detect_extensions` | `[fnl]`                              | Quais extensões devem ativar este módulo.                                           |
+| `detect_extensions` | `['fnl']`                            | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                   |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                              |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                                       |
@@ -1967,8 +1967,8 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | Opções     | Padrão                     | Descrição                                              |
 | ---------- | -------------------------- | ------------------------------------------------------ |
 | `format`   | `'via [$symbol]($style) '` | O formato do módulo.                                   |
-| `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
-| `style`    | `"yellow bold"`            | O estilo do módulo.                                    |
+| `symbol`   | `'🐃 '`                     | A format string representing the symbol of guix-shell. |
+| `style`    | `'yellow bold'`            | O estilo do módulo.                                    |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
 ### Variáveis
@@ -2005,13 +2005,13 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 | Opções              | Padrão                               | Descrição                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                |
-| `version_format`    | `"v${raw}"`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                                  |
-| `detect_extensions` | `["gradle", "gradle.kts"]`           | Quais extensões devem ativar este módulo.                                           |
+| `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
+| `version_format`    | `'v${raw}'`                          | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.                                  |
+| `detect_extensions` | `['gradle', 'gradle.kts']`           | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                   |
-| `detect_folders`    | `["gradle"]`                         | Quais pastas devem ativar este módulo.                                              |
-| `style`             | `"bold bright-cyan"`                 | O estilo do módulo.                                                                 |
+| `detect_folders`    | `['gradle']`                         | Quais pastas devem ativar este módulo.                                              |
+| `style`             | `'bold bright-cyan'`                 | O estilo do módulo.                                                                 |
 | `disabled`          | `false`                              | Disables the `gradle` module.                                                       |
 | `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                               |
 
@@ -2070,13 +2070,13 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 | Opções              | Padrão                                                                                          | Descrição                                                                           |
 | ------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"`                                                            | O formato do módulo.                                                                |
-| `version_format`    | `"v${raw}"`                                                                                     | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["hx", "hxml"]`                                                                                | Quais extensões devem ativar este módulo.                                           |
-| `detect_files`      | `["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"]` | Quais nomes de arquivos devem ativar este módulo.                                   |
-| `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | Quais pastas devem ativar este módulo.                                              |
-| `symbol`            | `"⌘ "`                                                                                          | O formato de string que representa o simbolo do Helm.                               |
-| `style`             | `"bold fg:202"`                                                                                 | O estilo do módulo.                                                                 |
+| `format`            | `'via [$symbol($version )]($style)'`                                                            | O formato do módulo.                                                                |
+| `version_format`    | `'v${raw}'`                                                                                     | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['hx', 'hxml']`                                                                                | Quais extensões devem ativar este módulo.                                           |
+| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | Quais nomes de arquivos devem ativar este módulo.                                   |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Quais pastas devem ativar este módulo.                                              |
+| `symbol`            | `'⌘ '`                                                                                          | O formato de string que representa o simbolo do Helm.                               |
+| `style`             | `'bold fg:202'`                                                                                 | O estilo do módulo.                                                                 |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                         |
 
 ### Variáveis
@@ -2809,7 +2809,7 @@ O módulo `nodejs` exibe a versão atual instalada do [Node.js](https://nodejs.o
 | `detect_folders`    | `['node_modules']`                         | Quais pastas devem ativar este módulo.                                                                   |
 | `style`             | `'bold green'`                             | O estilo do módulo.                                                                                      |
 | `disabled`          | `false`                                    | Desabilita o módulo `nodejs`.                                                                            |
-| `not_capable_style` | `bold red`                                 | O estilo para o módulo quando a propriedade engine no package.json não coincide com a versão do Node.js. |
+| `not_capable_style` | `'bold red'`                               | O estilo para o módulo quando a propriedade engine no package.json não coincide com a versão do Node.js. |
 
 ### Variáveis
 
@@ -2969,8 +2969,8 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 
 | Opções     | Padrão                | Descrição                                              |
 | ---------- | --------------------- | ------------------------------------------------------ |
-| `format`   | `"[$symbol]($style)"` | O formato do módulo.                                   |
-| `style`    | `"bold white"`        | O estilo do módulo.                                    |
+| `format`   | `'[$symbol]($style)'` | O formato do módulo.                                   |
+| `style`    | `'bold white'`        | O estilo do módulo.                                    |
 | `disabled` | `true`                | Disables the `os` module.                              |
 | `symbols`  |                       | A table that maps each operating system to its symbol. |
 
@@ -3324,7 +3324,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 | `symbol`             | `'🐍 '`                                                                                                       | Uma string que representa o simbolo do Python                                       |
 | `style`              | `'yellow bold'`                                                                                              | O estilo do módulo.                                                                 |
 | `pyenv_version_name` | `false`                                                                                                      | Usa pyenv para pegar a versão do Python                                             |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefixo antes da versão do pyenv, apenas usado se pyenv for usado                   |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefixo antes da versão do pyenv, apenas usado se pyenv for usado                   |
 | `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configura o binário python que o Starship vai executar para obter a versão.         |
 | `detect_extensions`  | `['py']`                                                                                                     | Quais extensões devem acionar este módulo                                           |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | []                                                                                  |
@@ -3773,14 +3773,14 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 
 | Opções              | Padrão                               | Descrição                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | O formato do módulo.                                                                |
-| `version_format`    | `"v${major}.${minor}.${patch}"`      | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                                 |
-| `compiler          | ["solc"]                             | The default compiler for Solidity.                                                  |
-| `detect_extensions` | `["sol"]`                            | Quais extensões devem ativar este módulo.                                           |
+| `format`            | `'via [$symbol($version )]($style)'` | O formato do módulo.                                                                |
+| `version_format`    | `'v${major}.${minor}.${patch}'`      | A versão formatada. As variáveis disponíveis são `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'S '`                               | A format string representing the symbol of Solidity                                 |
+| `compiler          | ['solc']                             | The default compiler for Solidity.                                                  |
+| `detect_extensions` | `['sol']`                            | Quais extensões devem ativar este módulo.                                           |
 | `detect_files`      | `[]`                                 | Quais nomes de arquivos devem ativar este módulo.                                   |
 | `detect_folders`    | `[]`                                 | Quais pastas devem ativar este módulo.                                              |
-| `style`             | `"bold blue"`                        | O estilo do módulo.                                                                 |
+| `style`             | `'bold blue'`                        | O estilo do módulo.                                                                 |
 | `disabled`          | `false`                              | Disables this module.                                                               |
 
 ### Variáveis
