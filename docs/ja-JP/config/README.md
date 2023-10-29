@@ -361,7 +361,7 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | `region_aliases`    | `{}`                                                                  | AWS名に加えて表示するリージョンのエイリアスです。                                                           |
 | `profile_aliases`   | `{}`                                                                  | AWS名に加えて表示するプロファイルのエイリアスです。                                                          |
 | `style`             | `'bold yellow'`                                                       | モジュールのスタイルです。                                                                        |
-| `expiration_symbol` | `X`                                                                   | この記号は一時的な資格情報が有効期限切れの場合に表示されます。                                                      |
+| `expiration_symbol` | `'X'`                                                                 | この記号は一時的な資格情報が有効期限切れの場合に表示されます。                                                      |
 | `disabled`          | `false`                                                               | `aws`モジュールを無効にします。                                                                   |
 | `force_display`     | `false`                                                               | `true`の場合、`credentials`、`credential_process`または`sso_start_url`が設定されていない場合でも情報を表示します。 |
 
@@ -621,17 +621,17 @@ format = 'via [🍔 $version](bold green) '
 
 ### オプション
 
-| オプション               | デフォルト                                                                       | 説明                                                     |
-| ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                | モジュールのフォーマット文字列。                                       |
-| `version_format`    | `'v${raw}'`                                                                 | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `'C '`                                                                      | コンパイラの詳細を表示する前に使用される記号です。                              |
-| `detect_extensions` | `['c', 'h']`                                                                | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `[]`                                                                        | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[]`                                                                        | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `commands`          | [ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ] | コンパイラを検出する方法                                           |
-| `style`             | `'bold 149'`                                                                | モジュールのスタイルです。                                          |
-| `disabled`          | `false`                                                                     | `c`モジュールを無効にします。                                       |
+| オプション               | デフォルト                                                                         | 説明                                                     |
+| ------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | モジュールのフォーマット文字列。                                       |
+| `version_format`    | `'v${raw}'`                                                                   | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'C '`                                                                        | コンパイラの詳細を表示する前に使用される記号です。                              |
+| `detect_extensions` | `['c', 'h']`                                                                  | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `[]`                                                                          | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `[]`                                                                          | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | コンパイラを検出する方法                                           |
+| `style`             | `'bold 149'`                                                                  | モジュールのスタイルです。                                          |
+| `disabled`          | `false`                                                                       | `c`モジュールを無効にします。                                       |
 
 ### 変数
 
@@ -1436,7 +1436,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。   |
 | `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel. |
 | `style`             | `'bold green'`                       | モジュールのスタイルです。                                            |
-| `detect_extensions` | `[fnl]`                              | どの拡張子がこのモジュールをアクティブにするか                                  |
+| `detect_extensions` | `['fnl']`                            | どの拡張子がこのモジュールをアクティブにするか                                  |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                                |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                                |
 | `disabled`          | `false`                              | Disables the `fennel` module.                            |
@@ -1967,8 +1967,8 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | オプション      | デフォルト                      | 説明                                                     |
 | ---------- | -------------------------- | ------------------------------------------------------ |
 | `format`   | `'via [$symbol]($style) '` | module のフォーマットです。                                      |
-| `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
-| `style`    | `"yellow bold"`            | モジュールのスタイルです。                                          |
+| `symbol`   | `'🐃 '`                     | A format string representing the symbol of guix-shell. |
+| `style`    | `'yellow bold'`            | モジュールのスタイルです。                                          |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
 ### 変数
@@ -2005,13 +2005,13 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 | オプション               | デフォルト                                | 説明                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
-| `version_format`    | `"v${raw}"`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.     |
-| `detect_extensions` | `["gradle", "gradle.kts"]`           | どの拡張子がこのモジュールをアクティブにするか                                |
+| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                          | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.     |
+| `detect_extensions` | `['gradle', 'gradle.kts']`           | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `["gradle"]`                         | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `"bold bright-cyan"`                 | モジュールのスタイルです。                                          |
+| `detect_folders`    | `['gradle']`                         | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `style`             | `'bold bright-cyan'`                 | モジュールのスタイルです。                                          |
 | `disabled`          | `false`                              | Disables the `gradle` module.                          |
 | `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.  |
 
@@ -2070,13 +2070,13 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 | オプション               | デフォルト                                                                                           | 説明                                                     |
 | ------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"`                                                            | module のフォーマットです。                                      |
-| `version_format`    | `"v${raw}"`                                                                                     | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `detect_extensions` | `["hx", "hxml"]`                                                                                | どの拡張子がこのモジュールをアクティブにするか                                |
-| `detect_files`      | `["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"]` | どのファイル名がこのモジュールをアクティブにするか                              |
-| `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `symbol`            | `"⌘ "`                                                                                          | A format string representing the symbol of Helm.       |
-| `style`             | `"bold fg:202"`                                                                                 | モジュールのスタイルです。                                          |
+| `format`            | `'via [$symbol($version )]($style)'`                                                            | module のフォーマットです。                                      |
+| `version_format`    | `'v${raw}'`                                                                                     | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `detect_extensions` | `['hx', 'hxml']`                                                                                | どの拡張子がこのモジュールをアクティブにするか                                |
+| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | どのファイル名がこのモジュールをアクティブにするか                              |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | どのフォルダーがこのモジュールをアクティブにするか                              |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Helm.       |
+| `style`             | `'bold fg:202'`                                                                                 | モジュールのスタイルです。                                          |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                            |
 
 ### 変数
@@ -2809,7 +2809,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 | `detect_folders`    | `['node_modules']`                         | どのフォルダーがこのモジュールをアクティブにするか                                                                             |
 | `style`             | `'bold green'`                             | モジュールのスタイルです。                                                                                         |
 | `disabled`          | `false`                                    | `nodejs`モジュールを無効にします。                                                                                 |
-| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
+| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### 変数
 
@@ -2969,8 +2969,8 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 
 | オプション      | デフォルト                 | 説明                                                     |
 | ---------- | --------------------- | ------------------------------------------------------ |
-| `format`   | `"[$symbol]($style)"` | module のフォーマットです。                                      |
-| `style`    | `"bold white"`        | モジュールのスタイルです。                                          |
+| `format`   | `'[$symbol]($style)'` | module のフォーマットです。                                      |
+| `style`    | `'bold white'`        | モジュールのスタイルです。                                          |
 | `disabled` | `true`                | Disables the `os` module.                              |
 | `symbols`  |                       | A table that maps each operating system to its symbol. |
 
@@ -3324,7 +3324,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 | `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `'yellow bold'`                                                                                              | モジュールのスタイルです。                                                                          |
 | `pyenv_version_name` | `false`                                                                                                      | pyenvを使用してPythonバージョンを取得します                                                            |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `['py']`                                                                                                     | どの拡張子がこのモジュールをアクティブにするか                                                                |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | どのファイル名がこのモジュールをアクティブにするか                                                              |
@@ -3773,14 +3773,14 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 
 | オプション               | デフォルト                                | 説明                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------ |
-| `format`            | `"via [$symbol($version )]($style)"` | module のフォーマットです。                                      |
-| `version_format`    | `"v${major}.${minor}.${patch}"`      | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
-| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity    |
-| `compiler          | ["solc"]                             | The default compiler for Solidity.                     |
-| `detect_extensions` | `["sol"]`                            | どの拡張子がこのモジュールをアクティブにするか                                |
+| `format`            | `'via [$symbol($version )]($style)'` | module のフォーマットです。                                      |
+| `version_format`    | `'v${major}.${minor}.${patch}'`      | バージョンのフォーマット。 使用可能な変数は`raw`、`major`、`minor`と`patch`です。 |
+| `symbol`            | `'S '`                               | A format string representing the symbol of Solidity    |
+| `compiler          | ['solc']                             | The default compiler for Solidity.                     |
+| `detect_extensions` | `['sol']`                            | どの拡張子がこのモジュールをアクティブにするか                                |
 | `detect_files`      | `[]`                                 | どのファイル名がこのモジュールをアクティブにするか                              |
 | `detect_folders`    | `[]`                                 | どのフォルダーがこのモジュールをアクティブにするか                              |
-| `style`             | `"bold blue"`                        | モジュールのスタイルです。                                          |
+| `style`             | `'bold blue'`                        | モジュールのスタイルです。                                          |
 | `disabled`          | `false`                              | Disables this module.                                  |
 
 ### 変数
