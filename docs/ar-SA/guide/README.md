@@ -20,7 +20,7 @@
   <a href="https://repology.org/project/starship/versions"
     ><img
       src="https://img.shields.io/repology/repositories/starship?label=in%20repositories&style=flat-square"
-      alt="Packaging status" /></a
+      alt="واقع التغليف" /></a
 ><br />
   <a href="https://discord.gg/starship"
     ><img
@@ -87,7 +87,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
-      alt="Italiano"
+      alt="الإيطالية"
  /></a>
   &nbsp;
   <a
