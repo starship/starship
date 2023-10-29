@@ -361,7 +361,7 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | `region_aliases`    | `{}`                                                                  | Tabel alias dari region yang ditampilan selain nama AWS.                                                    |
 | `profile_aliases`   | `{}`                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                       | Gaya penataan untuk modul.                                                                                  |
-| `expiration_symbol` | `X`                                                                   | Simbol ditampilkan ketika temporer kredensial telah kedaluwarsa.                                            |
+| `expiration_symbol` | `'X'`                                                                 | Simbol ditampilkan ketika temporer kredensial telah kedaluwarsa.                                            |
 | `disabled`          | `false`                                                               | Menonaktifkan modul `AWS`.                                                                                  |
 | `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
@@ -621,17 +621,17 @@ The `c` module shows some information about your C compiler. By default the modu
 
 ### Opsi
 
-| Opsi                | Bawaan                                                                      | Deskripsi                                                                           |
-| ------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                | The format string for the module.                                                   |
-| `version_format`    | `'v${raw}'`                                                                 | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'C '`                                                                      | The symbol used before displaying the compiler details                              |
-| `detect_extensions` | `['c', 'h']`                                                                | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `[]`                                                                        | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                                                        | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `commands`          | [ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ] | How to detect what the compiler is                                                  |
-| `style`             | `'bold 149'`                                                                | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                                                            |
+| Opsi                | Bawaan                                                                        | Deskripsi                                                                           |
+| ------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | The format string for the module.                                                   |
+| `version_format`    | `'v${raw}'`                                                                   | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C '`                                                                        | The symbol used before displaying the compiler details                              |
+| `detect_extensions` | `['c', 'h']`                                                                  | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `[]`                                                                          | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                                                          | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | How to detect what the compiler is                                                  |
+| `style`             | `'bold 149'`                                                                  | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                                                       | Disables the `c` module.                                                            |
 
 ### Variabel
 
@@ -1436,7 +1436,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel.                            |
 | `style`             | `'bold green'`                       | Gaya penataan untuk modul.                                                          |
-| `detect_extensions` | `[fnl]`                              | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_extensions` | `['fnl']`                            | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                                       |
@@ -1967,8 +1967,8 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 | Opsi       | Bawaan                     | Deskripsi                                              |
 | ---------- | -------------------------- | ------------------------------------------------------ |
 | `format`   | `'via [$symbol]($style) '` | Format dari modul.                                     |
-| `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
-| `style`    | `"yellow bold"`            | Gaya penataan untuk modul.                             |
+| `symbol`   | `'🐃 '`                     | A format string representing the symbol of guix-shell. |
+| `style`    | `'yellow bold'`            | Gaya penataan untuk modul.                             |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
 ### Variabel
@@ -2005,13 +2005,13 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `fromat`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                  |
-| `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                                  |
-| `detect_extensions` | `["gradle", "gradle.kts"]`           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.                                  |
+| `detect_extensions` | `['gradle', 'gradle.kts']`           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `["gradle"]`                         | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `"bold bright-cyan"`                 | Gaya penataan untuk modul.                                                          |
+| `detect_folders`    | `['gradle']`                         | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `'bold bright-cyan'`                 | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                              | Disables the `gradle` module.                                                       |
 | `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                               |
 
@@ -2070,13 +2070,13 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 | Opsi                | Bawaan                                                                                          | Deskripsi                                                                           |
 | ------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `fromat`            | `"via [$symbol($version )]($style)"`                                                            | Format dari modul.                                                                  |
-| `version_format`    | `"v${raw}"`                                                                                     | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["hx", "hxml"]`                                                                                | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `symbol`            | `"⌘ "`                                                                                          | A format string representing the symbol of Helm.                                    |
-| `style`             | `"bold fg:202"`                                                                                 | Gaya penataan untuk modul.                                                          |
+| `fromat`            | `'via [$symbol($version )]($style)'`                                                            | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                                                                                     | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['hx', 'hxml']`                                                                                | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Helm.                                    |
+| `style`             | `'bold fg:202'`                                                                                 | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                         |
 
 ### Variabel
@@ -2809,7 +2809,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | `detect_folders`    | `['node_modules']`                         | Folder mana yang sebaiknya memicul modul ini.                                                         |
 | `style`             | `'bold green'`                             | Gaya penataan untuk modul.                                                                            |
 | `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
+| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variabel
 
@@ -2969,8 +2969,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Opsi       | Bawaan                | Deskripsi                                              |
 | ---------- | --------------------- | ------------------------------------------------------ |
-| `fromat`   | `"[$symbol]($style)"` | Format dari modul.                                     |
-| `style`    | `"bold white"`        | Gaya penataan untuk modul.                             |
+| `fromat`   | `'[$symbol]($style)'` | Format dari modul.                                     |
+| `style`    | `'bold white'`        | Gaya penataan untuk modul.                             |
 | `disabled` | `true`                | Disables the `os` module.                              |
 | `symbols`  |                       | A table that maps each operating system to its symbol. |
 
@@ -3324,7 +3324,7 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 | `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `'yellow bold'`                                                                                              | Gaya penataan untuk modul.                                                             |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `['py']`                                                                                                     | Ekstensi mana yang sebaiknya memicu modul ini                                          |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | filenames mana yang sebaiknya memicu modul ini                                         |
@@ -3773,14 +3773,14 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `fromat`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                  |
-| `version_format`    | `"v${major}.${minor}.${patch}"`      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                                 |
-| `compiler          | ["solc"]                             | The default compiler for Solidity.                                                  |
-| `detect_extensions` | `["sol"]`                            | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `version_format`    | `'v${major}.${minor}.${patch}'`      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'S '`                               | A format string representing the symbol of Solidity                                 |
+| `compiler          | ['solc']                             | The default compiler for Solidity.                                                  |
+| `detect_extensions` | `['sol']`                            | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `"bold blue"`                        | Gaya penataan untuk modul.                                                          |
+| `style`             | `'bold blue'`                        | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                              | Disables this module.                                                               |
 
 ### Variabel
