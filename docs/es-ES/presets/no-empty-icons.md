@@ -2,7 +2,7 @@
 
 # Preselección de iconos no vacíos
 
-Si se identifican archivos del conjunto de herramientas, entonces se mostrara el ícono del conjunto de herramientas. If the toolset is not found to determine its version number, it is not displayed. This preset changes the behavior to display the icon only if the toolset information can be determined.
+Si se identifican archivos del conjunto de herramientas, entonces se mostrara el ícono del conjunto de herramientas. If the toolset is not found to determine its version number, it is not displayed. La forma en la que se muestra el ícono depende de si la información del conjunto de herramientas puede ser determinada.
 
 ![Screenshot of No Empty Icons preset](/presets/img/no-empty-icons.png)
 
