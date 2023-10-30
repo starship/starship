@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#bracketed-segments)
+[프리셋으로 돌아가기](./README.md#bracketed-segments)
 
 # Bracketed Segments Preset
 
@@ -12,6 +12,6 @@ This preset changes the format of all the built-in modules to show their segment
 starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/bracketed-segments.toml)
+[클릭하여 TOML 다운로드](/presets/toml/bracketed-segments.toml)
 
 <<< @/.vuepress/public/presets/toml/bracketed-segments.toml
