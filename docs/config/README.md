@@ -3826,8 +3826,6 @@ To enable it, set `disabled` to `false` in your configuration file.
 | `style`                | `'white bold'`            | The style for the module.                                    |
 | `disabled`             | `true`                    | Disables the `shell` module.                                 |
 
-`pwsh_indicator` is empty by default and falls back to using `powershell_indicator`.
-
 ### Variables
 
 | Variable  | Default | Description                                                |
