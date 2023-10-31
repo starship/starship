@@ -134,3 +134,6 @@ symbol = " "
 
 [scala]
 symbol = " "
+
+[typst]
+symbol = "t "

@@ -1683,7 +1683,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold #0093A7",
-        "symbol": "\uD835\uDC2D ",
+        "symbol": "𝐭 ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -5738,7 +5738,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "\uD835\uDC2D ",
+          "default": "𝐭 ",
           "type": "string"
         },
         "style": {

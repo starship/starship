@@ -315,6 +315,7 @@ $scala\
 $solidity\
 $swift\
 $terraform\
+$typst\
 $vlang\
 $vagrant\
 $zig\
@@ -4269,6 +4270,39 @@ time_format = '%T'
 utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
+
+## Typst
+
+The `typst` module finds the current installed typst version.
+
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `template.typ` file
+- The current directory contains any `.typ` file
+
+### Options
+
+| Option              | Default                              | Description                                        |
+| ------------------- |--------------------------------------| -------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                         |
+| `symbol`            | `'𝐭 '`                              | A format string representing the symbol of Haskell |
+| `detect_extensions` | `['typ']`                            | Which extensions should trigger this module.       |
+| `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.        |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
+| `style`             | `'bold #0093A7'`                     | The style for the module.                          |
+| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+
+### Variables
+
+| Variable       | Example | Description                          |
+|----------------|---------|--------------------------------------|
+| version        |         | alias for `typst\_version`           |
+| typst\_version | `0.9.0` | Currently installed typst version    |
+| symbol         |         | Mirrors the value of option `symbol` |
+| style\*        |         | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
 
 ## Username
 
