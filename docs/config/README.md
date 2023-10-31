@@ -4282,27 +4282,25 @@ By default the module will be shown if any of the following conditions are met:
 
 ### Options
 
-| Option              | Default                              | Description                                        |
-| ------------------- |--------------------------------------| -------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                         |
-| `symbol`            | `'𝐭 '`                              | A format string representing the symbol of Haskell |
-| `detect_extensions` | `['typ']`                            | Which extensions should trigger this module.       |
-| `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.        |
-| `detect_folders`    | `[]`                                 | Which folders should trigger this module.          |
-| `style`             | `'bold #0093A7'`                     | The style for the module.                          |
-| `disabled`          | `false`                              | Disables the `haskell` module.                     |
+| Option              | Default                               | Description                       |
+| ------------------- | ------------------------------------- | --------------------------------- |
+| `format`            | `'via [$symbol($version )]($style) '` | The format string for the module. |
+| `style`             | `'bold #0093A7'`                      | The style for the module time     |
+| `disabled`          | `false`                               | Disables the `time` module.       |
+| `detect_extensions` | `.typ`                                | List of detected extensions.      |
+| `detect_files`      | `template.typ`                        | List of detected files.           |
+| `disabled`          | `false`                               | Disables the `time` module.       |
 
 ### Variables
 
-| Variable       | Example | Description                          |
-|----------------|---------|--------------------------------------|
-| version        |         | alias for `typst\_version`           |
-| typst\_version | `0.9.0` | Currently installed typst version    |
-| symbol         |         | Mirrors the value of option `symbol` |
-| style\*        |         | Mirrors the value of option `style`  |
+| Variable      | Example   | Description                                     |
+| ------------- | --------- | ----------------------------------------------- |
+| version       | `0.9.0`   | The version of `typst`, alias for typst_version |
+| typst_version | `default` | The current Typst version                       |
+| symbol        |           | Mirrors the value of option `symbol`            |
+| style\*       |           | Mirrors the value of option `style`             |
 
 *: This variable can only be used as a part of a style string
-
 
 ## Username
 

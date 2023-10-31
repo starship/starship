@@ -1,3 +1,4 @@
+use std::ops::Add;
 use super::{Context, Module, ModuleConfig};
 
 use crate::configs::typst::TypstConfig;
@@ -30,8 +31,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "version" => get_version(context).map(Ok),
-                "typst_version" => get_typst_config(context).map(Ok),
+                "version" => get_typst_config(context).map(Ok),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -49,21 +49,18 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_typst_config(context: &Context) -> Option<String> {
-    Some(
-        context
+        Some("v".to_string().add(context
             .exec_cmd("typst", &["--version"])?
             .stdout
             .trim()
-            .to_string()
-            .as_str()[6..11]
-            .trim()
-            .to_string(),
-    )
+            .strip_prefix("typst ")
+            .unwrap().split_whitespace()
+            .next()
+            .unwrap())
+        )
+
 }
 
-fn get_version(context: &Context) -> Option<String> {
-    get_typst_config(context)
-}
 #[cfg(test)]
 mod tests {
     use crate::test::ModuleRenderer;
@@ -90,7 +87,7 @@ mod tests {
         let actual = ModuleRenderer::new("typst").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Rgb(0, 147, 167).bold().paint("𝐭 0.8.0 ")
+            Color::Rgb(0, 147, 167).bold().paint("𝐭 v0.8.0 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
