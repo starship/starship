@@ -206,6 +206,13 @@ This is the list of prompt-wide configuration options.
 | `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                        |
 | `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+
+::: tip
+
+If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
+
+:::
 
 ### مثال
 
@@ -672,7 +679,7 @@ The character will tell you whether the last command was successful or not. It c
 
 By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning
+::: تحذير
 
 `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
