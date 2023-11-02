@@ -1794,6 +1794,10 @@
       "default": true,
       "type": "boolean"
     },
+    "follow_symlinks": {
+      "default": true,
+      "type": "boolean"
+    },
     "palette": {
       "type": [
         "string",

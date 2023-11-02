@@ -219,6 +219,14 @@ This is the list of prompt-wide configuration options.
 | `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                        |
 | `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+
+::: tip
+
+If you have symlinks to networked filesystems, consider setting
+`follow_symlinks` to `false`.
+
+:::
 
 ### Example
 

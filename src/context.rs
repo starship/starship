@@ -358,7 +358,11 @@ impl<'a> Context<'a> {
     pub fn dir_contents(&self) -> Result<&DirContents, std::io::Error> {
         self.dir_contents.get_or_try_init(|| {
             let timeout = self.root_config.scan_timeout;
-            DirContents::from_path_with_timeout(&self.current_dir, Duration::from_millis(timeout))
+            DirContents::from_path_with_timeout(
+                &self.current_dir,
+                Duration::from_millis(timeout),
+                self.root_config.follow_symlinks,
+            )
         })
     }
 
@@ -479,11 +483,15 @@ pub struct DirContents {
 
 impl DirContents {
     #[cfg(test)]
-    fn from_path(base: &Path) -> Result<Self, std::io::Error> {
-        Self::from_path_with_timeout(base, Duration::from_secs(30))
+    fn from_path(base: &Path, follow_symlinks: bool) -> Result<Self, std::io::Error> {
+        Self::from_path_with_timeout(base, Duration::from_secs(30), follow_symlinks)
     }
 
-    fn from_path_with_timeout(base: &Path, timeout: Duration) -> Result<Self, std::io::Error> {
+    fn from_path_with_timeout(
+        base: &Path,
+        timeout: Duration,
+        follow_symlinks: bool,
+    ) -> Result<Self, std::io::Error> {
         let start = Instant::now();
 
         let mut folders: HashSet<PathBuf> = HashSet::new();
@@ -501,7 +509,15 @@ impl DirContents {
             .filter_map(|(_, entry)| entry.ok())
             .for_each(|entry| {
                 let path = PathBuf::from(entry.path().strip_prefix(base).unwrap());
-                if entry.path().is_dir() {
+
+                let is_dir = match follow_symlinks {
+                    true => entry.path().is_dir(),
+                    false => fs::symlink_metadata(entry.path())
+                        .map(|m| m.is_dir())
+                        .unwrap_or(false),
+                };
+
+                if is_dir {
                     folders.insert(path);
                 } else {
                     if !path.to_string_lossy().starts_with('.') {
@@ -898,9 +914,62 @@ mod tests {
     }
 
     #[test]
+    fn test_scan_dir_no_symlinks() -> Result<(), Box<dyn std::error::Error>> {
+        #[cfg(not(target_os = "windows"))]
+        use std::os::unix::fs::symlink;
+        #[cfg(target_os = "windows")]
+        use std::os::windows::fs::symlink_dir as symlink;
+
+        let d = testdir(&["file"])?;
+        fs::create_dir(d.path().join("folder"))?;
+
+        symlink(d.path().join("folder"), d.path().join("link_to_folder"))?;
+        symlink(d.path().join("file"), d.path().join("link_to_file"))?;
+
+        let dc_following_symlinks = DirContents::from_path(d.path(), true)?;
+
+        assert!(ScanDir {
+            dir_contents: &dc_following_symlinks,
+            files: &["link_to_file"],
+            extensions: &[],
+            folders: &[],
+        }
+        .is_match());
+
+        assert!(ScanDir {
+            dir_contents: &dc_following_symlinks,
+            files: &[],
+            extensions: &[],
+            folders: &["link_to_folder"],
+        }
+        .is_match());
+
+        let dc_not_following_symlinks = DirContents::from_path(d.path(), false)?;
+
+        assert!(ScanDir {
+            dir_contents: &dc_not_following_symlinks,
+            files: &["link_to_file"],
+            extensions: &[],
+            folders: &[],
+        }
+        .is_match());
+
+        assert!(!ScanDir {
+            dir_contents: &dc_not_following_symlinks,
+            files: &[],
+            extensions: &[],
+            folders: &["link_to_folder"],
+        }
+        .is_match());
+
+        Ok(())
+    }
+
+    #[test]
     fn test_scan_dir() -> Result<(), Box<dyn std::error::Error>> {
         let empty = testdir(&[])?;
-        let empty_dc = DirContents::from_path(empty.path())?;
+        let follow_symlinks = true;
+        let empty_dc = DirContents::from_path(empty.path(), follow_symlinks)?;
 
         assert!(!ScanDir {
             dir_contents: &empty_dc,
@@ -912,7 +981,7 @@ mod tests {
         empty.close()?;
 
         let rust = testdir(&["README.md", "Cargo.toml", "src/main.rs"])?;
-        let rust_dc = DirContents::from_path(rust.path())?;
+        let rust_dc = DirContents::from_path(rust.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &rust_dc,
             files: &["package.json"],
@@ -923,7 +992,7 @@ mod tests {
         rust.close()?;
 
         let java = testdir(&["README.md", "src/com/test/Main.java", "pom.xml"])?;
-        let java_dc = DirContents::from_path(java.path())?;
+        let java_dc = DirContents::from_path(java.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &java_dc,
             files: &["package.json"],
@@ -934,7 +1003,7 @@ mod tests {
         java.close()?;
 
         let node = testdir(&["README.md", "node_modules/lodash/main.js", "package.json"])?;
-        let node_dc = DirContents::from_path(node.path())?;
+        let node_dc = DirContents::from_path(node.path(), follow_symlinks)?;
         assert!(ScanDir {
             dir_contents: &node_dc,
             files: &["package.json"],
@@ -945,7 +1014,7 @@ mod tests {
         node.close()?;
 
         let tarballs = testdir(&["foo.tgz", "foo.tar.gz"])?;
-        let tarballs_dc = DirContents::from_path(tarballs.path())?;
+        let tarballs_dc = DirContents::from_path(tarballs.path(), follow_symlinks)?;
         assert!(ScanDir {
             dir_contents: &tarballs_dc,
             files: &[],
@@ -956,7 +1025,7 @@ mod tests {
         tarballs.close()?;
 
         let dont_match_ext = testdir(&["foo.js", "foo.ts"])?;
-        let dont_match_ext_dc = DirContents::from_path(dont_match_ext.path())?;
+        let dont_match_ext_dc = DirContents::from_path(dont_match_ext.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &dont_match_ext_dc,
             files: &[],
@@ -967,7 +1036,7 @@ mod tests {
         dont_match_ext.close()?;
 
         let dont_match_file = testdir(&["goodfile", "evilfile"])?;
-        let dont_match_file_dc = DirContents::from_path(dont_match_file.path())?;
+        let dont_match_file_dc = DirContents::from_path(dont_match_file.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &dont_match_file_dc,
             files: &["goodfile", "!notfound", "!evilfile"],
@@ -978,7 +1047,8 @@ mod tests {
         dont_match_file.close()?;
 
         let dont_match_folder = testdir(&["gooddir/somefile", "evildir/somefile"])?;
-        let dont_match_folder_dc = DirContents::from_path(dont_match_folder.path())?;
+        let dont_match_folder_dc =
+            DirContents::from_path(dont_match_folder.path(), follow_symlinks)?;
         assert!(!ScanDir {
             dir_contents: &dont_match_folder_dc,
             files: &[],
