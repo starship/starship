@@ -8,14 +8,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("typst");
     let config = TypstConfig::try_load(module.config);
 
-    let is_hs_project = context
+    let is_typst_project = context
         .try_begin_scan()?
         .set_files(&config.detect_files)
         .set_extensions(&config.detect_extensions)
         .set_folders(&config.detect_folders)
         .is_match();
 
-    if !is_hs_project {
+    if !is_typst_project {
         return None;
     }
 
@@ -56,18 +56,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 }
 
 fn get_typst_config(context: &Context) -> Option<String> {
-    Some(
-        context
-            .exec_cmd("typst", &["--version"])?
-            .stdout
-            .trim()
-            .strip_prefix("typst ")
-            .unwrap()
-            .split_whitespace()
-            .next()
-            .unwrap()
-            .to_string(),
-    )
+    context
+        .exec_cmd("typst", &["--version"])?
+        .stdout
+        .trim()
+        .strip_prefix("typst ")
+        .and_then(|version| version.split_whitespace().next().map(ToOwned::to_owned))
 }
 
 #[cfg(test)]
@@ -96,7 +90,7 @@ mod tests {
         let actual = ModuleRenderer::new("typst").path(dir.path()).collect();
         let expected = Some(format!(
             "via {}",
-            Color::Rgb(0, 147, 167).bold().paint("𝐭 v0.10 ")
+            Color::Rgb(0, 147, 167).bold().paint("t v0.10 ")
         ));
         assert_eq!(expected, actual);
         dir.close()
