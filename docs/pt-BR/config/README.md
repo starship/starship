@@ -206,6 +206,13 @@ Esta é a lista de opções de configuração em todo o prompt.
 | `add_newline`     | `true`                         | Insere linha vazia entre os prompts do shell.                                                                                                                                                           |
 | `palette`         | `''`                           | Define qual a paleta de cores de `palettes` será usada.                                                                                                                                                 |
 | `palettes`        | `{}`                           | Coleção de paletas de cores que atribuem [cores](/advanced-config/#style-strings) aos nomes definidos pelo usuário. Note que paletas de cores não podem referir-se a suas próprias definições de cores. |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                          |
+
+::: tip
+
+If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
+
+:::
 
 ### Exemplo
 
@@ -237,7 +244,7 @@ mustard = '#af8700'
 
 ### Format de Prompt Padrão
 
-O padrão `format` é usado para definir o formato do prompt, se estiver vazio ou nenhum `format` for fornecido. O padrão é como mostrado:
+The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
 
 ```toml
 format = '$all'
@@ -331,7 +338,7 @@ $shell\
 $character"""
 ```
 
-Se você quiser apenas estender o formato padrão, você pode usar `$all`; os módulos que você adicionar explicitamente ao formato não serão duplicados. Ex.
+If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
 
 ```toml
 # Mova o diretório para a segunda linha
@@ -344,11 +351,11 @@ The `aws` module shows the current AWS region and profile and an expiration time
 
 The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
 
-Quando usar [aws-vault](https://github.com/99designs/aws-vault), o perfil é lido da variável de ambiente `AWS_VAULT` e o tempo de expiração de credenciais é lido da variável de ambiente `AWS_SESSION_EXPIRATION`.
+When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
 
-Quando usar [awsu](https://github.com/kreuzwerker/awsu) o perfil é lido da varável de env `AWSU_PROFILE`.
+When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
 
-Quando usar [AWSume](https://awsu.me) o perfil é lido da variável `AWSUME_PROFILE` e o tempo de expiração de credenciais é lida da variável de env `AWSUME_EXPIRATION`.
+When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
 When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials` falls back to the `x_security_token_expires` key.
 
@@ -424,7 +431,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-O módulo `azure` exibe a assinatura Azure atual. Isto é baseado na exibição do nome da assinatura padrão ou no nome do usuário, como definido no arquivo `~/.azure/azureProfile.json`.
+The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
 
 ### Opções
 
@@ -473,7 +480,7 @@ very-long-subscription-name = 'vlsn'
 
 ## Bateria
 
-O módulo `battery` exibe o quanto a bateria do dispositivo está carregada e o estado atual de carregamento. O módulo é visível somente quando a bateria está abaixo de 10%.
+The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
 
 ### Opções
 
@@ -501,7 +508,7 @@ discharging_symbol = '💀 '
 
 ### Indicador de bateria
 
-A configuração `display` é usada para definir quando o indicador de bateria deve ser exibido (threshold), qual deve ser o simbolo(symbol) e como você gostaria de exibir (style). Se nenhum `display` for fornecido. O padrão é como mostrado:
+The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. The default is as shown:
 
 ```toml
 [[battery.display]]
@@ -509,11 +516,11 @@ threshold = 10
 style = 'bold red'
 ```
 
-O valor padrão das opções `charging_symbol` e `discharging_symbol`é respectivamente o valor das opções `battery`'s `charging_symbol` e `discharging_symbol`.
+The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
 
 #### Opções
 
-A opção `display` é um array da seguinte tabela.
+The `display` option is an array of the following table.
 
 | Opções               | Padrão       | Descrição                                                                                          |
 | -------------------- | ------------ | -------------------------------------------------------------------------------------------------- |
@@ -539,7 +546,7 @@ discharging_symbol = '💦'
 
 ## Buf
 
-O módulo `buf` mostra a versão instalada do [Buf](https://buf.build). Por padrão, o módulo é mostrado se todas as seguintes condições forem atendidas:
+The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
 
 - A CLI [`buf`](https://github.com/bufbuild/buf) está instalada.
 - O atual diretório contém um [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml) ou arquivo de configuração [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml).
@@ -578,7 +585,7 @@ symbol = '🦬 '
 
 ## Bun
 
-O módulo `bun` mostra a versão atualmente instalada do [bun](https://bun.sh) runtime do JavaScript. Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `bun.lockb`
 - O diretório atual conter um arquivo `bunfig.toml`
@@ -617,7 +624,7 @@ format = 'via [🍔 $version](bold green) '
 
 ## C
 
-O módulo `c` mostra algumas informações sobre o seu compilador de C. Por padrão o módulo será exibido se o diretório atual contém um arquivo `.c` ou `.h`.
+The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
 
 ### Opções
 
@@ -642,15 +649,15 @@ O módulo `c` mostra algumas informações sobre o seu compilador de C. Por padr
 | symbol   |         | Espelha o valor da opção `symbol` |
 | style    |         | Espelha o valor da opção `style`  |
 
-Note que `version` não está no formato padrão.
+NB that `version` is not in the default format.
 
 ### Comandos
 
-A opção `commands` aceita uma lista de comandos para determinar a versão e o nome do compilador.
+The `commands` option accepts a list of commands to determine the compiler version and name.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship tentará executar cada comando até que obtenha um resultado no STDOUT.
+Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
 
-Se um compilador C não é suportado por este módulo, você pode solicitá-lo [criando uma issue no GitHub](https://github.com/starship/starship/).
+If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
 
 ### Exemplo
 
@@ -663,16 +670,16 @@ format = 'via [$name $version]($style)'
 
 ## Caractere
 
-O módulo `character` exibe um caracter (normalmente uma seta) ao lado de onde o texto começa a ser inserido no terminal.
+The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
 
-O caractere vai te dizer se o ultimo comando foi bem sucedido ou não. Você pode fazer isto de duas maneiras:
+The character will tell you whether the last command was successful or not. It can do this in two ways:
 
 - alterando a cor (`red`/`green`)
 - alterando a forma (`❯`/`✖`)
 
-Por padrão ele apenas muda de cor. Se você deseja alterar o formato de uma olhada [neste exemplo](#with-custom-error-shape).
+By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
 
-::: warning
+::: atenção
 
 `vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
@@ -730,7 +737,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por padrão o módulo será ativo se qualquer das condições a seguir for atendida:
+The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
 
 - O diretorio atual cotem um arquivo `CMakeLists.txt`
 - O diretorio atual tem um arquivo `CMakeCache.txt`
@@ -760,7 +767,7 @@ O módulo `cmake` exibe a versão instalada do [CMake](https://cmake.org/). Por 
 
 ## COBOL / GNUCOBOL
 
-O módulo `cobol` exibe a versão instalada atual do COBOL. Por padrão, o módulo será exibido se qualquer das seguintes condições for atendida:
+The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
 
 - O diretório atual tem qualquer arquivo com extensão `.cob` or `.COB`
 - O diretório atual tenham qualquer arquivo com extensão `.cbl` or `.CBL`
@@ -790,15 +797,15 @@ O módulo `cobol` exibe a versão instalada atual do COBOL. Por padrão, o módu
 
 ## Tempo de execução do comando
 
-O módulo `cmd_duration` exibi o tempo que o ultimo comando levou para executar. O módulo vai exibir somente se o comando levar mais de dois segundos, ou o valor de configuração `min_time` existir.
+The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
 
-::: warning Não utilize o DEBUG-trap no Bash
+::: warning Do not hook the DEBUG trap in Bash
 
-Se você esta rodando o Starship no `bash`, você não deve ativar a armadilha `DEBUG` após rodar `eval $(starship init $0)`, ou este módulo **vai** quebrar.
+If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
 
 :::
 
-Usuários do bash que precisam de funções pre-executadas podem usar [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simplesmente defina os arrays `preexec_functions` e `precmd_functions` antes de rodar `eval $(starship init $0)`, e depois pode proceder normalmente.
+Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
 
 ### Opções
 
@@ -834,11 +841,11 @@ format = 'underwent [$duration](bold yellow)'
 
 ## Conda
 
-O módulo `conda` exibe o ambiente atual do [Conda](https://docs.conda.io/en/latest/), se o `$CONDA_DEFAULT_ENV` estiver definido.
+The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
 
 ::: tip
 
-Isso não suprime o modificador de prompt do conda, você pode executar `conda config --set changeps1 False`.
+This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
 
 :::
 
@@ -874,7 +881,7 @@ format = '[$symbol$environment](dimmed green) '
 
 ## Container
 
-O módulo `container` exibe um símbolo e nome do contêiner, se dentro de um container.
+The `container` module displays a symbol and container name, if inside a container.
 
 ### Opções
 
@@ -906,7 +913,7 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-O módulo `crystal` exibe a versão instalada atual do [Crystal](https://crystal-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contem um arquivo `shard.yml`
 - O diretório atual contem um arquivo `.cr`
@@ -945,7 +952,7 @@ format = 'via [✨ $version](bold blue) '
 
 ## Daml
 
-The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `daml.yaml`
 
@@ -983,7 +990,7 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-O módulo `dart` exibe a versão atual instalada do [Dart](https://dart.dev/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contem algum arquivo com extensão `.dart`
 - O diretório atual contem um diretório `.dart_tool`
@@ -1023,7 +1030,7 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-O módulo `deno` exibe a versão instalada atual do [Deno](https://deno.land/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha um arquivo `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` or `deps.js`
 
@@ -1059,11 +1066,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Diretório
 
-O módulo `directory` exibe o caminho do diretório atual, truncando as três pastas pai. Seu diretório será truncando na raiz do repositório git que você estiver atualmente.
+The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
 
-Ao usar a opção `fish_style_pwd_dir_length`, em vez de esconder o caminho que é truncado, você verá um nome encurtado de cada diretório com base no número que você habilitar para a opção.
+When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
 
-Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz e a opção esta definida para `1`. Você verá `~/D/N/nixpkgs/pkgs`, enquanto antes seria `nixpkgs/pkgs`.
+For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
 
 ### Opções
 
@@ -1084,7 +1091,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 | `use_os_path_sep`        | `true`                                                                                                                       | Use o separador de caminho específico do sistema opracional em vez de sempre usar `/` (por exemplo, `\` no Windows) |
 
 <details>
-<summary>Este módulo tem algumas configurações avançadas que controlam como o diretório é exibido.</summary>
+<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
 
 | Opções Avançadas            | Padrão | Descrição                                                                                                                                                             |
 | --------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1092,7 +1099,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 | `fish_style_pwd_dir_length` | `0`    | O número de caracteres para usar quando aplicado no path logico do fish shell pwd.                                                                                    |
 | `use_logical_path`          | `true` | Se `true` exibe um caminho lógico originado do shell via `PWD` ou`--logical-path`. Se `false` em vez disso, exibe o caminho do filesystem com os symlinks resolvidos. |
 
-`substitutions` aceita você definir substituições arbitrarias para strings literais que ocorra no path, por exemplo prefixos de rede longos ou diretórios de desenvolvimento (ex:. Java). Note isto irá desabilita o estilo PWD do fish.
+`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
 
 ```toml
 [directory.substitutions]
@@ -1100,7 +1107,7 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interage com as opções de truncação padrão de uma forma que pode suprimir no começo: se não for zero, os componentes do path que normalmente seriam truncados são exibidos com todos caracteres. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. Para `fish_style_pwd_dir_length = 2`, seria `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1114,9 +1121,9 @@ Por exemplo, dado `~/Dev/Nix/nixpkgs/pkgs` onde `nixpkgs` é o repositório raiz
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
 <details>
-<summary>Os repositórios git têm variáveis adicionais.</summary>
+<summary>The git repos have additional variables.</summary>
 
-Vamos considerar o caminho `/caminho/para/home/git_repo/src/lib`
+Let us consider the path `/path/to/home/git_repo/src/lib`
 
 | Variável           | Exemplo                 | Descrição                                           |
 | ------------------ | ----------------------- | --------------------------------------------------- |
@@ -1140,7 +1147,7 @@ truncation_symbol = '…/'
 
 ## Docker Context
 
-O módulo `docker_context` exibe o [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) ativo atualmente se não estiver definido como `default` ou se as variáveis de ambiente `DOCKER_MACHINE_NAME`, `DOCKER_HOST` ou `DOCKER_CONTEXT` estiverem definidas (iram sobrescrever o contexto atual).
+The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
 
 ### Opções
 
@@ -1176,9 +1183,9 @@ format = 'via [🐋 $context](blue bold)'
 
 ## Dotnet
 
-O módulo `dotnet` exibe a versão relevante do [.NET Core SDK](https://dotnet.microsoft.com/) para o directório atual. Se o SDK foi predefinido no diretório atual, a versão será exibida. Caso contrário, o módulo exibe a versão mais recente instalada do SDK.
+The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
 
-Por padrão, este módulo só será exibido no seu prompt quando um ou mais dos seguintes arquivos estiverem presentes no diretório atual:
+By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
 
 - `global.json`
 - `project.json`
@@ -1189,11 +1196,11 @@ Por padrão, este módulo só será exibido no seu prompt quando um ou mais dos 
 - `*.fsproj`
 - `*.xproj`
 
-Você também precisará do SDK do .NET Core instalado para usá-lo corretamente.
+You'll also need the .NET Core SDK installed in order to use it correctly.
 
-Internamente, este módulo usa um mecanismo próprio para detecção da versão. Geralmente é duas vezes mais rápido que executar `dotnet --version`, mas pode exibir uma versão errada se o seu projeto .NET tiver o layout de diretórios incomum. Se precisão for mais importante que velocidade, você pode desabilitar o mecanismo definindo `heuristic = false` nas opções do módulo.
+Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
 
-O módulo também mostrará o Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) quando houver um arquivo `.csproj` no diretório atual.
+The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
 
 ### Opções
 
@@ -1233,7 +1240,7 @@ heuristic = false
 
 ## Elixir
 
-O módulo `elixir` exibe a versão instalada do [Elixir](https://elixir-lang.org/) e [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `mix.exs`.
 
@@ -1272,7 +1279,7 @@ symbol = '🔮 '
 
 ## Elm
 
-O módulo `elm` exibe a versão instalada do [Elm](https://elm-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contem um arquivo `elm.json`
 - O diretório atual contem o arquivo `elm-package.json`
@@ -1314,7 +1321,7 @@ format = 'via [ $version](cyan bold) '
 
 ## Variáveis de Ambiente
 
-O módulo `env_var` exibe o valor atual de uma variável de ambiente selecionada. O módulo vai exibir somente se algumas das condições a seguir for atendida:
+The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
 
 - A opção de configuração da `variable` corresponde a uma variável existente
 - A configuração `variable` não está definida, mas a `default` está
@@ -1327,9 +1334,9 @@ The order in which env_var modules are shown can be individually set by includin
 
 ::: tip
 
-Múltiplas variáveis de ambiente podem ser exibidas usando um `.`. (Veja o exemplo) se a configuração `variable` não é definida, o módulo irá exibir o valor da variável após o caractere `.`.
+Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
 
-Exemplo: a configuração a seguir irá mostrar o valor da variável de ambiente USER
+Example: following configuration will display value of USER environment variable
 
 ```toml
 # ~/.config/starship.toml
@@ -1371,7 +1378,7 @@ variable = 'SHELL'
 default = 'unknown shell'
 ```
 
-Exibindo múltiplas variáveis de ambiente:
+Displaying multiple environmental variables:
 
 ```toml
 # ~/.config/starship.toml
@@ -1385,7 +1392,7 @@ default = 'unknown user'
 
 ## Erlang
 
-O módulo `erlang` mostra a versão atualmente instalada do [Erlang/OTP](https://erlang.org/doc/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contém um arquivo `rebar.config`.
 - O diretório atual contém um arquivo `erlang.mk`.
@@ -1424,7 +1431,7 @@ format = 'via [e $version](bold red) '
 
 ## Fennel
 
-The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a file with the `.fnl` extension
 
@@ -1462,7 +1469,7 @@ symbol = '⫰ '
 
 ## Fill
 
-O módulo `fill` preenche qualquer espaço vazio da linha com um simbolo. Se múltiplos módulos `fill` estiverem presentes em uma linha, eles irão dividir o espaço entre eles. Isto é útil para alinhar outros módulos.
+The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
 
 ### Opções
 
@@ -1483,7 +1490,7 @@ symbol = '-'
 style = 'bold green'
 ```
 
-Produz um prompt parecido com:
+Produces a prompt that looks like:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
@@ -1562,7 +1569,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Google Cloud (`gcloud`)
 
-O módulo `gcloud` exibe a configuração atual para a CLI do [`gcloud`](https://cloud.google.com/sdk/gcloud). Isto é baseadp mp arquivo `~/.config/gcloud/active_config` e no arquivo`~/.config/gcloud/configurations/config_{CONFIG NAME}` e a env var `CLOUDSDK_CONFIG`.
+The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
 When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
 
@@ -1638,7 +1645,7 @@ very-long-project-name = 'vlpn'
 
 ## Git Branch
 
-O módulo `git_branch` exibe o branch ativo do repositório no diretório atual.
+The `git_branch` module shows the active branch of the repo in your current directory.
 
 ### Opções
 
@@ -1680,7 +1687,7 @@ ignore_branches = ['master', 'main']
 
 ## Git commit
 
-O módulo `git_commit` exibe o hash do comiit atual e também a tag (se existir) do repositório no diretório atual.
+The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
 
 ### Opções
 
@@ -1717,7 +1724,7 @@ tag_symbol = '🔖 '
 
 ## Git State
 
-O módulo `git_state` vai exibir nos diretorios que fazem parte de um repositorio git e onde existe uma operação em progresso, como: _REBASING_, _BISECTING_, etc. Se houver informação de progresso (e.x: REBASING 3/10). esta informação será exibida também.
+The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### Opções
 
@@ -1757,11 +1764,11 @@ cherry_pick = '[🍒 PICKING](bold red)'
 
 ## Git Metrics
 
-O módulo `git_metrics` vai exibir o número de adições e exclusões de linhas no repositório git atual.
+The `git_metrics` module will show the number of added and deleted lines in the current git repository.
 
 ::: tip
 
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -1799,11 +1806,11 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Git Status
 
-O módulo `git_status` exibe o simbolo que representa o estado do repositório no diretório atual.
+The `git_status` module shows symbols representing the state of the repo in your current directory.
 
 ::: tip
 
-O módulo Git Status é muito lento nos diretórios do Windows (por exemplo, em `/mnt/c/`) quando em um ambiente WSL. Você pode desabilitar o módulo ou usar a opção `windows_starship` para usar um executável Starship nativo do Windows para calcular o `git_status` para esses caminhos.
+The Git Status module is very slow in Windows directories (for example under `/mnt/c/`) when in a WSL environment. You can disable the module or use the `windows_starship` option to use a Windows-native Starship executable to compute `git_status` for those paths.
 
 :::
 
@@ -1831,7 +1838,7 @@ O módulo Git Status é muito lento nos diretórios do Windows (por exemplo, em 
 
 ### Variáveis
 
-As variáveis a seguir podem ser usadas no `format`:
+The following variables can be used in `format`:
 
 | Variável       | Descrição                                                                                                  |
 | -------------- | ---------------------------------------------------------------------------------------------------------- |
@@ -1849,14 +1856,14 @@ As variáveis a seguir podem ser usadas no `format`:
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
 
-As variáveis a seguir podem ser usadas em `diverged`:
+The following variables can be used in `diverged`:
 
 | Variável       | Descrição                                           |
 | -------------- | --------------------------------------------------- |
 | `ahead_count`  | Número de commits a frente do braço de rastreamento |
 | `behind_count` | Número de commits atrás do braço de rastreamento    |
 
-As variaveis a seguir podem ser usadas em `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` e `deleted`:
+The following variables can be used in `conflicted`, `ahead`, `behind`, `untracked`, `stashed`, `modified`, `staged`, `renamed` and `deleted`:
 
 | Variável | Descrição                  |
 | -------- | -------------------------- |
@@ -1881,7 +1888,7 @@ renamed = '👅'
 deleted = '🗑'
 ```
 
-Exibe o count a frente/atrás do braço que esta sendo rastreado
+Show ahead/behind count of the branch being tracked
 
 ```toml
 # ~/.config/starship.toml
@@ -1892,7 +1899,7 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 behind = '⇣${count}'
 ```
 
-Use o executável do Windows Starship em caminhos do Windows em WSL
+Use Windows Starship executable on Windows paths in WSL
 
 ```toml
 # ~/.config/starship.toml
@@ -1903,7 +1910,7 @@ windows_starship = '/mnt/c/Users/nomedousuario/scoop/apps/starship/current/stars
 
 ## Go
 
-O módulo `golang` exibe a versão instalada atual do [Go](https://golang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `go.mod`
 - O diretório atual conter um arquivo `go.sum`
@@ -1994,7 +2001,7 @@ format = 'via [🐂](yellow bold) '
 
 The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
 
-Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `gradle/wrapper/gradle-wrapper.properties` directory.
 - The current directory contains a file ending with `.gradle` or `.gradle.kts`.
@@ -2027,9 +2034,9 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 ## Haskell
 
-O módulo `haskell` encontra a versão atual do GHC selecionada e/ou o snapshot do Stack selecionado.
+The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
 
-Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `stack.yaml`
 - O diretório atual contém qualquer arquivo `.hs`, `.cabal`, ou `.hs-boot`
@@ -2060,7 +2067,7 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ## Haxe
 
-The `haxe` module shows the currently installed version of [Haxe](https://haxe.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `haxe` module shows the currently installed version of [Haxe](https://haxe.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `project.xml`, `Project.xml`, `application.xml`, `haxelib.json`, `hxformat.json` or `.haxerc` file
 - The current directory contains a `.haxelib` or a `haxe_libraries` directory
@@ -2100,7 +2107,7 @@ format = "via [⌘ $version](bold fg:202) "
 
 ## Helm
 
-O módulo `helm` exibe a versão atual instalada do [Helm](https://helm.sh/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `helmfile.yaml`
 - O diretório atual contem um arquivo `Chart.yaml`
@@ -2139,7 +2146,7 @@ format = 'via [⎈ $version](bold white) '
 
 ## Hostname
 
-O módulo `hostname` exibe o nome do hostname.
+The `hostname` module shows the system hostname.
 
 ### Opções
 
@@ -2190,7 +2197,7 @@ disabled = false
 
 ## Java
 
-O módulo `java` exibe o versão atual instalada do [Java](https://www.oracle.com/java/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot`, or `.sdkmanrc` file
 - O diretório atual contenha arquivos com as extensões `.java`, `.class`, `.gradle`, `.jar`, `.clj`, or `.cljc`
@@ -2229,9 +2236,9 @@ symbol = '🌟 '
 
 ## Jobs
 
-O módulo `jobs` exibe o número atual de jobs rodando. O módulo vai ser exibido apenas se existir jobs em segundo plano sendo executados. O módulo vai exibir o número de jobs rodando se ao menos tiver 2 jobs ou mais que o valor da configuração `number_threshold`, se existir. O módulo vai exibir um simbolo se tiver ao menos 1 job ou mais, se o valor da configuração `symbol_threshold` existir. Você pode setar os dois valores para 0 para _sempre_ exibir o simbolo e número de jobs, mesmo que seja 0 os jobs em execução.
+The `jobs` module shows the current number of jobs running. The module will be shown only if there are background jobs running. The module will show the number of jobs running if there are at least 2 jobs, or more than the `number_threshold` config value, if it exists. The module will show a symbol if there is at least 1 job, or more than the `symbol_threshold` config value, if it exists. You can set both values to 0 in order to _always_ show the symbol and number of jobs, even if there are 0 jobs running.
 
-A funcionalidade padrão é:
+The default functionality is:
 
 - 0 jobs -> Nada é exibido.
 - 1 job -> `symbol` é exibido.
@@ -2239,13 +2246,13 @@ A funcionalidade padrão é:
 
 ::: atenção
 
-Este módulo não é suportado em tcsh e nu.
+This module is not supported on tcsh and nu.
 
 :::
 
 ::: atenção
 
-A opção `threshold` está obsoleta, mas se você quiser usa-la, o módulo vai exibir o numero de jobs rodando se for maior que 1 ou maior que o valor configurado na `threshold`, se ele existir. Se o valor `threshold` for definido como 0, então o módulo vai exibir quando tiver 0 jobs rodando.
+The `threshold` option is deprecated, but if you want to use it, the module will show the number of jobs running if there is more than 1 job, or more than the `threshold` config value, if it exists. If `threshold` is set to 0, then the module will also show when there are 0 jobs running.
 
 :::
 
@@ -2261,7 +2268,7 @@ A opção `threshold` está obsoleta, mas se você quiser usa-la, o módulo vai 
 | `style`            | `'bold blue'`                 | O estilo do módulo.                                                       |
 | `disabled`         | `false`                       | Desabilita o módulo `jobs`.                                               |
 
-*: Esta opção está obsoleta, por favor use o `number_threshold` e `symbol_threshold` em vez disso.
+*: This option is deprecated, please use the `number_threshold` and `symbol_threshold` options instead.
 
 ### Variáveis
 
@@ -2286,7 +2293,7 @@ symbol_threshold = 0
 
 ## Julia
 
-O módulo `julia` exibe a versão atual instalada do [Julia](https://julialang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `julia` module shows the currently installed version of [Julia](https://julialang.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contem um arquivo `Project.toml`
 - O diretório atual contem um arquivo `Manifest.toml`
@@ -2326,7 +2333,7 @@ symbol = '∴ '
 
 ## Kotlin
 
-O módulo `kotlin` exibie a versão atual instalada do [Kotlin](https://kotlinlang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contem um arquivo `.kt` ou um arquivo `.kts`
 
@@ -2373,11 +2380,11 @@ kotlin_binary = 'kotlinc'
 
 ## Kubernetes
 
-Exibe o nome atual do [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) e, se definido, o namespace, usuário e cluster do arquivo kubeconfig. O namespace precisa ser definido no arquivo kubeconfig, isso pode ser feito via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. Se a env var `$KUBECONFIG` estiver definida o módulo vai usa-la ao invés de usar o `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 When the module is enabled it will always be active, unless any of `detect_extensions`, `detect_files` or `detect_folders` have been set in which case the module will only be active in directories that match those conditions.
 
@@ -2489,7 +2496,7 @@ context_alias = "gke-$cluster"
 
 ## Quebra de Linha
 
-O módulo `line_break` separa o prompt em duas linhas.
+The `line_break` module separates the prompt into two lines.
 
 ### Opções
 
@@ -2508,7 +2515,7 @@ disabled = true
 
 ## IP Local
 
-O módulo `localip` mostra o endereço IPv4 da interface primária de rede.
+The `localip` module shows the IPv4 address of the primary network interface.
 
 ### Opções
 
@@ -2541,7 +2548,7 @@ disabled = false
 
 ## Lua
 
-O módulo `lua` exibe a versão atual instalada do [Lua](http://www.lua.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contém um arquivo `.lua-version`
 - O diretório atual contém um diretório `lua`
@@ -2582,13 +2589,13 @@ format = 'via [🌕 $version](bold blue) '
 
 ## Uso de Memória
 
-O módulo `memory_usage` mostra a memória atual do sistema e o uso de troca.
+The `memory_usage` module shows current system memory and swap usage.
 
-Por padrão o uso do swap é exibido se o total de swap do sistema é diferente de zero.
+By default the swap usage is displayed if the total system swap is non-zero.
 
 ::: tip
 
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -2613,7 +2620,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | symbol           | `🐏`           | Espelha o valor da opção `symbol`                 |
 | style\*        |               | Espelha o valor da opção `style`                  |
 
-*: Esta variável só pode ser usada como parte de uma string de estilo *\*: As informações do arquivo SWAP são exibidas apenas se detectadas no sistema atual
+*: This variable can only be used as a part of a style string *\*: The SWAP file information is only displayed if detected on the current system
 
 ### Exemplo
 
@@ -2705,7 +2712,7 @@ truncation_symbol = ''
 
 ## Nim
 
-O módulo `nim` exibe a versão atual instalada do [Nim](https://nim-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `nim.cfg`
 - O diretório atual tenha um arquivo com a extensão `.nim`
@@ -2747,7 +2754,7 @@ symbol = '🎣 '
 
 ## Nix-shell
 
-O módulo `nix_shell` exibe o ambiente [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html). O módulo vai exibir quando estiver dentro de um ambiente nix-shell.
+The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/developing-with-nix-shell.html) environment. The module will be shown when inside a nix-shell environment.
 
 ### Opções
 
@@ -2788,7 +2795,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-O módulo `nodejs` exibe a versão atual instalada do [Node.js](https://nodejs.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `package.json`
 - O diretório atual tenha um arquivo `.node-version`
@@ -2833,7 +2840,7 @@ format = 'via [🤖 $version](bold green) '
 
 ## OCaml
 
-O módulo `ocaml` exibe a versão atual instalada do [OCaml](https://ocaml.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contenha um arquivo com a extensão`.opam` ou um diretório `_opam`
 - O diretório atual tenha um diretório `esy.lock`
@@ -2916,7 +2923,7 @@ format = 'via [⛑️  $version](bold red) '
 
 ## OpenStack
 
-O módulo `openstack` exibe o OpenStack cloud e projeto atual. O módulo apenas ativa quando a env var `OS_CLOUD` esta definida, neste caso ele vai ler o arquivo `clouds.yaml` de qualquer um dos [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). para buscar o projeto atual em uso.
+The `openstack` module shows the current OpenStack cloud and project. The module only active when the `OS_CLOUD` env var is set, in which case it will read `clouds.yaml` file from any of the [default locations](https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files). to fetch the current project in use.
 
 ### Opções
 
@@ -2961,7 +2968,7 @@ The [os_info](https://lib.rs/crates/os_info) crate used by this module is known 
 
 ::: tip
 
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3053,7 +3060,7 @@ Arch = "Arch is the best! "
 
 ## Versionamento de Pacotes
 
-O módulo `package` é mostrado quando o diretório atual é o repositório de um pacote e mostra sua versão atual. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
+The `package` module is shown when the current directory is the repository for a package, and shows its current version. The module currently supports `npm`, `nimble`, `cargo`, `poetry`, `python`, `composer`, `gradle`, `julia`, `mix`, `helm`, `shards`, `daml` and `dart` packages.
 
 - [**npm**](https://docs.npmjs.com/cli/commands/npm) – O versionamento de pacotes `npm` é extraído do `package.json` presente no diretório atual
 - [**Cargo**](https://doc.rust-lang.org/cargo/) – O versionamento de pacotes `cargo`é extraído do arquivo `Cargo.toml` presente no diretório atual
@@ -3107,7 +3114,7 @@ format = 'via [🎁 $version](208 bold) '
 
 ## Perl
 
-O módulo `perl` exibe a versão atual instalada do [Perl](https://www.perl.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual tanha um aquivo `Makefile.PL` ou `Build.PL`
 - O diretório atual tenha um arquivo `cpanfile` ou `cpanfile.snapshot`
@@ -3147,7 +3154,7 @@ format = 'via [🦪 $version]($style) '
 
 ## PHP
 
-O módulo `php` mostra a versão atualmente instalada do [PHP](https://www.php.net/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `composer.json`
 - O diretório atual tenha um arquivo `.php-version`
@@ -3202,15 +3209,15 @@ The `pijul_channel` module shows the active channel of the repo in your current 
 
 ## Pulumi
 
-O módulo `pulumi` mostra o nome de usuário atual, a [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/) selcionada e a versão.
+The `pulumi` module shows the current username, selected [Pulumi Stack](https://www.pulumi.com/docs/intro/concepts/stack/), and version.
 
 ::: tip
 
-Por padrão a versão do Pulumi não é exibida, pois leva um tempo maior para ser carregada. Em média a maioria dos plugins leva (~70ms). Se você ainda deseja ativa-la, [siga o exemplo abaixo](#with-pulumi-version).
+By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
 
 :::
 
-Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha um arquivo `Pulumi.yaml` ou `Pulumi.yml`
 - A parent directory contains either `Pulumi.yaml` or `Pulumi.yml` unless `search_upwards` is set to `false`
@@ -3260,7 +3267,7 @@ format = '[$symbol$stack]($style) '
 
 ## PureScript
 
-O módulo `purescript` exibe a versão atual instalada do [PureScript](https://www.purescript.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual conter um arquivo `spago.dhall`
 - O diretório atual tenha um arquivo com a extensão `.purs`
@@ -3299,11 +3306,11 @@ format = 'via [$symbol$version](bold white)'
 
 ## Python
 
-O módulo `python` exibe a versão atual instalada do [Python](https://www.python.org/) e o [Python virtual environment](https://docs.python.org/tutorial/venv.html) se algum estiver ativo.
+The `python` module shows the currently installed version of [Python](https://www.python.org/) and the current [Python virtual environment](https://docs.python.org/tutorial/venv.html) if one is activated.
 
-Se o `pyenv_version_name` estiver definido como `true`, será exibido o nome da versão do pyenv. Caso contrario, ele exibirá o número da versão do `python --version`.
+If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha um arquivo `.python-version`
 - O diretório atual tenha um arquivo `Pipfile`
@@ -3333,9 +3340,9 @@ Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
 
 ::: tip
 
-A variável `python_binary` aceita uma string ou uma lista de strings. O Starship vai tentar executar cada binário até obter um resultado. Note que você pode apenas alterar o binário em que o Starship executa para pegar a versão do Python não os argumentos que são utilizados.
+The `python_binary` variable accepts either a string or a list of strings. Starship will try executing each binary until it gets a result. Note you can only change the binary that Starship executes to get the version of Python not the arguments that are used.
 
-O valor padrão e a ordem para o `python_binary` foram escolhidos para identificar primeiro uma versão do Python em um ambiente virtualenv/conda (que atualmente adiciona um `python`, não importa se ele aponta pro `python3` ou `python2`). Este tem efeito de lado, se você tenha um sistema com Python 2 instalado, pode ser usado antes de qualquer Python 3 (pelo menos nas Distros Linux que sempre fazem um symlink `/usr/bin/python` para Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
+The default values and order for `python_binary` was chosen to first identify the Python version in a virtualenv/conda environments (which currently still add a `python`, no matter if it points to `python3` or `python2`). This has the side effect that if you still have a system Python 2 installed, it may be picked up before any Python 3 (at least on Linux Distros that always symlink `/usr/bin/python` to Python 2). If you do not work with Python 2 anymore but cannot remove the system Python 2, changing this to `'python3'` will hide any Python version 2, see example below.
 
 :::
 
@@ -3388,7 +3395,7 @@ python_binary = ['./venv/bin/python', 'python', 'python3', 'python2']
 
 ## R
 
-O módulo `rlang` mostra a versão atualmente instalada do [R](https://www.r-project.org/). O módulo será mostrado se qualquer uma das seguintes condições for atendida:
+The `rlang` module shows the currently installed version of [R](https://www.r-project.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha um arquivo com a extensão `.R`.
 - O diretório atual tenha um arquivo com a extensão `.Rd`.
@@ -3430,7 +3437,7 @@ format = 'with [📐 $version](blue bold) '
 
 ## Raku
 
-The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). By default the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `META6.json` file
 - The current directory contains a `.p6`, `.pm6`, `.raku`, `.rakumod` or `.pod6`
@@ -3468,7 +3475,7 @@ format = 'via [🦪 $version]($style) '
 
 ## Red
 
-Por padrão o módulo `red` exibe a versão atual instalada do [Red](https://www.red-lang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
+By default the `red` module shows the currently installed version of [Red](https://www.red-lang.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual contenha um arquivo com a extensão `.red` or `.reds`
 
@@ -3506,14 +3513,14 @@ symbol = '🔴 '
 
 ## Ruby
 
-Por padrão o módulo `ruby` vai exibir a versão atual instalada do [Ruby](https://www.ruby-lang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
+By default the `ruby` module shows the currently installed version of [Ruby](https://www.ruby-lang.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha um arquivo `Gemfile`
 - O diretório atual contém um arquivo `.ruby-version`
 - O diretório atual contem um arquivo `.rb`
 - As variáveis de ambiente `RUBY_VERSION` ou `RBENV_VERSION` estão definidas
 
-O Starship pega a versão atual do Ruby rodando `ruby -v`.
+Starship gets the current Ruby version by running `ruby -v`.
 
 ### Opções
 
@@ -3550,7 +3557,7 @@ symbol = '🔺 '
 
 ## Rust
 
-Por padrão o módulo `rust` vai exibir a versão atual instalada do [Rust](https://www.rust-lang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
+By default the `rust` module shows the currently installed version of [Rust](https://www.rust-lang.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual contem um arquivo `Cargo.toml`
 - O diretório atual tenha um arquivo com a extensão `.rs`
@@ -3591,7 +3598,7 @@ format = 'via [⚙️ $version](red bold)'
 
 ## Scala
 
-O módulo `scala` exibe a versão atual instalada do [Scala](https://www.scala-lang.org/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contem um arquivo `build.sbt`, `.scalaenv` ou `.sbtenv`
 - O diretório atual tenha um arquivo com a extensão `.scala` ou `.sbt`
@@ -3631,11 +3638,11 @@ symbol = '🌟 '
 
 ## Shell
 
-O módulo de `shell` exibe um indicador para o shell que esta sendo usado.
+The `shell` module shows an indicator for currently used shell.
 
 ::: tip
 
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3733,7 +3740,7 @@ threshold = 0
 
 ## Singularidade
 
-O módulo `singularity` exibe a imagem atual do [Singularity](https://sylabs.io/singularity/), se dentro de um contêiner e definido `$SINGULARITY_NAME`.
+The `singularity` module shows the current [Singularity](https://sylabs.io/singularity/) image, if inside a container and `$SINGULARITY_NAME` is set.
 
 ### Opções
 
@@ -3803,7 +3810,7 @@ format = "via [S $version](blue bold)"
 
 ## Spack
 
-O módulo `spack` mostra o ambiente [Spack](https://spack.readthedocs.io/en/latest/) atual, se o `$SPACK_ENV` estiver definido.
+The `spack` module shows the current [Spack](https://spack.readthedocs.io/en/latest/) environment, if `$SPACK_ENV` is set.
 
 ### Opções
 
@@ -3836,11 +3843,11 @@ format = '[$symbol$environment](dimmed blue) '
 
 ## Status
 
-O módulo `status` exibe o código de saída do comando anterior. Se o $success_symbol estiver vazio (padrão), o módulo será exibido apenas se o código de saída não for `0.`. O código de status será convertido em um inteiro de 32 bits signed.
+The `status` module displays the exit code of the previous command. If $success_symbol is empty (default), the module will be shown only if the exit code is not `0`. The status code will cast to a signed 32-bit integer.
 
 ::: tip
 
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3897,11 +3904,11 @@ disabled = false
 
 ## Sudo
 
-O módulo `sudo` é exibido se uma credencial sudo estiver em cache. O módulo vai ser exibido somente se as credenciais estiverem em cache.
+The `sudo` module displays if sudo credentials are currently cached. The module will only be shown if credentials are cached.
 
 ::: tip
 
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -3946,7 +3953,7 @@ disabled = false
 
 ## Swift
 
-Por padrão o módulo `swift` vai exibir a versão atual instalada do [Swift](https://swift.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
+By default the `swift` module shows the currently installed version of [Swift](https://swift.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha um arquivo `Package.swift`
 - O diretório atual tenha um arquivo com a extensão `.swift`
@@ -3985,15 +3992,15 @@ format = 'via [🏎  $version](red bold)'
 
 ## Terraform
 
-O módulo `terraform` exibe o [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) selecionado e sua versão.
+The `terraform` module shows the currently selected [Terraform workspace](https://www.terraform.io/docs/language/state/workspaces.html) and version.
 
 ::: tip
 
-Por padrão a versão do Terraform não é exibida, desde que é lento recuperar a versão atual quando muitos plugins estão em uso. Se você deseja habilitar,, [Siga o exemplo abaixo](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
-Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual tenha uma pasta `.terraform`
 - O diretório atual tenha arquivos com as extensões `.tf`, `.tfplan` or `.tfstate`
@@ -4044,11 +4051,11 @@ format = '[🏎💨 $workspace]($style) '
 
 ## Horário
 
-O módulo `time` exibe a hora **local** atual. A configuração de `format` é usada pelo [`chrono`](https://crates.io/crates/chrono) para controlar qual hora é exibida. Dê uma olhada na [documentação do chrono strftime](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) para ver quais opções estão disponíveis.
+The `time` module shows the current **local** time. The `format` configuration value is used by the [`chrono`](https://crates.io/crates/chrono) crate to control how the time is displayed. Take a look [at the chrono strftime docs](https://docs.rs/chrono/0.4.7/chrono/format/strftime/index.html) to see what options are available.
 
 ::: tip
 
-Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para `false` no seu arquivo de configuração.
+This module is disabled by default. To enable it, set `disabled` to `false` in your configuration file.
 
 :::
 
@@ -4064,7 +4071,7 @@ Este módulo é desabilitado por padrão. Para habilitar, defina `disabled` para
 | `disabled`        | `true`                  | Desabilita o módulo `time`.                                                                                                 |
 | `time_range`      | `'-'`                   | Define o intervalo de tempo o qual o módulo será exibido. O horário deve ser especificado no formato de 24-hours            |
 
-If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Ajustes manuais no `time_format` irão sobrescrever a configuração `use_12hr`.
+If `use_12hr` is `true`, then `time_format` defaults to `'%r'`. Otherwise, it defaults to `'%T'`. Manually setting `time_format` will override the `use_12hr` setting.
 
 ### Variáveis
 
@@ -4090,7 +4097,7 @@ time_range = '10:00:00-14:00:00'
 
 ## Nome do usuário
 
-O módulo `username` mostra o nome de usuário do usuário ativo. O módulo será mostrado se alguma das seguintes condições for atendida:
+The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
 
 - O usuário atual é root/admin
 - O usuário atual não é o mesmo que está logado
@@ -4099,7 +4106,7 @@ O módulo `username` mostra o nome de usuário do usuário ativo. O módulo ser�
 
 ::: tip
 
-Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. Se seu host SSH não tem estas variáveis configuradas, uma alternativa é definir uma delas com valor burro.
+SSH connection is detected by checking environment variables `SSH_CONNECTION`, `SSH_CLIENT`, and `SSH_TTY`. If your SSH host does not set up these variables, one workaround is to set one of them with a dummy value.
 
 :::
 
@@ -4135,7 +4142,7 @@ show_always = true
 
 ## Vagrant
 
-O módulo `vagrant` exibe a versão atual instalada do [Vagrant](https://www.vagrantup.com/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual contem um arquivo `Vagrantfile`
 
@@ -4173,7 +4180,7 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-O módulo `vlang` exibe a versão atual instalada do [V](https://vlang.io/). Por padrão o módulo vai exibir se uma das condições a seguir for atendida:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). By default the module will be shown if any of the following conditions are met:
 
 - O diretório atual cotem qualquer arquivo com a extensão `.v`
 - O diretório atual contem um arquivo `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
@@ -4209,7 +4216,7 @@ format = 'via [V $version](blue bold) '
 
 ## VCSH
 
-O módulo `vcsh` exibe o repositório [VCSH](https://github.com/RichiH/vcsh) atual ativo. O módulo vai ser exibido apenas se um repositório estiver em uso.
+The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/vcsh) repository. The module will be shown only if a repository is currently in use.
 
 ### Opções
 
@@ -4241,7 +4248,7 @@ format = '[🆅 $repo](bold blue) '
 
 ## Zig
 
-By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). O módulo será mostrado se alguma das seguintes condições for atendida:
+By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). The module will be shown if any of the following conditions are met:
 
 - O diretório atual contém arquivo com a extensão `.zig`
 
@@ -4279,9 +4286,9 @@ symbol = '⚡️ '
 
 ## Comandos Personalizados
 
-Os módulos `custom` mostram a saída de alguns comandos arbitrários.
+The `custom` modules show the output of some arbitrary commands.
 
-Esses módulos serão mostrados se alguma das seguintes condições for atendida:
+These modules will be shown if any of the following conditions are met:
 
 - O diretório atual contém um arquivo cujo nome está em `detect_files`
 - O diretório atual contém um diretório cujo nome está em `detect_folders`
@@ -4291,27 +4298,27 @@ Esses módulos serão mostrados se alguma das seguintes condições for atendida
 
 ::: tip
 
-Vários módulos personalizados podem ser definidos usando um `.`.
+Multiple custom modules can be defined by using a `.`.
 
 :::
 
 ::: tip
 
-A ordem na qual os módulos personalizados são mostrados pode ser definida individualmente incluindo `${custom.foo}` no `format` de nível superior (como inclui um ponto, você precisa usar `${...}`). Por padrão, o módulo `custom` mostrará todos os módulos personalizados na ordem em que eles foram definidos.
+The order in which custom modules are shown can be individually set by including `${custom.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `custom` module will simply show all custom modules in the order they were defined.
 
 :::
 
 ::: tip
 
-A [Issue #1252](https://github.com/starship/starship/discussions/1252) contém exemplos de módulos personalizados. Se você tem um exemplo interessante que não esta coberto lá, sinta-se livre para compartilha-lo!
+[Issue #1252](https://github.com/starship/starship/discussions/1252) contains examples of custom modules. If you have an interesting example not covered there, feel free to share it there!
 
 :::
 
-::: warning A saída do comando é exibido unescaped no prompt
+::: warning Command output is printed unescaped to the prompt
 
-Seja qual for a saída o comando irá gerar uma saída sem modificações no prompt. Isto siguinifica que a saída tenha sequencias especiais estas serão interpretadas pelo seu shell, elas serão expandidas quando exibidas. Estas sequencias especiais são especificas da shell, ex: você pode escrever um módulo de comando que escreve uma sequencia de bash, ex:. `\h`, mas este módulo não irá funcionar no shell fish ou zsh.
+Whatever output the command generates is printed unmodified in the prompt. This means if the output contains special sequences that are interpreted by your shell they will be expanded when displayed. These special sequences are shell specific, e.g. you can write a command module that writes bash sequences, e.g. `\h`, but this module will not work in a fish or zsh shell.
 
-Strings de formatação também podem conter sequencias de prompt especificas de shell, ex: [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
+Format strings can also contain shell specific prompt sequences, e.g. [Bash](https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html), [Zsh](https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html).
 
 :::
 
@@ -4347,30 +4354,30 @@ Strings de formatação também podem conter sequencias de prompt especificas de
 
 #### Comandos personalizados de shell
 
-`shell` aceita uma lista não vazia de string, onde:
+`shell` accepts a non-empty list of strings, where:
 
 - A primeira string é o caminho para o shell que executará o comando.
 - Outros argumentos que serão passados para o shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
 
-O `command` será passado no stdin.
+The `command` will be passed in on stdin.
 
-Se o `shell` não for dado ou apenas conter um elemento e o Starship detectar PowerShell ele será usado, os seguintes argumentos serão automaticamente adicionados: `-NoProfile -Command -`. Se `shell` não for fornecido ou contiver apenas um elemento e o Starship detectar que o Cmd será usado, o seguinte argumento será adicionado automaticamente: `/C` e `stdin` serão definidos como `false`. Se `shell` não for fornecido ou contiver apenas um elemento e o Starship detectar que o Nushell será usado, os seguintes argumentos serão adicionados automaticamente: `-c` e `stdin` serão definidos como `false`. Este comportamento pode ser evitado passando explicitamente argumento para o shell, ex.
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning Tenha certeza que tenha uma configuração de shell
+::: warning Make sure your custom shell configuration exits gracefully
 
-Se você definir um comando personalizado, tenha certeza que o shell padrão usado pelo starship execute este comando com uma saída graciosa (via the `shell` option).
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
 
-Por exemplo, PowerShell requer o parâmetro `-Command` para executar um liner. Omitindo este parâmetro pode ser que o starship entre em um loop recursivo, onde o shell tente carrega um ambiente completo de perfil com o próprio starship novamente e portanto execute novamente o comando, entrando em um loop sem fim.
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
 
-Parâmetros similares ao `-NoProfile` no PowerShell são recomendados para outras shells, bem como para evitar um tempo de carregamento maior toda vez que o starship for chamado.
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
 
-Detecção automática de shell e adição de parâmetros estão sendo implementados atualmente, mas é possível que nem todas as shells sejam cobertas. [Por favor abra uma issue](https://github.com/starship/starship/issues/new/choose) com detalhes do shell e configurações do starship se você acertar algum cenário.
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
 :::
 
