@@ -206,6 +206,13 @@ This is the list of prompt-wide configuration options.
 | `add_newline`     | `true`                         | Inserts blank line between shell prompts.                                                                                                                                        |
 | `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+
+::: tip
+
+If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
+
+:::
 
 ### 예시
 
@@ -3206,7 +3213,7 @@ The `pulumi` module shows the current username, selected [Pulumi Stack](https://
 
 ::: tip
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). 그래도 활성화하려면, [아래에 있는 예시를 따라 하세요](#with-pulumi-version).
+By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
 
 :::
 
@@ -3989,7 +3996,7 @@ The `terraform` module shows the currently selected [Terraform workspace](https:
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. 그래도 활성화하려면, [아래에 있는 예시를 따라 하세요](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
 
 :::
 
