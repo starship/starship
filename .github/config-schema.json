@@ -1683,7 +1683,7 @@
         "disabled": false,
         "format": "via [$symbol($version )]($style)",
         "style": "bold #0093A7",
-        "symbol": "𝐭 ",
+        "symbol": "t ",
         "version_format": "v${raw}"
       },
       "allOf": [
@@ -5738,7 +5738,7 @@
           "type": "string"
         },
         "symbol": {
-          "default": "𝐭 ",
+          "default": "t ",
           "type": "string"
         },
         "style": {

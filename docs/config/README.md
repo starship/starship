@@ -4273,29 +4273,31 @@ time_range = '10:00:00-14:00:00'
 
 ## Typst
 
-The `typst` module finds the current installed typst version.
+The `typst` module shows the current installed version of Typst used in a project.
 
-By default the module will be shown if any of the following conditions are met:
+By default, the module will be shown if any of the following conditions are met:
 
 - The current directory contains a `template.typ` file
-- The current directory contains any `.typ` file
+- The current directory contains any `*.typ` file
 
 ### Options
 
-| Option              | Default                               | Description                       |
-| ------------------- | ------------------------------------- | --------------------------------- |
-| `format`            | `'via [$symbol($version )]($style) '` | The format string for the module. |
-| `style`             | `'bold #0093A7'`                      | The style for the module time     |
-| `disabled`          | `false`                               | Disables the `time` module.       |
-| `detect_extensions` | `.typ`                                | List of detected extensions.      |
-| `detect_files`      | `template.typ`                        | List of detected files.           |
-| `disabled`          | `false`                               | Disables the `time` module.       |
+| Option              | Default                              | Description                                                               |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                           |
+| `style`             | `'bold #0093A7'`                     | The style for the module.                                                 |
+| `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `daml` module.                                               |
 
 ### Variables
 
 | Variable      | Example   | Description                                     |
 | ------------- | --------- | ----------------------------------------------- |
-| version       | `0.9.0`   | The version of `typst`, alias for typst_version |
+| version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
 | typst_version | `default` | The current Typst version                       |
 | symbol        |           | Mirrors the value of option `symbol`            |
 | style\*       |           | Mirrors the value of option `style`             |

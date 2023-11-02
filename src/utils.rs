@@ -342,7 +342,7 @@ WebAssembly: unavailable
             stderr: String::default(),
         }),
         "typst --version" => Some(CommandOutput {
-            stdout: String::from("typst 0.8.0 (360cc9b9)"),
+            stdout: String::from("typst 0.10 (360cc9b9)"),
             stderr: String::default(),
         }),
 
