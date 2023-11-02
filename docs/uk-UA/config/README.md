@@ -206,11 +206,11 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | `add_newline`     | `true`                         | Вставити порожній рядок між командними рядками в оболонці.                                                                                                                                                          |
 | `palette`         | `''`                           | Встановлює кольорову палітру використовуючи `palettes`.                                                                                                                                                             |
 | `palettes`        | `{}`                           | Колекція кольорових палітр, для призначення [кольорів](/advanced-config/#style-strings) до назв визначених користувачем. Зверніть увагу, що кольорові палітри не можуть посилатися на їх власні визначення кольору. |
-| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                                      |
+| `follow_symlinks` | `true`                         | Перевіряти символічні посилання чи вони посилаються на теки; використовується в таких модулях як git.                                                                                                               |
 
 ::: tip
 
-If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
+Якщо у вас є символічні посилання не мережеві файлові системи, зважте на встановлення `follow_symlink` у `false`.
 
 :::
 
@@ -244,7 +244,7 @@ mustard = '#af8700'
 
 ### Стандартний формат командного рядка
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. The default is as shown:
+Стандартне значення змінної `format` використовується для визначення вигляду командного рядка, якщо  вона пуста або змінна  `format` відсутня. Стандартне значення є таким, як зазначено нижче:
 
 ```toml
 format = '$all'
@@ -338,7 +338,7 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+Якщо ви просто хочете розширити стандартний формат, можете використовувати `$all`; модулі, які ви явно додали до формату, не будуть подвоєні. Напр.
 
 ```toml
 # Перемістити назву теки на другий рядок
@@ -347,17 +347,17 @@ format = '$all$directory$character'
 
 ## AWS
 
-The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.
+Модуль `aws` показує поточний регіон AWS і профіль, а також час, що залишився до кінця сесії при використанні тимчасових облікових даних. Для виводу модуль використовує змінні `AWS_REGION`, `AWS_DEFAULT_REGION` і `AWS_PROFILE` та файли `~/.aws/config` і `~/.aws/credentials`, коли треба.
 
-The module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process`, `sso_start_url`, or `sso_session` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.
+Модуль показуватиме профіль якщо облікові дані знаходяться в `~/.aws/credentials`  або коли `credential_process`, `sso_start_url`, чи `sso_session` визначені в `~/.aws/config`. Крім того, достатньо буде визначити будь-яку змінну `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` або `AWS_SESSION_TOKEN`. Якщо для параметра `force_display` встановлено значення `true`, уся доступна інформація буде показуватись, навіть якщо не буде виявлено жодних облікових даних відповідно до наведених вище умов.
 
-When using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` env var.
+Під час використання [aws-vault](https://github.com/99designs/aws-vault) профіль зчитується зі змінної `AWS_VAULT`, а дата закінчення терміну дії облікових даних зчитується зі змінної `AWS_SESSION_EXPIRATION`.
 
-When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.
+Під час використання [awsu](https://github.com/kreuzwerker/awsu) профіль читається зі змінної `AWSU_PROFILE`.
 
-When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
+Під час використання [AWSume](https://awsu.me) профіль зчитується зі змінної `AWSUME_PROFILE`, а дата закінчення терміну дії облікових даних зчитується зі змінної `AWSUME_EXPIRATION`.
 
-When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials` falls back to the `x_security_token_expires` key.
+Під час використання [saml2aws](https://github.com/Versent/saml2aws) інформація про закінчення терміну дії, отримана з `~/.aws/credentials`, повертається до ключа `x_security_token_expires`.
 
 ### Параметри
 
@@ -431,7 +431,7 @@ Enterprise_Naming_Scheme-voidstars = 'void**'
 
 ## Azure
 
-The `azure` module shows the current Azure Subscription. This is based on showing the name of the default subscription or the username, as defined in the `~/.azure/azureProfile.json` file.
+Модуль `azure` показує поточну підписку Azure. Інформація заснована на назві стандартної підписки або імені користувача, як визначено у файлі `~/.azure/azureProfile.json`.
 
 ### Параметри
 
@@ -480,7 +480,7 @@ very-long-subscription-name = 'vlsn'
 
 ## Battery
 
-The `battery` module shows how charged the device's battery is and its current charging status. The module is only visible when the device's battery is below 10%.
+Модуль `battery` показує наскільки заряджена батарея пристрою і стан заряджання. Модуль показується лише тоді, коли заряд акумулятора пристрою нижче 10%.
 
 ### Параметри
 
@@ -508,7 +508,7 @@ discharging_symbol = '💀 '
 
 ### Показ модуля Battery
 
-The `display` configuration option is used to define when the battery indicator should be shown (threshold), which symbol would be used (symbol), and what it would like (style). If no `display` is provided. The default is as shown:
+Параметр конфігурації `display` використовується для визначення, коли має показуватись індикатор заряду батареї (threshold), який символ використовуватиметься (symbol) і як він виглядає (style). Якщо параметр `display` не встановлено. Стандартне значення є таким, як зазначено нижче:
 
 ```toml
 [[battery.display]]
@@ -516,11 +516,11 @@ threshold = 10
 style = 'bold red'
 ```
 
-The default value for the `charging_symbol` and `discharging_symbol` option is respectively the value of `battery`'s `charging_symbol` and `discharging_symbol` option.
+Типові значення для опції `charging_symbol` і `discharging_symbol` є відповідно типовими значеннями параметрів `charging_symbol` та `discharging_symbol` `батареї`.
 
 #### Параметри
 
-The `display` option is an array of the following table.
+Параметр `display` є масивом з наступної таблиці.
 
 | Параметр             | Стандартно   | Опис                                                                                                                                     |
 | -------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -546,7 +546,7 @@ discharging_symbol = '💦'
 
 ## Buf
 
-The `buf` module shows the currently installed version of [Buf](https://buf.build). By default, the module is shown if all of the following conditions are met:
+Модуль `buf` показує поточну встановлену версію [Buf](https://buf.build). Типово, модуль показується, якщо всі наступні умови виконуються:
 
 - Встановлено [`buf`](https://github.com/bufbuild/buf) CLI.
 - Поточна тека містить файли налаштувань [`buf.yaml`](https://docs.buf.build/configuration/v1/buf-yaml), [`buf.gen.yaml`](https://docs.buf.build/configuration/v1/buf-gen-yaml), чи [`buf.work.yaml`](https://docs.buf.build/configuration/v1/buf-work-yaml).
@@ -585,7 +585,7 @@ symbol = '🦬 '
 
 ## Bun
 
-The `bun` module shows the currently installed version of the [bun](https://bun.sh) JavaScript runtime. By default the module will be shown if any of the following conditions are met:
+Модуль `bun` показує поточну встановлену версію рушія JavaScript – [bun](https://bun.sh). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `bun.lockb`
 - Поточна тека містить файл `bunfig.toml`
@@ -624,7 +624,7 @@ format = 'via [🍔 $version](bold green) '
 
 ## C
 
-The `c` module shows some information about your C compiler. By default the module will be shown if the current directory contains a `.c` or `.h` file.
+Модуль `c` показує інформацію про ваш C компілятор. Стандартно модуль буде показаний, якщо поточна тека містить файли `.c` чи `.h`.
 
 ### Параметри
 
@@ -649,15 +649,15 @@ The `c` module shows some information about your C compiler. By default the modu
 | symbol  |         | Віддзеркалює значення параметра `symbol` |
 | style   |         | Віддзеркалює значення параметра `style`  |
 
-NB that `version` is not in the default format.
+NB `версія` не має стандартного формату.
 
-### Commands
+### Команди
 
-The `commands` option accepts a list of commands to determine the compiler version and name.
+Параметр `commands` отримує список команд для визначення версії та назви компілятора.
 
-Each command is represented as a list of the executable name, followed by its arguments, usually something like `['mycc', '--version']`. Starship will try executing each command until it gets a result on STDOUT.
+Кожна команда представлена списком з назви виконавчого файлу та аргументів, зазвичай `['myc', '--version']`. Starship спробує виконати кожну команду, поки не отримає результат в STDOUT.
 
-If a C compiler is not supported by this module, you can request it by [raising an issue on GitHub](https://github.com/starship/starship/).
+Якщо C-компілятор не підтримується цим модулем, ви можете зробити [запит на GitHub](https://github.com/starship/starship/).
 
 ### Приклад
 
@@ -670,18 +670,18 @@ format = 'via [$name $version]($style)'
 
 ## Character
 
-The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+Модуль `character` показує символ (зазвичай стрілку) поруч з текстом, який вводиться в терміналі.
 
-The character will tell you whether the last command was successful or not. It can do this in two ways:
+Символ підкаже вам, чи була остання команда успішною, чи ні. Це можна зробити двома способами:
 
 - зміною кольору (`red`/`green`)
 - зміною символу (`❯`/`✖`)
 
-By default it only changes color. If you also want to change its shape take a look at [this example](#with-custom-error-shape).
+Стандартно відбувається зміна кольору. Якщо ви також хочете змінювати й символ, подивитися на [цей приклад](#with-custom-error-shape).
 
 ::: warning
 
-`vimcmd_symbol` is only supported in cmd, fish and zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` are only supported in fish due to [upstream issues with mode detection in zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
+`vimcmd_symbol` працює лише з cmd, fish та zsh. `vimcmd_replace_one_symbol`, `vimcmd_replace_symbol`, and `vimcmd_visual_symbol` працює лише з fish через [проблему визначення режиму роботи в  zsh](https://github.com/starship/starship/issues/625#issuecomment-732454148).
 
 :::
 
@@ -737,7 +737,7 @@ vimcmd_symbol = '[V](bold green) '
 
 ## CMake
 
-The `cmake` module shows the currently installed version of [CMake](https://cmake.org/). By default the module will be activated if any of the following conditions are met:
+Модуль `cmake` показує поточну встановлену версію [CMake](https://cmake.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `CMakeLists.txt`
 - Поточна тека містить файл `CMakeCache.txt`
@@ -767,7 +767,7 @@ The `cmake` module shows the currently installed version of [CMake](https://cmak
 
 ## COBOL / GNUCOBOL
 
-The `cobol` module shows the currently installed version of COBOL. By default, the module will be shown if any of the following conditions are met:
+Модуль `cobol` показує встановлену версію COBOL. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `.cob` або `.COB`
 - Поточна тека містить файли  `.cbl` або `.CBL`
@@ -797,15 +797,15 @@ The `cobol` module shows the currently installed version of COBOL. By default, t
 
 ## Command Duration – час виконання
 
-The `cmd_duration` module shows how long the last command took to execute. The module will be shown only if the command took longer than two seconds, or the `min_time` config value, if it exists.
+Модуль `cmd_duration` показує, скільки часу виконувалась  остання команда. Модуль буде показаний лише в тому випадку, якщо на виконання команди пішло понад дві секунди або більше, ніж значення змінної `min_time`, якщо воно задане.
 
-::: warning Do not hook the DEBUG trap in Bash
+::: warning Не вмикайте DEBUG trap в Bash
 
-If you are running Starship in `bash`, do not hook the `DEBUG` trap after running `eval $(starship init $0)`, or this module **will** break.
+Якщо ви запускаєте Starship у `bash`, не вмикайте `DEBUG trap` після запуску `eval $(starship init $0)`, бо цей модуль **не працюватиме**.
 
 :::
 
-Bash users who need preexec-like functionality can use [rcaloras's bash_preexec framework](https://github.com/rcaloras/bash-preexec). Simply define the arrays `preexec_functions` and `precmd_functions` before running `eval $(starship init $0)`, and then proceed as normal.
+Користувачі Bash, яким потрібна функція preexec, можуть використовувати [фреймворк bash_preexec від rcaloras](https://github.com/rcaloras/bash-preexec). Просто визначте масиви `preexec_function` і `precmd_functions` перед запуском `eval $(starship init $0)`, а потім продовжуйте як зазвичай.
 
 ### Параметри
 
@@ -841,11 +841,11 @@ format = 'underwent [$duration](bold yellow)'
 
 ## Conda
 
-The `conda` module shows the current [Conda](https://docs.conda.io/en/latest/) environment, if `$CONDA_DEFAULT_ENV` is set.
+Модуль `conda` показує інформацію про поточне оточення [Conda](https://docs.conda.io/en/latest/), якщо змінна `$CONDA_DEFAULT_ENV` встановлена.
 
 ::: tip
 
-This does not suppress conda's own prompt modifier, you may want to run `conda config --set changeps1 False`.
+Це не призводить до вимикання власного модифікатора командного рядка в conda. Можливо, вам доведеться  виконати `conda config --set changeps1 False`.
 
 :::
 
@@ -881,7 +881,7 @@ format = '[$symbol$environment](dimmed green) '
 
 ## Container
 
-The `container` module displays a symbol and container name, if inside a container.
+Модуль `container` показує символ та назву контейнера, коли ви перебуваєте в ньому.
 
 ### Параметри
 
@@ -913,7 +913,7 @@ format = '[$symbol \[$name\]]($style) '
 
 ## Crystal
 
-The `crystal` module shows the currently installed version of [Crystal](https://crystal-lang.org/). By default the module will be shown if any of the following conditions are met:
+Модуль `crystal` показує поточну встановлену версію [Crystal](https://crystal-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `shard.yml`
 - Поточна тека містить файл `.cr`
@@ -952,7 +952,7 @@ format = 'via [✨ $version](bold blue) '
 
 ## Daml
 
-The `daml` module shows the currently used [Daml](https://www.digitalasset.com/developers) SDK version when you are in the root directory of your Daml project. The `sdk-version` in the `daml.yaml` file will be used, unless it's overridden by the `DAML_SDK_VERSION` environment variable. By default the module will be shown if any of the following conditions are met:
+Модуль `daml` показує поточну версію SDK  <1">Daml</a>, коли ви перебуваєте в кореневій теці проєкту Daml. `sdk-version` у файлі `daml.yaml` буде використовуватись, якщо значення не буде перевизначене змінною оточення `DAML_SDK_VERSION`. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `daml.yaml`
 
@@ -990,7 +990,7 @@ format = 'via [D $version](bold bright-green) '
 
 ## Dart
 
-The `dart` module shows the currently installed version of [Dart](https://dart.dev/). By default the module will be shown if any of the following conditions are met:
+Модуль `dart` показує поточну встановлену версію [Dart](https://dart.dev/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `.dart`
 - Поточна тека містить файл `.dart_tool`
@@ -1030,7 +1030,7 @@ format = 'via [🔰 $version](bold red) '
 
 ## Deno
 
-The `deno` module shows you your currently installed version of [Deno](https://deno.land/). By default the module will be shown if any of the following conditions are met:
+Модуль `deno` показує поточну встановлену версію [Deno](https://deno.land/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `deno.json`, `deno.jsonc`, `mod.ts`, `mod.js`, `deps.ts` чи  `deps.js`
 
@@ -1066,11 +1066,11 @@ format = 'via [🦕 $version](green bold) '
 
 ## Directory
 
-The `directory` module shows the path to your current directory, truncated to three parent folders. Your directory will also be truncated to the root of the git repo that you're currently in.
+Модуль `directory` показує шлях до поточної теки, урізаючи його до трьох останніх батьківських тек. Шлях до теки також буде скорочений до кореня git-репозиторію, в якому ви перебуваєте.
 
-When using the `fish_style_pwd_dir_length` option, instead of hiding the path that is truncated, you will see a shortened name of each directory based on the number you enable for the option.
+Якщо використовується параметр `fish_style_pwd_dir_length`, замість того, щоб приховувати скорочений шлях, ви побачите скорочену назву кожної теки в залежності від числа, яке ви вказали для цього параметра.
 
-For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, and the option set to `1`. You will now see `~/D/N/nixpkgs/pkgs`, whereas before it would have been `nixpkgs/pkgs`.
+Наприклад, маємо `~/Dev/Nix/nixpkgs/pkgs` де `nixpkgs` є коренем репозиторію, а параметр — `1`. Ви побачите `~/D/N/nixpkgs/pkgs`, тоді як до цього було `nixpkgs/pkgs`.
 
 ### Параметри
 
@@ -1091,7 +1091,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `use_os_path_sep`        | `true`                                                                                                                       | Використовувати розділювач шляхів, що притаманній вашій OS, замість того, щоб завжди використовувати `/` (напр `\` у Windows) |
 
 <details>
-<summary>This module has a few advanced configuration options that control how the directory is displayed.</summary>
+<summary>Цей модуль має декілька додаткових опцій, які контролюють показ шляхів до тек.</summary>
 
 | Додатковий параметр         | Стандартно | Опис                                                                                                                                                                                     |
 | --------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1099,7 +1099,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 | `fish_style_pwd_dir_length` | `0`        | Кількість символів, які використовуються при застосуванні логіки шляху fish shell pwd.                                                                                                   |
 | `use_logical_path`          | `true`     | Якщо `true` показувати логічний шлях оболонки через `PWD` або `--logical-path`. Якщо `false` – показувати шлях фізичної файлової системи з розвʼязанням шляхів для символічних посилань. |
 
-`substitutions` allows you to define arbitrary replacements for literal strings that occur in the path, for example long network prefixes or development directories (i.e. Java). Note that this will disable the fish style PWD.
+`substitutions` дозволяє визначити довільні заміни літер рядків, що зустрічаються в шляху, наприклад, довгі префікси мережі або теки розробки (в Java). Зауважте, що це відключить стиль fish у PWD.
 
 ```toml
 [directory.substitutions]
@@ -1107,7 +1107,7 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 'src/com/long/java/path' = 'mypath'
 ```
 
-`fish_style_pwd_dir_length` interacts with the standard truncation options in a way that can be surprising at first: if it's non-zero, the components of the path that would normally be truncated are instead displayed with that many characters. For example, the path `/built/this/city/on/rock/and/roll`, which would normally be displayed as `rock/and/roll`, would be displayed as `/b/t/c/o/rock/and/roll` with `fish_style_pwd_dir_length = 1`--the path components that would normally be removed are displayed with a single character. For `fish_style_pwd_dir_length = 2`, it would be `/bu/th/ci/on/rock/and/roll`.
+`fish_style_pwd_dir_length` взаємодіє зі стандартними опціями скорочення, по-перше, що може бути дивним, якщо значення не нуль, замість цього будуть показуватись компоненти шляху, які звичайно скорочені, зі вказаною кількістю символів. Наприклад, шлях `/built/this/city/on/rock/and/roll`, який зазвичай показуватиметься як `rock/and/roll`, буде показаний як `/b/t/c/o/rock/and/roll` з `fish_style_pwd_dir_length = 1` — шлях компонентів, які зазвичай вилучаються, показуються одним символом. Для `fish_style_pwd_dir_length = 2` це буде `/bu/th/ci/on/rock/and/roll`.
 
 </details>
 
@@ -1121,9 +1121,9 @@ For example, given `~/Dev/Nix/nixpkgs/pkgs` where `nixpkgs` is the repo root, an
 *: Ця змінна може бути використана лише як частина стилю рядка
 
 <details>
-<summary>The git repos have additional variables.</summary>
+<summary>Git-репозиторії мають додаткові змінні.</summary>
 
-Let us consider the path `/path/to/home/git_repo/src/lib`
+Розгляньмо шлях `/path/to/home/git_repo/src/lib`
 
 | Змінна             | Приклад               | Опис                                    |
 | ------------------ | --------------------- | --------------------------------------- |
@@ -1147,7 +1147,7 @@ truncation_symbol = '…/'
 
 ## Docker Context
 
-The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
+Модуль `docker_context` показує поточний [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) якщо його не встановлено у `default`, або якщо змінні середовища `DOCKER_MACHINE_NAME`, `DOCKER_HOST` або `DOCKER_CONTEXT` встановлені (оскільки вони призначені для перевизначення контексту).
 
 ### Параметри
 
@@ -1183,9 +1183,9 @@ format = 'via [🐋 $context](blue bold)'
 
 ## Dotnet
 
-The `dotnet` module shows the relevant version of the [.NET Core SDK](https://dotnet.microsoft.com/) for the current directory. If the SDK has been pinned in the current directory, the pinned version is shown. Otherwise the module shows the latest installed version of the SDK.
+Модуль `dotnet` показує відповідну версію [.NET Core SDK](https://dotnet.microsoft.com/) для поточної теки. Якщо SDK закріплена в поточній теці, показується закріплена версія. В іншому випадку модуль покаже останню встановлену версію SDK.
 
-By default this module will only be shown in your prompt when one or more of the following files are present in the current directory:
+Стандартно модуль буде показаний в командному рядку, коли в теці присутні один чи більше наступних файлів:
 
 - `global.json`
 - `project.json`
@@ -1196,11 +1196,11 @@ By default this module will only be shown in your prompt when one or more of the
 - `*.fsproj`
 - `*.xproj`
 
-You'll also need the .NET Core SDK installed in order to use it correctly.
+Вам також знадобиться .NET Core SDK, встановлений для того, щоб використовувати його правильно.
 
-Internally, this module uses its own mechanism for version detection. Typically it is twice as fast as running `dotnet --version`, but it may show an incorrect version if your .NET project has an unusual directory layout. If accuracy is more important than speed, you can disable the mechanism by setting `heuristic = false` in the module options.
+Всередині, цей модуль використовує власний механізм для виявлення версій. Як правило, він удвічі швидший ніж запуск `dotnet --version`, але він може показувати некоректну версію, якщо ваш проєкт .NET має незвичайне розташування тек. Якщо точність важливіша за швидкість, ви можете вимкнути механізм встановивши `heuristic = false` в налаштуваннях модуля.
 
-The module will also show the Target Framework Moniker (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>) when there is a `.csproj` file in the current directory.
+Модуль також показуватиме Target Framework Monamework (<https://docs.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks>), коли у поточній теці є файл `.csproj`.
 
 ### Параметри
 
@@ -1240,7 +1240,7 @@ heuristic = false
 
 ## Elixir
 
-The `elixir` module shows the currently installed version of [Elixir](https://elixir-lang.org/) and [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
+Модуль `elixir` показує поточну встановлену версію [Elixir](https://elixir-lang.org/) та <2">Erlang/OTP</a>. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `mix.exs`.
 
@@ -1279,7 +1279,7 @@ symbol = '🔮 '
 
 ## Elm
 
-The `elm` module shows the currently installed version of [Elm](https://elm-lang.org/). By default the module will be shown if any of the following conditions are met:
+Модуль `elm` показує поточну встановлену версію [Elm](https://elm-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `elm.json`
 - Поточна тека містить файл `elm-package.json`
@@ -1321,20 +1321,20 @@ format = 'via [ $version](cyan bold) '
 
 ## Environment Variable
 
-The `env_var` module displays the current value of a selected environment variables. The module will be shown only if any of the following conditions are met:
+Модуль `env_var` показує поточне значення обраних змінних середовища. Модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Параметр `variable` відповідає наявній змінній середовища
 - Параметр `variable` не визначено, але є параметр `default`
 
 ::: tip
 
-The order in which env_var modules are shown can be individually set by including `${env_var.foo}` in the top level `format` (as it includes a dot, you need to use `${...}`). By default, the `env_var` module will simply show all env_var modules in the order they were defined.
+Порядок в якому модуль env_var показується може встановлюватись індивідуально додаванням `${env_var.foo}` в `format` верхнього рівня (через те, що використовуються крапки, потрібно використовувати `${...}`). Типово, модуль `env_var` покаже усі модулі env_var, в тому порядку, в якому вони були визначені.
 
 :::
 
 ::: tip
 
-Multiple environmental variables can be displayed by using a `.`. (see example) If the `variable` configuration option is not set, the module will display value of variable under the name of text after the `.` character.
+Кілька змінних оточення можуть бути показані за допомоги `.`. (див. приклад) Якщо параметр конфігурації `variable` не встановлено, модуль показуватиме значення змінної під назвою тексту після символу `.`.
 
 Example: following configuration will display value of USER environment variable
 
@@ -1378,7 +1378,7 @@ variable = 'SHELL'
 default = 'unknown shell'
 ```
 
-Displaying multiple environmental variables:
+Показ кількох змінних оточення:
 
 ```toml
 # ~/.config/starship.toml
@@ -1392,7 +1392,7 @@ default = 'unknown user'
 
 ## Erlang
 
-The `erlang` module shows the currently installed version of [Erlang/OTP](https://erlang.org/doc/). By default the module will be shown if any of the following conditions are met:
+Модуль `erlang` показує поточну встановлену версію [Erlang/OTP](https://erlang.org/doc/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `rebar.config`.
 - Поточна тека містить файл `erlang.mk`.
@@ -1431,7 +1431,7 @@ format = 'via [e $version](bold red) '
 
 ## Fennel
 
-The `fennel` module shows the currently installed version of [Fennel](https://fennel-lang.org). By default the module will be shown if any of the following conditions are met:
+Модуль `fennel` показує поточну встановлену версію [Fennel](https://fennel-lang.org). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `.fnl`
 
@@ -1469,7 +1469,7 @@ symbol = '⫰ '
 
 ## Fill
 
-The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
+Модуль `fill` заповнює простір в рядку вказаним символом. Якщо використовується кілька модулів `fill`, вони можуть заповнювати рядок рівномірно розподіляючи його довжину між собою. Це корисно для форматування інших модулів.
 
 ### Параметри
 
@@ -1490,7 +1490,7 @@ symbol = '-'
 style = 'bold green'
 ```
 
-Produces a prompt that looks like:
+Створить рядок, що виглядатиме наступним чином:
 
 ```
 AA -------------------------------------------- BB -------------------------------------------- CC
@@ -1498,7 +1498,7 @@ AA -------------------------------------------- BB -----------------------------
 
 ## Fossil Branch
 
-The `fossil_branch` module shows the name of the active branch of the check-out in your current directory.
+Модуль `fossil_branch` показує назву активної гілки у вашій поточній теці.
 
 ### Параметри
 
@@ -1534,7 +1534,7 @@ truncation_symbol = ''
 
 ## Fossil Metrics
 
-The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+Модуль `fossil_metrics` покаже кількість доданих та видалених рядків у поточній теці. Потрібна версія Fossil не нижче v2.14 (2021-01-20).
 
 ### Параметри
 
@@ -1569,9 +1569,9 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 ## Google Cloud (`gcloud`)
 
-The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
+Модуль `gcloud` показує поточну конфігурацію [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Він базується на файлі `~/.config/gcloud/active_config` та на `~/.config/gcloud/configurations/config_{CONFIG NAME}` і на змінній оточення  `CLOUDSDK_CONFIG`.
 
-When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+Коли модуль увімкнено, він завжди буде активним, якщо не встановлено параметр `detect_env_vars`, в такому випадку модуль буде активним лише коли буде встановлено одну зі змінних середовища.
 
 ### Параметри
 
@@ -1645,7 +1645,7 @@ very-long-project-name = 'vlpn'
 
 ## Git Branch
 
-The `git_branch` module shows the active branch of the repo in your current directory.
+Модуль `git_branch` показує активну гілку репозиторію у вашій поточній теці.
 
 ### Параметри
 
@@ -1687,7 +1687,7 @@ ignore_branches = ['master', 'main']
 
 ## Git Commit
 
-The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+Модуль `git_commit` показує поточний хеш коміту, а також теґ (якщо він є) репозиторію у вашій поточній теці.
 
 ### Параметри
 
@@ -1724,7 +1724,7 @@ tag_symbol = '🔖 '
 
 ## Git State
 
-The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: _REBASING_, _BISECTING_, etc. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
+Модуль `git_state` показується в теках, які є частиною репозиторію git, під час виконання операцій на зразок _REBASING_, _BISECTING_ тощо. If there is progress information (e.g., REBASING 3/10), that information will be shown too.
 
 ### Параметри
 
@@ -1910,7 +1910,7 @@ windows_starship = '/mnt/c/Users/username/scoop/apps/starship/current/starship.e
 
 ## Go
 
-The `golang` module shows the currently installed version of [Go](https://golang.org/). By default the module will be shown if any of the following conditions are met:
+The `golang` module shows the currently installed version of [Go](https://golang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `go.mod`
 - Поточна тека містить файл `go.sum`
@@ -2001,7 +2001,7 @@ format = 'via [🐂](yellow bold) '
 
 The `gradle` module shows the version of the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) currently used in the project directory.
 
-By default the module will be shown if any of the following conditions are met:
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить теку `gradle/wrapper/gradle-wrapper.properties`.
 - Поточна тека містить файли `.gradle` або `.gradle.kts`.
@@ -2036,7 +2036,7 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 The `haskell` module finds the current selected GHC version and/or the selected Stack snapshot.
 
-By default the module will be shown if any of the following conditions are met:
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `stack.yaml`
 - Поточна тека містить файли `.hs`, `.cabal` або `.hs-boot`
@@ -2067,7 +2067,7 @@ By default the module will be shown if any of the following conditions are met:
 
 ## Haxe
 
-The `haxe` module shows the currently installed version of [Haxe](https://haxe.org/). By default the module will be shown if any of the following conditions are met:
+The `haxe` module shows the currently installed version of [Haxe](https://haxe.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `project.xml`, `Project.xml`, `додаток. ml`, `haxelib.json`, `hxformat.json` або `.haxerc`
 - Поточна тека містить теку `.haxelib` або `haxe_libraries`
@@ -2107,7 +2107,7 @@ format = "via [⌘ $version](bold fg:202) "
 
 ## Helm
 
-The `helm` module shows the currently installed version of [Helm](https://helm.sh/). By default the module will be shown if any of the following conditions are met:
+The `helm` module shows the currently installed version of [Helm](https://helm.sh/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `helmfile.yaml`
 - Поточна тека містить файл `Chart.yaml`
@@ -2197,7 +2197,7 @@ disabled = false
 
 ## Java
 
-The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). By default the module will be shown if any of the following conditions are met:
+The `java` module shows the currently installed version of [Java](https://www.oracle.com/java/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - В поточній теці містяться файли `pom.xml`, `build.gradle.kts`, `build.sbt`, `.java-version`, `deps.edn`, `project.clj`, `build.boot` або `.sdkmanrc`
 - Поточна тека містить файли з розширеннями `.java`, `.class`, `.gradle`, `.jar`, `.clj` або `.cljc`
@@ -2293,7 +2293,7 @@ symbol_threshold = 0
 
 ## Julia
 
-The `julia` module shows the currently installed version of [Julia](https://julialang.org/). By default the module will be shown if any of the following conditions are met:
+The `julia` module shows the currently installed version of [Julia](https://julialang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Project.toml`
 - Поточна тека містить файл `Manifest.toml`
@@ -2333,7 +2333,7 @@ symbol = '∴ '
 
 ## Kotlin
 
-The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). By default the module will be shown if any of the following conditions are met:
+The `kotlin` module shows the currently installed version of [Kotlin](https://kotlinlang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли, `.kt` або `.kts`
 
@@ -2548,7 +2548,7 @@ disabled = false
 
 ## Lua
 
-The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). By default the module will be shown if any of the following conditions are met:
+The `lua` module shows the currently installed version of [Lua](http://www.lua.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `.lua-version`
 - Поточна тека містить теку `lua`
@@ -2712,7 +2712,7 @@ truncation_symbol = ''
 
 ## Nim
 
-The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). By default the module will be shown if any of the following conditions are met:
+The `nim` module shows the currently installed version of [Nim](https://nim-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `nim.cfg`
 - Поточна тека містить файли з розширенням `.nim`
@@ -2795,7 +2795,7 @@ format = 'via [☃️ $state( \($name\))](bold blue) '
 
 ## Node.js
 
-The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). By default the module will be shown if any of the following conditions are met:
+The `nodejs` module shows the currently installed version of [Node.js](https://nodejs.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `package.json`
 - Поточна тека містить файл `.node-version`
@@ -2840,7 +2840,7 @@ format = 'via [🤖 $version](bold green) '
 
 ## OCaml
 
-The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). By default the module will be shown if any of the following conditions are met:
+The `ocaml` module shows the currently installed version of [OCaml](https://ocaml.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли з розширенням `.opam` або теку `_opam`
 - Поточна тека містить теку `esy.lock`
@@ -3114,7 +3114,7 @@ format = 'via [🎁 $version](208 bold) '
 
 ## Perl
 
-The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). By default the module will be shown if any of the following conditions are met:
+The `perl` module shows the currently installed version of [Perl](https://www.perl.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `Makefile.PL` чи `Build.PL`
 - Поточна тека містить файли `cpanfile` або `cpanfile.snapshot`
@@ -3154,7 +3154,7 @@ format = 'via [🦪 $version]($style) '
 
 ## PHP
 
-The `php` module shows the currently installed version of [PHP](https://www.php.net/). By default the module will be shown if any of the following conditions are met:
+The `php` module shows the currently installed version of [PHP](https://www.php.net/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `composer.json`
 - Поточна тека містить файл `.php-version`
@@ -3217,7 +3217,7 @@ By default the Pulumi version is not shown, since it takes an order of magnitude
 
 :::
 
-By default the module will be shown if any of the following conditions are met:
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - У поточній теці є або `Pulumi.yaml` або `Pulumi.yml`
 - Батьківська тека містить або `Pulumi.yaml` або `Pulumi.yml`, якщо для `search_upwards` не встановлено значення `false`
@@ -3267,7 +3267,7 @@ format = '[$symbol$stack]($style) '
 
 ## PureScript
 
-The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. By default the module will be shown if any of the following conditions are met:
+The `purescript` module shows the currently installed version of [PureScript](https://www.purescript.org/) version. Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `spago.dhall`
 - Поточна тека містить файли з розширенням `.purs`
@@ -3310,7 +3310,7 @@ The `python` module shows the currently installed version of [Python](https://ww
 
 If `pyenv_version_name` is set to `true`, it will display the pyenv version name. Otherwise, it will display the version number from `python --version`.
 
-By default the module will be shown if any of the following conditions are met:
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `.python-version`
 - Поточна тека містить файл `Pipfile`
@@ -3437,7 +3437,7 @@ format = 'with [📐 $version](blue bold) '
 
 ## Raku
 
-The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). By default the module will be shown if any of the following conditions are met:
+The `raku` module shows the currently installed version of [Raku](https://www.raku.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `META6.json`
 - Поточна тека містить файли `.p6`, `.pm6`, `.raku`, `.rakumod` або `.pod6`
@@ -3598,7 +3598,7 @@ format = 'via [⚙️ $version](red bold)'
 
 ## Scala
 
-The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). By default the module will be shown if any of the following conditions are met:
+The `scala` module shows the currently installed version of [Scala](https://www.scala-lang.org/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли `build.sbt`, `.scalaenv` або `.sbtenv`
 - Поточна тека містить файли `.scala` або `.sbt`
@@ -4000,7 +4000,7 @@ By default the Terraform version is not shown, since this is slow for current ve
 
 :::
 
-By default the module will be shown if any of the following conditions are met:
+Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `.terraform`
 - Поточна тека містить файли з розширеннями`.tf`, `.tfplan` або `.tfstate`
@@ -4142,7 +4142,7 @@ show_always = true
 
 ## Vagrant
 
-The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). By default the module will be shown if any of the following conditions are met:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файл `Vagrantfile`
 
@@ -4180,7 +4180,7 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-The `vlang` module shows you your currently installed version of [V](https://vlang.io/). By default the module will be shown if any of the following conditions are met:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
 - Поточна тека містить файли з розширенням `.v`
 - Поточна тека містить файли `v.mod`, `vpkg.json` або `.vpkg-lock.json`
