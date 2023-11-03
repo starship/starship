@@ -3213,7 +3213,7 @@ The `pulumi` module shows the current username, selected [Pulumi Stack](https://
 
 ::: tip
 
-By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). If you still want to enable it, [follow the example shown below](#with-pulumi-version).
+By default the Pulumi version is not shown, since it takes an order of magnitude longer to load then most plugins (~70ms). 그래도 활성화하려면, [아래에 있는 예시를 따라 하세요](#with-pulumi-version).
 
 :::
 
@@ -3996,7 +3996,7 @@ The `terraform` module shows the currently selected [Terraform workspace](https:
 
 ::: tip
 
-By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. If you still want to enable it, [follow the example shown below](#with-terraform-version).
+By default the Terraform version is not shown, since this is slow for current versions of Terraform when a lot of plugins are in use. 그래도 활성화하려면, [아래에 있는 예시를 따라 하세요](#with-terraform-version).
 
 :::
 
