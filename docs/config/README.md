@@ -860,6 +860,7 @@ running `eval $(starship init $0)`, and then proceed as normal.
 | `show_notifications`   | `false`                       | Show desktop notifications when command completes.                                                                                                                |
 | `min_time_to_notify`   | `45_000`                      | Shortest duration for notification (in milliseconds).                                                                                                             |
 | `notification_timeout` |                               | Duration to show notification for (in milliseconds). If unset, notification timeout will be determined by daemon. Not all notification daemons honor this option. |
+| `transient`            | `false`                       | Set the notifications to disappear once shown. Not all notification daemons honor this option.                                                                    |
 
 ### Variables
 

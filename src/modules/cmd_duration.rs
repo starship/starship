@@ -68,7 +68,7 @@ fn undistract_me<'a>(
     context: &'a Context,
     elapsed: u128,
 ) -> Module<'a> {
-    use notify_rust::{Notification, Timeout};
+    use notify_rust::{Hint, Notification, Timeout};
     use nu_ansi_term::{unstyle, AnsiStrings};
 
     if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
@@ -99,6 +99,10 @@ fn undistract_me<'a>(
             .body(&body)
             .icon("utilities-terminal")
             .timeout(timeout);
+
+        if config.transient {
+            notification.hint(Hint::Transient(true));
+        }
 
         if let Err(err) = notification.show() {
             log::trace!("Cannot show notification: {}", err);
