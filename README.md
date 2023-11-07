@@ -459,6 +459,7 @@ This project is [ISC](https://github.com/starship/starship/blob/master/LICENSE) 
 [homebrew]: https://formulae.brew.sh/formula/starship
 [macports]: https://ports.macports.org/port/starship
 [nixpkgs]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix
+[OSS]: https://software.opensuse.org/package/starship
 [pkgsrc]: https://pkgsrc.se/shells/starship
 [scoop]: https://github.com/ScoopInstaller/Main/blob/master/bucket/starship.json
 [termux]: https://github.com/termux/termux-packages/tree/master/packages/starship
