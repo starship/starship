@@ -232,7 +232,7 @@ Alternatively, install Starship using any of the following package managers:
 | Gentoo              | [Gentoo Packages]       | `emerge app-shells/starship`                                  |
 | Manjaro             |                         | `pacman -S starship`                                          |
 | NixOS               | [nixpkgs]               | `nix-env -iA nixpkgs.starship`                                |
-| openSUSE Tumbleweed | [OSS]                   | `zypper in starship`                                          |
+| openSUSE            | [OSS]                   | `zypper in starship`                                          |
 | Void Linux          | [Void Linux Packages]   | `xbps-install -S starship`                                    |
 
 </details>
