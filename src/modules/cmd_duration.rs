@@ -51,6 +51,14 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     Some(undistract_me(module, &config, context, elapsed))
 }
 
+#[cfg(all(feature = "notify", target_os = "linux"))]
+fn add_transient(notification: &mut notify_rust::Notification) {
+    notification.hint(notify_rust::Hint::Transient(true));
+}
+
+#[cfg(any(not(feature = "notify"), not(target_os = "linux")))]
+fn add_transient(_notification: &mut notify_rust::Notification) {}
+
 #[cfg(not(feature = "notify"))]
 fn undistract_me<'a>(
     module: Module<'a>,
@@ -68,7 +76,7 @@ fn undistract_me<'a>(
     context: &'a Context,
     elapsed: u128,
 ) -> Module<'a> {
-    use notify_rust::{Hint, Notification, Timeout};
+    use notify_rust::{Notification, Timeout};
     use nu_ansi_term::{unstyle, AnsiStrings};
 
     if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
@@ -101,7 +109,7 @@ fn undistract_me<'a>(
             .timeout(timeout);
 
         if config.transient {
-            notification.hint(Hint::Transient(true));
+            add_transient(&mut notification);
         }
 
         if let Err(err) = notification.show() {
