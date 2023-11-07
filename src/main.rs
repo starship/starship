@@ -50,6 +50,7 @@ enum Commands {
     ///  Prints the shell function used to execute starship
     Init {
         shell: String,
+        /// Prints out the main initialization script
         #[clap(long)]
         print_full_init: bool,
     },
