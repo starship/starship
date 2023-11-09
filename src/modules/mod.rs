@@ -24,6 +24,7 @@ mod env_var;
 mod erlang;
 mod fennel;
 mod fill;
+mod flutter;
 mod fossil_branch;
 mod fossil_metrics;
 mod gcloud;
@@ -129,6 +130,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "env_var" => env_var::module(None, context),
             "fennel" => fennel::module(context),
             "fill" => fill::module(context),
+            "flutter" => flutter::module(context),
             "fossil_branch" => fossil_branch::module(context),
             "fossil_metrics" => fossil_metrics::module(context),
             "gcloud" => gcloud::module(context),
@@ -245,6 +247,7 @@ pub fn description(module: &str) -> &'static str {
         "erlang" => "Current OTP version",
         "fennel" => "The currently installed version of Fennel",
         "fill" => "Fills the remaining space on the line with a pad string",
+        "flutter" => "The currently installed version of Flutter SDK",
         "fossil_branch" => "The active branch of the check-out in your current directory",
         "fossil_metrics" => "The currently added/deleted lines in your check-out",
         "gcloud" => "The current GCP client configuration",
