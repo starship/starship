@@ -37,6 +37,11 @@
       src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
       alt="Stand With Ukraine"
   /></a>
+  <a href="https://thebsd.github.io/StandWithPalestine"
+    ><img
+       src="https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/badges/StandWithPalestine.svg"
+       alt="Stand With Palestine"
+  /></a>
 </p>
 
 <p align="center">
