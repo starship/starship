@@ -152,15 +152,15 @@ En la segunda parte, que está encerrada entre `()`, es una [cadena de estilo](#
 
 Por ejemplo:
 
-- `'[on](red bold)'` will print a string `on` with bold text colored red.
-- `'[⌘ $version](bold green)'` will print a symbol `⌘` followed by the content of variable `version`, with bold text colored green.
-- `'[a [b](red) c](green)'` will print `a b c` with `b` red, and `a` and `c` green.
+- `'[on](red bold)'` imprimirá el texto `on` con color rojo y en negrita.
+- `'[⌘ $version](bold green)'` imprimirá el símbolo `⌘` seguido por el contenido de la variable `version` con color verde en negrita.
+- `'[a [b](red) c](green)'` imprimirá `a b c` donde `b` es rojo, pero `a` y `c` son verde.
 
 #### Cadenas de Estilo
 
 La mayoría de los módulos de starship permiten configurar sus estilos de visualización. Esto se consigue con una entrada (normalmente llamada `style`) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de cadenas de estilo junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consultar [la guía de configuración avanzada](/advanced-config/).
 
-- `'fg:green bg:blue'` sets green text on a blue background
+- `'fg:green bg:blue'` define el texto con color verde y el color de fondo azul
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
 - `'bold fg:27'` sets bold text with [ANSI color](https://i.stack.imgur.com/KTSQa.png) 27
 - `'underline bg:#bf5700'` sets underlined text on a burnt orange background
