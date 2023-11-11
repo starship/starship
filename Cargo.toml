@@ -96,7 +96,7 @@ shell-words = "1.1.0"
 whoami = { version = "1.4.1", default-features = false }
 
 [dependencies.schemars]
-version = "0.8.15"
+version = "0.8.16"
 optional = true
 features = ["preserve_order", "indexmap2"]
 
