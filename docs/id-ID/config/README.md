@@ -309,6 +309,7 @@ $scala\
 $solidity\
 $swift\
 $terraform\
+$typst\
 $vlang\
 $vagrant\
 $zig\
@@ -4095,6 +4096,39 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
+## Typst
+
+The `typst` module shows the current installed version of Typst used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `template.typ` file
+- The current directory contains any `*.typ` file
+
+### Opsi
+
+| Opsi                | Bawaan                               | Deskripsi                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                                     |
+| `style`             | `'bold #0093A7'`                     | Gaya penataan untuk modul.                                                          |
+| `detect_extensions` | `['.typ']`                           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `['template.typ']`                   | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `disabled`          | `false`                              | Disables the `daml` module.                                                         |
+
+### Variabel
+
+| Variabel      | Contoh   | Deskripsi                                       |
+| ------------- | -------- | ----------------------------------------------- |
+| version       | `v0.9.0` | The version of `typst`, alias for typst_version |
+| typst_version | `bawaan` | The current Typst version                       |
+| symbol        |          | Menyalin nilai dari opsi `symbol`               |
+| style\*     |          | Menyalin nilai dari opsi `style`                |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
 ## Username
 
 The `username` module shows active user's username. The module will be shown if any of the following conditions are met:
@@ -4330,7 +4364,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `deskripsi`         | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
