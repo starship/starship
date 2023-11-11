@@ -22,7 +22,7 @@ pub struct CharacterConfig<'a> {
 impl<'a> Default for CharacterConfig<'a> {
     fn default() -> Self {
         CharacterConfig {
-            format: "$symbol ",
+            format: "$symbol",
             success_symbol: "[❯](bold green)",
             error_symbol: "[❯](bold red)",
             vimcmd_symbol: "[❮](bold green)",
