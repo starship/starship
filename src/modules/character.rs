@@ -86,7 +86,7 @@ mod test {
 
     #[test]
     fn success_status() {
-        let expected = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected = Some(format!("{}", Color::Green.bold().paint("❯")));
 
         // Status code 0
         let actual = ModuleRenderer::new("character").status(0).collect();
@@ -99,7 +99,7 @@ mod test {
 
     #[test]
     fn failure_status() {
-        let expected = Some(format!("{} ", Color::Red.bold().paint("❯")));
+        let expected = Some(format!("{}", Color::Red.bold().paint("❯")));
 
         let exit_values = [1, 54321, -5000];
 
@@ -111,8 +111,8 @@ mod test {
 
     #[test]
     fn custom_symbol() {
-        let expected_fail = Some(format!("{} ", Color::Red.bold().paint("✖")));
-        let expected_success = Some(format!("{} ", Color::Green.bold().paint("➜")));
+        let expected_fail = Some(format!("{}", Color::Red.bold().paint("✖")));
+        let expected_success = Some(format!("{}", Color::Green.bold().paint("➜")));
 
         let exit_values = [1, 54321, -5000];
 
@@ -143,9 +143,9 @@ mod test {
 
     #[test]
     fn zsh_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
-        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
-        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_vicmd = Some(format!("{}", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{}", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{}", Color::Green.bold().paint("❯")));
 
         // zle keymap is vicmd
         let actual = ModuleRenderer::new("character")
@@ -175,12 +175,12 @@ mod test {
 
     #[test]
     fn fish_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
-        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
-        let expected_visual = Some(format!("{} ", Color::Yellow.bold().paint("❮")));
-        let expected_replace = Some(format!("{} ", Color::Purple.bold().paint("❮")));
+        let expected_vicmd = Some(format!("{}", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{}", Color::Green.bold().paint("V")));
+        let expected_visual = Some(format!("{}", Color::Yellow.bold().paint("❮")));
+        let expected_replace = Some(format!("{}", Color::Purple.bold().paint("❮")));
         let expected_replace_one = expected_replace.as_deref();
-        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_other = Some(format!("{}", Color::Green.bold().paint("❯")));
 
         // fish keymap is default
         let actual = ModuleRenderer::new("character")
@@ -231,9 +231,9 @@ mod test {
 
     #[test]
     fn cmd_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
-        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
-        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_vicmd = Some(format!("{}", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{}", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{}", Color::Green.bold().paint("❯")));
 
         // cmd keymap is vi
         let actual = ModuleRenderer::new("character")
@@ -263,9 +263,9 @@ mod test {
 
     #[test]
     fn powershell_keymap() {
-        let expected_vicmd = Some(format!("{} ", Color::Green.bold().paint("❮")));
-        let expected_specified = Some(format!("{} ", Color::Green.bold().paint("V")));
-        let expected_other = Some(format!("{} ", Color::Green.bold().paint("❯")));
+        let expected_vicmd = Some(format!("{}", Color::Green.bold().paint("❮")));
+        let expected_specified = Some(format!("{}", Color::Green.bold().paint("V")));
+        let expected_other = Some(format!("{}", Color::Green.bold().paint("❯")));
 
         // powershell keymap is vi
         let actual = ModuleRenderer::new("character")
