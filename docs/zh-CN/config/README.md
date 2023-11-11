@@ -309,6 +309,7 @@ $scala\
 $solidity\
 $swift\
 $terraform\
+$typst\
 $vlang\
 $vagrant\
 $zig\
@@ -4095,14 +4096,47 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
+## Typst
+
+The `typst` module shows the current installed version of Typst used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `template.typ` file
+- The current directory contains any `*.typ` file
+
+### 配置项
+
+| 选项                  | 默认值                                  | 描述                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | 组件格式化模板。                                                                  |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `符号`                | `'t '`                               | A format string representing the symbol of Daml                           |
+| `style`             | `'bold #0093A7'`                     | 此组件的样式。                                                                   |
+| `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `daml` module.                                               |
+
+### 变量
+
+| 字段            | 示例        | 描述                                              |
+| ------------- | --------- | ----------------------------------------------- |
+| version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
+| typst_version | `default` | The current Typst version                       |
+| 符号            |           | `symbol`对应值                                     |
+| style\*     |           | `style`对应值                                      |
+
+*: 此变量只能作为样式字符串的一部分使用
+
 ## Username
 
-`username` 组件显示当前活跃的用户名。 此组件将在符合以下任意条件时显示：
+The `username` module shows active user's username. 此组件将在符合以下任意条件时显示：
 
 - The current user is root/admin
-- 当前用户与登录用户不相同
-- 用户正通过 SSH 会话连接访问
-- 字段 `show_always` 被设置为 true
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -4115,10 +4149,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | 选项            | 默认值                     | 描述                                          |
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | 非 root 用户使用的样式。                             |
+| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
 | `format`      | `'[$user]($style) in '` | 组件格式化模板。                                    |
-| `show_always` | `false`                 | 总是显示 `username` 组件。                         |
-| `disabled`    | `false`                 | 禁用 `username` 组件。                           |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### 变量
 
@@ -4330,7 +4364,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `描述`                | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
@@ -4344,40 +4378,40 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 ### 变量
 
-| 字段        | 描述             |
-| --------- | -------------- |
-| output    | `shell` 中命令的输出 |
-| 符号        | `symbol`对应值    |
-| style\* | `style`对应值     |
+| 字段        | 描述                                     |
+| --------- | -------------------------------------- |
+| output    | The output of shell command in `shell` |
+| 符号        | `symbol`对应值                            |
+| style\* | `style`对应值                             |
 
 *: 此变量只能作为样式字符串的一部分使用
 
 #### 自定义命令 shell
 
-`shell` 接受一个非空字符串列表：
+`shell` accepts a non-empty list of strings, where:
 
-- 第一个字符串是用于执行命令的 shell 路径。
-- 剩下的将作为参数传递给 shell。
+- The first string is the path to the shell to use to execute the command.
+- Other following arguments are passed to the shell.
 
-如果未设置，它将回退到 STARSHIP_SHELL，然后回退到 Linux 上的 "sh" 命令，在 Windows 上则是 "cmd /C"。
+If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
 
-`command` 将会被传递给标准输入。
+The `command` will be passed in on stdin.
 
-如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 PowerShell，则会自动添加 `-NoProfile -Command -` 参数。 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 Cmd，则会自动添加 `/C` 参数，并且将 `stdin` 设置为 `false`。 如果 `shell` 未设置或仅包含一个元素，并且 Starship 检测到正在使用 Cmd，则会自动添加 `-C` 参数，并且将 `stdin` 设置为 `false`。 可以通过将参数显式传递给 shell 来避免这种行为，例如：
+If `shell` is not given or only contains one element and Starship detects PowerShell will be used, the following arguments will automatically be added: `-NoProfile -Command -`. If `shell` is not given or only contains one element and Starship detects Cmd will be used, the following argument will automatically be added: `/C` and `stdin` will be set to `false`. If `shell` is not given or only contains one element and Starship detects Nushell will be used, the following arguments will automatically be added: `-c` and `stdin` will be set to `false`. This behavior can be avoided by explicitly passing arguments to the shell, e.g.
 
 ```toml
 shell = ['pwsh', '-Command', '-']
 ```
 
-::: warning 请确保您的自定义 shell 配置正常退出
+::: warning Make sure your custom shell configuration exits gracefully
 
-如果您设置了一个自定义命令， 请确保 starship 使用的默认 shell (在 `shell` 选项设置) 执行命令后会正常退出。
+If you set a custom command, make sure that the default Shell used by starship will properly execute the command with a graceful exit (via the `shell` option).
 
-例如，PowerShell 需要 `-Command` 参数来执行单行命令。 忽略此参数可能导致 starship 无尽递归：shell 可能会尝试加载带有 starship 的完整配置并重新执行自定义命令，导致无尽循环。
+For example, PowerShell requires the `-Command` parameter to execute a one liner. Omitting this parameter might throw starship into a recursive loop where the shell might try to load a full profile environment with starship itself again and hence re-execute the custom command, getting into a never ending loop.
 
-建议使用类似于 PowerShell 中 `-NoProfile` 的启动参数，这样还能避免额外的配置加载时间。
+Parameters similar to `-NoProfile` in PowerShell are recommended for other shells as well to avoid extra loading time of a custom profile on every starship invocation.
 
-自动检测 shell 和添加适当的参数的功能已被实现，但包含的 shell 支持可能有缺漏。 遇到这种情况，请[提交一个带有 shell 信息和 starship 配置的 issue](https://github.com/starship/starship/issues/new/choose)。
+Automatic detection of shells and proper parameters addition are currently implemented, but it's possible that not all shells are covered. [Please open an issue](https://github.com/starship/starship/issues/new/choose) with shell details and starship configuration if you hit such scenario.
 
 :::
 
