@@ -309,6 +309,7 @@ $scala\
 $solidity\
 $swift\
 $terraform\
+$typst\
 $vlang\
 $vagrant\
 $zig\
@@ -1349,14 +1350,14 @@ default = 'unknown user'
 
 ### Options
 
-| Option        | Défaut                         | Description                                                                          |
-| ------------- | ------------------------------ | ------------------------------------------------------------------------------------ |
-| `symbole`     | `""`                           | Le symbole utilisé avant d'afficher la valeur de la variable.                        |
-| `variable`    |                                | La variable d'environnement à afficher.                                              |
-| `default`     |                                | La valeur par défaut à afficher lorsque la variable sélectionnée n'est pas définie.  |
-| `format`      | `"with [$env_value]($style) "` | Format du module.                                                                    |
-| `description` | `"<env_var module>"`     | La description du module qui est affichée lors de l’exécution de `starship explain`. |
-| `disabled`    | `false`                        | Désactive le module `env_var`.                                                       |
+| Option        | Défaut                         | Description                                                                         |
+| ------------- | ------------------------------ | ----------------------------------------------------------------------------------- |
+| `symbole`     | `""`                           | Le symbole utilisé avant d'afficher la valeur de la variable.                       |
+| `variable`    |                                | La variable d'environnement à afficher.                                             |
+| `default`     |                                | La valeur par défaut à afficher lorsque la variable sélectionnée n'est pas définie. |
+| `format`      | `"with [$env_value]($style) "` | Format du module.                                                                   |
+| `description` | `"<env_var module>"`     | The description of the module that is shown when running `starship explain`.        |
+| `disabled`    | `false`                        | Désactive le module `env_var`.                                                      |
 
 ### Variables
 
@@ -4096,14 +4097,47 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
-## Nom d'utilisateur
+## Typst
 
-Le module `username` affiche le nom de l’utilisateur actif. Le module sera affiché si l'une de ces conditions est remplie:
+The `typst` module shows the current installed version of Typst used in a project.
 
-- L'utilisateur courant est root/admin
-- L'utilisateur courant est différent de celui connecté
-- L'utilisateur est actuellement connecté en tant que session SSH
-- La variable `show_always` est définie à true
+Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+
+- The current directory contains a `template.typ` file
+- The current directory contains any `*.typ` file
+
+### Options
+
+| Option                               | Défaut                               | Description                                                                                |
+| ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
+| `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
+| `symbole`                            | `'t '`                               | A format string representing the symbol of Daml                                            |
+| `style`                              | `'bold #0093A7'`                     | Le style pour le module.                                                                   |
+| `detect_extensionsdetect_extensions` | `['.typ']`                           | Les extensions qui déclenchent ce module.                                                  |
+| `detect_files`                       | `['template.typ']`                   | Les fichiers qui activent ce module.                                                       |
+| `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
+| `disabled`                           | `false`                              | Disables the `daml` module.                                                                |
+
+### Variables
+
+| Variable      | Exemple   | Description                                     |
+| ------------- | --------- | ----------------------------------------------- |
+| version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
+| typst_version | `default` | The current Typst version                       |
+| symbole       |           | Reflète la valeur de l'option `symbol`          |
+| style\*     |           | Reflète la valeur de l'option `style`           |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+## Username
+
+The `username` module shows active user's username. Le module sera affiché si l'une de ces conditions est remplie:
+
+- The current user is root/admin
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -4113,20 +4147,20 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 
 ### Options
 
-| Option        | Défaut                  | Description                                          |
-| ------------- | ----------------------- | ---------------------------------------------------- |
-| `style_root`  | `'bold red'`            | Le style utilisé quand l'utilisateur est root/admin. |
-| `style_user`  | `'bold yellow'`         | Le style utilisé pour les utilisateurs non-root.     |
-| `format`      | `'[$user]($style) in '` | Format du module.                                    |
-| `show_always` | `false`                 | Toujours afficher le module `username`.              |
-| `disabled`    | `false`                 | Désactive le module `username`.                      |
+| Option        | Défaut                  | Description                                 |
+| ------------- | ----------------------- | ------------------------------------------- |
+| `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
+| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
+| `format`      | `'[$user]($style) in '` | Format du module.                           |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### Variables
 
 | Variable | Exemple      | Description                                                                                 |
 | -------- | ------------ | ------------------------------------------------------------------------------------------- |
 | `style`  | `'red bold'` | Mirrors the value of option `style_root` when root is logged in and `style_user` otherwise. |
-| `user`   | `'matchai'`  | L’identifiant de l’utilisateur courant.                                                     |
+| `user`   | `'matchai'`  | The currently logged-in user ID.                                                            |
 
 ### Exemple
 
@@ -4143,9 +4177,9 @@ show_always = true
 
 ## Vagrant
 
-Le module `vagrant` affiche la version de [Vagrant](https://www.vagrantup.com/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `vagrant` module shows the currently installed version of [Vagrant](https://www.vagrantup.com/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier `Vagrantfile`
+- The current directory contains a `Vagrantfile` file
 
 ### Options
 
@@ -4153,18 +4187,18 @@ Le module `vagrant` affiche la version de [Vagrant](https://www.vagrantup.com/) 
 | ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
 | `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'⍱ '`                               | Une chaîne de caractères représentant le symbole de Vagrant.                               |
+| `symbole`                            | `'⍱ '`                               | A format string representing the symbol of Vagrant.                                        |
 | `detect_extensionsdetect_extensions` | `[]`                                 | Les extensions qui déclenchent ce module.                                                  |
 | `detect_files`                       | `['Vagrantfile']`                    | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
 | `style`                              | `'cyan bold'`                        | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `vagrant`.                                                             |
+| `disabled`                           | `false`                              | Disables the `vagrant` module.                                                             |
 
 ### Variables
 
 | Variable  | Exemple          | Description                            |
 | --------- | ---------------- | -------------------------------------- |
-| version   | `Vagrant 2.2.10` | La version de `Vagrant`                |
+| version   | `Vagrant 2.2.10` | The version of `Vagrant`               |
 | symbole   |                  | Reflète la valeur de l'option `symbol` |
 | style\* |                  | Reflète la valeur de l'option `style`  |
 
@@ -4181,10 +4215,10 @@ format = 'via [⍱ $version](bold white) '
 
 ## V
 
-Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par défaut, le module sera affiché si l’une de ces conditions est remplie:
+The `vlang` module shows you your currently installed version of [V](https://vlang.io/). Par défaut, le module sera affiché si l’une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier avec l’extension `.v`
-- Le dossier courant contient un fichier `v.mod`, `vpkg.json` ou `.vpkg-lock.json`
+- The current directory contains a file with `.v` extension
+- The current directory contains a `v.mod`, `vpkg.json` or `.vpkg-lock.json` file
 
 ### Options
 
@@ -4192,18 +4226,18 @@ Le module `vlang` affiche la version de [V](https://vlang.io/) installée. Par d
 | ------------------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `format`                             | `'via [$symbol($version )]($style)'`         | Format du module.                                                                          |
 | `version_format`                     | `'v${raw}'`                                  | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'V '`                                       | Une chaîne de caractères représentant le symbole de V                                      |
+| `symbole`                            | `'V '`                                       | A format string representing the symbol of V                                               |
 | `detect_extensionsdetect_extensions` | `['v']`                                      | Les extensions qui déclenchent ce module.                                                  |
 | `detect_files`                       | `['v.mod', 'vpkg.json', '.vpkg-lock.json' ]` | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`                     | `[]`                                         | Les dossiers qui activent ce module.                                                       |
 | `style`                              | `'blue bold'`                                | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                                      | Désactive le module `vlang`.                                                               |
+| `disabled`                           | `false`                                      | Disables the `vlang` module.                                                               |
 
 ### Variables
 
 | Variable  | Exemple | Description                            |
 | --------- | ------- | -------------------------------------- |
-| version   | `v0.2`  | La version de `v`                      |
+| version   | `v0.2`  | The version of `v`                     |
 | symbole   |         | Reflète la valeur de l'option `symbol` |
 | style\* |         | Reflète la valeur de l'option `style`  |
 
@@ -4221,20 +4255,20 @@ The `vcsh` module displays the current active [VCSH](https://github.com/RichiH/v
 
 ### Options
 
-| Option     | Défaut                           | Description                                          |
-| ---------- | -------------------------------- | ---------------------------------------------------- |
-| `symbole`  | `''`                             | Le symbole utilisé avant d'afficher le nom du dépôt. |
-| `style`    | `'bold yellow'`                  | Le style pour le module.                             |
-| `format`   | `'vcsh [$symbol$repo]($style) '` | Format du module.                                    |
-| `disabled` | `false`                          | Désactive le module `vcsh`.                          |
+| Option     | Défaut                           | Description                                            |
+| ---------- | -------------------------------- | ------------------------------------------------------ |
+| `symbole`  | `''`                             | The symbol used before displaying the repository name. |
+| `style`    | `'bold yellow'`                  | Le style pour le module.                               |
+| `format`   | `'vcsh [$symbol$repo]($style) '` | Format du module.                                      |
+| `disabled` | `false`                          | Disables the `vcsh` module.                            |
 
 ### Variables
 
-| Variable  | Exemple                                         | Description                            |
-| --------- | ----------------------------------------------- | -------------------------------------- |
-| repo      | `dotfiles` si dans un dépôt VCSH nommé dotfiles | Le nom du dépôt actif                  |
-| symbole   |                                                 | Reflète la valeur de l'option `symbol` |
-| style\* | `black bold dimmed`                             | Reflète la valeur de l'option `style`  |
+| Variable  | Exemple                                     | Description                            |
+| --------- | ------------------------------------------- | -------------------------------------- |
+| repo      | `dotfiles` if in a VCSH repo named dotfiles | The active repository name             |
+| symbole   |                                             | Reflète la valeur de l'option `symbol` |
+| style\* | `black bold dimmed`                         | Reflète la valeur de l'option `style`  |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
@@ -4251,7 +4285,7 @@ format = '[🆅 $repo](bold blue) '
 
 By default the `zig` module shows the currently installed version of [Zig](https://ziglang.org/). Le module sera affiché si l'une de ces conditions est remplie:
 
-- Le dossier courant contient un fichier `.zip`
+- The current directory contains a `.zig` file
 
 ### Options
 
@@ -4259,9 +4293,9 @@ By default the `zig` module shows the currently installed version of [Zig](https
 | ------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------ |
 | `format`                             | `'via [$symbol($version )]($style)'` | Format du module.                                                                          |
 | `version_format`                     | `'v${raw}'`                          | Le format de la version. Les variables disponibles sont `raw`, `major`, `minor`, & `patch` |
-| `symbole`                            | `'↯ '`                               | Le symbole utilisé avant d'afficher la version de Zig.                                     |
+| `symbole`                            | `'↯ '`                               | The symbol used before displaying the version of Zig.                                      |
 | `style`                              | `'bold yellow'`                      | Le style pour le module.                                                                   |
-| `disabled`                           | `false`                              | Désactive le module `zig`.                                                                 |
+| `disabled`                           | `false`                              | Disables the `zig` module.                                                                 |
 | `detect_extensionsdetect_extensions` | `['zig']`                            | Les extensions qui déclenchent ce module.                                                  |
 | `detect_files`                       | `[]`                                 | Les fichiers qui activent ce module.                                                       |
 | `detect_folders`                     | `[]`                                 | Les dossiers qui activent ce module.                                                       |
@@ -4270,7 +4304,7 @@ By default the `zig` module shows the currently installed version of [Zig](https
 
 | Variable  | Exemple  | Description                            |
 | --------- | -------- | -------------------------------------- |
-| version   | `v0.6.0` | La version de `zip`                    |
+| version   | `v0.6.0` | The version of `zig`                   |
 | symbole   |          | Reflète la valeur de l'option `symbol` |
 | style\* |          | Reflète la valeur de l'option `style`  |
 
@@ -4285,21 +4319,21 @@ By default the `zig` module shows the currently installed version of [Zig](https
 symbol = '⚡️ '
 ```
 
-## Commandes personnalisées
+## Custom commands
 
-Les modules `custom` affichent la sortie d’une commande arbitaitre.
+The `custom` modules show the output of some arbitrary commands.
 
-Ces modules seront affichés si l'une de ces conditions est remplie:
+These modules will be shown if any of the following conditions are met:
 
-- Le dossier courant contient un fichier dont le nom est dans `detect_files`
-- Le dossier courant contient un dossier dont le nom est dans `detect_folders`
-- Le dossier courant contient un fichier dont l’extension est dans `detect_extensions`
-- La commande `when` retourne 0
+- The current directory contains a file whose name is in `detect_files`
+- The current directory contains a directory whose name is in `detect_folders`
+- The current directory contains a file whose extension is in `detect_extensions`
+- The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
 ::: tip
 
-Plusieurs modules personnalisés peuvent être définis en utilisant un `.`.
+Multiple custom modules can be defined by using a `.`.
 
 :::
 
@@ -4327,37 +4361,37 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 
 | Option                               | Défaut                          | Description                                                                                                                                                                                                                                                                                   |
 | ------------------------------------ | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `command`                            | `''`                            | La commande dont la sortie doit être affichée. La commande sera transmise au shell sur l’entrée standard.                                                                                                                                                                                     |
-| `when`                               | `false`                         | Soit une valeur booléenne (`true` ou `false`, sans guillemets) ou une commande shell utilisée comme condition pour afficher le module. Dans le cas d’une chaine, le module sera affiché si la commande renvoie un code de statut `0`.                                                         |
+| `command`                            | `''`                            | The command whose output should be printed. The command will be passed on stdin to the shell.                                                                                                                                                                                                 |
+| `when`                               | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`                       | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
-| `shell`                              |                                 | [Voir plus bas](#custom-command-shell)                                                                                                                                                                                                                                                        |
-| `description`                        | `'<custom module>'`       | La description du module qui est affichée lors de l’exécution de `starship explain`.                                                                                                                                                                                                          |
+| `shell`                              |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
+| `description`                        | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`                       | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`                     | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensionsdetect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
-| `symbole`                            | `''`                            | Le symbole utilisé avant d'afficher la sortie de la commande.                                                                                                                                                                                                                                 |
+| `symbole`                            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
 | `style`                              | `'bold green'`                  | Le style pour le module.                                                                                                                                                                                                                                                                      |
 | `format`                             | `'[$symbol($output )]($style)'` | Format du module.                                                                                                                                                                                                                                                                             |
-| `disabled`                           | `false`                         | Désactive le module `custom`.                                                                                                                                                                                                                                                                 |
-| `os`                                 |                                 | Nom du système d'exploitation sur lequel le module sera affiché (unix, linux, macos, windows, ... ) [Voir les valeurs possibles](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                  |
+| `disabled`                           | `false`                         | Disables this `custom` module.                                                                                                                                                                                                                                                                |
+| `os`                                 |                                 | Operating System name on which the module will be shown (unix, linux, macos, windows, ... ) [See possible values](https://doc.rust-lang.org/std/env/consts/constant.OS.html).                                                                                                                 |
 | `use_stdin`                          |                                 | An optional boolean value that overrides whether commands should be forwarded to the shell via the standard input or as an argument. If unset standard input is used by default, unless the shell does not support it (cmd, nushell). Setting this disables shell-specific argument handling. |
-| `ignore_timeout`                     | `false`                         | Ignore le paramètre global `command_timeout` et continuer à exécuter des commandes externes, peu importe le temps qu'elles prennent.                                                                                                                                                          |
+| `ignore_timeout`                     | `false`                         | Ignore global `command_timeout` setting and keep running external commands, no matter how long they take.                                                                                                                                                                                     |
 
 ### Variables
 
-| Variable  | Description                                 |
-| --------- | ------------------------------------------- |
-| output    | La sortie de la commande shell dans `shell` |
-| symbole   | Reflète la valeur de l'option `symbol`      |
-| style\* | Reflète la valeur de l'option `style`       |
+| Variable  | Description                            |
+| --------- | -------------------------------------- |
+| output    | The output of shell command in `shell` |
+| symbole   | Reflète la valeur de l'option `symbol` |
+| style\* | Reflète la valeur de l'option `style`  |
 
 *: Cette variable peut uniquement être utilisée dans une chaine de style
 
 #### Commandes shell personnalisées
 
-`shell` accepte une liste de chaînes non vide, où:
+`shell` accepts a non-empty list of strings, where:
 
-- La première chaîne est le chemin vers le shell à utiliser pour exécuter la commande.
+- The first string is the path to the shell to use to execute the command.
 - Other following arguments are passed to the shell.
 
 If unset, it will fallback to STARSHIP_SHELL and then to 'sh' on Linux, and 'cmd /C' on Windows.
