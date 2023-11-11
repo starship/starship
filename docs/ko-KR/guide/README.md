@@ -221,18 +221,19 @@ curl -sS https://starship.rs/install.sh | sh
 
 다음의 패키지 관리자를 사용해서 Starship을 설치할 수도 있습니다.
 
-| 배포판                | 리포지토리                                                                                        | 설명                                                                             |
-| ------------------ | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **_전체_**           | **[crates.io](https://crates.io/crates/starship)**                                           | `cargo install starship --locked`                                              |
-| _전체_               | [conda-forge](https://anaconda.org/conda-forge/starship)                                     | `conda install -c conda-forge starship`                                        |
-| _전체_               | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                       | `brew install starship`                                                        |
-| Alpine Linux 3.13+ | [Alpine Linux 패키지](https://pkgs.alpinelinux.org/packages?name=starship)                      | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                     | `pacman -S starship`                                                           |
-| CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                | `dnf copr enable atim/starship` <br /> `dnf install starship` |
-| Gentoo             | [Gentoo 패키지](https://packages.gentoo.org/packages/app-shells/starship)                       | `emerge app-shells/starship`                                                   |
-| Manjaro            |                                                                                              | `pacman -S starship`                                                           |
-| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix) | `nix-env -iA nixpkgs.starship`                                                 |
-| Void Linux         | [Void Linux 패키지](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship)   | `xbps-install -S starship`                                                     |
+| 배포판                | 리포지토리                                                                                           | 설명                                                                             |
+| ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **_전체_**           | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
+| _전체_               | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
+| _전체_               | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
+| Alpine Linux 3.13+ | [Alpine Linux 패키지](https://pkgs.alpinelinux.org/packages?name=starship)                         | `apk add starship`                                                             |
+| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
+| CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
+| Gentoo             | [Gentoo 패키지](https://packages.gentoo.org/packages/app-shells/starship)                          | `emerge app-shells/starship`                                                   |
+| Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
+| NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
+| Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
 
