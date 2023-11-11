@@ -309,6 +309,7 @@ $scala\
 $solidity\
 $swift\
 $terraform\
+$typst\
 $vlang\
 $vagrant\
 $zig\
@@ -4095,14 +4096,47 @@ utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
 
-## 使用者名稱
+## Typst
 
-`username` 模組顯示現在使用中的使用者名稱。 這個模組將在下列其中一個條件滿足時顯示：
+The `typst` module shows the current installed version of Typst used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `template.typ` file
+- The current directory contains any `*.typ` file
+
+### 選項
+
+| Option              | 預設                                   | 說明                                                                        |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version )]($style)'` | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                          | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                           |
+| `style`             | `'bold #0093A7'`                     | 這個模組的風格。                                                                  |
+| `detect_extensions` | `['.typ']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `['template.typ']`                   | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                 | Which folders should trigger this module.                                 |
+| `disabled`          | `false`                              | Disables the `daml` module.                                               |
+
+### Variables
+
+| 變數            | 範例        | 說明                                              |
+| ------------- | --------- | ----------------------------------------------- |
+| version       | `v0.9.0`  | The version of `typst`, alias for typst_version |
+| typst_version | `default` | The current Typst version                       |
+| symbol        |           | Mirrors the value of option `symbol`            |
+| style\*     |           | Mirrors the value of option `style`             |
+
+*: This variable can only be used as a part of a style string
+
+## Username
+
+The `username` module shows active user's username. 這個模組將在下列其中一個條件滿足時顯示：
 
 - The current user is root/admin
-- 目前使用者並非登入時的使用者
-- 使用者透過 SSH session 進行連線
-- 變數 `show_always` 被設為 true
+- The current user isn't the same as the one that is logged in
+- The user is currently connected as an SSH session
+- The variable `show_always` is set to true
 
 ::: tip
 
@@ -4115,10 +4149,10 @@ SSH connection is detected by checking environment variables `SSH_CONNECTION`, `
 | Option        | 預設                      | 說明                                          |
 | ------------- | ----------------------- | ------------------------------------------- |
 | `style_root`  | `'bold red'`            | The style used when the user is root/admin. |
-| `style_user`  | `'bold yellow'`         | 非 root 使用者時使用的風格。                           |
+| `style_user`  | `'bold yellow'`         | The style used for non-root users.          |
 | `format`      | `'[$user]($style) in '` | The format for the module.                  |
-| `show_always` | `false`                 | 總是顯示 `username` 模組。                         |
-| `disabled`    | `false`                 | 停用 `username` 模組。                           |
+| `show_always` | `false`                 | Always shows the `username` module.         |
+| `disabled`    | `false`                 | Disables the `username` module.             |
 
 ### Variables
 
@@ -4330,7 +4364,7 @@ Format strings can also contain shell specific prompt sequences, e.g. [Bash](htt
 | `when`              | `false`                         | Either a boolean value (`true` or `false`, without quotes) or a string shell command used as a condition to show the module. In case of a string, the module will be shown if the command returns a `0` status code.                                                                          |
 | `require_repo`      | `false`                         | If `true`, the module will only be shown in paths containing a (git) repository. This option alone is not sufficient display condition in absence of other options.                                                                                                                           |
 | `shell`             |                                 | [See below](#custom-command-shell)                                                                                                                                                                                                                                                            |
-| `說明`                | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
+| `description`       | `'<custom module>'`       | The description of the module that is shown when running `starship explain`.                                                                                                                                                                                                                  |
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
