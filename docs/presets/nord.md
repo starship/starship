@@ -7,6 +7,7 @@ This preset is heavily inspired by [Nord](https://www.nordtheme.com/).
 This preset uses starship [palette](https://starship.rs/config/#prompt).
 
 Four palettes are available:
+
 - polar_night
 - snow_storm
 - frost
