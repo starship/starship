@@ -4098,11 +4098,11 @@ time_range = '10:00:00-14:00:00'
 
 ## Typst
 
-The `typst` module shows the current installed version of Typst used in a project.
+Модуль `typst` показує поточну встановлену версію Typst, що використовується в проєкті.
 
 Типово, модуль показується, якщо виконується будь-яка з наступних умов:
 
-- The current directory contains a `template.typ` file
+- Поточна тека містить файл `template.typ`
 - The current directory contains any `*.typ` file
 
 ### Параметри
