@@ -1,4 +1,3 @@
-
 [Return to Presets](./README.md#nord-dark)
 
 # Nord Dark Preset
