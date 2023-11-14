@@ -1,0 +1,182 @@
+format = """
+[](fg:dir_bg_color)\
+$directory\
+[](fg:dir_bg_color bg:git_bg_color)\
+$git_branch\
+$git_status\
+[](fg:git_bg_color bg:code_bg_color)\
+$buf\
+$c\
+$elixir\
+$elm\
+$golang\
+$gradle\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$rust\
+$scala\
+[](fg:code_bg_color bg:tool_bg_color)\
+$kubernetes\
+$container\
+$docker_context\
+[](fg:tool_bg_color bg:character_bg_color)\
+$cmd_duration\
+$character
+"""
+
+palette = 'polar_night'
+
+# Nord Polar Night
+[palettes.polar_night]
+dir_bg_color = '#2E3440'
+git_bg_color = '#3B4252'
+code_bg_color = '#434C5E'
+tool_bg_color = '#4C566A'
+text_color = '#D8DEE9'
+character_bg_color = '#D8DEE9'
+character_text_color = '#2E3440'
+character_text_error_color = '#BF616A'
+
+# Nord Snow Storm
+[palettes.snow_storm]
+dir_bg_color = '#ECEFF4'
+git_bg_color = '#E5E9F0'
+code_bg_color = '#D8DEE9'
+tool_bg_color = '#E5E9F0'
+text_color = '#4C566A'
+character_bg_color = '#ECEFF4'
+character_text_color = '#4C566A'
+character_text_error_color = '#BF616A'
+
+# Nord Aurora
+[palettes.aurora]
+dir_bg_color = '#BF616A'
+git_bg_color = '#D08770'
+code_bg_color = '#EBCB8B'
+tool_bg_color = '#A3BE8C'
+text_color = '#4C566A'
+character_bg_color = '#B48EAD'
+character_text_color = '#4C566A'
+character_text_error_color = '#BF616A'
+
+# Nord Frost
+[palettes.frost]
+dir_bg_color = '#5E81AC'
+git_bg_color = '#81A1C1'
+code_bg_color = '#88C0D0'
+tool_bg_color = '#8FBCBB'
+text_color = '#4C566A'
+character_bg_color = '#D8DEE9'
+character_text_color = '#4C566A'
+character_text_error_color = '#BF616A'
+
+[buf]
+symbol = "󰿘 "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[cmd_duration]
+min_time = 0
+style = "bg:character_bg_color fg:character_text_color"
+format = '[ $duration ]($style)'
+
+[character]
+success_symbol = "[](fg:character_bg_color bg:character_bg_color)[](fg:character_bg_color)"
+error_symbol = "[](fg:character_bg_color bg:character_text_error_color)[](fg:character_text_error_color)"
+
+[directory]
+style = "bg:dir_bg_color fg:text_color"
+format = "[ $path $read_only ]($style)"
+home_symbol = "󱂵 "
+truncation_length = 3
+truncation_symbol = "󰦩 "
+read_only = "󰌾 "
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[c]
+symbol = " "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[docker_context]
+disabled = false
+symbol = " "
+style = "bg:tool_bg_color fg:text_color"
+format = '[ $symbol $context ]($style) $path'
+
+[kubernetes]
+symbol = "󱃾 "
+disabled = false
+format = '[ $symbol $cluster ]($style)'
+style = "bg:tool_bg_color fg:text_color"
+
+[elixir]
+symbol = " "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[elm]
+symbol = " "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[git_branch]
+symbol = "󰊢"
+style = "bg:git_bg_color fg:text_color"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:git_bg_color fg:text_color"
+format = '[$all_status$ahead_behind ]($style)'
+
+[golang]
+symbol = " "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[gradle]
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[haskell]
+symbol = " "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[java]
+symbol = " "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[julia]
+symbol = " "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[nim]
+symbol = "󰆥 "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[rust]
+symbol = ""
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
+
+[scala]
+symbol = " "
+style = "bg:code_bg_color fg:text_color"
+format = '[ $symbol ($version) ]($style)'
