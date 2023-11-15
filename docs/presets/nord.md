@@ -15,7 +15,7 @@ Four palettes are available:
 
 the default palette is polar_night
 
-![Screenshot of Nord preset](/presets/img/nord.png)
+![Screenshot of Nord preset](/presets/img/nord.gif)
 
 ### Prerequisites
 
