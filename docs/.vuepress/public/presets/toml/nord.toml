@@ -27,7 +27,7 @@ $cmd_duration\
 $character
 """
 
-palette = 'polar_night'
+palette = 'nord'
 
 # Nord Polar Night
 [palettes.polar_night]
@@ -94,12 +94,6 @@ home_symbol = "󰟒 "
 truncation_length = 3
 truncation_symbol = "󰦩 "
 read_only = "󰌾 "
-
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = " "
-"Pictures" = " "
 
 [c]
 symbol = " "
