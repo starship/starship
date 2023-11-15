@@ -27,7 +27,7 @@ $cmd_duration\
 $character
 """
 
-palette = 'nord'
+palette = 'polar_night'
 
 # Nord Polar Night
 [palettes.polar_night]
@@ -90,10 +90,13 @@ error_symbol = "[](fg:character_bg_color bg:character_text_error_color)[](
 [directory]
 style = "bg:dir_bg_color fg:text_color"
 format = "[ $path $read_only ]($style)"
-home_symbol = "󰟒 "
+home_symbol = "󰟒"
 truncation_length = 3
 truncation_symbol = "󰦩 "
 read_only = "󰌾 "
+
+[directory.substitutions]
+"/" = "  "
 
 [c]
 symbol = " "
