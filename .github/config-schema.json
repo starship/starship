@@ -1738,6 +1738,19 @@
         }
       ]
     },
+    "vim_shell": {
+      "default": {
+        "disabled": false,
+        "format": "[ $symbol ]($style)",
+        "style": "",
+        "symbol": "[](bold green)"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/VimShellConfig"
+        }
+      ]
+    },
     "vlang": {
       "default": {
         "detect_extensions": [
@@ -5869,6 +5882,28 @@
         },
         "format": {
           "default": "vcsh [$symbol$repo]($style) ",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "VimShellConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[ $symbol ]($style)",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "[](bold green)",
+          "type": "string"
+        },
+        "style": {
+          "default": "",
           "type": "string"
         },
         "disabled": {

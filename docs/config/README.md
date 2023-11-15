@@ -329,6 +329,7 @@ $vagrant\
 $zig\
 $buf\
 $nix_shell\
+$vim_shell\
 $conda\
 $meson\
 $spack\
@@ -4467,6 +4468,32 @@ The module will be shown only if a repository is currently in use.
 
 [vcsh]
 format = '[🆅 $repo](bold blue) '
+```
+
+## vim-shell
+
+The `vim_shell` module shows the [nvim embed terminal](https://neovim.io/doc/user/nvim_terminal_emulator.html) environment.
+The module will be shown when the shell inside the nvim embed terminal.
+
+### Options
+
+| Option     | Default                 | Description                                           |
+| ---------- | ----------------------- | ----------------------------------------------------- |
+| `format`   | `'[ $symbol ]($style)'` | The format for the module.                            |
+| `symbol`   | `'[](bold green)'`     | A format string representing the symbol of vim-shell. |
+| `style`    | `''`                    | The style for the module.                             |
+| `disabled` | `false`                 | Disables the `vim_shell` module.                      |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[vim_shell]
+disabled = true
+format = '[ $symbol ]($style) '
+symbol = "[](bold green)"
+style = ""
 ```
 
 ## Zig

@@ -84,6 +84,7 @@ mod username;
 mod utils;
 mod vagrant;
 mod vcsh;
+mod vim_shell;
 mod vlang;
 mod zig;
 
@@ -191,6 +192,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "username" => username::module(context),
             "vlang" => vlang::module(context),
             "vagrant" => vagrant::module(context),
+            "vim_shell" => vim_shell::module(context),
             "vcsh" => vcsh::module(context),
             "zig" => zig::module(context),
             env if env.starts_with("env_var.") => {
@@ -309,6 +311,7 @@ pub fn description(module: &str) -> &'static str {
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
         "vcsh" => "The currently active VCSH repository",
+        "vim_shell" => "The current shell is embed in vim",
         "vlang" => "The currently installed version of V",
         "zig" => "The currently installed version of Zig",
         _ => "<no description>",

@@ -94,6 +94,7 @@ pub const ALL_MODULES: &[&str] = &[
     "username",
     "vagrant",
     "vcsh",
+    "vim_shell",
     "vlang",
     "zig",
 ];

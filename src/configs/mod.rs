@@ -89,6 +89,7 @@ pub mod username;
 pub mod v;
 pub mod vagrant;
 pub mod vcsh;
+pub mod vim_shell;
 pub mod zig;
 
 pub use starship_root::*;
@@ -277,6 +278,8 @@ pub struct FullConfig<'a> {
     vagrant: vagrant::VagrantConfig<'a>,
     #[serde(borrow)]
     vcsh: vcsh::VcshConfig<'a>,
+    #[serde(borrow)]
+    vim_shell: vim_shell::VimShellConfig<'a>,
     #[serde(borrow)]
     vlang: v::VConfig<'a>,
     #[serde(borrow)]
