@@ -214,6 +214,12 @@ fn get_repo_status(
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
+
+    // can't run git status against a bare repo
+    if repo.repo.work_tree.is_none() {
+        log::debug!("This is a bare repository, not generating git status");
+        return Some(repo_status);
+    }
     let mut args = vec!["status", "--porcelain=2"];
 
     // for performance reasons, only pass flags if necessary...
@@ -1162,6 +1168,21 @@ mod tests {
         let expected = format_output("DUA");
 
         assert_eq!(actual, expected);
+
+        repo_dir.close()
+    }
+
+    #[test]
+    fn doesnt_generate_git_status_for_bare_repo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+
+        create_added(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .collect();
+
+        assert_eq!(None, actual);
 
         repo_dir.close()
     }
