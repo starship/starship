@@ -133,14 +133,6 @@ https://www.gnu.org/licenses/."#;
     }
 
     #[test]
-    fn folder_with_rprofile_files() -> io::Result<()> {
-        let dir = tempfile::tempdir()?;
-        File::create(dir.path().join(".Rprofile"))?.sync_all()?;
-        check_r_render(&dir);
-        dir.close()
-    }
-
-    #[test]
     fn folder_with_rproj_user_folder() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let rprofile = dir.path().join(".Rproj.user");
