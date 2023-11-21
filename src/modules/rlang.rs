@@ -141,6 +141,14 @@ https://www.gnu.org/licenses/."#;
         dir.close()
     }
 
+    #[test]
+    fn folder_with_description_files() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        File::create(dir.path().join("DESCRIPTION"))?.sync_all()?;
+        check_r_render(&dir);
+        dir.close()
+    }
+
     fn check_r_render(dir: &tempfile::TempDir) {
         let actual = ModuleRenderer::new("rlang").path(dir.path()).collect();
         let expected = Some(format!("via {}", Color::Blue.bold().paint("📐 v4.1.0 ")));

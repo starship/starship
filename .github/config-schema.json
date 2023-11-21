@@ -1396,7 +1396,9 @@
           "Rproj",
           "Rsx"
         ],
-        "detect_files": [],
+        "detect_files": [
+          "DESCRIPTION"
+        ],
         "detect_folders": [
           ".Rproj.user"
         ],
@@ -5097,7 +5099,9 @@
           }
         },
         "detect_files": {
-          "default": [],
+          "default": [
+            "DESCRIPTION"
+          ],
           "type": "array",
           "items": {
             "type": "string"
