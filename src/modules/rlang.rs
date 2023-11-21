@@ -133,18 +133,18 @@ https://www.gnu.org/licenses/."#;
     }
 
     #[test]
-    fn folder_with_rproj_user_folder() -> io::Result<()> {
+    fn folder_with_description_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        let rprofile = dir.path().join(".Rproj.user");
-        fs::create_dir_all(rprofile)?;
+        File::create(dir.path().join("DESCRIPTION"))?.sync_all()?;
         check_r_render(&dir);
         dir.close()
     }
 
     #[test]
-    fn folder_with_description_files() -> io::Result<()> {
+    fn folder_with_rproj_user_folder() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        File::create(dir.path().join("DESCRIPTION"))?.sync_all()?;
+        let rprofile = dir.path().join(".Rproj.user");
+        fs::create_dir_all(rprofile)?;
         check_r_render(&dir);
         dir.close()
     }
