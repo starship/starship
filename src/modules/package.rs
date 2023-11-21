@@ -312,7 +312,7 @@ fn get_dart_pub_version(context: &Context, config: &PackageConfig) -> Option<Str
 
 fn get_rlang_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let file_contents = context.read_file_from_pwd("DESCRIPTION")?;
-    let re = Regex::new(r"(?m)^\s*Version\s*:\s*'(?P<version>[^']+)'").unwrap();
+    let re = Regex::new(r"^Version:\s*(?P<version>.*$)").unwrap();
     let caps = re.captures(&file_contents)?;
     format_version(&caps["version"], config.version_format)
 }
