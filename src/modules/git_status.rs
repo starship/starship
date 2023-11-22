@@ -34,6 +34,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Return None if not in git repository
     let repo = context.get_repo().ok()?;
 
+    if repo.kind.is_bare() {
+        // git_status not applicable for a bare repository
+        log::debug!("This is a bare repository, git_status is not applicable");
+        return None;
+    }
+
     if let Some(git_status) = git_status_wsl(context, &config) {
         if git_status.is_empty() {
             return None;
@@ -215,11 +221,6 @@ fn get_repo_status(
 
     let mut repo_status = RepoStatus::default();
 
-    // can't run git status against a bare repo
-    if repo.repo.work_tree.is_none() {
-        log::debug!("This is a bare repository, not generating git status");
-        return Some(repo_status);
-    }
     let mut args = vec!["status", "--porcelain=2"];
 
     // for performance reasons, only pass flags if necessary...
