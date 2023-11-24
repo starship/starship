@@ -35,7 +35,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let repo = context.get_repo().ok()?;
 
     if repo.kind.is_bare() {
-        // git_status not applicable for a bare repository
         log::debug!("This is a bare repository, git_status is not applicable");
         return None;
     }
@@ -220,7 +219,6 @@ fn get_repo_status(
     log::debug!("New repo status created");
 
     let mut repo_status = RepoStatus::default();
-
     let mut args = vec!["status", "--porcelain=2"];
 
     // for performance reasons, only pass flags if necessary...
