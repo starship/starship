@@ -45,6 +45,7 @@ impl<'a> Default for OSConfig<'a> {
                 Type::Gentoo => "🗜️ ",
                 Type::HardenedBSD => "🛡️ ",
                 Type::Illumos => "🐦 ",
+                Type::Kali => "㉿ ",
                 Type::Linux => "🐧 ",
                 Type::Mabox => "📦 ",
                 Type::Macos => "🍎 ",

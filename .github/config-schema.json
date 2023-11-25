@@ -1159,6 +1159,7 @@
           "Gentoo": "🗜️ ",
           "HardenedBSD": "🛡️ ",
           "Illumos": "🐦 ",
+          "Kali": "㉿ ",
           "Linux": "🐧 ",
           "Mabox": "📦 ",
           "Macos": "🍎 ",
@@ -4577,6 +4578,7 @@
             "Gentoo": "🗜️ ",
             "HardenedBSD": "🛡️ ",
             "Illumos": "🐦 ",
+            "Kali": "㉿ ",
             "Linux": "🐧 ",
             "Mabox": "📦 ",
             "Macos": "🍎 ",
@@ -5310,6 +5312,12 @@
         "powershell_indicator": {
           "default": "psh",
           "type": "string"
+        },
+        "pwsh_indicator": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "ion_indicator": {
           "default": "ion",

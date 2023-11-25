@@ -146,6 +146,7 @@ mod tests {
             (Type::Gentoo, Some("🗜️ ")),
             (Type::HardenedBSD, Some("🛡️ ")),
             (Type::Illumos, Some("🐦 ")),
+            (Type::Kali, Some("㉿ ")),
             (Type::Linux, Some("🐧 ")),
             (Type::Macos, Some("🍎 ")),
             (Type::Manjaro, Some("🥭 ")),
@@ -193,6 +194,7 @@ mod tests {
             Gentoo = " "
             HardenedBSD = "󰞌 "
             Illumos = "󰈸 "
+            Kali = ""
             Linux = " "
             Macos = " "
             Manjaro = " "
@@ -234,6 +236,7 @@ mod tests {
             (Type::Gentoo, Some(" ")),
             (Type::HardenedBSD, Some("󰞌 ")),
             (Type::Illumos, Some("󰈸 ")),
+            (Type::Kali, Some(" ")),
             (Type::Linux, Some(" ")),
             (Type::Macos, Some(" ")),
             (Type::Manjaro, Some(" ")),
@@ -288,6 +291,7 @@ mod tests {
             (Type::Gentoo, Some("🗜️ ")),
             (Type::HardenedBSD, Some("🛡️ ")),
             (Type::Illumos, Some("🐦 ")),
+            (Type::Kali, Some("㉿ ")),
             (Type::Linux, Some("🐧 ")),
             (Type::Macos, Some("🍎 ")),
             (Type::Manjaro, Some("🥭 ")),
@@ -347,6 +351,7 @@ mod tests {
             Type::Gentoo => "🗜️ ",
             Type::HardenedBSD => "🛡️ ",
             Type::Illumos => "🐦 ",
+            Type::Kali => "㉿ ",
             Type::Linux => "🐧 ",
             Type::Mabox => "📦 ",
             Type::Macos => "🍎 ",
