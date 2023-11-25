@@ -3661,22 +3661,23 @@ Este módulo está deshabilitado por defecto. Para activarlo, establece `disable
 
 ### Opciones
 
-| Opción                 | Predeterminado            | Descripción                                                             |
-| ---------------------- | ------------------------- | ----------------------------------------------------------------------- |
-| `bash_indicator`       | `'bsh'`                   | Una cadena de formato usada para representar bash.                      |
-| `fish_indicator`       | `'fsh'`                   | Una cadena de formato usada para representar fish.                      |
-| `zsh_indicator`        | `'zsh'`                   | Una cadena de formato usada para representar zsh.                       |
-| `powershell_indicator` | `'psh'`                   | Una cadena de formato usada para representar powershell.                |
-| `ion_indicator`        | `'ion'`                   | Una cadena de formato usada para representar ion.                       |
-| `elvish_indicator`     | `'esh'`                   | Una cadena de formato usada para representar elvish.                    |
-| `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                                 |
-| `xonsh_indicator`      | `'xsh'`                   | Una cadena de formato usada para representar xonsh.                     |
-| `cmd_indicator`        | `'cmd'`                   | Una cadena de formato usada para representar cmd.                       |
-| `nu_indicator`         | `'nu'`                    | Una cadena de formato usada para representar nu.                        |
-| `unknown_indicator`    | `''`                      | El valor por defecto que se mostrará cuando se desconoce el intérprete. |
-| `format`               | `'[$indicator]($style) '` | El formato del módulo.                                                  |
-| `style`                | `'white bold'`            | El estilo del módulo.                                                   |
-| `disabled`             | `true`                    | Deshabilita el módulo `shell`.                                          |
+| Opción                 | Predeterminado            | Descripción                                                                                            |
+| ---------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `bash_indicator`       | `'bsh'`                   | Una cadena de formato usada para representar bash.                                                     |
+| `fish_indicator`       | `'fsh'`                   | Una cadena de formato usada para representar fish.                                                     |
+| `zsh_indicator`        | `'zsh'`                   | Una cadena de formato usada para representar zsh.                                                      |
+| `powershell_indicator` | `'psh'`                   | Una cadena de formato usada para representar powershell.                                               |
+| `pwsh_indicator`       |                           | A format string used to represent pwsh. The default value mirrors the value of `powershell_indicator`. |
+| `ion_indicator`        | `'ion'`                   | Una cadena de formato usada para representar ion.                                                      |
+| `elvish_indicator`     | `'esh'`                   | Una cadena de formato usada para representar elvish.                                                   |
+| `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                                                                |
+| `xonsh_indicator`      | `'xsh'`                   | Una cadena de formato usada para representar xonsh.                                                    |
+| `cmd_indicator`        | `'cmd'`                   | Una cadena de formato usada para representar cmd.                                                      |
+| `nu_indicator`         | `'nu'`                    | Una cadena de formato usada para representar nu.                                                       |
+| `unknown_indicator`    | `''`                      | El valor por defecto que se mostrará cuando se desconoce el intérprete.                                |
+| `format`               | `'[$indicator]($style) '` | El formato del módulo.                                                                                 |
+| `style`                | `'white bold'`            | El estilo del módulo.                                                                                  |
+| `disabled`             | `true`                    | Deshabilita el módulo `shell`.                                                                         |
 
 ### Variables
 
