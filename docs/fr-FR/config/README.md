@@ -3650,22 +3650,23 @@ Ce module est désactivé par défaut. Pour l'activer, configurez `disabled` sur
 
 ### Options
 
-| Option                 | Défaut                    | Description                                                 |
-| ---------------------- | ------------------------- | ----------------------------------------------------------- |
-| `bash_indicator`       | `'bsh'`                   | Chaine de formatage utilisée pour représenter bash.         |
-| `fish_indicator`       | `'fsh'`                   | Chaine de formatage utilisée pour représenter fish.         |
-| `zsh_indicator`        | `'zsh'`                   | Chaine de formatage utilisée pour représenter zsh.          |
-| `powershell_indicator` | `'psh'`                   | Chaine de formatage utilisée pour représenter powershell.   |
-| `ion_indicator`        | `'ion'`                   | Chaine de formatage utilisée pour représenter ion.          |
-| `elvish_indicator`     | `'esh'`                   | Chaine de formatage utilisée pour représenter elvish.       |
-| `tcsh_indicator`       | `'tsh'`                   | Chaine de formatage utilisée pour représenter tcsh.         |
-| `xonsh_indicator`      | `'xsh'`                   | Chaine de formatage utilisée pour représenter xonsh.        |
-| `cmd_indicator`        | `'cmd'`                   | Chaine de formatage utilisée pour représenter cmd.          |
-| `nu_indicator`         | `'nu'`                    | Chaine de formatage utilisée pour représenter nu.           |
-| `unknown_indicator`    | `''`                      | La valeur par défaut à afficher quand le shell est inconnu. |
-| `format`               | `'[$indicator]($style) '` | Format du module.                                           |
-| `style`                | `'white bold'`            | Le style pour le module.                                    |
-| `disabled`             | `true`                    | Désactive le module `shell`.                                |
+| Option                 | Défaut                    | Description                                                                                            |
+| ---------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `bash_indicator`       | `'bsh'`                   | Chaine de formatage utilisée pour représenter bash.                                                    |
+| `fish_indicator`       | `'fsh'`                   | Chaine de formatage utilisée pour représenter fish.                                                    |
+| `zsh_indicator`        | `'zsh'`                   | Chaine de formatage utilisée pour représenter zsh.                                                     |
+| `powershell_indicator` | `'psh'`                   | Chaine de formatage utilisée pour représenter powershell.                                              |
+| `pwsh_indicator`       |                           | A format string used to represent pwsh. The default value mirrors the value of `powershell_indicator`. |
+| `ion_indicator`        | `'ion'`                   | Chaine de formatage utilisée pour représenter ion.                                                     |
+| `elvish_indicator`     | `'esh'`                   | Chaine de formatage utilisée pour représenter elvish.                                                  |
+| `tcsh_indicator`       | `'tsh'`                   | Chaine de formatage utilisée pour représenter tcsh.                                                    |
+| `xonsh_indicator`      | `'xsh'`                   | Chaine de formatage utilisée pour représenter xonsh.                                                   |
+| `cmd_indicator`        | `'cmd'`                   | Chaine de formatage utilisée pour représenter cmd.                                                     |
+| `nu_indicator`         | `'nu'`                    | Chaine de formatage utilisée pour représenter nu.                                                      |
+| `unknown_indicator`    | `''`                      | La valeur par défaut à afficher quand le shell est inconnu.                                            |
+| `format`               | `'[$indicator]($style) '` | Format du module.                                                                                      |
+| `style`                | `'white bold'`            | Le style pour le module.                                                                               |
+| `disabled`             | `true`                    | Désactive le module `shell`.                                                                           |
 
 ### Variables
 
