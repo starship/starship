@@ -5311,6 +5311,12 @@
           "default": "psh",
           "type": "string"
         },
+        "pwsh_indicator": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "ion_indicator": {
           "default": "ion",
           "type": "string"
