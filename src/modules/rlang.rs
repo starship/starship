@@ -133,9 +133,9 @@ https://www.gnu.org/licenses/."#;
     }
 
     #[test]
-    fn folder_with_rprofile_files() -> io::Result<()> {
+    fn folder_with_description_files() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
-        File::create(dir.path().join(".Rprofile"))?.sync_all()?;
+        File::create(dir.path().join("DESCRIPTION"))?.sync_all()?;
         check_r_render(&dir);
         dir.close()
     }

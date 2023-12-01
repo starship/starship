@@ -13,3 +13,6 @@ symbol = "[⬢](bold green) "
 
 [pulumi]
 symbol = "🧊 "
+
+[typst]
+symbol = "t "

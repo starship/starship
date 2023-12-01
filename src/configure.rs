@@ -1,3 +1,4 @@
+use std::fmt::Write as _;
 use std::process;
 use std::process::Stdio;
 use std::str::FromStr;
@@ -96,8 +97,10 @@ pub fn print_configuration(context: &Context, use_default: bool, paths: &[String
             "# $all is shorthand for {}",
             PROMPT_ORDER
                 .iter()
-                .map(|module_name| format!("${module_name}"))
-                .collect::<String>()
+                .fold(String::new(), |mut output, module_name| {
+                    let _ = write!(output, "${module_name}");
+                    output
+                })
         );
 
         // Unwrapping is fine because config is based on FullConfig
@@ -105,10 +108,10 @@ pub fn print_configuration(context: &Context, use_default: bool, paths: &[String
         if !use_default && !custom_modules.is_empty() {
             println!(
                 "# $custom (excluding any modules already listed in `format`) is shorthand for {}",
-                custom_modules
-                    .keys()
-                    .map(|module_name| format!("${{custom.{module_name}}}"))
-                    .collect::<String>()
+                custom_modules.keys().fold(String::new(), |mut output, b| {
+                    let _ = write!(output, "${{custom.{b}}}");
+                    output
+                })
             );
         }
     }
