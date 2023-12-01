@@ -7,28 +7,28 @@ use serde::{Deserialize, Serialize};
     schemars(deny_unknown_fields)
 )]
 #[serde(default)]
-pub struct RLangConfig<'a> {
+pub struct TypstConfig<'a> {
     pub format: &'a str,
     pub version_format: &'a str,
-    pub style: &'a str,
     pub symbol: &'a str,
+    pub style: &'a str,
     pub disabled: bool,
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
 }
 
-impl<'a> Default for RLangConfig<'a> {
+impl<'a> Default for TypstConfig<'a> {
     fn default() -> Self {
-        RLangConfig {
+        TypstConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            style: "blue bold",
-            symbol: "📐 ",
+            symbol: "t ",
+            style: "bold #0093A7",
             disabled: false,
-            detect_extensions: vec!["R", "Rd", "Rmd", "Rproj", "Rsx"],
-            detect_files: vec!["DESCRIPTION"],
-            detect_folders: vec![".Rproj.user"],
+            detect_extensions: vec!["typ"],
+            detect_files: vec!["template.typ"],
+            detect_folders: vec![],
         }
     }
 }

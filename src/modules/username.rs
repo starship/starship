@@ -2,21 +2,15 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::username::UsernameConfig;
 use crate::formatter::StringFormatter;
-
-#[cfg(not(target_os = "windows"))]
-const USERNAME_ENV_VAR: &str = "USER";
-
-#[cfg(target_os = "windows")]
+#[cfg(test)]
 const USERNAME_ENV_VAR: &str = "USERNAME";
 
 /// Creates a module with the current user's username
-///
-/// Will display the username if any of the following criteria are met:
-///     - The current user is root (UID = 0) [1]
-///     - The current user isn't the same as the one that is logged in (`$LOGNAME` != `$USER`) [2]
-///     - The user is currently connected as an SSH session (`$SSH_CONNECTION`) [3]
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
+    #[cfg(test)]
     let mut username = context.get_env(USERNAME_ENV_VAR)?;
+    #[cfg(not(test))]
+    let mut username = whoami::username();
 
     let mut module = context.new_module("username");
     let config: UsernameConfig = UsernameConfig::try_load(module.config);
@@ -151,8 +145,8 @@ mod tests {
         let actual = ModuleRenderer::new("username")
             .env("SSH_CONNECTION", "192.168.223.17 36673 192.168.223.229 22")
             .collect();
-        let expected = None;
 
+        let expected = None;
         assert_eq!(expected, actual);
     }
 

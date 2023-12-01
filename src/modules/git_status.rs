@@ -34,6 +34,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Return None if not in git repository
     let repo = context.get_repo().ok()?;
 
+    if repo.kind.is_bare() {
+        log::debug!("This is a bare repository, git_status is not applicable");
+        return None;
+    }
+
     if let Some(git_status) = git_status_wsl(context, &config) {
         if git_status.is_empty() {
             return None;
@@ -1162,6 +1167,21 @@ mod tests {
         let expected = format_output("DUA");
 
         assert_eq!(actual, expected);
+
+        repo_dir.close()
+    }
+
+    #[test]
+    fn doesnt_generate_git_status_for_bare_repo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+
+        create_added(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .collect();
+
+        assert_eq!(None, actual);
 
         repo_dir.close()
     }

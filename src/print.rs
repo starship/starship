@@ -507,8 +507,10 @@ pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool)
 fn preset_list() -> String {
     Preset::value_variants()
         .iter()
-        .map(|v| format!("{}\n", v.0))
-        .collect()
+        .fold(String::new(), |mut output, b| {
+            let _ = writeln!(output, "{}", b.0);
+            output
+        })
 }
 
 #[cfg(test)]

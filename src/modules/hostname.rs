@@ -23,7 +23,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let os_hostname: OsString = gethostname::gethostname();
+    let os_hostname: OsString = whoami::hostname_os();
 
     let host = match os_hostname.into_string() {
         Ok(host) => host,
@@ -87,7 +87,7 @@ mod tests {
 
     macro_rules! get_hostname {
         () => {
-            if let Ok(hostname) = gethostname::gethostname().into_string() {
+            if let Ok(hostname) = whoami::hostname_os().into_string() {
                 hostname
             } else {
                 println!(
