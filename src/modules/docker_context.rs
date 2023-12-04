@@ -72,7 +72,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "context" => Some(Ok(ctx.as_str())),
+                "context" => { 
+                    Some(Ok(if ctx.contains("unix://") { "" } else { ctx.as_str() }))
+                },
                 _ => None,
             })
             .parse(None, Some(context))
@@ -287,6 +289,27 @@ mod tests {
             "via {} ",
             Color::Blue.bold().paint("🐳 udp://starship@127.0.0.1:53")
         ));
+
+        assert_eq!(expected, actual);
+
+        cfg_dir.close()
+    }
+
+    #[test]
+    fn test_docker_host_env_with_unix_path() -> io::Result<()> {
+        let cfg_dir = tempfile::tempdir()?;
+
+        let actual = ModuleRenderer::new("docker_context")
+            .env("DOCKER_HOST", "unix:///run/user/1001/podman/podman.sock")
+            .config(toml::toml! {
+                [docker_context]
+                only_with_files = false
+            })
+            .collect();
+        let expected = Some(format!(
+        "via {} ",
+        Color::Blue.bold().paint("🐳 ")
+    ));
 
         assert_eq!(expected, actual);
 
