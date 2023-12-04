@@ -57,7 +57,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         }
     };
 
-    if ctx == "default" {
+    if ctx == "default" || ctx.starts_with("unix://") {
         return None;
     }
 
@@ -72,9 +72,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "context" => { 
-                    Some(Ok(if ctx.contains("unix://") { "" } else { ctx.as_str() }))
-                },
+                "context" => Some(Ok(ctx.as_str())),
                 _ => None,
             })
             .parse(None, Some(context))
@@ -306,10 +304,7 @@ mod tests {
                 only_with_files = false
             })
             .collect();
-        let expected = Some(format!(
-        "via {} ",
-        Color::Blue.bold().paint("🐳 ")
-    ));
+        let expected = None;
 
         assert_eq!(expected, actual);
 
