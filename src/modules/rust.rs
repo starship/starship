@@ -389,7 +389,13 @@ fn format_rustc_version(rustc_version: &str, version_format: &str) -> Option<Str
         let re = Regex::new(r"rustc .* \(.* (?P<date>.*)\)").unwrap();
         let caps = re.captures(rustc_version)?;
 
-        caps.name("date").map(|x| format!("nightly-{}", x.as_str()))
+        caps.name("date").map(|x| {
+            let date = x.as_str();
+            let date = chrono::NaiveDate::parse_from_str(date, "%Y-%m-%d")
+                .expect(&format!("invalid date format: {date}"))
+                + chrono::Duration::days(1);
+            format!("nightly-{}", date.format("%Y-%m-%d"))
+        })
     } else {
         let version = rustc_version
             // split into ["rustc", "1.34.0", ...]
@@ -715,7 +721,7 @@ version = "12"
         let rustc_nightly = "rustc 1.34.0-nightly (b139669f3 2019-04-10)";
         assert_eq!(
             format_rustc_version(rustc_nightly, config.version_format),
-            Some("nightly-2019-04-10".to_string())
+            Some("nightly-2019-04-11".to_string())
         );
         assert_eq!(
             format_rustc_version(rustc_beta, config.version_format),
