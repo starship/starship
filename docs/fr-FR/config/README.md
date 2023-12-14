@@ -1572,7 +1572,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 Le module `gcloud` affiche la version de la commande [`gcloud`](https://cloud.google.com/sdk/gcloud) installée. Ceci est basé sur les fichiers `~/.config/gcloud/active_config` et `~/.config/gcloud/configurations/config_{CONFIG NAME}` et la variable d'environnement `CLOUDSDK_CONFIG`.
 
-When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active when one of the environment variables has been set.
 
 ### Options
 
