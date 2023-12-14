@@ -1572,7 +1572,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 Модуль `gcloud` показує поточну конфігурацію [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Він базується на файлі `~/.config/gcloud/active_config` та на `~/.config/gcloud/configurations/config_{CONFIG NAME}` і на змінній оточення  `CLOUDSDK_CONFIG`.
 
-Коли модуль увімкнено, він завжди буде активним, якщо не встановлено параметр `detect_env_vars`, в такому випадку модуль буде активним лише коли буде встановлено одну зі змінних середовища.
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active when one of the environment variables has been set.
 
 ### Параметри
 
