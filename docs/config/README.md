@@ -1655,7 +1655,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
 When the module is enabled it will always be active, unless `detect_env_vars` has
-been set in which case the module will only be active be active when one of the
+been set in which case the module will only be active when one of the
 environment variables has been set.
 
 ### Options
