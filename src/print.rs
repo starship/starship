@@ -558,7 +558,7 @@ mod test {
                 [character]
                 format=">"
         });
-        let dir = tempfile::tempdir().expect("failed to create temp dir");
+        let dir = tempfile::tempdir().unwrap();
         context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from(">");
@@ -575,7 +575,7 @@ mod test {
             [character]
             format=">"
         });
-        let dir = tempfile::tempdir().expect("failed to create temp dir");
+        let dir = tempfile::tempdir().unwrap();
         context.current_dir = dir.path().to_path_buf();
 
         context.target = Target::Right;
@@ -645,7 +645,7 @@ mod test {
 
     #[test]
     fn preset_command_output_to_file() -> std::io::Result<()> {
-        let dir = tempfile::tempdir().expect("failed to create temp dir");
+        let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join("preset.toml");
         preset_command(Some(Preset("nerd-font-symbols")), Some(path.clone()), false);
 
