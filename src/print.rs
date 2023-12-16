@@ -61,9 +61,7 @@ pub fn prompt(args: Properties, target: Target) {
     let stdout = io::stdout();
     let mut handle = stdout.lock();
     // Replaced unwrap with expect to provide a better error message
-    if let Err(err) = write!(handle, "{}", get_prompt(context)) {
-        eprintln!("Error writing to stdout: {}", err);
-    }
+    write!(handle, "{}", get_prompt(context)).expect("Error writing to stdout");
 }
 
 pub fn get_prompt(context: Context) -> String {
@@ -121,13 +119,9 @@ pub fn get_prompt(context: Context) -> String {
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
-        if let Err(err) = writeln!(buf) {
-            eprintln!("Error writing newline to buffer: {}", err);
-        }
+        writeln!(buf).expect("Error writing newline to buffer");
     }
-    if let Err(err) = write!(buf, "{}", AnsiStrings(&module_strings)) {
-        eprintln!("Error writing module strings to buffer: {}", err);
-    }
+    write!(buf, "{}", AnsiStrings(&module_strings)).expect("Error writing to buffer");
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
