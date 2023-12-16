@@ -61,7 +61,7 @@ pub fn prompt(args: Properties, target: Target) {
     let stdout = io::stdout();
     let mut handle = stdout.lock();
     // Replaced unwrap with expect to provide a better error message
-    write!(handle, "{}", get_prompt(context)).expect("Error writing to stdout");
+    write!(handle, "{}", get_prompt(context)).unwrap();
 }
 
 pub fn get_prompt(context: Context) -> String {
