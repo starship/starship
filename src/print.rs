@@ -60,7 +60,10 @@ pub fn prompt(args: Properties, target: Target) {
     let context = Context::new(args, target);
     let stdout = io::stdout();
     let mut handle = stdout.lock();
-    write!(handle, "{}", get_prompt(context)).unwrap();
+    // Replaced unwrap with expect to provide a better error message
+    if let Err(err) = write!(handle, "{}", get_prompt(context)) {
+        eprintln!("Error writing to stdout: {}", err);
+    }
 }
 
 pub fn get_prompt(context: Context) -> String {
@@ -118,9 +121,13 @@ pub fn get_prompt(context: Context) -> String {
     let module_strings = root_module.ansi_strings_for_shell(context.shell, Some(context.width));
     if config.add_newline && context.target != Target::Continuation {
         // continuation prompts normally do not include newlines, but they can
-        writeln!(buf).unwrap();
+        if let Err(err) = writeln!(buf) {
+            eprintln!("Error writing newline to buffer: {}", err);
+        }
     }
-    write!(buf, "{}", AnsiStrings(&module_strings)).unwrap();
+    if let Err(err) = write!(buf, "{}", AnsiStrings(&module_strings)) {
+        eprintln!("Error writing module strings to buffer: {}", err);
+    }
 
     if context.target == Target::Right {
         // right prompts generally do not allow newlines
@@ -557,7 +564,7 @@ mod test {
                 [character]
                 format=">"
         });
-        let dir = tempfile::tempdir().unwrap();
+        let dir = tempfile::tempdir().expect("failed to create temp dir");
         context.current_dir = dir.path().to_path_buf();
 
         let expected = String::from(">");
@@ -574,7 +581,7 @@ mod test {
             [character]
             format=">"
         });
-        let dir = tempfile::tempdir().unwrap();
+        let dir = tempfile::tempdir().expect("failed to create temp dir");
         context.current_dir = dir.path().to_path_buf();
 
         context.target = Target::Right;
@@ -644,7 +651,7 @@ mod test {
 
     #[test]
     fn preset_command_output_to_file() -> std::io::Result<()> {
-        let dir = tempfile::tempdir().unwrap();
+        let dir = tempfile::tempdir().expect("failed to create temp dir");
         let path = dir.path().join("preset.toml");
         preset_command(Some(Preset("nerd-font-symbols")), Some(path.clone()), false);
 
