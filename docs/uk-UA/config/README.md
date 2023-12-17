@@ -361,7 +361,7 @@ format = '$all$directory$character'
 
 Під час використання [saml2aws](https://github.com/Versent/saml2aws) інформація про закінчення терміну дії, отримана з `~/.aws/credentials`, повертається до ключа `x_security_token_expires`.
 
-When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile is read from the `AWS_SSO_PROFILE` env var.
+Під час використання [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) профіль читається зі змінної `AWS_SSO_PROFILE`.
 
 ### Параметри
 
@@ -1151,31 +1151,31 @@ truncation_symbol = '…/'
 
 ## Direnv
 
-The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+Модуль `direnv` показує статус rc-файла якщо він існує. Статус включає: шлях до файлу rc, чи завантажений він і чи дозволений він `direnv`.
 
 ### Параметри
 
-| Параметр            | Стандартно                             | Опис                                                  |
-| ------------------- | -------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Формат модуля.                                        |
-| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
-| `style`             | `'bold orange'`                        | Стиль модуля.                                         |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
-| `detect_extensions` | `[]`                                   | Які розширення повинні запускати цей модуль.          |
-| `detect_files`      | `['.envrc']`                           | Які імена файлів мають запускати цей модуль.          |
-| `detect_folders`    | `[]`                                   | В яких теках цей модуль має запускатись.              |
-| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
-| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
-| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
-| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+| Параметр            | Стандартно                             | Опис                                                       |
+| ------------------- | -------------------------------------- | ---------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Формат модуля.                                             |
+| `symbol`            | `'direnv '`                            | Символ, що показується перед Docker context.               |
+| `style`             | `'bold orange'`                        | Стиль модуля.                                              |
+| `disabled`          | `true`                                 | Вимикає модуль `direnv`.                                   |
+| `detect_extensions` | `[]`                                   | Які розширення повинні запускати цей модуль.               |
+| `detect_files`      | `['.envrc']`                           | Які імена файлів мають запускати цей модуль.               |
+| `detect_folders`    | `[]`                                   | В яких теках цей модуль має запускатись.                   |
+| `allowed_msg`       | `'allowed'`                            | Повідомлення, що показується коли rc-файл дозволений.      |
+| `denied_msg`        | `'denied'`                             | Повідомлення, що показується коли rc-файл заборонений.     |
+| `loaded_msg`        | `'loaded'`                             | Повідомлення, що показується коли rc-файл завантажений.    |
+| `unloaded_msg`      | `'not loaded'`                         | Повідомлення, що показується коли rc-файл не завантажений. |
 
 ### Змінні
 
 | Змінна    | Приклад             | Опис                                     |
 | --------- | ------------------- | ---------------------------------------- |
-| loaded    | `loaded`            | Whether the current rc file is loaded.   |
-| allowed   | `denied`            | Whether the current rc file is allowed.  |
-| rc_path   | `/home/test/.envrc` | The current rc file path.                |
+| loaded    | `loaded`            | Чи завантажений rc-файл.                 |
+| allowed   | `denied`            | Чи дозволене використання rc-файлу.      |
+| rc_path   | `/home/test/.envrc` | Шлях до rc-файлу.                        |
 | symbol    |                     | Mirrors the value of option `symbol`.    |
 | style\* | `red bold`          | Віддзеркалює значення параметра `style`. |
 
