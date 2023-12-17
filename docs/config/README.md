@@ -383,6 +383,9 @@ date is read from the `AWSUME_EXPIRATION` env var.
 When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials`
 falls back to the `x_security_token_expires` key.
 
+When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile
+is read from the `AWS_SSO_PROFILE` env var.
+
 ### Options
 
 | Option              | Default                                                           | Description                                                                                                 |
