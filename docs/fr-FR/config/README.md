@@ -323,6 +323,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$direnv\
 $env_var\
 $crystal\
 $custom\
@@ -359,6 +360,8 @@ Lorsque vous utilisez [awsu](https://github.com/kreuzwerker/awsu) le profil est 
 Lorsque vous utilisez [AWSume](https://awsu.me) le profil est lu à partir de la variable d'environnement `AWSUME_PROFILE` et la date d'expiration des identifiants est lue à partir de la variable d'environnement `AWSUME_EXPIRATION`.
 
 When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials` falls back to the `x_security_token_expires` key.
+
+When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile is read from the `AWS_SSO_PROFILE` env var.
 
 ### Options
 
@@ -1144,6 +1147,47 @@ Considérons le chemin `/path/to/home/git_repo/src/lib`
 [directory]
 truncation_length = 8
 truncation_symbol = '…/'
+```
+
+## Direnv
+
+The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+### Options
+
+| Option                               | Défaut                                 | Description                                           |
+| ------------------------------------ | -------------------------------------- | ----------------------------------------------------- |
+| `format`                             | `'[$symbol$loaded/$allowed]($style) '` | Format du module.                                     |
+| `symbole`                            | `'direnv '`                            | The symbol used before displaying the direnv context. |
+| `style`                              | `'bold orange'`                        | Le style pour le module.                              |
+| `disabled`                           | `true`                                 | Disables the `direnv` module.                         |
+| `detect_extensionsdetect_extensions` | `[]`                                   | Les extensions qui déclenchent ce module.             |
+| `detect_files`                       | `['.envrc']`                           | Les fichiers qui activent ce module.                  |
+| `detect_folders`                     | `[]`                                   | Les dossiers qui activent ce module.                  |
+| `allowed_msg`                        | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `denied_msg`                         | `'denied'`                             | The message displayed when an rc file is denied.      |
+| `loaded_msg`                         | `'loaded'`                             | The message displayed when an rc file is loaded.      |
+| `unloaded_msg`                       | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+
+### Variables
+
+| Variable  | Exemple             | Description                             |
+| --------- | ------------------- | --------------------------------------- |
+| loaded    | `loaded`            | Whether the current rc file is loaded.  |
+| allowed   | `denied`            | Whether the current rc file is allowed. |
+| rc_path   | `/home/test/.envrc` | The current rc file path.               |
+| symbole   |                     | Mirrors the value of option `symbol`.   |
+| style\* | `red bold`          | Reflète la valeur de l'option `style`.  |
+
+*: Cette variable peut uniquement être utilisée dans une chaine de style
+
+### Exemple
+
+```toml
+# ~/.config/starship.toml
+
+[direnv]
+disabled = false
 ```
 
 ## Contexte Docker
