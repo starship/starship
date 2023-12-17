@@ -323,6 +323,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$direnv\
 $env_var\
 $crystal\
 $custom\
@@ -359,6 +360,8 @@ When using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from 
 When using [AWSume](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.
 
 When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials` falls back to the `x_security_token_expires` key.
+
+When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile is read from the `AWS_SSO_PROFILE` env var.
 
 ### Các tuỳ chọn
 
@@ -1146,6 +1149,47 @@ truncation_length = 8
 truncation_symbol = '…/'
 ```
 
+## Direnv
+
+The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+### Options
+
+| Tuỳ chọn            | Mặc định                               | Mô tả                                                 |
+| ------------------- | -------------------------------------- | ----------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Định dạng cho module.                                 |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
+| `style`             | `'bold orange'`                        | Kiểu cho module.                                      |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
+| `detect_extensions` | `[]`                                   | Những tiện ích mở rộng nào sẽ kích hoạt mô-đun này.   |
+| `detect_files`      | `['.envrc']`                           | Những tên tệp nào sẽ kích hoạt mô-đun này.            |
+| `detect_folders`    | `[]`                                   | Những thư mục nào sẽ kích hoạt mô-đun này.            |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+
+### Các biến
+
+| Biến      | Ví dụ               | Mô tả                                   |
+| --------- | ------------------- | --------------------------------------- |
+| loaded    | `loaded`            | Whether the current rc file is loaded.  |
+| allowed   | `denied`            | Whether the current rc file is allowed. |
+| rc_path   | `/home/test/.envrc` | The current rc file path.               |
+| symbol    |                     | Mirrors the value of option `symbol`.   |
+| style\* | `red bold`          | Giá trị ghi đè của `style`.             |
+
+*: Biến này có thể chỉ được sử dụng như một phần của style string
+
+### Ví dụ
+
+```toml
+# ~/.config/starship.toml
+
+[direnv]
+disabled = false
+```
+
 ## Docker Context
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
@@ -1436,7 +1480,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 
 - The current directory contains a file with the `.fnl` extension
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                             | Mô tả                                                                     |
 | ------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -1472,7 +1516,7 @@ symbol = '⫰ '
 
 The `fill` module fills any extra space on the line with a symbol. If multiple `fill` modules are present in a line they will split the space evenly between them. This is useful for aligning other modules.
 
-### Các tuỳ chọn
+### Options
 
 | Tuỳ chọn   | Mặc định       | Mô tả                             |
 | ---------- | -------------- | --------------------------------- |
@@ -1815,7 +1859,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 :::
 
-### Options
+### Các tuỳ chọn
 
 | Tuỳ chọn            | Mặc định                                        | Mô tả                                                                                                       |
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
