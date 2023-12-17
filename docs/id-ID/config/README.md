@@ -323,6 +323,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$direnv\
 $env_var\
 $crystal\
 $custom\
@@ -359,6 +360,8 @@ Ketika menggunakan [awsu](https://github.com/kreuzwerker/awsu) profil dibaca dar
 Ketika menggunakan [AWSume](https://awsu.me) profil dibaca dari variabel environment `AWSUME_PROFILE` dan tanggal kedaluwarsanya dibaca dari variabel environment `AWSUME_EXPIRATION`.
 
 When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials` falls back to the `x_security_token_expires` key.
+
+When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile is read from the `AWS_SSO_PROFILE` env var.
 
 ### Opsi
 
@@ -1146,6 +1149,47 @@ truncation_length = 8
 truncation_symbol = '…/'
 ```
 
+## Direnv
+
+The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+### Opsi
+
+| Opsi                | Bawaan                                 | Deskripsi                                             |
+| ------------------- | -------------------------------------- | ----------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Format dari modul.                                    |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
+| `style`             | `'bold orange'`                        | Gaya penataan untuk modul.                            |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
+| `detect_extensions` | `[]`                                   | Ekstensi mana yang sebaiknya memicu modul ini.        |
+| `detect_files`      | `['.envrc']`                           | filenames mana yang sebaiknya memicu modul ini.       |
+| `detect_folders`    | `[]`                                   | Folder mana yang sebaiknya memicul modul ini.         |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+
+### Variabel
+
+| Variabel  | Contoh              | Deskripsi                               |
+| --------- | ------------------- | --------------------------------------- |
+| loaded    | `loaded`            | Whether the current rc file is loaded.  |
+| allowed   | `denied`            | Whether the current rc file is allowed. |
+| rc_path   | `/home/test/.envrc` | The current rc file path.               |
+| symbol    |                     | Mirrors the value of option `symbol`.   |
+| style\* | `red bold`          | Menyalin nilai dari opsi `style`.       |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[direnv]
+disabled = false
+```
+
 ## Docker Context
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
@@ -1402,7 +1446,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `' '`                               | The symbol used before displaying the version of erlang.                            |
 | `style`             | `'bold red'`                         | Gaya penataan untuk modul.                                                          |
@@ -1819,7 +1863,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 | Opsi                | Bawaan                                          | Deskripsi                                                                                                   |
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `fromat`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
 | `conflicted`        | `'='`                                           | This branch has merge conflicts.                                                                            |
 | `ahead`             | `'⇡'`                                           | The format of `ahead`                                                                                       |
 | `behind`            | `'⇣'`                                           | The format of `behind`                                                                                      |
@@ -1974,7 +2018,7 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 
 | Opsi       | Bawaan                     | Deskripsi                                              |
 | ---------- | -------------------------- | ------------------------------------------------------ |
-| `format`   | `'via [$symbol]($style) '` | Format dari modul.                                     |
+| `fromat`   | `'via [$symbol]($style) '` | Format dari modul.                                     |
 | `symbol`   | `'🐃 '`                     | A format string representing the symbol of guix-shell. |
 | `style`    | `'yellow bold'`            | Gaya penataan untuk modul.                             |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
