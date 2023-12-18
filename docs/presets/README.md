@@ -80,4 +80,3 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 This preset is heavily inspired by Assassin's Creed.
 
 [![Screenshot of Crimson Snow preset](/presets/img/crimson-snow.png "Click to view Crimson Snow preset")](./crimson-snow)
-
