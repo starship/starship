@@ -1,0 +1,94 @@
+format = """
+[░▒▓](#2F2F2F)\
+$username\
+[❯](fg:#B80101 bg:#2F2F2F)\
+$shlvl\
+[❯](fg:#B80101 bg:#2F2F2F)\
+$directory\
+[❯](fg:#B80101 bg:#2F2F2F)\
+$cmd_duration\
+[❯](fg:#B80101 bg:#2F2F2F)\
+$git_branch\
+$git_commit\
+$git_metrics\
+$git_state\
+[](fg:#2F2F2F)
+$character
+"""
+
+# Disable the blank line at the start of the prompt
+# add_newline = false
+
+[character]
+success_symbol = '[ ](fg:#FAFAFA)'
+error_symbol = '[ ](fg:#B80101)'
+format = '$symbol '
+disabled = false
+
+# You can also replace your username with a neat symbol like   or disable this
+# and use the os module below
+[username]
+show_always = true
+style_user = 'fg:#FAFAFA bg:#2F2F2F'
+style_root = 'fg:#FAFAFA bg:#2F2F2F'
+format = '[ ](fg:#B80101 bg:#2F2F2F)[ $user ]($style)'
+disabled = false
+
+[shlvl]
+disabled = false
+style = 'fg:#FAFAFA bg:#2F2F2F'
+format = '[  ](fg:#B80101 bg:#2F2F2F)[ $symbol$shlvl ]($style)'
+repeat = true
+symbol = ':'
+threshold = 0
+
+[directory]
+style = 'fg:#FAFAFA bg:#2F2F2F'
+format = '[  ](fg:#B80101 bg:#2F2F2F)[ $path ]($style)'
+truncation_length = 0
+truncate_to_repo = false
+truncation_symbol = '…/'
+
+# Here is how you can shorten some long paths by text replacement
+# similar to mapped_locations in Oh My Posh:
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+# Keep in mind that the order matters. For example:
+# "Important Documents" = " 󰈙 "
+# will not be replaced, because "Documents" was already substituted before.
+# So either put "Important Documents" before "Documents" or use the substituted version:
+# "Important 󰈙 " = " 󰈙 "
+
+[git_branch]
+disabled = false
+symbol = '[](fg:#B80101 bg:#2F2F2F)  '
+style = 'fg:#FAFAFA bg:#2F2F2F'
+format = '[ $symbol $branch ]($style)'
+
+[git_commit]
+disabled = false
+style = 'fg:#FAFAFA bg:#2F2F2F'
+format = '[\($hash$tag\) ]($style)'
+only_detached = false
+
+[git_metrics]
+disabled = false
+added_style = 'fg:#2FDA4E bg:#2F2F2F'
+deleted_style = 'fg:#E84855 bg:#2F2F2F'
+only_nonzero_diffs = false
+format = '([+$added ]($added_style))([-$deleted ]($deleted_style))'
+
+[git_state]
+disabled = false
+style = 'bg:#2F2F2F'
+format = '\([$state( $progress_current/$progress_total)]($style)\)'
+
+[cmd_duration]
+disabled = false
+style = 'fg:#FAFAFA bg:#2F2F2F'
+min_time = 0
+show_milliseconds = true
+format = '[  ](fg:#B80101 bg:#2F2F2F)[ $duration ]($style)'
