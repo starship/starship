@@ -1176,7 +1176,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | loaded    | `loaded`            | Whether the current rc file is loaded.  |
 | allowed   | `denied`            | Whether the current rc file is allowed. |
 | rc_path   | `/home/test/.envrc` | The current rc file path.               |
-| symbol    |                     | Mirrors the value of option `symbol`.   |
+| symbol    |                     | Spiegelt den Wert der Option `symbol`.  |
 | style\* | `red bold`          | Spiegelt den Wert der Option `style`.   |
 
 *: This variable can only be used as a part of a style string
@@ -4147,7 +4147,7 @@ The `typst` module shows the current installed version of Typst used in a projec
 
 By default, the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `template.typ` file
+- Das aktuelle Verzeichnis enthält eine `template.typ`-Datei
 - The current directory contains any `*.typ` file
 
 ### Optionen
