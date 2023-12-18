@@ -2025,7 +2025,7 @@
           ]
         }
       },
-      "dislay_on_charging": {
+      "display_on_charging": {
         "default": true,
         "type": "boolean"
       },
