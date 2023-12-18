@@ -558,6 +558,7 @@ The `display` option is an array of the following table.
 | `style`              | `'red bold'` | The style used if the display option is in use.                                                           |
 | `charging_symbol`    |              | Optional symbol displayed if display option is in use, defaults to battery's `charging_symbol` option.    |
 | `discharging_symbol` |              | Optional symbol displayed if display option is in use, defaults to battery's `discharging_symbol` option. |
+|`dispplay_on_charging`|`true`| Controls displaying of battery module when the device is on power.
 
 #### Example
 
