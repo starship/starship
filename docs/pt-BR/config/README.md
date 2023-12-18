@@ -1176,7 +1176,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | loaded    | `loaded`            | Whether the current rc file is loaded.  |
 | allowed   | `denied`            | Whether the current rc file is allowed. |
 | rc_path   | `/home/test/.envrc` | The current rc file path.               |
-| symbol    |                     | Mirrors the value of option `symbol`.   |
+| symbol    |                     | Espelha o valor da opção `symbol`.      |
 | style\* | `red bold`          | Espelha o valor da opção `style`.       |
 
 *: Esta variável só pode ser usada como parte de uma string de estilo
@@ -4147,7 +4147,7 @@ The `typst` module shows the current installed version of Typst used in a projec
 
 Por padrão, o módulo será exibido se qualquer das seguintes condições for atendida:
 
-- The current directory contains a `template.typ` file
+- O diretório atual conter um arquivo `template.typ`
 - The current directory contains any `*.typ` file
 
 ### Opções
@@ -4204,7 +4204,7 @@ Conexões SSH são detectadas checando as variáveis de ambiente `SSH_CONNECTION
 | Variável | Exemplo      | Descrição                                                                              |
 | -------- | ------------ | -------------------------------------------------------------------------------------- |
 | `style`  | `'red bold'` | Espelha o valor da opção `style_root` quando o root esta logado e `style_user` se não. |
-| `user`   | `'matchai'`  | O ID do usuário logado atualmente.                                                     |
+| `user`   | `'fulano'`   | O ID do usuário logado atualmente.                                                     |
 
 ### Exemplo
 
