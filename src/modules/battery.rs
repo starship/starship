@@ -51,7 +51,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
             match formatter.parse(None, Some(context)) {
                 Ok(format_string) => {
-                    module.set_segments(format_string);
+                    if !(!display_style.display_on_charging && state == battery::State::Charging) {
+                        module.set_segments(format_string);
+                    }
                     Some(module)
                 }
                 Err(e) => {
