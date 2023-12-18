@@ -1,27 +1,35 @@
 format = """
 [░▒▓](#2F2F2F)\
 $username\
-[❯](fg:#B80101 bg:#2F2F2F)\
+[❯](fg:color_crimson bg:color_dark_grey)\
 $shlvl\
-[❯](fg:#B80101 bg:#2F2F2F)\
+[❯](fg:color_crimson bg:color_dark_grey)\
 $directory\
-[❯](fg:#B80101 bg:#2F2F2F)\
+[❯](fg:color_crimson bg:color_dark_grey)\
 $cmd_duration\
-[❯](fg:#B80101 bg:#2F2F2F)\
+[❯](fg:color_crimson bg:color_dark_grey)\
 $git_branch\
 $git_commit\
 $git_metrics\
 $git_state\
-[](fg:#2F2F2F)
-$character
-"""
+[](fg:color_dark_grey)
+$character"""
 
 # Disable the blank line at the start of the prompt
 # add_newline = false
 
+palette = 'crimson_snow'
+
+[palettes.crimson_snow]
+color_bright_green = '#2FDA4E'
+color_bright_red = '#E84855'
+color_dark_grey = '#2F2F2F'
+color_crimson = '#B80101'
+color_snow = '#FAFAFA'
+
 [character]
-success_symbol = '[ ](fg:#FAFAFA)'
-error_symbol = '[ ](fg:#B80101)'
+success_symbol = '[ ](fg:color_snow)'
+error_symbol = '[ ](fg:color_crimson)'
 format = '$symbol '
 disabled = false
 
@@ -29,22 +37,22 @@ disabled = false
 # and use the os module below
 [username]
 show_always = true
-style_user = 'fg:#FAFAFA bg:#2F2F2F'
-style_root = 'fg:#FAFAFA bg:#2F2F2F'
-format = '[ ](fg:#B80101 bg:#2F2F2F)[ $user ]($style)'
+style_user = 'fg:color_snow bg:color_dark_grey'
+style_root = 'fg:color_snow bg:color_dark_grey'
+format = '[ ](fg:color_crimson bg:color_dark_grey)[ $user ]($style)'
 disabled = false
 
 [shlvl]
 disabled = false
-style = 'fg:#FAFAFA bg:#2F2F2F'
-format = '[  ](fg:#B80101 bg:#2F2F2F)[ $symbol$shlvl ]($style)'
+style = 'fg:color_snow bg:color_dark_grey'
+format = '[  ](fg:color_crimson bg:color_dark_grey)[ $symbol$shlvl ]($style)'
 repeat = true
 symbol = ':'
 threshold = 0
 
 [directory]
-style = 'fg:#FAFAFA bg:#2F2F2F'
-format = '[  ](fg:#B80101 bg:#2F2F2F)[ $path ]($style)'
+style = 'fg:color_snow bg:color_dark_grey'
+format = '[  ](fg:color_crimson bg:color_dark_grey)[ $path ]($style)'
 truncation_length = 0
 truncate_to_repo = false
 truncation_symbol = '…/'
@@ -64,31 +72,31 @@ truncation_symbol = '…/'
 
 [git_branch]
 disabled = false
-symbol = '[](fg:#B80101 bg:#2F2F2F)  '
-style = 'fg:#FAFAFA bg:#2F2F2F'
+symbol = '[](fg:color_crimson bg:color_dark_grey)  '
+style = 'fg:color_snow bg:color_dark_grey'
 format = '[ $symbol $branch ]($style)'
 
 [git_commit]
 disabled = false
-style = 'fg:#FAFAFA bg:#2F2F2F'
+style = 'fg:color_snow bg:color_dark_grey'
 format = '[\($hash$tag\) ]($style)'
 only_detached = false
 
 [git_metrics]
 disabled = false
-added_style = 'fg:#2FDA4E bg:#2F2F2F'
-deleted_style = 'fg:#E84855 bg:#2F2F2F'
+added_style = 'fg:color_bright_green bg:color_dark_grey'
+deleted_style = 'fg:color_bright_red bg:color_dark_grey'
 only_nonzero_diffs = false
 format = '([+$added ]($added_style))([-$deleted ]($deleted_style))'
 
 [git_state]
 disabled = false
-style = 'bg:#2F2F2F'
+style = 'bg:color_dark_grey'
 format = '\([$state( $progress_current/$progress_total)]($style)\)'
 
 [cmd_duration]
 disabled = false
-style = 'fg:#FAFAFA bg:#2F2F2F'
+style = 'fg:color_snow bg:color_dark_grey'
 min_time = 0
 show_milliseconds = true
-format = '[  ](fg:#B80101 bg:#2F2F2F)[ $duration ]($style)'
+format = '[  ](fg:color_crimson bg:color_dark_grey)[ $duration ]($style)'
