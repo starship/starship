@@ -4147,7 +4147,7 @@ The `typst` module shows the current installed version of Typst used in a projec
 
 By default, the module will be shown if any of the following conditions are met:
 
-- The current directory contains a `template.typ` file
+- 目前資料夾中有一個 `template.typ` 檔案
 - The current directory contains any `*.typ` file
 
 ### 選項
