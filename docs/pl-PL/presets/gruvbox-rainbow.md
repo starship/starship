@@ -1,10 +1,10 @@
 [Powrót do ustawień predefiniowanych](./README.md#gruvbox-rainbow)
 
-# Gruvbox Rainbow Preset
+# Ustawienia Gruvbox Rainbow
 
-This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+Zestaw mocno inspirowany przez [Pastel Powerline](./pastel-powerline.md) i [Tokyo Night](./tokyo-night.md).
 
-![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png)
+![Zrzut ekranu ustawień Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png)
 
 ### Wymagania wstępne
 
