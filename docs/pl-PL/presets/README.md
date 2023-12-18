@@ -66,6 +66,6 @@ Ten zestaw ustawień jest inspirowany [tokyo-night-vscode-theme](https://github.
 
 ## [Gruvbox Rainbow](./gruvbox-rainbow.md)
 
-This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
+Zestaw mocno inspirowany przez [Pastel Powerline](./pastel-powerline.md) i [Tokyo Night](./tokyo-night.md).
 
-[![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+[![Zrzut ekranu ustawień Gruvbox Rainbow](/presets/img/gruvbox-rainbow.png "Kliknij, aby wyświetlić ustawienia Gruvbox Rainbow")](./gruvbox-rainbow)
