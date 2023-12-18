@@ -21,7 +21,7 @@ Yes, they can both be used to disable modules in the prompt. If all you plan to 
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Newly created modules will be added to the prompt as Starship is updated
 
-## Dokumentacja stwierdza że Starship jest wieloplatformowy. Dlaczego moja preferowana powłoka nie jest obsługiwana?
+## Dokumentacja twierdzi, że Starship jest wieloplatformowy. Dlaczego moja preferowana powłoka nie jest obsługiwana?
 
 The way Starship is built, it should be possible to add support for virtually any shell. The starship binary is stateless and shell agnostic, so as long as your shell supports prompt customization and shell expansion, Starship can be used.
 
