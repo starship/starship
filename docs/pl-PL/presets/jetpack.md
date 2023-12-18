@@ -8,7 +8,7 @@ This is a pseudo minimalist preset inspired by the [geometry](https://github.com
 
 ![Screenshot of Jetpack preset](/presets/img/jetpack.png)
 
-### Prerequisite
+### Wymaganie wstępne
 
 - Requires a shell with [`right-prompt`](https://starship.rs/advanced-config/#enable-right-prompt) support.
 - [Jetbrains Mono](https://www.jetbrains.com/lp/mono/) is recommended.
