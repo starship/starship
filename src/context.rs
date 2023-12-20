@@ -244,7 +244,7 @@ impl<'a> Context<'a> {
             .any(|env_var| self.get_env(env_var).is_some())
     }
 
-    /// Returns true if 'detect_env_vars' is empty,
+    /// Returns true if `detect_env_vars` is empty,
     /// or if at least one environment variable is set and no negated environment variable is set
     pub fn detect_env_vars(&'a self, env_vars: &'a [&'a str]) -> bool {
         if env_vars.is_empty() {
