@@ -21,6 +21,7 @@ pub struct PythonConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub detect_pyenv_shell: bool,
 }
 
 impl<'a> Default for PythonConfig<'a> {
@@ -45,6 +46,7 @@ impl<'a> Default for PythonConfig<'a> {
                 "__init__.py",
             ],
             detect_folders: vec![],
+            detect_pyenv_shell: false,
         }
     }
 }

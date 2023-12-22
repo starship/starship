@@ -1409,6 +1409,7 @@
           "__init__.py"
         ],
         "detect_folders": [],
+        "detect_pyenv_shell": false,
         "disabled": false,
         "format": "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)",
         "pyenv_prefix": "pyenv ",
@@ -5258,6 +5259,10 @@
           "items": {
             "type": "string"
           }
+        },
+        "detect_pyenv_shell": {
+          "default": false,
+          "type": "boolean"
         }
       },
       "additionalProperties": false

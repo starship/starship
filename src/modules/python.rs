@@ -20,8 +20,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         .is_match();
 
     let is_venv = context.get_env("VIRTUAL_ENV").is_some();
+    let is_pyenv_shell = config.detect_pyenv_shell && context.get_env("PYENV_VERSION").is_some();
 
-    if !is_py_project && !is_venv {
+    if !is_py_project && !is_venv && !is_pyenv_shell {
         return None;
     };
 
@@ -347,6 +348,30 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
         let expected = Some(format!(
             "via {}",
             Color::Yellow.bold().paint("🐍 v3.8.0 (my_venv) ")
+        ));
+
+        assert_eq!(actual, expected);
+        dir.close()
+    }
+
+    #[test]
+    fn with_pyenv_shell() -> io::Result<()> {
+        let config = toml::toml! {
+             [python]
+             pyenv_version_name = true
+             pyenv_prefix = "test_pyenv "
+             detect_pyenv_shell = true
+        };
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("python")
+            .path(dir.path())
+            .config(config)
+            .env("PYENV_VERSION", "foo")
+            .collect();
+
+        let expected = Some(format!(
+            "via {}",
+            Color::Yellow.bold().paint("🐍 test_pyenv foo ")
         ));
 
         assert_eq!(actual, expected);
