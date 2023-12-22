@@ -279,6 +279,7 @@ $git_branch\
 $git_commit\
 $git_state\
 $git_metrics\
+$git_mob\
 $git_status\
 $hg_branch\
 $pijul_channel\
@@ -1937,6 +1938,44 @@ To enable it, set `disabled` to `false` in your configuration file.
 [git_metrics]
 added_style = 'bold blue'
 format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
+## Git Mob
+
+The `git_mob` module will show the configured Co-Author initials.
+
+::: tip
+
+This module is disabled by default.
+To enable it, set `disabled` to `false` in your configuration file.
+
+:::
+
+### Options
+
+| Option      | Default                                      | Description                       |
+| ----------- | -------------------------------------------- | --------------------------------- |
+| `disabled`  | `true`                                       | Disables the `git_mob` module.    |
+| `format`    | `'[$symbol $initials \\($count\\)]($style)'` | The format for the module.        |
+| `separator` | `','`                                        | Separator for multiple Co-Authors |
+| `style`     | `'green bold'`                               | Style for the module              |
+| `symbol`    | `'👥 '`                                      | Symbol to display                 |
+
+### Variables
+
+| Variable | Example | Description                                                   |
+| -------- | ------- | ------------------------------------------------------------- |
+| initials | `ab,ce` | The Co-Author initials separated using the provided separator |
+| count    | `2`     | The count of configured Co-Authors                            |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[git_mob]
+disabled = false
+separator = ","
 ```
 
 ## Git Status
