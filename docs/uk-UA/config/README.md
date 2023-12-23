@@ -249,7 +249,7 @@ mustard = '#af8700'
 ```toml
 format = '$all'
 
-# Це значення еквівалентне
+# Which is equivalent to
 format = """
 $username\
 $hostname\
@@ -1151,23 +1151,23 @@ truncation_symbol = '…/'
 
 ## Direnv
 
-Модуль `direnv` показує статус rc-файла якщо він існує. Статус включає: шлях до файлу rc, чи завантажений він і чи дозволений він `direnv`.
+Модуль `direnv` показує статус rc-файла якщо він існує. Статус включає: шлях до файлу rc, чи він завантажений та, чи `direnv` дозволяє його використання.
 
 ### Параметри
 
-| Параметр            | Стандартно                             | Опис                                                       |
-| ------------------- | -------------------------------------- | ---------------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Формат модуля.                                             |
-| `symbol`            | `'direnv '`                            | Символ, що показується перед Docker context.               |
-| `style`             | `'bold orange'`                        | Стиль модуля.                                              |
-| `disabled`          | `true`                                 | Вимикає модуль `direnv`.                                   |
-| `detect_extensions` | `[]`                                   | Які розширення повинні запускати цей модуль.               |
-| `detect_files`      | `['.envrc']`                           | Які імена файлів мають запускати цей модуль.               |
-| `detect_folders`    | `[]`                                   | В яких теках цей модуль має запускатись.                   |
-| `allowed_msg`       | `'allowed'`                            | Повідомлення, що показується коли rc-файл дозволений.      |
-| `denied_msg`        | `'denied'`                             | Повідомлення, що показується коли rc-файл заборонений.     |
-| `loaded_msg`        | `'loaded'`                             | Повідомлення, що показується коли rc-файл завантажений.    |
-| `unloaded_msg`      | `'not loaded'`                         | Повідомлення, що показується коли rc-файл не завантажений. |
+| Параметр            | Стандартно                             | Опис                                                                |
+| ------------------- | -------------------------------------- | ------------------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Формат модуля.                                                      |
+| `symbol`            | `'direnv '`                            | Символ, що показується перед direnv context.                        |
+| `style`             | `'bold orange'`                        | Стиль модуля.                                                       |
+| `disabled`          | `true`                                 | Вимикає модуль `direnv`.                                            |
+| `detect_extensions` | `[]`                                   | Які розширення повинні запускати цей модуль.                        |
+| `detect_files`      | `['.envrc']`                           | Які імена файлів мають запускати цей модуль.                        |
+| `detect_folders`    | `[]`                                   | В яких теках цей модуль має запускатись.                            |
+| `allowed_msg`       | `'allowed'`                            | Повідомлення, що показується коли використання rc-файлу дозволене.  |
+| `denied_msg`        | `'denied'`                             | Повідомлення, що показується коли використання rc-файлу заборонене. |
+| `loaded_msg`        | `'loaded'`                             | Повідомлення, що показується коли rc-файл завантажений.             |
+| `unloaded_msg`      | `'not loaded'`                         | Повідомлення, що показується коли rc-файл не завантажений.          |
 
 ### Змінні
 
@@ -1616,7 +1616,7 @@ format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
 
 Модуль `gcloud` показує поточну конфігурацію [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. Він базується на файлі `~/.config/gcloud/active_config` та на `~/.config/gcloud/configurations/config_{CONFIG NAME}` і на змінній оточення  `CLOUDSDK_CONFIG`.
 
-When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active when one of the environment variables has been set.
+Коли модуль увімкнено, він завжди буде активним, якщо не встановлено параметр `detect_env_vars`, в такому випадку модуль буде активним лише коли буде встановлено одну зі змінних середовища.
 
 ### Параметри
 
