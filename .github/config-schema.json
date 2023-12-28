@@ -366,6 +366,7 @@
         "disabled": true,
         "format": "[$symbol$loaded/$allowed]($style) ",
         "loaded_msg": "loaded",
+        "not_allowed_msg": "not allowed",
         "style": "bold orange",
         "symbol": "direnv ",
         "unloaded_msg": "not loaded"
@@ -2773,6 +2774,10 @@
         },
         "allowed_msg": {
           "default": "allowed",
+          "type": "string"
+        },
+        "not_allowed_msg": {
+          "default": "not allowed",
           "type": "string"
         },
         "denied_msg": {
