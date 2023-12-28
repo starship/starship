@@ -17,10 +17,9 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Parse config under `display`.
     // Select the first style that match the threshold,
     // if all thresholds are lower do not display battery module.
-    let display_style = config
-        .display
-        .iter()
-        .find(|display_style| percentage <= display_style.threshold as f32)?;
+    let display_style = config.display.iter().find(|display_style| {
+        percentage <= display_style.threshold as f32 && display_style.when.0.contains(&state)
+    })?;
 
     // Parse the format string and build the module
     match StringFormatter::new(config.format) {
@@ -410,6 +409,62 @@ mod tests {
             .battery_info_provider(&mock)
             .collect();
         let expected = Some(String::from("󰂃 13% "));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn battery_when_match() {
+        let mut mock = MockBatteryInfoProvider::new();
+
+        mock.expect_get_battery_info().times(1).returning(|| {
+            Some(BatteryInfo {
+                energy: 100.0,
+                energy_full: 1000.0,
+                state: battery::State::Charging,
+            })
+        });
+
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 10
+                when = "unknown"
+                style = "blue"
+                [[battery.display]]
+                threshold = 10
+                when = "charging"
+                style = ""
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = Some(String::from("󰂄 10% "));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn battery_when_filtered() {
+        let mut mock = MockBatteryInfoProvider::new();
+
+        mock.expect_get_battery_info().times(1).returning(|| {
+            Some(BatteryInfo {
+                energy: 100.0,
+                energy_full: 1000.0,
+                state: battery::State::Discharging,
+            })
+        });
+
+        let actual = ModuleRenderer::new("battery")
+            .config(toml::toml! {
+                [[battery.display]]
+                threshold = 10
+                when = ["charging", "unknown", "full", "empty", "charging"]
+                style = ""
+            })
+            .battery_info_provider(&mock)
+            .collect();
+        let expected = None;
 
         assert_eq!(expected, actual);
     }
