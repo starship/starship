@@ -44,6 +44,8 @@ impl<'a> Default for BatteryConfig<'a> {
 pub struct BatteryDisplayConfig<'a> {
     pub threshold: i64,
     pub style: &'a str,
+    pub charging_style: Option<&'a str>,
+    pub discharging_style: Option<&'a str>,
     pub charging_symbol: Option<&'a str>,
     pub discharging_symbol: Option<&'a str>,
 }
@@ -53,6 +55,8 @@ impl<'a> Default for BatteryDisplayConfig<'a> {
         BatteryDisplayConfig {
             threshold: 10,
             style: "red bold",
+            charging_style: None,
+            discharging_style: None,
             charging_symbol: None,
             discharging_symbol: None,
         }
