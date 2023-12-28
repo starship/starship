@@ -1,6 +1,6 @@
 [package]
 name = "starship"
-version = "1.16.0"
+version = "1.17.0"
 authors = ["Starship Contributors"]
 build = "build.rs"
 categories = ["command-line-utilities"]
