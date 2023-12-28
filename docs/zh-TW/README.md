@@ -179,7 +179,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### 命令提示字元
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   您需要在 Cmd 中使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+)。 Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

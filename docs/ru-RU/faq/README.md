@@ -1,12 +1,12 @@
-# Frequently Asked Questions
+# Часто задаваемые вопросы
 
 ## Какая конфигурация используется в демо-GIF?
 
 - **Эмулятор терминала**: [iTerm2](https://iterm2.com/)
-  - **Тема**: Минимальная
+  - **Тема**: Minimal
   - **Цветовая схема**: [Snazzy](https://github.com/sindresorhus/iterm2-snazzy)
-  - **Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
-- **Оболочка**: [Fish Shell](https://fishshell.com/)
+  - **Шрифт**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+- **Командная оболочка**: [Fish Shell](https://fishshell.com/)
   - **Конфигурация**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Подсказка**: [Starship](https://starship.rs/)
 

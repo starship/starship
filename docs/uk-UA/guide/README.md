@@ -32,6 +32,11 @@
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
       alt="Слідкуйте за @StarshipPrompt на Twitter"
  /></a>
+  <a href="https://stand-with-ukraine.pp.ua"
+    ><img
+      src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
+      alt="Підтримуйте Україну"
+ /></a>
 </p>
 
 <p align="center">
@@ -147,8 +152,6 @@
  /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-
 <h1></h1>
 
 <img
@@ -181,12 +184,12 @@
 
 ### Крок 1. Встановіть Starship
 
-Оберіть Вашу операційну систему зі списку нижче, щоб переглянути інструкцію зі встановлення:
+Оберіть вашу операційну систему зі списку нижче для ознайомлення з інструкцією зі встановлення:
 
 <details>
 <summary>Android</summary>
 
-Встановіть Starship використовуючи будь-який з наступних пакетних менеджерів:
+Встановіть Starship використовуючи будь-який з наступних менеджерів пакунків:
 
 | Репозиторій                                                                       | Команда для встановлення |
 | --------------------------------------------------------------------------------- | ------------------------ |
@@ -197,7 +200,7 @@
 <details>
 <summary>BSD</summary>
 
-Встановіть Starship використовуючи будь-який з наступних пакетних менеджерів:
+Встановіть Starship використовуючи будь-який з наступних менеджерів пакунків:
 
 | Дистрибутив     | Репозиторій                                              | Команда для встановлення          |
 | --------------- | -------------------------------------------------------- | --------------------------------- |
@@ -216,7 +219,7 @@
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Як варіант, можете встановити Starship через будь-який з наступних пакетних менеджерів:
+Як варіант, можете встановити Starship скориставшись будь-яким з наступних менеджерів пакунків:
 
 | Дистрибутив        | Репозиторій                                                                                     | Команда для встановлення                                                       |
 | ------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -229,6 +232,7 @@ curl -sS https://starship.rs/install.sh | sh
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
@@ -242,7 +246,7 @@ curl -sS https://starship.rs/install.sh | sh
 curl -sS https://starship.rs/install.sh | sh
 ```
 
-Як варіант, можете встановити Starship скориставшись будь-яким з наступних пакетних менеджерів:
+Як варіант, можете встановити Starship скориставшись будь-яким з наступних менеджерів пакунків:
 
 | Репозиторій                                              | Команда для встановлення                |
 | -------------------------------------------------------- | --------------------------------------- |
@@ -256,9 +260,9 @@ curl -sS https://starship.rs/install.sh | sh
 <details>
 <summary>Windows</summary>
 
-Встановіть останню версію системи за допомогою MSI-інсталятора з розділу [релізів](https://github.com/starship/starship/releases/latest).
+Встановіть останню версію для вашої системи за допомогою MSI-інсталятора з розділу [релізів](https://github.com/starship/starship/releases/latest).
 
-Встановіть Starship використовуючи будь-який з наступних менеджерів пакетів:
+Встановіть Starship використовуючи будь-який з наступних менеджерів пакунків:
 
 | Репозиторій                                                                                  | Команда для встановлення                |
 | -------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -341,7 +345,7 @@ mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
-Додайте наступний рядок наприкінці налаштувань Nushell (знайдіть її за допомоги `$nu.config-path`):
+Додайте наступний рядок наприкінці Вашої конфігурації Nushell (знайдіть її виконавши `$nu.config-path`):
 
 ```sh
 use ~/.cache/starship/init.nu
@@ -354,7 +358,7 @@ use ~/.cache/starship/init.nu
 <details>
 <summary>PowerShell</summary>
 
-Додайте наступний рядок наприкінці Вашої конфігурації PowerShell (знайдіть її виконавши `$PROFILE`):
+Додайте наступний рядок наприкінці вашої конфігурації PowerShell (знайдіть її виконавши команду `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -397,9 +401,9 @@ eval "$(starship init zsh)"
 
 ### Крок 3. Налаштуйте starship
 
-Запустіть новий екземпляр вашої оболонки і ви побачите новий яскравий командний рядок. Якщо вас влаштовують стандартні налаштування – насолоджуйтесь результатом!
+Запустіть новий екземпляр вашої оболонки і ви побачите новий яскравий командний рядок. Якщо ви задоволені налаштуваннями, насолоджуйтесь!
 
-Якщо ви бажаєте, ви можете продовжити налаштування Starship:
+Якщо ви бажаєте додатково налаштувати Starship:
 
 - **[Налаштування](https://starship.rs/config/)** – дізнайтесь як налаштувати Starship, щоб підлаштувати командний рядок під свої потреби
 
@@ -425,7 +429,7 @@ eval "$(starship init zsh)"
 
 ## ❤️ Спонсори
 
-Підтримайте цей проект [ставши спонсором](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
+Підтримайте цей проєкт [ставши спонсором](https://github.com/sponsors/starship). Ваше імʼя або логотип показуватимуться тут з посиланням на ваш сайт.
 
 **Підтримувачі**
 
