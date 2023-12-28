@@ -703,6 +703,10 @@
         "diverged": "⇕",
         "format": "([\\[$all_status$ahead_behind\\]]($style) )",
         "ignore_submodules": false,
+        "index_added": "",
+        "index_deleted": "",
+        "index_modified": "",
+        "index_typechanged": "",
         "modified": "!",
         "renamed": "»",
         "staged": "+",
@@ -711,7 +715,11 @@
         "typechanged": "",
         "untracked": "?",
         "up_to_date": "",
-        "use_git_executable": false
+        "use_git_executable": false,
+        "worktree_added": "",
+        "worktree_deleted": "",
+        "worktree_modified": "",
+        "worktree_typechanged": ""
       },
       "allOf": [
         {
@@ -3824,6 +3832,38 @@
           "type": "string"
         },
         "typechanged": {
+          "default": "",
+          "type": "string"
+        },
+        "worktree_added": {
+          "default": "",
+          "type": "string"
+        },
+        "worktree_deleted": {
+          "default": "",
+          "type": "string"
+        },
+        "worktree_modified": {
+          "default": "",
+          "type": "string"
+        },
+        "worktree_typechanged": {
+          "default": "",
+          "type": "string"
+        },
+        "index_added": {
+          "default": "",
+          "type": "string"
+        },
+        "index_deleted": {
+          "default": "",
+          "type": "string"
+        },
+        "index_modified": {
+          "default": "",
+          "type": "string"
+        },
+        "index_typechanged": {
           "default": "",
           "type": "string"
         },

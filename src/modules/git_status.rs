@@ -107,6 +107,65 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     "typechanged" => info.get_typechanged().and_then(|count| {
                         format_count(config.typechanged, "git_status.typechanged", context, count)
                     }),
+                    "worktree_added" => info.get_worktree_added().and_then(|count| {
+                        format_count(
+                            config.worktree_added,
+                            "git_status.worktree_added",
+                            context,
+                            count,
+                        )
+                    }),
+                    "worktree_deleted" => info.get_worktree_deleted().and_then(|count| {
+                        format_count(
+                            config.worktree_deleted,
+                            "git_status.worktree_deleted",
+                            context,
+                            count,
+                        )
+                    }),
+                    "worktree_modified" => info.get_worktree_modified().and_then(|count| {
+                        format_count(
+                            config.worktree_modified,
+                            "git_status.worktree_modified",
+                            context,
+                            count,
+                        )
+                    }),
+                    "worktree_typechanged" => info.get_worktree_typechanged().and_then(|count| {
+                        format_count(
+                            config.worktree_typechanged,
+                            "git_status.worktree_typechanged",
+                            context,
+                            count,
+                        )
+                    }),
+                    "index_added" => info.get_index_added().and_then(|count| {
+                        format_count(config.index_added, "git_status.index_added", context, count)
+                    }),
+                    "index_deleted" => info.get_index_deleted().and_then(|count| {
+                        format_count(
+                            config.index_deleted,
+                            "git_status.index_deleted",
+                            context,
+                            count,
+                        )
+                    }),
+                    "index_modified" => info.get_index_modified().and_then(|count| {
+                        format_count(
+                            config.index_modified,
+                            "git_status.index_modified",
+                            context,
+                            count,
+                        )
+                    }),
+                    "index_typechanged" => info.get_index_typechanged().and_then(|count| {
+                        format_count(
+                            config.index_typechanged,
+                            "git_status.index_typechanged",
+                            context,
+                            count,
+                        )
+                    }),
                     _ => None,
                 };
                 segments.map(Ok)
@@ -210,6 +269,38 @@ impl<'a> GitStatusInfo<'a> {
 
     pub fn get_typechanged(&self) -> Option<usize> {
         self.get_repo_status().map(|data| data.typechanged)
+    }
+
+    pub fn get_worktree_added(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.worktree_added)
+    }
+
+    pub fn get_worktree_deleted(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.worktree_deleted)
+    }
+
+    pub fn get_worktree_modified(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.worktree_modified)
+    }
+
+    pub fn get_worktree_typechanged(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.worktree_typechanged)
+    }
+
+    pub fn get_index_added(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.index_added)
+    }
+
+    pub fn get_index_deleted(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.index_deleted)
+    }
+
+    pub fn get_index_modified(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.index_modified)
+    }
+
+    pub fn get_index_typechanged(&self) -> Option<usize> {
+        self.get_repo_status().map(|data| data.index_typechanged)
     }
 }
 
@@ -503,46 +594,86 @@ pub(crate) struct RepoStatus {
     staged: usize,
     typechanged: usize,
     untracked: usize,
+    worktree_added: usize,
+    worktree_deleted: usize,
+    worktree_modified: usize,
+    worktree_typechanged: usize,
+    index_added: usize,
+    index_deleted: usize,
+    index_modified: usize,
+    index_typechanged: usize,
 }
 
 impl RepoStatus {
-    fn is_deleted(short_status: &str) -> bool {
-        // is_wt_deleted || is_index_deleted
-        short_status.contains('D')
+    fn is_index_typechanged(short_status: &str) -> bool {
+        short_status.starts_with('T')
     }
 
-    fn is_modified(short_status: &str) -> bool {
-        // is_wt_modified || is_wt_added
-        short_status.ends_with('M') || short_status.ends_with('A')
-    }
-
-    fn is_staged(short_status: &str) -> bool {
-        // is_index_modified || is_index_added || is_index_typechanged
-        short_status.starts_with('M')
-            || short_status.starts_with('A')
-            || short_status.starts_with('T')
-    }
-
-    fn is_typechanged(short_status: &str) -> bool {
+    fn is_worktree_typechanged(short_status: &str) -> bool {
         short_status.ends_with('T')
     }
 
+    fn is_index_deleted(short_status: &str) -> bool {
+        short_status.starts_with('D')
+    }
+
+    fn is_worktree_deleted(short_status: &str) -> bool {
+        short_status.ends_with('D')
+    }
+
+    fn is_index_added(short_status: &str) -> bool {
+        short_status.starts_with('A')
+    }
+
+    fn is_worktree_added(short_status: &str) -> bool {
+        short_status.ends_with('A')
+    }
+
+    fn is_index_modified(short_status: &str) -> bool {
+        short_status.starts_with('M')
+    }
+
+    fn is_worktree_modified(short_status: &str) -> bool {
+        short_status.ends_with('M')
+    }
+
     fn parse_normal_status(&mut self, short_status: &str) {
-        if Self::is_deleted(short_status) {
-            self.deleted += 1;
+        if Self::is_worktree_added(short_status) {
+            self.worktree_added += 1;
         }
 
-        if Self::is_modified(short_status) {
-            self.modified += 1;
+        if Self::is_worktree_deleted(short_status) {
+            self.worktree_deleted += 1;
         }
 
-        if Self::is_staged(short_status) {
-            self.staged += 1;
+        if Self::is_worktree_modified(short_status) {
+            self.worktree_modified += 1;
         }
 
-        if Self::is_typechanged(short_status) {
-            self.typechanged += 1;
+        if Self::is_worktree_typechanged(short_status) {
+            self.worktree_typechanged += 1;
         }
+
+        if Self::is_index_added(short_status) {
+            self.index_added += 1;
+        }
+
+        if Self::is_index_deleted(short_status) {
+            self.index_deleted += 1;
+        }
+
+        if Self::is_index_modified(short_status) {
+            self.index_modified += 1;
+        }
+
+        if Self::is_index_typechanged(short_status) {
+            self.index_typechanged += 1;
+        }
+
+        self.deleted = self.worktree_deleted + self.index_deleted;
+        self.modified = self.worktree_modified + self.worktree_added;
+        self.staged = self.index_modified + self.index_added + self.index_typechanged;
+        self.typechanged = self.worktree_typechanged;
     }
 
     fn add(&mut self, s: &str) {
@@ -1129,6 +1260,26 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn shows_worktree_typechanged_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_typechanged(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$worktree_typechanged"
+                worktree_typechanged = "$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(String::from("1"));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_modified() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -1184,6 +1335,46 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn shows_worktree_modified_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$worktree_modified"
+                worktree_modified = "$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(String::from("1"));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_index_modified_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_indexed_modified(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$index_modified"
+                index_modified = "$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(String::from("1"));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_added() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -1193,6 +1384,26 @@ pub(crate) mod tests {
             .path(repo_dir.path())
             .collect();
         let expected = format_output("!");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_worktree_added_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_added(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$worktree_added"
+                worktree_added = "$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(String::from("1"));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1240,6 +1451,26 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn shows_index_added_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$index_added"
+                index_added = "$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(String::from("1"));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
     fn shows_staged_typechange_with_count() -> io::Result<()> {
         let repo_dir = fixture_repo(FixtureProvider::Git)?;
 
@@ -1260,6 +1491,26 @@ pub(crate) mod tests {
                 Color::Red.bold().paint("]"),
             ])
         ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_index_typechanged_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_staged_typechange(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$index_typechanged"
+                index_typechanged = "$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(String::from("1"));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1373,6 +1624,46 @@ pub(crate) mod tests {
             .path(repo_dir.path())
             .collect();
         let expected = format_output("✘1");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_worktree_deleted_file_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_deleted(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$worktree_deleted"
+                worktree_deleted = "$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(String::from("1"));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_index_deleted_file_with_count() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_indexed_deleted(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                format = "$index_deleted"
+                index_deleted = "$count"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = Some(String::from("1"));
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1640,6 +1931,17 @@ pub(crate) mod tests {
         Ok(())
     }
 
+    fn create_indexed_modified(repo_dir: &Path) -> io::Result<()> {
+        create_modified(repo_dir)?;
+
+        create_command("git")?
+            .args(["add", "."])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
     fn create_staged(repo_dir: &Path) -> io::Result<()> {
         File::create(repo_dir.join("license"))?.sync_all()?;
 
@@ -1707,6 +2009,17 @@ pub(crate) mod tests {
     fn create_deleted_in_index(repo_dir: &Path) -> io::Result<()> {
         create_command("git")?
             .args(["rm", "readme.md"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
+    }
+
+    fn create_indexed_deleted(repo_dir: &Path) -> io::Result<()> {
+        create_deleted(repo_dir)?;
+
+        create_command("git")?
+            .args(["add", "."])
             .current_dir(repo_dir)
             .output()?;
 
