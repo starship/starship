@@ -166,7 +166,7 @@ mod tests {
             .cmd(
                 "direnv status",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), true, "2", true),
+                    stdout: status_cmd_output_with_rc(dir.path(), false, "2", true),
                     stderr: String::default(),
                 }),
             );
@@ -194,7 +194,7 @@ mod tests {
             .cmd(
                 "direnv status",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), true, "2", false),
+                    stdout: status_cmd_output_with_rc(dir.path(), false, "2", false),
                     stderr: String::default(),
                 }),
             );
