@@ -166,7 +166,7 @@ mod tests {
             .cmd(
                 "direnv status",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), false, "2", true),
+                    stdout: status_cmd_output_with_rc(dir.path(), false, "0", true),
                     stderr: String::default(),
                 }),
             );
@@ -194,7 +194,7 @@ mod tests {
             .cmd(
                 "direnv status",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), false, "2", false),
+                    stdout: status_cmd_output_with_rc(dir.path(), false, "0", false),
                     stderr: String::default(),
                 }),
             );
@@ -354,14 +354,10 @@ No .envrc or .env found"#,
         let rc_path = dir.as_ref().join(".envrc");
         let rc_path = rc_path.to_string_lossy();
 
-        let allowed_value = if use_legacy_boolean_flags {
-            if allowed == "0" {
-                "true"
-            } else {
-                "false"
-            }
-        } else {
-            &allowed
+        let allowed_value = match (use_legacy_boolean_flags, allowed) {
+            (true, "0") => "true",
+            (true, ..) => "false",
+            (false, val) => val,
         };
 
         let loaded = if loaded {
