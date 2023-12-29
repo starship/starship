@@ -36,6 +36,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 1. Install the **starship** binary:
 
+
    #### Install Latest Version
 
    With Shell:
@@ -45,6 +46,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```
 
    To update the Starship itself, rerun the above script. It will replace the current version without touching Starship's configuration.
+
 
    #### Install via Package Manager
 
@@ -61,6 +63,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
 1. Add the init script to your shell's config file:
 
+
    #### Bash
 
    `~/.bashrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
@@ -70,6 +73,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval "$(starship init bash)"
    ```
+
 
    #### Fish
 
@@ -81,6 +85,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    starship init fish | source
    ```
 
+
    #### Zsh
 
    `~/.zshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
@@ -91,6 +96,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval "$(starship init zsh)"
    ```
 
+
    #### Powershell
 
    Add the following to the end of `Microsoft.PowerShell_profile.ps1`. You can check the location of this file by querying the `$PROFILE` variable in PowerShell. Typically the path is `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` or `~/.config/powershell/Microsoft.PowerShell_profile.ps1` on -Nix.
@@ -98,6 +104,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    Invoke-Expression (&starship init powershell)
    ```
+
 
    #### Ion
 
@@ -108,6 +115,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval $(starship init ion)
    ```
+
 
    #### Elvish
 
@@ -125,6 +133,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    eval (starship init elvish)
    ```
 
+
    #### Tcsh
 
    `~/.tcshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
@@ -134,6 +143,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    eval `starship init tcsh`
    ```
+
 
    #### Nushell
 
@@ -155,6 +165,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    use ~/.cache/starship/init.nu
    ```
 
+
    #### Xonsh
 
    `~/.xonshrc` এর শেষে নিম্নলিখিত লাইন টি যোগ করুন:
@@ -164,6 +175,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    execx($(starship init xonsh))
    ```
+
 
    #### Cmd
 
