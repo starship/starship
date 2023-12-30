@@ -45,7 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "rc_path" => Some(Ok(state.rc_path.to_string_lossy())),
                 "allowed" => Some(Ok(match state.allowed {
                     AllowStatus::Allowed => Cow::from(config.allowed_msg),
-                    AllowStatus::NotAllowed => Cow::from(config.denied_msg),
+                    AllowStatus::NotAllowed => Cow::from(config.not_allowed_msg),
                     AllowStatus::Denied => Cow::from(config.denied_msg),
                 })),
                 "loaded" => state
