@@ -599,13 +599,13 @@ mod tests {
     }
 
     fn make_csproj_with_tfm(tfm_element: &str, tfm: &str) -> String {
-        let json_text = r#"
+        let json_text = r"
         <Project>
             <PropertyGroup>
                 <TFM_ELEMENT>TFM_VALUE</TFM_ELEMENT>
             </PropertyGroup>
         </Project>
-    "#;
+    ";
         json_text
             .replace("TFM_ELEMENT", tfm_element)
             .replace("TFM_VALUE", tfm)

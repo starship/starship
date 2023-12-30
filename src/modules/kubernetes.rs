@@ -21,7 +21,7 @@ fn get_current_kube_context_name(filename: path::PathBuf) -> Option<String> {
     let contents = utils::read_file(filename).ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
-    let conf = yaml_docs.get(0)?;
+    let conf = yaml_docs.first()?;
     conf["current-context"]
         .as_str()
         .filter(|s| !s.is_empty())
@@ -35,7 +35,7 @@ fn get_kube_ctx_components(
     let contents = utils::read_file(filename).ok()?;
 
     let yaml_docs = YamlLoader::load_from_str(&contents).ok()?;
-    let conf = yaml_docs.get(0)?;
+    let conf = yaml_docs.first()?;
     let contexts = conf["contexts"].as_vec()?;
 
     // Find the context with the name we're looking for
@@ -118,16 +118,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     .any(|v| !v.is_empty());
 
     let is_kube_project = have_scan_config.then(|| {
-        context
-            .try_begin_scan()
-            .map(|scanner| {
-                scanner
-                    .set_files(&config.detect_files)
-                    .set_folders(&config.detect_folders)
-                    .set_extensions(&config.detect_extensions)
-                    .is_match()
-            })
-            .unwrap_or(false)
+        context.try_begin_scan().map_or(false, |scanner| {
+            scanner
+                .set_files(&config.detect_files)
+                .set_folders(&config.detect_folders)
+                .set_extensions(&config.detect_extensions)
+                .is_match()
+        })
     });
 
     if !is_kube_project.unwrap_or(true) {

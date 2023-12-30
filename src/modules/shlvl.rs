@@ -242,7 +242,7 @@ mod tests {
                     disabled = false
                     threshold = threshold
                 })
-                .env(SHLVL_ENV_VAR, format!("{}", shlvl))
+                .env(SHLVL_ENV_VAR, format!("{shlvl}"))
                 .collect()
         }
 
