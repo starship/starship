@@ -119,9 +119,9 @@ impl FromStr for AllowStatus {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "0" | "true" => Ok(AllowStatus::Allowed),
-            "1" => Ok(AllowStatus::NotAllowed),
-            "2" | "false" => Ok(AllowStatus::Denied),
+            "0" | "true" => Ok(Self::Allowed),
+            "1" => Ok(Self::NotAllowed),
+            "2" | "false" => Ok(Self::Denied),
             _ => Err(Cow::from("invalid allow status")),
         }
     }
@@ -183,7 +183,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let rc_path = dir.path().join(".envrc");
 
-        std::fs::File::create(&rc_path)?.sync_all()?;
+        std::fs::File::create(rc_path)?.sync_all()?;
 
         let renderer = ModuleRenderer::new("direnv")
             .config(toml::toml! {
@@ -200,7 +200,7 @@ mod tests {
             );
 
         assert_eq!(
-            Some(format!("direnv not loaded/allowed ")),
+            Some("direnv not loaded/allowed ".to_string()),
             renderer.collect()
         );
 
@@ -236,7 +236,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let rc_path = dir.path().join(".envrc");
 
-        std::fs::File::create(&rc_path)?.sync_all()?;
+        std::fs::File::create(rc_path)?.sync_all()?;
 
         let renderer = ModuleRenderer::new("direnv")
             .config(toml::toml! {
@@ -252,7 +252,10 @@ mod tests {
                 }),
             );
 
-        assert_eq!(Some(format!("direnv loaded/allowed ")), renderer.collect());
+        assert_eq!(
+            Some("direnv loaded/allowed ".to_string()),
+            renderer.collect()
+        );
 
         dir.close()
     }
@@ -311,7 +314,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let rc_path = dir.path().join(".envrc");
 
-        std::fs::File::create(&rc_path)?.sync_all()?;
+        std::fs::File::create(rc_path)?.sync_all()?;
 
         let renderer = ModuleRenderer::new("direnv")
             .config(toml::toml! {
@@ -327,13 +330,16 @@ mod tests {
                 }),
             );
 
-        assert_eq!(Some(format!("direnv loaded/denied ")), renderer.collect());
+        assert_eq!(
+            Some("direnv loaded/denied ".to_string()),
+            renderer.collect()
+        );
 
         dir.close()
     }
     fn status_cmd_output_without_rc() -> String {
         String::from(
-            r#"\
+            r"\
 direnv exec path /usr/bin/direnv
 DIRENV_CONFIG /home/test/.config/direnv
 bash_path /usr/bin/bash
@@ -342,7 +348,7 @@ warn_timeout 5s
 whitelist.prefix []
 whitelist.exact map[]
 No .envrc or .env loaded
-No .envrc or .env found"#,
+No .envrc or .env found",
         )
     }
     fn status_cmd_output_with_rc(
