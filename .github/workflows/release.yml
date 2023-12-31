@@ -215,7 +215,7 @@ jobs:
           xcrun notarytool store-credentials "$KEYCHAIN_ENTRY" --team-id "$APPLEID_TEAMID" --apple-id "$APPLEID_USERNAME" --password "$APPLEID_PASSWORD" --keychain "$KEYCHAIN_PATH"
 
       - name: Setup | Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16
 
