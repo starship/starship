@@ -319,7 +319,10 @@ impl<'a> Context<'a> {
                 let shared_repo =
                     match ThreadSafeRepository::discover_with_environment_overrides_opts(
                         &self.current_dir,
-                        Default::default(),
+                        gix::discover::upwards::Options {
+                            match_ceiling_dir_or_error: false,
+                            ..Default::default()
+                        },
                         git_open_opts_map,
                     ) {
                         Ok(repo) => repo,
@@ -336,7 +339,10 @@ impl<'a> Context<'a> {
                 );
 
                 let branch = get_current_branch(&repository);
-                let remote = get_remote_repository_info(&repository, branch.as_deref());
+                let remote = get_remote_repository_info(
+                    &repository,
+                    branch.as_ref().map(|name| name.as_ref()),
+                );
                 let path = repository.path().to_path_buf();
 
                 let fs_monitor_value_is_true = repository
@@ -346,7 +352,7 @@ impl<'a> Context<'a> {
 
                 Ok(Repo {
                     repo: shared_repo,
-                    branch,
+                    branch: branch.map(|b| b.shorten().to_string()),
                     workdir: repository.work_dir().map(PathBuf::from),
                     path,
                     state: repository.state(),
@@ -624,7 +630,8 @@ pub struct Repo {
     pub repo: ThreadSafeRepository,
 
     /// If `current_dir` is a git repository or is contained within one,
-    /// this is the current branch name of that repo.
+    /// this is the short name of the current branch name of that repo,
+    /// i.e. `main`.
     pub branch: Option<String>,
 
     /// If `current_dir` is a git repository or is contained within one,
@@ -788,24 +795,21 @@ impl<'a> ScanAncestors<'a> {
     }
 }
 
-fn get_current_branch(repository: &Repository) -> Option<String> {
-    let name = repository.head_name().ok()??;
-    let shorthand = name.shorten();
-
-    Some(shorthand.to_string())
+fn get_current_branch(repository: &Repository) -> Option<gix::refs::FullName> {
+    repository.head_name().ok()?
 }
 
 fn get_remote_repository_info(
     repository: &Repository,
-    branch_name: Option<&str>,
+    branch_name: Option<&gix::refs::FullNameRef>,
 ) -> Option<Remote> {
     let branch_name = branch_name?;
     let branch = repository
-        .branch_remote_ref(branch_name)
+        .branch_remote_ref_name(branch_name, gix::remote::Direction::Fetch)
         .and_then(std::result::Result::ok)
         .map(|r| r.shorten().to_string());
     let name = repository
-        .branch_remote_name(branch_name)
+        .branch_remote_name(branch_name.shorten(), gix::remote::Direction::Fetch)
         .map(|n| n.as_bstr().to_string());
 
     Some(Remote { branch, name })
