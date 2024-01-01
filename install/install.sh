@@ -269,8 +269,16 @@ confirm() {
       exit 1
     fi
     if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-      error 'Aborting (please answer "yes" to continue)'
-      exit 1
+      printf "Enter the location to install to: "
+      set +e
+      read -r bd </dev/tty
+      BIN_DIR=$bd
+      rc=$?
+      set -e
+      if [ $rc -ne 0 ]; then
+          error "Error reading from prompt (please re-run with the '--yes' option)"
+          exit 1
+      fi
     fi
   fi
 }
