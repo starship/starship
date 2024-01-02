@@ -658,7 +658,8 @@
         "style": "red bold",
         "typechanged": "",
         "untracked": "?",
-        "up_to_date": ""
+        "up_to_date": "",
+        "no_upstream": ""
       },
       "allOf": [
         {
@@ -3449,6 +3450,10 @@
           "type": "string"
         },
         "up_to_date": {
+          "default": "",
+          "type": "string"
+        },
+        "no_upstream": {
           "default": "",
           "type": "string"
         },

@@ -21,6 +21,7 @@ const ALL_STATUS_FORMAT: &str =
 ///   - `⇣` — This branch is behind of the branch being tracked
 ///   - `⇕` — This branch has diverged from the branch being tracked
 ///   - ``  — This branch is up-to-date with the branch being tracked
+///   - ``  — This branch is not tracking an upstream branch
 ///   - `?` — There are untracked files in the working directory
 ///   - `$` — A stash exists for the local repository
 ///   - `!` — There are file modifications in the working directory
@@ -82,8 +83,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                             format_count(config.ahead, "git_status.ahead", context, ahead)
                         } else if behind > 0 && ahead == 0 {
                             format_count(config.behind, "git_status.behind", context, behind)
-                        } else {
+                        } else if ahead == 0 && behind == 0 {
                             format_symbol(config.up_to_date, "git_status.up_to_date", context)
+                        } else {
+                            format_symbol(config.no_upstream, "git_status.no_upstream", context)
                         }
                     }),
                     "conflicted" => info.get_conflicted().and_then(|count| {
@@ -241,14 +244,17 @@ fn get_repo_status(
 
     let status_output = repo.exec_git(context, &args)?;
     let status_lines = status_output.stdout.lines();
+    let mut upstream_status = "none";
 
     status_lines.for_each(|status_line| {
         if status_line.starts_with("# branch.ab ") {
-            repo_status.set_ahead_behind(status_line);
+            upstream_status = status_line;
         } else if !status_line.starts_with('#') {
             repo_status.add(status_line);
         }
     });
+
+    repo_status.set_ahead_behind(upstream_status);
 
     Some(repo_status)
 }
@@ -354,6 +360,10 @@ impl RepoStatus {
         if let Some(captures) = re.captures(s) {
             self.ahead = captures.get(1).unwrap().as_str().parse::<usize>().ok();
             self.behind = captures.get(2).unwrap().as_str().parse::<usize>().ok();
+        } else {
+            // No upstream branch found
+            self.ahead = None;
+            self.behind = None;
         }
     }
 }
@@ -661,6 +671,25 @@ mod tests {
             .path(repo_dir.path())
             .collect();
         let expected = format_output("✓");
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_no_upstream_branch() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        new_branch(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .config(toml::toml! {
+                [git_status]
+                no_upstream="🥷"
+            })
+            .path(repo_dir.path())
+            .collect();
+        let expected = format_output("🥷");
 
         assert_eq!(expected, actual);
         repo_dir.close()
@@ -1186,6 +1215,15 @@ mod tests {
         assert_eq!(None, actual);
 
         repo_dir.close()
+    }
+
+    fn new_branch(repo_dir: &Path) -> io::Result<()> {
+        create_command("git")?
+            .args(["switch", "--create", "foo"])
+            .current_dir(repo_dir)
+            .output()?;
+
+        Ok(())
     }
 
     fn ahead(repo_dir: &Path) -> io::Result<()> {
