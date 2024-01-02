@@ -305,7 +305,10 @@ mod tests {
                 }),
             );
 
-        assert_eq!(Some(format!("direnv loaded/denied ")), renderer.collect());
+        assert_eq!(
+            Some(format!("direnv loaded/not allowed ")),
+            renderer.collect()
+        );
 
         dir.close()
     }
