@@ -16,11 +16,11 @@ const ALL_STATUS_FORMAT: &str =
 ///
 /// Will display the branch name if the current directory is a git repo
 /// By default, the following symbols will be used to represent the repo's status:
-///   - `=` – This branch has merge conflicts
-///   - `⇡` – This branch is ahead of the branch being tracked
-///   - `⇣` – This branch is behind of the branch being tracked
-///   - `⇕` – This branch has diverged from the branch being tracked
-///   - `` – This branch is up-to-date with the branch being tracked
+///   - `=` — This branch has merge conflicts
+///   - `⇡` — This branch is ahead of the branch being tracked
+///   - `⇣` — This branch is behind of the branch being tracked
+///   - `⇕` — This branch has diverged from the branch being tracked
+///   - ``  — This branch is up-to-date with the branch being tracked
 ///   - `?` — There are untracked files in the working directory
 ///   - `$` — A stash exists for the local repository
 ///   - `!` — There are file modifications in the working directory
@@ -240,13 +240,13 @@ fn get_repo_status(
     }
 
     let status_output = repo.exec_git(context, &args)?;
-    let statuses = status_output.stdout.lines();
+    let status_lines = status_output.stdout.lines();
 
-    statuses.for_each(|status| {
-        if status.starts_with("# branch.ab ") {
-            repo_status.set_ahead_behind(status);
-        } else if !status.starts_with('#') {
-            repo_status.add(status);
+    status_lines.for_each(|status_line| {
+        if status_line.starts_with("# branch.ab ") {
+            repo_status.set_ahead_behind(status_line);
+        } else if !status_line.starts_with('#') {
+            repo_status.add(status_line);
         }
     });
 
@@ -347,12 +347,13 @@ impl RepoStatus {
         }
     }
 
+    // Set how many commits ahead and behind the local branch is in relation to the upstream branch
     fn set_ahead_behind(&mut self, s: &str) {
         let re = Regex::new(r"branch\.ab \+([0-9]+) \-([0-9]+)").unwrap();
 
-        if let Some(caps) = re.captures(s) {
-            self.ahead = caps.get(1).unwrap().as_str().parse::<usize>().ok();
-            self.behind = caps.get(2).unwrap().as_str().parse::<usize>().ok();
+        if let Some(captures) = re.captures(s) {
+            self.ahead = captures.get(1).unwrap().as_str().parse::<usize>().ok();
+            self.behind = captures.get(2).unwrap().as_str().parse::<usize>().ok();
         }
     }
 }
