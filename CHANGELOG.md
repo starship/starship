@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.17.1](https://github.com/starship/starship/compare/v1.17.0...v1.17.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* v1.17.0 post-release fix-ups ([#5660](https://github.com/starship/starship/issues/5660)) ([89dc192](https://github.com/starship/starship/commit/89dc19214bb671fe50a8f1be79a4594e7998ddea))
+
+
+### Reverts
+
+* refactor(modules): use whoami crate to get username ([#5669](https://github.com/starship/starship/issues/5669)) ([a83e107](https://github.com/starship/starship/commit/a83e10776ba37bd1ab439e5e4d0125a06e947728))
+
 ## [1.17.0](https://github.com/starship/starship/compare/v1.16.0...v1.17.0) (2023-12-28)
 
 
