@@ -23,6 +23,7 @@ pub struct StarshipRootConfig {
     pub palette: Option<String>,
     pub palettes: HashMap<String, Palette>,
     pub profiles: IndexMap<String, String>,
+    pub opt_in_modules: bool,
 }
 
 pub type Palette = HashMap<String, String>;
@@ -141,6 +142,7 @@ impl Default for StarshipRootConfig {
             follow_symlinks: true,
             palette: None,
             palettes: HashMap::default(),
+            opt_in_modules: false,
         }
     }
 }
