@@ -121,10 +121,10 @@ Starship 的卸载过程与安装过程一样简单。
 sh -c 'rm "$(command -v 'starship')"'
 ```
 
-## How do I install Starship without `sudo`?
+## 我如何在没有 `sudo` 的情况下安装 Starship？
 
-The shell install script (`https://starship.rs/install.sh`) only attempts to use `sudo` if the target installation directory is not writable by the current user. The default installation diretory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. If you instead set the installation directory to one that is writable by your user, you should be able to install starship without `sudo`. For example, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` uses the `-b` command line option of the install script to set the installation directory to `~/.local/bin`.
+Shell 安装脚本(`https://starship.rs/install`) 只尝试使用 `sudo`当安装目录不可被当前用户写入 默认安装目录是环境变量 `$BIN_DIR` 的值或者 `/usr/loca/bin` 如果 if `$BIN_DIR` 未设置 如果你使用一个用户可写的安装目录替代, 你应该可以不使用 `sudo` 安装 Starship 例如, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` 使用 `-b` 选项设置安装目录到 `~/.local/bin`
 
-For a non-interactive installation of Starship, don't forget to add the `-y` option to skip the confirmation. Check the source of the installation script for a list of all supported installation options.
+对于非交互 Starship 安装, 请添加 `-y` 以跳过确认 查看安装脚本源码以获取所有支持的选项
 
-When using a package manager, see the documentation for your package manager about installing with or without `sudo`.
+当使用包管理器时, 查询包管理器关于有无`sudo`安装的文档
