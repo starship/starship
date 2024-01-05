@@ -71,7 +71,10 @@ fn undistract_me<'a>(
     use notify_rust::{Notification, Timeout};
     use nu_ansi_term::{unstyle, AnsiStrings};
 
-    if config.show_notifications && config.min_time_to_notify as u128 <= elapsed {
+    if context.properties.redraw_count == 1
+        && config.show_notifications
+        && config.min_time_to_notify as u128 <= elapsed
+    {
         if cfg!(target_os = "linux") {
             let in_graphical_session = ["DISPLAY", "WAYLAND_DISPLAY", "MIR_SOCKET"]
                 .iter()

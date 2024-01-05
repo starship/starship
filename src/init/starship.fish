@@ -10,6 +10,7 @@ function fish_prompt
     # Account for changes in variable name between v2.7 and v3.0
     set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
     set STARSHIP_JOBS (count (jobs -p))
+    set -g STARSHIP_REDRAW_COUNT (math $STARSHIP_REDRAW_COUNT + 1)
     if test "$TRANSIENT" = "1"
         # Clear from cursor to end of screen as `commandline -f repaint` does not do this
         # See https://github.com/fish-shell/fish-shell/issues/8418
@@ -20,7 +21,7 @@ function fish_prompt
             printf "\e[1;32m❯\e[0m "
         end
     else
-        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        ::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS --redraw-count=$STARSHIP_REDRAW_COUNT
     end
 end
 
@@ -43,8 +44,12 @@ function fish_right_prompt
             printf ""
         end
     else
-        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS
+        ::STARSHIP:: prompt --right --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="$STARSHIP_CMD_PIPESTATUS" --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=$STARSHIP_JOBS --redraw-count=$STARSHIP_REDRAW_COUNT
     end
+end
+
+function _starship_reset_redraws --on-event fish_postexec
+    set -g STARSHIP_REDRAW_COUNT 0
 end
 
 # Disable virtualenv prompt, it breaks starship
