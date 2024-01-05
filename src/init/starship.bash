@@ -64,18 +64,18 @@ starship_precmd() {
 
     eval "$_PRESERVED_PROMPT_COMMAND"
 
-    local ARGS="--terminal-width=${COLUMNS} --status=${STARSHIP_CMD_STATUS} --pipestatus=${STARSHIP_PIPE_STATUS[*]} --jobs=${NUM_JOBS}"
+    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}")
     # Prepare the timer data, if needed.
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        ARGS+=" --cmd-duration=${STARSHIP_DURATION}"
+        ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
         unset STARSHIP_START_TIME
     fi
-    PS1="$(::STARSHIP:: prompt ${ARGS})"
+    PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
     if [[ ${BLE_ATTACHED-} ]]; then
         local nlns=${PS1//[!$'\n']}
-        bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right ${ARGS})"
+        bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
