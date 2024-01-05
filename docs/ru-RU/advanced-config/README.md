@@ -8,7 +8,7 @@
 
 :::
 
-## TransientPrompt in PowerShell
+## TransientPrompt для PowerShell
 
 It is possible to replace the previous-printed prompt with a custom string. This is useful in cases where all the prompt information is not always needed. To enable this, run `Enable-TransientPrompt` in the shell session. To make it permanent, put this statement in your `$PROFILE`. Transience can be disabled on-the-fly with `Disable-TransientPrompt`.
 
@@ -131,7 +131,7 @@ set +o functrace
 
 ## Custom pre-prompt and pre-execution Commands in PowerShell
 
-PowerShell does not have a formal preexec/precmd framework like most other shells. Because of this, it is difficult to provide fully customizable hooks in `powershell`. Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
+PowerShell does not have a formal preexec/precmd framework like most other shells. Из-за этого трудно предоставить полностью настраиваемые хуки в `powershell`. Тем не менее, Starship дает вам ограниченную возможность вставить собственные функции в процедуру отображения подсказки:
 
 Create a function named `Invoke-Starship-PreCommand`
 
@@ -193,7 +193,7 @@ You can also set a similar output with PowerShell by creating a function named `
 ```powershell
 # edit $PROFILE
 function Invoke-Starship-PreCommand {
-  $host.ui.Write("`e]0; PS> $env:USERNAME@$env:COMPUTERNAME`: $pwd `a")
+  $host.ui.RawUI.WindowTitle = "$env:USERNAME@$env:COMPUTERNAME`: $pwd `a"
 }
 
 Invoke-Expression (&starship init powershell)
@@ -271,14 +271,14 @@ continuation_prompt = '▶▶ '
 
 Цветовой спецификатор может быть одним из следующих:
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
+- Один из стандартных цветов терминалов: `black`, `red`, `green`, `blue`, `gellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
 - `#`, за которой следует шестизначное шестнадцатеричное число. Это определяет [шестнадцатеричный код цвета RGB](https://www.w3schools.com/colors/colors_hexadecimal.asp).
 - Число от 0 до 255. Это определяет [8-битный код цвета ANSI](https://i.stack.imgur.com/KTSQa.png).
 
 Если для переднего плана/фона задано несколько цветов, то последняя из строк будет иметь приоритет.
 
-Not every style string will be displayed correctly by every terminal. In particular, the following known quirks exist:
+Не все строки стиля будут корректно отображаться в терминале. В частности, существуют следующие известные ошибки:
 
-- Many terminals disable support for `blink` by default
-- `hidden` is [not supported on iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
-- `strikethrough` is not supported by the default macOS Terminal.app
+- Во многих терминалах по умолчанию отключена поддержка `blink`
+- `hidden` [не поддерживается в iTerm](https://gitlab.com/gnachman/iterm2/-/issues/4564).
+- `strikethrough` по умолчанию не поддерживается в macOS Terminal.app

@@ -32,6 +32,11 @@
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
       alt="Sigue a @StarshipPrompt en Twitter"
  /></a>
+  <a href="https://stand-with-ukraine.pp.ua"
+    ><img
+      src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
+      alt="Stand With Ukraine"
+ /></a>
 </p>
 
 <p align="center">
@@ -115,11 +120,19 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Tiếng Việt"
+      alt="Vietnamita"
  /></a>
   &nbsp;
   <a
@@ -127,7 +140,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-cn.png"
-      alt="简体中文"
+      alt="Chino Mandarín"
  /></a>
   &nbsp;
   <a
@@ -135,11 +148,9 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-tw.png"
-      alt="繁體中文"
+      alt="Chino Tradicional"
  /></a>
 </p>
-
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
 <h1></h1>
 
@@ -215,13 +226,13 @@ Alternativamente, instale Starship usando cualquiera de los siguientes gestores 
 | **_Cualquiera_**   | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Cualquiera_       | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _Cualquiera_       | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Cualquiera_       | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
+| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Paquetes Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
@@ -263,7 +274,7 @@ Instalar Starship usando cualquiera de los siguientes gestores de paquetes:
 
 </details>
 
-### Paso 2. Configura tu shell para usar Starship
+### Paso 2. Set up your shell to use Starship
 
 Configure su shell para inicializar starship. Selecciona el tuyo de la lista de abajo:
 
@@ -337,10 +348,10 @@ starship init nu | save -f ~/.cache/starship/init.nu
 Añade lo siguiente al final de tu configuración de Nushell (encuéntrala ejecutando `$nu.config-path`):
 
 ```sh
-source ~/.cache/starship/init.nu
+use ~/.cache/starship/init.nu
 ```
 
-Nota: Sólo se admite Nushell v0.73+
+Nota: Sólo se admite Nushell v0.78+
 
 </details>
 
@@ -422,7 +433,6 @@ Apoya este proyecto [convirtiéndote en patrocinador](https://github.com/sponsor
 
 **Patrocinadores**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">

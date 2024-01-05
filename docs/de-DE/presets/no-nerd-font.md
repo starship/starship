@@ -11,7 +11,7 @@ This preset will become the default preset in a future release of starship.
 ### Konfiguration
 
 ```sh
-starship preset no-nerd-font > ~/.config/starship.toml
+starship preset no-nerd-font -o ~/.config/starship.toml
 ```
 
 [Zum Herunterladen der TOML Datei klicken](/presets/toml/no-nerd-font.toml)

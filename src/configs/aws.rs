@@ -18,7 +18,8 @@ use std::collections::HashMap;
 ///
 /// When using [aws-vault](https://github.com/99designs/aws-vault) the profile
 /// is read from the `AWS_VAULT` env var and the credentials expiration date
-/// is read from the `AWS_SESSION_EXPIRATION` env var.
+/// is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION`
+/// var.
 ///
 /// When using [awsu](https://github.com/kreuzwerker/awsu) the profile
 /// is read from the `AWSU_PROFILE` env var.
@@ -26,6 +27,9 @@ use std::collections::HashMap;
 /// When using [`AWSume`](https://awsu.me) the profile
 /// is read from the `AWSUME_PROFILE` env var and the credentials expiration
 /// date is read from the `AWSUME_EXPIRATION` env var.
+///
+/// When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile
+/// is read from the `AWS_SSO_PROFILE` env var.
 pub struct AwsConfig<'a> {
     /// The format for the module.
     pub format: &'a str,

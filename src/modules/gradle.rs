@@ -75,7 +75,7 @@ fn parse_gradle_version_from_properties(wrapper_properties: &str) -> Option<Stri
         .rsplit_once('/')?
         .1
         .strip_prefix("gradle-")?
-        .split_once('-')?
+        .rsplit_once('-')?
         .0;
     Some(version.to_string())
 }
@@ -215,6 +215,29 @@ zipStorePath=wrapper/dists
         assert_eq!(
             parse_gradle_version_from_properties(input),
             Some("7.5.1".to_string())
+        );
+    }
+
+    #[test]
+    fn test_format_wrapper_properties_unstable_versions() {
+        let input = |version: &str| {
+            format!(
+                "\
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\\://services.gradle.org/distributions/gradle-{version}-bin.zip
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+        "
+            )
+        };
+        assert_eq!(
+            parse_gradle_version_from_properties(&input("8.1-rc-1")),
+            Some("8.1-rc-1".to_string())
+        );
+        assert_eq!(
+            parse_gradle_version_from_properties(&input("7.5.1-20220729132837+0000")),
+            Some("7.5.1-20220729132837+0000".to_string())
         );
     }
 }

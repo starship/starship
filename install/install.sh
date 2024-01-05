@@ -40,6 +40,14 @@ has() {
   command -v "$1" 1>/dev/null 2>&1
 }
 
+curl_is_snap() {
+  curl_path="$(command -v curl)"
+  case "$curl_path" in
+    /snap/*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 # Make sure user is not using zsh or non-POSIX-mode bash, which can cause issues
 verify_shell_is_posix_or_exit() {
   if [ -n "${ZSH_VERSION+x}" ]; then
@@ -55,7 +63,6 @@ verify_shell_is_posix_or_exit() {
   fi
 }
 
-# Gets path to a temporary file, even if
 get_tmpfile() {
   suffix="$1"
   if has mktemp; then
@@ -82,7 +89,13 @@ download() {
   file="$1"
   url="$2"
 
-  if has curl; then
+  if has curl && curl_is_snap; then
+    warn "curl installed through snap cannot download starship."
+    warn "See https://github.com/starship/starship/issues/5403 for details."
+    warn "Searching for other HTTP download programs..."
+  fi
+
+  if has curl && ! curl_is_snap; then
     cmd="curl --fail --silent --location --output $file $url"
   elif has wget; then
     cmd="wget --quiet --output-document=$file $url"
@@ -337,12 +350,13 @@ print_install() {
       nushell )
         # shellcheck disable=SC2088
         config_file="${BOLD}your nu config file${NO_COLOR} (find it by running ${BOLD}\$nu.config-path${NO_COLOR} in Nushell)"
-        config_cmd="mkdir ~/.cache/starship
-        starship init nu | save -f ~/.cache/starship/init.nu
-        source ~/.cache/starship/init.nu"
+        config_cmd="use ~/.cache/starship/init.nu"
         warning="${warning} This will change in the future.
-  Only Nushell v0.73 or higher is supported.
-  Add the following to the end of ${BOLD}your Nushell env file${NO_COLOR} (find it by running ${BOLD}\$nu.env-path${NO_COLOR} in Nushell): \"mkdir ~/.cache/starship; starship init nu | save ~/.cache/starship/init.nu\""
+  Only Nushell v0.78 or higher is supported.
+  Add the following to the end of ${BOLD}your Nushell env file${NO_COLOR} (find it by running ${BOLD}\$nu.env-path${NO_COLOR} in Nushell):
+
+	mkdir ~/.cache/starship
+	starship init nu | save -f ~/.cache/starship/init.nu"
         ;;
     esac
     printf "  %s\n  %s\n  And add the following to the end of %s:\n\n\t%s\n\n" \

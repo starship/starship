@@ -1,4 +1,4 @@
-use git_repository::state::InProgress;
+use gix::state::InProgress;
 use std::path::PathBuf;
 
 use super::{Context, Module, ModuleConfig};

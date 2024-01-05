@@ -9,7 +9,7 @@ Konfigurasi prasetel berikut mengubah format dari seluruh modul bawaan untuk men
 ### Konfigurasi
 
 ```sh
-starship preset bracketed-segments > ~/.config/starship.toml
+starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
 [Click to download TOML](/presets/toml/bracketed-segments.toml)

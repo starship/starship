@@ -9,7 +9,7 @@ Diese Voreinstellung emuliert das Aussehen und das Verhalten von [Pure](https://
 ### Konfiguration
 
 ```sh
-starship preset pure-preset > ~/.config/starship.toml
+starship preset pure-preset -o ~/.config/starship.toml
 ```
 
 [Zum Herunterladen der TOML Datei klicken](/presets/toml/pure-preset.toml)

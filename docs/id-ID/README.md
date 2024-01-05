@@ -10,7 +10,7 @@ features:
     title: Kompatibilitas Yang Utama
     details: Dapat berfungsi di shells standar dengan sistem operasi yang paling biasa. Pakai di mana saja!
   - 
-    title: Dibangun Dengan Rust
+    title: Dibuat dengan Rust
     details: Menggunakan kecepatan dan keamanan dari Rust, untuk membuat prompt kamu bekerja secepat dan seandal mungkin.
   - 
     title: Dapat Dikustomisasi
@@ -149,7 +149,7 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
 
    ::: warning
 
-   Hal ini dapat berubah di kemudian hari. Hanya Nushell v0.73+ yang menerima dukungan.
+   Hal ini dapat berubah di kemudian hari. Hanya Nushell v0.78+ yang menerima dukungan.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship merupakan sebuah prompt yang minimal, super cepat, dan san
    Lalu tambahkan baris berikut di baris terakhir konfigurasi Nushell (temukan dengan menjalankan `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 

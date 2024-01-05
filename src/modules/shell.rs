@@ -20,6 +20,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     Shell::Bash => Some(config.bash_indicator),
                     Shell::Fish => Some(config.fish_indicator),
                     Shell::Zsh => Some(config.zsh_indicator),
+                    Shell::Pwsh => config.pwsh_indicator.or(Some(config.powershell_indicator)),
                     Shell::PowerShell => Some(config.powershell_indicator),
                     Shell::Ion => Some(config.ion_indicator),
                     Shell::Elvish => Some(config.elvish_indicator),
@@ -40,6 +41,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "fish_indicator" => Some(Ok(config.fish_indicator)),
                 "zsh_indicator" => Some(Ok(config.zsh_indicator)),
                 "powershell_indicator" => Some(Ok(config.powershell_indicator)),
+                "pwsh_indicator" => config.pwsh_indicator.map(Ok),
                 "ion_indicator" => Some(Ok(config.ion_indicator)),
                 "elvish_indicator" => Some(Ok(config.elvish_indicator)),
                 "tcsh_indicator" => Some(Ok(config.tcsh_indicator)),
@@ -193,6 +195,50 @@ mod tests {
             .config(toml::toml! {
                 [shell]
                 powershell_indicator = "[powershell](bold cyan)"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_pwsh_default_format() {
+        let expected = Some(format!("{} ", Color::White.bold().paint("psh")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Pwsh)
+            .config(toml::toml! {
+                [shell]
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_pwsh_custom_format() {
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("pwsh")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Pwsh)
+            .config(toml::toml! {
+                [shell]
+                pwsh_indicator = "[pwsh](bold cyan)"
+                disabled = false
+            })
+            .collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_pwsh_custom_format_fallback() {
+        let expected = Some(format!("{} ", Color::Cyan.bold().paint("pwsh")));
+        let actual = ModuleRenderer::new("shell")
+            .shell(Shell::Pwsh)
+            .config(toml::toml! {
+                [shell]
+                powershell_indicator = "[pwsh](bold cyan)"
                 disabled = false
             })
             .collect();

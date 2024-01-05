@@ -1,5 +1,6 @@
 use crate::configs::Palette;
 use crate::context::Context;
+
 use crate::serde_utils::{ValueDeserializer, ValueRef};
 use crate::utils;
 use nu_ansi_term::Color;
@@ -10,9 +11,9 @@ use serde::{
 use std::borrow::Cow;
 use std::clone::Clone;
 use std::collections::HashMap;
+use std::ffi::OsString;
 use std::io::ErrorKind;
 
-use std::env;
 use toml::Value;
 
 /// Root config of a module.
@@ -120,25 +121,10 @@ pub struct StarshipConfig {
     pub config: Option<toml::Table>,
 }
 
-pub fn get_config_path() -> Option<String> {
-    if let Ok(path) = env::var("STARSHIP_CONFIG") {
-        // Use $STARSHIP_CONFIG as the config path if available
-        log::debug!("STARSHIP_CONFIG is set: {}", &path);
-        Some(path)
-    } else {
-        // Default to using ~/.config/starship.toml
-        log::debug!("STARSHIP_CONFIG is not set");
-        let config_path = utils::home_dir()?.join(".config/starship.toml");
-        let config_path_str = config_path.to_str()?.to_owned();
-        log::debug!("Using default config path: {}", config_path_str);
-        Some(config_path_str)
-    }
-}
-
 impl StarshipConfig {
     /// Initialize the Config struct
-    pub fn initialize() -> Self {
-        Self::config_from_file()
+    pub fn initialize(config_file_path: &Option<OsString>) -> Self {
+        Self::config_from_file(config_file_path)
             .map(|config| Self {
                 config: Some(config),
             })
@@ -146,10 +132,30 @@ impl StarshipConfig {
     }
 
     /// Create a config from a starship configuration file
-    fn config_from_file() -> Option<toml::Table> {
-        let file_path = get_config_path()?;
+    fn config_from_file(config_file_path: &Option<OsString>) -> Option<toml::Table> {
+        let toml_content = Self::read_config_content_as_str(config_file_path)?;
 
-        let toml_content = match utils::read_file(file_path) {
+        match toml::from_str(&toml_content) {
+            Ok(parsed) => {
+                log::debug!("Config parsed: {:?}", &parsed);
+                Some(parsed)
+            }
+            Err(error) => {
+                log::error!("Unable to parse the config file: {}", error);
+                None
+            }
+        }
+    }
+
+    pub fn read_config_content_as_str(config_file_path: &Option<OsString>) -> Option<String> {
+        if config_file_path.is_none() {
+            log::debug!(
+                "Unable to determine `config_file_path`. Perhaps `utils::home_dir` is not defined on your platform?"
+            );
+            return None;
+        }
+        let config_file_path = config_file_path.as_ref().unwrap();
+        match utils::read_file(config_file_path) {
             Ok(content) => {
                 log::trace!("Config file content: \"\n{}\"", &content);
                 Some(content)
@@ -162,17 +168,6 @@ impl StarshipConfig {
                 };
 
                 log::log!(level, "Unable to read config file content: {}", &e);
-                None
-            }
-        }?;
-
-        match toml::from_str(&toml_content) {
-            Ok(parsed) => {
-                log::debug!("Config parsed: {:?}", &parsed);
-                Some(parsed)
-            }
-            Err(error) => {
-                log::error!("Unable to parse the config file: {}", error);
                 None
             }
         }
@@ -292,64 +287,62 @@ pub fn parse_style_string(
 ) -> Option<nu_ansi_term::Style> {
     style_string
         .split_whitespace()
-        .fold(Some(nu_ansi_term::Style::new()), |maybe_style, token| {
-            maybe_style.and_then(|style| {
-                let token = token.to_lowercase();
+        .try_fold(nu_ansi_term::Style::new(), |style, token| {
+            let token = token.to_lowercase();
 
-                // Check for FG/BG identifiers and strip them off if appropriate
-                // If col_fg is true, color the foreground. If it's false, color the background.
-                let (token, col_fg) = if token.as_str().starts_with("fg:") {
-                    (token.trim_start_matches("fg:").to_owned(), true)
-                } else if token.as_str().starts_with("bg:") {
-                    (token.trim_start_matches("bg:").to_owned(), false)
-                } else {
-                    (token, true) // Bare colors are assumed to color the foreground
-                };
+            // Check for FG/BG identifiers and strip them off if appropriate
+            // If col_fg is true, color the foreground. If it's false, color the background.
+            let (token, col_fg) = if token.as_str().starts_with("fg:") {
+                (token.trim_start_matches("fg:").to_owned(), true)
+            } else if token.as_str().starts_with("bg:") {
+                (token.trim_start_matches("bg:").to_owned(), false)
+            } else {
+                (token, true) // Bare colors are assumed to color the foreground
+            };
 
-                match token.as_str() {
-                    "underline" => Some(style.underline()),
-                    "bold" => Some(style.bold()),
-                    "italic" => Some(style.italic()),
-                    "dimmed" => Some(style.dimmed()),
-                    "inverted" => Some(style.reverse()),
-                    "blink" => Some(style.blink()),
-                    "hidden" => Some(style.hidden()),
-                    "strikethrough" => Some(style.strikethrough()),
-                    // When the string is supposed to be a color:
-                    // Decide if we yield none, reset background or set color.
-                    color_string => {
-                        if color_string == "none" && col_fg {
-                            None // fg:none yields no style.
+            match token.as_str() {
+                "underline" => Some(style.underline()),
+                "bold" => Some(style.bold()),
+                "italic" => Some(style.italic()),
+                "dimmed" => Some(style.dimmed()),
+                "inverted" => Some(style.reverse()),
+                "blink" => Some(style.blink()),
+                "hidden" => Some(style.hidden()),
+                "strikethrough" => Some(style.strikethrough()),
+                // When the string is supposed to be a color:
+                // Decide if we yield none, reset background or set color.
+                color_string => {
+                    if color_string == "none" && col_fg {
+                        None // fg:none yields no style.
+                    } else {
+                        // Either bg or valid color or both.
+                        let parsed = parse_color_string(
+                            color_string,
+                            context.and_then(|x| {
+                                get_palette(
+                                    &x.root_config.palettes,
+                                    x.root_config.palette.as_deref(),
+                                )
+                            }),
+                        );
+                        // bg + invalid color = reset the background to default.
+                        if !col_fg && parsed.is_none() {
+                            let mut new_style = style;
+                            new_style.background = Option::None;
+                            Some(new_style)
                         } else {
-                            // Either bg or valid color or both.
-                            let parsed = parse_color_string(
-                                color_string,
-                                context.and_then(|x| {
-                                    get_palette(
-                                        &x.root_config.palettes,
-                                        x.root_config.palette.as_deref(),
-                                    )
-                                }),
-                            );
-                            // bg + invalid color = reset the background to default.
-                            if !col_fg && parsed.is_none() {
-                                let mut new_style = style;
-                                new_style.background = Option::None;
-                                Some(new_style)
-                            } else {
-                                // Valid color, apply color to either bg or fg
-                                parsed.map(|ansi_color| {
-                                    if col_fg {
-                                        style.fg(ansi_color)
-                                    } else {
-                                        style.on(ansi_color)
-                                    }
-                                })
-                            }
+                            // Valid color, apply color to either bg or fg
+                            parsed.map(|ansi_color| {
+                                if col_fg {
+                                    style.fg(ansi_color)
+                                } else {
+                                    style.on(ansi_color)
+                                }
+                            })
                         }
                     }
                 }
-            })
+            }
         })
 }
 
@@ -920,5 +913,14 @@ mod tests {
 
         // Test default behavior
         assert!(get_palette(&palettes, None).is_none());
+    }
+
+    #[test]
+    fn read_config_no_config_file_path_provided() {
+        assert_eq!(
+            None,
+            StarshipConfig::read_config_content_as_str(&None),
+            "if the platform doesn't have utils::home_dir(), it should return None"
+        );
     }
 }

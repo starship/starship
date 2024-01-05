@@ -1,8 +1,7 @@
 use crate::context::{Context, Shell, Target};
 use crate::logger::StarshipLogger;
 use crate::{
-    config::{ModuleConfig, StarshipConfig},
-    configs::StarshipRootConfig,
+    config::StarshipConfig,
     utils::{create_command, CommandOutput},
 };
 use log::{Level, LevelFilter};
@@ -28,7 +27,7 @@ fn init_logger() {
     let nul = if cfg!(windows) { "nul" } else { "/dev/null" };
     let nul = PathBuf::from(nul);
 
-    // Maxmimum log level
+    // Maximum log level
     log::set_max_level(LevelFilter::Trace);
     logger.set_log_level(Level::Trace);
     logger.set_log_file_path(nul);
@@ -43,6 +42,7 @@ pub fn default_context() -> Context<'static> {
         Target::Main,
         PathBuf::new(),
         PathBuf::new(),
+        Default::default(),
     );
     context.config = StarshipConfig { config: None };
     context
@@ -88,10 +88,7 @@ impl<'a> ModuleRenderer<'a> {
 
     /// Sets the config of the underlying context
     pub fn config(mut self, config: toml::Table) -> Self {
-        self.context.root_config = StarshipRootConfig::load(&config);
-        self.context.config = StarshipConfig {
-            config: Some(config),
-        };
+        self.context = self.context.set_config(config);
         self
     }
 
@@ -169,6 +166,7 @@ impl<'a> ModuleRenderer<'a> {
 pub enum FixtureProvider {
     Fossil,
     Git,
+    GitBare,
     Hg,
     Pijul,
 }
@@ -176,11 +174,17 @@ pub enum FixtureProvider {
 pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
     match provider {
         FixtureProvider::Fossil => {
+            let checkout_db = if cfg!(windows) {
+                "_FOSSIL_"
+            } else {
+                ".fslckout"
+            };
             let path = tempfile::tempdir()?;
+            fs::create_dir(path.path().join("subdir"))?;
             fs::OpenOptions::new()
                 .create(true)
                 .write(true)
-                .open(path.path().join(".fslckout"))?
+                .open(path.path().join(checkout_db))?
                 .sync_all()?;
             Ok(path)
         }
@@ -224,6 +228,16 @@ pub fn fixture_repo(provider: FixtureProvider) -> io::Result<TempDir> {
                 .current_dir(path.path())
                 .output()?;
 
+            Ok(path)
+        }
+        FixtureProvider::GitBare => {
+            let path = tempfile::tempdir()?;
+            gix::ThreadSafeRepository::init(
+                &path,
+                gix::create::Kind::Bare,
+                gix::create::Options::default(),
+            )
+            .map_err(|err| io::Error::new(io::ErrorKind::Other, err))?;
             Ok(path)
         }
         FixtureProvider::Hg => {

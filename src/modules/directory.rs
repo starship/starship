@@ -35,7 +35,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("directory");
     let config: DirectoryConfig = DirectoryConfig::try_load(module.config);
 
-    let home_symbol = String::from(config.home_symbol);
     let home_dir = context
         .get_home()
         .expect("Unable to determine HOME_DIR for user");
@@ -69,7 +68,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
 
     // the home directory if required.
     let dir_string = dir_string
-        .unwrap_or_else(|| contract_path(display_dir, &home_dir, &home_symbol).to_string());
+        .unwrap_or_else(|| contract_path(display_dir, &home_dir, config.home_symbol).to_string());
 
     #[cfg(windows)]
     let dir_string = remove_extended_path_prefix(dir_string);
@@ -91,10 +90,10 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         // fish-style path contraction together
         if config.fish_style_pwd_dir_length > 0 && config.substitutions.is_empty() {
             // If user is using fish style path, we need to add the segment first
-            let contracted_home_dir = contract_path(display_dir, &home_dir, &home_symbol);
+            let contracted_home_dir = contract_path(display_dir, &home_dir, config.home_symbol);
             to_fish_style(
                 config.fish_style_pwd_dir_length as usize,
-                contracted_home_dir.to_string(),
+                &contracted_home_dir,
                 &dir_string,
             )
         } else {
@@ -116,7 +115,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
             {
                 let root = repo_path_vec[0];
                 let before = before_root_dir(&dir_string, &contracted_path);
-                [prefix + before.as_str(), root.to_string(), after_repo_root]
+                [prefix + before, root.to_string(), after_repo_root]
             } else {
                 [String::new(), String::new(), prefix + dir_string.as_str()]
             }
@@ -130,7 +129,6 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         path_vec
     };
 
-    let lock_symbol = String::from(config.read_only);
     let display_format = if path_vec[0].is_empty() && path_vec[1].is_empty() {
         config.format
     } else {
@@ -149,12 +147,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 _ => None,
             })
             .map(|variable| match variable {
-                "path" => Some(Ok(&path_vec[2])),
-                "before_root_path" => Some(Ok(&path_vec[0])),
-                "repo_root" => Some(Ok(&path_vec[1])),
+                "path" => Some(Ok(path_vec[2].as_str())),
+                "before_root_path" => Some(Ok(path_vec[0].as_str())),
+                "repo_root" => Some(Ok(path_vec[1].as_str())),
                 "read_only" => {
                     if is_readonly_dir(physical_dir) {
-                        Some(Ok(&lock_symbol))
+                        Some(Ok(config.read_only))
                     } else {
                         None
                     }
@@ -317,12 +315,12 @@ fn substitute_path(dir_string: String, substitutions: &IndexMap<String, &str>) -
 /// Absolute Path: `/some/Path/not/in_a/repo/but_nested`
 /// Contracted Path: `in_a/repo/but_nested`
 /// With Fish Style: `/s/P/n/in_a/repo/but_nested`
-fn to_fish_style(pwd_dir_length: usize, dir_string: String, truncated_dir_string: &str) -> String {
-    let replaced_dir_string = dir_string.trim_end_matches(truncated_dir_string).to_owned();
+fn to_fish_style(pwd_dir_length: usize, dir_string: &str, truncated_dir_string: &str) -> String {
+    let replaced_dir_string = dir_string.trim_end_matches(truncated_dir_string);
     let components = replaced_dir_string.split('/').collect::<Vec<&str>>();
 
     if components.is_empty() {
-        return replaced_dir_string;
+        return replaced_dir_string.to_string();
     }
 
     components
@@ -346,10 +344,10 @@ fn convert_path_sep(path: &str) -> String {
 }
 
 /// Get the path before the git repo root by trim the most right repo name.
-fn before_root_dir(path: &str, repo: &str) -> String {
+fn before_root_dir<'a>(path: &'a str, repo: &'a str) -> &'a str {
     match path.rsplit_once(repo) {
-        Some((a, _)) => a.to_string(),
-        None => path.to_string(),
+        Some((a, _)) => a,
+        None => path,
     }
 }
 
@@ -460,14 +458,14 @@ mod tests {
     #[test]
     fn fish_style_with_user_home_contracted_path() {
         let path = "~/starship/engines/booster/rocket";
-        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
+        let output = to_fish_style(1, path, "engines/booster/rocket");
         assert_eq!(output, "~/s/");
     }
 
     #[test]
     fn fish_style_with_user_home_contracted_path_and_dot_dir() {
         let path = "~/.starship/engines/booster/rocket";
-        let output = to_fish_style(1, path.to_string(), "engines/booster/rocket");
+        let output = to_fish_style(1, path, "engines/booster/rocket");
         assert_eq!(output, "~/.s/");
     }
 
@@ -475,7 +473,7 @@ mod tests {
     fn fish_style_with_no_contracted_path() {
         // `truncation_length = 2`
         let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(1, path.to_string(), "repo/but_nested");
+        let output = to_fish_style(1, path, "repo/but_nested");
         assert_eq!(output, "/a/P/n/i/");
     }
 
@@ -483,21 +481,21 @@ mod tests {
     fn fish_style_with_pwd_dir_len_no_contracted_path() {
         // `truncation_length = 2`
         let path = "/absolute/Path/not/in_a/repo/but_nested";
-        let output = to_fish_style(2, path.to_string(), "repo/but_nested");
+        let output = to_fish_style(2, path, "repo/but_nested");
         assert_eq!(output, "/ab/Pa/no/in/");
     }
 
     #[test]
     fn fish_style_with_duplicate_directories() {
         let path = "~/starship/tmp/C++/C++/C++";
-        let output = to_fish_style(1, path.to_string(), "C++");
+        let output = to_fish_style(1, path, "C++");
         assert_eq!(output, "~/s/t/C/C/");
     }
 
     #[test]
     fn fish_style_with_unicode() {
         let path = "~/starship/tmp/目录/a̐éö̲/目录";
-        let output = to_fish_style(1, path.to_string(), "目录");
+        let output = to_fish_style(1, path, "目录");
         assert_eq!(output, "~/s/t/目/a̐/");
     }
 
@@ -840,7 +838,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&to_fish_style(
                 100,
-                dir.to_slash_lossy().to_string(),
+                &dir.to_slash_lossy(),
                 ""
             )))
         ));
@@ -891,7 +889,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/thrusters/rocket",
-                to_fish_style(1, dir.to_slash_lossy().to_string(), "/thrusters/rocket")
+                to_fish_style(1, &dir.to_slash_lossy(), "/thrusters/rocket")
             )))
         ));
 
@@ -1013,7 +1011,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().to_slash_lossy().to_string(), "")
+                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
             )))
         ));
 
@@ -1044,15 +1042,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(
-                    1,
-                    tmp_dir
-                        .path()
-                        .join("above-repo")
-                        .to_slash_lossy()
-                        .to_string(),
-                    ""
-                )
+                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
             )))
         ));
 
@@ -1227,7 +1217,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, tmp_dir.path().to_slash_lossy().to_string(), "")
+                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
             )))
         ));
 
@@ -1264,15 +1254,7 @@ mod tests {
             "{} ",
             Color::Cyan.bold().paint(convert_path_sep(&format!(
                 "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(
-                    1,
-                    tmp_dir
-                        .path()
-                        .join("above-repo")
-                        .to_slash_lossy()
-                        .to_string(),
-                    ""
-                )
+                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
             )))
         ));
 

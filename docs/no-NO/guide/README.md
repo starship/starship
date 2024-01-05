@@ -32,6 +32,11 @@
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
       alt="Følg @StarshipPrompt på Twitter"
  /></a>
+  <a href="https://stand-with-ukraine.pp.ua"
+    ><img
+      src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
+      alt="Stand With Ukraine"
+ /></a>
 </p>
 
 <p align="center">
@@ -115,6 +120,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -138,8 +151,6 @@
       alt="Kinesisk - tradisjonelt"
  /></a>
 </p>
-
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
 <h1></h1>
 
@@ -169,7 +180,7 @@
 
 ### Nødvendig forutsetninger
 
-- En [Nerd Font](https://www.nerdfonts.com/) installert og aktivert i terminalen (for eksempel [Fira Code Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Steg 1. Installer Starship
 
@@ -215,13 +226,13 @@ Alternatively, install Starship using any of the following package managers:
 | **_Noen_**         | **[crates.io](https://crates.io/crates/starship)**                                              | `cargo install starship --locked`                                              |
 | _Noen_             | [conda-forge](https://anaconda.org/conda-forge/starship)                                        | `conda install -c conda-forge starship`                                        |
 | _Noen_             | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                          | `brew install starship`                                                        |
-| _Noen_             | [Snapcraft](https://snapcraft.io/starship)                                                      | `snap install starship`                                                        |
 | Alpine Linux 3.13+ | [Alpine Linux Packages](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)                | `pacman -S starship`                                                           |
+| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                        | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                   | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
@@ -263,7 +274,7 @@ Installer Starship ved å bruke en av følgende installasjonsprogrammene:
 
 </details>
 
-### Steg 2. Sett opp skallet ditt for å bruke Starship
+### Steg 2. Set up your shell to use Starship
 
 Konfigurer skallet ditt til å initialisere starship. Velg din fra listen nedenfor:
 
@@ -337,10 +348,10 @@ starship init nu | save -f ~/.cache/starship/init.nu
 Og legg følgende til slutten av Nushell konfigurasjonen (finn det ved å kjøre `$nu.config-path`):
 
 ```sh
-source ~/.cache/starship/init.nu
+use ~/.cache/starship/init.nu
 ```
 
-Merk: Bare Nushell v0.73+ støttes
+Merk: Bare Nushell v0.78+ støttes
 
 </details>
 
@@ -422,7 +433,6 @@ Support this project by [becoming a sponsor](https://github.com/sponsors/starshi
 
 **Supporter Tier**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">

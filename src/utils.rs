@@ -71,7 +71,7 @@ pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Resul
     };
 
     match file.write_all(text.as_bytes()) {
-        Ok(_) => {
+        Ok(()) => {
             log::trace!("File {file_name:?} written successfully");
         }
         Err(err) => {
@@ -257,6 +257,12 @@ Elixir 1.10 (compiled with Erlang/OTP 22)\n",
             stdout: String::default(),
             stderr: String::default(),
         }),
+        "fossil diff --numstat" => Some(CommandOutput{
+            stdout: String::from("\
+         3          2 README.md
+         3          2 TOTAL over 1 changed files"),
+            stderr: String::default(),
+        }),
         "fossil update topic-branch" => Some(CommandOutput{
             stdout: String::default(),
             stderr: String::default(),
@@ -335,6 +341,11 @@ WebAssembly: unavailable
             stdout: String::from("default\n"),
             stderr: String::default(),
         }),
+        "typst --version" => Some(CommandOutput {
+            stdout: String::from("typst 0.10 (360cc9b9)"),
+            stderr: String::default(),
+        }),
+
         "esy ocaml -vnum" => Some(CommandOutput {
             stdout: String::from("4.08.1\n"),
             stderr: String::default(),
@@ -413,6 +424,14 @@ Built on MoarVM version 2021.12.\n",
             stdout: String::from("ruby 2.5.1p57 (2018-03-29 revision 63029) [x86_64-linux-gnu]\n"),
             stderr: String::default(),
         }),
+        "solc --version" => Some(CommandOutput {
+            stdout: String::from("solc, the solidity compiler commandline interface
+Version: 0.8.16+commit.07a7930e.Linux.g++"),
+            stderr: String::default(),
+        }),
+        "solcjs --version" => Some(CommandOutput {
+            stdout: String::from("0.8.15+commit.e14f2714.Emscripten.clang"),
+            stderr: String::default() }),
         "swift --version" => Some(CommandOutput {
             stdout: String::from(
                 "\
@@ -642,6 +661,40 @@ pub fn encode_to_hex(slice: &[u8]) -> String {
         dst.push(HEXTABLE[(v & 0x0f) as usize] as u8);
     }
     String::from_utf8(dst).unwrap()
+}
+
+pub trait PathExt {
+    /// Get device / volume info
+    fn device_id(&self) -> Option<u64>;
+}
+
+#[cfg(windows)]
+impl PathExt for Path {
+    fn device_id(&self) -> Option<u64> {
+        // Maybe it should use unimplemented!
+        Some(42u64)
+    }
+}
+
+#[cfg(not(windows))]
+impl PathExt for Path {
+    #[cfg(target_os = "linux")]
+    fn device_id(&self) -> Option<u64> {
+        use std::os::linux::fs::MetadataExt;
+        match self.metadata() {
+            Ok(m) => Some(m.st_dev()),
+            Err(_) => None,
+        }
+    }
+
+    #[cfg(all(unix, not(target_os = "linux")))]
+    fn device_id(&self) -> Option<u64> {
+        use std::os::unix::fs::MetadataExt;
+        match self.metadata() {
+            Ok(m) => Some(m.dev()),
+            Err(_) => None,
+        }
+    }
 }
 
 #[cfg(test)]

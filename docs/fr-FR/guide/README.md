@@ -32,6 +32,11 @@
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
       alt="Suivez @StarshipPrompt sur Twitter"
  /></a>
+  <a href="https://stand-with-ukraine.pp.ua"
+    ><img
+      src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
+      alt="Soutenez l'Ukraine"
+ /></a>
 </p>
 
 <p align="center">
@@ -115,6 +120,14 @@
  /></a>
   &nbsp;
   <a
+    href="https://github.com/starship/starship/blob/master/docs/uk-UA/guide/README.md"
+    ><img
+      height="20"
+      src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
+      alt="Українська"
+ /></a>
+  &nbsp;
+  <a
     href="https://github.com/starship/starship/blob/master/docs/vi-VN/guide/README.md"
     ><img
       height="20"
@@ -138,8 +151,6 @@
       alt="繁體中文"
  /></a>
 </p>
-
-[![Bannière StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
 <h1></h1>
 
@@ -169,7 +180,7 @@
 
 ### Pré-requis
 
-- Une police [Nerd Font](https://www.nerdfonts.com/) installée et activée dans votre terminal (Par exemple, essayez [Fira Code](https://www.nerdfonts.com/font-downloads)).
+- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Étape 1. Installer Starship
 
@@ -215,13 +226,13 @@ Vous pouvez aussi installer Starship en utilisant l’un de ces gestionnaires de
 | **_Toutes_**       | **[crates.io](https://crates.io/crates/starship)**                                             | `cargo install starship --locked`                                              |
 | _Toutes_           | [conda-forge](https://anaconda.org/conda-forge/starship)                                       | `conda install -c conda-forge starship`                                        |
 | _Toutes_           | [Linuxbrew](https://formulae.brew.sh/formula/starship)                                         | `brew install starship`                                                        |
-| _Toutes_           | [Snapcraft](https://snapcraft.io/starship)                                                     | `snap install starship`                                                        |
 | Alpine Linux 3.13+ | [Paquets Alpine Linux](https://pkgs.alpinelinux.org/packages?name=starship)                    | `apk add starship`                                                             |
-| Arch Linux         | [Arch Linux Community](https://archlinux.org/packages/community/x86_64/starship)               | `pacman -S starship`                                                           |
+| Arch Linux         | [Arch Linux Extra](https://archlinux.org/packages/extra/x86_64/starship)                       | `pacman -S starship`                                                           |
 | CentOS 7+          | [Copr](https://copr.fedorainfracloud.org/coprs/atim/starship)                                  | `dnf copr enable atim/starship` <br /> `dnf install starship` |
 | Gentoo             | [Paquets Gentoo](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)   | `nix-env -iA nixpkgs.starship`                                                 |
+| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                          | `zypper in starship`                                                           |
 | Void Linux         | [Paquets Void Linux](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
@@ -263,14 +274,14 @@ Installez Starship en utilisant l’un de ces gestionnaires de paquets:
 
 </details>
 
-### Étape 2. Configurer votre shell pour Starship
+### Étape 2. Set up your shell to use Starship
 
 Configurez votre shell pour initialiser starship. Sélectionnez le vôtre dans la liste ci-dessous:
 
 <details>
 <summary>Bash</summary>
 
-Ajoutez ce qui suit à la fin de `~/.bashrc`:
+Ajouter ce qui suit à la fin de `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
@@ -305,7 +316,7 @@ Note: Seul Elvish v0.18+ est supporté
 <details>
 <summary>Fish</summary>
 
-Ajoutez le code suivant à la fin de `~/.config/fish/config.fish`:
+Ajoute ce qui suit à la fin de `~/.config/fish/config.fish`:
 
 ```fish
 starship init fish | source
@@ -316,7 +327,7 @@ starship init fish | source
 <details>
 <summary>Ion</summary>
 
-Ajoutez ce qui suit à la fin de `~/.config/ion/initrc`:
+Ajouter ce qui suit à la fin de `~/.config/ion/initrc`:
 
 ```sh
 eval $(starship init ion)
@@ -337,10 +348,10 @@ starship init nu | save -f ~/.cache/starship/init.nu
 Ajoutez le code suivant à la fin de votre configuration Nushell (trouvez-la en exécutant `$nu.config path`):
 
 ```sh
-source ~/.cache/starship/init.nu
+use ~/.cache/starship/init.nu
 ```
 
-Note: Seul Nushell v0.73+ est supporté
+Note: Seul Nushell v0.78+ est supporté
 
 </details>
 
@@ -380,7 +391,7 @@ execx($(starship init xonsh))
 <details>
 <summary>Zsh</summary>
 
-Ajoutez ce qui suit à la fin de `~/.zshrc`:
+Ajouter ce qui suit à la fin de `~/.zshrc`:
 
 ```sh
 eval "$(starship init zsh)"
@@ -416,13 +427,12 @@ Voyez ces travaux précédents qui ont contribué à inspirer la création de St
 
 - **[reujab/silver](https://github.com/reujab/silver)** – Prompt multi-shell personnalisable, dans le style de powerline avec des icones.
 
-## ❤️ Sponsors
+## ❤️ Collaborateurs
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+Soutenez ce projet en [devenant un collaborateur](https://github.com/sponsors/starship). Votre nom ou logo apparaîtra ici avec un lien vers votre site Web.
 
-**Supporter Tier**
+**Palier Collaborateur**
 
-- [Dimension](https://dimension.dev/)
 - [Appwrite](https://appwrite.io/)
 
 <p align="center">

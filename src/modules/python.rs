@@ -376,10 +376,10 @@ Python 3.7.9 (7e6e2bb30ac5fbdbd443619cae28c51d5c162a02, Nov 24 2020, 10:03:59)
         create_dir_all(dir.path().join("my_venv"))?;
         let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
         venv_cfg.write_all(
-            br#"
+            br"
 home = something
 prompt = 'foo'
-        "#,
+        ",
         )?;
         venv_cfg.sync_all()?;
 
@@ -403,10 +403,10 @@ prompt = 'foo'
         create_dir_all(dir.path().join("my_venv"))?;
         let mut venv_cfg = File::create(dir.path().join("my_venv").join("pyvenv.cfg"))?;
         venv_cfg.write_all(
-            br#"
+            br"
 home = something
 prompt = '(foo)'
-        "#,
+        ",
         )?;
         venv_cfg.sync_all()?;
 

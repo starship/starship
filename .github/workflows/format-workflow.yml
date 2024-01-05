@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
       - name: Docs | Format
-        uses: dprint/check@v2.1
+        uses: dprint/check@v2.2
 
   # Validate preset files
   taplo:
@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
       - name: Install | Taplo
-        run: cargo install --debug --locked --version 0.8.0 taplo-cli
+        run: cargo install --debug --locked --version 0.8.1 taplo-cli
       - name: Presets | Validate with schema
         run: taplo lint --schema "file://${GITHUB_WORKSPACE}/.github/config-schema.json" docs/.vuepress/public/presets/toml/*.toml
 
@@ -35,7 +35,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Prevent File Change
-        uses: xalvarez/prevent-file-change-action@v1.3.1
+        uses: xalvarez/prevent-file-change-action@v1.5.1
         if: ${{ github.event.pull_request.head.ref != 'i18n_master' }}
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}

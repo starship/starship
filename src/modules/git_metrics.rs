@@ -1,5 +1,4 @@
 use regex::Regex;
-use std::ffi::OsStr;
 
 use crate::{
     config::ModuleConfig, configs::git_metrics::GitMetricsConfig,
@@ -21,22 +20,12 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     };
 
     let repo = context.get_repo().ok()?;
-    let repo_root = repo.workdir.as_ref()?;
+    let mut git_args = vec!["diff", "--shortstat"];
+    if config.ignore_submodules {
+        git_args.push("--ignore-submodules");
+    }
 
-    let diff = context
-        .exec_cmd(
-            "git",
-            &[
-                OsStr::new("--git-dir"),
-                repo.path.as_os_str(),
-                OsStr::new("--work-tree"),
-                repo_root.as_os_str(),
-                OsStr::new("--no-optional-locks"),
-                OsStr::new("diff"),
-                OsStr::new("--shortstat"),
-            ],
-        )?
-        .stdout;
+    let diff = repo.exec_git(context, &git_args)?.stdout;
 
     let stats = GitDiff::parse(&diff);
 
@@ -222,6 +211,33 @@ mod tests {
             "{} {} ",
             Color::Green.bold().paint("+1"),
             Color::Red.bold().paint("-0")
+        ));
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
+    #[test]
+    fn shows_all_changes_with_ignored_submodules() -> io::Result<()> {
+        let repo_dir = create_repo_with_commit()?;
+        let path = repo_dir.path();
+
+        let file_path = path.join("the_file");
+        write_file(file_path, "\nSecond Line\n\nModified\nAdded\n")?;
+
+        let actual = ModuleRenderer::new("git_metrics")
+            .config(toml::toml! {
+                    [git_metrics]
+                    disabled = false
+                    ignore_submodules = true
+            })
+            .path(path)
+            .collect();
+
+        let expected = Some(format!(
+            "{} {} ",
+            Color::Green.bold().paint("+4"),
+            Color::Red.bold().paint("-2")
         ));
 
         assert_eq!(expected, actual);
