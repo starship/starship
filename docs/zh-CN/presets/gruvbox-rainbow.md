@@ -8,7 +8,7 @@ This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), an
 
 ### 前置要求
 
-- 安装一种 [Nerd fonts](https://www.nerdfonts.com/) 并在您的终端启用。
+- 安装一种 [Nerd Font](https://www.nerdfonts.com/) 并在您的终端启用。
 
 ### 配置
 
