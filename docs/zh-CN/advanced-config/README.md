@@ -58,9 +58,9 @@ load(io.popen('starship init cmd'):read("*a"))()
 
 可以用自定义字符串替换预设的命令行提示。 这在不经常需要所有提示信息的情况下很有用。 若要启用该功能，请在 shell 中运行 `Enable-TransitientPrompt`命令 若要永久启用该功能，请将 上述语句放在您的 `~/.config/fish/config.fish` 中。 通过在shell中运行 `Disable-TransientPrompt`命令来禁用这项功能。
 
-请注意，对于Fish，命令行提示只在命令行非空 和语法正确的情况下才会显示。
+请注意，对于Fish，命令行提示只在命令行非空 且语法正确的情况下才会显示。
 
-- 默认情况下，输入的左侧是 粗体绿色的❯</code>符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要 在这里显示Starship的 `character` 模块，您需要如下操作：
+- 默认情况下，输入的左侧是 粗体绿色的`❯`符号。 要自定义它，请定义一个新函数，名为 `Invoke-Starship-TransitentFunction`。 例如，要在这里显示 Starship 的 `character` 组件，您需要如下操作：
 
 ```fish
 function starship_transent_rmpt_func
@@ -205,7 +205,7 @@ Invoke-Expression (&starship init powershell)
 
 注意：右侧提示和输入区显示在同一行。 如果需要在输入区的上方显示右对齐的组件，请查阅 [`fill` 组件](/config/#fill)。
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` 现支持: elvish, fish, zsh, xonsh, cmd, nushell.
 
 ### 示例
 
