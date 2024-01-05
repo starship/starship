@@ -71,7 +71,7 @@ pub fn write_file<P: AsRef<Path>, S: AsRef<str>>(file_name: P, text: S) -> Resul
     };
 
     match file.write_all(text.as_bytes()) {
-        Ok(_) => {
+        Ok(()) => {
             log::trace!("File {file_name:?} written successfully");
         }
         Err(err) => {

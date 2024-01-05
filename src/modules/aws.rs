@@ -97,7 +97,13 @@ fn get_aws_profile_and_region(
     context: &Context,
     aws_config: &AwsConfigFile,
 ) -> (Option<Profile>, Option<Region>) {
-    let profile_env_vars = ["AWSU_PROFILE", "AWS_VAULT", "AWSUME_PROFILE", "AWS_PROFILE"];
+    let profile_env_vars = [
+        "AWSU_PROFILE",
+        "AWS_VAULT",
+        "AWSUME_PROFILE",
+        "AWS_PROFILE",
+        "AWS_SSO_PROFILE",
+    ];
     let region_env_vars = ["AWS_REGION", "AWS_DEFAULT_REGION"];
     let profile = profile_env_vars
         .iter()
@@ -409,6 +415,20 @@ mod tests {
         let expected = Some(format!(
             "on {}",
             Color::Yellow.bold().paint("☁️  astronauts-awsume ")
+        ));
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn profile_set_from_awsssocli() {
+        let actual = ModuleRenderer::new("aws")
+            .env("AWS_SSO_PROFILE", "astronauts-awsssocli")
+            .env("AWS_ACCESS_KEY_ID", "dummy")
+            .collect();
+        let expected = Some(format!(
+            "on {}",
+            Color::Yellow.bold().paint("☁️  astronauts-awsssocli ")
         ));
 
         assert_eq!(expected, actual);

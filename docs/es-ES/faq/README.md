@@ -120,3 +120,11 @@ Si Starship fue instalado usando el guión de instalación, el siguiente comando
 # Localiza y elimina el binario de starship
 sh -c 'rm "$(comando -v 'starship')"'
 ```
+
+## ¿Cómo instalo Starship sin `sudo`?
+
+El script de instalación del shell (`https://starship.rs/install.sh`) solo intenta usar `sudo` si el directorio de instalación no es escribible para el usuario actual. El directorio de instalación por defecto es el valor de la variable de entorno `$BIN_DIR` o `/usr/local/bin` si `$BIN_DIR` no está establecido. Si en su lugar establece el directorio de instalación a uno que tenga permisos de escritura para su usuario, deberías ser capaz de instalar starship sin `sudo`. Por ejemplo, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` usa la opción de línea de comando `b` del script de instalación para establecer el directorio de instalación a `~/.local/bin`.
+
+Para una instalación no interactiva de Starship, no te olvides de añadir la opción `y` para omitir la confirmación. Consulte la fuente del script de instalación para ver una lista de todas las opciones de instalación soportadas.
+
+Al usar el gestor de paquetes, vea la documentación de su gestor de paquetes acerca de instalación con o sin `sudo`.
