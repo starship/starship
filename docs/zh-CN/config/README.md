@@ -1165,6 +1165,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `detect_files`      | `['.envrc']`                           | 哪些文件应触发此组件                                            |
 | `detect_folders`    | `[]`                                   | 那些文件夹应该触发此组件                                          |
 | `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
 | `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
 | `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
 | `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
