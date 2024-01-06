@@ -354,7 +354,7 @@ jobs:
       - name: Merge | Merge Crowdin PR
         run: gh pr merge i18n_master --squash --repo=starship/starship
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
   publish_docs:
     name: Trigger docs deployment
