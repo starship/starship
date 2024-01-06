@@ -703,14 +703,21 @@ credential_process = /opt/bin/awscreds-retriever
                     now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
                 )
                 .collect();
-            let expected = Some(format!(
-                "on {}",
-                Color::Yellow
-                    .bold()
-                    .paint("☁️  astronauts (ap-northeast-2) [30m] ")
-            ));
 
-            assert_eq!(expected, actual);
+            let possible_values = [
+                "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+            ];
+            let possible_values = possible_values.map(|duration| {
+                let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
+                Some(format!(
+                    "on {}",
+                    Color::Yellow.bold().paint(segment_colored)
+                ))
+            });
+            assert!(
+                possible_values.contains(&actual),
+                "time is not in range: {actual:?}"
+            );
         });
     }
 
