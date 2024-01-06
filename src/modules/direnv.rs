@@ -45,6 +45,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                 "rc_path" => Some(Ok(state.rc_path.to_string_lossy())),
                 "allowed" => Some(Ok(match state.allowed {
                     AllowStatus::Allowed => Cow::from(config.allowed_msg),
+                    AllowStatus::NotAllowed => Cow::from(config.not_allowed_msg),
                     AllowStatus::Denied => Cow::from(config.denied_msg),
                 })),
                 "loaded" => state
@@ -109,6 +110,7 @@ impl FromStr for DirenvState {
 #[derive(Debug)]
 enum AllowStatus {
     Allowed,
+    NotAllowed,
     Denied,
 }
 
@@ -117,8 +119,9 @@ impl FromStr for AllowStatus {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "true" => Ok(Self::Allowed),
-            "false" => Ok(Self::Denied),
+            "0" | "true" => Ok(Self::Allowed),
+            "1" => Ok(Self::NotAllowed),
+            "2" | "false" => Ok(Self::Denied),
             _ => Err(Cow::from("invalid allow status")),
         }
     }
@@ -148,6 +151,34 @@ mod tests {
         assert_eq!(None, renderer.collect());
     }
     #[test]
+    fn folder_with_unloaded_rc_file_pre_2_33() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+
+        std::fs::File::create(&rc_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+            })
+            .path(dir.path())
+            .cmd(
+                "direnv status",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc(dir.path(), false, "0", true),
+                    stderr: String::default(),
+                }),
+            );
+
+        assert_eq!(
+            Some(format!("direnv not loaded/allowed ")),
+            renderer.collect()
+        );
+
+        dir.close()
+    }
+    #[test]
     fn folder_with_unloaded_rc_file() -> io::Result<()> {
         let dir = tempfile::tempdir()?;
         let rc_path = dir.path().join(".envrc");
@@ -163,7 +194,7 @@ mod tests {
             .cmd(
                 "direnv status",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), false, true),
+                    stdout: status_cmd_output_with_rc(dir.path(), false, "0", false),
                     stderr: String::default(),
                 }),
             );
@@ -172,6 +203,31 @@ mod tests {
             Some("direnv not loaded/allowed ".to_string()),
             renderer.collect()
         );
+
+        dir.close()
+    }
+    #[test]
+    fn folder_with_loaded_rc_file_pre_2_33() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+
+        std::fs::File::create(&rc_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+            })
+            .path(dir.path())
+            .cmd(
+                "direnv status",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc(dir.path(), true, "0", true),
+                    stderr: String::default(),
+                }),
+            );
+
+        assert_eq!(Some(format!("direnv loaded/allowed ")), renderer.collect());
 
         dir.close()
     }
@@ -191,13 +247,66 @@ mod tests {
             .cmd(
                 "direnv status",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), true, true),
+                    stdout: status_cmd_output_with_rc(dir.path(), true, "0", false),
                     stderr: String::default(),
                 }),
             );
 
         assert_eq!(
             Some("direnv loaded/allowed ".to_string()),
+            renderer.collect()
+        );
+
+        dir.close()
+    }
+    #[test]
+    fn folder_with_loaded_and_denied_rc_file_pre_2_33() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+
+        std::fs::File::create(&rc_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+            })
+            .path(dir.path())
+            .cmd(
+                "direnv status",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc(dir.path(), true, "2", true),
+                    stderr: String::default(),
+                }),
+            );
+
+        assert_eq!(Some(format!("direnv loaded/denied ")), renderer.collect());
+
+        dir.close()
+    }
+    #[test]
+    fn folder_with_loaded_and_not_allowed_rc_file() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let rc_path = dir.path().join(".envrc");
+
+        std::fs::File::create(&rc_path)?.sync_all()?;
+
+        let renderer = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+            })
+            .path(dir.path())
+            .cmd(
+                "direnv status",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_with_rc(dir.path(), true, "1", false),
+                    stderr: String::default(),
+                }),
+            );
+
+        assert_eq!(
+            Some(format!("direnv loaded/not allowed ")),
             renderer.collect()
         );
 
@@ -219,7 +328,7 @@ mod tests {
             .cmd(
                 "direnv status",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), true, false),
+                    stdout: status_cmd_output_with_rc(dir.path(), true, "2", false),
                     stderr: String::default(),
                 }),
             );
@@ -245,9 +354,20 @@ No .envrc or .env loaded
 No .envrc or .env found",
         )
     }
-    fn status_cmd_output_with_rc(dir: impl AsRef<Path>, loaded: bool, allowed: bool) -> String {
+    fn status_cmd_output_with_rc(
+        dir: impl AsRef<Path>,
+        loaded: bool,
+        allowed: &str,
+        use_legacy_boolean_flags: bool,
+    ) -> String {
         let rc_path = dir.as_ref().join(".envrc");
         let rc_path = rc_path.to_string_lossy();
+
+        let allowed_value = match (use_legacy_boolean_flags, allowed) {
+            (true, "0") => "true",
+            (true, ..) => "false",
+            (false, val) => val,
+        };
 
         let loaded = if loaded {
             format!(
@@ -255,7 +375,7 @@ No .envrc or .env found",
             Loaded RC path {rc_path}
             Loaded watch: ".envrc" - 2023-04-30T09:51:04-04:00
             Loaded watch: "../.local/share/direnv/allow/abcd" - 2023-04-30T09:52:58-04:00
-            Loaded RC allowed false
+            Loaded RC allowed {allowed_value}
             Loaded RC allowPath
             "#
             )
