@@ -18,6 +18,7 @@ use crate::module::ALL_MODULES;
 use crate::modules;
 use crate::segment::Segment;
 use crate::shadow;
+use strip_ansi_escapes;
 
 pub struct Grapheme<'a>(pub &'a str);
 
@@ -40,11 +41,20 @@ where
     T: AsRef<str>,
 {
     fn width_graphemes(&self) -> usize {
-        self.as_ref()
-            .graphemes(true)
-            .map(Grapheme)
-            .map(|g| g.width())
-            .sum()
+        let plain: String;
+        // Try to remove all ANSI escape codes from self.
+        // If failed, use the original string as a backup.
+        if let Ok(x) = strip_ansi_escapes::strip(self.as_ref().as_bytes()) {
+            if let Ok(s) = String::from_utf8(x) {
+                plain = s;
+            } else {
+                plain = self.as_ref().to_owned();
+            }
+        } else {
+            plain = self.as_ref().to_owned();
+        }
+
+        plain.graphemes(true).map(Grapheme).map(|g| g.width()).sum()
     }
 }
 
@@ -54,6 +64,7 @@ fn test_grapheme_aware_width() {
     assert_eq!(2, "👩‍👩‍👦‍👦".width_graphemes());
     assert_eq!(1, "Ü".width_graphemes());
     assert_eq!(11, "normal text".width_graphemes());
+    assert_eq!(0, "\x1b]133;A\x07".width_graphemes());
 }
 
 pub fn prompt(args: Properties, target: Target) {

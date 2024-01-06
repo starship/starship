@@ -44,6 +44,7 @@ pub mod haxe;
 pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
+pub mod iterm2_mark;
 pub mod java;
 pub mod jobs;
 pub mod julia;
@@ -193,6 +194,8 @@ pub struct FullConfig<'a> {
     hg_branch: hg_branch::HgBranchConfig<'a>,
     #[serde(borrow)]
     hostname: hostname::HostnameConfig<'a>,
+    #[serde(borrow)]
+    iterm2_mark: iterm2_mark::ITerm2MarkConfig<'a>,
     #[serde(borrow)]
     java: java::JavaConfig<'a>,
     #[serde(borrow)]
