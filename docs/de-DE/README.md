@@ -30,7 +30,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
 ### Voraussetzungen
 
-- Eine [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in deinem Terminal.
+- Ein [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in deinem Terminal.
 
 ### Schnellinstallation
 
@@ -99,7 +99,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Powershell
 
-   Trage das folgende am Ende von `Microsoft.PowerShell_profile.ps1` ein. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Der Pfat lautet normalerweise `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` unter Windows und `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
+   Fügen Sie folgendes am Ende von `Microsoft.PowerShell_profile.ps1` hinzu. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Normalerweise ist der Pfad `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
@@ -153,7 +153,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   Füge folgendes zum Ende deiner Nushell env Datei hinzu (finde sie, indem du `$nu.env-path` in Nushell ausführst):
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
