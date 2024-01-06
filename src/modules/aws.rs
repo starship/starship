@@ -703,14 +703,21 @@ credential_process = /opt/bin/awscreds-retriever
                     now_plus_half_hour.to_rfc3339_opts(SecondsFormat::Secs, true),
                 )
                 .collect();
-            let expected = Some(format!(
-                "on {}",
-                Color::Yellow
-                    .bold()
-                    .paint("☁️  astronauts (ap-northeast-2) [30m] ")
-            ));
 
-            assert_eq!(expected, actual);
+            let possible_values = [
+                "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+            ];
+            let possible_values = possible_values.map(|duration| {
+                let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
+                Some(format!(
+                    "on {}",
+                    Color::Yellow.bold().paint(segment_colored)
+                ))
+            });
+            assert!(
+                possible_values.contains(&actual),
+                "time is not in range: {actual:?}"
+            );
         });
     }
 
@@ -743,46 +750,32 @@ aws_secret_access_key=dummy
             )
             .unwrap();
 
-            let actual = ModuleRenderer::new("aws")
-                .env("AWS_PROFILE", "astronauts")
-                .env("AWS_REGION", "ap-northeast-2")
-                .env(
-                    "AWS_SHARED_CREDENTIALS_FILE",
-                    credentials_path.to_string_lossy().as_ref(),
-                )
-                .collect();
+            let credentials_env_vars = ["AWS_SHARED_CREDENTIALS_FILE", "AWS_CREDENTIALS_FILE"];
+            credentials_env_vars.iter().for_each(|env_var| {
+                let actual = ModuleRenderer::new("aws")
+                    .env("AWS_PROFILE", "astronauts")
+                    .env("AWS_REGION", "ap-northeast-2")
+                    .env(env_var, credentials_path.to_string_lossy().as_ref())
+                    .collect();
 
-            let actual_variant = ModuleRenderer::new("aws")
-                .env("AWS_PROFILE", "astronauts")
-                .env("AWS_REGION", "ap-northeast-2")
-                .env(
-                    "AWS_CREDENTIALS_FILE",
-                    credentials_path.to_string_lossy().as_ref(),
-                )
-                .collect();
+                // In principle, "30m" should be correct. However, bad luck in scheduling
+                // on shared runners may delay it.
+                let possible_values = [
+                    "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
+                ];
+                let possible_values = possible_values.map(|duration| {
+                    let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
+                    Some(format!(
+                        "on {}",
+                        Color::Yellow.bold().paint(segment_colored)
+                    ))
+                });
 
-            assert_eq!(
-                actual, actual_variant,
-                "both AWS_SHARED_CREDENTIALS_FILE and AWS_CREDENTIALS_FILE should work"
-            );
-
-            // In principle, "30m" should be correct. However, bad luck in scheduling
-            // on shared runners may delay it.
-            let possible_values = [
-                "30m2s", "30m1s", "30m", "29m59s", "29m58s", "29m57s", "29m56s", "29m55s",
-            ];
-            let possible_values = possible_values.map(|duration| {
-                let segment_colored = format!("☁️  astronauts (ap-northeast-2) [{duration}] ");
-                Some(format!(
-                    "on {}",
-                    Color::Yellow.bold().paint(segment_colored)
-                ))
+                assert!(
+                    possible_values.contains(&actual),
+                    "time is not in range: {actual:?}"
+                );
             });
-
-            assert!(
-                possible_values.contains(&actual),
-                "time is not in range: {actual:?}"
-            );
         });
 
         dir.close()
