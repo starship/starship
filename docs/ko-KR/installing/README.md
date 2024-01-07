@@ -63,7 +63,7 @@ Enable the `programs.starship` module in your `home.nix` file, and add your sett
 {
   programs.starship = {
     enable = true;
-    # Configuration written to ~/.config/starship.toml
+    # ~/.config/starship.toml에 작성된 설정
     settings = {
       # add_newline = false;
 

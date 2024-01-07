@@ -338,6 +338,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$direnv\
 $env_var\
 $crystal\
 $custom\
@@ -383,6 +384,9 @@ date is read from the `AWSUME_EXPIRATION` env var.
 
 When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials`
 falls back to the `x_security_token_expires` key.
+
+When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile
+is read from the `AWS_SSO_PROFILE` env var.
 
 ### Options
 
@@ -1206,6 +1210,48 @@ truncation_length = 8
 truncation_symbol = '…/'
 ```
 
+## Direnv
+
+The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+### Options
+
+| Option              | Default                                | Description                                           |
+| ------------------- | -------------------------------------- | ----------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | The format for the module.                            |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
+| `style`             | `'bold orange'`                        | The style for the module.                             |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
+| `detect_extensions` | `[]`                                   | Which extensions should trigger this module.          |
+| `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.           |
+| `detect_folders`    | `[]`                                   | Which folders should trigger this module.             |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+
+### Variables
+
+| Variable | Example             | Description                             |
+| -------- | ------------------- | --------------------------------------- |
+| loaded   | `loaded`            | Whether the current rc file is loaded.  |
+| allowed  | `denied`            | Whether the current rc file is allowed. |
+| rc_path  | `/home/test/.envrc` | The current rc file path.               |
+| symbol   |                     | Mirrors the value of option `symbol`.   |
+| style\*  | `red bold`          | Mirrors the value of option `style`.    |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[direnv]
+disabled = false
+```
+
 ## Docker Context
 
 The `docker_context` module shows the currently active
@@ -1689,7 +1735,7 @@ The `gcloud` module shows the current configuration for [`gcloud`](https://cloud
 This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
 When the module is enabled it will always be active, unless `detect_env_vars` has
-been set in which case the module will only be active be active when one of the
+been set in which case the module will only be active when one of the
 environment variables has been set.
 
 ### Options

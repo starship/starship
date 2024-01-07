@@ -10,6 +10,9 @@ symbol = " "
 [conda]
 symbol = " "
 
+[crystal]
+symbol = " "
+
 [dart]
 symbol = " "
 
@@ -20,10 +23,13 @@ read_only = " 󰌾"
 symbol = " "
 
 [elixir]
-symbol = " "
+symbol = " "
 
 [elm]
 symbol = " "
+
+[fennel]
+symbol = " "
 
 [fossil_branch]
 symbol = " "
@@ -55,6 +61,9 @@ symbol = " "
 [julia]
 symbol = " "
 
+[kotlin]
+symbol = " "
+
 [lua]
 symbol = " "
 
@@ -72,6 +81,9 @@ symbol = " "
 
 [nodejs]
 symbol = " "
+
+[ocaml]
+symbol = " "
 
 [os.symbols]
 Alpaquita = " "
@@ -117,6 +129,12 @@ Windows = "󰍲 "
 [package]
 symbol = "󰏗 "
 
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
 [pijul_channel]
 symbol = " "
 
@@ -134,3 +152,9 @@ symbol = " "
 
 [scala]
 symbol = " "
+
+[swift]
+symbol = " "
+
+[zig]
+symbol = " "

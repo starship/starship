@@ -256,11 +256,12 @@ fn get_repo_status(
 fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
     let repo = repo.open();
     let reference = match repo.try_find_reference("refs/stash") {
-        Ok(Some(reference)) => reference,
+        // Only proceed if the found reference has the expected name (not tags/refs/stash etc.)
+        Ok(Some(reference)) if reference.name().as_bstr() == b"refs/stash".as_slice() => reference,
         // No stash reference found
-        Ok(None) => return Some(0),
+        Ok(_) => return Some(0),
         Err(err) => {
-            log::warn!("Error finding stash reference: {err}");
+            log::debug!("Error finding stash reference: {err}");
             return None;
         }
     };
@@ -272,7 +273,7 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
             Some(0)
         }
         Err(err) => {
-            log::warn!("Error getting stash log: {err}");
+            log::debug!("Error getting stash log: {err}");
             None
         }
     }

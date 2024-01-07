@@ -32,6 +32,11 @@
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
       alt="Подпишитесь на @StarshipPrompt в Twitter"
  /></a>
+  <a href="https://stand-with-ukraine.pp.ua"
+    ><img
+      src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
+      alt="Stand With Ukraine"
+ /></a>
 </p>
 
 <p align="center">
@@ -147,8 +152,6 @@
  /></a>
 </p>
 
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
-
 <h1></h1>
 
 <img
@@ -158,7 +161,7 @@
   align="right"
  />
 
-**Минималистичная, быстрая и бесконечно настраиваемая командная строка для любой оболочки!**
+**Минималистичное, быстрое и бесконечно настраиваемое приглашение командной строки для любой оболочки!**
 
 - **Быстрая:** она быстрая – _очень-очень_ быстрая! 🚀
 - **Настраиваемая:** настройте каждый элемент вашей командной строки.
@@ -229,6 +232,7 @@ Alternatively, install Starship using any of the following package managers:
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>

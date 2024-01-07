@@ -206,6 +206,13 @@ Berikut adalah opsi konfigurasi dari list yang bersifat prompt-wide.
 | `add_newline`     | `true`                         | Memasukkan baris kosong antara prompt shell.                                                                                                                                     |
 | `palette`         | `''`                           | Sets which color palette from `palettes` to use.                                                                                                                                 |
 | `palettes`        | `{}`                           | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `follow_symlinks` | `true`                         | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
+
+::: tip
+
+If you have symlinks to networked filesystems, consider setting `follow_symlinks` to `false`.
+
+:::
 
 ### Contoh
 
@@ -253,6 +260,7 @@ $kubernetes\
 $directory\
 $vcsh\
 $fossil_branch\
+$fossil_metrics\
 $git_branch\
 $git_commit\
 $git_state\
@@ -301,6 +309,7 @@ $scala\
 $solidity\
 $swift\
 $terraform\
+$typst\
 $vlang\
 $vagrant\
 $zig\
@@ -314,6 +323,7 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$direnv\
 $env_var\
 $crystal\
 $custom\
@@ -351,6 +361,8 @@ Ketika menggunakan [AWSume](https://awsu.me) profil dibaca dari variabel environ
 
 When using [saml2aws](https://github.com/Versent/saml2aws) the expiration information obtained from `~/.aws/credentials` falls back to the `x_security_token_expires` key.
 
+When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile is read from the `AWS_SSO_PROFILE` env var.
+
 ### Opsi
 
 | Opsi                | Bawaan                                                                | Deskripsi                                                                                                   |
@@ -360,7 +372,7 @@ When using [saml2aws](https://github.com/Versent/saml2aws) the expiration inform
 | `region_aliases`    | `{}`                                                                  | Tabel alias dari region yang ditampilan selain nama AWS.                                                    |
 | `profile_aliases`   | `{}`                                                                  | Table of profile aliases to display in addition to the AWS name.                                            |
 | `style`             | `'bold yellow'`                                                       | Gaya penataan untuk modul.                                                                                  |
-| `expiration_symbol` | `X`                                                                   | Simbol ditampilkan ketika temporer kredensial telah kedaluwarsa.                                            |
+| `expiration_symbol` | `'X'`                                                                 | Simbol ditampilkan ketika temporer kredensial telah kedaluwarsa.                                            |
 | `disabled`          | `false`                                                               | Menonaktifkan modul `AWS`.                                                                                  |
 | `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
@@ -620,17 +632,17 @@ The `c` module shows some information about your C compiler. By default the modu
 
 ### Opsi
 
-| Opsi                | Bawaan                                                                      | Deskripsi                                                                           |
-| ------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                | The format string for the module.                                                   |
-| `version_format`    | `'v${raw}'`                                                                 | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `'C '`                                                                      | The symbol used before displaying the compiler details                              |
-| `detect_extensions` | `['c', 'h']`                                                                | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `[]`                                                                        | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[]`                                                                        | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `commands`          | [ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ] | How to detect what the compiler is                                                  |
-| `style`             | `'bold 149'`                                                                | Gaya penataan untuk modul.                                                          |
-| `disabled`          | `false`                                                                     | Disables the `c` module.                                                            |
+| Opsi                | Bawaan                                                                        | Deskripsi                                                                           |
+| ------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `format`            | `'via [$symbol($version(-$name) )]($style)'`                                  | The format string for the module.                                                   |
+| `version_format`    | `'v${raw}'`                                                                   | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'C '`                                                                        | The symbol used before displaying the compiler details                              |
+| `detect_extensions` | `['c', 'h']`                                                                  | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `[]`                                                                          | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                                                          | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `commands`          | `[ [ 'cc', '--version' ], [ 'gcc', '--version' ], [ 'clang', '--version' ] ]` | How to detect what the compiler is                                                  |
+| `style`             | `'bold 149'`                                                                  | Gaya penataan untuk modul.                                                          |
+| `disabled`          | `false`                                                                       | Disables the `c` module.                                                            |
 
 ### Variabel
 
@@ -1137,6 +1149,47 @@ truncation_length = 8
 truncation_symbol = '…/'
 ```
 
+## Direnv
+
+The `direnv` module shows the status of the current rc file if one is present. The status includes the path to the rc file, whether it is loaded, and whether it has been allowed by `direnv`.
+
+### Opsi
+
+| Opsi                | Bawaan                                 | Deskripsi                                             |
+| ------------------- | -------------------------------------- | ----------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | Format dari modul.                                    |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
+| `style`             | `'bold orange'`                        | Gaya penataan untuk modul.                            |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
+| `detect_extensions` | `[]`                                   | Ekstensi mana yang sebaiknya memicu modul ini.        |
+| `detect_files`      | `['.envrc']`                           | filenames mana yang sebaiknya memicu modul ini.       |
+| `detect_folders`    | `[]`                                   | Folder mana yang sebaiknya memicul modul ini.         |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+
+### Variabel
+
+| Variabel  | Contoh              | Deskripsi                               |
+| --------- | ------------------- | --------------------------------------- |
+| loaded    | `loaded`            | Whether the current rc file is loaded.  |
+| allowed   | `denied`            | Whether the current rc file is allowed. |
+| rc_path   | `/home/test/.envrc` | The current rc file path.               |
+| symbol    |                     | Menyalin nilai dari opsi `symbol`.      |
+| style\* | `red bold`          | Menyalin nilai dari opsi `style`.       |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[direnv]
+disabled = false
+```
+
 ## Docker Context
 
 The `docker_context` module shows the currently active [Docker context](https://docs.docker.com/engine/context/working-with-contexts/) if it's not set to `default` or if the `DOCKER_MACHINE_NAME`, `DOCKER_HOST` or `DOCKER_CONTEXT` environment variables are set (as they are meant to override the context in use).
@@ -1393,7 +1446,7 @@ The `erlang` module shows the currently installed version of [Erlang/OTP](https:
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `' '`                               | The symbol used before displaying the version of erlang.                            |
 | `style`             | `'bold red'`                         | Gaya penataan untuk modul.                                                          |
@@ -1435,7 +1488,7 @@ The `fennel` module shows the currently installed version of [Fennel](https://fe
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🧅 '`                               | The symbol used before displaying the version of fennel.                            |
 | `style`             | `'bold green'`                       | Gaya penataan untuk modul.                                                          |
-| `detect_extensions` | `[fnl]`                              | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_extensions` | `['fnl']`                            | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
 | `disabled`          | `false`                              | Disables the `fennel` module.                                                       |
@@ -1524,11 +1577,46 @@ truncation_length = 4
 truncation_symbol = ''
 ```
 
+## Fossil Metrics
+
+The `fossil_metrics` module will show the number of added and deleted lines in the check-out in your current directory. At least v2.14 (2021-01-20) of Fossil is required.
+
+### Opsi
+
+| Opsi                 | Bawaan                                                       | Deskripsi                             |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `fromat`             | `'([+$added]($added_style) )([-$deleted]($deleted_style) )'` | Format dari modul.                    |
+| `added_style`        | `'bold green'`                                               | The style for the added count.        |
+| `deleted_style`      | `'bold red'`                                                 | The style for the deleted count.      |
+| `only_nonzero_diffs` | `true`                                                       | Render status only for changed items. |
+| `disabled`           | `true`                                                       | Disables the `fossil_metrics` module. |
+
+### Variabel
+
+| Variabel          | Contoh | Deskripsi                                   |
+| ----------------- | ------ | ------------------------------------------- |
+| added             | `1`    | The current number of added lines           |
+| deleted           | `2`    | The current number of deleted lines         |
+| added_style\*   |        | Mirrors the value of option `added_style`   |
+| deleted_style\* |        | Mirrors the value of option `deleted_style` |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
+
+### Contoh
+
+```toml
+# ~/.config/starship.toml
+
+[fossil_metrics]
+added_style = 'bold blue'
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+```
+
 ## Google Cloud (`gcloud`)
 
 The `gcloud` module shows the current configuration for [`gcloud`](https://cloud.google.com/sdk/gcloud) CLI. This is based on the `~/.config/gcloud/active_config` file and the `~/.config/gcloud/configurations/config_{CONFIG NAME}` file and the `CLOUDSDK_CONFIG` env var.
 
-When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active be active when one of the environment variables has been set.
+When the module is enabled it will always be active, unless `detect_env_vars` has been set in which case the module will only be active when one of the environment variables has been set.
 
 ### Opsi
 
@@ -1775,7 +1863,7 @@ The Git Status module is very slow in Windows directories (for example under `/m
 
 | Opsi                | Bawaan                                          | Deskripsi                                                                                                   |
 | ------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `fromat`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
+| `format`            | `'([\[$all_status$ahead_behind\]]($style) )'` | The default format for `git_status`                                                                         |
 | `conflicted`        | `'='`                                           | This branch has merge conflicts.                                                                            |
 | `ahead`             | `'⇡'`                                           | The format of `ahead`                                                                                       |
 | `behind`            | `'⇣'`                                           | The format of `behind`                                                                                      |
@@ -1930,9 +2018,9 @@ The `guix_shell` module shows the [guix-shell](https://guix.gnu.org/manual/devel
 
 | Opsi       | Bawaan                     | Deskripsi                                              |
 | ---------- | -------------------------- | ------------------------------------------------------ |
-| `format`   | `'via [$symbol]($style) '` | Format dari modul.                                     |
-| `symbol`   | `"🐃 "`                     | A format string representing the symbol of guix-shell. |
-| `style`    | `"yellow bold"`            | Gaya penataan untuk modul.                             |
+| `fromat`   | `'via [$symbol]($style) '` | Format dari modul.                                     |
+| `symbol`   | `'🐃 '`                     | A format string representing the symbol of guix-shell. |
+| `style`    | `'yellow bold'`            | Gaya penataan untuk modul.                             |
 | `disabled` | `false`                    | Disables the `guix_shell` module.                      |
 
 ### Variabel
@@ -1969,13 +2057,13 @@ The `gradle` module is only able to read your Gradle Wrapper version from your c
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                  |
-| `version_format`    | `"v${raw}"`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"🅶 "`                               | A format string representing the symbol of Gradle.                                  |
-| `detect_extensions` | `["gradle", "gradle.kts"]`           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'🅶 '`                               | A format string representing the symbol of Gradle.                                  |
+| `detect_extensions` | `['gradle', 'gradle.kts']`           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `["gradle"]`                         | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `"bold bright-cyan"`                 | Gaya penataan untuk modul.                                                          |
+| `detect_folders`    | `['gradle']`                         | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `style`             | `'bold bright-cyan'`                 | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                              | Disables the `gradle` module.                                                       |
 | `recursive`         | `false`                              | Enables recursive finding for the `gradle` directory.                               |
 
@@ -2034,13 +2122,13 @@ The `haxe` module shows the currently installed version of [Haxe](https://haxe.o
 
 | Opsi                | Bawaan                                                                                          | Deskripsi                                                                           |
 | ------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `fromat`            | `"via [$symbol($version )]($style)"`                                                            | Format dari modul.                                                                  |
-| `version_format`    | `"v${raw}"`                                                                                     | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `detect_extensions` | `["hx", "hxml"]`                                                                                | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
-| `detect_files`      | `["project.xml", "Project.xml", "application.xml", "haxelib.json", "hxformat.json", ".haxerc"]` | filenames mana yang sebaiknya memicu modul ini.                                     |
-| `detect_folders`    | `[".haxelib", "haxe_libraries"]`                                                                | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `symbol`            | `"⌘ "`                                                                                          | A format string representing the symbol of Helm.                                    |
-| `style`             | `"bold fg:202"`                                                                                 | Gaya penataan untuk modul.                                                          |
+| `fromat`            | `'via [$symbol($version )]($style)'`                                                            | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                                                                                     | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['hx', 'hxml']`                                                                                | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `['project.xml', 'Project.xml', 'application.xml', 'haxelib.json', 'hxformat.json', '.haxerc']` | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `['.haxelib', 'haxe_libraries']`                                                                | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `symbol`            | `'⌘ '`                                                                                          | A format string representing the symbol of Helm.                                    |
+| `style`             | `'bold fg:202'`                                                                                 | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                                                                                         | Disables the `haxe` module.                                                         |
 
 ### Variabel
@@ -2107,14 +2195,15 @@ The `hostname` module shows the system hostname.
 
 ### Opsi
 
-| Opsi         | Bawaan                                 | Deskripsi                                                                                                                            |
-| ------------ | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ssh_only`   | `true`                                 | Only show hostname when connected to an SSH session.                                                                                 |
-| `ssh_symbol` | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                               |
-| `trim_at`    | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation |
-| `fromat`     | `'[$ssh_symbol$hostname]($style) in '` | Format dari modul.                                                                                                                   |
-| `style`      | `'bold dimmed green'`                  | Gaya penataan untuk modul.                                                                                                           |
-| `disabled`   | `false`                                | Disables the `hostname` module.                                                                                                      |
+| Opsi              | Bawaan                                 | Deskripsi                                                                                                                             |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `ssh_only`        | `true`                                 | Only show hostname when connected to an SSH session.                                                                                  |
+| `ssh_symbol`      | `'🌐 '`                                 | A format string representing the symbol when connected to SSH session.                                                                |
+| `trim_at`         | `'.'`                                  | String that the hostname is cut off at, after the first match. `'.'` will stop after the first dot. `''` will disable any truncation. |
+| `detect_env_vars` | `[]`                                   | Which environment variable(s) should trigger this module.                                                                             |
+| `fromat`          | `'[$ssh_symbol$hostname]($style) in '` | Format dari modul.                                                                                                                    |
+| `style`           | `'bold dimmed green'`                  | Gaya penataan untuk modul.                                                                                                            |
+| `disabled`        | `false`                                | Disables the `hostname` module.                                                                                                       |
 
 ### Variabel
 
@@ -2128,6 +2217,8 @@ The `hostname` module shows the system hostname.
 
 ### Contoh
 
+#### Always show the hostname
+
 ```toml
 # ~/.config/starship.toml
 
@@ -2135,6 +2226,17 @@ The `hostname` module shows the system hostname.
 ssh_only = false
 format = '[$ssh_symbol](bold blue) on [$hostname](bold red) '
 trim_at = '.companyname.com'
+disabled = false
+```
+
+#### Hide the hostname in remote tmux sessions
+
+```toml
+# ~/.config/starship.toml
+
+[hostname]
+ssh_only = false
+detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 disabled = false
 ```
 
@@ -2323,7 +2425,7 @@ kotlin_binary = 'kotlinc'
 
 ## Kubernetes
 
-Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
+Displays the current [Kubernetes context](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#context) name and, if set, the namespace, user and cluster from the kubeconfig file. The namespace needs to be set in the kubeconfig file, this can be done via `kubectl config set-context starship-context --namespace astronaut`. Similarly, the user and cluster can be set with `kubectl config set-context starship-context --user starship-user` and `kubectl config set-context starship-context --cluster starship-cluster`. If the `$KUBECONFIG` env var is set the module will use that if not it will use the `~/.kube/config`.
 
 ::: tip
 
@@ -2335,17 +2437,39 @@ When the module is enabled it will always be active, unless any of `detect_exten
 
 ### Opsi
 
+::: warning
+
+The `context_aliases` and `user_aliases` options are deprecated. Use `contexts` and the corresponding `context_alias` and `user_alias` options instead.
+
+:::
+
 | Opsi                | Bawaan                                               | Deskripsi                                                             |
 | ------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
 | `symbol`            | `'☸ '`                                               | A format string representing the symbol displayed before the Cluster. |
 | `fromat`            | `'[$symbol$context( \($namespace\))]($style) in '` | Format dari modul.                                                    |
 | `style`             | `'cyan bold'`                                        | Gaya penataan untuk modul.                                            |
-| `context_aliases`   | `{}`                                                 | Table of context aliases to display.                                  |
-| `user_aliases`      | `{}`                                                 | Table of user aliases to display.                                     |
+| `context_aliases`*  | `{}`                                                 | Table of context aliases to display.                                  |
+| `user_aliases`*     | `{}`                                                 | Table of user aliases to display.                                     |
 | `detect_extensions` | `[]`                                                 | Ekstensi mana yang sebaiknya memicu modul ini.                        |
 | `detect_files`      | `[]`                                                 | filenames mana yang sebaiknya memicu modul ini.                       |
 | `detect_folders`    | `[]`                                                 | Folder mana yang sebaiknya memicul modul ini.                         |
+| `contexts`          | `[]`                                                 | Customized styles and symbols for specific contexts.                  |
 | `disabled`          | `true`                                               | Disables the `kubernetes` module.                                     |
+
+*: This option is deprecated, please add `contexts` with the corresponding `context_alias` and `user_alias` options instead.
+
+To customize the style of the module for specific environments, use the following configuration as part of the `contexts` list:
+
+| Variabel          | Deskripsi                                                                                |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| `context_pattern` | **Required** Regular expression to match current Kubernetes context name.                |
+| `user_pattern`    | Regular expression to match current Kubernetes user name.                                |
+| `context_alias`   | Context alias to display instead of the full context name.                               |
+| `user_alias`      | User alias to display instead of the full user name.                                     |
+| `style`           | The style for the module when using this context. If not set, will use module's style.   |
+| `symbol`          | The symbol for the module when using this context. If not set, will use module's symbol. |
+
+Note that all regular expression are anchored with `^<pattern>$` and so must match the whole string. The `*_pattern` regular expressions may contain capture groups, which can be referenced in the corresponding alias via `$name` and `$N` (see example below and the [rust Regex::replace() documentation](https://docs.rs/regex/latest/regex/struct.Regex.html#method.replace)).
 
 ### Variabel
 
@@ -2368,13 +2492,9 @@ When the module is enabled it will always be active, unless any of `detect_exten
 [kubernetes]
 format = 'on [⛵ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 disabled = false
-[kubernetes.context_aliases]
-'dev.local.cluster.k8s' = 'dev'
-'.*/openshift-cluster/.*' = 'openshift'
-'gke_.*_(?P<var_cluster>[\w-]+)' = 'gke-$var_cluster'
-[kubernetes.user_aliases]
-'dev.local.cluster.k8s' = 'dev'
-'root/.*' = 'root'
+contexts = [
+  { context_pattern = "dev.local.cluster.k8s", style = "green", symbol = "💔 " },
+]
 ```
 
 Only show the module in directories that contain a `k8s` file.
@@ -2387,25 +2507,36 @@ disabled = false
 detect_files = ['k8s']
 ```
 
-#### Regex Matching
+#### Kubernetes Context specific config
 
-Additional to simple aliasing, `context_aliases` and `user_aliases` also supports extended matching and renaming using regular expressions.
-
-The regular expression must match on the entire kube context, capture groups can be referenced using `$name` and `$N` in the replacement. This is more explained in the [regex crate](https://docs.rs/regex/1.5.4/regex/struct.Regex.html#method.replace) documentation.
-
-Long and automatically generated cluster names can be identified and shortened using regular expressions:
+The `contexts` configuration option is used to customise what the current Kubernetes context name looks like (style and symbol) if the name matches the defined regular expression.
 
 ```toml
-[kubernetes.context_aliases]
-# OpenShift contexts carry the namespace and user in the kube context: `namespace/name/user`:
-'.*/openshift-cluster/.*' = 'openshift'
-# Or better, to rename every OpenShift cluster at once:
-'.*/(?P<var_cluster>[\w-]+)/.*' = '$var_cluster'
+# ~/.config/starship.toml
 
+[[kubernetes.contexts]]
+# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
+# equals "admin_user"
+context_pattern = "production"
+user_pattern = "admin_user"
+style = "bold red"
+context_alias = "prod"
+user_alias = "admin"
+
+[[kubernetes.contexts]]
+# "green" style + a different symbol when Kubernetes current context name contains openshift
+context_pattern = ".*openshift.*"
+style = "green"
+symbol = "💔 "
+context_alias = "openshift"
+
+[[kubernetes.contexts]]
+# Using capture groups
 # Contexts from GKE, AWS and other cloud providers usually carry additional information, like the region/zone.
 # The following entry matches on the GKE format (`gke_projectname_zone_cluster-name`)
 # and renames every matching kube context into a more readable format (`gke-cluster-name`):
-'gke_.*_(?P<var_cluster>[\w-]+)' = 'gke-$var_cluster'
+context_pattern = "gke_.*_(?P<cluster>[\\w-]+)"
+context_alias = "gke-$cluster"
 ```
 
 ## Line Break
@@ -2637,7 +2768,7 @@ The `nim` module shows the currently installed version of [Nim](https://nim-lang
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul                                                                   |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul                                                                   |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'👑 '`                               | The symbol used before displaying the version of Nim.                               |
 | `detect_extensions` | `['nim', 'nims', 'nimble']`          | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -2674,7 +2805,7 @@ The `nix_shell` module shows the [nix-shell](https://nixos.org/guides/nix-pills/
 
 | Opsi          | Bawaan                                         | Deskripsi                                                             |
 | ------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
-| `format`      | `'via [$symbol$state( \($name\))]($style) '` | Format dari modul.                                                    |
+| `fromat`      | `'via [$symbol$state( \($name\))]($style) '` | Format dari modul.                                                    |
 | `symbol`      | `'❄️ '`                                        | A format string representing the symbol of nix-shell.                 |
 | `style`       | `'bold blue'`                                  | Gaya penataan untuk modul.                                            |
 | `impure_msg`  | `'impure'`                                     | A format string shown when the shell is impure.                       |
@@ -2722,7 +2853,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 
 | Opsi                | Bawaan                                     | Deskripsi                                                                                             |
 | ------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`       | Format dari modul.                                                                                    |
+| `fromat`            | `'via [$symbol($version )]($style)'`       | Format dari modul.                                                                                    |
 | `version_format`    | `'v${raw}'`                                | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch`                   |
 | `symbol`            | `' '`                                     | A format string representing the symbol of Node.js.                                                   |
 | `detect_extensions` | `['js', 'mjs', 'cjs', 'ts', 'mts', 'cts']` | Ekstensi mana yang sebaiknya memicu modul ini.                                                        |
@@ -2730,7 +2861,7 @@ The `nodejs` module shows the currently installed version of [Node.js](https://n
 | `detect_folders`    | `['node_modules']`                         | Folder mana yang sebaiknya memicul modul ini.                                                         |
 | `style`             | `'bold green'`                             | Gaya penataan untuk modul.                                                                            |
 | `disabled`          | `false`                                    | Disables the `nodejs` module.                                                                         |
-| `not_capable_style` | `bold red`                                 | The style for the module when an engines property in package.json does not match the Node.js version. |
+| `not_capable_style` | `'bold red'`                               | The style for the module when an engines property in package.json does not match the Node.js version. |
 
 ### Variabel
 
@@ -2767,7 +2898,7 @@ The `ocaml` module shows the currently installed version of [OCaml](https://ocam
 
 | Opsi                      | Bawaan                                                                     | Deskripsi                                                                           |
 | ------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | The format string for the module.                                                   |
+| `fromat`                  | `'via [$symbol($version )(\($switch_indicator$switch_name\) )]($style)'` | The format string for the module.                                                   |
 | `version_format`          | `'v${raw}'`                                                                | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`                  | `'🐫 '`                                                                     | The symbol used before displaying the version of OCaml.                             |
 | `global_switch_indicator` | `''`                                                                       | The format string used to represent global OPAM switch.                             |
@@ -2807,7 +2938,7 @@ The `opa` module shows the currently installed version of the OPA tool. By defau
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
 | `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🪖  '`                              | A format string representing the symbol of OPA.                                     |
 | `detect_extensions` | `['rego']`                           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -2843,7 +2974,7 @@ The `openstack` module shows the current OpenStack cloud and project. The module
 
 | Opsi       | Bawaan                                          | Deskripsi                                                      |
 | ---------- | ----------------------------------------------- | -------------------------------------------------------------- |
-| `format`   | `'on [$symbol$cloud(\($project\))]($style) '` | Format dari modul.                                             |
+| `fromat`   | `'on [$symbol$cloud(\($project\))]($style) '` | Format dari modul.                                             |
 | `symbol`   | `'☁️ '`                                         | The symbol used before displaying the current OpenStack cloud. |
 | `style`    | `'bold yellow'`                                 | Gaya penataan untuk modul.                                     |
 | `disabled` | `false`                                         | Disables the `openstack` module.                               |
@@ -2890,8 +3021,8 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 | Opsi       | Bawaan                | Deskripsi                                              |
 | ---------- | --------------------- | ------------------------------------------------------ |
-| `format`   | `"[$symbol]($style)"` | Format dari modul.                                     |
-| `style`    | `"bold white"`        | Gaya penataan untuk modul.                             |
+| `fromat`   | `'[$symbol]($style)'` | Format dari modul.                                     |
+| `style`    | `'bold white'`        | Gaya penataan untuk modul.                             |
 | `disabled` | `true`                | Disables the `os` module.                              |
 | `symbols`  |                       | A table that maps each operating system to its symbol. |
 
@@ -3000,7 +3131,7 @@ The `package` module is shown when the current directory is the repository for a
 
 | Opsi              | Bawaan                            | Deskripsi                                                                           |
 | ----------------- | --------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`          | `'is [$symbol$version]($style) '` | Format dari modul.                                                                  |
+| `fromat`          | `'is [$symbol$version]($style) '` | Format dari modul.                                                                  |
 | `symbol`          | `'📦 '`                            | The symbol used before displaying the version the package.                          |
 | `version_format`  | `'v${raw}'`                       | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `style`           | `'bold 208'`                      | Gaya penataan untuk modul.                                                          |
@@ -3040,7 +3171,7 @@ The `perl` module shows the currently installed version of [Perl](https://www.pe
 
 | Opsi                | Bawaan                                                                                                   | Deskripsi                                                                           |
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `format`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                                   |
+| `fromat`            | `'via [$symbol($version )]($style)'`                                                                     | The format string for the module.                                                   |
 | `version_format`    | `'v${raw}'`                                                                                              | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
 | `symbol`            | `'🐪 '`                                                                                                   | The symbol used before displaying the version of Perl                               |
 | `detect_extensions` | `['pl', 'pm', 'pod']`                                                                                    | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
@@ -3245,7 +3376,7 @@ Secara bawaan, modul akan aktif jika beberapa syarat berikut telah terpenuhi:
 | `symbol`             | `'🐍 '`                                                                                                       | A format string representing the symbol of Python                                      |
 | `style`              | `'yellow bold'`                                                                                              | Gaya penataan untuk modul.                                                             |
 | `pyenv_version_name` | `false`                                                                                                      | Use pyenv to get Python version                                                        |
-| `pyenv_prefix`       | `pyenv`                                                                                                      | Prefix before pyenv version display, only used if pyenv is used                        |
+| `pyenv_prefix`       | `'pyenv'`                                                                                                    | Prefix before pyenv version display, only used if pyenv is used                        |
 | `python_binary`      | `['python', 'python3', 'python2']`                                                                           | Configures the python binaries that Starship should executes when getting the version. |
 | `detect_extensions`  | `['py']`                                                                                                     | Ekstensi mana yang sebaiknya memicu modul ini                                          |
 | `detect_files`       | `['.python-version', 'Pipfile', '__init__.py', 'pyproject.toml', 'requirements.txt', 'setup.py', 'tox.ini']` | filenames mana yang sebaiknya memicu modul ini                                         |
@@ -3562,22 +3693,23 @@ This module is disabled by default. To enable it, set `disabled` to `false` in y
 
 ### Opsi
 
-| Opsi                   | Bawaan                    | Deskripsi                                                    |
-| ---------------------- | ------------------------- | ------------------------------------------------------------ |
-| `bash_indicator`       | `'bsh'`                   | A format string used to represent bash.                      |
-| `fish_indicator`       | `'fsh'`                   | A format string used to represent fish.                      |
-| `zsh_indicator`        | `'zsh'`                   | A format string used to represent zsh.                       |
-| `powershell_indicator` | `'psh'`                   | A format string used to represent powershell.                |
-| `ion_indicator`        | `'ion'`                   | A format string used to represent ion.                       |
-| `elvish_indicator`     | `'esh'`                   | A format string used to represent elvish.                    |
-| `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                      |
-| `xonsh_indicator`      | `'xsh'`                   | A format string used to represent xonsh.                     |
-| `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                       |
-| `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                        |
-| `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown. |
-| `fromat`               | `'[$indicator]($style) '` | Format dari modul.                                           |
-| `style`                | `'white bold'`            | Gaya penataan untuk modul.                                   |
-| `disabled`             | `true`                    | Disables the `shell` module.                                 |
+| Opsi                   | Bawaan                    | Deskripsi                                                                                              |
+| ---------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `bash_indicator`       | `'bsh'`                   | A format string used to represent bash.                                                                |
+| `fish_indicator`       | `'fsh'`                   | A format string used to represent fish.                                                                |
+| `zsh_indicator`        | `'zsh'`                   | A format string used to represent zsh.                                                                 |
+| `powershell_indicator` | `'psh'`                   | A format string used to represent powershell.                                                          |
+| `pwsh_indicator`       |                           | A format string used to represent pwsh. The default value mirrors the value of `powershell_indicator`. |
+| `ion_indicator`        | `'ion'`                   | A format string used to represent ion.                                                                 |
+| `elvish_indicator`     | `'esh'`                   | A format string used to represent elvish.                                                              |
+| `tcsh_indicator`       | `'tsh'`                   | A format string used to represent tcsh.                                                                |
+| `xonsh_indicator`      | `'xsh'`                   | A format string used to represent xonsh.                                                               |
+| `cmd_indicator`        | `'cmd'`                   | A format string used to represent cmd.                                                                 |
+| `nu_indicator`         | `'nu'`                    | A format string used to represent nu.                                                                  |
+| `unknown_indicator`    | `''`                      | The default value to be displayed when the shell is unknown.                                           |
+| `fromat`               | `'[$indicator]($style) '` | Format dari modul.                                                                                     |
+| `style`                | `'white bold'`            | Gaya penataan untuk modul.                                                                             |
+| `disabled`             | `true`                    | Disables the `shell` module.                                                                           |
 
 ### Variabel
 
@@ -3694,14 +3826,14 @@ The `solidity` module shows the currently installed version of [Solidity](https:
 
 | Opsi                | Bawaan                               | Deskripsi                                                                           |
 | ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `fromat`            | `"via [$symbol($version )]($style)"` | Format dari modul.                                                                  |
-| `version_format`    | `"v${major}.${minor}.${patch}"`      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
-| `symbol`            | `"S "`                               | A format string representing the symbol of Solidity                                 |
-| `compiler          | ["solc"]                             | The default compiler for Solidity.                                                  |
-| `detect_extensions` | `["sol"]`                            | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `version_format`    | `'v${major}.${minor}.${patch}'`      | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'S '`                               | A format string representing the symbol of Solidity                                 |
+| `compiler          | ['solc']                             | The default compiler for Solidity.                                                  |
+| `detect_extensions` | `['sol']`                            | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
 | `detect_files`      | `[]`                                 | filenames mana yang sebaiknya memicu modul ini.                                     |
 | `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
-| `style`             | `"bold blue"`                        | Gaya penataan untuk modul.                                                          |
+| `style`             | `'bold blue'`                        | Gaya penataan untuk modul.                                                          |
 | `disabled`          | `false`                              | Disables this module.                                                               |
 
 ### Variabel
@@ -4008,6 +4140,39 @@ time_format = '%T'
 utc_time_offset = '-5'
 time_range = '10:00:00-14:00:00'
 ```
+
+## Typst
+
+The `typst` module shows the current installed version of Typst used in a project.
+
+By default, the module will be shown if any of the following conditions are met:
+
+- Direktori ini memiliki berkas `template.typ`
+- The current directory contains any `*.typ` file
+
+### Opsi
+
+| Opsi                | Bawaan                               | Deskripsi                                                                           |
+| ------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `fromat`            | `'via [$symbol($version )]($style)'` | Format dari modul.                                                                  |
+| `version_format`    | `'v${raw}'`                          | Format dari versi. Variabel yang tersedia adalah `raw`, `major`, `minor`, & `patch` |
+| `symbol`            | `'t '`                               | A format string representing the symbol of Daml                                     |
+| `style`             | `'bold #0093A7'`                     | Gaya penataan untuk modul.                                                          |
+| `detect_extensions` | `['.typ']`                           | Ekstensi mana yang sebaiknya memicu modul ini.                                      |
+| `detect_files`      | `['template.typ']`                   | filenames mana yang sebaiknya memicu modul ini.                                     |
+| `detect_folders`    | `[]`                                 | Folder mana yang sebaiknya memicul modul ini.                                       |
+| `disabled`          | `false`                              | Disables the `daml` module.                                                         |
+
+### Variabel
+
+| Variabel      | Contoh   | Deskripsi                                       |
+| ------------- | -------- | ----------------------------------------------- |
+| version       | `v0.9.0` | The version of `typst`, alias for typst_version |
+| typst_version | `bawaan` | The current Typst version                       |
+| symbol        |          | Menyalin nilai dari opsi `symbol`               |
+| style\*     |          | Menyalin nilai dari opsi `style`                |
+
+*: Variabel tersebut hanya dapat digunakan sebagai bagian dari penataan string
 
 ## Username
 

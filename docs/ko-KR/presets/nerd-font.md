@@ -1,21 +1,21 @@
-[Return to Presets](./README.md#nerd-font-symbols)
+[프리셋으로 돌아가기](./README.md#nerd-font-symbols)
 
-# Nerd Font Symbols Preset
+# Nerd Font 기호 프리셋
 
-This preset changes the symbols for each module to use Nerd Font symbols.
+이 프리셋은 각 모듈의 기호가 Nerd Font 기호를 사용하도록 변경합니다.
 
-![Screenshot of Nerd Font Symbols preset](/presets/img/nerd-font-symbols.png)
+![Nerd Font 기호 프리셋 스크린샷](/presets/img/nerd-font-symbols.png)
 
-### 준비 사항
+### 필요 사항
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (the example uses Fira Code Nerd Font)
+- 터미널에 [Nerd Font](https://www.nerdfonts.com/) 설치 및 활성화 (예시에서는 Fira Code Nerd Font를 사용합니다.)
 
-### Configuration
+### 설정
 
 ```sh
 starship preset nerd-font-symbols -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/nerd-font-symbols.toml)
+[클릭하여 TOML 다운로드](/presets/toml/nerd-font-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml

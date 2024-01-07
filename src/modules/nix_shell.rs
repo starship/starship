@@ -23,7 +23,7 @@ impl NixShellType {
         };
 
         if use_heuristic {
-            Self::in_new_nix_shell(context).map(|_| Unknown)
+            Self::in_new_nix_shell(context).map(|()| Unknown)
         } else {
             None
         }

@@ -1,4 +1,4 @@
-# Advanced Configuration
+# 고급 설정
 
 While Starship is a versatile shell, sometimes you need to do more than edit `starship.toml` to get it to do certain things. This page details some of the more advanced configuration techniques used in starship.
 
@@ -199,27 +199,27 @@ function Invoke-Starship-PreCommand {
 Invoke-Expression (&starship init powershell)
 ```
 
-## Enable Right Prompt
+## 오른쪽 프롬프트 활성화
 
-Some shells support a right prompt which renders on the same line as the input. Starship can set the content of the right prompt using the `right_format` option. Any module that can be used in `format` is also supported in `right_format`. The `$all` variable will only contain modules not explicitly used in either `format` or `right_format`.
+일부 셸은 입력과 같은 줄에 렌더링되는 오른쪽 프롬프트를 지원합니다. Starship에서는 `right_format` 옵션을 사용하여 오른쪽 프롬프트의 내용을 설정할 수 있습니다. `format`에서 사용할 수 있는 모든 모듈은 `right_format`에서도 지원됩니다. `$all` 변수는 `format` 또는 `right_format`에서 명시적으로 사용하지 않는 모듈만 포함합니다.
 
-Note: The right prompt is a single line following the input location. To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
+알림: 오른쪽 프롬프트는 입력 위치에 따라 한 줄로 표시됩니다. 여러 줄 프롬프트에서 입력 선 위의 모듈을 오른쪽 정렬하려면, [`fill` 모듈](/config/#fill)을 참고하세요.
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format`은 현재 elvish, fish, zsh, xonsh, cmd, nushell에서 지원됩니다.
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
 
-# A minimal left prompt
+# 간결한 왼쪽 프롬프트
 format = """$character"""
 
-# move the rest of the prompt to the right
+# 프롬프트의 나머지를 오른쪽으로 옮기기
 right_format = """$all"""
 ```
 
-Produces a prompt like the following:
+위 설정은 아래와 같은 프롬프트를 출력합니다:
 
 ```
 ▶                                   starship on  rprompt [!] is 📦 v0.57.0 via 🦀 v1.54.0 took 17s
@@ -239,7 +239,7 @@ Note: Continuation prompts are only available in the following shells:
 - `zsh`
 - `Powershell`
 
-### Example
+### 예시
 
 ```toml
 # ~/.config/starship.toml
@@ -248,9 +248,9 @@ Note: Continuation prompts are only available in the following shells:
 continuation_prompt = '▶▶ '
 ```
 
-## Style Strings
+## 스타일 문자열
 
-Style strings are a list of words, separated by whitespace. The words are not case sensitive (i.e. `bold` and `BoLd` are considered the same string). Each word can be one of the following:
+스타일 문자열은 공백으로 구분된 단어 목록입니다. 단어는 대소문자를 구분하지 않습니다 (즉, `bold`와 `BoLd`는 동일한 문자열로 간주됩니다). 각 단어는 다음 중 하나가 될 수 있습니다:
 
 - `bold`
 - `italic`
@@ -265,15 +265,15 @@ Style strings are a list of words, separated by whitespace. The words are not ca
 - `<color>`
 - `none`
 
-where `<color>` is a color specifier (discussed below). `fg:<color>` and `<color>` currently do the same thing, though this may change in the future. `inverted` swaps the background and foreground colors. The order of words in the string does not matter.
+`<color>` 부분은 색상 지정자입니다 (아래에 후술). 현재, `fg:<color>` 와 `<color>`는 동일한 동작을 하지만 차후에 바뀔 수 있습니다. `inverted`는 배경 색과 전경 색을 서로 바꿉니다. 문자열의 단어 순서는 중요하지 않습니다.
 
-The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. It may become an error to use `none` in conjunction with other tokens in the future.
+The `none` token overrides all other tokens in a string if it is not part of a `bg:` specifier, so that e.g. `fg:red none fg:blue` will still create a string with no styling. `bg:none` sets the background to the default color so `fg:red bg:none` is equivalent to `red` or `fg:red` and `bg:green fg:red bg:none` is also equivalent to `fg:red` or `red`. 향후 다른 토큰과 함께 `none`을 사용하는 것은 오류가 발생할 수 있습니다.
 
-A color specifier can be one of the following:
+색상 지정자는 다음 중 하나가 될 수 있습니다:
 
-- One of the standard terminal colors: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. You can optionally prefix these with `bright-` to get the bright version (e.g. `bright-white`).
-- A `#` followed by a six-digit hexadecimal number. This specifies an [RGB color hex code](https://www.w3schools.com/colors/colors_hexadecimal.asp).
-- A number between 0-255. This specifies an [8-bit ANSI Color Code](https://i.stack.imgur.com/KTSQa.png).
+- 표준 터미널 색상: `black`, `red`, `green`, `blue`, `yellow`, `purple`, `cyan`, `white`. 앞에 `bright-`를 붙여 밝게 만들 수도 있습니다 (예시: `bright-white`).
+- `#` 다음의 여섯 자리 16진수 숫자. 이는 [RGB 색상 16진수 코드](https://www.w3schools.com/colors/colors_hexadecimal.asp)입니다.
+- 0~255 사이의 숫자. 이는 [8비트 ANSI 색상 코드](https://i.stack.imgur.com/KTSQa.png)입니다.
 
 If multiple colors are specified for foreground/background, the last one in the string will take priority.
 

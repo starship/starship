@@ -1,10 +1,10 @@
-[Return to Presets](./README.md#plain-text-symbols)
+[Вернуться к пресетам](./README.md#plain-text-symbols)
 
-## Plain Text Symbols Preset
+## Пресет Plain Text Symbols
 
-This preset changes the symbols for each module into plain text. Great if you don't have access to Unicode.
+Этот пресет изменяет символы для каждого модуля на обычный текст. Отлично подходит, если у вас нет возможности использовать Unicode.
 
-![Screenshot of Plain Text Symbols preset](/presets/img/plain-text-symbols.png)
+![Скриншот пресета Plain Text Symbols](/presets/img/plain-text-symbols.png)
 
 ### Конфигурация
 
@@ -12,6 +12,6 @@ This preset changes the symbols for each module into plain text. Great if you do
 starship preset plain-text-symbols -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/plain-text-symbols.toml)
+[Нажмите, чтобы загрузить TOML](/presets/toml/plain-text-symbols.toml)
 
 <<< @/.vuepress/public/presets/toml/plain-text-symbols.toml
