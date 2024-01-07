@@ -332,7 +332,7 @@
     "fly": {
       "default": {
         "disabled": false,
-        "format": "via [$symbol($app )($primary_region )]($style)",
+        "format": "via [$symbol($version )($app )($primary_region )]($style)",
         "style": "purple bold",
         "symbol": "🎈 ",
         "version_format": "v${raw}"
@@ -2667,7 +2667,7 @@
       "type": "object",
       "properties": {
         "format": {
-          "default": "via [$symbol($app )($primary_region )]($style)",
+          "default": "via [$symbol($version )($app )($primary_region )]($style)",
           "type": "string"
         },
         "version_format": {
