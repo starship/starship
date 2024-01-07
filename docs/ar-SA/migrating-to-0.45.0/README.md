@@ -1,10 +1,10 @@
-# Migrating to v0.45.0
+# الإنتقال إلى النسخة   v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+النسخة 0.45.0 سوف تستمر في تقديم تحديثات جذرية حتى الوصول للنسخة المستقرة 1.0.0. لقد قمنا بتغييرات رئيسية لكيفية إعداد سطر الأوامر، وذلك يسمح بطيف أكبر من قابلية التخصيص.
 
-This guide is intended to walk you through the breaking changes.
+هذا الدليل هو جولة خلال التغييرات الرئيسية التي قمنا بها.
 
-## `prompt_order` has been replaced by a root-level `format`
+## `prompt_order`تم استبداله بتنسيق  root-level ``
 
 Previously to v0.45.0, `prompt_order` would accept an array of module names in the order which they should be rendered by Starship.
 
