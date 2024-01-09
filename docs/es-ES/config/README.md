@@ -3142,14 +3142,14 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 
 ### Opciones
 
-| Opción           | Predeterminado                    | Descripción                                                                             |
-| ---------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`         | `'is [$symbol$version]($style) '` | El formato del módulo.                                                                  |
-| `symbol`         | `'📦 '`                            | El símbolo usado antes de mostrar la versión del paquete.                               |
-| `version_format` | `'v${raw}'`                       | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `style`          | `'bold 208'`                      | El estilo del módulo.                                                                   |
-| `'📦 '`           | `false`                           | Activar la visualización de la versión para los paquetes marcados como privados.        |
-| `disabled`       | `false`                           | Desactiva el módulo `package`.                                                          |
+| Opción            | Predeterminado                    | Descripción                                                                             |
+| ----------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`          | `'is [$symbol$version]($style) '` | El formato del módulo.                                                                  |
+| `symbol`          | `'📦 '`                            | El símbolo usado antes de mostrar la versión del paquete.                               |
+| `version_format`  | `'v${raw}'`                       | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `style`           | `'bold 208'`                      | El estilo del módulo.                                                                   |
+| `display_private` | `false`                           | Activar la visualización de la versión para los paquetes marcados como privados.        |
+| `disabled`        | `false`                           | Desactiva el módulo `package`.                                                          |
 
 ### Variables
 
