@@ -5,6 +5,7 @@ mod buf;
 mod bun;
 mod c;
 mod character;
+mod clojure;
 mod cmake;
 mod cmd_duration;
 mod cobol;
@@ -114,6 +115,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "bun" => bun::module(context),
             "c" => c::module(context),
             "character" => character::module(context),
+            "clojure" => clojure::module(context),
             "cmake" => cmake::module(context),
             "cmd_duration" => cmd_duration::module(context),
             "cobol" => cobol::module(context),
@@ -232,6 +234,7 @@ pub fn description(module: &str) -> &'static str {
         "character" => {
             "A character (usually an arrow) beside where the text is entered in your terminal"
         }
+        "clojure" => "The currently installed version of Clojure",
         "cmake" => "The currently installed version of CMake",
         "cmd_duration" => "How long the last command took to execute",
         "cobol" => "The currently installed version of COBOL/GNUCOBOL",

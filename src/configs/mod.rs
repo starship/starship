@@ -8,6 +8,7 @@ pub mod buf;
 pub mod bun;
 pub mod c;
 pub mod character;
+pub mod clojure;
 pub mod cmake;
 pub mod cmd_duration;
 pub mod cobol;
@@ -123,6 +124,8 @@ pub struct FullConfig<'a> {
     c: c::CConfig<'a>,
     #[serde(borrow)]
     character: character::CharacterConfig<'a>,
+    #[serde(borrow)]
+    clojure: clojure::ClojureConfig<'a>,
     #[serde(borrow)]
     cmake: cmake::CMakeConfig<'a>,
     #[serde(borrow)]

@@ -154,6 +154,35 @@
         }
       ]
     },
+    "clojure": {
+      "default": {
+        "detect_extensions": [
+          "clj",
+          "cljc",
+          "cljs",
+          "cljd",
+          "clj_kondo"
+        ],
+        "detect_files": [
+          "deps.edn",
+          "project.clj",
+          "build.boot",
+          "bb.edn",
+          "shadow-cljs.edn"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "red dimmed",
+        "symbol": "λ̮̮̑̑ ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ClojureConfig"
+        }
+      ]
+    },
     "cmake": {
       "default": {
         "detect_extensions": [],
@@ -2236,6 +2265,65 @@
         "disabled": {
           "default": false,
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ClojureConfig": {
+      "type": "object",
+      "properties": {
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "style": {
+          "default": "red dimmed",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "λ̮̮̑̑ ",
+          "type": "string"
+        },
+        "detect_extensions": {
+          "default": [
+            "clj",
+            "cljc",
+            "cljs",
+            "cljd",
+            "clj_kondo"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "deps.edn",
+            "project.clj",
+            "build.boot",
+            "bb.edn",
+            "shadow-cljs.edn"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

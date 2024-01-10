@@ -55,6 +55,7 @@ pub const PROMPT_ORDER: &[&str] = &[
     "bun",
     "c",
     "cmake",
+    "clojure",
     "cobol",
     "daml",
     "dart",

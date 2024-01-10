@@ -285,6 +285,7 @@ $pijul_channel\
 $docker_context\
 $package\
 $c\
+$clojure\
 $cmake\
 $cobol\
 $daml\
@@ -771,6 +772,46 @@ error_symbol = '[➜](bold red) '
 
 [character]
 vimcmd_symbol = '[V](bold green) '
+```
+
+## Clojure
+
+The `clojure` module shows the currently installed version of [Clojure](https://www.clojure.org/).
+By default the module will be shown if any of the following conditions are met:
+
+- The current directory contains a `deps.edn`, `project.clj`, `build.boot`, `bb.edn` or `shadow-cljs.edn` file
+- The current directory contains a file with the `.clj`, `.cljc`, `.cljs`, `.cljd` or `.clj_kondo` extension
+
+### Options
+
+| Option              | Default                                                                  | Description                                                               |
+| ------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `format`            | `'via [${symbol}(${version} )]($style)'`                                 | The format for the module.                                                |
+| `version_format`    | `'v${raw}'`                                                              | The version format. Available vars are `raw`, `major`, `minor`, & `patch` |
+| `detect_extensions` | `['clj', 'cljc', 'cljs', 'cljd', 'clj_kondo']`                           | Which extensions should trigger this module.                              |
+| `detect_files`      | `['deps.edn', 'project.clj', 'build.boot', 'bb.edn', 'shadow-cljs.edn']` | Which filenames should trigger this module.                               |
+| `detect_folders`    | `[]`                                                                     | Which folders should trigger this modules.                                |
+| `symbol`            | `'λ̮̮̑̑ '`                                                                   | A format string representing the symbol of Java                           |
+| `style`             | `'red dimmed'`                                                           | The style for the module.                                                 |
+| `disabled`          | `false`                                                                  | Disables the `clojure` module.                                            |
+
+### Variables
+
+| Variable | Example | Description                          |
+| -------- | ------- | ------------------------------------ |
+| version  | `v1.12` | The version of `clojure`             |
+| symbol   |         | Mirrors the value of option `symbol` |
+| style\*  |         | Mirrors the value of option `style`  |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[clojure]
+symbol = '🌟 '
 ```
 
 ## CMake
