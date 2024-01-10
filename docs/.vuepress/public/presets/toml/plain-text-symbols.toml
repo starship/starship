@@ -25,6 +25,9 @@ symbol = "bun "
 [c]
 symbol = "C "
 
+[clojure]
+symbol = "clojure "
+
 [cobol]
 symbol = "cobol "
 

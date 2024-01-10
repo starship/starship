@@ -26,6 +26,7 @@ $pijul_channel\
 $docker_context\
 $package\
 $c\
+$clojure\
 $cmake\
 $cobol\
 $daml\
@@ -230,6 +231,10 @@ format = " buf [$symbol $version $buf_version]($style)"
 [c]
 symbol = "∁ "
 format = " c [$symbol($version(-$name))]($style)"
+
+[clojure]
+symbol = "λ̮̮̑̑ "
+format = " clojure [${symbol}(${version} )]($style)"
 
 [conda]
 symbol = "◯ "

@@ -7,6 +7,9 @@ symbol = " "
 [c]
 symbol = " "
 
+[clojure]
+symbol = "λ̮̮̑̑ "
+
 [conda]
 symbol = " "
 
