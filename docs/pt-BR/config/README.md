@@ -536,16 +536,16 @@ A opção `display` é um array da seguinte tabela.
 #### Exemplo
 
 ```toml
-[[battery.display]] # ''bold red' e discharging_symbol é exibido quando a capacidade está entre 0% e 10%
+[[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
 threshold = 10
 style = 'bold red'
 
-[[battery.display]] # 'yellow' style e o símbolo 💦  é exibido quando a capacidade está entre 10% e 30%
+[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = 'bold yellow'
-discharging_symbol = '💦'
+discharging_symbol = '💦 '
 
-# quando a capacidade estiver acima de 30%, o indicador de bateria não será exibido
+# when capacity is over 30%, the battery indicator will not be displayed
 ```
 
 ## Buf
