@@ -536,16 +536,16 @@ style = 'bold red'
 #### Приклад
 
 ```toml
-[[battery.display]] # 'bold red' style and discharging_symbol when capacity is between 0% and 10%
+[[battery.display]] # стиль 'bold red' та discharging_symbol, якщо заряд між 0% та 10%
 threshold = 10
 style = 'bold red'
 
-[[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
+[[battery.display]] # стиль 'bold yellow' та символ 💦, якщо заряд між 10% та 30%
 threshold = 30
 style = 'bold yellow'
-discharging_symbol = '💦 '
+discharging_symbol = '💦'
 
-# when capacity is over 30%, the battery indicator will not be displayed
+# якщо рівень заряду понад 30%, індикатор заряду не показується
 ```
 
 ## Buf
