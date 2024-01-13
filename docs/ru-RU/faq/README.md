@@ -10,9 +10,9 @@
   - **Конфигурация**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Подсказка**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Как мне получить автодополнение команд, как показано на демонстрационной GIF?
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Автодополнение команд обеспечивается выбранной вами оболочкой. В данном случае, демо было выполнено с [Fish Shell](https://fishshell.com/), которая обеспечивает дополнения по умолчанию. Если вы используете Z Shell (zsh), я бы посоветовал взглянуть на [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -21,7 +21,7 @@ Completion support, or autocomplete, is provided by your shell of choice. In the
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Новосозданные модули будут добавлены в подсказку по мере обновления Starship
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## Доки говорят, что Starship поддерживается на всех оболочках *(cross-shell)*. Почему моя любимая оболочка не поддерживается?
 
 Starship устроен так, что есть возможность добавить поддержку практически любой оболочки. Бинарный файл Starship не зависит от оболочки и не имеет состояния, так что если ваша оболочка поддерживает расширение подстрок и настройку подсказки, то Starship может быть использован.
 
@@ -56,9 +56,9 @@ starship prompt --help
 curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## Почему я вижу предупреждение  `Executing command "..." timed out.`?
 
-Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+Starship выполняет различные команды, чтобы получить информацию, отображаемую в промпте, например версию программы или текущий git status. Чтобы быть уверенными, что starship не зависнет во время выполнения этих команд, мы поставили лимит времени, и если команда выполняется дольше лимита, starship прекратит её выполнение и выведет это предупреждение, это нормальное поведение. Временной лимит можно изменить с помощью опции [`command_timeout`key](/config/#prompt), поэтому при желании вы можете увеличить это время. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
 
 ## I see symbols I don't understand or expect, what do they mean?
 
