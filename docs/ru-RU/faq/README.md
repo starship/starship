@@ -121,10 +121,10 @@ If Starship was installed using the install script, the following command will d
 sh -c 'rm "$(command -v 'starship')"'
 ```
 
-## How do I install Starship without `sudo`?
+## Как Starship без `sudo`?
 
-The shell install script (`https://starship.rs/install.sh`) only attempts to use `sudo` if the target installation directory is not writable by the current user. The default installation diretory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. If you instead set the installation directory to one that is writable by your user, you should be able to install starship without `sudo`. For example, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` uses the `-b` command line option of the install script to set the installation directory to `~/.local/bin`.
+Скрипт установки (`https://starship.rs/install. h`) использует `sudo` только если директория установки недоступна для записи текущим пользователем. Директория установки по умолчанию это значение переменной окружения `$BIN_DIR` или `/usr/local/bin`, если `$BIN_DIR` не установлен. Если вместо этого выбрать директорию установки, которая доступна для записи пользователем, вы можете установить starship без `sudo`. Например, в `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` флаг `-b` установочного скрипта используется, чтобы задать директорию установки на `~/.local/bin`.
 
-For a non-interactive installation of Starship, don't forget to add the `-y` option to skip the confirmation. Check the source of the installation script for a list of all supported installation options.
+Для неинтерактивной установки Starship не забудьте добавить опцию `-y` чтобы пропустить подтверждение. Проверьте исходник установочного скрипта, чтобы получить список всех поддерживаемых параметров установки.
 
-When using a package manager, see the documentation for your package manager about installing with or without `sudo`.
+При через пакетный менеджер, смотрите документацию для вашего пакетного менеджера об установке с `sudo` и без.
