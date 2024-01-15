@@ -10,7 +10,7 @@ The configurations in this section are subject to change in future releases of S
 
 :::
 
-## TransientPrompt in PowerShell
+## TransientPrompt and TransientRightPrompt in PowerShell
 
 It is possible to replace the previous-printed prompt with a custom string. This
 is useful in cases where all the prompt information is not always needed. To enable
@@ -18,13 +18,27 @@ this, run `Enable-TransientPrompt` in the shell session. To make it permanent, p
 this statement in your `$PROFILE`. Transience can be disabled on-the-fly with
 `Disable-TransientPrompt`.
 
-By default, the left side of input gets replaced with `>`. To customize this,
-define a new function called `Invoke-Starship-TransientFunction`. For example, to
-display Starship's `character` module here, you would do
+- By default, the left side of input gets replaced with a bold-green `❯`. To customize this,
+  define a new function called `Invoke-Starship-TransientFunction`. For example, to
+  display Starship's `character` module here, you would do
 
 ```powershell
 function Invoke-Starship-TransientFunction {
   &starship module character
+}
+
+Invoke-Expression (&starship init powershell)
+
+Enable-TransientPrompt
+```
+
+- By default, the right side of input is empty. To customize this, define a new
+  function called `Invoke-Starship-TransientRightFunction`. For example, to display
+  the time at which the last command was started here, you would do
+
+```powershell
+function Invoke-Starship-TransientRightFunction {
+  &starship module time
 }
 
 Invoke-Expression (&starship init powershell)
@@ -261,7 +275,11 @@ not explicitly used in either `format` or `right_format`.
 Note: The right prompt is a single line following the input location. To right align modules above
 the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` is currently supported for the following shells: pwsh, elvish, fish, zsh, xonsh, cmd, nushell.
+For pwsh, it is not implemented natively, and hence can result in two side-effects:
+
+- the right prompt won't be cleared once the input starts overlapping with the right prompt
+- the right prompt won't be reprinted if the input is cleared from the overlap region
 
 ### Example
 

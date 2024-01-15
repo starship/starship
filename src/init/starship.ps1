@@ -23,7 +23,7 @@ $null = New-Module starship {
         }
     }
 
-    function Invoke-Native {
+    function Build-ProcessInfo {
         param($Executable, $Arguments)
         $startInfo = New-Object System.Diagnostics.ProcessStartInfo -ArgumentList $Executable -Property @{
             StandardOutputEncoding = [System.Text.Encoding]::UTF8;
@@ -39,8 +39,7 @@ $null = New-Module starship {
             foreach ($arg in $Arguments) {
                 $startInfo.ArgumentList.Add($arg);
             }
-        }
-        else {
+        } else {
             # Build an arguments string which follows the C++ command-line argument quoting rules
             # See: https://docs.microsoft.com/en-us/previous-versions//17w5ykft(v=vs.85)?redirectedfrom=MSDN
             $escaped = $Arguments | ForEach-Object {
@@ -51,7 +50,12 @@ $null = New-Module starship {
             }
             $startInfo.Arguments = $escaped -Join ' ';
         }
-        $process = [System.Diagnostics.Process]::Start($startInfo)
+        $startInfo
+    }
+
+    function Invoke-Native {
+        param($Executable, $Arguments)
+        $process = [System.Diagnostics.Process]::Start((Build-ProcessInfo -Executable $Executable -Arguments $Arguments))
 
         # Read the output and error streams asynchronously
         # Avoids potential deadlocks when the child process fills one of the buffers
@@ -146,22 +150,50 @@ $null = New-Module starship {
         }
 
         # Invoke Starship
-        $promptText = if ($script:TransientPrompt) {
+        $promptText, $rpromptText = $null, $null
+        if ($script:TransientPrompt) {
             $script:TransientPrompt = $false
-            if (Test-Path function:Invoke-Starship-TransientFunction) {
+            $promptText = if (Test-Path function:Invoke-Starship-TransientFunction) {
                 Invoke-Starship-TransientFunction
             } else {
                 "$([char]0x1B)[1;32m❯$([char]0x1B)[0m "
             }
+            $rpromptText = if (Test-Path function:Invoke-Starship-TransientRightFunction) {
+                Invoke-Starship-TransientRightFunction
+            } else {
+                ""
+            }
         } else {
-            Invoke-Native -Executable ::STARSHIP:: -Arguments $arguments
+            $lproc = [System.Diagnostics.Process]::Start((Build-ProcessInfo -Executable ::STARSHIP:: -Arguments $arguments))
+            $rproc = [System.Diagnostics.Process]::Start((Build-ProcessInfo -Executable ::STARSHIP:: -Arguments ($arguments + "--right")))
+            $lsout = $lproc.StandardOutput.ReadToEndAsync()
+            $rsout = $rproc.StandardOutput.ReadToEndAsync()
+            $lserr = $lproc.StandardError.ReadToEndAsync()
+            $rserr = $rproc.StandardError.ReadToEndAsync()
+            [System.Threading.Tasks.Task]::WaitAll(@($lsout, $rsout, $lserr, $rserr))
+            if ($lserr.Result.Trim() -ne '') { $host.ui.WriteErrorLine($lserr.Result) }
+            if ($rserr.Result.Trim() -ne '') { $host.ui.WriteErrorLine($rserr.Result) }
+            $promptText  = $lsout.Result;
+            $rpromptText = $rsout.Result;
         }
 
+        $promptLines = $promptText.Split("`n")
+        # Calculate offset for printing on right side:
+        # offset = (console width) + (length of ANSI sequences on right_prompt) - (length of just text in last line of left_prompt)
+        $rpromptOffset = $Host.UI.RawUI.WindowSize.Width + ($rpromptText.Length - ($rpromptText -replace $ansiRegex).Length) - ($promptLines[-1] -replace $ansiRegex).Length
+
         # Set the number of extra lines in the prompt for PSReadLine prompt redraw.
-        Set-PSReadLineOption -ExtraPromptLineCount ($promptText.Split("`n").Length - 1)
+        Set-PSReadLineOption -ExtraPromptLineCount ($promptLines.Length - 1)
 
         # Return the prompt
-        $promptText
+        if ($rpromptOffset - $rpromptText.Length -lt 0) {
+            # Avoid printing the right prompt if it doesn't fit
+            $promptText
+        } else {
+            # After printing the left prompt, the cursor position is saved,
+            # right prompt is printed, and then cursor position is restored.
+            "$promptText$([char]0x1B)[s{0,$rpromptOffset}$([char]0x1B)[u" -f $rpromptText
+        }
 
         # Propagate the original $LASTEXITCODE from before the prompt function was invoked.
         $global:LASTEXITCODE = $origLastExitCode
@@ -186,6 +218,10 @@ $null = New-Module starship {
         }
 
     }
+
+    # The following regex is used to strip out ANSI sequences from a string,
+    # giving us just plain text. This is useful for string length calculation.
+    $ansiRegex = [regex]'([\u001B\u009B][[\]()#;?]*(?:(?:(?:[a-zA-Z\d]*(?:;[-a-zA-Z\d\/#&.:=?%@~_]*)*)?\u0007)|(?:(?:\d{1,4}(?:;\d{0,4})*)?[\dA-PR-TZcf-ntqry=><~])))'
 
     # Disable virtualenv prompt, it breaks starship
     $ENV:VIRTUAL_ENV_DISABLE_PROMPT=1
