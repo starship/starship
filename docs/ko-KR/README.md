@@ -2,23 +2,23 @@
 home: true
 heroImage: /logo.svg
 heroText:
-tagline: 간결하고 화끈하게 빠르며 무제한으로 커스터마이징이 가능한 프롬프트. 어떤 쉘에서든 사용할 수 있습니다!
-actionText: Get Started →
+tagline: 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!
+actionText: 시작하기 →
 actionLink: ./guide/
 features:
   - 
-    title: Compatibility First
-    details: Works on the most common shells on the most common operating systems. Use it everywhere!
+    title: 호환성 우선
+    details: 거의 모든 운영 체제의 거의 모든 셸에서 동작합니다. 모든 곳에서 사용해 보세요!
   - 
-    title: Rust-Powered
-    details: Brings the best-in-class speed and safety of Rust, to make your prompt as quick and reliable as possible.
+    title: Rust 기반
+    details: Rust의 최고 수준의 속도와 안정성으로 프롬프트를 가능한 한 빠르고 안정적으로 만들어 보세요.
   - 
-    title: Customizable
-    details: Every little detail is customizable to your liking, to make this prompt as minimal or feature-rich as you'd like it to be.
+    title: 커스텀 가능
+    details: 모든 사소한 디테일들을 마음대로 커스텀할 수 있어, 프롬프트를 원하는 만큼 간단하게 만들거나 기능이 풍부하게 만들 수 있습니다.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors
 #Used for the description meta tag, for SEO
-metaTitle: "Starship: Cross-Shell Prompt"
-description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
+metaTitle: "Starship: 크로스-셸 프롬프트"
+description: Starship은 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다! 필요한 정보를 깔끔하고 간략하게 표시합니다. Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, 및 PowerShell에 빠르게 설치할 수 있습니다.
 ---
 
 <div class="center">
@@ -39,7 +39,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    #### 최근 버전 설치
 
-   With Shell:
+   셸로 설치:
 
    ```sh
    curl -sS https://starship.rs/install.sh | sh
@@ -48,14 +48,14 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    Starship을 업데이트하고 싶은 경우에도 위의 스크립트를 실행시키면 됩니다. Starship의 설정은 변경되지 않고 버전만 최근 버전으로 대체될 것입니다.
 
 
-   #### 패키지 매니저를 이용한 설치
+   #### 패키지 매니저로 설치하기
 
-   [Homebrew](https://brew.sh/)를 통한 설치:
+   [Homebrew](https://brew.sh/)로 설치:
 
    ```sh
    brew install starship
    ```
-   With [Winget](https://github.com/microsoft/winget-cli):
+   [Winget](https://github.com/microsoft/winget-cli)으로 설치:
 
    ```powershell
    winget install starship
@@ -121,7 +121,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning
 
-   Only elvish v0.18 or higher is supported.
+   elvish 버전 v0.18 이상에서만 지원됩니다.
 
    :::
 
@@ -149,17 +149,17 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.78+ is supported.
+   추후에 변경될 예정입니다. Nushell v0.78 버전 이상에서만 지원됩니다.
 
    :::
 
-   Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+   다음 내용을 Nushell env 파일 (찾으려면 Nushell에서 `$nu.env-path` 실행) 마지막 부분에 추가하세요:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
    ```
 
-   And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
+   다음 내용을 Nushell 설정 파일 (찾으려면 Nushell에서 `$nu.config-path` 실행) 마지막 부분에 추가하세요:
 
    ```sh
    use ~/.cache/starship/init.nu

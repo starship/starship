@@ -285,8 +285,9 @@ mod tests {
         let project_file = PathBuf::from("/hello/Pulumi.yaml");
         assert_eq!(
             get_pulumi_workspace(&context, name, &project_file),
-            Some("/home/sweet/home/.pulumi/workspaces/foobar-test-workspace.json")
-                .map(PathBuf::from)
+            Some(PathBuf::from(
+                "/home/sweet/home/.pulumi/workspaces/foobar-test-workspace.json"
+            ))
         );
     }
 

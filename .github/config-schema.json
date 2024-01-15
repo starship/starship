@@ -361,6 +361,29 @@
         }
       ]
     },
+    "direnv": {
+      "default": {
+        "allowed_msg": "allowed",
+        "denied_msg": "denied",
+        "detect_extensions": [],
+        "detect_files": [
+          ".envrc"
+        ],
+        "detect_folders": [],
+        "disabled": true,
+        "format": "[$symbol$loaded/$allowed]($style) ",
+        "loaded_msg": "loaded",
+        "not_allowed_msg": "not allowed",
+        "style": "bold orange",
+        "symbol": "direnv ",
+        "unloaded_msg": "not loaded"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/DirenvConfig"
+        }
+      ]
+    },
     "docker_context": {
       "default": {
         "detect_extensions": [],
@@ -1404,7 +1427,7 @@
           "Rsx"
         ],
         "detect_files": [
-          ".Rprofile"
+          "DESCRIPTION"
         ],
         "detect_folders": [
           ".Rproj.user"
@@ -1678,6 +1701,27 @@
         }
       ]
     },
+    "typst": {
+      "default": {
+        "detect_extensions": [
+          "typ"
+        ],
+        "detect_files": [
+          "template.typ"
+        ],
+        "detect_folders": [],
+        "disabled": false,
+        "format": "via [$symbol($version )]($style)",
+        "style": "bold #0093A7",
+        "symbol": "t ",
+        "version_format": "v${raw}"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/TypstConfig"
+        }
+      ]
+    },
     "username": {
       "default": {
         "disabled": false,
@@ -1801,6 +1845,10 @@
       "default": true,
       "type": "boolean"
     },
+    "follow_symlinks": {
+      "default": true,
+      "type": "boolean"
+    },
     "palette": {
       "type": [
         "string",
@@ -1829,7 +1877,7 @@
   "definitions": {
     "AwsConfig": {
       "title": "AWS",
-      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION` var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.",
+      "description": "The `aws` module shows the current AWS region and profile and an expiration timer when using temporary credentials. The output of the module uses the `AWS_REGION`, `AWS_DEFAULT_REGION`, and `AWS_PROFILE` env vars and the `~/.aws/config` and `~/.aws/credentials` files as required.\n\nThe module will display a profile only if its credentials are present in `~/.aws/credentials` or if a `credential_process` or `sso_start_url` are defined in `~/.aws/config`. Alternatively, having any of the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or `AWS_SESSION_TOKEN` env vars defined will also suffice. If the option `force_display` is set to `true`, all available information will be displayed even if no credentials per the conditions above are detected.\n\nWhen using [aws-vault](https://github.com/99designs/aws-vault) the profile is read from the `AWS_VAULT` env var and the credentials expiration date is read from the `AWS_SESSION_EXPIRATION` or `AWS_CREDENTIAL_EXPIRATION` var.\n\nWhen using [awsu](https://github.com/kreuzwerker/awsu) the profile is read from the `AWSU_PROFILE` env var.\n\nWhen using [`AWSume`](https://awsu.me) the profile is read from the `AWSUME_PROFILE` env var and the credentials expiration date is read from the `AWSUME_EXPIRATION` env var.\n\nWhen using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile is read from the `AWS_SSO_PROFILE` env var.",
       "type": "object",
       "properties": {
         "format": {
@@ -2763,6 +2811,71 @@
         "Equal",
         "Exists"
       ]
+    },
+    "DirenvConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "[$symbol$loaded/$allowed]($style) ",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "direnv ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold orange",
+          "type": "string"
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            ".envrc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_msg": {
+          "default": "allowed",
+          "type": "string"
+        },
+        "not_allowed_msg": {
+          "default": "not allowed",
+          "type": "string"
+        },
+        "denied_msg": {
+          "default": "denied",
+          "type": "string"
+        },
+        "loaded_msg": {
+          "default": "loaded",
+          "type": "string"
+        },
+        "unloaded_msg": {
+          "default": "not loaded",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     },
     "DockerContextConfig": {
       "type": "object",
@@ -5157,7 +5270,7 @@
         },
         "detect_files": {
           "default": [
-            ".Rprofile"
+            "DESCRIPTION"
           ],
           "type": "array",
           "items": {
@@ -5367,6 +5480,12 @@
         "powershell_indicator": {
           "default": "psh",
           "type": "string"
+        },
+        "pwsh_indicator": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "ion_indicator": {
           "default": "ion",
@@ -5783,6 +5902,57 @@
         "time_range": {
           "default": "-",
           "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TypstConfig": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "via [$symbol($version )]($style)",
+          "type": "string"
+        },
+        "version_format": {
+          "default": "v${raw}",
+          "type": "string"
+        },
+        "symbol": {
+          "default": "t ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold #0093A7",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "detect_extensions": {
+          "default": [
+            "typ"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_files": {
+          "default": [
+            "template.typ"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "detect_folders": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

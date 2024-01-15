@@ -108,6 +108,9 @@ format = '(via [$symbol($version )]($style))'
 [swift]
 format = '(via [$symbol($version )]($style))'
 
+[typst]
+format = '(via [$symbol($version )]($style))'
+
 [vagrant]
 format = '(via [$symbol($version )]($style))'
 

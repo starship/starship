@@ -32,6 +32,11 @@
       src="https://img.shields.io/badge/twitter-@StarshipPrompt-1DA1F3?style=flat-square"
       alt="在推特上追蹤 @StarshipPrompt"
  /></a>
+  <a href="https://stand-with-ukraine.pp.ua"
+    ><img
+      src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
+      alt="Stand With Ukraine"
+ /></a>
 </p>
 
 <p align="center">
@@ -79,7 +84,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-id.png"
-      alt="Bahasa Indonesia"
+      alt="印尼文 (Bahasa)"
  /></a>
   &nbsp;
   <a
@@ -87,7 +92,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-it.png"
-      alt="Italiano"
+      alt="意大利語"
  /></a>
   &nbsp;
   <a
@@ -103,7 +108,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Português do Brasil"
+      alt="巴西葡萄牙語"
  /></a>
   &nbsp;
   <a
@@ -111,7 +116,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ru.png"
-      alt="Русский"
+      alt="俄語"
  /></a>
   &nbsp;
   <a
@@ -119,7 +124,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-ua.png"
-      alt="Українська"
+      alt="烏克蘭語"
  /></a>
   &nbsp;
   <a
@@ -146,8 +151,6 @@
       alt="繁體中文"
  /></a>
 </p>
-
-[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
 <h1></h1>
 
@@ -177,7 +180,7 @@
 
 ### 先決要求
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- 至少一個[Nerd Font](https://www.nerdfonts.com/)需要已經被安裝，並且在終端模擬器中啓用 (你可以試試看[FireCode Nerd Font](https://www.nerdfonts.com/font-downloads))。
 
 ### 第一步 安裝 Starship
 
@@ -229,6 +232,7 @@ Alternatively, install Starship using any of the following package managers:
 | Gentoo             | [Gentoo Packages](https://packages.gentoo.org/packages/app-shells/starship)                     | `emerge app-shells/starship`                                                   |
 | Manjaro            |                                                                                                 | `pacman -S starship`                                                           |
 | NixOS              | [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/starship/default.nix)    | `nix-env -iA nixpkgs.starship`                                                 |
+| openSUSE           | [OSS](https://software.opensuse.org/package/starship)                                           | `zypper in starship`                                                           |
 | Void Linux         | [Void Linux Packages](https://github.com/void-linux/void-packages/tree/master/srcpkgs/starship) | `xbps-install -S starship`                                                     |
 
 </details>
@@ -270,7 +274,7 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### 第二步 Set up your shell to use Starship
+### 第二步 設定您的 shell 以啟用 Starship
 
 設定您的 shell 以啟用 Starship。 請從下列選單選取您的 shell：
 
@@ -288,7 +292,7 @@ eval "$(starship init bash)"
 <details>
 <summary>命令提示字元</summary>
 
-You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+您需要在 Cmd 中使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+)。 在此路徑 `%LocalAppData%\clink\starship.lua` 建立一個檔案，並填入以下內容：
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -305,7 +309,7 @@ load(io.popen('starship init cmd'):read("*a"))()
 eval (starship init elvish)
 ```
 
-Note: Only Elvish v0.18+ is supported
+注意：只支援 Elvish v0.18+ 以上的版本
 
 </details>
 
@@ -376,7 +380,7 @@ eval `starship init tcsh`
 <details>
 <summary>Xonsh</summary>
 
-將以下內容放到 `~/.xonshrc` 的結尾：
+將以下內容加到 `~/.xonshrc` 的結尾：
 
 ```python
 execx($(starship init xonsh))
@@ -423,13 +427,13 @@ eval "$(starship init zsh)"
 
 - **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
 
-## ❤️ Sponsors
+## ❤️ 贊助我們
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+你可以[成爲一個贊助者](https://github.com/sponsors/starship)來支持這個專案！ 你的名字和頭像會在這裏顯示，並且會帶有一個前往你網站的鏈接。
 
-**Supporter Tier**
+**贊助者等級**
 
-- [Appwrite](https://appwrite.io/)
+- [後端](https://appwrite.io/)
 
 <p align="center">
     <br>

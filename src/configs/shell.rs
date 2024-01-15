@@ -13,6 +13,8 @@ pub struct ShellConfig<'a> {
     pub fish_indicator: &'a str,
     pub zsh_indicator: &'a str,
     pub powershell_indicator: &'a str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pwsh_indicator: Option<&'a str>,
     pub ion_indicator: &'a str,
     pub elvish_indicator: &'a str,
     pub tcsh_indicator: &'a str,
@@ -32,6 +34,7 @@ impl<'a> Default for ShellConfig<'a> {
             fish_indicator: "fsh",
             zsh_indicator: "zsh",
             powershell_indicator: "psh",
+            pwsh_indicator: None,
             ion_indicator: "ion",
             elvish_indicator: "esh",
             tcsh_indicator: "tsh",

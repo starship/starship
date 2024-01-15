@@ -1,5 +1,49 @@
 # Changelog
 
+## [1.17.1](https://github.com/starship/starship/compare/v1.17.0...v1.17.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* v1.17.0 post-release fix-ups ([#5660](https://github.com/starship/starship/issues/5660)) ([89dc192](https://github.com/starship/starship/commit/89dc19214bb671fe50a8f1be79a4594e7998ddea))
+
+
+### Reverts
+
+* refactor(modules): use whoami crate to get username ([#5669](https://github.com/starship/starship/issues/5669)) ([a83e107](https://github.com/starship/starship/commit/a83e10776ba37bd1ab439e5e4d0125a06e947728))
+
+## [1.17.0](https://github.com/starship/starship/compare/v1.16.0...v1.17.0) (2023-12-28)
+
+
+### Features
+
+* add additional exit status code meanings from libc ([#5412](https://github.com/starship/starship/issues/5412)) ([81c7d0c](https://github.com/starship/starship/commit/81c7d0cc5805dc10018f0589a6671e1b727a0e9c))
+* add typst module ([7b21705](https://github.com/starship/starship/commit/7b217056bdb8dcb5b328b51fa3b68fe837f9fb3c))
+* **aws:** Adding the AWS SSO CLI env variable to profile list ([#5640](https://github.com/starship/starship/issues/5640)) ([6d96df3](https://github.com/starship/starship/commit/6d96df3c6828161bb9dc922fe45ef35a1ce33771))
+* **direnv:** add new direnv module ([#5157](https://github.com/starship/starship/issues/5157)) ([e47bfba](https://github.com/starship/starship/commit/e47bfbabb9b7d6af12a29db9413a6ec03fba174b))
+* **fossil_metrics:** add fossil_metrics module ([#4874](https://github.com/starship/starship/issues/4874)) ([e867cda](https://github.com/starship/starship/commit/e867cda1eb90ba452768bd2e0738afc2fd0db613))
+* **hostname:** add detect_env_vars as option ([#5196](https://github.com/starship/starship/issues/5196)) ([43b2d42](https://github.com/starship/starship/commit/43b2d42cd526e34c5f0290e7409fbd6d3a54e908))
+* **kubernetes:** Add styling based on current context ([#4550](https://github.com/starship/starship/issues/4550)) ([6b444e0](https://github.com/starship/starship/commit/6b444e05c688f9b871d0fe4624cd5559eba1f95c))
+* R lang packages version, remove .Rprofile from rlang detection ([#5588](https://github.com/starship/starship/issues/5588)) ([5267c46](https://github.com/starship/starship/commit/5267c464eb5e4b23e44cdb7c56919991f4f67ae3))
+* **scanner:** add option not to follow symlinks ([#5325](https://github.com/starship/starship/issues/5325)) ([7b851fc](https://github.com/starship/starship/commit/7b851fc30e109213e911eec38460315872f1ae59))
+* **shell:** allow distinguishing between pwsh and powershell ([#5478](https://github.com/starship/starship/issues/5478)) ([d7a34b4](https://github.com/starship/starship/commit/d7a34b45f88ced63bd79a582c14a6b2f8ebd9544))
+
+
+### Bug Fixes
+
+* **bash:** unbound variable error with STARSHIP_PREEXEC_READY ([#5438](https://github.com/starship/starship/issues/5438)) ([8168c21](https://github.com/starship/starship/commit/8168c21293de8118af1e95778b1eee8f26cd6d6a))
+* **docker_context:** ignore unix domain socket path from Docker Context ([#5616](https://github.com/starship/starship/issues/5616)) ([a910e09](https://github.com/starship/starship/commit/a910e094f77ba6d67349a561e5e9780becfe823a)), closes [#5548](https://github.com/starship/starship/issues/5548)
+* **git_status:** Avoid printing error on missing stash ref ([#5434](https://github.com/starship/starship/issues/5434)) ([00d3dc8](https://github.com/starship/starship/commit/00d3dc86a21d11aede96f81ffbe49babe487984e))
+* **git:** prevent `core.fsmonitor` from executing external commands ([#3981](https://github.com/starship/starship/issues/3981)) ([03278e4](https://github.com/starship/starship/commit/03278e4de4f540cbd0e346e9df878c7e6798d757))
+* **install:** do not use curl installed through snap ([#5442](https://github.com/starship/starship/issues/5442)) ([0e73817](https://github.com/starship/starship/commit/0e738175c57d5789350b996b69c5713aac03835e))
+* **pastel-powerline:** remove `$path` from docker-context module format string ([#5534](https://github.com/starship/starship/issues/5534)) ([6abc83d](https://github.com/starship/starship/commit/6abc83decdf176842985b4daa5b09771c6b93415))
+
+
+### Performance Improvements
+
+* **git_status:** avoid running in bare repos ([#5581](https://github.com/starship/starship/issues/5581)) ([ac4a839](https://github.com/starship/starship/commit/ac4a83910357d69950ca304a3fb41d1d39bc3592))
+* Skip unnecessary indirection in starship init zsh ([#5322](https://github.com/starship/starship/issues/5322)) ([5ca8daa](https://github.com/starship/starship/commit/5ca8daacd4ce936f97170f814a780b34bfaa486e))
+
 ## [1.16.0](https://github.com/starship/starship/compare/v1.15.0...v1.16.0) (2023-07-30)
 
 

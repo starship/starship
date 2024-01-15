@@ -34,6 +34,11 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     // Return None if not in git repository
     let repo = context.get_repo().ok()?;
 
+    if repo.kind.is_bare() {
+        log::debug!("This is a bare repository, git_status is not applicable");
+        return None;
+    }
+
     if let Some(git_status) = git_status_wsl(context, &config) {
         if git_status.is_empty() {
             return None;
@@ -251,11 +256,12 @@ fn get_repo_status(
 fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
     let repo = repo.open();
     let reference = match repo.try_find_reference("refs/stash") {
-        Ok(Some(reference)) => reference,
+        // Only proceed if the found reference has the expected name (not tags/refs/stash etc.)
+        Ok(Some(reference)) if reference.name().as_bstr() == b"refs/stash".as_slice() => reference,
         // No stash reference found
-        Ok(None) => return Some(0),
+        Ok(_) => return Some(0),
         Err(err) => {
-            log::warn!("Error finding stash reference: {err}");
+            log::debug!("Error finding stash reference: {err}");
             return None;
         }
     };
@@ -267,7 +273,7 @@ fn get_stashed_count(repo: &context::Repo) -> Option<usize> {
             Some(0)
         }
         Err(err) => {
-            log::warn!("Error getting stash log: {err}");
+            log::debug!("Error getting stash log: {err}");
             None
         }
     }
@@ -1162,6 +1168,21 @@ mod tests {
         let expected = format_output("DUA");
 
         assert_eq!(actual, expected);
+
+        repo_dir.close()
+    }
+
+    #[test]
+    fn doesnt_generate_git_status_for_bare_repo() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::GitBare)?;
+
+        create_added(repo_dir.path())?;
+
+        let actual = ModuleRenderer::new("git_status")
+            .path(repo_dir.path())
+            .collect();
+
+        assert_eq!(None, actual);
 
         repo_dir.close()
     }

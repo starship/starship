@@ -27,7 +27,7 @@ impl<'a> Default for RLangConfig<'a> {
             symbol: "📐 ",
             disabled: false,
             detect_extensions: vec!["R", "Rd", "Rmd", "Rproj", "Rsx"],
-            detect_files: vec![".Rprofile"],
+            detect_files: vec!["DESCRIPTION"],
             detect_folders: vec![".Rproj.user"],
         }
     }

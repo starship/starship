@@ -391,7 +391,7 @@ pub fn format_duration(duration: &Duration) -> String {
 /// Return the modules from $all that are not already in the list
 fn all_modules_uniq(module_list: &BTreeSet<String>) -> Vec<String> {
     let mut prompt_order: Vec<String> = Vec::new();
-    for module in PROMPT_ORDER.iter() {
+    for module in PROMPT_ORDER {
         if !module_list.contains(*module) {
             prompt_order.push(String::from(*module))
         }
@@ -452,7 +452,7 @@ fn load_formatter_and_modules<'a>(context: &'a Context) -> (StringFormatter<'a>,
     let modules = [&lf, &rf]
         .into_iter()
         .flatten()
-        .flat_map(|f| f.get_variables())
+        .flat_map(VariableHolder::get_variables)
         .collect();
 
     let main_formatter = match context.target {
@@ -507,8 +507,10 @@ pub fn preset_command(name: Option<Preset>, output: Option<PathBuf>, list: bool)
 fn preset_list() -> String {
     Preset::value_variants()
         .iter()
-        .map(|v| format!("{}\n", v.0))
-        .collect()
+        .fold(String::new(), |mut output, b| {
+            let _ = writeln!(output, "{}", b.0);
+            output
+        })
 }
 
 #[cfg(test)]

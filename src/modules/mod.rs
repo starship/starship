@@ -16,6 +16,7 @@ mod daml;
 mod dart;
 mod deno;
 mod directory;
+mod direnv;
 mod docker_context;
 mod dotnet;
 mod elixir;
@@ -89,6 +90,7 @@ mod zig;
 
 #[cfg(feature = "battery")]
 mod battery;
+mod typst;
 
 #[cfg(feature = "battery")]
 pub use self::battery::{BatteryInfoProvider, BatteryInfoProviderImpl};
@@ -121,6 +123,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "dart" => dart::module(context),
             "deno" => deno::module(context),
             "directory" => directory::module(context),
+            "direnv" => direnv::module(context),
             "docker_context" => docker_context::module(context),
             "dotnet" => dotnet::module(context),
             "elixir" => elixir::module(context),
@@ -185,6 +188,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "sudo" => sudo::module(context),
             "terraform" => terraform::module(context),
             "time" => time::module(context),
+            "typst" => typst::module(context),
             "crystal" => crystal::module(context),
             "username" => username::module(context),
             "vlang" => vlang::module(context),
@@ -238,6 +242,7 @@ pub fn description(module: &str) -> &'static str {
         "dart" => "The currently installed version of Dart",
         "deno" => "The currently installed version of Deno",
         "directory" => "The current working directory",
+        "direnv" => "The currently applied direnv file",
         "docker_context" => "The current docker context",
         "dotnet" => "The relevant version of the .NET Core SDK for the current directory",
         "elixir" => "The currently installed versions of Elixir and OTP",
@@ -303,6 +308,7 @@ pub fn description(module: &str) -> &'static str {
         "swift" => "The currently installed version of Swift",
         "terraform" => "The currently selected terraform workspace and version",
         "time" => "The current local time",
+        "typst" => "The current installed version of typst",
         "username" => "The active user's username",
         "vagrant" => "The currently installed version of Vagrant",
         "vcsh" => "The currently active VCSH repository",

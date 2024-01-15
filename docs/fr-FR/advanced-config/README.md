@@ -205,7 +205,7 @@ Certains shells peuvent gérer une invite de commande à droite, sur la même li
 
 Note: l’invite à droite est une seule ligne, sur la même ligne que l’entrée. Pour aligner à droite les modules au-dessus de la ligne d’entrée d’une invite multiligne, voir le [module `fill`](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` est actuellement supporté pour les shells suivants : elvish, fish, zsh, xonsh, cmd, nushell.
 
 ### Exemple
 

@@ -310,6 +310,13 @@ fn get_dart_pub_version(context: &Context, config: &PackageConfig) -> Option<Str
     format_version(raw_version, config.version_format)
 }
 
+fn get_rlang_version(context: &Context, config: &PackageConfig) -> Option<String> {
+    let file_contents = context.read_file_from_pwd("DESCRIPTION")?;
+    let re = Regex::new(r"(?m)^Version:\s*(?P<version>.*$)").unwrap();
+    let caps = re.captures(&file_contents)?;
+    format_version(&caps["version"], config.version_format)
+}
+
 fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
     let package_version_fn: Vec<fn(&Context, &PackageConfig) -> Option<String>> = vec![
         get_cargo_version,
@@ -330,6 +337,7 @@ fn get_version(context: &Context, config: &PackageConfig) -> Option<String> {
         get_sbt_version,
         get_daml_project_version,
         get_dart_pub_version,
+        get_rlang_version,
     ];
 
     package_version_fn.iter().find_map(|f| f(context, config))
@@ -1402,6 +1410,19 @@ environment:
         project_dir.close()
     }
 
+    #[test]
+    fn test_extract_rlang_version() -> io::Result<()> {
+        let config_name = "DESCRIPTION";
+        let config_content = "
+Package: starship
+Version: 1.0.0
+Title: Starship
+";
+        let project_dir = create_project_dir()?;
+        fill_config(&project_dir, config_name, Some(config_content))?;
+        expect_output(&project_dir, Some("v1.0.0"), None);
+        project_dir.close()
+    }
     fn create_project_dir() -> io::Result<TempDir> {
         tempfile::tempdir()
     }

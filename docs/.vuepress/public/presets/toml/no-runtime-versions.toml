@@ -109,6 +109,9 @@ format = 'via [$symbol]($style)'
 [solidity]
 format = 'via [$symbol]($style)'
 
+[typst]
+format = 'via [$symbol]($style)'
+
 [swift]
 format = 'via [$symbol]($style)'
 

@@ -287,10 +287,10 @@ mod tests {
             "{}{}",
             expect_added
                 .map(|added| format!("{} ", expect_added_style.paint(format!("+{added}"))))
-                .unwrap_or(String::from("")),
+                .unwrap_or_default(),
             expect_deleted
                 .map(|deleted| format!("{} ", expect_deleted_style.paint(format!("-{deleted}"))))
-                .unwrap_or(String::from("")),
+                .unwrap_or_default(),
         ));
         assert_eq!(expected, actual);
     }

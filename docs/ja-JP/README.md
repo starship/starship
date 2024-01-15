@@ -50,12 +50,12 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    #### パッケージマネージャー経由でインストール
 
-   [ Homebrew ](https://brew.sh/)の場合：
+   [ Homebrew](https://brew.sh/)を使用する
 
    ```sh
    brew install starship
    ```
-   With [Winget](https://github.com/microsoft/winget-cli):
+   [Winget](https://github.com/microsoft/winget-cli)を使用する
 
    ```powershell
    winget install starship
@@ -153,7 +153,7 @@ description: Starship はミニマルで、非常に高速で、カスタマイ�
 
    :::
 
-   Nushellの環境ファイルの最後に以下を追記してください ( `$nu.env-path` を実行してください):
+   そして、Nushellの設定ファイルの最後に以下を追加してください（ `$nu.config-path` を実行してください）:
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
