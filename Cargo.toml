@@ -50,7 +50,7 @@ dunce = "1.0.4"
 gethostname = "0.4.3"
 # default feature restriction addresses https://github.com/starship/starship/issues/4251
 gix = { version = "0.57.1", default-features = false, features = ["max-performance-safe", "revision"] }
-gix-features = { version = "0.37.1", optional = true }
+gix-features = { version = "0.37.2", optional = true }
 indexmap = { version = "2.1.0", features = ["serde"] }
 log = { version = "0.4.20", features = ["std"] }
 # notify-rust is optional (on by default) because the crate doesn't currently build for darwin with nix
