@@ -4564,6 +4564,7 @@ These modules will be shown if any of the following conditions are met:
 - The current directory contains a file whose name is in `detect_files`
 - The current directory contains a directory whose name is in `detect_folders`
 - The current directory contains a file whose extension is in `detect_extensions`
+- The buffer contains a keyword which is in `detect_keywords` (zsh only)
 - The `when` command returns 0
 - The current Operating System (std::env::consts::OS) matches with `os` field if defined.
 
@@ -4613,6 +4614,7 @@ Format strings can also contain shell specific prompt sequences, e.g.
 | `detect_files`      | `[]`                            | The files that will be searched in the working directory for a match.                                                                                                                                                                                                                         |
 | `detect_folders`    | `[]`                            | The directories that will be searched in the working directory for a match.                                                                                                                                                                                                                   |
 | `detect_extensions` | `[]`                            | The extensions that will be searched in the working directory for a match.                                                                                                                                                                                                                    |
+| `detect_keywords`   | `[]`                            | The keywords that will matched against the content of the command line buffer.                                                                                                                                                                                                                |
 | `symbol`            | `''`                            | The symbol used before displaying the command output.                                                                                                                                                                                                                                         |
 | `style`             | `'bold green'`                  | The style for the module.                                                                                                                                                                                                                                                                     |
 | `format`            | `'[$symbol($output )]($style)'` | The format for the module.                                                                                                                                                                                                                                                                    |
