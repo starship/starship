@@ -41,19 +41,37 @@ pub fn module<'a>(name: &str, context: &'a Context) -> Option<Module<'a>> {
     // Note: Forward config if `Module` ends up needing `config`
     let mut module = Module::new(&format!("custom.{name}"), config.description, None);
 
-    let mut is_match = context
-        .try_begin_scan()?
-        .set_extensions(&config.detect_extensions)
-        .set_files(&config.detect_files)
-        .set_folders(&config.detect_folders)
-        .is_match();
+    let have_scan_config = [
+        &config.detect_files,
+        &config.detect_folders,
+        &config.detect_extensions,
+    ]
+    .into_iter()
+    .any(|v| !v.is_empty());
 
-    if !is_match {
-        is_match = match config.when {
+    let is_module_project = have_scan_config.then(|| {
+        context.try_begin_scan().map_or(false, |scanner| {
+            scanner
+                .set_files(&config.detect_files)
+                .set_folders(&config.detect_folders)
+                .set_extensions(&config.detect_extensions)
+                .is_match()
+        })
+    });
+
+    let has_keyword_config = !config.detect_keywords.is_empty();
+    let is_module_command = has_keyword_config.then(|| {
+        config
+            .detect_keywords
+            .iter()
+            .any(|keyword| context.properties.keywords.contains(&keyword.to_string()))
+    });
+
+    if !is_module_project.unwrap_or(false) && !is_module_command.unwrap_or(false) {
+        let is_match = match config.when {
             Either::First(b) => b,
             Either::Second(s) => exec_when(s, &config, context),
         };
-
         if !is_match {
             return None;
         }
@@ -378,6 +396,39 @@ mod tests {
         assert_eq!(render_cmd("echo hello")?, Some("hello".into()));
         assert_eq!(render_cmd("echo 강남스타일")?, Some("강남스타일".into()));
         Ok(())
+    }
+
+    #[test]
+    fn detect_keywords_contains_keyword() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
+            .keywords(vec!["test".into()])
+            .config(toml::toml! {
+                [custom.test]
+                format = "test"
+                detect_keywords = ["test"]
+            })
+            .collect();
+        let expected = Some("test".to_string());
+        assert_eq!(expected, actual);
+        dir.close()
+    }
+
+    #[test]
+    fn detect_keywords_not_contains_keyword() -> io::Result<()> {
+        let dir = tempfile::tempdir()?;
+        let actual = ModuleRenderer::new("custom.test")
+            .path(dir.path())
+            .config(toml::toml! {
+                [custom.test]
+                format = "test"
+                detect_keywords = ["test"]
+            })
+            .collect();
+        let expected = None;
+        assert_eq!(expected, actual);
+        dir.close()
     }
 
     #[test]

@@ -132,6 +132,11 @@ impl<'a> ModuleRenderer<'a> {
         self
     }
 
+    pub fn keywords(mut self, keywords: Vec<String>) -> Self {
+        self.context.properties.keywords = keywords;
+        self
+    }
+
     #[cfg(feature = "battery")]
     pub fn battery_info_provider(
         mut self,
