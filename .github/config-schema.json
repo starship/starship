@@ -6142,6 +6142,13 @@
             "type": "string"
           }
         },
+        "detect_keywords": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "os": {
           "type": [
             "string",
