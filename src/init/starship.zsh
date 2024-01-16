@@ -76,27 +76,30 @@ else
     zle -N zle-keymap-select starship_zle-keymap-select-wrapped;
 fi
 
-# Set a function to redraw the prompt when the line is redrawn
-starship_zle-line-pre-redraw() {
-    # Only redraw if there are no more keys queued
-    if [[ $KEYS_QUEUED_COUNT -eq 0 && $PENDING -eq 0 ]]; then
-        local KEYWORDS=${(z)BUFFER}
-        zle reset-prompt
-    fi
-}
-
-## Check for existing line-pre-redraw widget.
-# zle-line-pre-redraw is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
-__starship_preserved_zle_line_pre_redraw=${widgets[zle-line-pre-redraw]#user:}
-if [[ -z $__starship_preserved_zle_line_pre_redraw ]]; then
-    zle -N zle-line-pre-redraw starship_zle-line-pre-redraw;
-else
-    # Define a wrapper fn to call the original widget fn and then Starship's.
-    starship_zle-line-pre-redraw-wrapped() {
-        $__starship_preserved_zle_line_pre_redraw "$@";
-        starship_zle-line-pre-redraw "$@";
+# If the detect keywords feature is enabled, set up a function to watch for buffer changes
+if [[ ::ENABLE_DETECT_KEYWORDS:: = 1 ]]; then
+    # Set a function to redraw the prompt when the line is redrawn
+    starship_zle-line-pre-redraw() {
+        # Only redraw if there are no more keys queued
+        if [[ $KEYS_QUEUED_COUNT -eq 0 && $PENDING -eq 0 ]]; then
+            local KEYWORDS=${(z)BUFFER}
+            zle reset-prompt
+        fi
     }
-    zle -N zle-line-pre-redraw starship_zle-line-pre-redraw-wrapped;
+
+    ## Check for existing line-pre-redraw widget.
+    # zle-line-pre-redraw is a special widget so it'll be "user:fnName" or nothing. Let's get fnName only.
+    __starship_preserved_zle_line_pre_redraw=${widgets[zle-line-pre-redraw]#user:}
+    if [[ -z $__starship_preserved_zle_line_pre_redraw ]]; then
+        zle -N zle-line-pre-redraw starship_zle-line-pre-redraw;
+    else
+        # Define a wrapper fn to call the original widget fn and then Starship's.
+        starship_zle-line-pre-redraw-wrapped() {
+            $__starship_preserved_zle_line_pre_redraw "$@";
+            starship_zle-line-pre-redraw "$@";
+        }
+        zle -N zle-line-pre-redraw starship_zle-line-pre-redraw-wrapped;
+    fi
 fi
 
 __starship_get_time && STARSHIP_START_TIME=$STARSHIP_CAPTURED_TIME
