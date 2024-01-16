@@ -1155,20 +1155,20 @@ The `direnv` module shows the status of the current rc file if one is present. T
 
 ### Opciones
 
-| Opción              | Predeterminado                         | Descripción                                           |
-| ------------------- | -------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | El formato del módulo.                                |
-| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
-| `style`             | `'bold orange'`                        | El estilo del módulo.                                 |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
-| `detect_extensions` | `[]`                                   | Qué extensiones deberían activar este módulo.         |
-| `detect_files`      | `['.envrc']`                           | Qué nombres de archivo deberían activar este módulo.  |
-| `detect_folders`    | `[]`                                   | Qué carpetas deberían activar este módulo.            |
-| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
-| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
-| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
-| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
-| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+| Opción              | Predeterminado                         | Descripción                                                       |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | El formato del módulo.                                            |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.             |
+| `style`             | `'bold orange'`                        | El estilo del módulo.                                             |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                                     |
+| `detect_extensions` | `[]`                                   | Qué extensiones deberían activar este módulo.                     |
+| `detect_files`      | `['.envrc']`                           | Qué nombres de archivo deberían activar este módulo.              |
+| `detect_folders`    | `[]`                                   | Qué carpetas deberían activar este módulo.                        |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.                 |
+| `not_allowed_msg`   | `'no permitido'`                       | El mensaje que se muestra cuando un archivo rc no está permitido. |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.                  |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.                  |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.              |
 
 ### Variables
 
