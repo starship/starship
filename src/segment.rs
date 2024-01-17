@@ -93,6 +93,7 @@ mod fill_seg_tests {
 pub enum Segment {
     Text(TextSegment),
     Fill(FillSegment),
+    Control(&'static str),
     LineTerm,
 }
 
@@ -126,11 +127,18 @@ impl Segment {
         })
     }
 
+    /// Creates a new control segment
+    /// Control segments are used to output ANSI control sequences.
+    /// The width of a control segment is always 0.
+    pub fn control(value: &'static str) -> Self {
+        Self::Control(value)
+    }
+
     pub fn style(&self) -> Option<Style> {
         match self {
             Self::Fill(fs) => fs.style,
             Self::Text(ts) => ts.style,
-            Self::LineTerm => None,
+            Self::LineTerm | Self::Control(_) => None,
         }
     }
 
@@ -146,7 +154,7 @@ impl Segment {
                     ts.style = style
                 }
             }
-            Self::LineTerm => {}
+            Self::LineTerm | Self::Control(_) => {}
         }
     }
 
@@ -155,6 +163,7 @@ impl Segment {
             Self::Fill(fs) => &fs.value,
             Self::Text(ts) => &ts.value,
             Self::LineTerm => LINE_TERMINATOR_STRING,
+            Self::Control(c) => c,
         }
     }
 
@@ -164,6 +173,7 @@ impl Segment {
             Self::Fill(fs) => fs.ansi_string(None),
             Self::Text(ts) => ts.ansi_string(),
             Self::LineTerm => AnsiString::from(LINE_TERMINATOR_STRING),
+            Self::Control(c) => AnsiString::from(*c),
         }
     }
 
@@ -171,7 +181,7 @@ impl Segment {
         match self {
             Self::Fill(fs) => fs.value.width_graphemes(),
             Self::Text(ts) => ts.value.width_graphemes(),
-            Self::LineTerm => 0,
+            Self::LineTerm | Self::Control(_) => 0,
         }
     }
 }
