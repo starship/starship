@@ -32,7 +32,11 @@ starship_preexec() {
 # Will be run before the prompt is drawn
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
-    STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
+    if [[ ${BLE_ATTACHED-} ]]; then
+        STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${BLE_PIPESTATUS[@]})
+    else
+        STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
+    fi
     if [[ "${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
         STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
     fi
