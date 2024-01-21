@@ -7,6 +7,8 @@ use super::{Context, Module, ModuleConfig};
 use crate::configs::direnv::DirenvConfig;
 use crate::formatter::StringFormatter;
 
+use serde::Deserialize;
+
 /// Creates a module with the current direnv rc
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
     let mut module = context.new_module("direnv");
@@ -24,7 +26,8 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let direnv_status = &context.exec_cmd("direnv", &["status"])?.stdout;
+    // the `--json` flag is silently ignored for direnv versions <2.33.0
+    let direnv_status = &context.exec_cmd("direnv", &["status", "--json"])?.stdout;
     let state = match DirenvState::from_str(direnv_status) {
         Ok(s) => s,
         Err(e) => {
@@ -81,6 +84,22 @@ impl FromStr for DirenvState {
     type Err = Cow<'static, str>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match serde_json::from_str::<RawDirenvState>(s) {
+            Ok(raw) => Ok(DirenvState {
+                rc_path: raw.state.found_rc.path,
+                allowed: raw.state.found_rc.allowed.try_into()?,
+                loaded: matches!(
+                    raw.state.loaded_rc.allowed.try_into()?,
+                    AllowStatus::Allowed
+                ),
+            }),
+            Err(_) => DirenvState::from_lines(s),
+        }
+    }
+}
+
+impl DirenvState {
+    fn from_lines(s: &str) -> Result<Self, Cow<'static, str>> {
         let mut rc_path = PathBuf::new();
         let mut allowed = None;
         let mut loaded = true;
@@ -127,12 +146,63 @@ impl FromStr for AllowStatus {
     }
 }
 
+impl TryFrom<u8> for AllowStatus {
+    type Error = Cow<'static, str>;
+
+    fn try_from(u: u8) -> Result<Self, Self::Error> {
+        match u {
+            0 => Ok(Self::Allowed),
+            1 => Ok(Self::NotAllowed),
+            2 => Ok(Self::Denied),
+            _ => Err(Cow::from("unknown integer allow status")),
+        }
+    }
+}
+
+#[derive(Debug, Deserialize)]
+struct RawDirenvState {
+    pub state: State,
+}
+
+#[derive(Debug, Deserialize)]
+struct State {
+    #[serde(rename = "foundRC")]
+    pub found_rc: RCStatus,
+    #[serde(rename = "loadedRC")]
+    pub loaded_rc: RCStatus,
+}
+
+#[derive(Debug, Deserialize)]
+struct RCStatus {
+    pub allowed: u8,
+    pub path: PathBuf,
+}
+
 #[cfg(test)]
 mod tests {
+    use serde_json::json;
+
     use crate::test::ModuleRenderer;
     use crate::utils::CommandOutput;
     use std::io;
     use std::path::Path;
+    #[test]
+    fn folder_without_rc_files_pre_2_33() {
+        let renderer = ModuleRenderer::new("direnv")
+            .config(toml::toml! {
+                [direnv]
+                disabled = false
+            })
+            .cmd(
+                "direnv status --json",
+                Some(CommandOutput {
+                    stdout: status_cmd_output_without_rc(),
+                    stderr: String::default(),
+                }),
+            );
+
+        assert_eq!(None, renderer.collect());
+    }
     #[test]
     fn folder_without_rc_files() {
         let renderer = ModuleRenderer::new("direnv")
@@ -141,9 +211,9 @@ mod tests {
                 disabled = false
             })
             .cmd(
-                "direnv status",
+                "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_without_rc(),
+                    stdout: status_cmd_output_without_rc_json(),
                     stderr: String::default(),
                 }),
             );
@@ -164,7 +234,7 @@ mod tests {
             })
             .path(dir.path())
             .cmd(
-                "direnv status",
+                "direnv status --json",
                 Some(CommandOutput {
                     stdout: status_cmd_output_with_rc(dir.path(), false, "0", true),
                     stderr: String::default(),
@@ -192,9 +262,9 @@ mod tests {
             })
             .path(dir.path())
             .cmd(
-                "direnv status",
+                "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), false, "0", false),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), 1, 0),
                     stderr: String::default(),
                 }),
             );
@@ -220,7 +290,7 @@ mod tests {
             })
             .path(dir.path())
             .cmd(
-                "direnv status",
+                "direnv status --json",
                 Some(CommandOutput {
                     stdout: status_cmd_output_with_rc(dir.path(), true, "0", true),
                     stderr: String::default(),
@@ -245,9 +315,9 @@ mod tests {
             })
             .path(dir.path())
             .cmd(
-                "direnv status",
+                "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), true, "0", false),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 0),
                     stderr: String::default(),
                 }),
             );
@@ -273,7 +343,7 @@ mod tests {
             })
             .path(dir.path())
             .cmd(
-                "direnv status",
+                "direnv status --json",
                 Some(CommandOutput {
                     stdout: status_cmd_output_with_rc(dir.path(), true, "2", true),
                     stderr: String::default(),
@@ -298,9 +368,9 @@ mod tests {
             })
             .path(dir.path())
             .cmd(
-                "direnv status",
+                "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), true, "1", false),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 1),
                     stderr: String::default(),
                 }),
             );
@@ -326,9 +396,9 @@ mod tests {
             })
             .path(dir.path())
             .cmd(
-                "direnv status",
+                "direnv status --json",
                 Some(CommandOutput {
-                    stdout: status_cmd_output_with_rc(dir.path(), true, "2", false),
+                    stdout: status_cmd_output_with_rc_json(dir.path(), 0, 2),
                     stderr: String::default(),
                 }),
             );
@@ -353,6 +423,19 @@ whitelist.exact map[]
 No .envrc or .env loaded
 No .envrc or .env found",
         )
+    }
+    fn status_cmd_output_without_rc_json() -> String {
+        json!({
+            "config": {
+                "ConfigDir": config_dir(),
+                "SelfPath": self_path(),
+            },
+            "state": {
+                "foundRC": null,
+                "loadedRC": null,
+            }
+        })
+        .to_string()
     }
     fn status_cmd_output_with_rc(
         dir: impl AsRef<Path>,
@@ -402,5 +485,43 @@ Found RC allowed {state}
 Found RC allowPath /home/test/.local/share/direnv/allow/abcd
 "#
         )
+    }
+    fn status_cmd_output_with_rc_json(dir: impl AsRef<Path>, loaded: u8, allowed: u8) -> String {
+        let rc_path = dir.as_ref().join(".envrc");
+        let rc_path = rc_path.to_string_lossy();
+
+        json!({
+            "config": {
+                "ConfigDir": config_dir(),
+                "SelfPath": self_path(),
+            },
+            "state": {
+                "foundRC": {
+                    "allowed": allowed,
+                    "path": rc_path,
+                },
+                "loadedRC": {
+                    "allowed": loaded,
+                    "path": rc_path,
+                }
+            }
+        })
+        .to_string()
+    }
+    #[cfg(windows)]
+    fn config_dir() -> &'static str {
+        r"C:\\Users\\test\\AppData\\Local\\direnv"
+    }
+    #[cfg(not(windows))]
+    fn config_dir() -> &'static str {
+        "/home/test/.config/direnv"
+    }
+    #[cfg(windows)]
+    fn self_path() -> &'static str {
+        r"C:\\Program Files\\direnv\\direnv.exe"
+    }
+    #[cfg(not(windows))]
+    fn self_path() -> &'static str {
+        "/usr/bin/direnv"
     }
 }
