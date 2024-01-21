@@ -80,6 +80,26 @@ starship init fish | source
 enable_transience
 ```
 
+## TransientPrompt and TransientRightPrompt in Bash
+
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+
+The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and this option has a non-empty value, the prompt specified by `PS1` is erased on leaving the current command line. If the value contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in the value and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+
+Make the following changes to your `~/.bashrc` to customize what gets displayed on the left and on the right:
+
+- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+
+```bash
+bleopt prompt_ps1_final="$(starship module character)"
+```
+
+- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. 例えば、直前のコマンドを実行した時刻を表示するには次のようにします。
+
+```bash
+bleopt prompt_rps1_final="$(starship module time)"
+```
+
 ## Cmdのカスタムの事前プロンプトおよび事前実行コマンド
 
 Clinkはプロンプト表示前と実行前にCmd shellコマンドを実行するための非常に柔軟なAPIを提供します。 It is fairly simple to use with Starship. Make the following changes to your `starship.lua` file as per your requirements:
@@ -205,7 +225,9 @@ Invoke-Expression (&starship init powershell)
 
 注意: 右プロンプトは入力の場所に続く単一の行です。 To right align modules above the input line in a multi-line prompt, see the [`fill` module](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework should be installed in order to use right prompt in bash.
 
 ### 設定例
 
