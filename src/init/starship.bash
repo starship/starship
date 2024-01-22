@@ -92,7 +92,7 @@ if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
     blehook PRECMD!='starship_precmd'
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-elif [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
+elif [[ "${__bp_imported:-}" == "defined" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
     # bash-preexec needs a single function--wrap the args into a closure and pass
     starship_preexec_all(){ starship_preexec "$_"; }
     preexec_functions+=(starship_preexec_all)
@@ -113,7 +113,7 @@ else
 
     # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
-    if [[ -z "$PROMPT_COMMAND" ]]; then
+    if [[ -z "${PROMPT_COMMAND-}" ]]; then
         PROMPT_COMMAND="starship_precmd"
     elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
         # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
