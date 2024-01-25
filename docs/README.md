@@ -138,7 +138,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ::: warning
 
    This will change in the future.
-   Only Nushell v0.73+ is supported.
+   Only Nushell v0.78+ is supported.
 
    :::
 
@@ -151,8 +151,9 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
    #### Xonsh
 
    Add the following to the end of `~/.xonshrc`:

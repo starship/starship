@@ -30,7 +30,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
 ### 先決要求
 
-- 安裝至少一個 [Nerd Font](https://www.nerdfonts.com/) 字體，並在終端中啟用。
+- 安裝 [Nerd Font](https://www.nerdfonts.com/) 字型，並在終端機中啟用。
 
 ### 快速安裝
 
@@ -149,7 +149,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    ::: warning
 
-   This will change in the future. Only Nushell v0.73+ is supported.
+   This will change in the future. Only Nushell v0.78+ is supported.
 
    :::
 
@@ -162,8 +162,9 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
    And add the following to the end of your Nushell configuration (find it by running `$nu.config-path`):
 
    ```sh
-   source ~/.cache/starship/init.nu
+   use ~/.cache/starship/init.nu
    ```
+
 
    #### Xonsh
 
@@ -178,7 +179,7 @@ description: Starship 是適合任何 shell 的最小、極速、高度客製化
 
    #### 命令提示字元
 
-   You need to use [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) with Cmd. Add the following to a file `starship.lua` and place this file in Clink scripts directory:
+   您需要在 Cmd 中使用 [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+)。 Add the following to a file `starship.lua` and place this file in Clink scripts directory:
 
    ```lua
    -- starship.lua

@@ -1,17 +1,17 @@
-[Return to Presets](./README.md#bracketed-segments)
+[Повернутися до Шаблонів](./README.md#bracketed-segments)
 
-# Bracketed Segments Preset
+# Bracketed Segments
 
-This preset changes the format of all the built-in modules to show their segment in brackets instead of using the default Starship wording ("via", "on", etc.).
+Шаблон змінює формат всіх вбудованих модулів для показу їх частин в дужках замість використання стандартних в Starship слів ("via", "on", і т.д.).
 
-![Screenshot of Bracketed Segments preset](/presets/img/bracketed-segments.png)
+![Скріншот шаблона Bracketed Segments](/presets/img/bracketed-segments.png)
 
-### Configuration
+### Налаштування
 
 ```sh
-starship preset bracketed-segments > ~/.config/starship.toml
+starship preset bracketed-segments -o ~/.config/starship.toml
 ```
 
-[Click to download TOML](/presets/toml/bracketed-segments.toml)
+[Натисніть, щоб завантажити TOML](/presets/toml/bracketed-segments.toml)
 
 <<< @/.vuepress/public/presets/toml/bracketed-segments.toml

@@ -18,6 +18,7 @@ pub struct KubernetesConfig<'a> {
     pub detect_extensions: Vec<&'a str>,
     pub detect_files: Vec<&'a str>,
     pub detect_folders: Vec<&'a str>,
+    pub contexts: Vec<KubernetesContextConfig<'a>>,
 }
 
 impl<'a> Default for KubernetesConfig<'a> {
@@ -32,6 +33,23 @@ impl<'a> Default for KubernetesConfig<'a> {
             detect_extensions: vec![],
             detect_files: vec![],
             detect_folders: vec![],
+            contexts: vec![],
         }
     }
+}
+
+#[derive(Clone, Deserialize, Serialize, Default)]
+#[cfg_attr(
+    feature = "config-schema",
+    derive(schemars::JsonSchema),
+    schemars(deny_unknown_fields)
+)]
+#[serde(default)]
+pub struct KubernetesContextConfig<'a> {
+    pub context_pattern: &'a str,
+    pub user_pattern: Option<&'a str>,
+    pub symbol: Option<&'a str>,
+    pub style: Option<&'a str>,
+    pub context_alias: Option<&'a str>,
+    pub user_alias: Option<&'a str>,
 }

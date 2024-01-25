@@ -47,7 +47,7 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
                     } else {
                         return None;
                     };
-                    Some(c_compiler).map(Cow::Borrowed).map(Ok)
+                    Some(Ok(Cow::Borrowed(c_compiler)))
                 }
                 "version" => {
                     let c_compiler_info = &c_compiler_info.deref().as_ref()?.stdout;

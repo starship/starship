@@ -21,7 +21,7 @@ starship_preexec() {
     local PREV_LAST_ARG=$1
 
     # Avoid restarting the timer for commands in the same pipeline
-    if [ "$STARSHIP_PREEXEC_READY" = "true" ]; then
+    if [ "${STARSHIP_PREEXEC_READY:-}" = "true" ]; then
         STARSHIP_PREEXEC_READY=false
         STARSHIP_START_TIME=$(::STARSHIP:: time)
     fi
@@ -33,9 +33,24 @@ starship_preexec() {
 starship_precmd() {
     # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
+    if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
+        STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
+    fi
     if [[ "${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
         STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
     fi
+
+    # Due to a bug in certain Bash versions, any external process launched
+    # inside $PROMPT_COMMAND will be reported by `jobs` as a background job:
+    #
+    #   [1]  42135 Done                    /bin/echo
+    #
+    # This is a workaround - we run `jobs` once to clear out any completed jobs
+    # first, and then we run it again and count the number of jobs.
+    #
+    # More context: https://github.com/starship/starship/issues/5159
+    # Original bug: https://lists.gnu.org/archive/html/bug-bash/2022-07/msg00117.html
+    jobs &>/dev/null
 
     local NUM_JOBS=0
     # Evaluate the number of jobs before running the preserved prompt command, so that tools
@@ -52,21 +67,30 @@ starship_precmd() {
 
     eval "$_PRESERVED_PROMPT_COMMAND"
 
+    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}")
     # Prepare the timer data, if needed.
     if [[ $STARSHIP_START_TIME ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
-        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS" --cmd-duration=$STARSHIP_DURATION)"
+        ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
         unset STARSHIP_START_TIME
-    else
-        PS1="$(::STARSHIP:: prompt --terminal-width="$COLUMNS" --status=$STARSHIP_CMD_STATUS --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="$NUM_JOBS")"
+    fi
+    PS1="$(::STARSHIP:: prompt "${ARGS[@]}")"
+    if [[ ${BLE_ATTACHED-} ]]; then
+        local nlns=${PS1//[!$'\n']}
+        bleopt prompt_rps1="$nlns$(::STARSHIP:: prompt --right "${ARGS[@]}")"
     fi
     STARSHIP_PREEXEC_READY=true  # Signal that we can safely restart the timer
 }
 
+# If the user appears to be using https://github.com/akinomyoga/ble.sh,
+# then hook our functions into their framework.
+if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
+    blehook PREEXEC!='starship_preexec "$_"'
+    blehook PRECMD!='starship_precmd'
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-if [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
+elif [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
     # bash-preexec needs a single function--wrap the args into a closure and pass
     starship_preexec_all(){ starship_preexec "$_"; }
     preexec_functions+=(starship_preexec_all)

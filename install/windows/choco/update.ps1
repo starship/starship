@@ -26,10 +26,13 @@ $nuspec_file.Save("./starship.install.nuspec")
 
 # Have metapackage depend on starship.install
 $nuspec_file.package.metadata.id = "starship"
+
+$deps = $nuspec_file.createelement("dependencies")
 $dep = $nuspec_file.createelement("dependency")
 $dep.SetAttribute("id", "starship.install")
 $dep.SetAttribute("version", "[$versionNumber]")
-$nuspec_file.package.metadata.dependencies.AppendChild($dep)
+$deps.AppendChild($dep)
+$nuspec_file.package.metadata.AppendChild($deps)
 $nuspec_file.Save("./starship.nuspec")
 
 $url_x86_64_zip = "https://github.com/starship/starship/releases/download/$version/starship-x86_64-pc-windows-msvc.zip"
@@ -85,9 +88,9 @@ foreach ($install_type in @('portable', 'install')) {
 }
 
 if ($null -ne $ENV:PUSH_TOKEN) {
-    choco push starship.portable.$versionNumber.nupkg --key $ENV:PUSH_TOKEN
-    choco push starship.install.$versionNumber.nupkg --key $ENV:PUSH_TOKEN
-    choco push starship.$versionNumber.nupkg --key $ENV:PUSH_TOKEN
+    choco push starship.portable.$versionNumber.nupkg --key $ENV:PUSH_TOKEN --source="'https://push.chocolatey.org/'"
+    choco push starship.install.$versionNumber.nupkg --key $ENV:PUSH_TOKEN --source="'https://push.chocolatey.org/'"
+    choco push starship.$versionNumber.nupkg --key $ENV:PUSH_TOKEN --source="'https://push.chocolatey.org/'"
 }
 else {
     Write-Host "No API key provided, skipping push"

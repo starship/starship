@@ -24,14 +24,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          profile: minimal
           components: rustfmt
 
       - name: Build | Format
@@ -46,24 +43,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          override: true
-          profile: minimal
           components: clippy
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
 
       - name: Build | Lint
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: clippy
-          args: --workspace --locked --all-targets --all-features -- -D clippy::all
+        uses: giraffate/clippy-action@94e9bd8deab2618756ec5380f12eb35bcb0a88ca
 
   # Ensure that the project could be successfully compiled
   cargo_check:
@@ -71,14 +62,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -93,14 +80,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -115,14 +98,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -141,14 +120,10 @@ jobs:
       pull-requests: write
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -157,7 +132,7 @@ jobs:
         run: cargo run --locked --features config-schema -- config-schema > .github/config-schema.json
 
       - name: Check | Detect Changes
-        uses: reviewdog/action-suggester@v1.6.0
+        uses: reviewdog/action-suggester@v1.10.0
         with:
           tool_name: starship config-schema
           filter_mode: nofilter
@@ -181,16 +156,14 @@ jobs:
       RUSTFLAGS: ${{ matrix.rustflags || '' }}
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Install all the required dependencies for testing
       - name: Setup | Rust
-        uses: actions-rs/toolchain@v1.0.7
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.rust }}
           components: llvm-tools-preview
-          profile: minimal
-          override: true
 
       - name: Setup | Cache
         uses: Swatinem/rust-cache@v2
@@ -228,10 +201,7 @@ jobs:
       - name: Build | Installer [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
-        uses: actions-rs/cargo@v1.0.3
-        with:
-          command: wix
-          args: --dbg-build -v --nocapture -I install/windows/main.wxs
+        run: cargo wix --dbg-build -v --nocapture -I install/windows/main.wxs
 
       - name: Build | Chocolatey Package [Windows]
         continue-on-error: true
