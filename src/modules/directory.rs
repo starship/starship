@@ -862,11 +862,10 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&to_fish_style(
-                100,
-                &dir.to_slash_lossy(),
-                ""
-            ), MAIN_SEPARATOR_STR))
+            Color::Cyan.bold().paint(convert_path_sep(
+                &to_fish_style(100, &dir.to_slash_lossy(), ""),
+                MAIN_SEPARATOR_STR
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -914,10 +913,13 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
-                "{}/thrusters/rocket",
-                to_fish_style(1, &dir.to_slash_lossy(), "/thrusters/rocket")
-            ), MAIN_SEPARATOR_STR))
+            Color::Cyan.bold().paint(convert_path_sep(
+                &format!(
+                    "{}/thrusters/rocket",
+                    to_fish_style(1, &dir.to_slash_lossy(), "/thrusters/rocket")
+                ),
+                MAIN_SEPARATOR_STR
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -1038,10 +1040,13 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
-                "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
-            ), MAIN_SEPARATOR_STR))
+            Color::Cyan.bold().paint(convert_path_sep(
+                &format!(
+                    "{}/above-repo/rocket-controls/src/meters/fuel-gauge",
+                    to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
+                ),
+                MAIN_SEPARATOR_STR
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -1069,10 +1074,13 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
-                "{}/rocket-controls/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
-            ), MAIN_SEPARATOR_STR))
+            Color::Cyan.bold().paint(convert_path_sep(
+                &format!(
+                    "{}/rocket-controls/src/meters/fuel-gauge",
+                    to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                ),
+                MAIN_SEPARATOR_STR
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -1249,10 +1257,13 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
-                "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
-            ), MAIN_SEPARATOR_STR))
+            Color::Cyan.bold().paint(convert_path_sep(
+                &format!(
+                    "{}/above-repo/rocket-controls-symlink/src/meters/fuel-gauge",
+                    to_fish_style(1, &tmp_dir.path().to_slash_lossy(), "")
+                ),
+                MAIN_SEPARATOR_STR
+            ))
         ));
 
         assert_eq!(expected, actual);
@@ -1286,10 +1297,13 @@ mod tests {
             .collect();
         let expected = Some(format!(
             "{} ",
-            Color::Cyan.bold().paint(convert_path_sep(&format!(
-                "{}/rocket-controls-symlink/src/meters/fuel-gauge",
-                to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
-            ), MAIN_SEPARATOR_STR))
+            Color::Cyan.bold().paint(convert_path_sep(
+                &format!(
+                    "{}/rocket-controls-symlink/src/meters/fuel-gauge",
+                    to_fish_style(1, &tmp_dir.path().join("above-repo").to_slash_lossy(), "")
+                ),
+                MAIN_SEPARATOR_STR
+            ))
         ));
 
         assert_eq!(expected, actual);
