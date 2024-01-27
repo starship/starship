@@ -36,7 +36,7 @@ starship_precmd() {
     if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
         STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
     fi
-    if [[ "${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
+    if [[ -n "${BP_PIPESTATUS-}" ]] && [[ "${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
         STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
     fi
 
@@ -65,11 +65,13 @@ starship_precmd() {
     # command pipeline, which may rely on it.
     _starship_set_return "$STARSHIP_CMD_STATUS"
 
-    eval "$_PRESERVED_PROMPT_COMMAND"
+    if [[ -n "${_PRESERVED_PROMPT_COMMAND-}" ]]; then
+        eval "$_PRESERVED_PROMPT_COMMAND"
+    fi
 
     local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}")
     # Prepare the timer data, if needed.
-    if [[ $STARSHIP_START_TIME ]]; then
+    if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
         STARSHIP_DURATION=$((STARSHIP_END_TIME - STARSHIP_START_TIME))
         ARGS+=( --cmd-duration="${STARSHIP_DURATION}")
@@ -90,7 +92,7 @@ if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
     blehook PRECMD!='starship_precmd'
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-elif [[ "${__bp_imported:-}" == "defined" || $preexec_functions || $precmd_functions ]]; then
+elif [[ "${__bp_imported:-}" == "defined" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
     # bash-preexec needs a single function--wrap the args into a closure and pass
     starship_preexec_all(){ starship_preexec "$_"; }
     preexec_functions+=(starship_preexec_all)
@@ -111,7 +113,7 @@ else
 
     # Finally, prepare the precmd function and set up the start time. We will avoid to
     # add multiple instances of the starship function and keep other user functions if any.
-    if [[ -z "$PROMPT_COMMAND" ]]; then
+    if [[ -z "${PROMPT_COMMAND-}" ]]; then
         PROMPT_COMMAND="starship_precmd"
     elif [[ "$PROMPT_COMMAND" != *"starship_precmd"* ]]; then
         # Appending to PROMPT_COMMAND breaks exit status ($?) checking.
