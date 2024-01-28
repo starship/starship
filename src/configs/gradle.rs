@@ -24,7 +24,7 @@ impl<'a> Default for GradleConfig<'a> {
         GradleConfig {
             format: "via [$symbol($version )]($style)",
             version_format: "v${raw}",
-            symbol: "🅶 ",
+            symbol: " ",
             style: "bold bright-cyan",
             disabled: false,
             recursive: false,
