@@ -36,7 +36,7 @@ starship_precmd() {
     if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
         STARSHIP_PIPE_STATUS=("${BLE_PIPESTATUS[@]}")
     fi
-    if [[ -n "${BP_PIPESTATUS-}" ]] && [[ "${#BP_PIPESTATUS[@]}" -gt "${#STARSHIP_PIPE_STATUS[@]}" ]]; then
+    if [[ -n "${BP_PIPESTATUS-}" ]] && [[ "${#BP_PIPESTATUS[@]}" -gt 0 ]]; then
         STARSHIP_PIPE_STATUS=(${BP_PIPESTATUS[@]})
     fi
 
@@ -92,7 +92,7 @@ if [[ ${BLE_VERSION-} && _ble_version -ge 400 ]]; then
     blehook PRECMD!='starship_precmd'
 # If the user appears to be using https://github.com/rcaloras/bash-preexec,
 # then hook our functions into their framework.
-elif [[ "${__bp_imported:-}" == "defined" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
+elif [[ -n "${bash_preexec_imported:-}" || -n "${__bp_imported:-}" || -n "${preexec_functions-}" || -n "${precmd_functions-}" ]]; then
     # bash-preexec needs a single function--wrap the args into a closure and pass
     starship_preexec_all(){ starship_preexec "$_"; }
     preexec_functions+=(starship_preexec_all)
