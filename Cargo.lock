@@ -1647,9 +1647,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.1.0"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d530e1a18b1cb4c484e6e34556a0d948706958449fca0cab753d649f2bce3d1f"
+checksum = "cf2a4f498956c7723dc280afc6a37d0dec50b39a29e232c6187ce4503703e8c2"
 dependencies = [
  "equivalent",
  "hashbrown 0.14.3",
@@ -2587,7 +2587,7 @@ checksum = "45a28f4c49489add4ce10783f7911893516f15afe45d015608d41faca6bc4d29"
 dependencies = [
  "dyn-clone",
  "indexmap 1.9.3",
- "indexmap 2.1.0",
+ "indexmap 2.2.0",
  "schemars_derive",
  "serde",
  "serde_json",
@@ -2850,7 +2850,7 @@ dependencies = [
  "gix-features",
  "guess_host_triple",
  "home",
- "indexmap 2.1.0",
+ "indexmap 2.2.0",
  "log",
  "mockall",
  "nix 0.27.1",
@@ -3140,7 +3140,7 @@ version = "0.8.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a1a195ec8c9da26928f773888e0742ca3ca1040c6cd859c919c9f59c1954ab35"
 dependencies = [
- "indexmap 2.1.0",
+ "indexmap 2.2.0",
  "serde",
  "serde_spanned",
  "toml_datetime",
@@ -3162,7 +3162,7 @@ version = "0.19.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1b5bb770da30e5cbfde35a2d7b9b8a2c4b8ef89548a7a6aeab5c9a576e3e7421"
 dependencies = [
- "indexmap 2.1.0",
+ "indexmap 2.2.0",
  "toml_datetime",
  "winnow",
 ]
@@ -3173,7 +3173,7 @@ version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d34d383cd00a163b4a5b85053df514d45bc330f6de7737edfe0a93311d1eaa03"
 dependencies = [
- "indexmap 2.1.0",
+ "indexmap 2.2.0",
  "serde",
  "serde_spanned",
  "toml_datetime",
