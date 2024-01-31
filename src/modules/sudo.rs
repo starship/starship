@@ -4,6 +4,8 @@ use super::{Context, Module, ModuleConfig};
 
 use crate::configs::sudo::SudoConfig;
 use crate::formatter::StringFormatter;
+#[cfg(target_os = "windows")]
+use crate::modules::utils::sudo::is_sudo;
 
 /// Creates a module with sudo credential cache status
 pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
@@ -18,10 +20,21 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let is_sudo_cached = context.exec_cmd("sudo", &["-n", "true"]).is_some();
+    #[cfg(not(target_os = "windows"))]
+    {
+        let is_sudo_cached = context.exec_cmd("sudo", &["-n", "true"]).is_some();
 
-    if !is_sudo_cached {
-        return None;
+        if !is_sudo_cached {
+            return None;
+        }
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        is_sudo().ok().and_then(|f| match f {
+            true => Some(()),
+            false => None,
+        })?
     }
 
     let parsed = StringFormatter::new(config.format).and_then(|formatter| {
