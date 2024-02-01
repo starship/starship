@@ -1,6 +1,6 @@
-# Migrating to v0.45.0
+# 遷移版本至 v0.45.0
 
-Starship v0.45.0 is a release containing breaking changes, in preparation for the big v1.0.0. We have made some major changes around how configuration is done on the prompt, to allow for a greater degree of customization.
+Starship v0.45.0 包含了破壞性的變更，這個變更是為了大的 v1.0.0. 做準備 我們圍繞著如何在提示上完成設定進行了一些重大的更改，以允許更大程度的客製化。
 
 This guide is intended to walk you through the breaking changes.
 
