@@ -80,21 +80,21 @@ starship init fish | source
 enable_transience
 ```
 
-## TransientPrompt and TransientRightPrompt in Bash
+## TransientPrompt та TransientRightPrompt в Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+[Ble.sh](https://github.com/akinomyoga/ble.sh) дозволяє замінювати попередньо надрукований командний рядок іншим рядком. Це корисно у випадках, коли вся інформація з командного рядка не потрібна. Для увімкнення цього додайте до `~/.bashrc` рядок `bleopt prompt_ps1_transient=<value>`:
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and this option has a non-empty value, the prompt specified by `PS1` is erased on leaving the current command line. If the value contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in the value and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+\<value\> тут  – це розділений двокрапкою список `always`, `same-dir` та `trim`. Якщо `prompt_ps1_final` порожній і цей параметр має не пусте значення, командний рядок, вказаний у `PS1` буде стертий при виході з поточного командного рядка. Якщо значення містить поле `trim`, тільки останній рядок багаторядкового `PS1` буде збережений, а інші вилучені. В іншому випадку командний рядок буде встановлено перестворено, якщо вказано `PS1=`. Коли поле `same-dir` міститься у значені та поточна тека є відмінною від останньої теки у попередньому виводі командного рядка, параметр `prompt_ps1_transient` не враховується.
 
-Make the following changes to your `~/.bashrc` to customize what gets displayed on the left and on the right:
+Зробіть наступні зміни у `~/.bashrc`, щоб налаштувати, що показується ліворуч і праворуч:
 
-- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+- Для налаштування того, чим замінюється ліва частина вводу, налаштуйте параметр `prompt_ps1_final`. Наприклад, щоб показати тут модуль Starship `character`, вам потрібно
 
 ```bash
 bleopt prompt_ps1_final="$(starship module character)"
 ```
 
-- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. Наприклад, щоб показати час, коли була запущена остання команда, ви можете зробити
+- Для налаштування того, чим замінюється права частина вводу, налаштуйте параметр `prompt_rps1_final`. Наприклад, щоб показати час, коли була запущена остання команда, ви можете зробити
 
 ```bash
 bleopt prompt_rps1_final="$(starship module time)"
@@ -225,9 +225,9 @@ Invoke-Expression (&starship init powershell)
 
 Примітка: командний рядок праворуч – це один рядок, що знаходиться праворуч у рядку вводу. Щоб вирівняти модулі праворуч над рядком введення в багаторядковому запиті, перегляньте модуль [`fill`](/config/#fill).
 
-`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+`right_format` наразі підтримується для таких оболонок: elvish, fish, zsh, xonsh, cmd, nushell, bash.
 
-Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework should be installed in order to use right prompt in bash.
+Примітка: фреймворк [Ble.sh](https://github.com/akinomyoga/ble.sh) має бути встановлений для того, щоб використовувати розташування командного рядка в bash праворуч.
 
 ### Приклад
 
