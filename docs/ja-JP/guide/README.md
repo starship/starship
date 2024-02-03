@@ -358,7 +358,7 @@ use ~/.cache/starship/init.nu
 <details>
 <summary>PowerShell</summary>
 
-そして、Nushellの設定ファイルの最後に以下を追加してください（ `$PROFILE.config-path` を実行してください）:
+PowerShellの設定ファイルの最後に以下を追加してください（ `$PROFILE.config-path` を実行してください）:
 
 ```powershell
 Invoke-Expression (&starship init powershell)
