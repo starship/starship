@@ -90,6 +90,7 @@ mod zig;
 
 #[cfg(feature = "battery")]
 mod battery;
+mod jj;
 mod typst;
 
 #[cfg(feature = "battery")]
@@ -149,6 +150,7 @@ pub fn handle<'a>(module: &str, context: &'a Context) -> Option<Module<'a>> {
             "hg_branch" => hg_branch::module(context),
             "hostname" => hostname::module(context),
             "java" => java::module(context),
+            "jj_status" => jj::module(context),
             "jobs" => jobs::module(context),
             "julia" => julia::module(context),
             "kotlin" => kotlin::module(context),
@@ -267,6 +269,7 @@ pub fn description(module: &str) -> &'static str {
         "hg_branch" => "The active branch and topic of the repo in your current directory",
         "hostname" => "The system hostname",
         "java" => "The currently installed version of Java",
+        "jj_status" => "The status of the current jj repo",
         "jobs" => "The current number of jobs running",
         "julia" => "The currently installed version of Julia",
         "kotlin" => "The currently installed version of Kotlin",

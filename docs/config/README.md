@@ -275,6 +275,7 @@ $directory\
 $vcsh\
 $fossil_branch\
 $fossil_metrics\
+$jj_status\
 $git_branch\
 $git_commit\
 $git_state\
@@ -2443,6 +2444,78 @@ then the module will also show when there are 0 jobs running.
 symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
+```
+
+## JJ
+
+The `jj` module reflects the current status of your Jujutsu repository. It shows
+different symbols and formats depending on the state of your work in progress,
+including changes, commits, branch, and more.
+
+The `jj` module is only shown when you're in a directory that is part of a
+Jujutsu repository.
+
+The default functionality includes displaying:
+
+- current change id
+- current commit id
+
+::: warning
+
+This module requires the Jujutsu command line tool to be installed and
+accessible in your system's PATH for it to function correctly.
+
+:::
+
+### Options
+
+| Option                   | Default                                                                                                                                                                                                                                                             | Description                                                                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`                 | `'🍐 '`                                                                                                                                                                                                                                                             | The string used before displaying the repository status.                                                                        |
+| `no_description_symbol`  | `' 📝'`                                                                                                                                                                                                                                                             | Is displayed when change description is empty.                                                                                  |
+| `divergent_symbol`       | `' 💥'`                                                                                                                                                                                                                                                             | Is displayed when commit is in [divergent](https://github.com/martinvonz/jj/blob/main/docs/glossary.md#divergent-change) state. |
+| `format`                 | `'\[$symbol[$change_id_prefix]($change_id_prefix_style)[$change_id_suffix]($change_id_suffix_style) [$commit_id_prefix]($commit_id_prefix_style)[$commit_id_suffix]($commit_id_suffix_style) on [$branch]($branch_style)$no_description_symbol$divergent_symbol\]'` | The format for rendering the module. `symbol`, `style`, and other variables can be included.                                    |
+| `disabled`               | `false`                                                                                                                                                                                                                                                             | Disables the `jj` module.                                                                                                       |
+| `change_id_prefix_style` | `'purple'`                                                                                                                                                                                                                                                          | The style for uniq part of change id.                                                                                           |
+| `change_id_suffix_style` | `'bright-black'`                                                                                                                                                                                                                                                    | The style for the rest of change id.                                                                                            |
+| `commit_id_prefix_style` | `'blue'`                                                                                                                                                                                                                                                            | The style for unique part of commit hash.                                                                                       |
+| `commit_id_suffix_style` | `'bright-black'`                                                                                                                                                                                                                                                    | The style for the rest of commit hash.                                                                                          |
+| `truncation_length`      | `8`                                                                                                                                                                                                                                                                 | Truncates the commit and change id to `truncation_length` characters.                                                           |
+| `branch_style`           | `'purple'`                                                                                                                                                                                                                                                          | The style for the branch name.                                                                                                  |
+
+### Variables
+
+```
+[🍐 rnyynlop 811ca1a4 on push-rnyynlopprno*]
+```
+
+| Variable           | Example   | Description                                                       |
+| ------------------ | --------- | ----------------------------------------------------------------- |
+| `symbol`           | `🍐`      | Mirrors the value of option `symbol`.                             |
+| `change_id_prefix` | `r`       | Unique part of the change id, styled by `change_id_prefix_style`. |
+| `change_id_suffix` | `nyynlop` | The rest of the change id, styled by `change_id_suffix_style`.    |
+| `commit_id_prefix` | `811`     | Unique part of the commit id, styled by `commit_id_prefix_style`. |
+| `commit_id_suffix` | `ca1a4`   | The rest of the commit id, styled by `commit_id_suffix_style`.    |
+| `branch`           | `master`  | The current branch name.                                          |
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj]
+symbol = "🍐 "
+style = "purple"
+format = "\\[$symbol[$change_id_prefix]($change_id_prefix_style)[$change_id_suffix]($change_id_suffix_style) [$commit_id_prefix]($commit_id_prefix_style)[$commit_id_suffix]($commit_id_suffix_style) on [$branch]($branch_style)$no_description_symbol$divergent_symbol\\]"
+disabled = false
+change_id_prefix_style = "purple"
+change_id_suffix_style = "bright-black"
+commit_id_prefix_style = "blue"
+commit_id_suffix_style = "bright-black"
+truncation_length = 8
+no_description_symbol = "📝"
+divergent_symbol = "💥"
+branch_style = "purple"
 ```
 
 ## Julia

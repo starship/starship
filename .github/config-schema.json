@@ -868,6 +868,26 @@
         }
       ]
     },
+    "jj_status": {
+      "default": {
+        "branch_style": "purple",
+        "change_id_prefix_style": "purple",
+        "change_id_suffix_style": "bright-black",
+        "commit_id_prefix_style": "blue",
+        "commit_id_suffix_style": "bright-black",
+        "disabled": false,
+        "divergent_symbol": " 💥",
+        "format": "\\[$symbol[$change_id_prefix]($change_id_prefix_style)[$change_id_suffix]($change_id_suffix_style) [$commit_id_prefix]($commit_id_prefix_style)[$commit_id_suffix]($commit_id_suffix_style) on [$branch]($branch_style)$no_description_symbol$divergent_symbol\\]",
+        "no_description_symbol": " 📝",
+        "symbol": "🍐 ",
+        "truncation_length": 8
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/JJConfig"
+        }
+      ]
+    },
     "jobs": {
       "default": {
         "disabled": false,
@@ -3935,6 +3955,58 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "JJConfig": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "default": "🍐 ",
+          "type": "string"
+        },
+        "format": {
+          "default": "\\[$symbol[$change_id_prefix]($change_id_prefix_style)[$change_id_suffix]($change_id_suffix_style) [$commit_id_prefix]($commit_id_prefix_style)[$commit_id_suffix]($commit_id_suffix_style) on [$branch]($branch_style)$no_description_symbol$divergent_symbol\\]",
+          "type": "string"
+        },
+        "disabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "change_id_prefix_style": {
+          "default": "purple",
+          "type": "string"
+        },
+        "change_id_suffix_style": {
+          "default": "bright-black",
+          "type": "string"
+        },
+        "commit_id_prefix_style": {
+          "default": "blue",
+          "type": "string"
+        },
+        "commit_id_suffix_style": {
+          "default": "bright-black",
+          "type": "string"
+        },
+        "truncation_length": {
+          "default": 8,
+          "type": "integer",
+          "format": "uint8",
+          "minimum": 0.0
+        },
+        "no_description_symbol": {
+          "default": " 📝",
+          "type": "string"
+        },
+        "divergent_symbol": {
+          "default": " 💥",
+          "type": "string"
+        },
+        "branch_style": {
+          "default": "purple",
+          "type": "string"
         }
       },
       "additionalProperties": false
