@@ -1,6 +1,6 @@
 # Advanced Installation
 
-To install starship, you need to do two things:
+Untuk memasang starship, ada dua hal yang perlu anda lakukan:
 
 1. Get the **starship** binary onto your computer
 1. Tell your shell to use the starship binary as its prompt by modifying its init scripts
