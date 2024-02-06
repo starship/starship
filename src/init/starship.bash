@@ -31,6 +31,12 @@ starship_preexec() {
 
 # Will be run before the prompt is drawn
 starship_precmd() {
+    KEYMAP="$(bind -V 2> /dev/null | grep keymap)"
+    STARSHIP_KEYMAP="viins"
+    if [[ "$KEYMAP" =~ "vi" ]] && [[ ! "$KEYMAP" =~ "vi-insert" ]]; then
+        STARSHIP_KEYMAP="vicmd"
+    fi
+
     # Save the status, because commands in this pipeline will change $?
     STARSHIP_CMD_STATUS=$? STARSHIP_PIPE_STATUS=(${PIPESTATUS[@]})
     if [[ ${BLE_ATTACHED-} && ${#BLE_PIPESTATUS[@]} -gt 0 ]]; then
@@ -69,7 +75,7 @@ starship_precmd() {
         eval "$_PRESERVED_PROMPT_COMMAND"
     fi
 
-    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}")
+    local -a ARGS=(--terminal-width="${COLUMNS}" --status="${STARSHIP_CMD_STATUS}" --pipestatus="${STARSHIP_PIPE_STATUS[*]}" --jobs="${NUM_JOBS}" --keymap="$STARSHIP_KEYMAP")
     # Prepare the timer data, if needed.
     if [[ -n "${STARSHIP_START_TIME-}" ]]; then
         STARSHIP_END_TIME=$(::STARSHIP:: time)
