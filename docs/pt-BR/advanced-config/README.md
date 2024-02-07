@@ -84,14 +84,14 @@ enable_transience
 
 O framework [Ble.sh](https://github.com/akinomyoga/ble.sh) permite substituir o prompt anteriormente impresso por strings personalizadas. Isso é útil em casos onde nem sempre todas as informações do prompt são necessárias. Para habilitar isso, coloque em `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
-O \<value\> aqui é uma lista separada por dois pontos de `sempre`, `same-dir` e `recorte`. Quando `prompt_ps1_final` está vazia e esta opção tem um valor não-vazio, o prompt especificado pelo `PS1` é apagado ao sair da linha de comando atual. Se o valor contém um campo `aparar`, apenas a última linha de multilinha `PS1` é preservada e as outras linhas são apagadas. Caso contrário, a linha de comando será redesenhada como se `PS1=` fosse especificado. Quando um campo `same-dir` está contido no valor e o diretório de trabalho atual é diferente do diretório final de a linha de comando anterior, esta opção `prompt_ps1_transient` é ignorada.
+O \<value\> aqui é uma lista separada por dois pontos de `always`, `same-dir` e `trim`. Quando `prompt_ps1_final` está vazio e esta opção tem um valor não-vazio, o prompt especificado pelo `PS1` é apagado ao sair da linha de comando atual. Se o valor contém um campo `trim`, apenas a última linha de multilinha `PS1` é preservada e as outras linhas são apagadas. Caso contrário, a linha de comando será redesenhada como se `PS1=` fosse especificado. Quando um campo `same-dir` está contido no valor e o diretório de trabalho atual difere do diretório final da linha de comando anterior, esta opção `prompt_ps1_transient` é ignorada.
 
-Faça as seguintes alterações no seu `~/.bashrc` para personalizar o que é exibido a à esquerda e à direita:
+Faça as seguintes alterações no seu `~/.bashrc` para personalizar o que é exibido à esquerda e à direita:
 
-- Para personalizar o que o lado esquerdo do valor de entrada é substituído, configure a opção `prompt_ps1_final` Ble.sh. Por exemplo, para exibir o caractere `da Starship` aqui, você faria
+- Para personalizar o que o lado esquerdo do valor de entrada é substituído, configure a opção `prompt_ps1_final` Ble.sh. Por exemplo, para exibir o caractere da `Starship` aqui, você faria
 
 ```bash
-bleopt prompt_ps1_final="$(caractere módulo starship)"
+bleopt prompt_ps1_final="$(starship module character)"
 ```
 
 - Para personalizar o que o lado direito de entrada é substituído, configure a opção `prompt_rps1_final` Ble.sh. Por exemplo, para exibir o momento em que o último comando foi iniciado, você faria
