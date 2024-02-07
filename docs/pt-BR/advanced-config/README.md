@@ -80,21 +80,21 @@ starship init fish | source
 enable_transience
 ```
 
-## TransientPrompt and TransientRightPrompt in Bash
+## TransientPrompt e TransientRightPrompt em Bash
 
-The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework allows you to replace the previous-printed prompt with custom strings. This is useful in cases where all the prompt information is not always needed. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+O framework [Ble.sh](https://github.com/akinomyoga/ble.sh) permite substituir o prompt anteriormente impresso por strings personalizadas. Isso é útil em casos onde nem sempre todas as informações do prompt são necessárias. Para habilitar isso, coloque em `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
 
-The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and this option has a non-empty value, the prompt specified by `PS1` is erased on leaving the current command line. If the value contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in the value and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+O \<value\> aqui é uma lista separada por dois pontos de `sempre`, `same-dir` e `recorte`. Quando `prompt_ps1_final` está vazia e esta opção tem um valor não-vazio, o prompt especificado pelo `PS1` é apagado ao sair da linha de comando atual. Se o valor contém um campo `aparar`, apenas a última linha de multilinha `PS1` é preservada e as outras linhas são apagadas. Caso contrário, a linha de comando será redesenhada como se `PS1=` fosse especificado. Quando um campo `same-dir` está contido no valor e o diretório de trabalho atual é diferente do diretório final de a linha de comando anterior, esta opção `prompt_ps1_transient` é ignorada.
 
-Make the following changes to your `~/.bashrc` to customize what gets displayed on the left and on the right:
+Faça as seguintes alterações no seu `~/.bashrc` para personalizar o que é exibido a à esquerda e à direita:
 
-- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+- Para personalizar o que o lado esquerdo do valor de entrada é substituído, configure a opção `prompt_ps1_final` Ble.sh. Por exemplo, para exibir o caractere `da Starship` aqui, você faria
 
 ```bash
-bleopt prompt_ps1_final="$(starship module character)"
+bleopt prompt_ps1_final="$(caractere módulo starship)"
 ```
 
-- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. Por exemplo, para exibir o momento em que o último comando foi iniciado, você faria
+- Para personalizar o que o lado direito de entrada é substituído, configure a opção `prompt_rps1_final` Ble.sh. Por exemplo, para exibir o momento em que o último comando foi iniciado, você faria
 
 ```bash
 bleopt prompt_rps1_final="$(starship module time)"
