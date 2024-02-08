@@ -502,6 +502,9 @@ pub fn wrap_seq_for_shell(
     escape_begin: char,
     escape_end: char,
 ) -> String {
+    if ![Shell::Bash, Shell::Tcsh, Shell::Zsh].contains(&shell) {
+        return ansi;
+    }
     const BASH_BEG: &str = "\u{5c}\u{5b}"; // \[
     const BASH_END: &str = "\u{5c}\u{5d}"; // \]
     const ZSH_BEG: &str = "\u{25}\u{7b}"; // %{
