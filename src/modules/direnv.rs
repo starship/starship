@@ -85,7 +85,7 @@ impl FromStr for DirenvState {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match serde_json::from_str::<RawDirenvState>(s) {
-            Ok(raw) => Ok(DirenvState {
+            Ok(raw) => Ok(Self {
                 rc_path: raw.state.found_rc.path,
                 allowed: raw.state.found_rc.allowed.try_into()?,
                 loaded: matches!(
@@ -93,7 +93,7 @@ impl FromStr for DirenvState {
                     AllowStatus::Allowed
                 ),
             }),
-            Err(_) => DirenvState::from_lines(s),
+            Err(_) => Self::from_lines(s),
         }
     }
 }
@@ -225,7 +225,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let rc_path = dir.path().join(".envrc");
 
-        std::fs::File::create(&rc_path)?.sync_all()?;
+        std::fs::File::create(rc_path)?.sync_all()?;
 
         let renderer = ModuleRenderer::new("direnv")
             .config(toml::toml! {
@@ -242,7 +242,7 @@ mod tests {
             );
 
         assert_eq!(
-            Some(format!("direnv not loaded/allowed ")),
+            Some("direnv not loaded/allowed ".to_string()),
             renderer.collect()
         );
 
@@ -281,7 +281,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let rc_path = dir.path().join(".envrc");
 
-        std::fs::File::create(&rc_path)?.sync_all()?;
+        std::fs::File::create(rc_path)?.sync_all()?;
 
         let renderer = ModuleRenderer::new("direnv")
             .config(toml::toml! {
@@ -297,7 +297,10 @@ mod tests {
                 }),
             );
 
-        assert_eq!(Some(format!("direnv loaded/allowed ")), renderer.collect());
+        assert_eq!(
+            Some("direnv loaded/allowed ".to_string()),
+            renderer.collect()
+        );
 
         dir.close()
     }
@@ -334,7 +337,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let rc_path = dir.path().join(".envrc");
 
-        std::fs::File::create(&rc_path)?.sync_all()?;
+        std::fs::File::create(rc_path)?.sync_all()?;
 
         let renderer = ModuleRenderer::new("direnv")
             .config(toml::toml! {
@@ -350,7 +353,10 @@ mod tests {
                 }),
             );
 
-        assert_eq!(Some(format!("direnv loaded/denied ")), renderer.collect());
+        assert_eq!(
+            Some("direnv loaded/denied ".to_string()),
+            renderer.collect()
+        );
 
         dir.close()
     }
@@ -359,7 +365,7 @@ mod tests {
         let dir = tempfile::tempdir()?;
         let rc_path = dir.path().join(".envrc");
 
-        std::fs::File::create(&rc_path)?.sync_all()?;
+        std::fs::File::create(rc_path)?.sync_all()?;
 
         let renderer = ModuleRenderer::new("direnv")
             .config(toml::toml! {
@@ -376,7 +382,7 @@ mod tests {
             );
 
         assert_eq!(
-            Some(format!("direnv loaded/not allowed ")),
+            Some("direnv loaded/not allowed ".to_string()),
             renderer.collect()
         );
 
