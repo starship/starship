@@ -46,7 +46,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Logging
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. This, however can be changed using the `STARSHIP_CACHE` environment variable:
+在預設值下 starship 會記錄警告以及錯誤至`~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`，其中 session key 對應至您的終端機實例 不過，可以使用 `STARSHIP_CACHE` 環境變數來變更此設定:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -98,7 +98,7 @@ format = "☺\\☻ "
 format = '\[\$\] '
 ```
 
-When using line breaks, multi-line declarations can be used. For example, if you want to print a `$` symbol on a new line, the following values for `format` are equivalent:
+使用換行符號時，可以使用多行宣告 舉例來說，如果你想在一個新行印出 `$` 符號，則下列的 `format` 值具有相同效果
 
 ```toml
 # with literal string
@@ -115,7 +115,7 @@ format = """
 format = "\n\\$"
 ```
 
-In multiline basic strings, newlines can be used for formatting without being present in the value by escaping them.
+在多行基本字串中，換行符號可用於格式化，而無需透過跳脫字元出現在值中。
 
 ```toml
 format = """
@@ -340,7 +340,7 @@ $shell\
 $character"""
 ```
 
-If you just want to extend the default format, you can use `$all`; modules you explicitly add to the format will not be duplicated. Eg.
+如果你只是想要擴充預設的格式，可以使用 `$all`，您明確地新增到格式中的模組將不會重複。 Eg.
 
 ```toml
 # Move the directory to the second line
@@ -365,7 +365,7 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 
 ### 選項
 
-| Option              | 預設                                                                    | 說明                                                                                                          |
+| 選項                  | 預設                                                                    | 說明                                                                                                          |
 | ------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `format`            | `'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'` | The format for the module.                                                                                  |
 | `symbol`            | `'☁️ '`                                                               | 顯示在目前 AWS 配置之前的符號。                                                                                          |
@@ -376,7 +376,7 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 | `disabled`          | `false`                                                               | 停用 `AWS` 模組。                                                                                                |
 | `force_display`     | `false`                                                               | If `true` displays info even if `credentials`, `credential_process` or `sso_start_url` have not been setup. |
 
-### Variables
+### 變數
 
 | 變數        | 範例               | 說明                                          |
 | --------- | ---------------- | ------------------------------------------- |
@@ -388,9 +388,9 @@ When using [aws-sso-cli](https://github.com/synfinatic/aws-sso-cli) the profile 
 
 *: This variable can only be used as a part of a style string
 
-### Examples
+### 範例
 
-#### Display everything
+#### 顯示所有
 
 ```toml
 # ~/.config/starship.toml
@@ -406,7 +406,7 @@ us-east-1 = 'va'
 CompanyGroupFrobozzOnCallAccess = 'Frobozz'
 ```
 
-#### Display region
+#### 顯示 region
 
 ```toml
 # ~/.config/starship.toml
@@ -420,7 +420,7 @@ ap-southeast-2 = 'au'
 us-east-1 = 'va'
 ```
 
-#### Display profile
+#### 顯示 profile
 
 ```toml
 # ~/.config/starship.toml
@@ -447,9 +447,9 @@ The `azure` module shows the current Azure Subscription. This is based on showin
 | `disabled`             | `true`                                   | Disables the `azure` module.                                                          |
 | `subscription_aliases` | `{}`                                     | Table of subscription name aliases to display in addition to Azure subscription name. |
 
-### Examples
+### 範例
 
-#### Display Subscription Name
+#### 顯示訂閱名稱
 
 ```toml
 # ~/.config/starship.toml
@@ -461,7 +461,7 @@ symbol = '󰠅 '
 style = 'blue bold'
 ```
 
-#### Display Username
+#### 顯示使用者名稱
 
 ```toml
 # ~/.config/starship.toml
@@ -473,7 +473,7 @@ symbol = "󰠅 "
 style = "blue bold"
 ```
 
-#### Display Subscription Name Alias
+#### 顯示訂閱名稱別名
 
 ```toml
 # ~/.config/starship.toml
@@ -568,7 +568,7 @@ The `buf` module shows the currently installed version of [Buf](https://buf.buil
 | `style`             | `'bold blue'`                                   | 這個模組的風格。                                              |
 | `disabled`          | `false`                                         | Disables the `elixir` module.                         |
 
-### Variables
+### 變數
 
 | 變數        | 範例       | 說明                                   |
 | --------- | -------- | ------------------------------------ |
@@ -708,7 +708,7 @@ By default it only changes color. If you also want to change its shape take a lo
 | ------ | -- | -------------------------------------------------------------------------------------------------------- |
 | symbol |    | A mirror of either `success_symbol`, `error_symbol`, `vimcmd_symbol` or `vimcmd_replace_one_symbol` etc. |
 
-### Examples
+### 範例
 
 #### With custom error shape
 
@@ -1645,7 +1645,7 @@ When the module is enabled it will always be active, unless `detect_env_vars` ha
 
 *: This variable can only be used as a part of a style string
 
-### Examples
+### 範例
 
 #### Display account and project
 
@@ -2216,7 +2216,7 @@ format = 'via [⎈ $version](bold white) '
 
 *: This variable can only be used as a part of a style string
 
-### Examples
+### 範例
 
 #### Always show the hostname
 
@@ -3721,7 +3721,7 @@ The `shell` module shows an indicator for currently used shell.
 
 *: This variable can only be used as a part of a style string
 
-### Examples
+### 範例
 
 ```toml
 # ~/.config/starship.toml
