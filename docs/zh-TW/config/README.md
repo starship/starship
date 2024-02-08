@@ -128,7 +128,7 @@ line2
 """
 ```
 
-### Format Strings
+### 格式化字串
 
 Format strings are the format that a module prints all its variables with. Most modules have an entry called `format` that configures the display format of the module. You can use texts, variables and text groups in a format string.
 
@@ -136,7 +136,7 @@ Format strings are the format that a module prints all its variables with. Most 
 
 A variable contains a `$` symbol followed by the name of the variable. The name of a variable can only contain letters, numbers and `_`.
 
-For example:
+範例：
 
 - `'$version'` is a format string with a variable named `version`.
 - `'$git_branch$git_commit'` is a format string with two variables named `git_branch` and `git_commit`.
@@ -242,9 +242,9 @@ blue = '21'
 mustard = '#af8700'
 ```
 
-### Default Prompt Format
+### 預設提示字元格式
 
-The default `format` is used to define the format of the prompt, if empty or no `format` is provided. 預設如下：
+如果為空值或未提供 `format`，則預設`format`用於定義提示字元的格式。 預設如下：
 
 ```toml
 format = '$all'
