@@ -180,7 +180,7 @@
 
 ### Voraussetzungen
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Eine [Nerd Font](https://www.nerdfonts.com/), installiert und in deinem Terminal aktiviert (versuche es zum Beispiel mal mit der [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Schritt 1. Installiere Starship
 
@@ -274,14 +274,14 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Schritt 2. Set up your shell to use Starship
+### Schritt 2. Richte deine Shell für die Nutzung von Starship ein
 
-Konfigurieren deine Shell um Starship zu initialisieren. Wähle dafür deine Shell aus der Liste aus:
+Konfiguriere deine Shell, um Starship automatisch zu starten. Wähle dafür deine Shell aus der Liste aus:
 
 <details>
 <summary>Bash</summary>
 
-Trage folgendes am Ende der `~/.bashrc` ein:
+Füge dies ans Ende von `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
