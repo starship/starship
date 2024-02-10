@@ -30,7 +30,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
 ### Voraussetzungen
 
-- Ein [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in deinem Terminal.
+- Eine [Nerd Font](https://www.nerdfonts.com/) installiert und aktiviert in deinem Terminal.
 
 ### Schnellinstallation
 
@@ -45,7 +45,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
    curl -sS https://starship.rs/install.sh | sh
    ```
 
-   Um Starship selbst zu aktualisieren, führe das Skript oben erneut aus. Die vorhandene Version wird ersetzt, ohne das deine Konfiguration von Starship verloren geht.
+   Führe das Skript oben erneut aus, um Starship selbst zu aktualisieren. Die vorhandene Version wird ersetzt, ohne dass deine Starship-Konfiguration verloren geht.
 
 
    #### Installation mithilfe eines Paket-Managers
@@ -66,7 +66,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Bash
 
-   Trage folgendes am Ende der `~/.bashrc` ein:
+   Füge dies ans Ende von `~/.bashrc`:
 
    ```sh
    # ~/.bashrc
@@ -99,7 +99,7 @@ description: Starship ist eine minimale, super schnelle, und extrem anpassbare P
 
    #### Powershell
 
-   Fügen Sie folgendes am Ende von `Microsoft.PowerShell_profile.ps1` hinzu. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Normalerweise ist der Pfad `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
+   Füge das Folgende ans Ende von `Microsoft.PowerShell_profile.ps1` an. Du kannst den Speicherort dieser Datei überprüfen, indem du die `$PROFILE` Variable in PowerShell abfragst. Normalerweise ist der Pfad `~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1` oder `~/.config/powershell/Microsoft.PowerShell_profile.ps1` auf -Nix.
 
    ```sh
    Invoke-Expression (&starship init powershell)
