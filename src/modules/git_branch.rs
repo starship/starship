@@ -30,13 +30,13 @@ pub fn module<'a>(context: &'a Context) -> Option<Module<'a>> {
         return None;
     }
 
-    let branch_name = repo.branch.as_ref()?;
+    let branch_name = repo.branch.as_deref().unwrap_or("HEAD");
     let mut graphemes: Vec<&str> = branch_name.graphemes(true).collect();
 
     if config
         .ignore_branches
         .iter()
-        .any(|ignored| branch_name.eq(ignored))
+        .any(|&ignored| branch_name.eq(ignored))
     {
         return None;
     }
