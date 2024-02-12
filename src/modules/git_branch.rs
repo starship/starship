@@ -428,6 +428,29 @@ mod tests {
         remote_dir.close()
     }
 
+    #[test]
+    fn test_branch_fallback_on_detached() -> io::Result<()> {
+        let repo_dir = fixture_repo(FixtureProvider::Git)?;
+
+        create_command("git")?
+            .args(["checkout", "@~1"])
+            .current_dir(repo_dir.path())
+            .output()?;
+
+        let actual = ModuleRenderer::new("git_branch")
+            .config(toml::toml! {
+                [git_branch]
+                format = "$branch"
+            })
+            .path(repo_dir.path())
+            .collect();
+
+        let expected = Some("HEAD".into());
+
+        assert_eq!(expected, actual);
+        repo_dir.close()
+    }
+
     // This test is not possible until we switch to `git status --porcelain`
     // where we can mock the env for the specific git process. This is because
     // git2 does not care about our mocking and when we set the real `GIT_DIR`
