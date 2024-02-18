@@ -140,7 +140,7 @@ jobs:
           cd -
 
       - name: Release | Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
@@ -148,7 +148,7 @@ jobs:
       - name: Release | Upload installer artifacts [Windows]
         continue-on-error: true
         if: matrix.os == 'windows-latest' && matrix.target != 'aarch64-pc-windows-msvc'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: starship-${{ matrix.target }}.msi
           path: target/wix/starship-${{ matrix.target }}.msi
@@ -226,7 +226,7 @@ jobs:
           npm run build
 
       - name: Notarize | Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: artifacts
@@ -238,7 +238,7 @@ jobs:
         run: bash install/macos_packages/build_and_notarize.sh starship docs ${{ matrix.arch }} ${{ matrix.pkgname }}
 
       - name: Notarize | Upload Notarized Flat Installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.pkgname }}
           path: ${{ matrix.pkgname }}
@@ -247,10 +247,11 @@ jobs:
         run: tar czvf ${{ matrix.name }} starship
 
       - name: Notarize | Upload Notarized Binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
+          overwrite: true
 
       - name: Cleanup Secrets
         if: ${{ always() }}
@@ -265,7 +266,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Setup | Checksums
         run: for file in starship-*/starship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
@@ -336,7 +337,7 @@ jobs:
       - name: Setup | Checkout
         uses: actions/checkout@v4
       - name: Setup | Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
       - run: pwsh ./install/windows/choco/update.ps1
         env:
           STARSHIP_VERSION: ${{ needs.release_please.outputs.tag_name }}
