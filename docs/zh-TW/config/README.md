@@ -158,7 +158,7 @@ In the second part, which is enclosed in a `()`, is a [style string](#style-stri
 
 #### 風格字串
 
-Starship 內大多數的模組允許你設定他們的顯示風格。 這要透過一個條目 (通常叫做 `style`)，這個條目使用一個字串來進行設定。 這裡給幾個風格字串的例子，以及這些字串的功用。 對於完整語法的詳細說明，請參照 [進階設定指南](/advanced-config/)。
+Starship 內大多數的模組允許你設定他們的顯示風格。 這要透過一個條目 (通常叫做 `style`)，這個條目使用一個字串來進行設定。 這裡給幾個風格字串的例子，以及這些字串的功用。 對於完整語法的詳細說明，請參照 [進階設定指南](../advanced-config/)。
 
 - `'fg:green bg:blue'` sets green text on a blue background
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -200,12 +200,12 @@ detect_extensions = ['ts', '!video.ts', '!audio.ts']
 | 選項                | 預設                           | 說明                                                                                                                                                                               |
 | ----------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | [連結](#default-prompt-format) | Configure the format of the prompt.                                                                                                                                              |
-| `right_format`    | `''`                         | See [Enable Right Prompt](/advanced-config/#enable-right-prompt)                                                                                                                 |
+| `right_format`    | `''`                         | See [Enable Right Prompt](../advanced-config/#enable-right-prompt)                                                                                                                 |
 | `scan_timeout`    | `30`                         | Timeout for starship to scan files (in milliseconds).                                                                                                                            |
 | `command_timeout` | `500`                        | Timeout for commands executed by starship (in milliseconds).                                                                                                                     |
 | `add_newline`     | `true`                       | Inserts blank line between shell prompts.                                                                                                                                        |
 | `palette`         | `''`                         | Sets which color palette from `palettes` to use.                                                                                                                                 |
-| `palettes`        | `{}`                         | Collection of color palettes that assign [colors](/advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
+| `palettes`        | `{}`                         | Collection of color palettes that assign [colors](../advanced-config/#style-strings) to user-defined names. Note that color palettes cannot reference their own color definitions. |
 | `follow_symlinks` | `true`                       | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                   |
 
 ::: tip

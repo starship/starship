@@ -1,4 +1,4 @@
-[返回全部预设](./README.md#no-empty-icons)
+[返回全部预设](./#no-empty-icons)
 
 # No Empty Icons Preset
 
@@ -14,4 +14,4 @@ starship preset no-empty-icons -o ~/.config/starship.toml
 
 [点击下载 TOML 文件](/presets/toml/no-empty-icons.toml)
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+<<< @/public/presets/toml/no-empty-icons.toml

@@ -1,4 +1,4 @@
-[Retornar para Personalizações](./README.md#gruvbox-rainbow)
+[Retornar para Personalizações](./#gruvbox-rainbow)
 
 # Gruvbox Rainbow Preset
 
@@ -18,4 +18,4 @@ starship preset gruvbox-rainbow -o ~/.config/starship.toml
 
 [Clique para baixar o TOML](/presets/toml/gruvbox-rainbow.toml)
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/public/presets/toml/gruvbox-rainbow.toml

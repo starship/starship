@@ -1,4 +1,4 @@
-[返回全部预设](./README.md#no-nerd-fonts)
+[返回全部预设](./#no-nerd-fonts)
 
 # No Nerd Fonts Preset
 
@@ -16,4 +16,4 @@ starship preset no-nerd-font -o ~/.config/starship.toml
 
 [点击下载 TOML 文件](/presets/toml/no-nerd-font.toml)
 
-<<< @/.vuepress/public/presets/toml/no-nerd-font.toml
+<<< @/public/presets/toml/no-nerd-font.toml

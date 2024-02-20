@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Sitio web</a>
+  <a href="https://starship.rs/es-ES">Sitio web</a>
 
 <a href="#🚀-installation">Instalación</a>
 
-<a href="https://starship.rs/config/">Configuración</a>
+<a href="https://starship.rs/es-ES/config/">Configuración</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **Fácil:** rápido de instalar – empieza a usarlo en minutos.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/es-ES/config/"><strong>Explora la documentación de Starship&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>

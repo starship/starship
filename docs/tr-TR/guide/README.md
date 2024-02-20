@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">Website</a>
+  <a href="https://starship.rs/tr-TR">Website</a>
   ·
   <a href="#🚀-installation">Kurulum</a>
   ·
-  <a href="https://starship.rs/config/">Yapılandırma</a>
+  <a href="https://starship.rs/tr-TR/config/">Yapılandırma</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **Kolay:** hızlı kurulum -  dakikalar içinde kullanmaya başla.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Starship dokümantasyonunu incele &nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/tr-TR/config/"><strong>Starship dokümantasyonunu incele &nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>

@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#no-nerd-fonts)
+[Повернутися до Шаблонів](./#no-nerd-fonts)
 
 # No Nerd Fonts
 
@@ -16,4 +16,4 @@ starship preset no-nerd-font -o ~/.config/starship.toml
 
 [Натисніть, щоб завантажити TOML](/presets/toml/no-nerd-font.toml)
 
-<<< @/.vuepress/public/presets/toml/no-nerd-font.toml
+<<< @/public/presets/toml/no-nerd-font.toml

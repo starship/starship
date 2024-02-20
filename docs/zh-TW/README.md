@@ -1,18 +1,21 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: 適合任何 shell 的最小、極速、無限客製化的提示字元！
-actionText: 馬上開始 →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: 適合任何 shell 的最小、極速、無限客製化的提示字元！
+  actions:
+    - theme: brand
+      text: 馬上開始 →
+      link: ./guide/
 features:
-  - 
+  -
     title: 相容性優先
     details: 能夠在最常見的作業系統之中最常見的 shell 上運作。 在各處使用它吧！
-  - 
+  -
     title: 以 Rust 開發
     details: 帶來同類中最快的速度以及 Rust 的安全性，讓你的提示字元盡可能快速與可靠。
-  - 
+  -
     title: 可客製化
     details: 任何些微的細節都可以隨你喜愛地客製化，讓你的提示字元可以隨你所欲地最小化或是充滿各種特色。
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors

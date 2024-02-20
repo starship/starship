@@ -1,18 +1,21 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: 轻量、迅速、客制化的高颜值终端！
-actionText: 快速上手 →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: 轻量、迅速、客制化的高颜值终端！
+  actions:
+    - theme: brand
+      text: 快速上手 →
+      link: ./guide/
 features:
-  - 
+  -
     title: 兼容性优先
     details: Starship 可以在常见的操作系统和 shell 上运行。 尝试着在各种地方使用它吧！
-  - 
+  -
     title: 基于 Rust
     details: Rust 特有的的速度与安全性，让你的提示尽可能的快速可靠。
-  - 
+  -
     title: 客制化
     details: 每个小细节都可以按您喜欢的客制化，不论是最小化以求速度，还是更大以获得最完善的功能。
 footer: ISC 许可 | 版权所有 © 2019至今 - Starship 贡献者

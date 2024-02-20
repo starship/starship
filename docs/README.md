@@ -1,10 +1,13 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText: null
-tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
-actionText: Get Started →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+  actions:
+    - theme: brand
+      text: Get Started →
+      link: ./guide/
 features:
   - title: Compatibility First
     details: Works on the most common shells on the most common operating systems. Use it everywhere!

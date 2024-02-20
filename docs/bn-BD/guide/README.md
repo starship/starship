@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">ওয়েবসাইট</a>
- · 
+  <a href="https://starship.rs/bn-BD">ওয়েবসাইট</a>
+ ·
 <a href="#🚀-installation">ইন্সটল</a>
  ·
-<a href="https://starship.rs/config/"> কনফিগ</a>
+<a href="https://starship.rs/bn-BD/config/"> কনফিগ</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **সহজ:** অনায়াসে ইন্সটল করুন – মিনিটের মধ্যে ব্যবহার শুরু করে দিন ।
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Starship এর ডকুমেন্টেশন ঘুরে দেখুন&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/bn-BD/config/"><strong>Starship এর ডকুমেন্টেশন ঘুরে দেখুন&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>

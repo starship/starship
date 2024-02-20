@@ -158,7 +158,7 @@ Por ejemplo:
 
 #### Cadenas de Estilo
 
-La mayoría de los módulos de starship permiten configurar sus estilos de visualización. Esto se consigue con una entrada (normalmente llamada `style`) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de cadenas de estilo junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consultar [la guía de configuración avanzada](/advanced-config/).
+La mayoría de los módulos de starship permiten configurar sus estilos de visualización. Esto se consigue con una entrada (normalmente llamada `style`) que no es más que un texto donde se especifica la configuración. A continuación mostramos algunos ejemplos de cadenas de estilo junto con su funcionalidad. Para más detalles sobre la sintaxis completa, consultar [la guía de configuración avanzada](../advanced-config/).
 
 - `'fg:green bg:blue'` define el texto con color verde y el color de fondo azul
 - `'bg:blue fg:bright-green'` sets bright green text on a blue background
@@ -200,12 +200,12 @@ Esta es la lista de opciones de configuración del prompt.
 | Opción            | Predeterminado                     | Descripción                                                                                                                                                                                                                           |
 | ----------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `format`          | [ver aquí](#default-prompt-format) | Configura el formato del prompt.                                                                                                                                                                                                      |
-| `right_format`    | `''`                               | Ver [Habilitar prompt derecho](/advanced-config/#enable-right-prompt)                                                                                                                                                                 |
+| `right_format`    | `''`                               | Ver [Habilitar prompt derecho](../advanced-config/#enable-right-prompt)                                                                                                                                                                 |
 | `scan_timeout`    | `30`                               | Tiempo de espera tras el que Starship escanea archivos (en milisegundos).                                                                                                                                                             |
 | `command_timeout` | `500`                              | Tiempo de espera para los comandos ejecutados por Starship (en milisegundos).                                                                                                                                                         |
 | `add_newline`     | `true`                             | Inserta un línea en blanco entre las instrucciones del intérprete de comandos.                                                                                                                                                        |
 | `paleta`          | `''`                               | Establece la paleta de color de `paletas` a utilizar.                                                                                                                                                                                 |
-| `paletas`         | `{}`                               | Colección de paletas de colores que asignan [colores](/advanced-config/#style-strings) a nombres definidos por el usuario. Tenga en cuenta que las paletas de colores no pueden hacer referencia a sus propias definiciones de color. |
+| `paletas`         | `{}`                               | Colección de paletas de colores que asignan [colores](../advanced-config/#style-strings) a nombres definidos por el usuario. Tenga en cuenta que las paletas de colores no pueden hacer referencia a sus propias definiciones de color. |
 | `follow_symlinks` | `true`                             | Follows symlinks to check if they're directories; used in modules such as git.                                                                                                                                                        |
 
 ::: tip
@@ -529,7 +529,7 @@ La opción `display` es un arreglo de la siguiente tabla.
 | Opción               | Predeterminado | Descripción                                                                                                                             |
 | -------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `threshold`          | `10`           | El umbral para la opción de visualización.                                                                                              |
-| `style`              | `'red bold'`   | El estilo usado cuando si la opción <0>display</0> está activa.                                                                         |
+| `style`              | `'red bold'`   | El estilo usado cuando si la opción `display` está activa.                                                                         |
 | `charging_symbol`    |                | Símbolo opcional que se muestra si la opción de visualización está en uso, por defecto en la opción `charging_symbol` de la batería.    |
 | `discharging_symbol` |                | Símbolo opcional que se muestra si la opción de visualización está en uso, por defecto en la opción `discharging_symbol` de la batería. |
 
@@ -2204,25 +2204,13 @@ El módulo `hostname` muestra el nombre de host del sistema.
 | `detect_env_vars` | `[]`                                   | Qué variable(s) de entorno deben activar este módulo.                                                                                                                                                                                                                                                                                                                                                              |
 | `format`          | `'[$ssh_symbol$hostname]($style) in '` | El formato del módulo.                                                                                                                                                                                                                                                                                                                                                                                             |
 | `style`           | `'negrita oscurecida verde'`           | El estilo del módulo.                                                                                                                                                                                                                                                                                                                                                                                              |
-| `disabled`        | `false`                                | Deshabilita el módulo `hostname<0>.</td>
-</tr>
-</tbody>
-</table>
+| `disabled`        | `false`                                | Deshabilita el módulo `hostname`. |
 
-<h3 spaces-before="0">Variables</h3>
 
-<table spaces-before="0">
-<thead>
-<tr>
-  <th>Variable</th>
-  <th>Ejemplo</th>
-  <th>Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>nombre del host</td>
-  <td><code>computadora` | El nombre de host de la computadora |
+### Variables
+
+| Variable  | Ejemplo | Descripción                            |
+| nombre del host | `computadora` | El nombre de host de la computadora |
 | style\*         |                                        | Refleja el valor de la opción `style`                                                                                                                                                                                                                                                                                                                                                                              |
 | ssh_symbol        | `'🌏 '`                                 | El símbolo a representar cuando está conectado a la sesión SSH                                                                                                                                                                                                                                                                                                                                                     |
 

@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">웹사이트</a>
+  <a href="https://starship.rs/ko-KR">웹사이트</a>
   ·
   <a href="#🚀-installation">설치</a>
   ·
-  <a href="https://starship.rs/config/">설정</a>
+  <a href="https://starship.rs/ko-KR/config/">설정</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **쉬움:** 빠른 설치 - 몇 분만 투자하면 바로 사용할 수 있습니다.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/ko-KR/config/"><strong>Starship 문서 보기&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>

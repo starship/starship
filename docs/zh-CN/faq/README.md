@@ -58,7 +58,7 @@ curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 
 ## 为什么我会遇到 `Executing command "..." timed out.` 警告？
 
-Starship 会执行数个不同的命令来获取应该显示的信息，例如某个程序的版本号、现在 Git 的工作树状态。 为保证 Starship 不会在执行某条命令时卡住，Starship 会终止执行时间过长的命令并且输出以上警告。这是正常现象。 若希望增加时长限制，它可以在 [`command_timeout` 设置](/config/#prompt) 处自定义。 您也可以按照下文的调试步骤查看并优化运行慢的命令。 最后，您也可以设置环境变量 `STARSHIP_LOG` 为 `error` 来隐藏这些警告。
+Starship 会执行数个不同的命令来获取应该显示的信息，例如某个程序的版本号、现在 Git 的工作树状态。 为保证 Starship 不会在执行某条命令时卡住，Starship 会终止执行时间过长的命令并且输出以上警告。这是正常现象。 若希望增加时长限制，它可以在 [`command_timeout` 设置](../config/#prompt) 处自定义。 您也可以按照下文的调试步骤查看并优化运行慢的命令。 最后，您也可以设置环境变量 `STARSHIP_LOG` 为 `error` 来隐藏这些警告。
 
 ## 我不理解某些符号，它们是什么意思？
 

@@ -1,4 +1,4 @@
-[Powrót do ustawień predefiniowanych](./README.md#pastel-powerline)
+[Powrót do ustawień predefiniowanych](./#pastel-powerline)
 
 # Ustawienia Pastel Powerline
 
@@ -18,4 +18,4 @@ starship preset pastel-powerline -o ~/.config/starship.toml
 
 [Kliknij, aby pobrać TOML](/presets/toml/pastel-powerline.toml)
 
-<<< @/.vuepress/public/presets/toml/pastel-powerline.toml
+<<< @/public/presets/toml/pastel-powerline.toml

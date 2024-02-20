@@ -1,4 +1,4 @@
-[Return to Presets](./README.md#no-nerd-fonts)
+[Return to Presets](./#no-nerd-fonts)
 
 # No Nerd Fonts Preset
 
@@ -17,4 +17,4 @@ starship preset no-nerd-font -o ~/.config/starship.toml
 
 [Click to download TOML](/presets/toml/no-nerd-font.toml)
 
-<<< @/.vuepress/public/presets/toml/no-nerd-font.toml
+<<< @/public/presets/toml/no-nerd-font.toml
