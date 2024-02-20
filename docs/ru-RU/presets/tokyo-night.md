@@ -1,4 +1,4 @@
-[Вернуться к пресетам](./README.md#pastel-powerline)
+[Вернуться к пресетам](./#pastel-powerline)
 
 # Пресет Tokyo Night
 
@@ -18,4 +18,4 @@ starship preset tokyo-night -o ~/.config/starship.toml
 
 [Нажмите, чтобы загрузить TOML](/presets/toml/tokyo-night.toml)
 
-<<< @/.vuepress/public/presets/toml/tokyo-night.toml
+<<< @/public/presets/toml/tokyo-night.toml

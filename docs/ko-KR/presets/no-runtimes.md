@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#no-runtime-versions)
+[프리셋으로 돌아가기](./#no-runtime-versions)
 
 # No Runtime Versions Preset
 
@@ -14,4 +14,4 @@ starship preset no-runtime-versions -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/no-runtime-versions.toml)
 
-<<< @/.vuepress/public/presets/toml/no-runtime-versions.toml
+<<< @/public/presets/toml/no-runtime-versions.toml

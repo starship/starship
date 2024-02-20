@@ -1,4 +1,4 @@
-[返回全部预设](./README.md#nerd-font-symbols)
+[返回全部预设](./#nerd-font-symbols)
 
 # Nerd 字体符号预设
 
@@ -18,4 +18,4 @@ starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 [点击下载 TOML 文件](/presets/toml/nerd-font-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
+<<< @/public/presets/toml/nerd-font-symbols.toml

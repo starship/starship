@@ -1,4 +1,4 @@
-[プリセット一覧に戻る](./README.md#no-empty-icons)
+[プリセット一覧に戻る](./#no-empty-icons)
 
 # No Empty Icons プリセット
 
@@ -14,4 +14,4 @@ starship preset no-empty-icons -o ~/.config/starship.toml
 
 [クリックしてTOMLをダウンロード](/presets/toml/no-empty-icons.toml)
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+<<< @/public/presets/toml/no-empty-icons.toml

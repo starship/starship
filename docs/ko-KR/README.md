@@ -1,18 +1,21 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!
-actionText: 시작하기 →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: 아무 셸에나 적용할 수 있는 작고, 매우 빠르며, 무한히 커스텀 가능한 프롬프트입니다!
+  actions:
+    - theme: brand
+      text: 시작하기 →
+      link: ./guide/
 features:
-  - 
+  -
     title: 호환성 우선
     details: 거의 모든 운영 체제의 거의 모든 셸에서 동작합니다. 모든 곳에서 사용해 보세요!
-  - 
+  -
     title: Rust 기반
     details: Rust의 최고 수준의 속도와 안정성으로 프롬프트를 가능한 한 빠르고 안정적으로 만들어 보세요.
-  - 
+  -
     title: 커스텀 가능
     details: 모든 사소한 디테일들을 마음대로 커스텀할 수 있어, 프롬프트를 원하는 만큼 간단하게 만들거나 기능이 풍부하게 만들 수 있습니다.
 footer: ISC Licensed | Copyright © 2019-present Starship Contributors

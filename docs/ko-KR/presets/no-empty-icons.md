@@ -1,4 +1,4 @@
-[프리셋으로 돌아가기](./README.md#no-empty-icons)
+[프리셋으로 돌아가기](./#no-empty-icons)
 
 # No Empty Icons Preset
 
@@ -14,4 +14,4 @@ starship preset no-empty-icons -o ~/.config/starship.toml
 
 [클릭하여 TOML 다운로드](/presets/toml/no-empty-icons.toml)
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+<<< @/public/presets/toml/no-empty-icons.toml

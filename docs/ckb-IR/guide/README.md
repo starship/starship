@@ -40,7 +40,7 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">ماڵپەڕ</a>  ·  <a href="#🚀-installation">دامەزراندن</a>  ·  <a href="https://starship.rs/config/">رێکخستن</a>
+  <a href="https://starship.rs/ckb-IR">ماڵپەڕ</a>  ·  <a href="#🚀-installation">دامەزراندن</a>  ·  <a href="https://starship.rs/ckb-IR/config/">رێکخستن</a>
 </p>
 
 <p align="center">
@@ -167,7 +167,7 @@
 - **ئاسان:** خێرا لە دامەزراندن – دەست ئەکەیت بە بەکارهێنانی لە چەند خولەکێکدا.
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>بەڵگەنامەکانی Starship بگەڕێ&nbsp;&nbsp;◀</strong></a>
+<a href="https://starship.rs/ckb-IR/config/"><strong>بەڵگەنامەکانی Starship بگەڕێ&nbsp;&nbsp;◀</strong></a>
 </p>
 
 <a name="🚀-installation"></a>

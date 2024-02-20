@@ -1,4 +1,4 @@
-[Вернуться к пресетам](./README.md#no-runtime-versions)
+[Вернуться к пресетам](./#no-runtime-versions)
 
 # Пресет No Runtime Versions
 
@@ -14,4 +14,4 @@ starship preset no-runtime-versions -o ~/.config/starship.toml
 
 [Нажмите, чтобы загрузить TOML](/presets/toml/no-runtime-versions.toml)
 
-<<< @/.vuepress/public/presets/toml/no-runtime-versions.toml
+<<< @/public/presets/toml/no-runtime-versions.toml

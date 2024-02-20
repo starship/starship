@@ -1,18 +1,21 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!
-actionText: Mari Mulai →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: Prompt yang minimal, super cepat, dan dapat disesuaikan tanpa batas untuk shell apa pun!
+  actions:
+    - theme: brand
+      text: Mari Mulai →
+      link: ./guide/
 features:
-  - 
+  -
     title: Kompatibilitas Yang Utama
     details: Dapat berfungsi di shells standar dengan sistem operasi yang paling biasa. Pakai di mana saja!
-  - 
+  -
     title: Dibuat dengan Rust
     details: Menggunakan kecepatan dan keamanan dari Rust, untuk membuat prompt kamu bekerja secepat dan seandal mungkin.
-  - 
+  -
     title: Dapat Dikustomisasi
     details: Kamu dapat mengatur semua detail kecil dengan sesukamu, entah itu untuk membuatnya sebagai prompt yang seminimal mungkin atau kaya akan fitur yang kamu mau.
 footer: Berlisensi ISC | Hak Cipta © 2019-sekarang Kontributor Starship

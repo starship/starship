@@ -1,18 +1,21 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: Sade, hızlı, dilediğiniz gibi özelleştirilebilen ve istenilen shell'de kullanılabilen prompt!
-actionText: Kullanmaya Başlayın →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: Sade, hızlı, dilediğiniz gibi özelleştirilebilen ve istenilen shell'de kullanılabilen prompt!
+  actions:
+    - theme: brand
+      text: Kullanmaya Başlayın →
+      link: ./guide/
 features:
-  - 
+  -
     title: Önce Uyumluluk
     details: En yaygın işletim sistemlerindeki en yaygın shell'ler üzerinde çalışır. Use it everywhere!
-  - 
+  -
     title: Rust-Powered
     details: Prompt'u mümkün olduğunca hızlı ve güvenilir hale getirmek için sınıfının en iyisi Rust hızını ve güvenliğini sağlar.
-  - 
+  -
     title: Özelleştirilebilir
     details: Her küçük ayrıntı beğeninize göre özelleştirilebilir, böylece bu prompt'u istediğiniz kadar minimal veya zengin özelliklere sahip hale getirirsiniz.
 footer: ISC Lisanslı | Telif Hakkı © 2019-günümüz Starship Contributors

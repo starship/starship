@@ -1,4 +1,4 @@
-[Powrót do ustawień predefiniowanych](./README.md#pure)
+[Powrót do ustawień predefiniowanych](./#pure)
 
 # Ustawienia Pure
 
@@ -14,4 +14,4 @@ starship preset pure-preset -o ~/.config/starship.toml
 
 [Kliknij, aby pobrać TOML](/presets/toml/pure-preset.toml)
 
-<<< @/.vuepress/public/presets/toml/pure-preset.toml
+<<< @/public/presets/toml/pure-preset.toml

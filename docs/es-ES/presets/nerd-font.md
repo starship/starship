@@ -1,4 +1,4 @@
-[Volver a Preajustes](./README.md#nerd-font-symbols)
+[Volver a Preajustes](./#nerd-font-symbols)
 
 # Preajuste de Símbolos de Nerd Font
 
@@ -18,4 +18,4 @@ starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 [Clic para descargar TOML](/presets/toml/nerd-font-symbols.toml)
 
-<<< @/.vuepress/public/presets/toml/nerd-font-symbols.toml
+<<< @/public/presets/toml/nerd-font-symbols.toml

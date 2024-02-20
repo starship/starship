@@ -1,18 +1,21 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !
-actionText: Commencez →
-actionLink: ./guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: L'invite minimaliste, ultra-rapide et personnalisable à l'infini pour n'importe quel shell !
+  actions:
+    - theme: brand
+      text: Commencez →
+      link: ./guide/
 features:
-  - 
+  -
     title: Compatibilité avant tout
     details: Fonctionne sur tous les principaux shells et système d'exploitation. Utilisez-le partout !
-  - 
+  -
     title: Propulsé par Rust
     details: Profitez de toute la rapidité et la sécurité de Rust pour rendre votre invite de commandes la plus rapide et fiable possible.
-  - 
+  -
     title: Personnalisable
     details: Tous les petits détails sont personnalisable à votre goût, pour rendre votre invite de commandes aussi légère ou complète que le vous souhaitez.
 footer: Licence ISC | Copyright © 2019-présent Contributeurs Starship

@@ -1,4 +1,4 @@
-[プリセット一覧に戻る](./README.md#gruvbox-rainbow)
+[プリセット一覧に戻る](./#gruvbox-rainbow)
 
 # Gruvbox Rainbow Preset
 
@@ -18,4 +18,4 @@ starship preset gruvbox-rainbow -o ~/.config/starship.toml
 
 [クリックしてTOMLをダウンロード](/presets/toml/gruvbox-rainbow.toml)
 
-<<< @/.vuepress/public/presets/toml/gruvbox-rainbow.toml
+<<< @/public/presets/toml/gruvbox-rainbow.toml

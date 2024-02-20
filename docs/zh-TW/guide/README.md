@@ -40,11 +40,11 @@
 </p>
 
 <p align="center">
-  <a href="https://starship.rs">網站</a>
+  <a href="https://starship.rs/zh-TW">網站</a>
   ·
   <a href="#🚀-installation">安裝</a>
   ·
-  <a href="https://starship.rs/config/">設定</a>
+  <a href="https://starship.rs/zh-TW/config/">設定</a>
 </p>
 
 <p align="center">
@@ -171,7 +171,7 @@
 - **易用：**安裝快速 – 幾分鐘內即可開始使用。
 
 <p align="center">
-<a href="https://starship.rs/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
+<a href="https://starship.rs/zh-TW/config/"><strong>探索 Starship 文件&nbsp;&nbsp;▶</strong></a>
 </p>
 
 <a name="🚀-installation"></a>

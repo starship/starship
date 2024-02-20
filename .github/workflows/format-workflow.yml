@@ -40,3 +40,26 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           pattern: docs/[a-z][a-z][a-z]?-[A-Z][A-Z]?/.*
+
+  # Vitepress build
+  vitepress:
+    name: Vitepress [Build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup | Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: docs/package-lock.json
+
+      - name: Setup | Install dependencies
+        run: npm install
+        working-directory: docs
+
+      - name: Build | Build docs site
+        run: npm run build
+        working-directory: docs

@@ -1,18 +1,21 @@
 ---
-home: true
-heroImage: /logo.svg
-heroText:
-tagline: Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!
-actionText: Loslegen →
-actionLink: ./de-DE/guide/
+layout: home
+hero:
+  image: /logo.svg
+  text: null
+  tagline: Minimale, super schnelle und unendlich anpassbare Prompt für jede Shell!
+  actions:
+    - theme: brand
+      text: Loslegen →
+      link: ./guide/
 features:
-  - 
+  -
     title: Kompatibel
     details: Läuft mit den beliebtesten Shells auf den beliebtesten Betriebssystemen. Überall einsetzbar!
-  - 
+  -
     title: Rust-Powered
     details: Bringt die Schnelligkeit und Sicherheit von Rust in deine Shell-Prompt.
-  - 
+  -
     title: Individualisierbar
     details: Jedes noch so kleine Detail kann nach Deinen Wünschen angepasst werden, um die Eingabeaufforderung so minimal oder funktionsreich zu gestalten, wie Du es möchtest.
 footer: ICS lizenziert | Copyright © 2019-heute Starship-Mitwirkende

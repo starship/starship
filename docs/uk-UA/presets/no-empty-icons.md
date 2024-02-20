@@ -1,4 +1,4 @@
-[Повернутися до Шаблонів](./README.md#no-empty-icons)
+[Повернутися до Шаблонів](./#no-empty-icons)
 
 # No Empty Icons
 
@@ -14,4 +14,4 @@ starship preset no-empty-icons -o ~/.config/starship.toml
 
 [Натисніть, щоб завантажити TOML](/presets/toml/no-empty-icons.toml)
 
-<<< @/.vuepress/public/presets/toml/no-empty-icons.toml
+<<< @/public/presets/toml/no-empty-icons.toml
