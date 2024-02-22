@@ -425,7 +425,7 @@ dependencies = [
  "anstream",
  "anstyle",
  "clap_lex",
- "strsim 0.11.0",
+ "strsim",
  "unicase",
  "unicode-width",
 ]
@@ -2875,7 +2875,7 @@ dependencies = [
  "shadow-rs",
  "shell-words",
  "starship-battery",
- "strsim 0.10.1",
+ "strsim",
  "systemstat",
  "tempfile",
  "terminal_size",
@@ -2913,12 +2913,6 @@ name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
-
-[[package]]
-name = "strsim"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ccbca6f34534eb78dbee83f6b2c9442fea7113f43d9e80ea320f0972ae5dc08d"
 
 [[package]]
 name = "strsim"
