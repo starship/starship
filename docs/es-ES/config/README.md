@@ -543,7 +543,7 @@ style = 'bold red'
 [[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = 'bold yellow'
-discharging_symbol = '💦'
+discharging_symbol = '💦 '
 
 # when capacity is over 30%, the battery indicator will not be displayed
 ```
@@ -1155,19 +1155,20 @@ The `direnv` module shows the status of the current rc file if one is present. T
 
 ### Opciones
 
-| Opción              | Predeterminado                         | Descripción                                           |
-| ------------------- | -------------------------------------- | ----------------------------------------------------- |
-| `format`            | `'[$symbol$loaded/$allowed]($style) '` | El formato del módulo.                                |
-| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context. |
-| `style`             | `'bold orange'`                        | El estilo del módulo.                                 |
-| `disabled`          | `true`                                 | Disables the `direnv` module.                         |
-| `detect_extensions` | `[]`                                   | Qué extensiones deberían activar este módulo.         |
-| `detect_files`      | `['.envrc']`                           | Qué nombres de archivo deberían activar este módulo.  |
-| `detect_folders`    | `[]`                                   | Qué carpetas deberían activar este módulo.            |
-| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
-| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
-| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
-| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |
+| Opción              | Predeterminado                         | Descripción                                                       |
+| ------------------- | -------------------------------------- | ----------------------------------------------------------------- |
+| `format`            | `'[$symbol$loaded/$allowed]($style) '` | El formato del módulo.                                            |
+| `symbol`            | `'direnv '`                            | The symbol used before displaying the direnv context.             |
+| `style`             | `'bold orange'`                        | El estilo del módulo.                                             |
+| `disabled`          | `true`                                 | Disables the `direnv` module.                                     |
+| `detect_extensions` | `[]`                                   | Qué extensiones deberían activar este módulo.                     |
+| `detect_files`      | `['.envrc']`                           | Qué nombres de archivo deberían activar este módulo.              |
+| `detect_folders`    | `[]`                                   | Qué carpetas deberían activar este módulo.                        |
+| `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.                 |
+| `not_allowed_msg`   | `'no permitido'`                       | El mensaje que se muestra cuando un archivo rc no está permitido. |
+| `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.                  |
+| `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.                  |
+| `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.              |
 
 ### Variables
 
@@ -3141,14 +3142,14 @@ El módulo `package` se muestra cuando el directorio actual es el repositorio de
 
 ### Opciones
 
-| Opción           | Predeterminado                    | Descripción                                                                             |
-| ---------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
-| `format`         | `'is [$symbol$version]($style) '` | El formato del módulo.                                                                  |
-| `symbol`         | `'📦 '`                            | El símbolo usado antes de mostrar la versión del paquete.                               |
-| `version_format` | `'v${raw}'`                       | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
-| `style`          | `'bold 208'`                      | El estilo del módulo.                                                                   |
-| `'📦 '`           | `false`                           | Activar la visualización de la versión para los paquetes marcados como privados.        |
-| `disabled`       | `false`                           | Desactiva el módulo `package`.                                                          |
+| Opción            | Predeterminado                    | Descripción                                                                             |
+| ----------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+| `format`          | `'is [$symbol$version]($style) '` | El formato del módulo.                                                                  |
+| `symbol`          | `'📦 '`                            | El símbolo usado antes de mostrar la versión del paquete.                               |
+| `version_format`  | `'v${raw}'`                       | El formato de versión. Las variables disponibles son `raw`, `major`, `minor`, & `patch` |
+| `style`           | `'bold 208'`                      | El estilo del módulo.                                                                   |
+| `display_private` | `false`                           | Activar la visualización de la versión para los paquetes marcados como privados.        |
+| `disabled`        | `false`                           | Desactiva el módulo `package`.                                                          |
 
 ### Variables
 

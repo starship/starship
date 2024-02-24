@@ -1,6 +1,6 @@
 # Konfiguration
 
-Um mit der Konfiguration von Starship zu beginnen, muss eine leere Datei in diesem Pfad erstellt werden: `~/.config/starship.toml`.
+Um mit der Konfiguration von Starship zu beginnen, musst du die folgende Datei erstellen: `~/.config/starship.toml`.
 
 ```sh
 mkdir -p ~/.config && touch ~/.config/starship.toml
@@ -9,24 +9,25 @@ mkdir -p ~/.config && touch ~/.config/starship.toml
 Die gesamte Konfiguration von Starship erfolgt in dieser [TOML](https://github.com/toml-lang/toml)-Datei:
 
 ```toml
-# Get editor completions based on the config schema
+
+# Editor Vervollständigungen basierend auf dem Konfigurations-Schema erhalten
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# Fügt eine Leerzeile zwischen den Eingabeaufforderungen ein
 add_newline = true
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+# Ersetzt das '❯' Zeichen in der Prompt mit '➜'
+[character] # Der name des Moduls das wir ändern ist 'character'
+success_symbol = '[➜](bold green)' # Der 'success_symbol' Teil wird auf '➜' mit der farbe 'bold green' gesetzt
 
-# Disable the package module, hiding it from the prompt completely
+# Deaktiviert das "package" Modul, damit es in der Eingabeaufforderung nicht mehr zu sehen ist
 [package]
 disabled = true
 ```
 
-### Config File Location
+### Ort der Konfigurationsdatei
 
-Die voreingestellte Konfigurations-Datei kann mit der `STARSHIP_CONFIG` Umgebungsvariable verändert werden. Hier z. Bsp. für die BASH shell, hinzuzufügen zur ~/. bashrc:
+Du kannst die voreingestellte Konfigurations-Datei mit der `STARSHIP_CONFIG` Umgebungsvariable verändern:
 
 ```sh
 export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
@@ -38,7 +39,7 @@ export STARSHIP_CONFIG=~/example/non/default/path/starship.toml
 $ENV:STARSHIP_CONFIG = "$HOME\example\non\default\path\starship.toml"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Oder für Cmd (Windows) diese Zeile (wieder zur  `starship.lua`):
 
 ```lua
 os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\starship.toml')
@@ -46,7 +47,7 @@ os.setenv('STARSHIP_CONFIG', 'C:\\Users\\user\\example\\non\\default\\path\\star
 
 ### Protokollierung
 
-By default starship logs warnings and errors into a file named `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, where the session key is corresponding to an instance of your terminal. Das kann jedoch durch die Nutzung der `STARSHIP_CACHE` Umgebungsvariable verändert werden:
+Standardmäßig protokolliert Starship Warnungen und Fehler in einer Datei names `~/.cache/starship/session_${STARSHIP_SESSION_KEY}.log`, wobei der session key zu der Instanz deines Terminals korrespondiert. Das kann jedoch durch die Nutzung der `STARSHIP_CACHE` Umgebungsvariable verändert werden:
 
 ```sh
 export STARSHIP_CACHE=~/.starship/cache
@@ -58,7 +59,7 @@ export STARSHIP_CACHE=~/.starship/cache
 $ENV:STARSHIP_CACHE = "$HOME\AppData\Local\Temp"
 ```
 
-Or for Cmd (Windows) would be adding this line to your `starship.lua`:
+Oder für Cmd (Windows) diese Zeile (wieder zur  `starship.lua`):
 
 ```lua
 os.setenv('STARSHIP_CACHE', 'C:\\Users\\user\\AppData\\Local\\Temp')
@@ -74,9 +75,9 @@ Die meisten Module haben einen Präfix der standardmäßigen terminal-Farbe (z.B
 
 ### Strings
 
-In TOML syntax, [text values](https://toml.io/en/v1.0.0#string) are declared with `'`, `"`, `'''`, or `"""`.
+In der TOML Syntax werden [Zeichenketten](https://toml.io/en/v1.0.0#string) mit `'`, `"`, `'''`, oder `"""` eingesetzt.
 
-The following Starship syntax symbols have special usage in a format string and must be escaped to display as that character: `$ [ ] ( )`.
+Die folgende Starship Syntax Symbole haben eine spezielle Rolle in einem String, und müssen demnach als Spezialzeichen markiert werden, um als normales Zeichen angezeigt zu werden:  `$ [ ] ( )`.
 
 | Symbol | Type                      | Notes                                                  |
 | ------ | ------------------------- | ------------------------------------------------------ |
@@ -543,7 +544,7 @@ style = 'bold red'
 [[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = 'bold yellow'
-discharging_symbol = '💦'
+discharging_symbol = '💦 '
 
 # when capacity is over 30%, the battery indicator will not be displayed
 ```
@@ -1165,6 +1166,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `detect_files`      | `['.envrc']`                           | Which filenames should trigger this module.           |
 | `detect_folders`    | `[]`                                   | Which folders should trigger this module.             |
 | `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
 | `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
 | `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
 | `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |

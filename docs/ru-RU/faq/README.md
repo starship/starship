@@ -10,9 +10,9 @@
   - **Конфигурация**: [matchai's Dotfiles](https://github.com/matchai/dotfiles/blob/b6c6a701d0af8d145a8370288c00bb9f0648b5c2/.config/fish/config.fish)
   - **Подсказка**: [Starship](https://starship.rs/)
 
-## How do I get command completion as shown in the demo GIF?
+## Как мне получить автодополнение команд, как показано на демонстрационной GIF?
 
-Completion support, or autocomplete, is provided by your shell of choice. In the case of the demo, the demo was done with [Fish Shell](https://fishshell.com/), which provides completions by default. If you use Z Shell (zsh), I'd suggest taking a look at [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
+Автодополнение команд обеспечивается выбранной вами оболочкой. В данном случае, демо было выполнено с [Fish Shell](https://fishshell.com/), которая обеспечивает дополнения по умолчанию. Если вы используете Z Shell (zsh), я бы посоветовал взглянуть на [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions).
 
 ## Do top level `format` and `<module>.disabled` do the same thing?
 
@@ -21,7 +21,7 @@ Completion support, or autocomplete, is provided by your shell of choice. In the
 - Disabling modules is more explicit than omitting them from the top level `format`
 - Новосозданные модули будут добавлены в подсказку по мере обновления Starship
 
-## The docs say Starship is cross-shell. Why isn't my preferred shell supported?
+## Доки говорят, что Starship поддерживается на всех оболочках *(cross-shell)*. Почему моя любимая оболочка не поддерживается?
 
 Starship устроен так, что есть возможность добавить поддержку практически любой оболочки. Бинарный файл Starship не зависит от оболочки и не имеет состояния, так что если ваша оболочка поддерживает расширение подстрок и настройку подсказки, то Starship может быть использован.
 
@@ -56,15 +56,15 @@ starship prompt --help
 curl -sS https://starship.rs/install.sh | sh -s -- --platform unknown-linux-musl
 ```
 
-## Why do I see `Executing command "..." timed out.` warnings?
+## Почему я вижу предупреждение  `Executing command "..." timed out.`?
 
-Starship executes different commands to get information to display in the prompt, for example the version of a program or the current git status. To make sure starship doesn't hang while trying to execute these commands we set a time limit, if a command takes longer than this limit starship will stop the execution of the command and output the above warning, this is expected behaviour. This time limit is configurable using the [`command_timeout`key](/config/#prompt) so if you want you can increase the time limit. You can also follow the debugging steps below to see which command is being slow and see if you can optimise it. Finally you can set the `STARSHIP_LOG` env var to `error` to hide these warnings.
+Starship выполняет различные команды, чтобы получить информацию, отображаемую в промпте, например версию программы или текущий git status. Чтобы быть уверенными, что starship не зависнет во время выполнения этих команд, мы поставили лимит времени, и если команда выполняется дольше лимита, starship прекратит её выполнение и выведет это предупреждение, это нормальное поведение. Временной лимит можно изменить с помощью опции [`command_timeout`key](/config/#prompt), поэтому при желании вы можете увеличить это время. Вы так же можете следовать шагам для отладки ниже, чтобы понять, какая команда влияет на время и ускорить промпт. Наконец, вы можете изменить переменную окружения `STARSHIP_LOG` `error`, чтобы спрятать это предупреждение.
 
-## I see symbols I don't understand or expect, what do they mean?
+## Я вижу символы, которые я не понимаю или не ожидаю, что они означают?
 
-If you see symbols that you don't recognise you can use `starship explain` to explain the currently showing modules.
+Если вы видите символы, которые вы не узнаете, вы можете использовать команду `starship explain`, чтобы разъяснить показываемые модули.
 
-## Starship is doing something unexpected, how can I debug it?
+## Starship делает что-то неожиданное, как я могу отладить его?
 
 You can enable the debug logs by using the `STARSHIP_LOG` env var. These logs can be very verbose so it is often useful to use the `module` command if you are trying to debug a particular module, for example, if you are trying to debug the `rust` module you could run the following command to get the trace logs and output from the module.
 
@@ -86,24 +86,24 @@ Finally if you find a bug you can use the `bug-report` command to create a GitHu
 starship bug-report
 ```
 
-## Why don't I see a glyph symbol in my prompt?
+## Почему я не вижу символ в промпте?
 
-The most common cause of this is system misconfiguration. Some Linux distros in particular do not come with font support out-of-the-box. You need to ensure that:
+Наиболее распространенной причиной этого является неправильная конфигурация системы. В частности, некоторые Linux дистрибутивы не предоставляют поддержку шрифта из коробки. Необходимо убедиться, что:
 
 - Your locale is set to a UTF-8 value, like `de_DE.UTF-8` or `ja_JP.UTF-8`. If `LC_ALL` is not a UTF-8 value, [you will need to change it](https://www.tecmint.com/set-system-locales-in-linux/).
 - You have an emoji font installed. Most systems come with an emoji font by default, but some (notably Arch Linux) do not. You can usually install one through your system's package manager--[noto emoji](https://www.google.com/get/noto/help/emoji/) is a popular choice.
-- You are using a [Nerd Font](https://www.nerdfonts.com/).
+- Вы используете [Nerd Font](https://www.nerdfonts.com/).
 
-To test your system, run the following commands in a terminal:
+Для тестирования системы запустите следующие команды в терминале:
 
 ```sh
 echo -e "\xf0\x9f\x90\x8d"
 echo -e "\xee\x82\xa0"
 ```
 
-The first line should produce a [snake emoji](https://emojipedia.org/snake/), while the second should produce a [powerline branch symbol (e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
+Первая строка должна создать [эмоджи змеи](https://emojipedia.org/snake/), а вторая - символ ветки [(e0a0)](https://github.com/ryanoasis/powerline-extra-symbols#glyphs).
 
-If either symbol fails to display correctly, your system is still misconfigured. Unfortunately, getting font configuration correct is sometimes difficult. Users on the Discord may be able to help. If both symbols display correctly, but you still don't see them in starship, [file a bug report!](https://github.com/starship/starship/issues/new/choose)
+Если любой из символов не отображается корректно, ваша система все еще неправильно настроена. К сожалению, иногда сложно получить правильную конфигурацию шрифта. Пользователи в Discord могут помочь. Если оба символа отображаются верно, но вы всё ещё не видите их в starship, [отправьте bug report!](https://github.com/starship/starship/issues/new/choose)
 
 ## Как удалить Starship?
 
@@ -121,10 +121,10 @@ If Starship was installed using the install script, the following command will d
 sh -c 'rm "$(command -v 'starship')"'
 ```
 
-## How do I install Starship without `sudo`?
+## Как Starship без `sudo`?
 
-The shell install script (`https://starship.rs/install.sh`) only attempts to use `sudo` if the target installation directory is not writable by the current user. The default installation diretory is the value of the `$BIN_DIR` environment variable or `/usr/local/bin` if `$BIN_DIR` is not set. If you instead set the installation directory to one that is writable by your user, you should be able to install starship without `sudo`. For example, `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` uses the `-b` command line option of the install script to set the installation directory to `~/.local/bin`.
+Скрипт установки (`https://starship.rs/install. h`) использует `sudo` только если директория установки недоступна для записи текущим пользователем. Директория установки по умолчанию это значение переменной окружения `$BIN_DIR` или `/usr/local/bin`, если `$BIN_DIR` не установлен. Если вместо этого выбрать директорию установки, которая доступна для записи пользователем, вы можете установить starship без `sudo`. Например, в `curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin` флаг `-b` установочного скрипта используется, чтобы задать директорию установки на `~/.local/bin`.
 
-For a non-interactive installation of Starship, don't forget to add the `-y` option to skip the confirmation. Check the source of the installation script for a list of all supported installation options.
+Для неинтерактивной установки Starship не забудьте добавить опцию `-y` чтобы пропустить подтверждение. Проверьте исходник установочного скрипта, чтобы получить список всех поддерживаемых параметров установки.
 
-When using a package manager, see the documentation for your package manager about installing with or without `sudo`.
+При через пакетный менеджер, смотрите документацию для вашего пакетного менеджера об установке с `sudo` и без.

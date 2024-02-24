@@ -35,7 +35,7 @@
   <a href="https://stand-with-ukraine.pp.ua"
     ><img
       src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraineFlat.svg"
-      alt="Stand With Ukraine"
+      alt="Wir stehen zur Ukraine"
  /></a>
 </p>
 
@@ -108,7 +108,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-br.png"
-      alt="Portugiesisch (Brasilien)"
+      alt="Português do Brasil"
  /></a>
   &nbsp;
   <a
@@ -132,7 +132,7 @@
     ><img
       height="20"
       src="https://raw.githubusercontent.com/starship/starship/master/media/flag-vn.png"
-      alt="Vietnamesisch"
+      alt="Tiếng Việt"
  /></a>
   &nbsp;
   <a
@@ -180,7 +180,7 @@
 
 ### Voraussetzungen
 
-- A [Nerd Font](https://www.nerdfonts.com/) installed and enabled in your terminal (for example, try the [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
+- Eine [Nerd Font](https://www.nerdfonts.com/), installiert und in deinem Terminal aktiviert (versuche es zum Beispiel mal mit der [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)).
 
 ### Schritt 1. Installiere Starship
 
@@ -274,14 +274,14 @@ Install Starship using any of the following package managers:
 
 </details>
 
-### Schritt 2. Set up your shell to use Starship
+### Schritt 2. Richte deine Shell für die Nutzung von Starship ein
 
-Konfigurieren deine Shell um Starship zu initialisieren. Wähle dafür deine Shell aus der Liste aus:
+Konfiguriere deine Shell, um Starship automatisch zu starten. Wähle dafür deine Shell aus der Liste aus:
 
 <details>
 <summary>Bash</summary>
 
-Trage folgendes am Ende der `~/.bashrc` ein:
+Füge dies ans Ende von `~/.bashrc`:
 
 ```sh
 eval "$(starship init bash)"
@@ -292,7 +292,7 @@ eval "$(starship init bash)"
 <details>
 <summary>⌘ Cmd</summary>
 
-Du musst [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) mit Cmd verwenden. Create a file at this path `%LocalAppData%\clink\starship.lua` with the following contents:
+Du musst [Clink](https://chrisant996.github.io/clink/clink.html) (v1.2.30+) mit Cmd verwenden. Erstelle eine Datei in diesem Pfad `%LocalAppData%\clink\starship.lua` mit dem folgenden Inhalt:
 
 ```lua
 load(io.popen('starship init cmd'):read("*a"))()
@@ -338,27 +338,27 @@ eval $(starship init ion)
 <details>
 <summary>Nushell</summary>
 
-Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+Füge folgendes zum Ende deiner Nushell env Datei hinzu (finde sie, indem du `$nu.env-path` in Nushell ausführst):
 
 ```sh
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
 ```
 
-Und füge folgendes am Ende deiner Nushell-Konfiguration hinzu (du findest diese, indem du folgenden Befehl in Nushell ausführst `$nu.config-path`):
+Und füge Folgendes am Ende deiner Nushell-Konfiguration hinzu (finde sie, indem du folgenden Befehl in Nushell ausführst `$nu.config-path`):
 
 ```sh
 use ~/.cache/starship/init.nu
 ```
 
-Note: Only Nushell v0.78+ is supported
+Beachte: Nushell wird erst ab v0.78+ unterstützt
 
 </details>
 
 <details>
 <summary>PowerShell</summary>
 
-Add the following to the end of your PowerShell configuration (find it by running `$PROFILE`):
+Füge Folgendes am Ende deiner PowerShell-Konfiguration hinzu (finde sie, indem du folgenden Befehl ausführst `$PROFILE`):
 
 ```powershell
 Invoke-Expression (&starship init powershell)
@@ -369,7 +369,7 @@ Invoke-Expression (&starship init powershell)
 <details>
 <summary>Tcsh</summary>
 
-Trage folgendes am Ende von `~/.bashrc` ein:
+Füge Folgendes am Ende von `~/.tcshrc` ein:
 
 ```sh
 eval `starship init tcsh`
@@ -421,17 +421,17 @@ Falls du an Starship mitwirken willst, wirf bitte einen Blick auf den [Leitfaden
 
 Schaut euch bitte auch die Projekte an, die die Entstehung von Starship inspiriert haben. 🙏
 
-- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – A ZSH prompt for astronauts.
+- **[denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt)** – Eine ZSH Prompt für Astronauten.
 
-- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-shell robbyrussell theme written in JavaScript.
+- **[denysdovhan/robbyrussell-node](https://github.com/denysdovhan/robbyrussell-node)** – Cross-Shell robbyrussell Thema geschrieben in JavaScript.
 
-- **[reujab/silver](https://github.com/reujab/silver)** – A cross-shell customizable powerline-like prompt with icons.
+- **[reujab/silber](https://github.com/reujab/silver)** – Eine cross-shell anpassbare Powerline-Prompt mit Icons.
 
-## ❤️ Sponsors
+## ❤️ Sponsoren
 
-Support this project by [becoming a sponsor](https://github.com/sponsors/starship). Your name or logo will show up here with a link to your website.
+Unterstütze dieses Projekt, indem du [ein Sponsor wirst](https://github.com/sponsors/starship). Dein Name und Logo wird hier mit einem Link zu deiner Website erscheinen.
 
-**Supporter Tier**
+**Unterstützer**
 
 - [Appwrite](https://appwrite.io/)
 

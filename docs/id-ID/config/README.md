@@ -543,7 +543,7 @@ style = 'bold red'
 [[battery.display]] # 'bold yellow' style and 💦 symbol when capacity is between 10% and 30%
 threshold = 30
 style = 'bold yellow'
-discharging_symbol = '💦'
+discharging_symbol = '💦 '
 
 # when capacity is over 30%, the battery indicator will not be displayed
 ```
@@ -1165,6 +1165,7 @@ The `direnv` module shows the status of the current rc file if one is present. T
 | `detect_files`      | `['.envrc']`                           | filenames mana yang sebaiknya memicu modul ini.       |
 | `detect_folders`    | `[]`                                   | Folder mana yang sebaiknya memicul modul ini.         |
 | `allowed_msg`       | `'allowed'`                            | The message displayed when an rc file is allowed.     |
+| `not_allowed_msg`   | `'not allowed'`                        | The message displayed when an rc file is not_allowed. |
 | `denied_msg`        | `'denied'`                             | The message displayed when an rc file is denied.      |
 | `loaded_msg`        | `'loaded'`                             | The message displayed when an rc file is loaded.      |
 | `unloaded_msg`      | `'not loaded'`                         | The message displayed when an rc file is not loaded.  |

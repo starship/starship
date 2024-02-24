@@ -80,6 +80,26 @@ starship init fish | source
 enable_transience
 ```
 
+## TransientPrompt and TransientRightPrompt in Bash
+
+The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework allows you to replace the previous-printed prompt with custom strings. Esto es útil en los casos en que la información del prompt no es siempre necesaria. To enable this, put this in `~/.bashrc` `bleopt prompt_ps1_transient=<value>`:
+
+The \<value\> here is a colon-separated list of `always`, `same-dir` and `trim`. When `prompt_ps1_final` is empty and this option has a non-empty value, the prompt specified by `PS1` is erased on leaving the current command line. If the value contains a field `trim`, only the last line of multiline `PS1` is preserved and the other lines are erased. Otherwise, the command line will be redrawn as if `PS1=` is specified. When a field `same-dir` is contained in the value and the current working directory is different from the final directory of the previous command line, this option `prompt_ps1_transient` is ignored.
+
+Make the following changes to your `~/.bashrc` to customize what gets displayed on the left and on the right:
+
+- To customize what the left side of input gets replaced with, configure the `prompt_ps1_final` Ble.sh option. For example, to display Starship's `character` module here, you would do
+
+```bash
+bleopt prompt_ps1_final="$(starship module character)"
+```
+
+- To customize what the right side of input gets replaced with, configure the `prompt_rps1_final` Ble.sh option. Por ejemplo, para mostrar la hora en la que se inició el último comando aquí, lo harías
+
+```bash
+bleopt prompt_rps1_final="$(starship module time)"
+```
+
 ## Comandos pre-prompt y pre-ejecución personalizados en Cmd
 
 Clink proporciona una API extremadamente flexible para ejecutar comandos pre-prompt y pre-ejecución en la shell de Cmd. Es bastante sencillo de usar con Starship. Haz los siguientes cambios a tu archivo `starship.lua` según tus requisitos:
@@ -205,7 +225,9 @@ Algunos intérpretes de comandos soportan un prompt derecho que se renderiza en 
 
 Nota: El prompt derecho es una sola línea siguiendo la ubicación de entrada. Para alinear los módulos arriba de la línea de entrada en un prompt multi-línea, vea el [módulo `fill`](/config/#fill).
 
-`right_format` está actualmente soportado para los siguientes intérpretes de comandos: elvish, fish, zsh, xonsh, cmd, nushell.
+`right_format` is currently supported for the following shells: elvish, fish, zsh, xonsh, cmd, nushell, bash.
+
+Note: The [Ble.sh](https://github.com/akinomyoga/ble.sh) framework should be installed in order to use right prompt in bash.
 
 ### Ejemplo
 
