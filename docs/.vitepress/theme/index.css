@@ -54,7 +54,7 @@ p[align="center"] img[height="20"] {
   src: url("/nerd-font.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
-  unicode-range: e000-f8ff, f0000-fffff, 100000 -10ffff;
+  unicode-range: U+e000-f8ff, U+f0000-fffff, U+100000-10ffff;
 }
 
 code {
