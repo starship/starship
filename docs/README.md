@@ -22,12 +22,10 @@ metaTitle: "Starship: Cross-Shell Prompt"
 description: Starship is the minimal, blazing fast, and extremely customizable prompt for any shell! Shows the information you need, while staying sleek and minimal. Quick installation available for Bash, Fish, ZSH, Ion, Tcsh, Elvish, Nu, Xonsh, Cmd, and PowerShell.
 ---
 
-<div class="center">
-  <video class="demo-video" muted autoplay loop playsinline>
-    <source src="/demo.webm" type="video/webm">
-    <source src="/demo.mp4" type="video/mp4">
-  </video>
-</div>
+<video class="demo-video" muted autoplay loop playsinline>
+  <source src="/demo.webm" type="video/webm">
+  <source src="/demo.mp4" type="video/mp4">
+</video>
 
 ### Prerequisites
 
@@ -54,6 +52,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    ```sh
    brew install starship
    ```
+
    With [Winget](https://github.com/microsoft/winget-cli):
 
    ```powershell
@@ -146,6 +145,7 @@ description: Starship is the minimal, blazing fast, and extremely customizable p
    :::
 
    Add the following to the end of your Nushell env file (find it by running `$nu.env-path` in Nushell):
+
    ```sh
    mkdir ~/.cache/starship
    starship init nu | save -f ~/.cache/starship/init.nu
