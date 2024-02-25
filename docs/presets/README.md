@@ -74,3 +74,9 @@ This preset is inspired by [tokyo-night-vscode-theme](https://github.com/enkia/t
 This preset is heavily inspired by [Pastel Powerline](./pastel-powerline.md), and [Tokyo Night](./tokyo-night.md).
 
 [![Screenshot of Gruvbox Rainbow preset](/presets/img/gruvbox-rainbow.png "Click to view Gruvbox Rainbow preset")](./gruvbox-rainbow)
+
+## [Catppuccin](./catppuccin.md)
+
+This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
+
+[![Screenshot of Catppuccin preset](/presets/img/catppuccin.png "Click to view Catppuccin preset")](./catppuccin)
