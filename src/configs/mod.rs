@@ -45,6 +45,7 @@ pub mod helm;
 pub mod hg_branch;
 pub mod hostname;
 pub mod java;
+pub mod jj_change;
 pub mod jobs;
 pub mod julia;
 pub mod kotlin;
@@ -195,6 +196,8 @@ pub struct FullConfig<'a> {
     hostname: hostname::HostnameConfig<'a>,
     #[serde(borrow)]
     java: java::JavaConfig<'a>,
+    #[serde(borrow)]
+    jj_change: jj_change::JujutsuChangeConfig<'a>,
     #[serde(borrow)]
     jobs: jobs::JobsConfig<'a>,
     #[serde(borrow)]

@@ -7,6 +7,7 @@ $directory\
 [](fg:#DA627D bg:#FCA17D)\
 $git_branch\
 $git_status\
+$jj_change\
 [](fg:#FCA17D bg:#86BBD8)\
 $c\
 $elixir\
@@ -111,6 +112,10 @@ format = '[ $symbol ($version) ]($style)'
 symbol = " "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
+
+[jj_change]
+style = "bg:#FCA17D"
+format = '[ $change_id ]($style)'
 
 [julia]
 symbol = " "

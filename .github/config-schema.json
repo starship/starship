@@ -868,6 +868,19 @@
         }
       ]
     },
+    "jj_change": {
+      "default": {
+        "change_id_length": 7,
+        "disabled": true,
+        "format": "[\\($change_id\\)]($style) ",
+        "style": "bold purple"
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/JujutsuChangeConfig"
+        }
+      ]
+    },
     "jobs": {
       "default": {
         "disabled": false,
@@ -3935,6 +3948,30 @@
           "items": {
             "type": "string"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "JujutsuChangeConfig": {
+      "type": "object",
+      "properties": {
+        "change_id_length": {
+          "default": 7,
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        },
+        "disabled": {
+          "default": true,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "[\\($change_id\\)]($style) ",
+          "type": "string"
+        },
+        "style": {
+          "default": "bold purple",
+          "type": "string"
         }
       },
       "additionalProperties": false

@@ -281,6 +281,7 @@ $git_state\
 $git_metrics\
 $git_status\
 $hg_branch\
+$jj_change\
 $pijul_channel\
 $docker_context\
 $package\
@@ -2443,6 +2444,39 @@ then the module will also show when there are 0 jobs running.
 symbol = '+ '
 number_threshold = 4
 symbol_threshold = 0
+```
+
+## Jujutsu Change
+
+The `jj_change` module shows the current change ID in a [Jujutsu](martinvonz.github.io/jj/) repository.
+When active (`disabled = false`), the module will be shown when your current directory is a Jujutsu directory.
+
+### Options
+
+| Option             | Default                    | Description                                                                                  |
+| ------------------ | -------------------------- | -------------------------------------------------------------------------------------------- |
+| `change_id_length` | `7`                        | Minimum size of the unique prefix to use. Pass `0` to always use the shortest possible size. |
+| `format`           | `'[($change_id)]($style)'` | The format for the module.                                                                   |
+| `style`            | `'bold purple'`            | The style for the module.                                                                    |
+| `disabled`         | `true`                     | Disables the `jj_change` module.                                                             |
+
+### Variables
+
+| Variable  | Example  | Description                         |
+| --------- | -------- | ----------------------------------- |
+| change_id | `mvlssa` | The current change ID               |
+| style\*   |          | Mirrors the value of option `style` |
+
+*: This variable can only be used as a part of a style string
+
+### Example
+
+```toml
+# ~/.config/starship.toml
+
+[jj_change]
+change_id_length = 12
+disabled = false
 ```
 
 ## Julia

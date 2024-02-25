@@ -9,6 +9,7 @@ $directory\
 [](fg:color_yellow bg:color_aqua)\
 $git_branch\
 $git_status\
+$jj_change\
 [](fg:color_aqua bg:color_blue)\
 $c\
 $rust\
@@ -123,6 +124,10 @@ format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 symbol = " "
 style = "bg:color_blue"
 format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[jj_change]
+style = "bg:color_purple"
+format = '[[ $change_id ](fg:color_fg0 bg:color_purple)]($style)'
 
 [kotlin]
 symbol = ""
