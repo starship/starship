@@ -1,6 +1,6 @@
 [Return to Presets](./README.md#catppuccin)
 
-# Catppuccin Preset 
+# Catppuccin Preset
 
 This preset is a minimally modified version of [Gruvbox Rainbow](./gruvbox-rainbow.md) using the [Catppuccin](https://github.com/catppuccin/catppuccin) theme palette.
 
@@ -17,7 +17,7 @@ starship preset catppuccin -o ~/.config/starship.toml
 ```
 
 By default this preset uses the Mocha flavour of Catppucin, but you can specify any of the flavours by modifying the value of `palette`:
-    
+
 - `catppuccin_mocha`
 - `catppuccin_frappe`
 - `catppuccin_macchiato`
